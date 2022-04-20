@@ -222,7 +222,7 @@ public class AssetEntryFinderImpl
 	protected SQLQuery buildAssetQuerySQL(
 		AssetEntryQuery entryQuery, boolean count, Session session) {
 
-		StringBundler sb = new StringBundler(67);
+		StringBundler sb = new StringBundler(77);
 
 		if (count) {
 			sb.append("SELECT COUNT(DISTINCT AssetEntry.entryId) AS ");
@@ -238,11 +238,14 @@ public class AssetEntryFinderImpl
 			String orderByCol2 = entryQuery.getOrderByCol2();
 
 			if (orderByCol1.equals("ratings") ||
-				orderByCol2.equals("ratings")) {
+				orderByCol2.equals("ratings") ||
+				orderByCol1.equals("ratingsTotalScore") ||
+				orderByCol2.equals("ratingsTotalScore")) {
 
 				selectRatings = true;
 
-				sb.append(", TEMP_TABLE_ASSET_ENTRY.averageScore ");
+				sb.append(", TEMP_TABLE_ASSET_ENTRY.averageScore, ");
+				sb.append("TEMP_TABLE_ASSET_ENTRY.totalScore ");
 			}
 
 			if (orderByCol1.equals("viewCount") ||
@@ -256,7 +259,8 @@ public class AssetEntryFinderImpl
 			sb.append("FROM (SELECT DISTINCT AssetEntry.entryId ");
 
 			if (selectRatings) {
-				sb.append(", RatingsStats.averageScore ");
+				sb.append(", RatingsStats.averageScore, ");
+				sb.append(" RatingsStats.totalScore ");
 			}
 
 			if (selectViewCount) {
@@ -306,7 +310,10 @@ public class AssetEntryFinderImpl
 			}
 		}
 
-		if (orderByCol1.equals("ratings") || orderByCol2.equals("ratings")) {
+		if (orderByCol1.equals("ratings") || orderByCol2.equals("ratings") ||
+			orderByCol1.equals("ratingsTotalScore") ||
+			orderByCol2.equals("ratingsTotalScore")) {
+
 			sb.append(" LEFT JOIN RatingsStats ON (RatingsStats.classNameId ");
 			sb.append("= AssetEntry.classNameId) AND (RatingsStats.classPK = ");
 			sb.append("AssetEntry.classPK)");
@@ -449,6 +456,19 @@ public class AssetEntryFinderImpl
 			if (orderByCol1.equals("ratings")) {
 				sb.append("CASE WHEN TEMP_TABLE_ASSET_ENTRY.averageScore ");
 				sb.append("IS NULL THEN 0 ");
+				sb.append("ELSE TEMP_TABLE_ASSET_ENTRY.averageScore END ");
+				sb.append(entryQuery.getOrderByType1());
+				sb.append(", CASE WHEN TEMP_TABLE_ASSET_ENTRY.totalScore ");
+				sb.append("IS NULL THEN 0 ");
+				sb.append("ELSE TEMP_TABLE_ASSET_ENTRY.totalScore END");
+			}
+			else if (orderByCol1.equals("ratingsTotalScore")) {
+				sb.append("CASE WHEN TEMP_TABLE_ASSET_ENTRY.totalScore ");
+				sb.append("IS NULL THEN 0 ");
+				sb.append("ELSE TEMP_TABLE_ASSET_ENTRY.totalScore END ");
+				sb.append(entryQuery.getOrderByType1());
+				sb.append(", CASE WHEN TEMP_TABLE_ASSET_ENTRY.averageScore ");
+				sb.append("IS NULL THEN 0 ");
 				sb.append("ELSE TEMP_TABLE_ASSET_ENTRY.averageScore END");
 			}
 			else if (orderByCol1.equals("viewCount")) {
@@ -468,6 +488,20 @@ public class AssetEntryFinderImpl
 				!orderByCol1.equals(orderByCol2)) {
 
 				if (orderByCol2.equals("ratings")) {
+					sb.append(", CASE WHEN ");
+					sb.append("TEMP_TABLE_ASSET_ENTRY.averageScore IS NULL ");
+					sb.append("THEN 0 ELSE ");
+					sb.append("TEMP_TABLE_ASSET_ENTRY.averageScore END ");
+					sb.append(entryQuery.getOrderByType2());
+					sb.append(", CASE WHEN TEMP_TABLE_ASSET_ENTRY.totalScore ");
+					sb.append("IS NULL THEN 0 ");
+					sb.append("ELSE TEMP_TABLE_ASSET_ENTRY.totalScore END");
+				}
+				else if (orderByCol2.equals("ratingsTotalScore")) {
+					sb.append(", CASE WHEN TEMP_TABLE_ASSET_ENTRY.totalScore ");
+					sb.append("IS NULL THEN 0 ");
+					sb.append("ELSE TEMP_TABLE_ASSET_ENTRY.totalScore END ");
+					sb.append(entryQuery.getOrderByType2());
 					sb.append(", CASE WHEN ");
 					sb.append("TEMP_TABLE_ASSET_ENTRY.averageScore IS NULL ");
 					sb.append("THEN 0 ELSE ");

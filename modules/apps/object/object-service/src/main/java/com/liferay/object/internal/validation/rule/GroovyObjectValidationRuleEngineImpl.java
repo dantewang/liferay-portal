@@ -19,10 +19,9 @@ import com.liferay.object.validation.rule.ObjectValidationRuleEngine;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.scripting.Scripting;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
@@ -36,24 +35,8 @@ public class GroovyObjectValidationRuleEngineImpl
 	implements ObjectValidationRuleEngine {
 
 	@Override
-	public boolean evaluate(Map<String, Object> inputObjects, String script) {
-		try {
-			return _evaluate(inputObjects, script);
-		}
-		catch (Exception exception) {
-			_log.error(exception);
-
-			return false;
-		}
-	}
-
-	@Override
-	public String getName() {
-		return ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY;
-	}
-
-	private boolean _evaluate(Map<String, Object> inputObjects, String script)
-		throws Exception {
+	public Map<String, Object> execute(
+		Map<String, Object> inputObjects, String script) {
 
 		Thread currentThread = Thread.currentThread();
 
@@ -63,20 +46,32 @@ public class GroovyObjectValidationRuleEngineImpl
 
 		ClassLoader classLoader = clazz.getClassLoader();
 
-		Map<String, Object> results = Collections.emptyMap();
+		Map<String, Object> results = new HashMap<>();
 
 		try {
 			currentThread.setContextClassLoader(classLoader);
 
 			results = _scripting.eval(
-				null, inputObjects, SetUtil.fromArray("returnValue"),
+				null, inputObjects, SetUtil.fromArray("invalidFields"),
 				ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY, script);
+
+			results.put("invalidScript", false);
+		}
+		catch (Exception exception) {
+			_log.error(exception);
+
+			results.put("invalidScript", true);
 		}
 		finally {
 			currentThread.setContextClassLoader(contextClassLoader);
 		}
 
-		return GetterUtil.getBoolean(results.get("returnValue"));
+		return results;
+	}
+
+	@Override
+	public String getName() {
+		return ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

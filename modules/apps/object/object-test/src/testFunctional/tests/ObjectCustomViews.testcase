@@ -706,7 +706,7 @@ definition {
 
 		ObjectAdmin.goToCustomObject(objectName = "CustomObject149239");
 
-		for (var columnName : list "Author,Created Date,Modified Date,Status,ID") {
+		for (var columnName : list "Author,Creation Date,Modified Date,Workflow Status,ID") {
 			ObjectPortlet.assertEntryColumnPresent(column = "${columnName}");
 		}
 	}
@@ -766,7 +766,7 @@ definition {
 
 		ObjectAdmin.goToCustomObject(objectName = "CustomObject147771");
 
-		for (var columnName : list "Author,Created Date,Custom Field") {
+		for (var columnName : list "Author,Creation Date,Custom Field") {
 			ObjectPortlet.assertEntryColumnPresent(column = "${columnName}");
 		}
 
@@ -841,7 +841,7 @@ definition {
 		WaitForPageLoad();
 
 		ObjectCustomViews.viewColumnsOrder(
-			colunmName = "Created Date",
+			colunmName = "Creation Date",
 			position = "1");
 
 		ObjectCustomViews.viewColumnsOrder(

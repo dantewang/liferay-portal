@@ -32,7 +32,7 @@ public class FrontendIconsConfigurationCategory
 
 	@Override
 	public String getCategoryIcon() {
-		return "plus-squares";
+		return "squares";
 	}
 
 	@Override

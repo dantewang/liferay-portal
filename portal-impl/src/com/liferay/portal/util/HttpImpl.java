@@ -278,7 +278,8 @@ public class HttpImpl implements Http {
 			options.getCookies(), options.getAuth(), options.getBody(),
 			options.getFileParts(), options.getInputStreamParts(),
 			options.getParts(), options.getResponse(),
-			options.isFollowRedirects(), options.getTimeout());
+			options.isFollowRedirects(), options.isNormalizeURI(),
+			options.getTimeout());
 	}
 
 	@Override
@@ -311,7 +312,8 @@ public class HttpImpl implements Http {
 			options.getCookies(), options.getAuth(), options.getBody(),
 			options.getFileParts(), options.getInputStreamParts(),
 			options.getParts(), options.getResponse(),
-			options.isFollowRedirects(), options.getTimeout());
+			options.isFollowRedirects(), options.isNormalizeURI(),
+			options.getTimeout());
 	}
 
 	@Override
@@ -693,12 +695,13 @@ public class HttpImpl implements Http {
 			List<Http.FilePart> fileParts,
 			List<Http.InputStreamPart> inputStreamParts,
 			Map<String, String> parts, Http.Response response,
-			boolean followRedirects, int timeout)
+			boolean followRedirects, boolean normalizeURI, int timeout)
 		throws IOException {
 
 		try (InputStream inputStream = URLtoInputStream(
 				location, method, headers, cookies, auth, body, fileParts,
-				inputStreamParts, parts, response, followRedirects, timeout)) {
+				inputStreamParts, parts, response, followRedirects,
+				normalizeURI, timeout)) {
 
 			if (inputStream == null) {
 				return null;
@@ -724,7 +727,7 @@ public class HttpImpl implements Http {
 			List<Http.FilePart> fileParts,
 			List<Http.InputStreamPart> inputStreamParts,
 			Map<String, String> parts, Http.Response response,
-			boolean followRedirects, int timeout)
+			boolean followRedirects, boolean normalizeURI, int timeout)
 		throws IOException {
 
 		URI uri = null;
@@ -873,6 +876,8 @@ public class HttpImpl implements Http {
 						auth.getUsername(), auth.getPassword()));
 			}
 
+			requestConfigBuilder.setNormalizeUri(normalizeURI);
+
 			addProxyCredentials(uri, httpClientContext);
 
 			requestBuilder.setConfig(requestConfigBuilder.build());
@@ -901,7 +906,8 @@ public class HttpImpl implements Http {
 						return URLtoInputStream(
 							locationHeaderValue, Http.Method.GET, headers,
 							cookies, auth, body, fileParts, inputStreamParts,
-							parts, response, followRedirects, timeout);
+							parts, response, followRedirects, normalizeURI,
+							timeout);
 					}
 
 					response.setRedirect(locationHeaderValue);

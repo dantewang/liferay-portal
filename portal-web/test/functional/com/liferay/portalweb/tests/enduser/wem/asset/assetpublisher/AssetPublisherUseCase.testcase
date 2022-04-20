@@ -43,8 +43,8 @@ definition {
 	@priority = "4"
 	test AddAndEditWebContentViaAssetPublisherInOrganizationSiteWithVirtualHost {
 		property custom.properties = "virtual.hosts.valid.hosts=localhost,127.0.0.1,www.able.com,www.baker.com";
-		property osgi.module.configuration.file.names = "com.liferay.login.web.internal.configuration.AuthLoginConfiguration.config";
-		property osgi.module.configurations = "promptEnabled=&quot;true&quot;";
+		property osgi.module.configuration.file.names = "com.liferay.login.web.internal.configuration.AuthLoginConfiguration.config:com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "promptEnabled=&quot;true&quot;:disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
 		property test.name.skip.portal.instance = "AssetPublisherUseCase#AddAndEditWebContentViaAssetPublisherInOrganizationSiteWithVirtualHost";
 
 		task ("Add an organization with site") {
@@ -183,8 +183,8 @@ definition {
 	@priority = "4"
 	test AddAndEditWebContentViaAssetPublisherInOrganizationSiteWithVirtualHostFF {
 		property custom.properties = "virtual.hosts.valid.hosts=localhost,127.0.0.1,www.able.com,www.baker.com";
-		property osgi.module.configuration.file.names = "com.liferay.layout.internal.configuration.FFDisablePrivateLayoutsConfiguration.config:com.liferay.login.web.internal.configuration.AuthLoginConfiguration.config";
-		property osgi.module.configurations = "enabled=&quot;true&quot;:promptEnabled=&quot;true&quot;";
+		property osgi.module.configuration.file.names = "com.liferay.login.web.internal.configuration.AuthLoginConfiguration.config";
+		property osgi.module.configurations = "promptEnabled=&quot;true&quot;";
 		property test.name.skip.portal.instance = "AssetPublisherUseCase#AddAndEditWebContentViaAssetPublisherInOrganizationSiteWithVirtualHost";
 
 		task ("Add an organization with site") {
@@ -1429,7 +1429,7 @@ definition {
 
 			WebContent.editDisplayPage(
 				pageName = "Asset Publisher Page",
-				pageType = "Public Pages",
+				pageType = "Pages",
 				webContentTitle = "Web Content Title");
 
 			PortletEntry.publish();
@@ -1815,7 +1815,7 @@ definition {
 
 		WebContent.editDisplayPage(
 			pageName = "Asset Publisher Page",
-			pageType = "Public Pages");
+			pageType = "Pages");
 
 		WebContent.editFriendlyURL(webContentFriendlyURL = "webcontentenglish");
 
@@ -2505,7 +2505,7 @@ catch (Exception e) {
 
 			WebContent.editDisplayPage(
 				pageName = "Content Page Name",
-				pageType = "Public Pages");
+				pageType = "Pages");
 
 			PortletEntry.publish();
 		}
@@ -2569,7 +2569,7 @@ catch (Exception e) {
 
 			WebContent.editDisplayPage(
 				pageName = "Asset Publisher Page",
-				pageType = "Public Pages");
+				pageType = "Pages");
 
 			PortletEntry.publish();
 		}

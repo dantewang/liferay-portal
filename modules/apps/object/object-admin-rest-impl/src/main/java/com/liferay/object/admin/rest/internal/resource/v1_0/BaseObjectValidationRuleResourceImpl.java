@@ -393,6 +393,11 @@ public abstract class BaseObjectValidationRuleResourceImpl
 				objectValidationRule.getEngine());
 		}
 
+		if (objectValidationRule.getEngineLabel() != null) {
+			existingObjectValidationRule.setEngineLabel(
+				objectValidationRule.getEngineLabel());
+		}
+
 		if (objectValidationRule.getErrorLabel() != null) {
 			existingObjectValidationRule.setErrorLabel(
 				objectValidationRule.getErrorLabel());

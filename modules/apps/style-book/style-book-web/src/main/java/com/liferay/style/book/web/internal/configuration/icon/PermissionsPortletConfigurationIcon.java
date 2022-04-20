@@ -49,6 +49,11 @@ public class PermissionsPortletConfigurationIcon
 	extends BasePortletConfigurationIcon {
 
 	@Override
+	public String getIconCssClass() {
+		return "password-policies";
+	}
+
+	@Override
 	public String getMessage(PortletRequest portletRequest) {
 		return LanguageUtil.get(
 			getResourceBundle(getLocale(portletRequest)), "permissions");
@@ -82,7 +87,7 @@ public class PermissionsPortletConfigurationIcon
 
 	@Override
 	public double getWeight() {
-		return 101;
+		return 99;
 	}
 
 	@Override

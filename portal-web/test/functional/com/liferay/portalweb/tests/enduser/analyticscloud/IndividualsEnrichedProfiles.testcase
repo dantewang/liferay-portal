@@ -19,8 +19,10 @@ definition {
 			ACUtils.launchDXP();
 		}
 
-		task ("Add a new site with a public widget page") {
+		task ("Add a new site with a public widget page, then add a blog") {
 			ACUtils.addSiteAndPage();
+
+			ACUtils.createBlogsAndAddToPage();
 		}
 
 		task ("Connect the DXP to AC") {
@@ -40,6 +42,8 @@ definition {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
 
+		JSONUser.tearDownNonAdminUsers();
+
 		ACUtils.tearDownAC();
 	}
 
@@ -48,12 +52,24 @@ definition {
 	test IncreaseByOneWhenAnonymousIndividualConvertedToKnownIndividual {
 		property portal.acceptance = "true";
 
-		task ("Sign out") {
-			UserBar.signOut();
+		task ("Add a new user") {
+			JSONUser.addUser(
+				userEmailAddress = "ac@liferay.com",
+				userFirstName = "ac",
+				userLastName = "ac",
+				userScreenName = "ac");
+
+			JSONUser.setFirstPassword(
+				agreeToTermsAndAnswerReminderQuery = "true",
+				requireReset = "false",
+				userEmailAddress = "ac@liferay.com");
 		}
 
-		task ("View the site page as guest") {
-			ACUtils.navigateToSitePage(
+		task ("View the blog as a new user") {
+			ACUtils.navigateToSitePageWithUser(
+				actionType = "View Blog",
+				documentTitleList = "Blogs AC Title",
+				emailList = "ac@liferay.com",
 				pageName = "AC Page",
 				siteName = "Site Name");
 		}
@@ -92,13 +108,20 @@ definition {
 				count = "0 Profiles");
 		}
 
-		task ("Sign in as Test Test") {
-			var portalURL = PropsUtil.get("portal.url");
+		task ("Sync the new user and view the blog") {
+			ACUtils.launchDXP();
 
-			User.firstLoginUI(
-				password = "test",
-				specificURL = "${portalURL}/web/site-name/ac-page",
-				userEmailAddress = "test@liferay.com");
+			ACDXPSettings.syncNewContactData();
+
+			User.logoutAndLoginPG(
+				userLoginEmailAddress = "ac@liferay.com",
+				userLoginFullName = "ac ac");
+
+			ACUtils.navigateToSitePage(
+				actionType = "View Blog",
+				documentTitleList = "Blogs AC Title",
+				pageName = "AC Page",
+				siteName = "Site Name");
 		}
 
 		task ("Close Sessions") {

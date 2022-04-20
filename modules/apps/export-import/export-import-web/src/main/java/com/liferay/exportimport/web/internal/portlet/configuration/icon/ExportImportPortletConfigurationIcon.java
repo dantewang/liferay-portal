@@ -48,6 +48,11 @@ public class ExportImportPortletConfigurationIcon
 	}
 
 	@Override
+	public String getIconCssClass() {
+		return "download";
+	}
+
+	@Override
 	public String getMessage(PortletRequest portletRequest) {
 		return LanguageUtil.get(
 			getResourceBundle(getLocale(portletRequest)), "export-import");
@@ -102,7 +107,7 @@ public class ExportImportPortletConfigurationIcon
 
 	@Override
 	public double getWeight() {
-		return 15.0;
+		return 102;
 	}
 
 	@Override

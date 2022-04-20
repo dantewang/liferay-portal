@@ -335,9 +335,6 @@ public interface ObjectValidationRuleLocalService
 	public ObjectValidationRule updateObjectValidationRule(
 		ObjectValidationRule objectValidationRule);
 
-	public void validate(
-			long userId, long objectDefinitionId,
-			ObjectEntry originalObjectEntry, ObjectEntry objectEntry)
-		throws PortalException;
+	public void validate(ObjectEntry objectEntry) throws PortalException;
 
 }

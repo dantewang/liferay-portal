@@ -22,10 +22,7 @@ import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.scope.ObjectScopeProvider;
 import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.web.internal.constants.ObjectWebKeys;
-import com.liferay.object.web.internal.display.context.helper.ObjectRequestHelper;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -41,7 +38,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Marco Leo
  */
-public class ObjectDefinitionsDetailsDisplayContext {
+public class ObjectDefinitionsDetailsDisplayContext
+	extends BaseObjectDefinitionsDisplayContext {
 
 	public ObjectDefinitionsDetailsDisplayContext(
 		HttpServletRequest httpServletRequest,
@@ -50,12 +48,10 @@ public class ObjectDefinitionsDetailsDisplayContext {
 		ObjectScopeProviderRegistry objectScopeProviderRegistry,
 		PanelCategoryRegistry panelCategoryRegistry) {
 
-		_objectDefinitionModelResourcePermission =
-			objectDefinitionModelResourcePermission;
+		super(httpServletRequest, objectDefinitionModelResourcePermission);
+
 		_objectScopeProviderRegistry = objectScopeProviderRegistry;
 		_panelCategoryRegistry = panelCategoryRegistry;
-
-		_objectRequestHelper = new ObjectRequestHelper(httpServletRequest);
 	}
 
 	public List<KeyValuePair> getKeyValuePairs() {
@@ -64,7 +60,7 @@ public class ObjectDefinitionsDetailsDisplayContext {
 		ObjectDefinition objectDefinition = getObjectDefinition();
 
 		String scope = ParamUtil.getString(
-			_objectRequestHelper.getRequest(), "scope",
+			objectRequestHelper.getRequest(), "scope",
 			objectDefinition.getScope());
 
 		ObjectScopeProvider objectScopeProvider =
@@ -93,10 +89,10 @@ public class ObjectDefinitionsDetailsDisplayContext {
 						childPanelCategory.getKey(),
 						StringBundler.concat(
 							panelCategory.getLabel(
-								_objectRequestHelper.getLocale()),
+								objectRequestHelper.getLocale()),
 							" > ",
 							childPanelCategory.getLabel(
-								_objectRequestHelper.getLocale()))));
+								objectRequestHelper.getLocale()))));
 			}
 		}
 
@@ -105,7 +101,7 @@ public class ObjectDefinitionsDetailsDisplayContext {
 
 	public ObjectDefinition getObjectDefinition() {
 		HttpServletRequest httpServletRequest =
-			_objectRequestHelper.getRequest();
+			objectRequestHelper.getRequest();
 
 		return (ObjectDefinition)httpServletRequest.getAttribute(
 			ObjectWebKeys.OBJECT_DEFINITION);
@@ -119,33 +115,20 @@ public class ObjectDefinitionsDetailsDisplayContext {
 		ObjectDefinition objectDefinition = getObjectDefinition();
 
 		return ParamUtil.getString(
-			_objectRequestHelper.getRequest(), "scope",
+			objectRequestHelper.getRequest(), "scope",
 			objectDefinition.getScope());
 	}
 
 	public boolean hasPublishObjectPermission() {
 		PortletResourcePermission portletResourcePermission =
-			_objectDefinitionModelResourcePermission.
+			objectDefinitionModelResourcePermission.
 				getPortletResourcePermission();
 
 		return portletResourcePermission.contains(
-			_objectRequestHelper.getPermissionChecker(), null,
+			objectRequestHelper.getPermissionChecker(), null,
 			ObjectActionKeys.PUBLISH_OBJECT_DEFINITION);
 	}
 
-	public boolean hasUpdateObjectDefinitionPermission()
-		throws PortalException {
-
-		ObjectDefinition objectDefinition = getObjectDefinition();
-
-		return _objectDefinitionModelResourcePermission.contains(
-			_objectRequestHelper.getPermissionChecker(),
-			objectDefinition.getObjectDefinitionId(), ActionKeys.UPDATE);
-	}
-
-	private final ModelResourcePermission<ObjectDefinition>
-		_objectDefinitionModelResourcePermission;
-	private final ObjectRequestHelper _objectRequestHelper;
 	private final ObjectScopeProviderRegistry _objectScopeProviderRegistry;
 	private final PanelCategoryRegistry _panelCategoryRegistry;
 

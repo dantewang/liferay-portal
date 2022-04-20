@@ -672,7 +672,7 @@ definition {
 			portlet = "Pages",
 			site = "Test Site Name");
 
-		PagesAdmin.addPublicPage(
+		PagesAdmin.addPage(
 			pageName = "Web Content Display Page",
 			sitePageType = "Widget Page");
 
@@ -1299,7 +1299,7 @@ definition {
 
 			WebContent.editDisplayPage(
 				pageName = "Test Page Name 2",
-				pageType = "Public Pages");
+				pageType = "Pages");
 
 			PortletEntry.publish();
 		}
@@ -1319,7 +1319,7 @@ definition {
 
 			WebContent.editDisplayPage(
 				pageName = "Test Page Name 2",
-				pageType = "Public Pages");
+				pageType = "Pages");
 
 			PortletEntry.publish();
 		}
@@ -1453,7 +1453,7 @@ definition {
 
 			WebContent.editDisplayPage(
 				pageName = "Test Page Name",
-				pageType = "Public Pages");
+				pageType = "Pages");
 
 			PortletEntry.publish();
 		}
@@ -1466,7 +1466,7 @@ definition {
 
 		task ("View the selected display page is not saved") {
 			WebContent.viewSelectedDisplayPageTemplateCP(
-				displayPageTemplateName = "Public Pages > Test Page Name",
+				displayPageTemplateName = "Pages > Test Page Name",
 				displayPageTemplateType = "Specific");
 		}
 	}
@@ -1609,9 +1609,6 @@ definition {
 	@description = "This is a use case for LPS-140253. View no private page in web content."
 	@priority = "4"
 	test ViewNoPrivatePageInWebContent {
-		property osgi.module.configuration.file.names = "com.liferay.layout.internal.configuration.FFDisablePrivateLayoutsConfiguration.config";
-		property osgi.module.configurations = "enabled=&quot;true&quot;";
-
 		task ("Add a content page and add Asset Publisher in it") {
 			JSONLayout.addPublicLayout(
 				groupName = "Test Site Name",

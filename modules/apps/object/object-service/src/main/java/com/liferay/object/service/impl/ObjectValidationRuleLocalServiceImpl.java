@@ -14,6 +14,7 @@
 
 package com.liferay.object.service.impl;
 
+import com.liferay.object.constants.ObjectValidationRuleConstants;
 import com.liferay.object.exception.ObjectValidationRuleEngineException;
 import com.liferay.object.exception.ObjectValidationRuleNameException;
 import com.liferay.object.exception.ObjectValidationRuleScriptException;
@@ -29,8 +30,10 @@ import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -40,6 +43,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -172,20 +176,30 @@ public class ObjectValidationRuleLocalServiceImpl
 	}
 
 	@Override
-	public void validate(
-			long userId, long objectDefinitionId,
-			ObjectEntry originalObjectEntry, ObjectEntry objectEntry)
-		throws PortalException {
+	public void validate(ObjectEntry objectEntry) throws PortalException {
+		if (objectEntry == null) {
+			return;
+		}
 
-		Map<String, Serializable> values = null;
+		Map<String, Serializable> values = _objectEntryLocalService.getValues(
+			objectEntry);
 
-		if (objectEntry != null) {
-			values = _objectEntryLocalService.getValues(objectEntry);
+		HashMapBuilder.HashMapWrapper<String, Object> hashMapWrapper =
+			HashMapBuilder.<String, Object>putAll(
+				objectEntry.getModelAttributes());
+
+		if (values != null) {
+			hashMapWrapper.putAll(values);
+		}
+
+		if (PrincipalThreadLocal.getUserId() > 0) {
+			hashMapWrapper.put(
+				"currentUserId", PrincipalThreadLocal.getUserId());
 		}
 
 		List<ObjectValidationRule> objectValidationRules =
 			objectValidationRuleLocalService.getObjectValidationRules(
-				objectDefinitionId, true);
+				objectEntry.getObjectDefinitionId(), true);
 
 		for (ObjectValidationRule objectValidationRule :
 				objectValidationRules) {
@@ -195,46 +209,33 @@ public class ObjectValidationRuleLocalServiceImpl
 					getObjectValidationRuleEngine(
 						objectValidationRule.getEngine());
 
-			HashMapBuilder.HashMapWrapper<String, Object> hashMapWrapper =
-				HashMapBuilder.<String, Object>putAll(
-					objectEntry.getModelAttributes());
+			if (Objects.equals(
+					objectValidationRule.getEngine(),
+					ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY)) {
 
-			if ((objectEntry != null) && (values != null)) {
-				hashMapWrapper.putAll(values);
-			}
+				Map<String, Object> results =
+					objectValidationRuleEngine.execute(
+						hashMapWrapper.build(),
+						objectValidationRule.getScript());
 
-			if (originalObjectEntry != null) {
-				Map<String, Object> modelAttributes =
-					originalObjectEntry.getModelAttributes();
+				if (GetterUtil.getBoolean(results.get("invalidScript"))) {
+					throw new ObjectValidationRuleScriptException(
+						"Script is invalid");
+				}
 
-				for (Map.Entry<String, Object> entry :
-						modelAttributes.entrySet()) {
-
-					hashMapWrapper.put(
-						"original." + entry.getKey(), entry.getValue());
+				if (GetterUtil.getBoolean(results.get("invalidFields"))) {
+					throw new ObjectValidationRuleEngineException(
+						"Script has invalid fields");
 				}
 			}
+			else {
+				if (!objectValidationRuleEngine.evaluate(
+						hashMapWrapper.build(),
+						objectValidationRule.getScript())) {
 
-			if (userId > 0) {
-				User user = _userLocalService.getUser(userId);
-
-				hashMapWrapper.put(
-					"user.emailAddress", user.getEmailAddress()
-				).put(
-					"user.firstName", user.getFirstName()
-				).put(
-					"user.lastName", user.getLastName()
-				).put(
-					"userId", userId
-				);
-			}
-
-			if (!objectValidationRuleEngine.evaluate(
-					hashMapWrapper.build(), objectValidationRule.getScript())) {
-
-				throw new ObjectValidationRuleScriptException(
-					objectValidationRule.getErrorLabel(
-						LocaleUtil.getMostRelevantLocale()));
+					throw new ObjectValidationRuleEngineException(
+						"Unable to evaluate script");
+				}
 			}
 		}
 	}

@@ -186,6 +186,7 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 			randomObjectValidationRule();
 
 		objectValidationRule.setEngine(regex);
+		objectValidationRule.setEngineLabel(regex);
 		objectValidationRule.setScript(regex);
 
 		String json = ObjectValidationRuleSerDes.toJSON(objectValidationRule);
@@ -195,6 +196,7 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 		objectValidationRule = ObjectValidationRuleSerDes.toDTO(json);
 
 		Assert.assertEquals(regex, objectValidationRule.getEngine());
+		Assert.assertEquals(regex, objectValidationRule.getEngineLabel());
 		Assert.assertEquals(regex, objectValidationRule.getScript());
 	}
 
@@ -718,6 +720,14 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("engineLabel", additionalAssertFieldName)) {
+				if (objectValidationRule.getEngineLabel() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("errorLabel", additionalAssertFieldName)) {
 				if (objectValidationRule.getErrorLabel() == null) {
 					valid = false;
@@ -895,6 +905,17 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 				if (!Objects.deepEquals(
 						objectValidationRule1.getEngine(),
 						objectValidationRule2.getEngine())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("engineLabel", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						objectValidationRule1.getEngineLabel(),
+						objectValidationRule2.getEngineLabel())) {
 
 					return false;
 				}
@@ -1143,6 +1164,14 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 			return sb.toString();
 		}
 
+		if (entityFieldName.equals("engineLabel")) {
+			sb.append("'");
+			sb.append(String.valueOf(objectValidationRule.getEngineLabel()));
+			sb.append("'");
+
+			return sb.toString();
+		}
+
 		if (entityFieldName.equals("errorLabel")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -1221,6 +1250,8 @@ public abstract class BaseObjectValidationRuleResourceTestCase {
 				dateCreated = RandomTestUtil.nextDate();
 				dateModified = RandomTestUtil.nextDate();
 				engine = StringUtil.toLowerCase(RandomTestUtil.randomString());
+				engineLabel = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
 				id = RandomTestUtil.randomLong();
 				objectDefinitionId = RandomTestUtil.randomLong();
 				script = StringUtil.toLowerCase(RandomTestUtil.randomString());

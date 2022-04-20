@@ -1078,6 +1078,8 @@ definition {
 
 	@priority = "5"
 	test ExportImportPrivatePage {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
 		property portal.acceptance = "true";
 		property testray.component.names = "Training";
 
@@ -1369,7 +1371,7 @@ definition {
 
 		PagesAdmin.openPagesAdmin(siteURLKey = "Site Name");
 
-		PagesAdmin.addPublicPage(pageName = "Test Page");
+		PagesAdmin.addPage(pageName = "Test Page");
 
 		PagesAdmin.openPagesAdmin(siteURLKey = "Site Name");
 

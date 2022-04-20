@@ -20,15 +20,15 @@ import com.liferay.info.field.type.ImageInfoFieldType;
 import com.liferay.info.field.type.TextInfoFieldType;
 import com.liferay.info.field.type.URLInfoFieldType;
 import com.liferay.info.localized.InfoLocalizedValue;
+import com.liferay.object.model.ObjectEntry;
 
 /**
  * @author Jorge Ferrer
  */
-public interface ObjectEntryInfoItemFields {
+public class ObjectEntryInfoItemFields {
 
 	public static final InfoField<DateInfoFieldType> createDateInfoField =
-		InfoField.builder(
-		).infoFieldType(
+		BuilderHolder._builder.infoFieldType(
 			DateInfoFieldType.INSTANCE
 		).name(
 			"createDate"
@@ -37,8 +37,7 @@ public interface ObjectEntryInfoItemFields {
 				ObjectEntryInfoItemFields.class, "create-date")
 		).build();
 	public static final InfoField<URLInfoFieldType> displayPageURLInfoField =
-		InfoField.builder(
-		).infoFieldType(
+		BuilderHolder._builder.infoFieldType(
 			URLInfoFieldType.INSTANCE
 		).name(
 			"displayPageURL"
@@ -47,8 +46,7 @@ public interface ObjectEntryInfoItemFields {
 				"com.liferay.asset.info.display.impl", "display-page-url")
 		).build();
 	public static final InfoField<DateInfoFieldType> modifiedDateInfoField =
-		InfoField.builder(
-		).infoFieldType(
+		BuilderHolder._builder.infoFieldType(
 			DateInfoFieldType.INSTANCE
 		).name(
 			"modifiedDate"
@@ -57,8 +55,7 @@ public interface ObjectEntryInfoItemFields {
 				ObjectEntryInfoItemFields.class, "modified-date")
 		).build();
 	public static final InfoField<DateInfoFieldType> publishDateInfoField =
-		InfoField.builder(
-		).infoFieldType(
+		BuilderHolder._builder.infoFieldType(
 			DateInfoFieldType.INSTANCE
 		).name(
 			"publishDate"
@@ -67,8 +64,7 @@ public interface ObjectEntryInfoItemFields {
 				ObjectEntryInfoItemFields.class, "publish-date")
 		).build();
 	public static final InfoField<TextInfoFieldType> userNameInfoField =
-		InfoField.builder(
-		).infoFieldType(
+		BuilderHolder._builder.infoFieldType(
 			TextInfoFieldType.INSTANCE
 		).name(
 			"userName"
@@ -76,14 +72,21 @@ public interface ObjectEntryInfoItemFields {
 			InfoLocalizedValue.localize(
 				ObjectEntryInfoItemFields.class, "user-name")
 		).build();
-	public static final InfoField userProfileImageInfoField = InfoField.builder(
-	).infoFieldType(
-		ImageInfoFieldType.INSTANCE
-	).name(
-		"userProfileImage"
-	).labelInfoLocalizedValue(
-		InfoLocalizedValue.localize(
-			ObjectEntryInfoItemFields.class, "user-profile-image")
-	).build();
+	public static final InfoField userProfileImageInfoField =
+		BuilderHolder._builder.infoFieldType(
+			ImageInfoFieldType.INSTANCE
+		).name(
+			"userProfileImage"
+		).labelInfoLocalizedValue(
+			InfoLocalizedValue.localize(
+				ObjectEntryInfoItemFields.class, "user-profile-image")
+		).build();
+
+	private static class BuilderHolder {
+
+		private static final InfoField.NamespacedBuilder _builder =
+			InfoField.builder(ObjectEntry.class.getSimpleName());
+
+	}
 
 }

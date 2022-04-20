@@ -50,6 +50,8 @@ public class AssetCategoryMainImageInfoItemFieldReader
 		return InfoField.builder(
 		).infoFieldType(
 			ImageInfoFieldType.INSTANCE
+		).namespace(
+			AssetCategory.class.getSimpleName()
 		).name(
 			"mainImage"
 		).labelInfoLocalizedValue(

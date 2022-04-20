@@ -320,6 +320,9 @@ components:
                     type: string
                 engine:
                     type: string
+                engineLabel:
+                    readOnly: true
+                    type: string
                 errorLabel:
                     additionalProperties:
                         type: string

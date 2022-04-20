@@ -48,6 +48,7 @@ public class ObjectRelationshipsTableFDSView extends BaseTableFDSView {
 
 		fdsTableSchemaBuilder.addFDSTableSchemaField(
 			"objectDefinitionName2", "related-object");
+
 		fdsTableSchemaBuilder.addFDSTableSchemaField("type", "type");
 
 		return fdsTableSchemaBuilder.build();

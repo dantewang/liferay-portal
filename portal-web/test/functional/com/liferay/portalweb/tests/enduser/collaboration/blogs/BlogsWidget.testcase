@@ -455,12 +455,28 @@ definition {
 	}
 
 	@description = "This is a test for LPS-90983. It checks that the custom abstract can be viewed in card display template."
-	@ignore = "Test Stub"
 	@priority = "4"
 	test CanViewCustomAbstractInCardDisplayTemplate {
+		JSONBlog.addEntry(
+			entryAbstractDescription = "Blogs Entry Abstract Description",
+			entryContent = "Blogs Entry Content",
+			entryTitle = "Blogs Entry Title");
 
-		// TODO LPS-149974 CanViewCustomAbstractInCardDisplayTemplate pending implementation
+		Portlet.gotoPortletOptions(
+			portletName = "Blogs",
+			portletOption = "Configuration");
 
+		BlogsConfiguration.selectConfigurationIFrame();
+
+		BlogsConfiguration.selectDisplayTemplate(displayTemplate = "Card");
+
+		IFrame.saveConfiguration();
+
+		Navigator.gotoPage(pageName = "Blogs Page");
+
+		BlogsEntry.viewWithAbstractDisplayTemplatePG(
+			entryAbstractDescription = "Blogs Entry Abstract Description",
+			entryTitle = "Blogs Entry Title");
 	}
 
 	@description = "This checks that a blog entry can be added, edited, saved as a draft and published via AP."

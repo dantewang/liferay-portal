@@ -15,42 +15,37 @@
 package com.liferay.layout.internal.visibility;
 
 import com.liferay.layout.admin.kernel.visibility.LayoutVisibilityManager;
-import com.liferay.layout.internal.configuration.FFDisablePrivateLayoutsConfiguration;
-import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.release.feature.flag.ReleaseFeatureFlag;
+import com.liferay.release.feature.flag.ReleaseFeatureFlagManagerUtil;
 
-import java.util.Map;
-
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
 
 /**
  * @author Jürgen Kappler
  */
-@Component(
-	configurationPid = "com.liferay.layout.internal.configuration.FFDisablePrivateLayoutsConfiguration",
-	immediate = true, service = LayoutVisibilityManager.class
-)
+@Component(immediate = true, service = LayoutVisibilityManager.class)
 public class LayoutVisibilityManagerImpl implements LayoutVisibilityManager {
 
 	@Override
-	public boolean isPrivateLayoutsEnabled(long groupId) {
-		if (_ffDisablePrivateLayoutsConfiguration.enabled()) {
+	public boolean isPrivateLayoutsEnabled() {
+		if (ReleaseFeatureFlagManagerUtil.isEnabled(
+				ReleaseFeatureFlag.DISABLE_PRIVATE_LAYOUTS)) {
+
 			return false;
 		}
 
 		return true;
 	}
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		_ffDisablePrivateLayoutsConfiguration =
-			ConfigurableUtil.createConfigurable(
-				FFDisablePrivateLayoutsConfiguration.class, properties);
-	}
+	@Override
+	public boolean isPrivateLayoutsEnabled(long groupId) {
+		if (ReleaseFeatureFlagManagerUtil.isEnabled(
+				ReleaseFeatureFlag.DISABLE_PRIVATE_LAYOUTS)) {
 
-	private static volatile FFDisablePrivateLayoutsConfiguration
-		_ffDisablePrivateLayoutsConfiguration;
+			return false;
+		}
+
+		return true;
+	}
 
 }

@@ -125,8 +125,6 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.togglePrivacy(privacy = "Public Pages");
-
 		PagesAdmin.cannotDeletePagesAssociatedWithSiteTemplate(
 			page = "Site Child Page Name",
 			pageName = "Site Page Name");
@@ -146,13 +144,9 @@ definition {
 
 		Page.viewNoPG(pageName = "Site Child Page Name");
 
-		PagesAdmin.viewPageItemNotPresent(
-			pageName = "Site Page Name",
-			privacy = "Public Pages");
+		PagesAdmin.viewPageItemNotPresent(pageName = "Site Page Name");
 
-		PagesAdmin.viewPageItemNotPresent(
-			pageName = "Site Child Page Name",
-			privacy = "Public Pages");
+		PagesAdmin.viewPageItemNotPresent(pageName = "Site Child Page Name");
 
 		AssertConsoleTextNotPresent(value1 = "java.lang.NullPointerException");
 	}
@@ -336,9 +330,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.cannotDeletePagesAssociatedWithSiteTemplate(
-			page = "Home",
-			pageName = "Public Pages");
+		PagesAdmin.cannotDeletePagesAssociatedWithSiteTemplate(page = "Home");
 	}
 
 	@description = "LRQA-73456. Site template preferences and contents are inherited on User group sites."
@@ -634,7 +626,7 @@ definition {
 		PagesAdmin.openPagesAdmin(siteURLKey = "new-site");
 
 		PagesAdmin.viewPagesOrder(
-			depth = "2",
+			depth = "1",
 			pageNameList = "Home,1,2,Hello");
 	}
 
@@ -734,6 +726,9 @@ definition {
 	@description = "This is a use case for LPS-92663. Navigation menus are copied when a site is created from a site template."
 	@priority = "4"
 	test ViewNavigationMenuCopyFromSitesTemplate {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
+
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 		SiteTemplates.addCP(

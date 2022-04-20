@@ -11,7 +11,7 @@
 
 import ClayIcon from '@clayui/icon';
 
-export const COLUMNS = [
+export const ACTIVATE_COLUMNS = [
 	{
 		accessor: 'envName',
 		bodyClass: 'border-0 cursor-pointer',

@@ -30,9 +30,14 @@ definition {
 		}
 
 		if ("${pageVersioningEnabled}" == "true") {
-			Click(locator1 = "Checkbox#ENABLED_ON_PUBLIC_PAGES");
+			if (IsElementPresent(key_fieldLabel = "Enabled", locator1 = "Checkbox#CHECKBOX_LABEL")) {
+				Click(locator1 = "Checkbox#ENABLED_ON_PUBLIC_PAGES");
+			}
+			else {
+				Click(locator1 = "Checkbox#ENABLED_ON_PUBLIC_PAGES");
 
-			Click(locator1 = "Checkbox#ENABLED_ON_PRIVATE_PAGES");
+				Click(locator1 = "Checkbox#ENABLED_ON_PRIVATE_PAGES");
+			}
 		}
 
 		Click(locator1 = "SiteSettingsStaging#CONTENT_SELECT_ALL_CHECKBOX");
@@ -497,7 +502,7 @@ definition {
 	macro deactivateStagingCP {
 		LexiconEntry.gotoHeaderMenuItem(menuItem = "Staging Configuration");
 
-		if (IsElementPresent(locator1 = "SiteSettingsStaging#ENABLED_ON_PUBLIC_PAGES_CHECKBOX")) {
+		if (IsVisible(checkboxName = "Enabled", locator1 = "Checkbox#ANY_CHECKBOX")) {
 			Check.checkHiddenToggleSwitch(locator1 = "SiteSettingsStaging#NONE_RADIO");
 
 			AssertClickNoError(
@@ -511,7 +516,9 @@ definition {
 				value1 = "Staging is successfully disabled.");
 		}
 
-		AssertNotVisible(locator1 = "SiteSettingsStaging#ENABLED_ON_PUBLIC_PAGES_CHECKBOX");
+		AssertNotVisible(
+			checkboxName = "Enabled",
+			locator1 = "Checkbox#ANY_CHECKBOX");
 	}
 
 	macro deleteHistory {
@@ -1148,7 +1155,12 @@ definition {
 
 		Click(locator1 = "StagingPublishToLive#SWITCH_TO_ADVANCED_PUBLICATION");
 
-		Click(locator1 = "PagesConfiguration#PAGES_ALL_PUBLIC_PAGES_CHECKBOX");
+		if (IsElementPresent(locator1 = "PagesConfiguration#PAGES_ALL_PAGES_CHECKBOX")) {
+			Check(locator1 = "PagesConfiguration#PAGES_ALL_PAGES_CHECKBOX");
+		}
+		else {
+			Check(locator1 = "PagesConfiguration#PAGES_ALL_PUBLIC_PAGES_CHECKBOX");
+		}
 
 		Staging.configureScheduleTime(scheduleTitleName = "${scheduleTitleName}");
 

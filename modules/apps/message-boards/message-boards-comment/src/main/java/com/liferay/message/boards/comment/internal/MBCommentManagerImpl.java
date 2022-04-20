@@ -96,7 +96,7 @@ public class MBCommentManagerImpl implements CommentManager {
 			MBMessage.class.getName());
 
 		MBMessage mbMessage = _mbMessageLocalService.addDiscussionMessage(
-			userId, StringPool.BLANK, groupId, className, classPK,
+			null, userId, StringPool.BLANK, groupId, className, classPK,
 			thread.getThreadId(), thread.getRootMessageId(), StringPool.BLANK,
 			body, serviceContext);
 
@@ -105,8 +105,9 @@ public class MBCommentManagerImpl implements CommentManager {
 
 	@Override
 	public long addComment(
-			long userId, long groupId, String className, long classPK,
-			String userName, String subject, String body,
+			String externalReferenceCode, long userId, long groupId,
+			String className, long classPK, String userName, String subject,
+			String body,
 			Function<String, ServiceContext> serviceContextFunction)
 		throws PortalException {
 
@@ -121,17 +122,18 @@ public class MBCommentManagerImpl implements CommentManager {
 			MBMessage.class.getName());
 
 		MBMessage mbMessage = _mbMessageLocalService.addDiscussionMessage(
-			userId, userName, groupId, className, classPK,
-			mbThread.getThreadId(), mbThread.getRootMessageId(), subject, body,
-			serviceContext);
+			externalReferenceCode, userId, userName, groupId, className,
+			classPK, mbThread.getThreadId(), mbThread.getRootMessageId(),
+			subject, body, serviceContext);
 
 		return mbMessage.getMessageId();
 	}
 
 	@Override
 	public long addComment(
-			long userId, String className, long classPK, String userName,
-			long parentCommentId, String subject, String body,
+			String externalReferenceCode, long userId, String className,
+			long classPK, String userName, long parentCommentId, String subject,
+			String body,
 			Function<String, ServiceContext> serviceContextFunction)
 		throws PortalException {
 
@@ -142,9 +144,9 @@ public class MBCommentManagerImpl implements CommentManager {
 			MBMessage.class.getName());
 
 		MBMessage mbMessage = _mbMessageLocalService.addDiscussionMessage(
-			userId, userName, parentMessage.getGroupId(), className, classPK,
-			parentMessage.getThreadId(), parentCommentId, subject, body,
-			serviceContext);
+			externalReferenceCode, userId, userName, parentMessage.getGroupId(),
+			className, classPK, parentMessage.getThreadId(), parentCommentId,
+			subject, body, serviceContext);
 
 		return mbMessage.getMessageId();
 	}
@@ -231,6 +233,19 @@ public class MBCommentManagerImpl implements CommentManager {
 	}
 
 	@Override
+	public Comment fetchComment(long groupId, String externalReferenceCode) {
+		MBMessage mbMessage =
+			_mbMessageLocalService.fetchMBMessageByExternalReferenceCode(
+				groupId, externalReferenceCode);
+
+		if (mbMessage == null) {
+			return null;
+		}
+
+		return new MBCommentImpl(mbMessage);
+	}
+
+	@Override
 	public DiscussionComment fetchDiscussionComment(long userId, long commentId)
 		throws PortalException {
 
@@ -269,6 +284,15 @@ public class MBCommentManagerImpl implements CommentManager {
 	public int getChildCommentsCount(long parentCommentId, int status) {
 		return _mbMessageLocalService.getChildMessagesCount(
 			parentCommentId, status);
+	}
+
+	@Override
+	public Comment getComment(long groupId, String externalReferenceCode)
+		throws PortalException {
+
+		return new MBCommentImpl(
+			_mbMessageLocalService.getMBMessageByExternalReferenceCode(
+				groupId, externalReferenceCode));
 	}
 
 	@Override
@@ -443,7 +467,7 @@ public class MBCommentManagerImpl implements CommentManager {
 			comment.getCommentId());
 
 		long newCommentId = addComment(
-			comment.getUserId(), comment.getClassName(), newClassPK,
+			null, comment.getUserId(), comment.getClassName(), newClassPK,
 			comment.getUserName(), parentCommentId, mbMessage.getSubject(),
 			comment.getBody(), serviceContextFunction);
 

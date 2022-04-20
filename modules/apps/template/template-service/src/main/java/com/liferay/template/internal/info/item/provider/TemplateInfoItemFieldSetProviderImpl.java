@@ -100,6 +100,8 @@ public class TemplateInfoItemFieldSetProviderImpl
 		return InfoField.builder(
 		).infoFieldType(
 			TextInfoFieldType.INSTANCE
+		).namespace(
+			PortletDisplayTemplate.DISPLAY_STYLE_PREFIX
 		).name(
 			PortletDisplayTemplate.DISPLAY_STYLE_PREFIX +
 				templateEntry.getTemplateEntryId()

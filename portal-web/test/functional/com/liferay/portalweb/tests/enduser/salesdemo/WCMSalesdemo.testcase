@@ -34,12 +34,11 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "IFrame Page");
+		PagesAdmin.addPage(pageName = "IFrame Page");
 
 		PagesAdmin.configurePage(
 			columnName = "1 Column",
 			pageName = "IFrame Page",
-			privacy = "Public Pages",
 			sitePageType = "Widget Page");
 
 		Navigator.gotoPage(pageName = "IFrame Page");
@@ -64,8 +63,6 @@ definition {
 	@description = "This is a test for LPS-140253. View no private page in page administration."
 	@priority = "4"
 	test IFrameDemoFF {
-		property osgi.module.configuration.file.names = "com.liferay.layout.internal.configuration.FFDisablePrivateLayoutsConfiguration.config";
-		property osgi.module.configurations = "enabled=&quot;true&quot;";
 		property testray.component.names = "IFrame Portlet";
 
 		ProductMenu.gotoPortlet(

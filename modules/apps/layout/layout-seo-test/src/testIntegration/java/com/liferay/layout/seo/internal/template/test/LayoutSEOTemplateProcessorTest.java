@@ -21,6 +21,7 @@ import com.liferay.info.field.type.TextInfoFieldType;
 import com.liferay.info.item.InfoItemFieldValues;
 import com.liferay.info.localized.InfoLocalizedValue;
 import com.liferay.layout.seo.template.LayoutSEOTemplateProcessor;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.test.rule.Inject;
@@ -148,6 +149,8 @@ public class LayoutSEOTemplateProcessorTest {
 				InfoField.builder(
 				).infoFieldType(
 					TextInfoFieldType.INSTANCE
+				).namespace(
+					StringPool.BLANK
 				).name(
 					"description"
 				).labelInfoLocalizedValue(
@@ -159,6 +162,8 @@ public class LayoutSEOTemplateProcessorTest {
 				InfoField.builder(
 				).infoFieldType(
 					TextInfoFieldType.INSTANCE
+				).namespace(
+					StringPool.BLANK
 				).name(
 					"Text45966564"
 				).labelInfoLocalizedValue(
@@ -170,6 +175,8 @@ public class LayoutSEOTemplateProcessorTest {
 				InfoField.builder(
 				).infoFieldType(
 					TextInfoFieldType.INSTANCE
+				).namespace(
+					StringPool.BLANK
 				).name(
 					"title"
 				).labelInfoLocalizedValue(

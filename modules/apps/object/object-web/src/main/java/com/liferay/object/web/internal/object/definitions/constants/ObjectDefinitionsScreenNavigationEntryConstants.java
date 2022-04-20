@@ -32,6 +32,8 @@ public class ObjectDefinitionsScreenNavigationEntryConstants {
 
 	public static final String CATEGORY_KEY_RELATIONSHIPS = "relationships";
 
+	public static final String CATEGORY_KEY_VALIDATIONS = "validations";
+
 	public static final String CATEGORY_KEY_VIEWS = "views";
 
 	public static final String ENTRY_KEY_ACTIONS = "actions";
@@ -45,6 +47,8 @@ public class ObjectDefinitionsScreenNavigationEntryConstants {
 	public static final String ENTRY_KEY_OBJECTS = "objects";
 
 	public static final String ENTRY_KEY_RELATIONSHIPS = "relationships";
+
+	public static final String ENTRY_KEY_VALIDATIONS = "validations";
 
 	public static final String ENTRY_KEY_VIEWS = "views";
 

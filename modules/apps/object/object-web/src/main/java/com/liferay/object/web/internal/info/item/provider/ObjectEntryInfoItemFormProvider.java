@@ -239,6 +239,8 @@ public class ObjectEntryInfoItemFormProvider
 						InfoField.builder(
 						).infoFieldType(
 							_getInfoFieldType(objectField)
+						).namespace(
+							ObjectField.class.getSimpleName()
 						).name(
 							objectField.getName()
 						).labelInfoLocalizedValue(

@@ -21,6 +21,7 @@ import com.liferay.info.item.InfoItemFieldValues;
 import com.liferay.info.item.InfoItemReference;
 import com.liferay.info.localized.InfoLocalizedValue;
 import com.liferay.petra.function.UnsafeConsumer;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.Layout;
@@ -116,11 +117,15 @@ public class XLIFFInfoFormTranslationImporter
 	}
 
 	private InfoField _createInfoField(Locale locale, String value) {
+		String[] namespaceAndNameArray = _getNamespaceAndNameArray(value);
+
 		return InfoField.builder(
 		).infoFieldType(
 			TextInfoFieldType.INSTANCE
+		).namespace(
+			namespaceAndNameArray[0]
 		).name(
-			value
+			namespaceAndNameArray[1]
 		).labelInfoLocalizedValue(
 			InfoLocalizedValue.<String>builder(
 			).value(
@@ -227,6 +232,16 @@ public class XLIFFInfoFormTranslationImporter
 
 		return new InfoItemReference(
 			matcher.group(1), GetterUtil.getLong(matcher.group(2)));
+	}
+
+	private String[] _getNamespaceAndNameArray(String value) {
+		String[] parts = value.split(StringPool.UNDERLINE, 2);
+
+		if (parts.length != 2) {
+			return new String[] {StringPool.BLANK, value};
+		}
+
+		return parts;
 	}
 
 	private long _getSegmentsExperienceClassPK(

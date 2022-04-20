@@ -155,6 +155,8 @@ public class FileEntryInfoItemFieldValuesProviderTest {
 			return InfoField.builder(
 			).infoFieldType(
 				TextInfoFieldType.INSTANCE
+			).namespace(
+				FileEntry.class.getSimpleName()
 			).name(
 				_INFO_FIELD_NAME
 			).labelInfoLocalizedValue(

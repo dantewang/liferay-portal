@@ -524,11 +524,9 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.togglePrivacy(privacy = "Public Pages");
+		Click(locator1 = "Icon#HEADER_VERTICAL_ELLIPSIS");
 
-		Click(
-			key_pageName = "Public Pages",
-			locator1 = "Icon#COG_PAGE");
+		MenuItem.click(menuItem = "Configuration");
 
 		AssertElementNotPresent(
 			key_panel = "Logo",
@@ -1308,7 +1306,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "AP Test Page");
+		PagesAdmin.addPage(pageName = "AP Test Page");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -1333,7 +1331,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "AP Test Page");
+		PagesAdmin.addPage(pageName = "AP Test Page");
 
 		Navigator.gotoPage(pageName = "AP Test Page");
 

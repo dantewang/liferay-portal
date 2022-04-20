@@ -15,32 +15,36 @@
 package com.liferay.dynamic.data.mapping.form.web.internal.configuration.persistence.listener;
 
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListenerException;
+import com.liferay.portal.kernel.resource.bundle.ResourceBundleLoader;
+import com.liferay.portal.kernel.resource.bundle.ResourceBundleLoaderUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
+import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.util.PropsImpl;
 
 import java.util.Locale;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.mockito.Matchers;
-
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Mockito;
 
 /**
  * @author Pedro Queiroz
  */
-@PrepareForTest(ResourceBundleUtil.class)
-@RunWith(PowerMockRunner.class)
-public class DDMFormWebConfigurationModelListenerTest extends PowerMockito {
+public class DDMFormWebConfigurationModelListenerTest {
 
-	@Before
-	public void setUp() {
+	@ClassRule
+	@Rule
+	public static final LiferayUnitTestRule liferayUnitTestRule =
+		LiferayUnitTestRule.INSTANCE;
+
+	@BeforeClass
+	public static void setUpClass() {
 		_setUpDDMFormWebConfigurationModelListener();
 		_setUpPropsUtil();
 		_setUpResourceBundleUtil();
@@ -57,28 +61,30 @@ public class DDMFormWebConfigurationModelListenerTest extends PowerMockito {
 			).build());
 	}
 
-	private void _setUpDDMFormWebConfigurationModelListener() {
+	private static void _setUpDDMFormWebConfigurationModelListener() {
 		_ddmFormWebConfigurationModelListener =
 			new DDMFormWebConfigurationModelListener();
 	}
 
-	private void _setUpPropsUtil() {
+	private static void _setUpPropsUtil() {
 		PropsUtil.setProps(new PropsImpl());
 	}
 
-	private void _setUpResourceBundleUtil() {
-		PowerMockito.mockStatic(ResourceBundleUtil.class);
+	private static void _setUpResourceBundleUtil() {
+		ResourceBundleLoader resourceBundleLoader = Mockito.mock(
+			ResourceBundleLoader.class);
 
-		PowerMockito.when(
-			ResourceBundleUtil.getBundle(
-				Matchers.anyString(), Matchers.any(Locale.class),
-				Matchers.any(ClassLoader.class))
+		ResourceBundleLoaderUtil.setPortalResourceBundleLoader(
+			resourceBundleLoader);
+
+		Mockito.when(
+			resourceBundleLoader.loadResourceBundle(Matchers.any(Locale.class))
 		).thenReturn(
 			ResourceBundleUtil.EMPTY_RESOURCE_BUNDLE
 		);
 	}
 
-	private DDMFormWebConfigurationModelListener
+	private static DDMFormWebConfigurationModelListener
 		_ddmFormWebConfigurationModelListener;
 
 }

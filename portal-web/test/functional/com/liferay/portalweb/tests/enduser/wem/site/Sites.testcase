@@ -126,8 +126,8 @@ definition {
 			Site.openSiteSettingsAdmin(siteURLKey = "site-name");
 
 			Site.addVirtualHostsURLCP(
-				publicPageVirtualHostURL = "www.able.com",
-				publicVirtualHosts = "true");
+				pageVirtualHosts = "true",
+				pageVirtualHostURL = "www.able.com");
 		}
 
 		task ("Visit public page by virtual host") {
@@ -185,6 +185,9 @@ definition {
 	@description = "Deleting firiendly URL makes it not able to access page via fridely URL."
 	@priority = "4"
 	test DeleteSiteFriendlyURL {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
+
 		task ("Add a site") {
 			JSONGroup.addGroup(groupName = "Site Name");
 		}
@@ -263,6 +266,9 @@ definition {
 	@description = "Could edit friendly URL and access by it."
 	@priority = "4"
 	test EditSiteFriendlyURL {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
+
 		var portalURL = PropsUtil.get("portal.url");
 
 		task ("Add a site") {

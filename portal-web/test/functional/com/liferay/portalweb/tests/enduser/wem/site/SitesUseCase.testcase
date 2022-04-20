@@ -35,6 +35,8 @@ definition {
 	@description = "Export and import work in organization and add child site from imported site template."
 	@priority = "5"
 	test AddChildSiteFromImportedSiteTemplate {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
 		property portal.acceptance = "true";
 		property portal.upstream = "true";
 		property test.name.skip.portal.instance = "SitesUseCase#AddChildSiteFromImportedSiteTemplate";
@@ -450,8 +452,8 @@ definition {
 	@priority = "4"
 	test PrivateVirtualHostUrlDoesNotRedirectUserToLoginPage {
 		property custom.properties = "jsonws.web.service.paths.excludes=";
-		property osgi.module.configuration.file.names = "com.liferay.login.web.internal.configuration.AuthLoginConfiguration.config";
-		property osgi.module.configurations = "promptEnabled=&quot;true&quot;";
+		property osgi.module.configuration.file.names = "com.liferay.login.web.internal.configuration.AuthLoginConfiguration.config:com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "promptEnabled=&quot;true&quot;:disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
 		property testray.component.names = "Site Administration";
 
 		task ("Get site name") {
@@ -565,8 +567,8 @@ definition {
 			Site.openSiteSettingsAdmin(siteURLKey = "site-name");
 
 			Site.addVirtualHostsURLCP(
-				publicPageVirtualHostURL = "www.baker.com",
-				publicVirtualHosts = "true");
+				pageVirtualHosts = "true",
+				pageVirtualHostURL = "www.baker.com");
 		}
 
 		task ("Log in public page in virtual host") {
@@ -723,7 +725,7 @@ definition {
 				category = "Site Builder",
 				portlet = "Pages");
 
-			PagesAdmin.addPublicPage(pageName = "site Page Name");
+			PagesAdmin.addPage(pageName = "site Page Name");
 		}
 
 		task ("Add a user ") {
@@ -899,8 +901,8 @@ definition {
 	@priority = "4"
 	test SitesDemoSiteManagement {
 		property custom.properties = "jsonws.web.service.paths.excludes=";
-		property osgi.module.configuration.file.names = "com.liferay.login.web.internal.configuration.AuthLoginConfiguration.config";
-		property osgi.module.configurations = "promptEnabled=&quot;true&quot;";
+		property osgi.module.configuration.file.names = "com.liferay.login.web.internal.configuration.AuthLoginConfiguration.config:com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "promptEnabled=&quot;true&quot;:disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
 		property portal.release = "true";
 		property test.name.skip.portal.instance = "SitesUsecase#SitesDemoSiteManagement";
 		property testray.component.names = "Site Administration,Site Pages Administration";

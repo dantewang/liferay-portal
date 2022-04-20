@@ -180,7 +180,7 @@ definition {
 		}
 
 		task ("Add a widget page") {
-			PagesAdmin.addPublicPage(pageName = "Test Page Name");
+			PagesAdmin.addPage(pageName = "Test Page Name");
 		}
 
 		task ("View current languages are shown in Pages admin") {
@@ -497,8 +497,8 @@ definition {
 			Site.openSiteSettingsAdmin(siteURLKey = "test-site-name-2");
 
 			Site.addVirtualHostsURLCP(
-				publicPageVirtualHostURL = "www.able.com",
-				publicVirtualHosts = "true");
+				pageVirtualHosts = "true",
+				pageVirtualHostURL = "www.able.com");
 		}
 
 		task ("View page is shown in fr-FR via virtual host") {

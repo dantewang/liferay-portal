@@ -46,6 +46,39 @@ definition {
 			value1 = "Error:At least one field must be added.");
 	}
 
+	@description = "This is a test for LPS-91043. It asserts that user can not publish from old versions to live."
+	@priority = "5"
+	test CanNotPublishFromOldVersions {
+		JSONDocument.addFileWithUploadedFile(
+			dmDocumentDescription = "DM Document Description",
+			dmDocumentTitle = "DM Document Title",
+			groupName = "Site Name-staging",
+			mimeType = "image/jpeg",
+			sourceFileName = "Document_1.jpg");
+
+		DMNavigator.openToEditEntryInSite(
+			dmDocumentTitle = "DM Document Title",
+			groupName = "Site Name (Staging)",
+			site = "false",
+			siteURLKey = "site-name-staging");
+
+		DMDocument.editCmd(dmDocumentTitleEdit = "DM Document Title Edit");
+
+		Button.clickPublish();
+
+		DMNavigator.openToEntryInAdmin(
+			dmDocumentTitle = "DM Document Title Edit",
+			groupName = "Site Name (Staging)",
+			site = "false",
+			siteURLKey = "site-name-staging");
+
+		for (var n : list "0,1") {
+			DMDocument.viewNoItemInVersionMenu(
+				dmDocumentVersionNumber = "1.${n}",
+				menuItem = "Publish to Live");
+		}
+	}
+
 	@description = "This is a test for LPS-136819. It checks that a file version can be deleted and published."
 	@priority = "4"
 	test CanPublishDeletedFileVersion {
@@ -251,15 +284,6 @@ definition {
 		DMNavigator.gotoDocumentCP(dmDocumentTitle = "Document_1.jpeg");
 
 		DMDocument.viewDocumentVersionNumberCmdPG(dmDocumentVersionNumber = "1.1");
-	}
-
-	@description = "This is a test for LPS-91043. It asserts that user can publish an old file entry version to live."
-	@ignore = "Test Stub"
-	@priority = "5"
-	test CanPublishOldVerion {
-
-		// TODO LPS-149384 CanPublishOldVerion pending implementation
-
 	}
 
 	@description = "This is a test for LPS-136827. It checks that the related asset of a file can be published."

@@ -16,21 +16,26 @@ package com.liferay.dynamic.data.mapping.form.web.internal.display.context.util;
 
 import com.liferay.dynamic.data.mapping.model.DDMFormInstance;
 import com.liferay.dynamic.data.mapping.model.DDMFormInstanceSettings;
+import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.util.TimeZone;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Mockito;
 
 /**
  * @author Rodrigo Paulino
  */
-@RunWith(PowerMockRunner.class)
-public class DDMFormInstanceExpirationStatusUtilTest extends PowerMockito {
+public class DDMFormInstanceExpirationStatusUtilTest {
+
+	@ClassRule
+	@Rule
+	public static final LiferayUnitTestRule liferayUnitTestRule =
+		LiferayUnitTestRule.INSTANCE;
 
 	@Test
 	public void testFormExpired() throws Exception {
@@ -66,9 +71,9 @@ public class DDMFormInstanceExpirationStatusUtilTest extends PowerMockito {
 			DDMFormInstanceSettings ddmFormInstanceSettings)
 		throws Exception {
 
-		DDMFormInstance ddmFormInstance = mock(DDMFormInstance.class);
+		DDMFormInstance ddmFormInstance = Mockito.mock(DDMFormInstance.class);
 
-		when(
+		Mockito.when(
 			ddmFormInstance.getSettingsModel()
 		).thenReturn(
 			ddmFormInstanceSettings
@@ -80,18 +85,18 @@ public class DDMFormInstanceExpirationStatusUtilTest extends PowerMockito {
 	private DDMFormInstanceSettings _mockDDMFormInstanceSettings(
 		String expirationDate, boolean neverExpire) {
 
-		DDMFormInstanceSettings ddmFormInstanceSettings = mock(
+		DDMFormInstanceSettings ddmFormInstanceSettings = Mockito.mock(
 			DDMFormInstanceSettings.class);
 
 		if (expirationDate != null) {
-			when(
+			Mockito.when(
 				ddmFormInstanceSettings.expirationDate()
 			).thenReturn(
 				expirationDate
 			);
 		}
 
-		when(
+		Mockito.when(
 			ddmFormInstanceSettings.neverExpire()
 		).thenReturn(
 			neverExpire

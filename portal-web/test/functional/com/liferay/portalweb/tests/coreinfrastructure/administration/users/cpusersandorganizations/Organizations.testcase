@@ -281,6 +281,8 @@ definition {
 
 	@priority = "5"
 	test AddOrganizationSitePrivatePage {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
 		property testray.component.names = "Training";
 
 		var portalURL = PropsUtil.get("portal.url");
@@ -358,15 +360,13 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Public Page");
+		PagesAdmin.addPage(pageName = "Public Page");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Public Page",
 			url = "${portalURL}/web/organization-name/public-page");
 
-		PagesAdmin.viewPageItemPresent(
-			pageName = "Public Page",
-			privacy = "Public Pages");
+		PagesAdmin.viewPageItemPresent(pageName = "Public Page");
 	}
 
 	@priority = "5"
@@ -419,7 +419,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Organization Public Page");
+		PagesAdmin.addPage(pageName = "Organization Public Page");
 
 		PagesAdmin.openPagesAdmin(siteURLKey = "Organization Name");
 
@@ -498,7 +498,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Mock LDAP Page");
+		PagesAdmin.addPage(pageName = "Mock LDAP Page");
 
 		Navigator.gotoPage(pageName = "Mock LDAP Page");
 
@@ -1211,7 +1211,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Public Page");
+		PagesAdmin.addPage(pageName = "Public Page");
 
 		PagesAdmin.openPagesAdmin(siteURLKey = "Organization Name");
 
@@ -1979,7 +1979,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Sites Directory Page");
+		PagesAdmin.addPage(pageName = "Sites Directory Page");
 
 		Navigator.gotoPage(pageName = "Sites Directory Page");
 
@@ -2009,7 +2009,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Test Page");
+		PagesAdmin.addPage(pageName = "Test Page");
 
 		ApplicationsMenu.gotoPortlet(
 			category = "Users",

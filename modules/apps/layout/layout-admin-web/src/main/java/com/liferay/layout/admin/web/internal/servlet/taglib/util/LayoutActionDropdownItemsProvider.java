@@ -205,6 +205,7 @@ public class LayoutActionDropdownItemsProvider {
 							dropdownItem.setHref(
 								_layoutsAdminDisplayContext.
 									getLayoutConversionPreviewURL(layout));
+							dropdownItem.setIcon("page");
 							dropdownItem.setLabel(
 								LanguageUtil.get(
 									_httpServletRequest,

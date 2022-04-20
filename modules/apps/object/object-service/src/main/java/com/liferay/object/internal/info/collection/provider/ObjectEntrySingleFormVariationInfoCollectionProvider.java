@@ -36,6 +36,7 @@ import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -152,6 +153,8 @@ public class ObjectEntrySingleFormVariationInfoCollectionProvider
 							InfoField.builder(
 							).infoFieldType(
 								SelectInfoFieldType.INSTANCE
+							).namespace(
+								StringPool.BLANK
 							).name(
 								objectField.getName()
 							).attribute(

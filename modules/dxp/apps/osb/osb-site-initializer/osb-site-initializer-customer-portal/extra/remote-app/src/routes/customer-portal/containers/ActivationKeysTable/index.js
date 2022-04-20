@@ -24,7 +24,7 @@ import ModalKeyDetails from './components/ModalKeyDetails';
 import useGetActivationKeysData from './hooks/useGetActivationKeysData';
 import usePagination from './hooks/usePagination';
 import useStatusCountNavigation from './hooks/useStatusCountNavigation';
-import {COLUMNS} from './utils/constants';
+import {ACTIVATE_COLUMNS} from './utils/constants';
 import {ALERT_ACTIVATION_AGGREGATED_KEYS_DOWNLOAD_TEXT} from './utils/constants/alertAggregateKeysDownloadText';
 import {
 	EnvironmentTypeColumn,
@@ -46,8 +46,15 @@ const ActivationKeysTable = ({productName, project, sessionId}) => {
 		setNewKeyGeneratedAlertStatus,
 	] = useState(state?.newKeyGeneratedAlert ? 'success' : '');
 
+	const [deactivatedKeyAlertStatus, setDeactivatedKeyAlertStatus] = useState(
+		state?.deactivateKeyAlert ? 'success' : ''
+	);
+
 	const messageNewKeyGeneratedAlert =
 		'Activation Key was generated successfully';
+
+	const messageDeactivateKey =
+		'Activation Key(s) were deactivated successfully.';
 
 	const {
 		activationKeysState: [activationKeys, setActivationKeys],
@@ -191,7 +198,7 @@ const ActivationKeysTable = ({productName, project, sessionId}) => {
 								setCheckboxesChecked: setActivationKeysIdChecked,
 							}}
 							className="border-0 cp-activation-key-table"
-							columns={COLUMNS}
+							columns={ACTIVATE_COLUMNS}
 							hasCheckbox
 							hasPagination
 							isLoading={loading}
@@ -230,6 +237,14 @@ const ActivationKeysTable = ({productName, project, sessionId}) => {
 					downloadStatus={newKeyGeneratedAlertStatus}
 					message={messageNewKeyGeneratedAlert}
 					setDownloadStatus={setNewKeyGeneratedAlertStatus}
+				/>
+			)}
+
+			{!!deactivatedKeyAlertStatus && (
+				<DownloadAlert
+					downloadStatus={deactivatedKeyAlertStatus}
+					message={messageDeactivateKey}
+					setDownloadStatus={setDeactivatedKeyAlertStatus}
 				/>
 			)}
 		</>

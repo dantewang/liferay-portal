@@ -63,6 +63,9 @@ definition {
 	@priority = "5"
 	@refactordone
 	test CanNavigateToOtherPageByEditorLink {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
+
 		JSONLayout.addPrivateLayout(
 			groupName = "Guest",
 			layoutName = "Research Projects");

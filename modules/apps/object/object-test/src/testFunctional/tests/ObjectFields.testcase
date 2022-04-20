@@ -96,12 +96,26 @@ definition {
 	}
 
 	@description = "LPS-143065 - Verify if the 'Attachment' option is shown on the 'Type' dropdown"
-	@ignore = "Test Stub"
 	@priority = "5"
 	test CanViewAttachmentOption {
+		ObjectAdmin.addObjectViaAPI(
+			labelName = "Custom Object 151557",
+			objectName = "CustomObject151557",
+			pluralLabelName = "Custom Objects 151557");
 
-		// TODO LPS-151557 CanViewAttachmentOption pending implementation
+		Navigator.openURL();
 
+		ObjectAdmin.openObjectAdmin();
+
+		ObjectPortlet.selectCustomObject(label = "Custom Object 151557");
+
+		ObjectAdmin.goToFieldsTab();
+
+		LexiconEntry.gotoAdd();
+
+		ObjectField.assertOptionAndDescription(
+			description = "Upload files or select from Documents and Media.",
+			option = "Attachment");
 	}
 
 	@description = "LPS-143065 - Verify if there is an option on Request Files: Directly from User's Computer"
@@ -234,12 +248,30 @@ definition {
 	}
 
 	@description = "LPS-143065 - Verify that the Request Files option is a required field"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test RequestFilesIsRequired {
+		ObjectAdmin.addObjectViaAPI(
+			labelName = "Custom Object 151558",
+			objectName = "CustomObject151558",
+			pluralLabelName = "Custom Objects 151558");
 
-		// TODO LPS-151558 RequestFilesIsRequired pending implementation
+		Navigator.openURL();
 
+		ObjectAdmin.openObjectAdmin();
+
+		ObjectPortlet.selectCustomObject(label = "Custom Object 151558");
+
+		ObjectAdmin.goToFieldsTab();
+
+		LexiconEntry.gotoAdd();
+
+		ObjectField.selectType(fieldType = "Attachment");
+
+		Button.clickSave();
+
+		AssertElementPresent(
+			key_fieldName = "Request Files",
+			locator1 = "ObjectField#ERROR_REQUIRED_FIELD_SPECIFIC");
 	}
 
 }

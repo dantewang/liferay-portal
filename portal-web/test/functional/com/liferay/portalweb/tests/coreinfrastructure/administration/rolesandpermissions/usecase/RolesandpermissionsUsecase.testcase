@@ -225,7 +225,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Site Page Name");
+		PagesAdmin.addPage(pageName = "Site Page Name");
 
 		JSONUser.addUser(
 			userEmailAddress = "userea@liferay.com",
@@ -429,7 +429,7 @@ definition {
 			portlet = "Pages",
 			site = "${siteName}");
 
-		PagesAdmin.addPublicPage(pageName = "Bookmarks Page");
+		PagesAdmin.addPage(pageName = "Bookmarks Page");
 
 		Navigator.gotoPage(pageName = "Bookmarks Page");
 
@@ -457,7 +457,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Bookmarks Page");
+		PagesAdmin.addPage(pageName = "Bookmarks Page");
 
 		Navigator.gotoSitePage(
 			pageName = "Bookmarks Page",
@@ -554,6 +554,8 @@ definition {
 	@priority = "3"
 	test NoGuestRolePermissionsFromPrivateLayout {
 		property custom.properties = "permissions.check.guest.enabled=false";
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
 
 		ApplicationsMenu.gotoPortlet(
 			category = "Sites",
@@ -1002,7 +1004,7 @@ definition {
 			portlet = "Pages",
 			site = "${siteName}");
 
-		PagesAdmin.addPublicPage(pageName = "Bookmarks Page");
+		PagesAdmin.addPage(pageName = "Bookmarks Page");
 
 		Navigator.gotoPage(pageName = "Bookmarks Page");
 
@@ -1150,7 +1152,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(
+		PagesAdmin.addPage(
 			pageName = "USA Ice Hockey Team Search",
 			pageTemplateName = "Search");
 
@@ -1267,7 +1269,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(
+		PagesAdmin.addPage(
 			pageName = "Search Page",
 			pageTemplateName = "Search");
 
@@ -1624,6 +1626,9 @@ definition {
 
 	@priority = "4"
 	test ViewPrivatePageSiteMemberRole {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
+
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 		JSONUser.addUser(
@@ -1683,6 +1688,9 @@ definition {
 
 	@priority = "4"
 	test ViewRegRolePermissionsDefaultView {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
+
 		JSONRole.addRegularRole(
 			roleKey = "Roles Regrole Name",
 			roleTitle = "Roles Regrole Name");

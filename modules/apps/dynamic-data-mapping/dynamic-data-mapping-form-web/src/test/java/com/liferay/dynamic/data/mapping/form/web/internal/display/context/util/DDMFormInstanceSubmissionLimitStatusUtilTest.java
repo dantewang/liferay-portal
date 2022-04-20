@@ -20,24 +20,28 @@ import com.liferay.dynamic.data.mapping.model.DDMFormInstanceSettings;
 import com.liferay.dynamic.data.mapping.service.DDMFormInstanceRecordVersionLocalService;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.mockito.Matchers;
-
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Mockito;
 
 /**
  * @author Carolina Barbosa
  */
-@RunWith(PowerMockRunner.class)
-public class DDMFormInstanceSubmissionLimitStatusUtilTest extends PowerMockito {
+public class DDMFormInstanceSubmissionLimitStatusUtilTest {
+
+	@ClassRule
+	@Rule
+	public static final LiferayUnitTestRule liferayUnitTestRule =
+		LiferayUnitTestRule.INSTANCE;
 
 	@Test
 	public void testIsLimitToOneSubmissionPerUser() throws Exception {
@@ -58,15 +62,15 @@ public class DDMFormInstanceSubmissionLimitStatusUtilTest extends PowerMockito {
 				_mockDDMFormInstance(_mockDDMFormInstanceSettings(true)),
 				_mockDDMFormInstanceRecordVersionLocalService(
 					Collections.singletonList(
-						mock(DDMFormInstanceRecordVersion.class))),
-				mock(User.class)));
+						Mockito.mock(DDMFormInstanceRecordVersion.class))),
+				Mockito.mock(User.class)));
 	}
 
 	@Test
 	public void testIsSubmissionLimitReachedWithDefaultUser() throws Exception {
-		User user = mock(User.class);
+		User user = Mockito.mock(User.class);
 
-		when(
+		Mockito.when(
 			user.isDefaultUser()
 		).thenReturn(
 			true
@@ -77,7 +81,7 @@ public class DDMFormInstanceSubmissionLimitStatusUtilTest extends PowerMockito {
 				_mockDDMFormInstance(_mockDDMFormInstanceSettings(true)),
 				_mockDDMFormInstanceRecordVersionLocalService(
 					Collections.singletonList(
-						mock(DDMFormInstanceRecordVersion.class))),
+						Mockito.mock(DDMFormInstanceRecordVersion.class))),
 				user));
 	}
 
@@ -88,15 +92,15 @@ public class DDMFormInstanceSubmissionLimitStatusUtilTest extends PowerMockito {
 				_mockDDMFormInstance(_mockDDMFormInstanceSettings(true)),
 				_mockDDMFormInstanceRecordVersionLocalService(
 					Collections.emptyList()),
-				mock(User.class)));
+				Mockito.mock(User.class)));
 	}
 
 	@Test
 	public void testIsSubmissionLimitReachedWithStatusDraft() throws Exception {
-		DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion = mock(
-			DDMFormInstanceRecordVersion.class);
+		DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion =
+			Mockito.mock(DDMFormInstanceRecordVersion.class);
 
-		when(
+		Mockito.when(
 			ddmFormInstanceRecordVersion.getStatus()
 		).thenReturn(
 			WorkflowConstants.STATUS_DRAFT
@@ -107,16 +111,16 @@ public class DDMFormInstanceSubmissionLimitStatusUtilTest extends PowerMockito {
 				_mockDDMFormInstance(_mockDDMFormInstanceSettings(true)),
 				_mockDDMFormInstanceRecordVersionLocalService(
 					Collections.singletonList(ddmFormInstanceRecordVersion)),
-				mock(User.class)));
+				Mockito.mock(User.class)));
 	}
 
 	private DDMFormInstance _mockDDMFormInstance(
 			DDMFormInstanceSettings ddmFormInstanceSettings)
 		throws Exception {
 
-		DDMFormInstance ddmFormInstance = mock(DDMFormInstance.class);
+		DDMFormInstance ddmFormInstance = Mockito.mock(DDMFormInstance.class);
 
-		when(
+		Mockito.when(
 			ddmFormInstance.getSettingsModel()
 		).thenReturn(
 			ddmFormInstanceSettings
@@ -130,10 +134,10 @@ public class DDMFormInstanceSubmissionLimitStatusUtilTest extends PowerMockito {
 			List<DDMFormInstanceRecordVersion> ddmFormInstanceRecordVersions) {
 
 		DDMFormInstanceRecordVersionLocalService
-			ddmFormInstanceRecordVersionLocalService = mock(
+			ddmFormInstanceRecordVersionLocalService = Mockito.mock(
 				DDMFormInstanceRecordVersionLocalService.class);
 
-		when(
+		Mockito.when(
 			ddmFormInstanceRecordVersionLocalService.
 				getFormInstanceRecordVersions(
 					Matchers.anyLong(), Matchers.anyLong())
@@ -147,10 +151,10 @@ public class DDMFormInstanceSubmissionLimitStatusUtilTest extends PowerMockito {
 	private DDMFormInstanceSettings _mockDDMFormInstanceSettings(
 		boolean limitToOneSubmissionPerUser) {
 
-		DDMFormInstanceSettings ddmFormInstanceSettings = mock(
+		DDMFormInstanceSettings ddmFormInstanceSettings = Mockito.mock(
 			DDMFormInstanceSettings.class);
 
-		when(
+		Mockito.when(
 			ddmFormInstanceSettings.limitToOneSubmissionPerUser()
 		).thenReturn(
 			limitToOneSubmissionPerUser

@@ -70,6 +70,8 @@ public class ExpandoInfoItemFieldReader
 		return InfoField.builder(
 		).infoFieldType(
 			TextInfoFieldType.INSTANCE
+		).namespace(
+			StringPool.BLANK
 		).name(
 			getName()
 		).labelInfoLocalizedValue(

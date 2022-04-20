@@ -39,6 +39,8 @@ definition {
 
 	@priority = "5"
 	test AddFormInGlobal {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
 		property portal.acceptance = "true";
 		property portal.upstream = "true";
 		property test.name.skip.portal.instance = "Forms#AddFormInGlobal";
@@ -165,7 +167,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Form Page");
+		PagesAdmin.addPage(pageName = "Form Page");
 
 		ProductMenu.gotoPortlet(
 			category = "People",
@@ -896,7 +898,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Form Page");
+		PagesAdmin.addPage(pageName = "Form Page");
 
 		Navigator.gotoPage(pageName = "Form Page");
 
@@ -1754,7 +1756,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Form Page");
+		PagesAdmin.addPage(pageName = "Form Page");
 
 		Navigator.gotoPage(pageName = "Form Page");
 
@@ -1915,7 +1917,7 @@ definition {
 			category = "Site Builder",
 			portlet = "Pages");
 
-		PagesAdmin.addPublicPage(pageName = "Form Page");
+		PagesAdmin.addPage(pageName = "Form Page");
 
 		Navigator.gotoPage(pageName = "Form Page");
 

@@ -218,7 +218,7 @@ definition {
 		task ("Create Widget Page") {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-			PagesAdmin.addPublicPage(
+			PagesAdmin.addPage(
 				pageName = "Widget Page Name",
 				sitePageType = "Widget Page");
 		}
@@ -322,7 +322,7 @@ definition {
 		task ("Create Widget Page") {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-			PagesAdmin.addPublicPage(
+			PagesAdmin.addPage(
 				pageName = "Widget Page Name",
 				sitePageType = "Widget Page");
 		}
@@ -1031,6 +1031,9 @@ definition {
 	Then the reload button won't be visible."
 	@priority = "3"
 	test CheckNotVisibleReloadbButtonInPrivatePage {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
+
 		task ("Create a Private Page") {
 			JSONLayout.addPrivateLayout(
 				groupName = "Test Site Name",

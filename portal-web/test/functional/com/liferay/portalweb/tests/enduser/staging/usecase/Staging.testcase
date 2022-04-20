@@ -84,6 +84,8 @@ definition {
 
 	@priority = "5"
 	test ActivateStagingPageVersioningWithCustomDefaultLanguage {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
 		property test.name.skip.portal.instance = "Staging#ActivateStagingPageVersioningWithCustomDefaultLanguage";
 
 		JSONLayout.addPrivateLayout(
@@ -1053,6 +1055,9 @@ definition {
 
 	@priority = "4"
 	test PublishTemplateWithPages {
+		property osgi.module.configuration.file.names = "com.liferay.release.feature.flag.web.internal.configuration.ReleaseFeatureFlagConfiguration.config";
+		property osgi.module.configurations = "disabledReleaseFeatureFlags=[&quot;DISABLE_PRIVATE_LAYOUTS&quot;]";
+
 		JSONLayout.addPrivateLayout(
 			groupName = "Site Name",
 			layoutName = "Private Staging Page");
@@ -1123,7 +1128,7 @@ definition {
 
 		Form.publishForm();
 
-		PagesAdmin.addPublicPage(
+		PagesAdmin.addPage(
 			pageName = "Test Page",
 			sitePageType = "Widget Page");
 
@@ -1557,7 +1562,6 @@ definition {
 		PagesAdmin.configurePage(
 			columnName = "1 Column",
 			pageName = "Staging Test Page",
-			privacy = "Public Pages",
 			sitePageType = "Widget Page");
 
 		Navigator.gotoSitePage(
@@ -2292,7 +2296,7 @@ definition {
 		PagesAdmin.openPagesAdmin(siteURLKey = "site-name");
 
 		PagesAdmin.viewPagesOrder(
-			depth = "2",
+			depth = "1",
 			pageNameList = "Staging Test Page,Test Page 1,Test Page 2");
 	}
 
@@ -2341,17 +2345,13 @@ definition {
 			pageName = "Staging Page Edit",
 			siteName = "Site Name");
 
-		PagesAdmin.viewPageItemPresent(
-			pageName = "Staging Page Edit",
-			privacy = "Public Pages");
+		PagesAdmin.viewPageItemPresent(pageName = "Staging Page Edit");
 
 		Navigator.gotoSitePage(
 			pageName = "Staging Page Edit",
 			siteName = "Site Name");
 
-		PagesAdmin.viewPageItemPresent(
-			pageName = "Staging Page Edit",
-			privacy = "Public Pages");
+		PagesAdmin.viewPageItemPresent(pageName = "Staging Page Edit");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -2427,9 +2427,7 @@ definition {
 			pageName = "Staging Page Edit",
 			siteName = "Site Name");
 
-		PagesAdmin.viewPageItemPresent(
-			pageName = "Staging Page Edit",
-			privacy = "Public Pages");
+		PagesAdmin.viewPageItemPresent(pageName = "Staging Page Edit");
 	}
 
 	@description = "This is a use case for LPS-82355."
