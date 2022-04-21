@@ -21,8 +21,24 @@
 		margin-right: 10px;
 	}
 
-	&__object-builder-list-item-sort-order {
+	&__object-builder-list-item-first-column--not-draggable {
+		margin-left: 10px;
+	}
+
+	&__object-builder-list-item-second-column {
 		left: 336px;
+		position: absolute;
+		top: 23px;
+
+		&--not-draggable {
+			left: 265px !important;
+			position: absolute;
+			top: 23px;
+		}
+	}
+
+	&__object-builder-list-item-third-column--not-draggable {
+		left: 485px !important;
 		position: absolute;
 		top: 23px;
 	}

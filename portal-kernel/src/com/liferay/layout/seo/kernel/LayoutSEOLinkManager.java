@@ -16,17 +16,23 @@ package com.liferay.layout.seo.kernel;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ListMergeable;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Cristina González
  */
 public interface LayoutSEOLinkManager {
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #getCanonicalLayoutSEOLink(Layout, Locale, String, ThemeDisplay)}
+	 */
+	@Deprecated
 	public default LayoutSEOLink getCanonicalLayoutSEOLink(
 			Layout layout, Locale locale, String canonicalURL,
 			Map<Locale, String> alternateURLs)
@@ -34,6 +40,11 @@ public interface LayoutSEOLinkManager {
 
 		throw new UnsupportedOperationException();
 	}
+
+	public LayoutSEOLink getCanonicalLayoutSEOLink(
+			Layout layout, Locale locale, String canonicalURL,
+			ThemeDisplay themeDisplay)
+		throws PortalException;
 
 	public default String getFullPageTitle(
 			Layout layout, String portletId, String tilesTitle,
@@ -45,9 +56,18 @@ public interface LayoutSEOLinkManager {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), replaced by {@link #getLocalizedLayoutSEOLinks(Layout, Locale, String, Set)}
+	 */
+	@Deprecated
 	public List<LayoutSEOLink> getLocalizedLayoutSEOLinks(
 			Layout layout, Locale locale, String canonicalURL,
 			Map<Locale, String> alternateURLs)
+		throws PortalException;
+
+	public List<LayoutSEOLink> getLocalizedLayoutSEOLinks(
+			Layout layout, Locale locale, String canonicalURL,
+			Set<Locale> availableLocales)
 		throws PortalException;
 
 	public default String getPageTitle(

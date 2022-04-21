@@ -24,8 +24,9 @@ import ViewContext, {TYPES} from '../context';
 
 import './BuilderListItem.scss';
 
-interface Iprops {
+interface IProps {
 	aliasColumnText?: string;
+	hasDragAndDrop?: boolean;
 	index: number;
 	isDefaultSort?: boolean;
 	label?: string;
@@ -33,6 +34,7 @@ interface Iprops {
 	onEditing?: (boolean: boolean) => void;
 	onEditingObjectFieldName?: (objectFieldName: string) => void;
 	onVisibleEditModal?: (boolean: boolean) => void;
+	thirdColumnValues?: string[];
 }
 
 type TItemHover = {
@@ -45,8 +47,9 @@ type TDraggedOffset = {
 	y: number;
 } | null;
 
-const BuilderListItem: React.FC<Iprops> = ({
+const BuilderListItem: React.FC<IProps> = ({
 	aliasColumnText,
+	hasDragAndDrop,
 	index,
 	isDefaultSort,
 	label,
@@ -54,6 +57,7 @@ const BuilderListItem: React.FC<Iprops> = ({
 	onEditing,
 	onEditingObjectFieldName,
 	onVisibleEditModal,
+	thirdColumnValues,
 }) => {
 	const [active, setActive] = useState<boolean>(false);
 	const [_, dispatch] = useContext(ViewContext);
@@ -153,21 +157,46 @@ const BuilderListItem: React.FC<Iprops> = ({
 				}
 			)}
 			flex
-			ref={ref}
+			ref={hasDragAndDrop ? ref : null}
 		>
-			<ClayList.ItemField>
-				<ClayButtonWithIcon displayType={null} symbol="drag" />
-			</ClayList.ItemField>
+			{hasDragAndDrop && (
+				<ClayList.ItemField>
+					<ClayButtonWithIcon displayType={null} symbol="drag" />
+				</ClayList.ItemField>
+			)}
 
-			<ClayList.ItemField expand>
+			<ClayList.ItemField
+				className={classNames({
+					'lfr-object__object-builder-list-item-first-column--not-draggable': !hasDragAndDrop,
+				})}
+				expand
+			>
 				<ClayList.ItemTitle>{label}</ClayList.ItemTitle>
 			</ClayList.ItemField>
 
 			<ClayList.ItemField
-				className="lfr-object__object-builder-list-item-sort-order"
+				className={classNames({
+					'lfr-object__object-builder-list-item-second-column': hasDragAndDrop,
+					'lfr-object__object-builder-list-item-second-column--not-draggable': !hasDragAndDrop,
+				})}
 				expand
 			>
 				<ClayList.ItemText>{aliasColumnText}</ClayList.ItemText>
+			</ClayList.ItemField>
+
+			<ClayList.ItemField
+				className={classNames({
+					'lfr-object__object-builder-list-item-third-column--not-draggable': !hasDragAndDrop,
+				})}
+				expand
+			>
+				<ClayList.ItemText>
+					{thirdColumnValues?.map((value, index) => {
+						return index !== thirdColumnValues.length - 1
+							? `${value}, `
+							: value;
+					})}
+				</ClayList.ItemText>
 			</ClayList.ItemField>
 
 			<ClayDropDown

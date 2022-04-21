@@ -3036,7 +3036,7 @@ public class PortalImpl implements Portal {
 		Company company = CompanyLocalServiceUtil.getCompany(
 			layoutSet.getCompanyId());
 
-		String defaultVirtualHostName = _getDefaultVirtualHostName(company);
+		String defaultVirtualHostname = _getDefaultVirtualHostname(company);
 
 		int portalPort = getPortalServerPort(secureConnection);
 
@@ -3047,14 +3047,14 @@ public class PortalImpl implements Portal {
 			layoutSet);
 
 		if (!virtualHostnames.isEmpty() &&
-			!virtualHostnames.containsKey(defaultVirtualHostName)) {
+			!virtualHostnames.containsKey(defaultVirtualHostname)) {
 
 			int index = portalURL.indexOf("://");
 
 			String portalDomain = portalURL.substring(index + 3);
 
 			String virtualHostname = getCanonicalDomain(
-				virtualHostnames, portalDomain, defaultVirtualHostName);
+				virtualHostnames, portalDomain, defaultVirtualHostname);
 
 			virtualHostname = getPortalURL(
 				virtualHostname, portalPort, secureConnection);
@@ -3097,7 +3097,7 @@ public class PortalImpl implements Portal {
 			LayoutSet layoutSet, ThemeDisplay themeDisplay)
 		throws PortalException {
 
-		String defaultVirtualHostName = _getDefaultVirtualHostName(
+		String defaultVirtualHostname = _getDefaultVirtualHostname(
 			themeDisplay.getCompany());
 
 		String virtualHostname = null;
@@ -3111,7 +3111,7 @@ public class PortalImpl implements Portal {
 
 		if (Validator.isNotNull(virtualHostname) &&
 			!StringUtil.equalsIgnoreCase(
-				virtualHostname, defaultVirtualHostName)) {
+				virtualHostname, defaultVirtualHostname)) {
 
 			String portalURL = getPortalURL(
 				virtualHostname, themeDisplay.getServerPort(),
@@ -7354,11 +7354,11 @@ public class PortalImpl implements Portal {
 
 	protected String getCanonicalDomain(
 		TreeMap<String, String> virtualHostnames, String portalDomain,
-		String defaultVirtualHostName) {
+		String defaultVirtualHostname) {
 
 		if (Validator.isBlank(portalDomain) ||
-			StringUtil.equalsIgnoreCase(portalDomain, defaultVirtualHostName) ||
-			!virtualHostnames.containsKey(defaultVirtualHostName)) {
+			StringUtil.equalsIgnoreCase(portalDomain, defaultVirtualHostname) ||
+			!virtualHostnames.containsKey(defaultVirtualHostname)) {
 
 			return virtualHostnames.firstKey();
 		}
@@ -8060,7 +8060,7 @@ public class PortalImpl implements Portal {
 			Set<Locale> availableLocales)
 		throws PortalException {
 
-		String defaultVirtualHostName = _getDefaultVirtualHostName(
+		String defaultVirtualHostname = _getDefaultVirtualHostname(
 			themeDisplay.getCompany());
 		String portalDomain = themeDisplay.getPortalDomain();
 
@@ -8072,9 +8072,9 @@ public class PortalImpl implements Portal {
 
 		if ((!Validator.isBlank(portalDomain) &&
 			 !StringUtil.equalsIgnoreCase(
-				 portalDomain, defaultVirtualHostName) &&
+				 portalDomain, defaultVirtualHostname) &&
 			 StringUtil.equalsIgnoreCase(
-				 virtualHostname, defaultVirtualHostName)) ||
+				 virtualHostname, defaultVirtualHostname)) ||
 			virtualHostnames.containsKey(portalDomain)) {
 
 			virtualHostname = portalDomain;
@@ -8100,6 +8100,11 @@ public class PortalImpl implements Portal {
 		// www.liferay.com:8080/ctx/page to www.liferay.com:8080/ctx/es/page
 
 		int pos = canonicalURL.indexOf(virtualHostname);
+
+		if (pos < 0) {
+			pos = canonicalURL.indexOf(portalDomain);
+			virtualHostname = portalDomain;
+		}
 
 		if (pos > 0) {
 			pos = canonicalURL.indexOf(
@@ -8236,7 +8241,7 @@ public class PortalImpl implements Portal {
 		return alternateURLs;
 	}
 
-	private String _getDefaultVirtualHostName(Company company) {
+	private String _getDefaultVirtualHostname(Company company) {
 		if ((company != null) &&
 			Validator.isNotNull(company.getVirtualHostname())) {
 
@@ -8257,19 +8262,19 @@ public class PortalImpl implements Portal {
 
 		boolean useGroupVirtualHostname = false;
 
-		String defaultVirtualHostName = _LOCALHOST;
+		String defaultVirtualHostname = _LOCALHOST;
 
 		Company company = themeDisplay.getCompany();
 
 		if ((company != null) &&
 			Validator.isNotNull(company.getVirtualHostname())) {
 
-			defaultVirtualHostName = company.getVirtualHostname();
+			defaultVirtualHostname = company.getVirtualHostname();
 		}
 
 		if (canonicalURL ||
 			!StringUtil.equalsIgnoreCase(
-				themeDisplay.getServerName(), defaultVirtualHostName)) {
+				themeDisplay.getServerName(), defaultVirtualHostname)) {
 
 			useGroupVirtualHostname = true;
 		}
@@ -8296,7 +8301,7 @@ public class PortalImpl implements Portal {
 		if (useGroupVirtualHostname) {
 			if (!virtualHostnames.isEmpty() &&
 				(canonicalURL ||
-				 !virtualHostnames.containsKey(defaultVirtualHostName))) {
+				 !virtualHostnames.containsKey(defaultVirtualHostname))) {
 
 				if (!controlPanel || !privateLayoutSet) {
 					if (canonicalURL) {
@@ -8307,7 +8312,7 @@ public class PortalImpl implements Portal {
 						}
 
 						if (!virtualHostnames.containsKey(
-								defaultVirtualHostName) &&
+								defaultVirtualHostname) &&
 							!_containsHostname(
 								virtualHostnames, portalDomain)) {
 
@@ -8349,7 +8354,7 @@ public class PortalImpl implements Portal {
 						String serverName = themeDisplay.getServerName();
 
 						if (Validator.isNotNull(serverName) &&
-							!serverName.equals(defaultVirtualHostName)) {
+							!serverName.equals(defaultVirtualHostname)) {
 
 							virtualHostnames.put(serverName, StringPool.BLANK);
 						}
@@ -8365,19 +8370,19 @@ public class PortalImpl implements Portal {
 					}
 
 					if (virtualHostnames.isEmpty() ||
-						virtualHostnames.containsKey(defaultVirtualHostName)) {
+						virtualHostnames.containsKey(defaultVirtualHostname)) {
 
 						virtualHostnames = TreeMapBuilder.put(
-							company::getVirtualHostname, StringPool.BLANK
+							defaultVirtualHostname, StringPool.BLANK
 						).build();
 					}
 
 					if (canonicalURL ||
-						!virtualHostnames.containsKey(defaultVirtualHostName)) {
+						!virtualHostnames.containsKey(defaultVirtualHostname)) {
 
 						String virtualHostname = getCanonicalDomain(
 							virtualHostnames, portalDomain,
-							defaultVirtualHostName);
+							defaultVirtualHostname);
 
 						portalURL = getPortalURL(
 							virtualHostname, themeDisplay.getServerPort(),
@@ -8417,7 +8422,7 @@ public class PortalImpl implements Portal {
 					group.getGroupKey(),
 					PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME) ||
 				 (!StringUtil.equalsIgnoreCase(
-					 portalDomain, defaultVirtualHostName) &&
+					 portalDomain, defaultVirtualHostname) &&
 				  !_containsHostname(virtualHostnames, portalDomain))) {
 
 			sb.append(_PUBLIC_GROUP_SERVLET_MAPPING);

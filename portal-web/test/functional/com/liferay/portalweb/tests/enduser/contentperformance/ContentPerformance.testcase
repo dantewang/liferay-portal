@@ -411,6 +411,29 @@ definition {
 		}
 	}
 
+	@description = "LPS-150536 Bug: Traffic sources with link and full pie chart when the content was published today and there is some data for that content in AC side"
+	@priority = "4"
+	test EmptyDataAtPieChartPublishedToday {
+		task ("Create and go to content page") {
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Content Page 2",
+				type = "content");
+
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page-2");
+		}
+
+		task ("Open Content Performance panel") {
+			ContentPerformance.openContentPerformance();
+		}
+
+		task ("Check that graph is empty (grey/gray)") {
+			AssertElementPresent(
+				colorHex = "f1f2f5",
+				locator1 = "ContentPerformance#PIE_CHART_WITH_COLOR");
+		}
+	}
+
 	@description = "LPS-105216: Validate that Free trial and dismiss buttons ARE NOT displayed when AC is enabled"
 	@priority = "3"
 	test FreeTrialButtonNotPresent {
@@ -1256,24 +1279,24 @@ definition {
 	@description = "LPS-111042: As a content writer I want to know the keywords driving traffic to my contents by different countries"
 	@priority = "4"
 	test NoNavigationWithoutIncomingTraffic {
-		task ("Open Content Performance and Assert") {
-			if (IsVisible(locator1 = "ContentPerformance#CONTENT_PERFORMANCE_PANEL")) {
-				Click(locator1 = "ContentPerformance#CONTENT_PERFORMANCE_BUTTON");
-			}
-
-			Click(locator1 = "ContentPerformance#CONTENT_PERFORMANCE_BUTTON");
-
-			AssertElementPresent(
-				locator1 = "ContentPerformance#SELECT_TRAFFIC_SOURCES_NUMBER",
-				value1 = "0");
+		task ("Open Content Performance") {
+			ContentPerformance.openContentPerformance();
 		}
 
-		task ("Click and Assert if element still present") {
-			ClickNoError(locator1 = "ContentPerformance#SELECT_TRAFFIC_SOURCES_NUMBER");
+		task ("Check the value of engagement data") {
+			for (var channel : list "Referral,Social,Paid,Direct,Organic") {
+				ContentPerformance.viewTrafficViews(
+					key_numberViews = "0",
+					trafficChannel = "${channel}");
+			}
+		}
 
-			AssertElementPresent(
-				locator1 = "ContentPerformance#SELECT_TRAFFIC_SOURCES_NUMBER",
-				value1 = "0");
+		task ("Chech that channels are not clickable") {
+			for (var channel : list "Referral,Social,Paid,Direct,Organic") {
+				AssertVisible(
+					locator1 = "ContentPerformance#TRAFFIC_CHANNELS_TEXT",
+					trafficChannel = "${channel}");
+			}
 		}
 	}
 

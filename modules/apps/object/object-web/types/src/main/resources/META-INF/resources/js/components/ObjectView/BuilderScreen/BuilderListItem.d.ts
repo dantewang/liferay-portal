@@ -14,8 +14,9 @@
 
 import React from 'react';
 import './BuilderListItem.scss';
-interface Iprops {
+interface IProps {
 	aliasColumnText?: string;
+	hasDragAndDrop?: boolean;
 	index: number;
 	isDefaultSort?: boolean;
 	label?: string;
@@ -23,6 +24,7 @@ interface Iprops {
 	onEditing?: (boolean: boolean) => void;
 	onEditingObjectFieldName?: (objectFieldName: string) => void;
 	onVisibleEditModal?: (boolean: boolean) => void;
+	thirdColumnValues?: string[];
 }
-declare const BuilderListItem: React.FC<Iprops>;
+declare const BuilderListItem: React.FC<IProps>;
 export default BuilderListItem;

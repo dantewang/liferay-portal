@@ -310,12 +310,24 @@ definition {
 	}
 
 	@description = "LPS-146028 - Verify that the user can duplicate a object View"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test CanDuplicateObjectView {
+		ObjectAdmin.addObjectViaAPI(
+			labelName = "Custom Object 151589",
+			objectName = "CustomObject151589",
+			pluralLabelName = "Custom Objects 151589");
 
-		// TODO LPS-151589 CanDuplicateObjectView pending implementation
+		ObjectAdmin.openObjectAdmin();
 
+		ObjectPortlet.selectCustomObject(label = "Custom Object 151589");
+
+		ObjectCustomViews.goToViewsTab();
+
+		ObjectCustomViews.addObjectViewViaUI(viewName = "Custom View 151589");
+
+		ObjectCustomViews.duplicateObjectCustomView(viewLabel = "Custom View 151589");
+
+		ObjectCustomViews.assertObjectView(viewLabel = "Custom View 151589 (Copy)");
 	}
 
 	@description = "LPS-135394 - Verify the Name is required when creating a View"
@@ -857,18 +869,131 @@ definition {
 	@ignore = "Test Stub"
 	@priority = "4"
 	test DuplicatedObjectViewColumnsAreCorrectlyOrdered {
+		ObjectAdmin.addObjectViaAPI(
+			labelName = "Custom Object 151590",
+			objectName = "CustomObject151590",
+			pluralLabelName = "Custom Objects 151590");
 
-		// TODO LPS-151590 DuplicatedObjectViewColumnsAreCorrectlyOrdered pending implementation
+		ObjectAdmin.openObjectAdmin();
 
+		ObjectPortlet.selectCustomObject(label = "Custom Object 151590");
+
+		ObjectCustomViews.goToViewsTab();
+
+		ObjectCustomViews.addObjectViewViaUI(viewName = "Custom View 151590");
+
+		ObjectCustomViews.goToViewsDetails(label = "Custom View 151590");
+
+		ObjectCustomViews.markViewAsDefault();
+
+		ObjectCustomViews.goToViewsBuilderTab();
+
+		LexiconEntry.gotoAdd();
+
+		for (var columnOption : list "Author,Creation Date,Modified Date,Workflow Status,ID") {
+			Click.clickAtNotVisible(
+				key_columnOption = "${columnOption}",
+				locator1 = "ObjectCustomViews#CHECKBOX_COLUMN_OPTION");
+		}
+
+		ObjectCustomViews.saveColumnsModal();
+
+		Button.clickSave();
+
+		SelectFrame(locator1 = "ObjectCustomViews#OBJECT_VIEW_KEBAB_MENU");
+
+		ObjectCustomViews.duplicateObjectCustomView(viewLabel = "Custom View 151590");
+
+		ObjectCustomViews.goToViewsDetails(label = "Custom View 151590 (Copy)");
+
+		ObjectCustomViews.goToViewsBuilderTab();
+
+		ObjectCustomViews.viewOrdersOfTheColumns(
+			colunmName = "Author",
+			position = "1");
+
+		ObjectCustomViews.viewOrdersOfTheColumns(
+			colunmName = "Creation Date",
+			position = "2");
+
+		ObjectCustomViews.viewOrdersOfTheColumns(
+			colunmName = "Modified Date",
+			position = "3");
+
+		ObjectCustomViews.viewOrdersOfTheColumns(
+			colunmName = "Workflow Status",
+			position = "4");
+
+		ObjectCustomViews.viewOrdersOfTheColumns(
+			colunmName = "ID",
+			position = "5");
 	}
 
 	@description = "LPS-146028 - Verify that the fields present at the Default Sort are ordered correctly"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test DuplicatedObjectViewFieldsAreCorrectlyOrdered {
+		ObjectAdmin.addObjectViaAPI(
+			labelName = "Custom Object 151591",
+			objectName = "CustomObject151591",
+			pluralLabelName = "Custom Objects 151591");
 
-		// TODO LPS-151591 DuplicatedObjectViewFieldsAreCorrectlyOrdered pending implementation
+		ObjectAdmin.addObjectFieldViaAPI(
+			fieldBusinessType = "Text",
+			fieldLabelName = "Custom Field A",
+			fieldName = "customObjectFieldA151591",
+			fieldType = "String",
+			isRequired = "false",
+			objectName = "CustomObject151591");
 
+		ObjectAdmin.addObjectFieldViaAPI(
+			fieldBusinessType = "Text",
+			fieldLabelName = "Custom Field B",
+			fieldName = "customObjectFieldB151591",
+			fieldType = "String",
+			isRequired = "false",
+			objectName = "CustomObject151591");
+
+		ObjectAdmin.openObjectAdmin();
+
+		ObjectPortlet.selectCustomObject(label = "Custom Object 151591");
+
+		ObjectCustomViews.goToViewsTab();
+
+		ObjectCustomViews.addObjectViewViaUI(viewName = "Custom View 151591");
+
+		ObjectCustomViews.goToViewsDetails(label = "Custom View 151591");
+
+		ObjectCustomViews.markViewAsDefault();
+
+		ObjectCustomViews.goToViewsBuilderTab();
+
+		LexiconEntry.gotoAdd();
+
+		for (var columnOption : list "Custom Field A,Custom Field B") {
+			Click.clickAtNotVisible(
+				key_columnOption = "${columnOption}",
+				locator1 = "ObjectCustomViews#CHECKBOX_COLUMN_OPTION");
+		}
+
+		ObjectCustomViews.saveColumnsModal();
+
+		Button.clickSave();
+
+		SelectFrame(locator1 = "ObjectCustomViews#OBJECT_VIEW_KEBAB_MENU");
+
+		ObjectCustomViews.duplicateObjectCustomView(viewLabel = "Custom View 151591");
+
+		ObjectCustomViews.goToViewsDetails(label = "Custom View 151591 (Copy)");
+
+		ObjectCustomViews.goToViewsBuilderTab();
+
+		ObjectCustomViews.viewOrdersOfTheColumns(
+			colunmName = "Custom Field A",
+			position = "1");
+
+		ObjectCustomViews.viewOrdersOfTheColumns(
+			colunmName = "Custom Field B",
+			position = "2");
 	}
 
 	@description = "LPS-135394 - Verify the empty state for the View Builder tab"

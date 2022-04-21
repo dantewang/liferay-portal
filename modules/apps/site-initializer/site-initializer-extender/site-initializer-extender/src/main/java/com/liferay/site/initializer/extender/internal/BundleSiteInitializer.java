@@ -79,7 +79,6 @@ import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.petra.function.UnsafeRunnable;
 import com.liferay.petra.function.UnsafeSupplier;
-import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -327,7 +326,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 
 	@Override
 	public String getThumbnailSrc() {
-		return _servletContext.getContextPath() + "/images/thumbnail.png";
+		return _servletContext.getContextPath() + "/thumbnail.png";
 	}
 
 	@Override
@@ -1368,23 +1367,11 @@ public class BundleSiteInitializer implements SiteInitializer {
 		while (enumeration.hasMoreElements()) {
 			URL url = enumeration.nextElement();
 
-			// Begin LPS-146172
-
 			String fileName = url.getFile();
 
-			int index = fileName.lastIndexOf(CharPool.FORWARD_SLASH);
-
-			if ((index == -1) || (index >= (fileName.length() - 1))) {
+			if (fileName.endsWith("/")) {
 				continue;
 			}
-
-			fileName = fileName.substring(index + 1);
-
-			if (Validator.isNull(fileName)) {
-				continue;
-			}
-
-			// End LPS-146172
 
 			String urlPath = url.getPath();
 
@@ -2528,15 +2515,33 @@ public class BundleSiteInitializer implements SiteInitializer {
 	private void _addStyleBookEntries(ServiceContext serviceContext)
 		throws Exception {
 
-		URL url = _bundle.getEntry("/style-books.zip");
+		Enumeration<URL> enumeration = _bundle.findEntries(
+			"/site-initializer/style-books", StringPool.STAR, true);
 
-		if (url == null) {
+		if (enumeration == null) {
 			return;
+		}
+
+		ZipWriter zipWriter = ZipWriterFactoryUtil.getZipWriter();
+
+		while (enumeration.hasMoreElements()) {
+			URL url = enumeration.nextElement();
+
+			String fileName = url.getFile();
+
+			if (fileName.endsWith("/")) {
+				continue;
+			}
+
+			zipWriter.addEntry(
+				StringUtil.removeFirst(
+					fileName, "/site-initializer/style-books/"),
+				url.openStream());
 		}
 
 		_styleBookEntryZipProcessor.importStyleBookEntries(
 			serviceContext.getUserId(), serviceContext.getScopeGroupId(),
-			FileUtil.createTempFile(url.openStream()), false);
+			zipWriter.getFile(), false);
 	}
 
 	private Map<String, String> _addTaxonomyCategories(

@@ -120,6 +120,39 @@ definition {
 		PublicationsPermissions.assertEditorPermissions(publicationName = "Publication Name 2");
 	}
 
+	@priority = "3"
+	test ExplainEachRoleInInviteUsers {
+		JSONPublications.enablePublications();
+
+		JSONPublications.addPublication(publicationName = "Publication Name");
+
+		PublicationsNavigator.gotoReviewChanges(
+			gotoPublicationsAdmin = "true",
+			publicationName = "Publication Name");
+
+		Click(locator1 = "Icon#PLUS");
+
+		Click(
+			key_text = "Viewer",
+			locator1 = "Button#ANY_SECONDARY");
+
+		PublicationsPermissions.viewPublicationRoleHelpText(
+			publicationRole = "Viewer",
+			publicationRoleHelpText = "Viewers can view.");
+
+		PublicationsPermissions.viewPublicationRoleHelpText(
+			publicationRole = "Editor",
+			publicationRoleHelpText = "Editors can view and edit.");
+
+		PublicationsPermissions.viewPublicationRoleHelpText(
+			publicationRole = "Publisher",
+			publicationRoleHelpText = "Publishers can view, edit, and publish.");
+
+		PublicationsPermissions.viewPublicationRoleHelpText(
+			publicationRole = "Admin",
+			publicationRoleHelpText = "Admins can view, edit, publish, and invite other users.");
+	}
+
 	@priority = "5"
 	test InviteUserAsAdmin {
 		for (var userNumber : list "1,2") {

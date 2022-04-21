@@ -18,9 +18,37 @@ import type {Atom} from '@liferay/frontend-js-state-web';
 
 export const activeLanguageIdsAtom: Atom<any>;
 
-export function ResultsBar(
-	children: React.ReactElement | Array<React.ReactElement>
-): ReactElement;
+export declare const ManagementToolbar: {
+	Container: React.FunctionComponent<{
+		active?: boolean;
+		children?: React.ReactElement | Array<React.ReactElement>;
+		className?: string;
+	}>;
+	Item: React.FunctionComponent<{
+		children?: React.ReactElement | Array<React.ReactElement>;
+		className?: string;
+	}>;
+	ItemList: React.FunctionComponent<{
+		children?: React.ReactElement | Array<React.ReactElement>;
+		expand?: boolean;
+	}>;
+	ResultsBar: React.FunctionComponent<{
+		children: React.ReactElement | Array<React.ReactElement>;
+	}>;
+	ResultsBarItem: React.FunctionComponent<
+		React.LiHTMLAttributes<HTMLLIElement> & {
+			children?: React.ReactElement | Array<React.ReactElement>;
+			expand?: boolean;
+		}
+	>;
+	Search: React.FunctionComponent<
+		React.FormHTMLAttributes<HTMLFormElement> & {
+			children?: React.ReactElement | Array<React.ReactElement>;
+			onlySearch?: boolean;
+			showMobile?: boolean;
+		}
+	>;
+};
 
 export function Treeview(
 	NodeComponent: () => void,

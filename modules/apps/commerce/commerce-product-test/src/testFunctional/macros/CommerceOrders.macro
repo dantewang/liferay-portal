@@ -22,6 +22,43 @@ definition {
 		Alert.viewSuccessMessage();
 	}
 
+	macro assertOrderImportPreviewEntry {
+		AssertTextEquals(
+			key_columnNumber = "1",
+			key_productName = "${productName}",
+			key_value = "${productSku}",
+			locator1 = "CommerceEntry#TABLE_SEARCH_BY_NAME_AND_COLUMN_CONTENT",
+			value1 = "${productSku}");
+
+		AssertTextEquals.assertPartialText(
+			key_columnNumber = "3",
+			key_productName = "${productName}",
+			key_value = "${unitPrice}",
+			locator1 = "CommerceEntry#TABLE_SEARCH_BY_NAME_AND_COLUMN_CONTENT",
+			value1 = "${unitPrice}");
+
+		AssertTextEquals(
+			key_columnNumber = "4",
+			key_productName = "${productName}",
+			key_value = "${productQuantity}",
+			locator1 = "CommerceEntry#TABLE_SEARCH_BY_NAME_AND_COLUMN_CONTENT",
+			value1 = "${productQuantity}");
+
+		AssertTextEquals.assertPartialText(
+			key_columnNumber = "5",
+			key_productName = "${productName}",
+			key_value = "${totalPrice}",
+			locator1 = "CommerceEntry#TABLE_SEARCH_BY_NAME_AND_COLUMN_CONTENT",
+			value1 = "${totalPrice}");
+
+		AssertTextEquals.assertPartialText(
+			key_columnNumber = "6",
+			key_productName = "${productName}",
+			key_value = "${importStatus}",
+			locator1 = "CommerceEntry#TABLE_SEARCH_BY_NAME_AND_COLUMN_CONTENT",
+			value1 = "${importStatus}");
+	}
+
 	macro assertOrderTypesEntry {
 		AssertTextEquals(
 			locator1 = "CommerceEntry#NAME_FIELD",
@@ -226,6 +263,22 @@ definition {
 		IFrame.selectTopFrame();
 	}
 
+	macro importFromOrder {
+		Click(locator1 = "CommerceEntry#DROPDOWN");
+
+		MenuItem.click(menuItem = "Import from Orders");
+
+		IFrame.selectModalFrame();
+
+		Search.searchCP(searchTerm = "${orderId}");
+
+		Button.click(button = "Select");
+
+		Button.click(button = "Import");
+
+		IFrame.selectTopFrame();
+	}
+
 	macro openOrdersAdmin {
 		Navigator.openWithAppendToBaseURL(
 			baseURL = "${baseURL}",
@@ -236,6 +289,34 @@ definition {
 		Navigator.openWithAppendToBaseURL(
 			baseURL = "${baseURL}",
 			urlAppend = "group/control_panel/manage?p_p_id=com_liferay_commerce_order_web_internal_portlet_CommerceOrderTypePortlet");
+	}
+
+	macro viewOrdersDetails {
+		AssertElementPresent(
+			key_productSku = "${productSku}",
+			locator1 = "CommerceOrders#ORDER_DETAILS_PRODUCT_SKU");
+
+		AssertElementPresent(
+			key_productName = "${productName}",
+			locator1 = "CommerceOrders#ORDER_DETAILS_PRODUCT_NAME");
+
+		AssertElementPresent(
+			key_productListPrice = "${productListPrice}",
+			locator1 = "CommerceOrders#ORDER_DETAILS_PRODUCT_LIST_PRICE");
+
+		if (isSet(productDiscount)) {
+			AssertElementPresent(
+				key_productDiscount = "{productDiscount}",
+				locator1 = "CommerceOrders#ORDER_DETAILS_PRODUCT_DISCOUNT");
+		}
+
+		AssertElementPresent(
+			key_productQuantity = "${productQuantity}",
+			locator1 = "CommerceOrders#ORDER_DETAILS_PRODUCT_QUANTITY");
+
+		AssertElementPresent(
+			key_productTotalPrice = "${productTotalPrice}",
+			locator1 = "CommerceOrders#ORDER_DETAILS_TOTAL_PRICE");
 	}
 
 	macro viewOrdersEntry {

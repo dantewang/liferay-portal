@@ -15,45 +15,52 @@
 import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import ClayEmptyState from '@clayui/empty-state';
 import ClayList from '@clayui/list';
-import ClayManagementToolbar from '@clayui/management-toolbar';
+import classNames from 'classnames';
+import {ManagementToolbar} from 'frontend-js-components-web';
 import React, {useEffect, useState} from 'react';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 
 import Card from '../../Card/Card';
 import {ManagementToolbarSearch} from '../ManagementToolbarSearch/ManagementToolbarSearch';
-import {TObjectViewSortColumn} from '../types';
+import {TObjectColumn} from '../types';
 import BuilderListItem from './BuilderListItem';
 
 import './BuilderScreen.scss';
 
 interface IProps {
-	aliasColumnHeader: string;
 	emptyState: {
 		buttonText: string;
 		description: string;
 		title: string;
 	};
+	firstColumnHeader: string;
+	hasDragAndDrop?: boolean;
 	isDefaultSort?: boolean;
-	objectColumns: TObjectViewSortColumn[];
+	objectColumns: TObjectColumn[];
 	onEditing?: (boolean: boolean) => void;
 	onEditingObjectFieldName?: (objectFieldName: string) => void;
 	onVisibleEditModal: (boolean: boolean) => void;
 	onVisibleModal: (boolean: boolean) => void;
+	secondColumnHeader: string;
+	thirdColumnHeader?: string;
 	title: string;
 }
 
 const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 export function BuilderScreen({
-	aliasColumnHeader,
 	emptyState,
+	firstColumnHeader,
+	hasDragAndDrop,
 	isDefaultSort,
 	objectColumns,
 	onEditing,
 	onEditingObjectFieldName,
 	onVisibleEditModal,
 	onVisibleModal,
+	secondColumnHeader,
+	thirdColumnHeader,
 	title,
 }: IProps) {
 	const [query, setQuery] = useState('');
@@ -64,7 +71,7 @@ export function BuilderScreen({
 	}, [objectColumns]);
 
 	const newFilteredItems = filteredItems.filter(
-		(objectColumns: TObjectViewSortColumn) =>
+		(objectColumns: TObjectColumn) =>
 			objectColumns.fieldLabel
 				?.toLowerCase()
 				.includes(query.toLowerCase())
@@ -75,22 +82,22 @@ export function BuilderScreen({
 			<Card.Header title={title} />
 
 			<Card.Body>
-				<ClayManagementToolbar>
-					<ClayManagementToolbar.ItemList expand>
+				<ManagementToolbar.Container>
+					<ManagementToolbar.ItemList expand>
 						<ManagementToolbarSearch
 							query={query}
 							setQuery={setQuery}
 						/>
 
-						<ClayManagementToolbar.Item>
+						<ManagementToolbar.Item>
 							<ClayButtonWithIcon
 								className="nav-btn nav-btn-monospaced"
 								onClick={() => onVisibleModal(true)}
 								symbol="plus"
 							/>
-						</ClayManagementToolbar.Item>
-					</ClayManagementToolbar.ItemList>
-				</ClayManagementToolbar>
+						</ManagementToolbar.Item>
+					</ManagementToolbar.ItemList>
+				</ManagementToolbar.Container>
 
 				{objectColumns?.length > 0 ? (
 					<ClayList>
@@ -102,12 +109,16 @@ export function BuilderScreen({
 									>
 										{index === 0 && (
 											<ClayList.Item flex>
-												<ClayList.ItemField expand>
-													<ClayList.ItemField className="lfr-object__object-builder-screen-name">
-														{Liferay.Language.get(
-															'name'
-														)}
-													</ClayList.ItemField>
+												<ClayList.ItemField
+													className={classNames(
+														'lfr-object__object-builder-screen-first-column',
+														{
+															'drag-and-drop': hasDragAndDrop,
+														}
+													)}
+													expand
+												>
+													{firstColumnHeader}
 												</ClayList.ItemField>
 
 												<ClayList.ItemField
@@ -115,7 +126,7 @@ export function BuilderScreen({
 													expand
 												>
 													<ClayList.ItemField>
-														{aliasColumnHeader}
+														{secondColumnHeader}
 													</ClayList.ItemField>
 												</ClayList.ItemField>
 											</ClayList.Item>
@@ -176,21 +187,39 @@ export function BuilderScreen({
 										{index === 0 && (
 											<ClayList.Item flex>
 												<ClayList.ItemField expand>
-													<ClayList.ItemField className="lfr-object__object-builder-screen-name">
-														{Liferay.Language.get(
-															'name'
-														)}
+													<ClayList.ItemField
+														className={classNames({
+															'lfr-object__object-builder-screen-first-column': hasDragAndDrop,
+														})}
+														expand
+													>
+														{firstColumnHeader}
 													</ClayList.ItemField>
 												</ClayList.ItemField>
 
 												<ClayList.ItemField
-													className="lfr-object__object-builder-screen-second-column"
+													className={classNames({
+														'lfr-object__object-builder-screen-second-column': hasDragAndDrop,
+													})}
 													expand
 												>
 													<ClayList.ItemField>
-														{aliasColumnHeader}
+														{secondColumnHeader}
 													</ClayList.ItemField>
 												</ClayList.ItemField>
+
+												{thirdColumnHeader && (
+													<ClayList.ItemField
+														className={classNames({
+															'lfr-object__object-builder-screen-third-column': hasDragAndDrop,
+														})}
+														expand
+													>
+														<ClayList.ItemField>
+															{thirdColumnHeader}
+														</ClayList.ItemField>
+													</ClayList.ItemField>
+												)}
 											</ClayList.Item>
 										)}
 
@@ -210,6 +239,7 @@ export function BuilderScreen({
 																defaultLanguageId
 														  ]
 												}
+												hasDragAndDrop={hasDragAndDrop}
 												index={index}
 												isDefaultSort={isDefaultSort}
 												label={viewColumn.fieldLabel}
@@ -222,6 +252,9 @@ export function BuilderScreen({
 												}
 												onVisibleEditModal={
 													onVisibleEditModal
+												}
+												thirdColumnValues={
+													viewColumn.valueList
 												}
 											/>
 										</DndProvider>

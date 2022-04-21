@@ -14,7 +14,7 @@
 
 import {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
-import ClayManagementToolbar from '@clayui/management-toolbar';
+import {ManagementToolbar} from 'frontend-js-components-web';
 import React from 'react';
 
 import './ManagementToolbarSearch.scss';
@@ -26,9 +26,7 @@ interface IProps {
 
 export function ManagementToolbarSearch({query, setQuery}: IProps) {
 	return (
-		<ClayManagementToolbar.Search
-			onSubmit={(event) => event.preventDefault()}
-		>
+		<ManagementToolbar.Search onSubmit={(event) => event.preventDefault()}>
 			<ClayInput.Group>
 				<ClayInput.GroupItem>
 					<ClayInput
@@ -50,6 +48,6 @@ export function ManagementToolbarSearch({query, setQuery}: IProps) {
 					</ClayInput.GroupInsetItem>
 				</ClayInput.GroupItem>
 			</ClayInput.Group>
-		</ClayManagementToolbar.Search>
+		</ManagementToolbar.Search>
 	);
 }

@@ -51,7 +51,6 @@ export function DefaultSortScreen() {
 			</ClayAlert>
 
 			<BuilderScreen
-				aliasColumnHeader={Liferay.Language.get('sorting')}
 				emptyState={{
 					buttonText: Liferay.Language.get('new-default-sort'),
 					description: Liferay.Language.get(
@@ -61,12 +60,15 @@ export function DefaultSortScreen() {
 						'no-default-sort-was-created-yet'
 					),
 				}}
+				firstColumnHeader={Liferay.Language.get('name')}
+				hasDragAndDrop
 				isDefaultSort
 				objectColumns={objectViewSortColumns ?? []}
 				onEditing={setIsEditingSort}
 				onEditingObjectFieldName={setEditingObjectFieldName}
 				onVisibleEditModal={setVisibleModal}
 				onVisibleModal={setVisibleModal}
+				secondColumnHeader={Liferay.Language.get('sorting')}
 				title={Liferay.Language.get('default-sort')}
 			/>
 

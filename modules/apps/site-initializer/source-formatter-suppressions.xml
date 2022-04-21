@@ -2,7 +2,7 @@
 
 <suppressions>
 	<checkstyle>
-		<suppress checks="MethodNamingCheck" files="site-initializer-extender/site-initializer-extender/src/main/java/com/liferay/site/initializer/extender/internal/file/backed/FileBackedServletContextDelegate\.java" />
+		<suppress checks="MethodNamingCheck" files="site-initializer-extender/site-initializer-extender/src/main/java/com/liferay/site/initializer/extender/internal/file/backed/servlet/FileBackedServletContextDelegate\.java" />
 	</checkstyle>
 	<source-check>
 		<suppress checks="GradleDependenciesCheck" files=".*" />

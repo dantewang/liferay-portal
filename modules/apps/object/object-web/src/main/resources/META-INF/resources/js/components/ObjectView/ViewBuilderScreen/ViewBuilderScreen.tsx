@@ -42,7 +42,6 @@ const ViewBuilderScreen: React.FC<{}> = () => {
 	return (
 		<>
 			<BuilderScreen
-				aliasColumnHeader={Liferay.Language.get('column-label')}
 				emptyState={{
 					buttonText: Liferay.Language.get('add-column'),
 					description: Liferay.Language.get(
@@ -50,10 +49,13 @@ const ViewBuilderScreen: React.FC<{}> = () => {
 					),
 					title: Liferay.Language.get('no-columns-added-yet'),
 				}}
+				firstColumnHeader={Liferay.Language.get('name')}
+				hasDragAndDrop
 				objectColumns={objectViewColumns ?? []}
 				onEditingObjectFieldName={setEditingObjectFieldName}
 				onVisibleEditModal={setVisibleEditModal}
 				onVisibleModal={setVisibleModal}
+				secondColumnHeader={Liferay.Language.get('column-label')}
 				title={Liferay.Language.get('columns')}
 			/>
 

@@ -119,12 +119,28 @@ definition {
 	}
 
 	@description = "LPS-143065 - Verify if there is an option on Request Files: Directly from User's Computer"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test CanViewDirectlyFromUsersComputerOption {
+		ObjectAdmin.addObjectViaAPI(
+			labelName = "Custom Object 151559",
+			objectName = "CustomObject151559",
+			pluralLabelName = "Custom Objects 151559");
 
-		// TODO LPS-151559 CanViewDirectlyFromUsersComputerOption pending implementation
+		Navigator.openURL();
 
+		ObjectAdmin.openObjectAdmin();
+
+		ObjectPortlet.selectCustomObject(label = "Custom Object 151559");
+
+		ObjectAdmin.goToFieldsTab();
+
+		LexiconEntry.gotoAdd();
+
+		ObjectField.selectType(fieldType = "Attachment");
+
+		ObjectField.assertOptionAndDescriptionOnRequestFiles(
+			description = "Files can be stored in an object entry or in a specific folder in Documents and Media.",
+			option = "Upload Directly from the User's Computer");
 	}
 
 	@description = "LPS-146523 - Verify if there's an option on Request Files: Upload and Select from Documents and Media Item Selector"
@@ -188,12 +204,31 @@ definition {
 	}
 
 	@description = "LPS-143065 - Verify if a side panel containing the Field name, Typem Request Files, Accepted File Extensions, and Maximum File Size fields"
-	@ignore = "Test Stub"
 	@priority = "4"
 	test CanViewSidePanelOptions {
+		ObjectAdmin.addObjectViaAPI(
+			labelName = "Custom Object 151560",
+			objectName = "CustomObject151560",
+			pluralLabelName = "Custom Objects 151560");
 
-		// TODO LPS-151560 CanViewSidePanelOptions pending implementation
+		Navigator.openURL();
 
+		ObjectAdmin.openObjectAdmin();
+
+		ObjectPortlet.selectCustomObject(label = "Custom Object 151560");
+
+		ObjectAdmin.goToFieldsTab();
+
+		ObjectAdmin.addObjectFieldViaUI(
+			fieldAttachment = "Upload Directly from the User's Computer",
+			fieldLabel = "Custom Attachment",
+			fieldType = "Attachment");
+
+		ObjectAdmin.goToFieldsDetails(label = "Custom Attachment");
+
+		AssertElementPresent(locator1 = "ObjectField#LABEL_ACCEPTED_FILE_EXTENSIONS");
+
+		AssertElementPresent(locator1 = "ObjectField#LABEL_MAXIMUM_FILE_SIZE");
 	}
 
 	@description = "LPS-144902 - Verify there is a description of each Field Type"

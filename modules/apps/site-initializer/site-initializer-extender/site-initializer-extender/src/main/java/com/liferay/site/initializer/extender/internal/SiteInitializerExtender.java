@@ -63,8 +63,8 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.service.access.policy.service.SAPEntryLocalService;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.remote.app.service.RemoteAppEntryLocalService;
-import com.liferay.site.initializer.extender.internal.file.backed.FileBackedBundleDelegate;
-import com.liferay.site.initializer.extender.internal.file.backed.FileBackedServletContextDelegate;
+import com.liferay.site.initializer.extender.internal.file.backed.osgi.FileBackedBundleDelegate;
+import com.liferay.site.initializer.extender.internal.file.backed.servlet.FileBackedServletContextDelegate;
 import com.liferay.site.navigation.service.SiteNavigationMenuItemLocalService;
 import com.liferay.site.navigation.service.SiteNavigationMenuLocalService;
 import com.liferay.site.navigation.type.SiteNavigationMenuItemTypeRegistry;
@@ -72,10 +72,10 @@ import com.liferay.style.book.zip.processor.StyleBookEntryZipProcessor;
 
 import java.io.File;
 
-import java.net.MalformedURLException;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -94,7 +94,7 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 /**
  * @author Brian Wing Shun Chan
  */
-@Component(immediate = true, service = {})
+@Component(service = SiteInitializerExtender.class)
 public class SiteInitializerExtender
 	implements BundleTrackerCustomizer<SiteInitializerExtension> {
 
@@ -148,6 +148,10 @@ public class SiteInitializerExtender
 		return siteInitializerExtension;
 	}
 
+	public File getFile(String fileKey) {
+		return _files.get(fileKey);
+	}
+
 	@Override
 	public void modifiedBundle(
 		Bundle bundle, BundleEvent bundleEvent,
@@ -163,9 +167,7 @@ public class SiteInitializerExtender
 	}
 
 	@Activate
-	protected void activate(BundleContext bundleContext)
-		throws MalformedURLException {
-
+	protected void activate(BundleContext bundleContext) throws Exception {
 		_bundleContext = bundleContext;
 
 		_bundleTracker = new BundleTracker<>(
@@ -185,22 +187,29 @@ public class SiteInitializerExtender
 
 	@Deactivate
 	protected void deactivate() {
+		_bundleTracker.close();
+
+		_files.clear();
+
 		for (SiteInitializerExtension siteInitializerExtension :
 				_fileSiteInitializerExtensions) {
 
 			siteInitializerExtension.destroy();
 		}
 
-		_bundleTracker.close();
+		_fileSiteInitializerExtensions.clear();
 	}
 
-	private void _addFile(File file) throws MalformedURLException {
+	private void _addFile(File file) throws Exception {
 		if (!file.isDirectory()) {
 			return;
 		}
 
-		String symbolicName =
-			"Liferay Site Initializer - File - " + StringUtil.randomString();
+		String fileKey = StringUtil.randomString(16);
+
+		_files.put(fileKey, file);
+
+		String symbolicName = "Liferay Site Initializer - File - " + fileKey;
 
 		SiteInitializerExtension siteInitializerExtension =
 			new SiteInitializerExtension(
@@ -210,7 +219,7 @@ public class SiteInitializerExtender
 				ProxyUtil.newDelegateProxyInstance(
 					Bundle.class.getClassLoader(), Bundle.class,
 					new FileBackedBundleDelegate(
-						_bundleContext, file, symbolicName),
+						_bundleContext, file, _jsonFactory, symbolicName),
 					null),
 				_ddmStructureLocalService, _ddmTemplateLocalService,
 				_defaultDDMStructureHelper, _dlURLHelper,
@@ -231,7 +240,8 @@ public class SiteInitializerExtender
 				_sapEntryLocalService,
 				ProxyUtil.newDelegateProxyInstance(
 					ServletContext.class.getClassLoader(), ServletContext.class,
-					new FileBackedServletContextDelegate(file, symbolicName),
+					new FileBackedServletContextDelegate(
+						file, fileKey, symbolicName),
 					null),
 				_settingsFactory, _siteNavigationMenuItemLocalService,
 				_siteNavigationMenuItemTypeRegistry,
@@ -284,6 +294,7 @@ public class SiteInitializerExtender
 	@Reference
 	private DocumentResource.Factory _documentResourceFactory;
 
+	private final Map<String, File> _files = new HashMap<>();
 	private final List<SiteInitializerExtension>
 		_fileSiteInitializerExtensions = new ArrayList<>();
 
