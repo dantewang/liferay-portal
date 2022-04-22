@@ -36,8 +36,8 @@ CookiesBannerDisplayContext cookiesBannerDisplayContext = (CookiesBannerDisplayC
 
 			<clay:content-col>
 				<clay:button
-					cssClass="cookies-banner-button-configuration"
 					displayType="link"
+					id='<%= liferayPortletResponse.getNamespace() + "configurationButton" %>'
 					label='<%= LanguageUtil.get(request, "configuration") %>'
 					small="<%= true %>"
 				/>
@@ -45,8 +45,8 @@ CookiesBannerDisplayContext cookiesBannerDisplayContext = (CookiesBannerDisplayC
 
 			<clay:content-col>
 				<clay:button
-					cssClass="cookies-banner-button-accept"
 					displayType="secondary"
+					id='<%= liferayPortletResponse.getNamespace() + "acceptAllButton" %>'
 					label='<%= LanguageUtil.get(request, "accept-all") %>'
 					small="<%= true %>"
 				/>
@@ -54,8 +54,8 @@ CookiesBannerDisplayContext cookiesBannerDisplayContext = (CookiesBannerDisplayC
 
 			<clay:content-col>
 				<clay:button
-					cssClass="cookies-banner-button-decline"
 					displayType="primary"
+					id='<%= liferayPortletResponse.getNamespace() + "declineAllButton" %>'
 					label='<%= LanguageUtil.get(request, "decline-all") %>'
 					small="<%= true %>"
 				/>
@@ -69,6 +69,10 @@ CookiesBannerDisplayContext cookiesBannerDisplayContext = (CookiesBannerDisplayC
 	context='<%=
 		HashMapBuilder.<String, Object>put(
 			"configurationUrl", cookiesBannerDisplayContext.getConfigurationURL()
+		).put(
+			"optionalCookies", cookiesBannerDisplayContext.getOptionalCookies()
+		).put(
+			"requiredCookies", cookiesBannerDisplayContext.getRequiredCookies()
 		).build()
 	%>'
 	module="cookies_banner/js/CookiesBanner"

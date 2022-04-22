@@ -16,8 +16,13 @@
 
 <%@ include file="/init.jsp" %>
 
+<%
+CookiesBannerConfigurationDisplayContext cookiesBannerConfigurationDisplayContext = new CookiesBannerConfigurationDisplayContext(renderRequest, renderResponse);
+%>
+
 <clay:container-fluid
 	cssClass="container-view p-md-4"
+	id='<%= liferayPortletResponse.getNamespace() + "cookiesBannerConfigurationForm" %>'
 >
 	<clay:row>
 		<clay:col
@@ -66,7 +71,7 @@
 				<clay:content-col>
 					<label class="toggle-switch">
 						<span class="toggle-switch-check-bar">
-							<input class="toggle-switch-check toggle-switch-check-performance" disabled type="checkbox" />
+							<input class="toggle-switch-check" data-cookie-key="CONSENT_TYPE_PERFORMANCE" disabled type="checkbox" />
 
 							<span aria-hidden="true" class="toggle-switch-bar">
 								<span class="toggle-switch-handle"></span>
@@ -95,7 +100,7 @@
 				<clay:content-col>
 					<label class="toggle-switch">
 						<span class="toggle-switch-check-bar">
-							<input class="toggle-switch-check toggle-switch-check-functional" disabled type="checkbox" />
+							<input class="toggle-switch-check" data-cookie-key="CONSENT_TYPE_FUNCTIONAL" disabled type="checkbox" />
 
 							<span aria-hidden="true" class="toggle-switch-bar">
 								<span class="toggle-switch-handle"></span>
@@ -124,7 +129,7 @@
 				<clay:content-col>
 					<label class="toggle-switch">
 						<span class="toggle-switch-check-bar">
-							<input class="toggle-switch-check toggle-switch-check-personalization" disabled type="checkbox" />
+							<input class="toggle-switch-check" data-cookie-key="CONSENT_TYPE_PERSONALIZATION" disabled type="checkbox" />
 
 							<span aria-hidden="true" class="toggle-switch-bar">
 								<span class="toggle-switch-handle"></span>
@@ -141,9 +146,56 @@
 			</clay:content-row>
 		</clay:col>
 	</clay:row>
+
+	<c:if test="<%= cookiesBannerConfigurationDisplayContext.isShowButtons() %>">
+		<clay:row
+			cssClass="d-flex justify-content-end"
+		>
+			<clay:content-row
+				noGutters="true"
+				verticalAlign="center"
+			>
+				<clay:content-col>
+					<clay:button
+						displayType="secondary"
+						id='<%= liferayPortletResponse.getNamespace() + "confirmButton" %>'
+						label='<%= LanguageUtil.get(request, "confirm") %>'
+						small="<%= true %>"
+					/>
+				</clay:content-col>
+
+				<clay:content-col>
+					<clay:button
+						displayType="secondary"
+						id='<%= liferayPortletResponse.getNamespace() + "acceptAllButton" %>'
+						label='<%= LanguageUtil.get(request, "accept-all") %>'
+						small="<%= true %>"
+					/>
+				</clay:content-col>
+
+				<clay:content-col>
+					<clay:button
+						displayType="primary"
+						id='<%= liferayPortletResponse.getNamespace() + "declineAllButton" %>'
+						label='<%= LanguageUtil.get(request, "decline-all") %>'
+						small="<%= true %>"
+					/>
+				</clay:content-col>
+			</clay:content-row>
+		</clay:row>
+	</c:if>
 </clay:container-fluid>
 
 <liferay-frontend:component
 	componentId="CookiesBannerConfiguration"
+	context='<%=
+		HashMapBuilder.<String, Object>put(
+			"optionalCookies", cookiesBannerConfigurationDisplayContext.getOptionalCookies()
+		).put(
+			"requiredCookies", cookiesBannerConfigurationDisplayContext.getRequiredCookies()
+		).put(
+			"showButtons", cookiesBannerConfigurationDisplayContext.isShowButtons()
+		).build()
+	%>'
 	module="cookies_banner_configuration/js/CookiesBannerConfiguration"
 />

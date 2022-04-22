@@ -68,6 +68,25 @@ public class ImportTranslationResultsDisplayContext implements Serializable {
 			workflowDefinitionLinkLocalService;
 	}
 
+	public String getFailureMessageKey() {
+		String pattern = "x-files-could-not-be-published";
+
+		if (_workflowAction == WorkflowConstants.ACTION_PUBLISH) {
+			if (getFailureMessagesCount() == 1) {
+				pattern = "x-file-could-not-be-published";
+			}
+		}
+		else {
+			pattern = "x-files-could-not-be-saved";
+
+			if (getFailureMessagesCount() == 1) {
+				pattern = "x-file-could-not-be-saved";
+			}
+		}
+
+		return pattern;
+	}
+
 	public List<Map<String, String>> getFailureMessages() {
 		return _failureMessages;
 	}

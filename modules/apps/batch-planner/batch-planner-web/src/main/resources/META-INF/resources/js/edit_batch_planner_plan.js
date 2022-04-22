@@ -38,8 +38,8 @@ function trimPackage(name) {
 function getOptionElement(label, schemaName, selected, value) {
 	const optionElement = document.createElement('option');
 
-	optionElement.innerHTML = label;
-	optionElement.value = value;
+	optionElement.innerHTML = encodeURIComponent(label);
+	optionElement.value = encodeURIComponent(value);
 
 	if (selected) {
 		optionElement.selected = true;

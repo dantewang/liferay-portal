@@ -12,95 +12,76 @@
  * details.
  */
 
-export default function () {
-	const toggleFunctional = document.querySelector(
-		'.toggle-switch-check-functional'
-	);
-	const togglePerformance = document.querySelector(
-		'.toggle-switch-check-performance'
-	);
-	const togglePersonalization = document.querySelector(
-		'.toggle-switch-check-personalization'
+import {
+	acceptAllCookies,
+	declineAllCookies,
+	getCookie,
+	setCookie,
+} from '../../js/CookiesUtil';
+
+export default function ({
+	namespace,
+	optionalCookies,
+	requiredCookies,
+	showButtons,
+}) {
+	const toggleSwitches = Array.from(
+		document.querySelectorAll(
+			`#${namespace}cookiesBannerConfigurationForm [data-cookie-key]`
+		)
 	);
 
-	if (getCookie('liferay.cookie.consent.functional') === 'accepted') {
-		toggleFunctional.checked = true;
+	toggleSwitches.forEach((toggleSwitch) => {
+		const cookieKey = toggleSwitch.dataset.cookieKey;
+
+		toggleSwitch.addEventListener('click', () => {
+			Liferay.Util.getOpener().Liferay.fire('cookiePreferenceUpdate', {
+				key: cookieKey,
+				value: toggleSwitch.checked ? 'true' : 'false',
+			});
+		});
+
+		toggleSwitch.checked = getCookie(cookieKey) === 'true';
+
+		toggleSwitch.removeAttribute('disabled');
+	});
+
+	if (showButtons) {
+		const acceptAllButton = document.getElementById(
+			`${namespace}acceptAllButton`
+		);
+		const confirmButton = document.getElementById(
+			`${namespace}confirmButton`
+		);
+		const declineAllButton = document.getElementById(
+			`${namespace}declineAllButton`
+		);
+
+		acceptAllButton.addEventListener('click', () => {
+			acceptAllCookies(optionalCookies, requiredCookies);
+
+			window.location.reload();
+		});
+
+		confirmButton.addEventListener('click', () => {
+			toggleSwitches.forEach((toggleSwitch) => {
+				setCookie(
+					toggleSwitch.dataset.cookieKey,
+					toggleSwitch.checked ? 'true' : 'false'
+				);
+			});
+
+			requiredCookies.forEach((requiredCookie) => {
+				setCookie(requiredCookie, 'true');
+			});
+
+			window.location.reload();
+		});
+
+		declineAllButton.addEventListener('click', () => {
+			declineAllCookies(optionalCookies, requiredCookies);
+
+			window.location.reload();
+		});
 	}
-
-	if (getCookie('liferay.cookie.consent.performance') === 'accepted') {
-		togglePerformance.checked = true;
-	}
-
-	if (getCookie('liferay.cookie.consent.personalization') === 'accepted') {
-		togglePersonalization.checked = true;
-	}
-
-	toggleFunctional.addEventListener(
-		'click',
-		function handleToggleFunctional() {
-			if (toggleFunctional.checked) {
-				setCookie('liferay.cookie.consent.functional', 'accepted');
-			}
-			else {
-				setCookie('liferay.cookie.consent.functional', 'decline');
-			}
-		}
-	);
-
-	togglePerformance.addEventListener(
-		'click',
-		function handleTogglePerformance() {
-			if (togglePerformance.checked) {
-				setCookie('liferay.cookie.consent.performance', 'accepted');
-			}
-			else {
-				setCookie('liferay.cookie.consent.performance', 'decline');
-			}
-		}
-	);
-
-	togglePersonalization.addEventListener(
-		'click',
-		function handleTogglePersonalization() {
-			if (togglePersonalization.checked) {
-				setCookie('liferay.cookie.consent.personalization', 'accepted');
-			}
-			else {
-				setCookie('liferay.cookie.consent.personalization', 'decline');
-			}
-		}
-	);
-
-	toggleFunctional.removeAttribute('disabled');
-	togglePerformance.removeAttribute('disabled');
-	togglePersonalization.removeAttribute('disabled');
-}
-
-function getCookie(name) {
-	const cookieName = name + '=';
-	const cookieSet = document.cookie.split(';');
-
-	for (let i = 0; i < cookieSet.length; i++) {
-		let c = cookieSet[i];
-
-		while (c.charAt(0) === ' ') {
-			c = c.substring(1, c.length);
-		}
-
-		if (c.indexOf(cookieName) === 0) {
-			return c.substring(cookieName.length, c.length);
-		}
-	}
-
-	return null;
-}
-
-function setCookie(name, value, days = 180) {
-	const date = new Date();
-
-	date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-
-	const expires = '; expires=' + date.toUTCString();
-
-	document.cookie = name + '=' + (value || '') + expires + '; path=/';
 }
