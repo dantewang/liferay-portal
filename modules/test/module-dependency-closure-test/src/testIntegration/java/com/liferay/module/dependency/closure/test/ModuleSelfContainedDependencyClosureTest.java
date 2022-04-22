@@ -103,7 +103,8 @@ public class ModuleSelfContainedDependencyClosureTest {
 
 		testBundles.add(bundleContext.getBundle());
 
-		Path modulesPath = Paths.get(PropsValues.MODULE_FRAMEWORK_MODULES_DIR);
+		Path modulesPath = Paths.get(SystemProperties.get(
+			SystemPropsKeys.MODULE_FRAMEWORK_MODULES_DIR));
 
 		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(
 				Paths.get(
