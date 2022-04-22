@@ -15,7 +15,6 @@
 package com.liferay.portal.util;
 
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.SystemPropsKeys;
 
@@ -40,25 +39,25 @@ public class SystemPropsValues {
 	public static final String MODULE_FRAMEWORK_BASE_DIR = SystemProperties.get(
 		SystemPropsKeys.MODULE_FRAMEWORK_BASE_DIR);
 
-	public static final String MODULE_FRAMEWORK_CONFIGS_DIR = SystemProperties.get(
-		SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR);
+	public static final String MODULE_FRAMEWORK_CONFIGS_DIR =
+		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR);
 
-	public static final String MODULE_FRAMEWORK_MARKETPLACE_DIR = SystemProperties.get(
-		SystemPropsKeys.MODULE_FRAMEWORK_MARKETPLACE_DIR);
+	public static final String MODULE_FRAMEWORK_MARKETPLACE_DIR =
+		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_MARKETPLACE_DIR);
 
-	public static final String MODULE_FRAMEWORK_MODULES_DIR = SystemProperties.get(
-		SystemPropsKeys.MODULE_FRAMEWORK_MODULES_DIR);
+	public static final String MODULE_FRAMEWORK_MODULES_DIR =
+		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_MODULES_DIR);
 
-	public static final String MODULE_FRAMEWORK_PORTAL_DIR = SystemProperties.get(
-		SystemPropsKeys.MODULE_FRAMEWORK_PORTAL_DIR);
+	public static final String MODULE_FRAMEWORK_PORTAL_DIR =
+		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_PORTAL_DIR);
+
+	public static final String MODULE_FRAMEWORK_STATE_DIR =
+		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_STATE_DIR);
 
 	public static final String MODULE_FRAMEWORK_WAR_DIR = SystemProperties.get(
 		SystemPropsKeys.MODULE_FRAMEWORK_WAR_DIR);
 
-	public static final String MODULE_FRAMEWORK_STATE_DIR = SystemProperties.get(
-		SystemPropsKeys.MODULE_FRAMEWORK_STATE_DIR);
-
-	public static final String RESOURCE_REPOSITORIES_ROOT = SystemProperties.get(
-		SystemPropsKeys.RESOURCE_REPOSITORIES_ROOT);
+	public static final String RESOURCE_REPOSITORIES_ROOT =
+		SystemProperties.get(SystemPropsKeys.RESOURCE_REPOSITORIES_ROOT);
 
 }

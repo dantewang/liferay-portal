@@ -32,8 +32,6 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.SystemPropsKeys;
@@ -201,7 +199,8 @@ public class AlloyControllerInvokerManager {
 						controllerClass, alloyControllerInvokerClassName);
 
 				final String fileName = StringBundler.concat(
-					SystemProperties.get(SystemPropsKeys.LIFERAY_HOME), "/data/alloy/",
+					SystemProperties.get(SystemPropsKeys.LIFERAY_HOME),
+					"/data/alloy/",
 					_getClassBinaryName(alloyControllerInvokerClassName),
 					".class");
 

@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -32,7 +33,6 @@ import java.nio.file.Paths;
 import java.util.Dictionary;
 import java.util.concurrent.CountDownLatch;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

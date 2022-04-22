@@ -22,7 +22,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncPrintWriter;
 import com.liferay.portal.kernel.test.rule.ClassTestRule;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.util.PropsImpl;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +45,6 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.hsqldb.server.Server;
 import org.hsqldb.server.ServerConstants;

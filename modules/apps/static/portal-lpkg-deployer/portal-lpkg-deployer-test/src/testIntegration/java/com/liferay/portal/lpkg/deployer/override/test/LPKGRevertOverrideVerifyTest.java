@@ -16,7 +16,7 @@ package com.liferay.portal.lpkg.deployer.override.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

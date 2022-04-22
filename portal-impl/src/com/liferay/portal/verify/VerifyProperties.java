@@ -296,37 +296,17 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.auto.deploy.interval",
 			"module.framework.auto.deploy.interval"
 		},
-		{
-			"module.framework.base.dir",
-			"module.framework.base.dir"
-		},
-		{
-			"module.framework.configs.dir",
-			"module.framework.configs.dir"
-		},
+		{"module.framework.base.dir", "module.framework.base.dir"},
+		{"module.framework.configs.dir", "module.framework.configs.dir"},
 		{
 			"module.framework.marketplace.dir",
 			"module.framework.marketplace.dir"
 		},
-		{
-			"module.framework.modules.dir",
-			"module.framework.modules.dir"
-		},
-		{
-			"module.framework.portal.dir",
-			"module.framework.portal.dir"
-		},
-		{
-			"module.framework.war.dir",
-			"module.framework.war.dir"
-		},
-		{
-			"module.framework.state.dir",
-			"module.framework.state.dir"
-		},{
-			"resource.repositories.root",
-			"resource.repositories.root"
-		}
+		{"module.framework.modules.dir", "module.framework.modules.dir"},
+		{"module.framework.portal.dir", "module.framework.portal.dir"},
+		{"module.framework.war.dir", "module.framework.war.dir"},
+		{"module.framework.state.dir", "module.framework.state.dir"},
+		{"resource.repositories.root", "resource.repositories.root"}
 	};
 
 	private static final String[][] _MIGRATED_SYSTEM_KEYS = {

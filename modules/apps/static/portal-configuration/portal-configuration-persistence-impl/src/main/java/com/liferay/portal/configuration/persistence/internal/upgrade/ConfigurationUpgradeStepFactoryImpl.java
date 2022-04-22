@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeException;
 import com.liferay.portal.kernel.upgrade.UpgradeStep;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +33,6 @@ import java.nio.file.Files;
 import java.util.Dictionary;
 import java.util.Enumeration;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.apache.felix.cm.PersistenceManager;
 
 /**

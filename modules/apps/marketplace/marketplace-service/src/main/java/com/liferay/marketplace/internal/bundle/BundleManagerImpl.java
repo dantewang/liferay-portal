@@ -21,10 +21,10 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SystemPropsKeys;
 import com.liferay.portal.lpkg.deployer.LPKGVerifier;
 import com.liferay.portal.util.ShutdownUtil;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 import java.io.InputStream;
@@ -39,7 +39,6 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;

@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.util.SystemPropsKeys;
 import com.liferay.portal.lpkg.deployer.test.util.LPKGTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 
@@ -39,7 +38,6 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.concurrent.CountDownLatch;
-
 
 import org.junit.After;
 import org.junit.Assert;

@@ -15,7 +15,7 @@
 package com.liferay.portal.lpkg.deployer.internal;
 
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +33,6 @@ import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.BundleContext;
 
 /**

@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 
@@ -32,7 +32,6 @@ import java.sql.ResultSet;
 
 import java.util.Dictionary;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.apache.felix.cm.file.ConfigurationHandler;
 
 /**

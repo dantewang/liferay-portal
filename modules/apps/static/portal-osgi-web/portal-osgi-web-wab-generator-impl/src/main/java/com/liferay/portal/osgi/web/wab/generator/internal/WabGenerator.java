@@ -24,7 +24,7 @@ import com.liferay.portal.osgi.web.wab.generator.internal.artifact.ArtifactURLUt
 import com.liferay.portal.osgi.web.wab.generator.internal.artifact.WarArtifactUrlTransformer;
 import com.liferay.portal.osgi.web.wab.generator.internal.handler.WabURLStreamHandlerService;
 import com.liferay.portal.osgi.web.wab.generator.internal.processor.WabProcessor;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +50,6 @@ import java.util.zip.ZipFile;
 
 import javax.servlet.ServletContext;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;

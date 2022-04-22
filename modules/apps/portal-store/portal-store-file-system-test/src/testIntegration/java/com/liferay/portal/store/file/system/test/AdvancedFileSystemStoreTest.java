@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Props;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.SystemPropsKeys;
 import com.liferay.portal.store.test.util.BaseStoreTestCase;
@@ -53,7 +52,7 @@ public class AdvancedFileSystemStoreTest extends BaseStoreTestCase {
 	public static void setUpClass() throws Exception {
 		_rootDir =
 			SystemProperties.get(SystemPropsKeys.LIFERAY_HOME) +
-			"/test/store/advanced_file_system";
+				"/test/store/advanced_file_system";
 
 		_configuration = _configurationAdmin.getConfiguration(
 			"com.liferay.portal.store.file.system.configuration." +

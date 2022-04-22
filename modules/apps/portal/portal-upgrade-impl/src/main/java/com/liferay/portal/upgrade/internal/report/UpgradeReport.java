@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portal.upgrade.internal.release.osgi.commands.ReleaseManagerOSGiCommands;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +63,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.apache.commons.io.FileUtils;
 import org.apache.felix.cm.PersistenceManager;
 
@@ -398,7 +398,8 @@ public class UpgradeReport {
 			_rootDir = _getRootDir(_CONFIGURATION_PID_FILE_SYSTEM_STORE);
 
 			if (_rootDir == null) {
-				_rootDir = SystemPropsValues.LIFERAY_HOME + "/data/document_library";
+				_rootDir =
+					SystemPropsValues.LIFERAY_HOME + "/data/document_library";
 			}
 		}
 

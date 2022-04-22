@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -84,6 +85,7 @@ public class SystemEnv {
 
 	public static void setEnvProperties(Properties properties) {
 		Map<String, String> env = System.getenv();
+
 		for (Map.Entry<String, String> entry : env.entrySet()) {
 			String key = entry.getKey();
 
@@ -100,7 +102,6 @@ public class SystemEnv {
 			}
 
 			properties.setProperty(newKey, entry.getValue());
-
 		}
 	}
 
@@ -134,12 +135,11 @@ public class SystemEnv {
 		}
 	}
 
-
 	private static final String _SYSTEM_ENV_OVERRIDE_PREFIX = "LIFERAY_SYSTEM_";
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		SystemEnv.class);
+	private static final Log _log = LogFactoryUtil.getLog(SystemEnv.class);
 
 	private static final Map<String, Character> _charPoolChars =
 		_getCharPoolChars();
+
 }

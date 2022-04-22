@@ -40,7 +40,7 @@ import com.liferay.portal.osgi.web.servlet.jsp.compiler.test.servlet.PrecompileT
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,7 +65,6 @@ import javax.portlet.Portlet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
