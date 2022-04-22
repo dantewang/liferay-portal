@@ -71,6 +71,7 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -418,7 +419,7 @@ public class DefaultLPKGDeployer implements LPKGDeployer {
 		File deploymentDir = new File(
 			GetterUtil.getString(
 				bundleContext.getProperty("lpkg.deployer.dir"),
-				PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR));
+				SystemPropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR));
 
 		deploymentDir = deploymentDir.getCanonicalFile();
 

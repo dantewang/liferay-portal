@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class LPKGContainerVerifyTest {
 	@Test
 	public void testLPKGController() throws Exception {
 		Path path = Paths.get(
-			PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR,
+			SystemPropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR,
 			"Liferay Container Test.lpkg");
 
 		Assert.assertTrue(Files.notExists(path));
