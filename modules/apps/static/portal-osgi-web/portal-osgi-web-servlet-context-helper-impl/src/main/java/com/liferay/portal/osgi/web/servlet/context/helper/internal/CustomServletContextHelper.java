@@ -46,6 +46,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.http.context.ServletContextHelper;
@@ -67,7 +68,7 @@ public class CustomServletContextHelper
 		_webResourceCollectionDefinitions = webResourceCollectionDefinitions;
 
 		_overrideDirName = StringBundler.concat(
-			PropsValues.LIFERAY_HOME, File.separator, "work", File.separator,
+			SystemPropsValues.LIFERAY_HOME, File.separator, "work", File.separator,
 			_bundle.getSymbolicName(), StringPool.DASH, _bundle.getVersion());
 
 		Class<?> clazz = getClass();

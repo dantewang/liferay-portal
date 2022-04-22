@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.store.file.system.configuration.FileSystemStoreConfiguration;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,7 +55,7 @@ public class FileSystemStore implements Store {
 		File rootDir = new File(path);
 
 		if (!rootDir.isAbsolute()) {
-			rootDir = new File(PropsUtil.get(PropsKeys.LIFERAY_HOME), path);
+			rootDir = new File(SystemPropsValues.LIFERAY_HOME, path);
 		}
 
 		_rootDir = rootDir;

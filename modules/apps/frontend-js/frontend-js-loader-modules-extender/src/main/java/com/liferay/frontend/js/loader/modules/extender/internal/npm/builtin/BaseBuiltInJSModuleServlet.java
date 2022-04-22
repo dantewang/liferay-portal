@@ -47,6 +47,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
@@ -61,7 +62,7 @@ public abstract class BaseBuiltInJSModuleServlet extends HttpServlet {
 
 	public BaseBuiltInJSModuleServlet() {
 		_workDirName = StringBundler.concat(
-			PropsValues.LIFERAY_HOME, File.separator, "work");
+			SystemPropsValues.LIFERAY_HOME, File.separator, "work");
 	}
 
 	@Override

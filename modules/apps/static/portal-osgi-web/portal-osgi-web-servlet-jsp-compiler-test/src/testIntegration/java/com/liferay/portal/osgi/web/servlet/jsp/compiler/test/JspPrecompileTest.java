@@ -65,6 +65,7 @@ import javax.portlet.Portlet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -103,7 +104,7 @@ public class JspPrecompileTest {
 		_bundle.start();
 
 		_workDirPath = Paths.get(
-			PropsValues.LIFERAY_HOME, "work",
+			SystemPropsValues.LIFERAY_HOME, "work",
 			_bundle.getSymbolicName() + StringPool.DASH + _bundle.getVersion());
 
 		Files.createDirectories(_workDirPath);

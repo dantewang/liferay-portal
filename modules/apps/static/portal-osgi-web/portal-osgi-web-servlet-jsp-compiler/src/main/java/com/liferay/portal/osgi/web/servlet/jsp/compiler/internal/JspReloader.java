@@ -23,6 +23,7 @@ import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -69,7 +70,7 @@ public class JspReloader {
 	}
 
 	private static final String _WORK_DIR = StringBundler.concat(
-		PropsValues.LIFERAY_HOME, File.separator, "work", File.separator);
+		SystemPropsValues.LIFERAY_HOME, File.separator, "work", File.separator);
 
 	private static final Log _log = LogFactoryUtil.getLog(JspReloader.class);
 

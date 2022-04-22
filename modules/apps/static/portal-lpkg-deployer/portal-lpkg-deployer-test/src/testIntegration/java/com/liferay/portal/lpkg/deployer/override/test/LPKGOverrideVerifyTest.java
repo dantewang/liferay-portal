@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -51,7 +52,7 @@ public class LPKGOverrideVerifyTest {
 
 		Properties properties = new Properties();
 
-		Path path = Paths.get(PropsValues.LIFERAY_HOME, "/overrides");
+		Path path = Paths.get(SystemPropsValues.LIFERAY_HOME, "/overrides");
 
 		Assert.assertTrue(Files.exists(path));
 

@@ -46,6 +46,8 @@ import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.SystemEnv;
+import com.liferay.portal.kernel.util.SystemProperties;
+import com.liferay.portal.kernel.util.SystemPropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
@@ -68,6 +70,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -710,7 +713,7 @@ public class PDFProcessorImpl
 					ProcessCallable<String> processCallable =
 						new LiferayPDFBoxProcessCallable(
 							ServerDetector.getServerId(),
-							PropsUtil.get(PropsKeys.LIFERAY_HOME),
+							SystemPropsValues.LIFERAY_HOME,
 							HashMapBuilder.putAll(
 								Log4JUtil.getCustomLogSettings()
 							).put(

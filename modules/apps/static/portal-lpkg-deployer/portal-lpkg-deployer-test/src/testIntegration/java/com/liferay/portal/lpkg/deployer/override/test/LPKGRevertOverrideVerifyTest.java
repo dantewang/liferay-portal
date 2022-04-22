@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +55,7 @@ public class LPKGRevertOverrideVerifyTest {
 
 		Properties properties = new Properties();
 
-		Path path = Paths.get(PropsValues.LIFERAY_HOME, "/overrides");
+		Path path = Paths.get(SystemPropsValues.LIFERAY_HOME, "/overrides");
 
 		Assert.assertTrue(Files.exists(path));
 
@@ -140,7 +141,7 @@ public class LPKGRevertOverrideVerifyTest {
 			"Static JARs not reverted: " + statics, statics.isEmpty());
 		Assert.assertTrue("WARs not reverted: " + wars, wars.isEmpty());
 
-		Files.delete(Paths.get(PropsValues.LIFERAY_HOME, "/overrides"));
+		Files.delete(Paths.get(SystemPropsValues.LIFERAY_HOME, "/overrides"));
 	}
 
 }

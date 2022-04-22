@@ -45,6 +45,7 @@ import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.hsqldb.jdbc.JDBCDriver;
 import org.hsqldb.server.Server;
 import org.hsqldb.server.ServerConstants;
@@ -223,7 +224,7 @@ public class HypersonicServerClassTestRule extends ClassTestRule<Server> {
 	private static final boolean _HYPERSONIC;
 
 	private static final String _HYPERSONIC_TEMP_DIR_NAME =
-		PropsValues.LIFERAY_HOME + "/data/hypersonic_temp/";
+		SystemPropsValues.LIFERAY_HOME + "/data/hypersonic_temp/";
 
 	static {
 		Props props = new PropsImpl();

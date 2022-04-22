@@ -25,6 +25,8 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
+import com.liferay.portal.kernel.util.SystemPropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
@@ -175,7 +177,7 @@ public class Log4JUtil {
 	private static String _getLiferayHome() {
 		if (_liferayHome == null) {
 			_liferayHome = _escapeXMLAttribute(
-				PropsUtil.get(PropsKeys.LIFERAY_HOME));
+				SystemProperties.get(SystemPropsKeys.LIFERAY_HOME));
 		}
 
 		return _liferayHome;

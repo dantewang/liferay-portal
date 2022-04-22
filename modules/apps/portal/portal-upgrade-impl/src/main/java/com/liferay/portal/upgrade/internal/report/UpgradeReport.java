@@ -62,6 +62,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.apache.commons.io.FileUtils;
 import org.apache.felix.cm.PersistenceManager;
 
@@ -362,7 +363,7 @@ public class UpgradeReport {
 	private String _getPropertiesInfo() {
 		StringBuffer sb = new StringBuffer(12);
 
-		sb.append("liferay.home=" + PropsValues.LIFERAY_HOME);
+		sb.append("liferay.home=" + SystemPropsValues.LIFERAY_HOME);
 		sb.append("\nlocales=" + Arrays.toString(PropsValues.LOCALES));
 		sb.append(
 			"\nlocales.enabled=" +
@@ -397,7 +398,7 @@ public class UpgradeReport {
 			_rootDir = _getRootDir(_CONFIGURATION_PID_FILE_SYSTEM_STORE);
 
 			if (_rootDir == null) {
-				_rootDir = PropsValues.LIFERAY_HOME + "/data/document_library";
+				_rootDir = SystemPropsValues.LIFERAY_HOME + "/data/document_library";
 			}
 		}
 

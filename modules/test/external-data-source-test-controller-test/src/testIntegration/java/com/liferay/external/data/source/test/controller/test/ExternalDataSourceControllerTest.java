@@ -40,6 +40,7 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.hsqldb.jdbc.JDBCDriver;
 
 import org.junit.After;
@@ -204,7 +205,7 @@ public class ExternalDataSourceControllerTest {
 	private static final String _EXTERNAL_DATABASE_NAME = "external";
 
 	private static final String _HYPERSONIC_TEMP_DIR_NAME =
-		PropsValues.LIFERAY_HOME + "/data/hypersonic_temp/";
+		SystemPropsValues.LIFERAY_HOME + "/data/hypersonic_temp/";
 
 	private static final String _JDBC_URL = StringBundler.concat(
 		"jdbc:hsqldb:", _HYPERSONIC_TEMP_DIR_NAME, _EXTERNAL_DATABASE_NAME,

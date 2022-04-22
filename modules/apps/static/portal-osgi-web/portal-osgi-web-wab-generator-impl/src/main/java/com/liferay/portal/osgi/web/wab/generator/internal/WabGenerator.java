@@ -50,6 +50,7 @@ import java.util.zip.ZipFile;
 
 import javax.servlet.ServletContext;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -96,7 +97,7 @@ public class WabGenerator
 
 		final Set<String> requiredForStartupContextPaths =
 			_getRequiredForStartupContextPaths(
-				Paths.get(PropsValues.LIFERAY_HOME, "osgi/war"));
+				Paths.get(SystemPropsValues.LIFERAY_HOME, "osgi/war"));
 
 		if (requiredForStartupContextPaths.isEmpty()) {
 			return;

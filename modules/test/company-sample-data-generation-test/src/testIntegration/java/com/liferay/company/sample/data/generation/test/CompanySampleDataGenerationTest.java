@@ -67,6 +67,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -252,7 +253,7 @@ public class CompanySampleDataGenerationTest {
 		}
 
 		Path outputDirPath = Paths.get(
-			PropsUtil.get(PropsKeys.LIFERAY_HOME), outputDir);
+			SystemPropsValues.LIFERAY_HOME, outputDir);
 
 		File outputDirFile = outputDirPath.toFile();
 
