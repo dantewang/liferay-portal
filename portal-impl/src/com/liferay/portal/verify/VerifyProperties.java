@@ -323,6 +323,9 @@ public class VerifyProperties extends VerifyProcess {
 		{
 			"module.framework.state.dir",
 			"module.framework.state.dir"
+		},{
+			"resource.repositories.root",
+			"resource.repositories.root"
 		}
 	};
 
