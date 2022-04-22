@@ -1173,9 +1173,6 @@ public class PropsValues {
 	public static final long LEARN_RESOURCES_REFRESH_TIME = GetterUtil.getLong(
 		PropsUtil.get(PropsKeys.LEARN_RESOURCES_REFRESH_TIME));
 
-	public static final String LIFERAY_HOME = PropsUtil.get(
-		PropsKeys.LIFERAY_HOME);
-
 	public static final String LIFERAY_LIB_GLOBAL_SHARED_DIR = PropsUtil.get(
 		PropsKeys.LIFERAY_LIB_GLOBAL_SHARED_DIR);
 
@@ -1359,14 +1356,6 @@ public class PropsValues {
 			PropsUtil.get(
 				PropsKeys.MODEL_TREE_REBUILD_QUERY_RESULTS_BATCH_SIZE));
 
-	public static final long MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL =
-		GetterUtil.getLong(
-			PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL),
-			2000);
-
-	public static final String MODULE_FRAMEWORK_BASE_DIR = PropsUtil.get(
-		PropsKeys.MODULE_FRAMEWORK_BASE_DIR);
-
 	public static final int MODULE_FRAMEWORK_BEGINNING_START_LEVEL =
 		GetterUtil.getInteger(
 			PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_BEGINNING_START_LEVEL));
@@ -1375,9 +1364,6 @@ public class PropsValues {
 		GetterUtil.getBoolean(
 			PropsUtil.get(
 				PropsKeys.MODULE_FRAMEWORK_CONCURRENT_STARTUP_ENABLED));
-
-	public static final String MODULE_FRAMEWORK_CONFIGS_DIR = PropsUtil.get(
-		PropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR);
 
 	public static String[]
 		MODULE_FRAMEWORK_CONFIGURATION_BUNDLE_SYMBOLIC_NAMES =
@@ -1437,15 +1423,6 @@ public class PropsValues {
 	public static final String MODULE_FRAMEWORK_FILE_INSTALL_SUBDIR_MODE =
 		PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_FILE_INSTALL_SUBDIR_MODE);
 
-	public static final String MODULE_FRAMEWORK_MARKETPLACE_DIR = PropsUtil.get(
-		PropsKeys.MODULE_FRAMEWORK_MARKETPLACE_DIR);
-
-	public static final String MODULE_FRAMEWORK_MODULES_DIR = PropsUtil.get(
-		PropsKeys.MODULE_FRAMEWORK_MODULES_DIR);
-
-	public static final String MODULE_FRAMEWORK_PORTAL_DIR = PropsUtil.get(
-		PropsKeys.MODULE_FRAMEWORK_PORTAL_DIR);
-
 	public static final String MODULE_FRAMEWORK_RESOLVER_REVISION_BATCH_SIZE =
 		PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_RESOLVER_REVISION_BATCH_SIZE);
 
@@ -1457,9 +1434,6 @@ public class PropsValues {
 		PropsUtil.getArray(
 			PropsKeys.MODULE_FRAMEWORK_SERVICES_IGNORED_INTERFACES);
 
-	public static final String MODULE_FRAMEWORK_STATE_DIR = PropsUtil.get(
-		PropsKeys.MODULE_FRAMEWORK_STATE_DIR);
-
 	public static final String[] MODULE_FRAMEWORK_STATIC_JARS =
 		PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_STATIC_JARS);
 
@@ -1469,9 +1443,6 @@ public class PropsValues {
 
 	public static final String[] MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA =
 		PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA);
-
-	public static final String MODULE_FRAMEWORK_WAR_DIR = PropsUtil.get(
-		PropsKeys.MODULE_FRAMEWORK_WAR_DIR);
 
 	public static final String[]
 		MODULE_FRAMEWORK_WEB_GENERATOR_DEFAULT_SERVLET_PACKAGES =

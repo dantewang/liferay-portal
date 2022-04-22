@@ -1410,8 +1410,6 @@ public interface PropsKeys {
 	public static final String LEARN_RESOURCES_REFRESH_TIME =
 		"learn.resources.refresh.time";
 
-	public static final String LIFERAY_HOME = "liferay.home";
-
 	public static final String LIFERAY_LIB_GLOBAL_SHARED_DIR =
 		"liferay.lib.global.shared.dir";
 
@@ -1697,20 +1695,11 @@ public interface PropsKeys {
 	public static final String MODEL_TREE_REBUILD_QUERY_RESULTS_BATCH_SIZE =
 		"model.tree.rebuild.query.results.batch.size";
 
-	public static final String MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL =
-		"module.framework.auto.deploy.interval";
-
-	public static final String MODULE_FRAMEWORK_BASE_DIR =
-		"module.framework.base.dir";
-
 	public static final String MODULE_FRAMEWORK_BEGINNING_START_LEVEL =
 		"module.framework.beginning.start.level";
 
 	public static final String MODULE_FRAMEWORK_CONCURRENT_STARTUP_ENABLED =
 		"module.framework.concurrent.startup.enabled";
-
-	public static final String MODULE_FRAMEWORK_CONFIGS_DIR =
-		"module.framework.configs.dir";
 
 	public static final String
 		MODULE_FRAMEWORK_CONFIGURATION_BUNDLE_SYMBOLIC_NAMES =
@@ -1751,15 +1740,6 @@ public interface PropsKeys {
 	public static final String MODULE_FRAMEWORK_FILE_INSTALL_SUBDIR_MODE =
 		"module.framework.file.install.subdir.mode";
 
-	public static final String MODULE_FRAMEWORK_MARKETPLACE_DIR =
-		"module.framework.marketplace.dir";
-
-	public static final String MODULE_FRAMEWORK_MODULES_DIR =
-		"module.framework.modules.dir";
-
-	public static final String MODULE_FRAMEWORK_PORTAL_DIR =
-		"module.framework.portal.dir";
-
 	public static final String MODULE_FRAMEWORK_PROPERTIES =
 		"module.framework.properties.";
 
@@ -1772,9 +1752,6 @@ public interface PropsKeys {
 	public static final String MODULE_FRAMEWORK_SERVICES_IGNORED_INTERFACES =
 		"module.framework.services.ignored.interfaces";
 
-	public static final String MODULE_FRAMEWORK_STATE_DIR =
-		"module.framework.state.dir";
-
 	public static final String MODULE_FRAMEWORK_STATIC_JARS =
 		"module.framework.static.jars";
 
@@ -1783,9 +1760,6 @@ public interface PropsKeys {
 
 	public static final String MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA =
 		"module.framework.system.packages.extra";
-
-	public static final String MODULE_FRAMEWORK_WAR_DIR =
-		"module.framework.war.dir";
 
 	public static final String
 		MODULE_FRAMEWORK_WEB_GENERATOR_DEFAULT_SERVLET_PACKAGES =
