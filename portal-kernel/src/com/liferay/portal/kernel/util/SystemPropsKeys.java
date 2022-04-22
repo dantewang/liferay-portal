@@ -19,7 +19,32 @@ package com.liferay.portal.kernel.util;
  */
 public interface SystemPropsKeys {
 
+	public static final String LIFERAY_HOME = "liferay.home";
+
 	public static final String MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS =
 		"module.framework.auto.deploy.dirs";
 
+	public static final String MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL =
+		"module.framework.auto.deploy.interval";
+
+	public static final String MODULE_FRAMEWORK_BASE_DIR =
+		"module.framework.base.dir";
+
+	public static final String MODULE_FRAMEWORK_CONFIGS_DIR =
+		"module.framework.configs.dir";
+
+	public static final String MODULE_FRAMEWORK_MARKETPLACE_DIR =
+		"module.framework.marketplace.dir";
+
+	public static final String MODULE_FRAMEWORK_MODULES_DIR =
+		"module.framework.modules.dir";
+
+	public static final String MODULE_FRAMEWORK_PORTAL_DIR =
+		"module.framework.portal.dir";
+
+	public static final String MODULE_FRAMEWORK_WAR_DIR =
+		"module.framework.war.dir";
+
+	public static final String MODULE_FRAMEWORK_STATE_DIR =
+		"module.framework.state.dir";
 }

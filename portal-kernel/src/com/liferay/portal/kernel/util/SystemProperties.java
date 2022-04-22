@@ -136,7 +136,7 @@ public class SystemProperties {
 
 		// Set environment properties
 
-		SystemEnv.setProperties(properties);
+		SystemEnv.setEnvProperties(properties);
 
 		// Set system properties
 

@@ -14,7 +14,8 @@
 
 package com.liferay.portal.util;
 
-import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.SystemPropsKeys;
 
@@ -23,8 +24,38 @@ import com.liferay.portal.kernel.util.SystemPropsKeys;
  */
 public class SystemPropsValues {
 
+	public static final String LIFERAY_HOME = SystemProperties.get(
+		SystemPropsKeys.LIFERAY_HOME);
+
 	public static final String[] MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS =
 		SystemProperties.getArray(
 			SystemPropsKeys.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS);
+
+	public static final long MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL =
+		GetterUtil.getLong(
+			SystemProperties.get(
+				SystemPropsKeys.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL),
+			2000);
+
+	public static final String MODULE_FRAMEWORK_BASE_DIR = SystemProperties.get(
+		SystemPropsKeys.MODULE_FRAMEWORK_BASE_DIR);
+
+	public static final String MODULE_FRAMEWORK_CONFIGS_DIR = SystemProperties.get(
+		SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR);
+
+	public static final String MODULE_FRAMEWORK_MARKETPLACE_DIR = SystemProperties.get(
+		SystemPropsKeys.MODULE_FRAMEWORK_MARKETPLACE_DIR);
+
+	public static final String MODULE_FRAMEWORK_MODULES_DIR = SystemProperties.get(
+		SystemPropsKeys.MODULE_FRAMEWORK_MODULES_DIR);
+
+	public static final String MODULE_FRAMEWORK_PORTAL_DIR = SystemProperties.get(
+		SystemPropsKeys.MODULE_FRAMEWORK_PORTAL_DIR);
+
+	public static final String MODULE_FRAMEWORK_WAR_DIR = SystemProperties.get(
+		SystemPropsKeys.MODULE_FRAMEWORK_WAR_DIR);
+
+	public static final String MODULE_FRAMEWORK_STATE_DIR = SystemProperties.get(
+		SystemPropsKeys.MODULE_FRAMEWORK_STATE_DIR);
 
 }
