@@ -28,6 +28,8 @@ import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.upgrade.UpgradeStep;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
+import com.liferay.portal.kernel.util.SystemProperties;
+import com.liferay.portal.kernel.util.SystemPropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -103,7 +105,8 @@ public class UpgradeConfigurationPidUpgradeTest {
 		String fileName = _SERVICE_FACTORY_PID + "-default.config";
 
 		Path path = Paths.get(
-			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, fileName);
+			SystemProperties.get(
+				SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR), fileName);
 
 		if (Files.exists(path)) {
 			Files.delete(path);
@@ -269,7 +272,8 @@ public class UpgradeConfigurationPidUpgradeTest {
 		String fileName = _SERVICE_FACTORY_PID + separator + "default.config";
 
 		Path path = Paths.get(
-			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, fileName);
+			SystemProperties.get(
+				SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR), fileName);
 
 		if (!Files.exists(path)) {
 			Files.createFile(path);

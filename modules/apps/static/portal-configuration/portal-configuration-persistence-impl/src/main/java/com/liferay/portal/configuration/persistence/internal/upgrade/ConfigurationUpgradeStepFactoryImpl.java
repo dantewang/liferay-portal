@@ -33,6 +33,7 @@ import java.nio.file.Files;
 import java.util.Dictionary;
 import java.util.Enumeration;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.apache.felix.cm.PersistenceManager;
 
 /**
@@ -90,7 +91,7 @@ public class ConfigurationUpgradeStepFactoryImpl
 				}
 
 				File configResourcesDir = new File(
-					PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR);
+					SystemPropsValues.MODULE_FRAMEWORK_CONFIGS_DIR);
 
 				for (File file : configResourcesDir.listFiles()) {
 					String fileName = file.getName();

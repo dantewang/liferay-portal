@@ -60,6 +60,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.sql.DataSource;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.apache.felix.cm.NotCachablePersistenceManager;
 import org.apache.felix.cm.PersistenceManager;
 import org.apache.felix.cm.file.ConfigurationHandler;
@@ -386,7 +387,7 @@ public class ConfigurationPersistenceManager
 
 	private File _getCanonicalConfigFile(String fileName) throws IOException {
 		File configFile = new File(
-			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, fileName);
+			SystemPropsValues.MODULE_FRAMEWORK_CONFIGS_DIR, fileName);
 
 		return configFile.getCanonicalFile();
 	}

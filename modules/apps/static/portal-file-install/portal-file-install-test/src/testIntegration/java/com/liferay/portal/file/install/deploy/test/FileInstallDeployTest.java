@@ -44,6 +44,7 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -86,7 +87,7 @@ public class FileInstallDeployTest {
 	@Test
 	public void testConfiguration() throws Exception {
 		Path path = Paths.get(
-			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+			SystemPropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
 			_CONFIGURATION_PID.concat(".config"));
 
 		try {
@@ -142,7 +143,7 @@ public class FileInstallDeployTest {
 	@Test
 	public void testConfigurationSystem() throws Exception {
 		Path path = Paths.get(
-			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+			SystemPropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
 			_CONFIGURATION_PID.concat(".config"));
 
 		String systemTestPropertyKey = StringBundler.concat(
