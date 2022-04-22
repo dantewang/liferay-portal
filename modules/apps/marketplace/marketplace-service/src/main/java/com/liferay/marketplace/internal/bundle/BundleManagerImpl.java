@@ -21,8 +21,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.SystemPropsKeys;
 import com.liferay.portal.lpkg.deployer.LPKGVerifier;
 import com.liferay.portal.util.ShutdownUtil;
 
@@ -39,6 +39,7 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -169,13 +170,13 @@ public class BundleManagerImpl implements BundleManager {
 	}
 
 	private String _getInstallDirName() throws Exception {
-		String[] autoDeployDirNames = PropsUtil.getArray(
-			PropsKeys.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS);
+		String[] autoDeployDirNames =
+			SystemPropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS;
 
 		if (ArrayUtil.isEmpty(autoDeployDirNames)) {
 			throw new AutoDeployException(
 				"The portal property \"" +
-					PropsKeys.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS +
+					SystemPropsKeys.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS +
 						"\" is not set");
 		}
 

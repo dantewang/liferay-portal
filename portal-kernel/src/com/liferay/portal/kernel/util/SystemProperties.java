@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.util;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -55,6 +56,20 @@ public class SystemProperties {
 
 		if (value == null) {
 			value = System.getProperty(key);
+		}
+
+		return value;
+	}
+
+	public static String[] getArray(String key) {
+		String[] value = _propertiesArrayCache.get(key);
+
+		if (value == null) {
+			String propertiesValue = get(key);
+
+			value = StringUtil.split(propertiesValue);
+
+			_propertiesArrayCache.put(key, value);
 		}
 
 		return value;
@@ -175,6 +190,9 @@ public class SystemProperties {
 	}
 
 	private static final Map<String, String> _properties =
+		new ConcurrentHashMap<>();
+
+	private static final Map<String, String[]> _propertiesArrayCache =
 		new ConcurrentHashMap<>();
 
 	static {

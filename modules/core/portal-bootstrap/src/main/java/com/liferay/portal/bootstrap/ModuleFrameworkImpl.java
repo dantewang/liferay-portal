@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.module.framework.ModuleFramework;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -827,7 +828,9 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			_log.debug("Initializing required startup directories");
 		}
 
-		for (String dirName : PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS) {
+		for (String dirName :
+				SystemPropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS) {
+
 			FileUtil.mkdirs(dirName);
 		}
 
