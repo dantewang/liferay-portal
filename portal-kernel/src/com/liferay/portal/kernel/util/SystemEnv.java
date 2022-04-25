@@ -135,7 +135,7 @@ public class SystemEnv {
 		}
 	}
 
-	private static final String _SYSTEM_ENV_OVERRIDE_PREFIX = "LIFERAY_SYSTEM_";
+	private static final String _SYSTEM_ENV_OVERRIDE_PREFIX = "SYSTEM_";
 
 	private static final Log _log = LogFactoryUtil.getLog(SystemEnv.class);
 
