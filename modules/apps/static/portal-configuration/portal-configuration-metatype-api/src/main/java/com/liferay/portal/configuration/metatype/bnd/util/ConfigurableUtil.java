@@ -80,7 +80,7 @@ public class ConfigurableUtil {
 					interfaceClass, snapshotClassName);
 
 				try {
-					snapshotClass = (Class<T>)_defineClassMethod.invoke(
+					snapshotClass = (Class<T>)DefineClassMethodUtil.defineClass(
 						classLoader, snapshotClassName, snapshotClassData, 0,
 						snapshotClassData.length);
 				}
@@ -264,14 +264,10 @@ public class ConfigurableUtil {
 		).build();
 	}
 
-	private static final Method _defineClassMethod;
 	private static final Method _findLoadedClassMethod;
 
 	static {
 		try {
-			_defineClassMethod = ReflectionUtil.getDeclaredMethod(
-				ClassLoader.class, "defineClass", String.class, byte[].class,
-				int.class, int.class);
 			_findLoadedClassMethod = ReflectionUtil.getDeclaredMethod(
 				ClassLoader.class, "findLoadedClass", String.class);
 		}
