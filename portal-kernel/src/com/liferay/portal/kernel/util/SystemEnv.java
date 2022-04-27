@@ -90,6 +90,9 @@ public class SystemEnv {
 			String key = entry.getKey();
 
 			if (!key.startsWith(_SYSTEM_ENV_OVERRIDE_PREFIX)) {
+				properties.setProperty(
+					"env." + entry.getKey(), entry.getValue());
+
 				continue;
 			}
 

@@ -14,6 +14,9 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringPool;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -137,6 +141,10 @@ public class SystemProperties {
 
 		SystemEnv.setEnvProperties(properties);
 
+		// Default liferay home directory
+
+		set(PropsKeys.DEFAULT_LIFERAY_HOME, _getDefaultLiferayHome());
+
 		// Set system properties
 
 		if (GetterUtil.getBoolean(
@@ -174,6 +182,7 @@ public class SystemProperties {
 		// java.util.Properties
 
 		PropertiesUtil.fromProperties(properties, _properties);
+		_parseProperties(_properties);
 
 		if (urls != null) {
 			for (URL url : urls) {
@@ -187,6 +196,109 @@ public class SystemProperties {
 
 		_properties.put(key, value);
 	}
+
+	private static String _getDefaultLiferayHome() {
+		String defaultLiferayHome = null;
+
+		if (ServerDetector.isJBoss()) {
+			defaultLiferayHome = get("jboss.home.dir") + "/..";
+		}
+		else if (ServerDetector.isWebLogic()) {
+			defaultLiferayHome = get("env.DOMAIN_HOME") + "/..";
+		}
+		else if (ServerDetector.isTomcat()) {
+			defaultLiferayHome = get("catalina.base") + "/..";
+		}
+		else {
+			defaultLiferayHome = get("user.dir") + "/liferay";
+		}
+
+		defaultLiferayHome = StringUtil.replace(
+			defaultLiferayHome, CharPool.BACK_SLASH, CharPool.SLASH);
+
+		defaultLiferayHome = StringUtil.replace(
+			defaultLiferayHome, StringPool.DOUBLE_SLASH, StringPool.SLASH);
+
+		if (defaultLiferayHome.endsWith("/..")) {
+			int pos = defaultLiferayHome.lastIndexOf(
+				CharPool.SLASH, defaultLiferayHome.length() - 4);
+
+			if (pos != -1) {
+				defaultLiferayHome = defaultLiferayHome.substring(0, pos);
+			}
+		}
+
+		return defaultLiferayHome;
+	}
+
+	private static void _parseProperties(Map<String, String> properties) {
+		Map<String, String> placeholderPropsCache = new ConcurrentHashMap<>();
+
+		for (Map.Entry<String, String> propertyEntry : properties.entrySet()) {
+			String entryValue = propertyEntry.getValue();
+
+			String value = _replacePlaceholders(
+				entryValue, placeholderPropsCache);
+
+			if (!entryValue.equals(value)) {
+				placeholderPropsCache.put(propertyEntry.getKey(), value);
+
+				propertyEntry.setValue(value);
+
+				System.setProperty(propertyEntry.getKey(), value);
+			}
+		}
+	}
+
+	private static String _replacePlaceholders(
+		String propertiesValue, Map<String, String> placeholderPropsCache) {
+
+		int startIndex = propertiesValue.indexOf(_DOLLAR_OPEN_CURLY_BRACE);
+
+		while (startIndex != -1) {
+			int endIndex = propertiesValue.indexOf(
+				_CLOSE_CURLY_BRACE, startIndex);
+
+			if (endIndex != -1) {
+				String placeholderKey = propertiesValue.substring(
+					startIndex + _DOLLAR_OPEN_CURLY_BRACE.length(), endIndex);
+
+				String placeholderValue = placeholderPropsCache.get(
+					placeholderKey);
+
+				if (Objects.isNull(placeholderValue)) {
+					placeholderValue = get(placeholderKey);
+
+					if (Objects.isNull(placeholderValue)) {
+						placeholderValue = "";
+					}
+
+					placeholderValue = _replacePlaceholders(
+						placeholderValue, placeholderPropsCache);
+
+					placeholderPropsCache.put(placeholderKey, placeholderValue);
+				}
+
+				propertiesValue = StringUtil.replace(
+					propertiesValue,
+					_DOLLAR_OPEN_CURLY_BRACE + placeholderKey +
+						_CLOSE_CURLY_BRACE,
+					placeholderValue, startIndex);
+
+				startIndex = propertiesValue.indexOf(_DOLLAR_OPEN_CURLY_BRACE);
+			}
+			else {
+				break;
+			}
+		}
+
+		return propertiesValue;
+	}
+
+	private static final String _CLOSE_CURLY_BRACE = String.valueOf(
+		CharPool.CLOSE_CURLY_BRACE);
+
+	private static final String _DOLLAR_OPEN_CURLY_BRACE = "${";
 
 	private static final Map<String, String> _properties =
 		new ConcurrentHashMap<>();
