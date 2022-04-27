@@ -99,7 +99,7 @@ public class ViewCountEntryLocalServiceTest {
 	public void testCreationWithHoldLock() throws Throwable {
 		Assume.assumeTrue(_db.getDBType() == DBType.SQLSERVER);
 
-		_setUpRaceCondition();
+		_testRaceCondition();
 
 		Assert.assertTrue(_viewCountEntries.size() == 2);
 		Assert.assertNull(_viewCountEntries.get(0));
@@ -118,11 +118,10 @@ public class ViewCountEntryLocalServiceTest {
 			_db.getDBType() == DBType.HYPERSONIC);
 
 		Assume.assumeFalse(
-			"Due to HHH-10654 changed, the test is not suitable for " +
-				"SQLSERVER database, skip test.",
+			"SQL Server is protected from this race condition, skip test.",
 			_db.getDBType() == DBType.SQLSERVER);
 
-		_setUpRaceCondition();
+		_testRaceCondition();
 
 		Assert.assertTrue(_viewCountEntries.size() > 2);
 		Assert.assertNull(_viewCountEntries.get(0));
@@ -184,7 +183,7 @@ public class ViewCountEntryLocalServiceTest {
 			});
 	}
 
-	private void _setUpRaceCondition() throws Throwable {
+	private void _testRaceCondition() throws Throwable {
 		try (LogCapture logCapture1 = LoggerTestUtil.configureLog4JLogger(
 				SqlExceptionHelper.class.getName(), LoggerTestUtil.OFF);
 			LogCapture logCapture2 = LoggerTestUtil.configureLog4JLogger(
