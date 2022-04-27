@@ -143,7 +143,7 @@ public class SystemProperties {
 
 		// Default liferay home directory
 
-		set(PropsKeys.DEFAULT_LIFERAY_HOME, _getDefaultLiferayHome());
+		set(SystemPropsKeys.DEFAULT_LIFERAY_HOME, _getDefaultLiferayHome());
 
 		// Set system properties
 
