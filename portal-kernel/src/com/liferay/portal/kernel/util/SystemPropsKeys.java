@@ -75,6 +75,9 @@ public interface SystemPropsKeys {
 	public static final String MODULE_FRAMEWORK_STATIC_JARS =
 		"module.framework.static.jars";
 
+	public static final String MODULE_FRAMEWORK_STOP_WAIT_TIMEOUT =
+		"module.framework.stop.wait.timeout";
+
 	public static final String MODULE_FRAMEWORK_WAR_DIR =
 		"module.framework.war.dir";
 

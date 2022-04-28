@@ -96,6 +96,11 @@ public class SystemPropsValues {
 	public static final String[] MODULE_FRAMEWORK_STATIC_JARS =
 		SystemProperties.getArray(SystemPropsKeys.MODULE_FRAMEWORK_STATIC_JARS);
 
+	public static final long MODULE_FRAMEWORK_STOP_WAIT_TIMEOUT =
+		GetterUtil.getLong(
+			SystemProperties.get(
+				SystemPropsKeys.MODULE_FRAMEWORK_STOP_WAIT_TIMEOUT));
+
 	public static final String MODULE_FRAMEWORK_WAR_DIR = SystemProperties.get(
 		SystemPropsKeys.MODULE_FRAMEWORK_WAR_DIR);
 
