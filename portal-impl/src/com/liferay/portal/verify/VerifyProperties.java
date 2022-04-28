@@ -311,6 +311,10 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.configuration.bundle.symbolic.names"
 		},
 		{
+			"module.framework.dynamic.install.start.level",
+			"module.framework.dynamic.install.start.level"
+		},
+		{
 			"module.framework.marketplace.dir",
 			"module.framework.marketplace.dir"
 		},
