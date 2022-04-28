@@ -66,6 +66,9 @@ public interface SystemPropsKeys {
 	public static final String MODULE_FRAMEWORK_RUNTIME_START_LEVEL =
 		"module.framework.runtime.start.level";
 
+	public static final String MODULE_FRAMEWORK_SERVICES_IGNORED_INTERFACES =
+		"module.framework.services.ignored.interfaces";
+
 	public static final String MODULE_FRAMEWORK_STATE_DIR =
 		"module.framework.state.dir";
 
