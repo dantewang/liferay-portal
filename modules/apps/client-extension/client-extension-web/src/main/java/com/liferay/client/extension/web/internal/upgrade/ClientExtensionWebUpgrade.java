@@ -17,6 +17,7 @@ package com.liferay.client.extension.web.internal.upgrade;
 import com.liferay.client.extension.service.ClientExtensionEntryLocalService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.upgrade.BasePortletIdUpgradeProcess;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
@@ -48,6 +49,18 @@ public class ClientExtensionWebUpgrade implements UpgradeStepRegistrator {
 
 		registry.register(
 			"1.0.0", "2.0.0",
+			new UpgradeProcess() {
+
+				@Override
+				protected void doUpgrade() throws Exception {
+					runSQL(
+						"update Release_ set servletContextName =" +
+							"'com.liferay.client.extension.web'" +
+								"where servletContextName = " +
+									"'com.liferay.remote.app.web'");
+				}
+
+			},
 			new BasePortletIdUpgradeProcess() {
 
 				@Override
