@@ -81,6 +81,11 @@ public class SystemPropsValues {
 		SystemProperties.get(
 			SystemPropsKeys.MODULE_FRAMEWORK_RESOLVER_REVISION_BATCH_SIZE);
 
+	public static final int MODULE_FRAMEWORK_RUNTIME_START_LEVEL =
+		GetterUtil.getInteger(
+			SystemProperties.get(
+				SystemPropsKeys.MODULE_FRAMEWORK_RUNTIME_START_LEVEL));
+
 	public static final String MODULE_FRAMEWORK_STATE_DIR =
 		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_STATE_DIR);
 
