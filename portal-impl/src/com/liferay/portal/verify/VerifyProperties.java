@@ -315,6 +315,10 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.dynamic.install.start.level"
 		},
 		{
+			"module.framework.export.password.attributes",
+			"module.framework.export.password.attributes"
+		},
+		{
 			"module.framework.marketplace.dir",
 			"module.framework.marketplace.dir"
 		},
