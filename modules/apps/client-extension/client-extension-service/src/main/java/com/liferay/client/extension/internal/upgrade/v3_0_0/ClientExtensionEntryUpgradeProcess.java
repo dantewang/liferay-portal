@@ -39,8 +39,7 @@ public class ClientExtensionEntryUpgradeProcess extends UpgradeProcess {
 			"delete from Release_ where servletContextName = " +
 				"'com.liferay.remote.app.service'");
 		runSQL(
-			"delete from ServiceComponent where buildNamespace = " +
-				"'RemoteApp'");
+			"delete from ServiceComponent where buildNamespace = 'RemoteApp'");
 	}
 
 	private void _insertClientExtensionEntries() throws Exception {

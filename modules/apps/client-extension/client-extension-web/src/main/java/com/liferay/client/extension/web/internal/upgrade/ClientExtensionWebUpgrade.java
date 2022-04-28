@@ -15,6 +15,7 @@
 package com.liferay.client.extension.web.internal.upgrade;
 
 import com.liferay.client.extension.service.ClientExtensionEntryLocalService;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.upgrade.BasePortletIdUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -54,10 +55,11 @@ public class ClientExtensionWebUpgrade implements UpgradeStepRegistrator {
 				@Override
 				protected void doUpgrade() throws Exception {
 					runSQL(
-						"update Release_ set servletContextName =" +
-							"'com.liferay.client.extension.web'" +
-								"where servletContextName = " +
-									"'com.liferay.remote.app.web'");
+						StringBundler.concat(
+							"update Release_ set servletContextName = ",
+							"'com.liferay.client.extension.web' where ",
+							"servletContextName = ",
+							"'com.liferay.remote.app.web'"));
 				}
 
 			},
