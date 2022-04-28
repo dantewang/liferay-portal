@@ -59,10 +59,6 @@ public class ClassNamesUpgradeProcess extends UpgradeKernelPackage {
 	};
 
 	private static final String[][] _RESOURCE_NAMES = {
-		{
-			"com.liferay.remote.app.model.RemoteAppEntry",
-			"com.liferay.client.extension.model.ClientExtensionEntry"
-		},
 		{"com.liferay.remote.app", "com.liferay.client.extension"}
 	};
 
