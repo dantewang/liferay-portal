@@ -93,6 +93,9 @@ public class SystemPropsValues {
 	public static final String MODULE_FRAMEWORK_STATE_DIR =
 		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_STATE_DIR);
 
+	public static final String[] MODULE_FRAMEWORK_STATIC_JARS =
+		SystemProperties.getArray(SystemPropsKeys.MODULE_FRAMEWORK_STATIC_JARS);
+
 	public static final String MODULE_FRAMEWORK_WAR_DIR = SystemProperties.get(
 		SystemPropsKeys.MODULE_FRAMEWORK_WAR_DIR);
 
