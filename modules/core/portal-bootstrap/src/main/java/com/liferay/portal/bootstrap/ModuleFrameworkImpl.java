@@ -31,10 +31,11 @@ import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.NamedThreadFactory;
 import com.liferay.portal.kernel.util.Props;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
+import com.liferay.portal.kernel.util.SystemPropsKeys;
 import com.liferay.portal.module.framework.ModuleFramework;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.SystemPropsValues;
@@ -435,8 +436,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 		// Overrides
 
-		Properties extraProperties = PropsUtil.getProperties(
-			PropsKeys.MODULE_FRAMEWORK_PROPERTIES, true);
+		Properties extraProperties = SystemProperties.getProperties(
+			SystemPropsKeys.MODULE_FRAMEWORK_PROPERTIES, true);
 
 		String extraCapabilities = extraProperties.getProperty(
 			Constants.FRAMEWORK_SYSTEMCAPABILITIES_EXTRA);
