@@ -333,6 +333,10 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.runtime.start.level",
 			"module.framework.runtime.start.level"
 		},
+		{
+			"module.framework.services.ignored.interfaces",
+			"module.framework.services.ignored.interfaces"
+		},
 		{"module.framework.state.dir", "module.framework.state.dir"},
 		{"resource.repositories.root", "resource.repositories.root"}
 	};
