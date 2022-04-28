@@ -58,6 +58,11 @@ public class SystemPropsValues {
 				SystemPropsKeys.
 					MODULE_FRAMEWORK_CONFIGURATION_BUNDLE_SYMBOLIC_NAMES);
 
+	public static final int MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL =
+		GetterUtil.getInteger(
+			SystemProperties.get(
+				SystemPropsKeys.MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL));
+
 	public static final String MODULE_FRAMEWORK_MARKETPLACE_DIR =
 		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_MARKETPLACE_DIR);
 
