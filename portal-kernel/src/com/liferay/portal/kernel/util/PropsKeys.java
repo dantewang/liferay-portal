@@ -1722,9 +1722,6 @@ public interface PropsKeys {
 	public static final String MODULE_FRAMEWORK_FILE_INSTALL_SUBDIR_MODE =
 		"module.framework.file.install.subdir.mode";
 
-	public static final String MODULE_FRAMEWORK_PROPERTIES =
-		"module.framework.properties.";
-
 	public static final String
 		MODULE_FRAMEWORK_WEB_GENERATOR_DEFAULT_SERVLET_PACKAGES =
 			"module.framework.web.generator.default.servlet.packages";
