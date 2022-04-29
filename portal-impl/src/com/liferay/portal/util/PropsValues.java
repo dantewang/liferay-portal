@@ -1368,9 +1368,6 @@ public class PropsValues {
 			PropsUtil.get(
 				PropsKeys.MODULE_FRAMEWORK_CONCURRENT_STARTUP_ENABLED));
 
-	public static final String MODULE_FRAMEWORK_CONFIGS_DIR = PropsUtil.get(
-		PropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR);
-
 	public static String[]
 		MODULE_FRAMEWORK_CONFIGURATION_BUNDLE_SYMBOLIC_NAMES =
 			PropsUtil.getArray(
