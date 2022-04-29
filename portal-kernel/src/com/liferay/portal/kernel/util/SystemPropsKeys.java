@@ -25,4 +25,7 @@ public interface SystemPropsKeys {
 	public static final String MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL =
 		"module.framework.auto.deploy.interval";
 
+	public static final String MODULE_FRAMEWORK_BASE_DIR =
+		"module.framework.base.dir";
+
 }
