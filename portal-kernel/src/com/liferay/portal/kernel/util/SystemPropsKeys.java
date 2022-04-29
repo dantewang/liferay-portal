@@ -40,6 +40,9 @@ public interface SystemPropsKeys {
 	public static final String MODULE_FRAMEWORK_PORTAL_DIR =
 		"module.framework.portal.dir";
 
+	public static final String MODULE_FRAMEWORK_STATE_DIR =
+		"module.framework.state.dir";
+
 	public static final String MODULE_FRAMEWORK_WAR_DIR =
 		"module.framework.war.dir";
 
