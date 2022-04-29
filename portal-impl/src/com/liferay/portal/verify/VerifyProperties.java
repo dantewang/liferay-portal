@@ -307,6 +307,10 @@ public class VerifyProperties extends VerifyProcess {
 		},
 		{"module.framework.configs.dir", "module.framework.configs.dir"},
 		{
+			"module.framework.configuration.bundle.symbolic.names",
+			"module.framework.configuration.bundle.symbolic.names"
+		},
+		{
 			"module.framework.marketplace.dir",
 			"module.framework.marketplace.dir"
 		},
