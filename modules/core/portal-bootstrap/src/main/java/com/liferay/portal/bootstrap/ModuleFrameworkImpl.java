@@ -834,7 +834,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			FileUtil.mkdirs(dirName);
 		}
 
-		FileUtil.mkdirs(SystemPropsValues.MODULE_FRAMEWORK_BASE_DIR + "/static");
+		FileUtil.mkdirs(
+			SystemPropsValues.MODULE_FRAMEWORK_BASE_DIR + "/static");
 		FileUtil.mkdirs(
 			SystemPropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR + "/override");
 	}
@@ -965,7 +966,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		_installBundlesFromDir(
 			PropsValues.MODULE_FRAMEWORK_PORTAL_DIR, checksums, fragmentHosts);
 		_installBundlesFromDir(
-			PropsValues.MODULE_FRAMEWORK_MODULES_DIR, checksums, fragmentHosts);
+			SystemPropsValues.MODULE_FRAMEWORK_MODULES_DIR, checksums,
+			fragmentHosts);
 
 		if (!fragmentHosts.isEmpty()) {
 			List<Bundle> refreshBundles = new ArrayList<>();
