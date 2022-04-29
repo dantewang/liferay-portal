@@ -1356,11 +1356,6 @@ public class PropsValues {
 			PropsUtil.get(
 				PropsKeys.MODEL_TREE_REBUILD_QUERY_RESULTS_BATCH_SIZE));
 
-	public static String[]
-		MODULE_FRAMEWORK_CONFIGURATION_BUNDLE_SYMBOLIC_NAMES =
-			PropsUtil.getArray(
-				PropsKeys.MODULE_FRAMEWORK_CONFIGURATION_BUNDLE_SYMBOLIC_NAMES);
-
 	public static final int MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL =
 		GetterUtil.getInteger(
 			PropsUtil.get(
