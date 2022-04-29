@@ -301,6 +301,10 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.beginning.start.level",
 			"module.framework.beginning.start.level"
 		},
+		{
+			"module.framework.concurrent.startup.enabled",
+			"module.framework.concurrent.startup.enabled"
+		},
 		{"module.framework.configs.dir", "module.framework.configs.dir"},
 		{
 			"module.framework.marketplace.dir",
