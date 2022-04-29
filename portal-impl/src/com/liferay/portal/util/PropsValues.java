@@ -1450,9 +1450,6 @@ public class PropsValues {
 	public static final String[] MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA =
 		PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA);
 
-	public static final String MODULE_FRAMEWORK_WAR_DIR = PropsUtil.get(
-		PropsKeys.MODULE_FRAMEWORK_WAR_DIR);
-
 	public static final String[]
 		MODULE_FRAMEWORK_WEB_GENERATOR_DEFAULT_SERVLET_PACKAGES =
 			PropsUtil.getArray(
