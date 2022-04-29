@@ -297,6 +297,10 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.auto.deploy.interval"
 		},
 		{"module.framework.base.dir", "module.framework.base.dir"},
+		{
+			"module.framework.beginning.start.level",
+			"module.framework.beginning.start.level"
+		},
 		{"module.framework.configs.dir", "module.framework.configs.dir"},
 		{
 			"module.framework.marketplace.dir",

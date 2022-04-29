@@ -280,7 +280,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			new DefaultNoticeableFuture<>();
 
 		frameworkStartLevel.setStartLevel(
-			PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL,
+			SystemPropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL,
 			frameworkEvent -> defaultNoticeableFuture.set(frameworkEvent));
 
 		FrameworkEvent frameworkEvent = defaultNoticeableFuture.get();
@@ -1013,14 +1013,15 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 				_log.debug(
 					StringBundler.concat(
 						"Setting bundle ", bundle, " at start level ",
-						PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL));
+						SystemPropsValues.
+							MODULE_FRAMEWORK_BEGINNING_START_LEVEL));
 			}
 
 			BundleStartLevel bundleStartLevel = bundle.adapt(
 				BundleStartLevel.class);
 
 			bundleStartLevel.setStartLevel(
-				PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL);
+				SystemPropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL);
 
 			return bundle;
 		}
@@ -1452,7 +1453,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			new DefaultNoticeableFuture<>();
 
 		frameworkStartLevel.setStartLevel(
-			PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL,
+			SystemPropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL,
 			frameworkEvent -> defaultNoticeableFuture.set(frameworkEvent));
 
 		FrameworkEvent frameworkEvent = defaultNoticeableFuture.get();
