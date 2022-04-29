@@ -33,6 +33,7 @@ import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -47,7 +48,7 @@ public class ContainerLPKGUtil {
 		Path deployerDirPath = Paths.get(
 			GetterUtil.getString(
 				bundleContext.getProperty("lpkg.deployer.dir"),
-				PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR));
+				SystemPropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR));
 
 		List<File> lpkgFiles = new ArrayList<>();
 
