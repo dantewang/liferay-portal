@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +52,7 @@ public class LPKGIndependenceTest {
 		BundleContext bundleContext = bundle.getBundleContext();
 
 		Path tempPath = Paths.get(
-			PropsValues.MODULE_FRAMEWORK_BASE_DIR, "temp");
+			SystemPropsValues.MODULE_FRAMEWORK_BASE_DIR, "temp");
 
 		File tempFile = tempPath.toFile();
 
