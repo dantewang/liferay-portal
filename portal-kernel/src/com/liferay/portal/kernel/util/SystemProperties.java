@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -181,6 +182,7 @@ public class SystemProperties {
 		// java.util.Properties
 
 		PropertiesUtil.fromProperties(properties, _properties);
+		_parseProperties(_properties);
 
 		if (urls != null) {
 			for (URL url : urls) {
@@ -190,6 +192,8 @@ public class SystemProperties {
 	}
 
 	public static void set(String key, String value) {
+		value = _replacePlaceholders(value, null);
+
 		System.setProperty(key, value);
 
 		_properties.put(key, value);
@@ -227,6 +231,81 @@ public class SystemProperties {
 		}
 
 		return defaultLiferayHome;
+	}
+
+	private static void _parseProperties(Map<String, String> properties) {
+		Map<String, String> placeholderPropsCache = new ConcurrentHashMap<>();
+
+		for (Map.Entry<String, String> propertyEntry : properties.entrySet()) {
+			String entryValue = propertyEntry.getValue();
+
+			String value = _replacePlaceholders(
+				entryValue, placeholderPropsCache);
+
+			if (!entryValue.equals(value)) {
+				placeholderPropsCache.put(propertyEntry.getKey(), value);
+
+				propertyEntry.setValue(value);
+
+				System.setProperty(propertyEntry.getKey(), value);
+			}
+		}
+	}
+
+	private static String _replacePlaceholders(
+		String propertiesValue, Map<String, String> placeholderPropsCache) {
+
+		int startIndex = propertiesValue.indexOf(
+			StringPool.DOLLAR_AND_OPEN_CURLY_BRACE);
+
+		while (startIndex != -1) {
+			int endIndex = propertiesValue.indexOf(
+				StringPool.CLOSE_CURLY_BRACE, startIndex);
+
+			if (endIndex != -1) {
+				String placeholderKey = propertiesValue.substring(
+					startIndex +
+						StringPool.DOLLAR_AND_OPEN_CURLY_BRACE.length(),
+					endIndex);
+
+				String placeholderValue = null;
+
+				if (Objects.nonNull(placeholderPropsCache)) {
+					placeholderValue = placeholderPropsCache.get(
+						placeholderKey);
+				}
+
+				if (Objects.isNull(placeholderValue)) {
+					placeholderValue = get(placeholderKey);
+
+					if (Objects.isNull(placeholderValue)) {
+						placeholderValue = "";
+					}
+
+					placeholderValue = _replacePlaceholders(
+						placeholderValue, placeholderPropsCache);
+
+					if (Objects.nonNull(placeholderPropsCache)) {
+						placeholderPropsCache.put(
+							placeholderKey, placeholderValue);
+					}
+				}
+
+				propertiesValue = StringUtil.replace(
+					propertiesValue,
+					StringPool.DOLLAR_AND_OPEN_CURLY_BRACE + placeholderKey +
+						StringPool.CLOSE_CURLY_BRACE,
+					placeholderValue, startIndex);
+
+				startIndex = propertiesValue.indexOf(
+					StringPool.DOLLAR_AND_OPEN_CURLY_BRACE);
+			}
+			else {
+				break;
+			}
+		}
+
+		return propertiesValue;
 	}
 
 	private static final Map<String, String> _properties =
