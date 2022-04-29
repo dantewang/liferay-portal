@@ -1356,11 +1356,6 @@ public class PropsValues {
 			PropsUtil.get(
 				PropsKeys.MODEL_TREE_REBUILD_QUERY_RESULTS_BATCH_SIZE));
 
-	public static final boolean MODULE_FRAMEWORK_CONCURRENT_STARTUP_ENABLED =
-		GetterUtil.getBoolean(
-			PropsUtil.get(
-				PropsKeys.MODULE_FRAMEWORK_CONCURRENT_STARTUP_ENABLED));
-
 	public static String[]
 		MODULE_FRAMEWORK_CONFIGURATION_BUNDLE_SYMBOLIC_NAMES =
 			PropsUtil.getArray(
