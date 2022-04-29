@@ -24,31 +24,40 @@ import java.lang.reflect.Modifier;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * @author Jiaxu Wei
  */
 public class EnvPropertiesUtil {
 
-	private static Map<String, Character> _getCharPoolChars() {
-		try {
-			Map<String, Character> charPoolChars = new HashMap<>();
+	public static void parseProperties(
+		String envPrefix, BiConsumer<String, String> setProperty) {
 
-			for (Field field : CharPool.class.getFields()) {
-				if (Modifier.isStatic(field.getModifiers()) &&
-					(field.getType() == char.class)) {
+		Map<String, String> env = System.getenv();
 
-					charPoolChars.put(
-						StringUtil.removeChar(
-							field.getName(), CharPool.UNDERLINE),
-						field.getChar(null));
-				}
+		for (Map.Entry<String, String> entry : env.entrySet()) {
+			String key = entry.getKey();
+
+			if (!key.startsWith(envPrefix)) {
+				continue;
 			}
 
-			return charPoolChars;
-		}
-		catch (Exception exception) {
-			throw new ExceptionInInitializerError(exception);
+			String newKey = _decode(
+				StringUtil.toLowerCase(key.substring(envPrefix.length())));
+
+			if (newKey.equals("include-and-override")) {
+				continue;
+			}
+
+			setProperty.accept(newKey, entry.getValue());
+
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					StringBundler.concat(
+						"Overrode property ", newKey,
+						" with the value from the environment variable ", key));
+			}
 		}
 	}
 
@@ -101,6 +110,28 @@ public class EnvPropertiesUtil {
 		sb.append(s.substring(position));
 
 		return sb.toString();
+	}
+
+	private static Map<String, Character> _getCharPoolChars() {
+		try {
+			Map<String, Character> charPoolChars = new HashMap<>();
+
+			for (Field field : CharPool.class.getFields()) {
+				if (Modifier.isStatic(field.getModifiers()) &&
+					(field.getType() == char.class)) {
+
+					charPoolChars.put(
+						StringUtil.removeChar(
+							field.getName(), CharPool.UNDERLINE),
+						field.getChar(null));
+				}
+			}
+
+			return charPoolChars;
+		}
+		catch (Exception exception) {
+			throw new ExceptionInInitializerError(exception);
+		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
