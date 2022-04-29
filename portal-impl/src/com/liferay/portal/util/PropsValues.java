@@ -1356,10 +1356,6 @@ public class PropsValues {
 			PropsUtil.get(
 				PropsKeys.MODEL_TREE_REBUILD_QUERY_RESULTS_BATCH_SIZE));
 
-	public static final int MODULE_FRAMEWORK_BEGINNING_START_LEVEL =
-		GetterUtil.getInteger(
-			PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_BEGINNING_START_LEVEL));
-
 	public static final boolean MODULE_FRAMEWORK_CONCURRENT_STARTUP_ENABLED =
 		GetterUtil.getBoolean(
 			PropsUtil.get(
