@@ -15,13 +15,12 @@
 package com.liferay.portal.lpkg.deployer.container.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

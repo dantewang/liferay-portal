@@ -31,7 +31,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +60,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.sql.DataSource;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.apache.felix.cm.NotCachablePersistenceManager;
 import org.apache.felix.cm.PersistenceManager;
 import org.apache.felix.cm.file.ConfigurationHandler;

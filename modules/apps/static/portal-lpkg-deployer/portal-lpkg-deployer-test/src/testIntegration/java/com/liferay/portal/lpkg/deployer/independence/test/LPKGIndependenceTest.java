@@ -15,7 +15,7 @@
 package com.liferay.portal.lpkg.deployer.independence.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 import java.io.InputStream;
@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

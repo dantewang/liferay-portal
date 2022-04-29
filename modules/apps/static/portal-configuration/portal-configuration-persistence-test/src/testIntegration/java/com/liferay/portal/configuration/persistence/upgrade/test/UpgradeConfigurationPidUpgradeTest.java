@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
-import com.liferay.portal.util.PropsValues;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -105,8 +104,8 @@ public class UpgradeConfigurationPidUpgradeTest {
 		String fileName = _SERVICE_FACTORY_PID + "-default.config";
 
 		Path path = Paths.get(
-			SystemProperties.get(
-				SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR), fileName);
+			SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR),
+			fileName);
 
 		if (Files.exists(path)) {
 			Files.delete(path);
@@ -272,8 +271,8 @@ public class UpgradeConfigurationPidUpgradeTest {
 		String fileName = _SERVICE_FACTORY_PID + separator + "default.config";
 
 		Path path = Paths.get(
-			SystemProperties.get(
-				SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR), fileName);
+			SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR),
+			fileName);
 
 		if (!Files.exists(path)) {
 			Files.createFile(path);

@@ -18,7 +18,7 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.InputStream;
 
@@ -32,7 +32,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.eclipse.osgi.container.ModuleReadHook;
 
 /**

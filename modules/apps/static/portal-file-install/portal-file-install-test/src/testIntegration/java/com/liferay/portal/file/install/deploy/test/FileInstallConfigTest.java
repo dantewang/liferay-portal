@@ -29,6 +29,7 @@ import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.SystemPropsValues;
 
 import java.io.File;
 
@@ -43,7 +44,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Assume;

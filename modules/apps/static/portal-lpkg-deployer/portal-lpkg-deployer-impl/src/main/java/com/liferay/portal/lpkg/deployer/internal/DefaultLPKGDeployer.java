@@ -38,7 +38,6 @@ import com.liferay.portal.lpkg.deployer.LPKGVerifier;
 import com.liferay.portal.lpkg.deployer.LPKGVerifyException;
 import com.liferay.portal.util.SystemPropsValues;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -72,7 +71,6 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
