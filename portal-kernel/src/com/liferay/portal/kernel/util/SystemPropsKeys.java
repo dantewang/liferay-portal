@@ -18,8 +18,8 @@ package com.liferay.portal.kernel.util;
  * @author Jiaxu Wei
  */
 public interface SystemPropsKeys {
-	public static final String DEFAULT_LIFERAY_HOME =
-		"default.liferay.home";
+
+	public static final String DEFAULT_LIFERAY_HOME = "default.liferay.home";
 
 	public static final String LIFERAY_HOME = "liferay.home";
 
@@ -31,6 +31,9 @@ public interface SystemPropsKeys {
 
 	public static final String MODULE_FRAMEWORK_BASE_DIR =
 		"module.framework.base.dir";
+
+	public static final String MODULE_FRAMEWORK_BEGINNING_START_LEVEL =
+		"module.framework.beginning.start.level";
 
 	public static final String MODULE_FRAMEWORK_CONFIGS_DIR =
 		"module.framework.configs.dir";
