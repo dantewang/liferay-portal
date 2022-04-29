@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import java.util.Dictionary;
 import java.util.concurrent.CountDownLatch;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -91,7 +92,7 @@ public class FileInstallCfgTest {
 			".testConfiguration");
 
 		_configurationPath = Paths.get(
-			PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+			SystemPropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
 			configurationPid.concat(".cfg"));
 
 		String testKey = "testKey";

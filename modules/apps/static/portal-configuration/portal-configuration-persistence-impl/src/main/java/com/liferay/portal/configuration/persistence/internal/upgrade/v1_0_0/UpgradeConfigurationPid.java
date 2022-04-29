@@ -32,6 +32,7 @@ import java.sql.ResultSet;
 
 import java.util.Dictionary;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.apache.felix.cm.file.ConfigurationHandler;
 
 /**
@@ -85,7 +86,7 @@ public class UpgradeConfigurationPid extends UpgradeProcess {
 
 				if (felixFileInstallFilename != null) {
 					File file = new File(
-						PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
+						SystemPropsValues.MODULE_FRAMEWORK_CONFIGS_DIR,
 						felixFileInstallFilename);
 
 					if (file.exists()) {
