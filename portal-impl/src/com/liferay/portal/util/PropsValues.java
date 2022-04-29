@@ -16,7 +16,6 @@ package com.liferay.portal.util;
 
 import com.liferay.portal.json.JSONObjectImpl;
 import com.liferay.portal.kernel.configuration.Filter;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.CookieKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -24,9 +23,6 @@ import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Time;
-
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author Brian Wing Shun Chan
@@ -831,21 +827,9 @@ public class PropsValues {
 			PropsUtil.get(
 				PropsKeys.FACEBOOK_CONNECT_VERIFIED_ACCOUNT_REQUIRED));
 
-	public static final JSONObject FEATURE_FLAGS_JSON_OBJECT =
-		new JSONObjectImpl() {
-			{
-				Properties properties = PropsUtil.getProperties(
-					"feature.flag.", true);
-
-				for (Map.Entry<Object, Object> property :
-						properties.entrySet()) {
-
-					put(
-						GetterUtil.getString(property.getKey()),
-						GetterUtil.getBoolean(property.getValue()));
-				}
-			}
-		};
+	public static final String FEATURE_FLAGS_JSON_OBJECT = new JSONObjectImpl(
+		PropsUtil.getProperties("feature.flag.", true)
+	).toString();
 
 	public static final String[] FIELD_EDITABLE_DOMAINS = PropsUtil.getArray(
 		PropsKeys.FIELD_EDITABLE_DOMAINS);
