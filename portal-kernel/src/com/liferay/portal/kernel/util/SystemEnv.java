@@ -27,8 +27,17 @@ public class SystemEnv {
 		Map<String, String> env = System.getenv();
 
 		for (Map.Entry<String, String> entry : env.entrySet()) {
-			properties.setProperty("env." + entry.getKey(), entry.getValue());
+			String key = entry.getKey();
+
+			if (!key.startsWith(_SYSTEM_ENV_OVERRIDE_PREFIX)) {
+				properties.setProperty("env." + key, entry.getValue());
+			}
 		}
+
+		EnvPropertiesUtil.parseProperties(
+			_SYSTEM_ENV_OVERRIDE_PREFIX, properties::setProperty);
 	}
+
+	private static final String _SYSTEM_ENV_OVERRIDE_PREFIX = "SYSTEM_";
 
 }
