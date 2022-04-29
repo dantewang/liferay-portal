@@ -14,8 +14,16 @@
 
 package com.liferay.portal.util;
 
+import com.liferay.portal.kernel.util.SystemProperties;
+import com.liferay.portal.kernel.util.SystemPropsKeys;
+
 /**
  * @author Jiaxu Wei
  */
 public class SystemPropsValues {
+
+	public static final String[] MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS =
+		SystemProperties.getArray(
+			SystemPropsKeys.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS);
+
 }
