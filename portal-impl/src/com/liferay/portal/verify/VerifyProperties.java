@@ -302,7 +302,8 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.marketplace.dir"
 		},
 		{"module.framework.modules.dir", "module.framework.modules.dir"},
-		{"module.framework.portal.dir", "module.framework.portal.dir"}
+		{"module.framework.portal.dir", "module.framework.portal.dir"},
+		{"module.framework.war.dir", "module.framework.war.dir"}
 	};
 
 	private static final String[][] _MIGRATED_SYSTEM_KEYS = {
