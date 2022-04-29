@@ -412,7 +412,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		properties.put("java.security.manager", null);
 		properties.put("org.osgi.framework.security", null);
 
-		File file = new File(PropsValues.LIFERAY_HOME);
+		File file = new File(SystemPropsValues.LIFERAY_HOME);
 
 		URI uri = file.toURI();
 
@@ -964,7 +964,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		Set<String> fragmentHosts = new HashSet<>();
 
 		_installBundlesFromDir(
-			SystemPropsValues.MODULE_FRAMEWORK_PORTAL_DIR, checksums, fragmentHosts);
+			SystemPropsValues.MODULE_FRAMEWORK_PORTAL_DIR, checksums,
+			fragmentHosts);
 		_installBundlesFromDir(
 			SystemPropsValues.MODULE_FRAMEWORK_MODULES_DIR, checksums,
 			fragmentHosts);
