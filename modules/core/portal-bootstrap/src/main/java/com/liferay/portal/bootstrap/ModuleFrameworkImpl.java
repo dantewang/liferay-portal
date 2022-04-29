@@ -896,7 +896,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 				}
 				else {
 					bundleStartLevel.setStartLevel(
-						PropsValues.MODULE_FRAMEWORK_WEB_START_LEVEL);
+						SystemPropsValues.MODULE_FRAMEWORK_WEB_START_LEVEL);
 				}
 
 				if (_isFragmentBundle(bundle)) {
@@ -1622,7 +1622,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		}
 
 		frameworkStartLevel.setStartLevel(
-			PropsValues.MODULE_FRAMEWORK_WEB_START_LEVEL,
+			SystemPropsValues.MODULE_FRAMEWORK_WEB_START_LEVEL,
 			webFrameworkEvent -> webDefaultNoticeableFuture.set(
 				webFrameworkEvent));
 
