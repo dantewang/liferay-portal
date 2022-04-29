@@ -60,6 +60,20 @@ public class SystemProperties {
 		return value;
 	}
 
+	public static String[] getArray(String key) {
+		String[] value = _propertiesArrayCache.get(key);
+
+		if (value == null) {
+			String propertiesValue = get(key);
+
+			value = StringUtil.split(propertiesValue);
+
+			_propertiesArrayCache.put(key, value);
+		}
+
+		return value;
+	}
+
 	public static Properties getProperties() {
 		return PropertiesUtil.fromMap(_properties);
 	}
@@ -175,6 +189,8 @@ public class SystemProperties {
 	}
 
 	private static final Map<String, String> _properties =
+		new ConcurrentHashMap<>();
+	private static final Map<String, String[]> _propertiesArrayCache =
 		new ConcurrentHashMap<>();
 
 	static {
