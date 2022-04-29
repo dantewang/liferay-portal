@@ -39,4 +39,7 @@ public class SystemPropsValues {
 	public static final String MODULE_FRAMEWORK_CONFIGS_DIR =
 		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR);
 
+	public static final String MODULE_FRAMEWORK_MARKETPLACE_DIR =
+		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_MARKETPLACE_DIR);
+
 }
