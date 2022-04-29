@@ -45,4 +45,7 @@ public class SystemPropsValues {
 	public static final String MODULE_FRAMEWORK_MODULES_DIR =
 		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_MODULES_DIR);
 
+	public static final String MODULE_FRAMEWORK_PORTAL_DIR =
+		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_PORTAL_DIR);
+
 }
