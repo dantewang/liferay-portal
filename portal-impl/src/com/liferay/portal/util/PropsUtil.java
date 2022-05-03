@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.UnicodeProperties;
@@ -288,45 +287,6 @@ public class PropsUtil {
 		return configuration;
 	}
 
-	private static String _getDefaultLiferayHome() {
-		String defaultLiferayHome = null;
-
-		if (ServerDetector.isJBoss()) {
-			defaultLiferayHome = SystemProperties.get("jboss.home.dir") + "/..";
-		}
-		else if (ServerDetector.isWebLogic()) {
-			defaultLiferayHome =
-				SystemProperties.get("env.DOMAIN_HOME") + "/..";
-		}
-		else if (ServerDetector.isTomcat()) {
-			defaultLiferayHome = SystemProperties.get("catalina.base") + "/..";
-		}
-		else {
-			defaultLiferayHome = SystemProperties.get("user.dir") + "/liferay";
-		}
-
-		defaultLiferayHome = StringUtil.replace(
-			defaultLiferayHome, CharPool.BACK_SLASH, CharPool.SLASH);
-
-		defaultLiferayHome = StringUtil.replace(
-			defaultLiferayHome, StringPool.DOUBLE_SLASH, StringPool.SLASH);
-
-		if (defaultLiferayHome.endsWith("/..")) {
-			int pos = defaultLiferayHome.lastIndexOf(
-				CharPool.SLASH, defaultLiferayHome.length() - 4);
-
-			if (pos != -1) {
-				defaultLiferayHome = defaultLiferayHome.substring(0, pos);
-			}
-		}
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("Default Liferay home " + defaultLiferayHome);
-		}
-
-		return defaultLiferayHome;
-	}
-
 	private static String _getLibDir(Class<?> clazz) {
 		String path = ClassUtil.getParentPath(
 			clazz.getClassLoader(), clazz.getName());
@@ -348,11 +308,6 @@ public class PropsUtil {
 	private static final Map<Long, Configuration> _configurations;
 
 	static {
-
-		// Default liferay home directory
-
-		SystemProperties.set(
-			PropsKeys.DEFAULT_LIFERAY_HOME, _getDefaultLiferayHome());
 
 		// Global shared lib directory
 
@@ -406,22 +361,13 @@ public class PropsUtil {
 
 		SystemProperties.set(PropsKeys.LIFERAY_WEB_PORTAL_DIR, portalWebDir);
 
-		// Liferay home directory
+		// Ehcache disk directory
 
 		_configuration = ConfigurationFactoryImpl.CONFIGURATION_PORTAL;
 
-		String liferayHome = _configuration.get(PropsKeys.LIFERAY_HOME);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("Configured Liferay home " + liferayHome);
-		}
-
-		SystemProperties.set(PropsKeys.LIFERAY_HOME, liferayHome);
-
-		// Ehcache disk directory
-
 		SystemProperties.set(
-			"ehcache.disk.store.dir", liferayHome + "/data/ehcache");
+			"ehcache.disk.store.dir",
+			SystemPropsValues.LIFERAY_HOME + "/data/ehcache");
 
 		if (GetterUtil.getBoolean(
 				SystemProperties.get("company-id-properties"))) {
