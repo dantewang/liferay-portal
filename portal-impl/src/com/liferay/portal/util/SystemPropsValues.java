@@ -39,6 +39,11 @@ public class SystemPropsValues {
 	public static final String MODULE_FRAMEWORK_BASE_DIR = SystemProperties.get(
 		SystemPropsKeys.MODULE_FRAMEWORK_BASE_DIR);
 
+	public static final int MODULE_FRAMEWORK_BEGINNING_START_LEVEL =
+		GetterUtil.getInteger(
+			SystemProperties.get(
+				SystemPropsKeys.MODULE_FRAMEWORK_BEGINNING_START_LEVEL));
+
 	public static final String MODULE_FRAMEWORK_CONFIGS_DIR =
 		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR);
 
