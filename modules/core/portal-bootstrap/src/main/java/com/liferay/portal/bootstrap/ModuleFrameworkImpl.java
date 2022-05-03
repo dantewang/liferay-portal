@@ -889,7 +889,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 				if (header == null) {
 					bundleStartLevel.setStartLevel(
-						PropsValues.
+						SystemPropsValues.
 							MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL);
 				}
 				else {
@@ -1600,7 +1600,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			new DefaultNoticeableFuture<>();
 
 		frameworkStartLevel.setStartLevel(
-			PropsValues.MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL,
+			SystemPropsValues.MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL,
 			frameworkEvent -> defaultNoticeableFuture.set(frameworkEvent));
 
 		FrameworkEvent frameworkEvent = defaultNoticeableFuture.get();
