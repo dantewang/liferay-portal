@@ -18,4 +18,8 @@ package com.liferay.portal.kernel.util;
  * @author Jiaxu Wei
  */
 public interface SystemPropsKeys {
+
+	public static final String RESOURCE_REPOSITORIES_ROOT =
+		"resource.repositories.root";
+
 }
