@@ -60,6 +60,9 @@ public interface SystemPropsKeys {
 	public static final String MODULE_FRAMEWORK_PORTAL_DIR =
 		"module.framework.portal.dir";
 
+	public static final String MODULE_FRAMEWORK_PROPERTIES =
+		"module.framework.properties.";
+
 	public static final String MODULE_FRAMEWORK_RESOLVER_REVISION_BATCH_SIZE =
 		"module.framework.resolver.revision.batch.size";
 
