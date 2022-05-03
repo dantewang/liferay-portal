@@ -36,6 +36,9 @@ public class SystemPropsValues {
 				SystemPropsKeys.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL),
 			2000);
 
+	public static final String MODULE_FRAMEWORK_BASE_DIR = SystemProperties.get(
+		SystemPropsKeys.MODULE_FRAMEWORK_BASE_DIR);
+
 	public static final String RESOURCE_REPOSITORIES_ROOT =
 		SystemProperties.get(SystemPropsKeys.RESOURCE_REPOSITORIES_ROOT);
 

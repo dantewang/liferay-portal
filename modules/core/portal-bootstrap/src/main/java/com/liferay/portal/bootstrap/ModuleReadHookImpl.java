@@ -32,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.eclipse.osgi.container.ModuleReadHook;
 
 /**
@@ -65,7 +66,7 @@ public class ModuleReadHookImpl implements ModuleReadHook {
 
 				if (jarLocation.startsWith(
 						_normalizePath(
-							PropsValues.MODULE_FRAMEWORK_BASE_DIR))) {
+							SystemPropsValues.MODULE_FRAMEWORK_BASE_DIR))) {
 
 					int index = location.indexOf(CharPool.QUESTION);
 
