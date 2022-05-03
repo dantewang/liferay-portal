@@ -87,6 +87,9 @@ public interface SystemPropsKeys {
 	public static final String MODULE_FRAMEWORK_WAR_DIR =
 		"module.framework.war.dir";
 
+	public static final String MODULE_FRAMEWORK_WEB_START_LEVEL =
+		"module.framework.web.start.level";
+
 	public static final String RESOURCE_REPOSITORIES_ROOT =
 		"resource.repositories.root";
 

@@ -444,6 +444,10 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.stop.wait.timeout"
 		},
 		{
+			"module.framework.web.start.level",
+			"module.framework.web.start.level"
+		},
+		{
 			"module.framework.system.packages.extra",
 			"module.framework.system.packages.extra"
 		},
