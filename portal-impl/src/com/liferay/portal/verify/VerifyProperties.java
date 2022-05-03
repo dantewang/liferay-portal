@@ -328,6 +328,10 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.resolver.revision.batch.size",
 			"module.framework.resolver.revision.batch.size"
 		},
+		{
+			"module.framework.runtime.start.level",
+			"module.framework.runtime.start.level"
+		},
 		{"module.framework.state.dir", "module.framework.state.dir"},
 		{"module.framework.war.dir", "module.framework.war.dir"},
 		{"resource.repositories.root", "resource.repositories.root"}
