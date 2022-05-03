@@ -14,6 +14,7 @@
 
 package com.liferay.portal.util;
 
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.SystemPropsKeys;
 
@@ -28,6 +29,12 @@ public class SystemPropsValues {
 	public static final String[] MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS =
 		SystemProperties.getArray(
 			SystemPropsKeys.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS);
+
+	public static final long MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL =
+		GetterUtil.getLong(
+			SystemProperties.get(
+				SystemPropsKeys.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL),
+			2000);
 
 	public static final String RESOURCE_REPOSITORIES_ROOT =
 		SystemProperties.get(SystemPropsKeys.RESOURCE_REPOSITORIES_ROOT);
