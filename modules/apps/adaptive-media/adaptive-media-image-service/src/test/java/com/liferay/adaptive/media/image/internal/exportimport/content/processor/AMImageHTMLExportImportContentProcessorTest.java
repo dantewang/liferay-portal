@@ -17,8 +17,8 @@ package com.liferay.adaptive.media.image.internal.exportimport.content.processor
 import com.liferay.adaptive.media.image.html.AMImageHTMLTagFactory;
 import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
-import com.liferay.exportimport.kernel.lar.ExportImportPathUtil;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
+import com.liferay.exportimport.kernel.lar.StagedModelType;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -26,24 +26,27 @@ import com.liferay.portal.kernel.model.StagedModel;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.test.rule.LiferayUnitTestRule;
+
+import java.io.Serializable;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.mockito.Mockito;
-
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Adolfo Pérez
  */
-@PrepareForTest(ExportImportPathUtil.class)
-@RunWith(PowerMockRunner.class)
 public class AMImageHTMLExportImportContentProcessorTest {
+
+	@ClassRule
+	@Rule
+	public static final LiferayUnitTestRule liferayUnitTestRule =
+		LiferayUnitTestRule.INSTANCE;
 
 	@Before
 	public void setUp() throws Exception {
@@ -75,8 +78,6 @@ public class AMImageHTMLExportImportContentProcessorTest {
 		).getFileEntry(
 			Mockito.anyLong()
 		);
-
-		PowerMockito.mockStatic(ExportImportPathUtil.class);
 
 		_setUpFileEntryToExport(_FILE_ENTRY_ID_1, _fileEntry1);
 		_setUpFileEntryToImport(_FILE_ENTRY_ID_1, _fileEntry1);
@@ -151,9 +152,10 @@ public class AMImageHTMLExportImportContentProcessorTest {
 
 		Assert.assertEquals(
 			StringBundler.concat(
-				prefix, "<img src=\"", urlFileEntry1, "\" data-fileentryid=\"",
-				_FILE_ENTRY_ID_1, "\" />", infix, "<img src=\"", urlFileEntry2,
-				"\" data-fileentryid=\"", _FILE_ENTRY_ID_2, "\" />", suffix),
+				prefix, "<img src=\"", urlFileEntry1,
+				"\" export-import-path=\"", _EXPORT_IMPORT_PATH, "\" />", infix,
+				"<img src=\"", urlFileEntry2, "\" export-import-path=\"",
+				_EXPORT_IMPORT_PATH, "\" />", suffix),
 			_import(
 				_export(
 					StringBundler.concat(
@@ -176,13 +178,12 @@ public class AMImageHTMLExportImportContentProcessorTest {
 
 		Assert.assertEquals(
 			StringBundler.concat(
-				prefix, "<picture data-fileentryid=\"", _FILE_ENTRY_ID_1,
-				"\"><source /><img src=\"", urlFileEntry1,
-				"\" data-fileentryid=\"", _FILE_ENTRY_ID_1, "\" /></picture>",
-				infix, "<picture data-fileentryid=\"", _FILE_ENTRY_ID_2,
-				"\"><source /><img src=\"", urlFileEntry2,
-				"\" data-fileentryid=\"", _FILE_ENTRY_ID_2, "\" /></picture>",
-				suffix),
+				prefix, "<picture export-import-path=\"", _EXPORT_IMPORT_PATH,
+				"\"><img src=\"", urlFileEntry1, "\" export-import-path=\"",
+				_EXPORT_IMPORT_PATH, "\" /></picture>", infix,
+				"<picture export-import-path=\"", _EXPORT_IMPORT_PATH,
+				"\"><img src=\"", urlFileEntry2, "\" export-import-path=\"",
+				_EXPORT_IMPORT_PATH, "\" /></picture>", suffix),
 			_import(
 				_export(
 					StringBundler.concat(
@@ -217,8 +218,8 @@ public class AMImageHTMLExportImportContentProcessorTest {
 		expectedSB.append(prefix);
 		expectedSB.append("<img src=\"");
 		expectedSB.append(urlFileEntry1);
-		expectedSB.append("\" data-fileentryid=\"");
-		expectedSB.append(_FILE_ENTRY_ID_1);
+		expectedSB.append("\" export-import-path=\"");
+		expectedSB.append(_EXPORT_IMPORT_PATH);
 		expectedSB.append("\" />");
 		expectedSB.append(suffix);
 
@@ -243,8 +244,8 @@ public class AMImageHTMLExportImportContentProcessorTest {
 		Assert.assertEquals(
 			StringBundler.concat(
 				prefix, "<img attr1=\"1\" attr2=\"2\" src=\"", urlFileEntry1,
-				"\" attr3=\"3\" data-fileentryid=\"", _FILE_ENTRY_ID_1, "\" />",
-				suffix),
+				"\" attr3=\"3\" export-import-path=\"", _EXPORT_IMPORT_PATH,
+				"\" />", suffix),
 			_import(
 				_export(
 					StringBundler.concat(
@@ -262,10 +263,9 @@ public class AMImageHTMLExportImportContentProcessorTest {
 
 		Assert.assertEquals(
 			StringBundler.concat(
-				prefix, "<picture data-fileentryid=\"", _FILE_ENTRY_ID_1,
-				"\"><source /><img src=\"", urlFileEntry1,
-				"\" data-fileentryid=\"", _FILE_ENTRY_ID_1, "\" /></picture>",
-				suffix),
+				prefix, "<picture export-import-path=\"", _EXPORT_IMPORT_PATH,
+				"\"><img src=\"", urlFileEntry1, "\" export-import-path=\"",
+				_EXPORT_IMPORT_PATH, "\" /></picture>", suffix),
 			_import(
 				_export(
 					StringBundler.concat(
@@ -283,10 +283,10 @@ public class AMImageHTMLExportImportContentProcessorTest {
 
 		Assert.assertEquals(
 			StringBundler.concat(
-				"<picture data-fileentryid=\"", _FILE_ENTRY_ID_1,
-				"\"><source /><img src=\"", urlFileEntry1,
-				"\" class=\"pretty\" data-fileentryid=\"", _FILE_ENTRY_ID_1,
-				"\" /></picture>"),
+				"<picture export-import-path=\"", _EXPORT_IMPORT_PATH,
+				"\"><img src=\"", urlFileEntry1,
+				"\" class=\"pretty\" export-import-path=\"",
+				_EXPORT_IMPORT_PATH, "\" /></picture>"),
 			_import(
 				_export(
 					StringBundler.concat(
@@ -418,10 +418,26 @@ public class AMImageHTMLExportImportContentProcessorTest {
 			fileEntryId
 		);
 
+		StagedModelType stagedModelType = Mockito.mock(StagedModelType.class);
+
+		Mockito.doReturn(
+			stagedModelType
+		).when(
+			fileEntry
+		).getStagedModelType();
+
+		Serializable serializable = Mockito.mock(Serializable.class);
+
+		Mockito.doReturn(
+			serializable
+		).when(
+			fileEntry
+		).getPrimaryKeyObj();
+
 		Mockito.when(
-			ExportImportPathUtil.getModelPath(fileEntry)
+			serializable.toString()
 		).thenReturn(
-			"PATH_" + fileEntryId
+			""
 		);
 	}
 
@@ -463,6 +479,8 @@ public class AMImageHTMLExportImportContentProcessorTest {
 			}
 		);
 	}
+
+	private static final String _EXPORT_IMPORT_PATH = "/group/0/null/.xml";
 
 	private static final long _FILE_ENTRY_ID_1 = RandomTestUtil.randomLong();
 
