@@ -338,6 +338,10 @@ public class VerifyProperties extends VerifyProcess {
 		},
 		{"module.framework.state.dir", "module.framework.state.dir"},
 		{"module.framework.static.jars", "module.framework.static.jars"},
+		{
+			"module.framework.stop.wait.timeout",
+			"module.framework.stop.wait.timeout"
+		},
 		{"module.framework.war.dir", "module.framework.war.dir"},
 		{"resource.repositories.root", "resource.repositories.root"}
 	};

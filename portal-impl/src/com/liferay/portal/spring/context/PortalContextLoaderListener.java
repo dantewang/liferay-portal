@@ -154,7 +154,7 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		try {
 			ModuleFrameworkUtil.stopFramework(
-				PropsValues.MODULE_FRAMEWORK_STOP_WAIT_TIMEOUT);
+				SystemPropsValues.MODULE_FRAMEWORK_STOP_WAIT_TIMEOUT);
 		}
 		catch (Exception exception) {
 			_log.error(exception);
