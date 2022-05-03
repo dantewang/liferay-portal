@@ -65,8 +65,7 @@ public class SystemProperties {
 	}
 
 	public static String[] getArray(String key) {
-		return _propertiesArrayCache.computeIfAbsent(
-			key, k -> StringUtil.split(get(k)));
+		return _arrayValues.computeIfAbsent(key, k -> StringUtil.split(get(k)));
 	}
 
 	public static Properties getProperties() {
@@ -232,16 +231,16 @@ public class SystemProperties {
 	}
 
 	private static void _parseProperties(Map<String, String> properties) {
-		Map<String, String> placeholderPropsCache = new ConcurrentHashMap<>();
+		Map<String, String> placeholderProperties = new ConcurrentHashMap<>();
 
 		for (Map.Entry<String, String> propertyEntry : properties.entrySet()) {
 			String entryValue = propertyEntry.getValue();
 
 			String value = _replacePlaceholders(
-				entryValue, placeholderPropsCache);
+				entryValue, placeholderProperties);
 
 			if (!entryValue.equals(value)) {
-				placeholderPropsCache.put(propertyEntry.getKey(), value);
+				placeholderProperties.put(propertyEntry.getKey(), value);
 
 				propertyEntry.setValue(value);
 
@@ -251,7 +250,7 @@ public class SystemProperties {
 	}
 
 	private static String _replacePlaceholders(
-		String propertiesValue, Map<String, String> placeholderPropsCache) {
+		String propertiesValue, Map<String, String> placeholderProperties) {
 
 		int startIndex = propertiesValue.indexOf(
 			StringPool.DOLLAR_AND_OPEN_CURLY_BRACE);
@@ -268,8 +267,8 @@ public class SystemProperties {
 
 				String placeholderValue = null;
 
-				if (Objects.nonNull(placeholderPropsCache)) {
-					placeholderValue = placeholderPropsCache.get(
+				if (Objects.nonNull(placeholderProperties)) {
+					placeholderValue = placeholderProperties.get(
 						placeholderKey);
 				}
 
@@ -281,10 +280,10 @@ public class SystemProperties {
 					}
 
 					placeholderValue = _replacePlaceholders(
-						placeholderValue, placeholderPropsCache);
+						placeholderValue, placeholderProperties);
 
-					if (Objects.nonNull(placeholderPropsCache)) {
-						placeholderPropsCache.put(
+					if (Objects.nonNull(placeholderProperties)) {
+						placeholderProperties.put(
 							placeholderKey, placeholderValue);
 					}
 				}
@@ -306,9 +305,9 @@ public class SystemProperties {
 		return propertiesValue;
 	}
 
-	private static final Map<String, String> _properties =
+	private static final Map<String, String[]> _arrayValues =
 		new ConcurrentHashMap<>();
-	private static final Map<String, String[]> _propertiesArrayCache =
+	private static final Map<String, String> _properties =
 		new ConcurrentHashMap<>();
 
 	static {
