@@ -302,6 +302,7 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.marketplace.dir",
 			"module.framework.marketplace.dir"
 		},
+		{"module.framework.modules.dir", "module.framework.modules.dir"},
 		{"resource.repositories.root", "resource.repositories.root"}
 	};
 
