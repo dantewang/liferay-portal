@@ -337,6 +337,7 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.services.ignored.interfaces"
 		},
 		{"module.framework.state.dir", "module.framework.state.dir"},
+		{"module.framework.static.jars", "module.framework.static.jars"},
 		{"module.framework.war.dir", "module.framework.war.dir"},
 		{"resource.repositories.root", "resource.repositories.root"}
 	};
