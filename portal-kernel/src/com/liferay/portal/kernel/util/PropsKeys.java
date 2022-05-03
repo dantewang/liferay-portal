@@ -1693,9 +1693,6 @@ public interface PropsKeys {
 	public static final String MODEL_TREE_REBUILD_QUERY_RESULTS_BATCH_SIZE =
 		"model.tree.rebuild.query.results.batch.size";
 
-	public static final String MODULE_FRAMEWORK_BEGINNING_START_LEVEL =
-		"module.framework.beginning.start.level";
-
 	public static final String MODULE_FRAMEWORK_CONCURRENT_STARTUP_ENABLED =
 		"module.framework.concurrent.startup.enabled";
 
