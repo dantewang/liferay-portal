@@ -296,7 +296,9 @@ public class VerifyProperties extends VerifyProcess {
 			"module.framework.auto.deploy.interval",
 			"module.framework.auto.deploy.interval"
 		},
+		{"module.framework.base.dir", "module.framework.base.dir"},
 		{"resource.repositories.root", "resource.repositories.root"}
+
 	};
 
 	private static final String[][] _MIGRATED_SYSTEM_KEYS = {

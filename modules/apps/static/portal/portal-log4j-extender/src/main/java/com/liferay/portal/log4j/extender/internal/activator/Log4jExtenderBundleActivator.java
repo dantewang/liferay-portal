@@ -28,6 +28,7 @@ import java.net.URL;
 
 import java.util.Enumeration;
 
+import com.liferay.portal.util.SystemPropsValues;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -77,7 +78,7 @@ public class Log4jExtenderBundleActivator implements BundleActivator {
 	private void _configureLog4j(String symbolicName) {
 		File configFile = new File(
 			StringBundler.concat(
-				PropsValues.MODULE_FRAMEWORK_BASE_DIR, "/log4j/", symbolicName,
+				SystemPropsValues.MODULE_FRAMEWORK_BASE_DIR, "/log4j/", symbolicName,
 				"-log4j-ext.xml"));
 
 		if (!configFile.exists()) {
