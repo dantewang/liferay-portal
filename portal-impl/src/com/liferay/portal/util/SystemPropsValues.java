@@ -101,6 +101,10 @@ public class SystemPropsValues {
 			SystemProperties.get(
 				SystemPropsKeys.MODULE_FRAMEWORK_STOP_WAIT_TIMEOUT));
 
+	public static final String[] MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA =
+		SystemProperties.getArray(
+			SystemPropsKeys.MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA);
+
 	public static final String MODULE_FRAMEWORK_WAR_DIR = SystemProperties.get(
 		SystemPropsKeys.MODULE_FRAMEWORK_WAR_DIR);
 
