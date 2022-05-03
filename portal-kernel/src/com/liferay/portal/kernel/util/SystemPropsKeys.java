@@ -63,6 +63,9 @@ public interface SystemPropsKeys {
 	public static final String MODULE_FRAMEWORK_RESOLVER_REVISION_BATCH_SIZE =
 		"module.framework.resolver.revision.batch.size";
 
+	public static final String MODULE_FRAMEWORK_RUNTIME_START_LEVEL =
+		"module.framework.runtime.start.level";
+
 	public static final String MODULE_FRAMEWORK_STATE_DIR =
 		"module.framework.state.dir";
 
