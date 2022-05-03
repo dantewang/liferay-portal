@@ -178,6 +178,7 @@ public class SystemProperties {
 		// java.util.Properties
 
 		PropertiesUtil.fromProperties(properties, _properties);
+
 		_parseProperties(_properties);
 
 		if (urls != null) {
