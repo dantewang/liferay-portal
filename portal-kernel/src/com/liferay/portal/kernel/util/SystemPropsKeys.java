@@ -35,6 +35,9 @@ public interface SystemPropsKeys {
 	public static final String MODULE_FRAMEWORK_BEGINNING_START_LEVEL =
 		"module.framework.beginning.start.level";
 
+	public static final String MODULE_FRAMEWORK_CONCURRENT_STARTUP_ENABLED =
+		"module.framework.concurrent.startup.enabled";
+
 	public static final String MODULE_FRAMEWORK_CONFIGS_DIR =
 		"module.framework.configs.dir";
 

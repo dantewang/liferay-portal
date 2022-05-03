@@ -44,6 +44,11 @@ public class SystemPropsValues {
 			SystemProperties.get(
 				SystemPropsKeys.MODULE_FRAMEWORK_BEGINNING_START_LEVEL));
 
+	public static final boolean MODULE_FRAMEWORK_CONCURRENT_STARTUP_ENABLED =
+		GetterUtil.getBoolean(
+			SystemProperties.get(
+				SystemPropsKeys.MODULE_FRAMEWORK_CONCURRENT_STARTUP_ENABLED));
+
 	public static final String MODULE_FRAMEWORK_CONFIGS_DIR =
 		SystemProperties.get(SystemPropsKeys.MODULE_FRAMEWORK_CONFIGS_DIR);
 
