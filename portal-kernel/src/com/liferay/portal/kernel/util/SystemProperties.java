@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -267,22 +266,22 @@ public class SystemProperties {
 
 				String placeholderValue = null;
 
-				if (Objects.nonNull(placeholderProperties)) {
+				if (placeholderProperties != null) {
 					placeholderValue = placeholderProperties.get(
 						placeholderKey);
 				}
 
-				if (Objects.isNull(placeholderValue)) {
+				if (placeholderValue == null) {
 					placeholderValue = get(placeholderKey);
 
-					if (Objects.isNull(placeholderValue)) {
-						placeholderValue = "";
+					if (placeholderValue == null) {
+						placeholderValue = StringPool.BLANK;
 					}
 
 					placeholderValue = _replacePlaceholders(
 						placeholderValue, placeholderProperties);
 
-					if (Objects.nonNull(placeholderProperties)) {
+					if (placeholderProperties != null) {
 						placeholderProperties.put(
 							placeholderKey, placeholderValue);
 					}
