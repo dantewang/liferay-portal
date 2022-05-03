@@ -65,17 +65,8 @@ public class SystemProperties {
 	}
 
 	public static String[] getArray(String key) {
-		String[] value = _propertiesArrayCache.get(key);
-
-		if (value == null) {
-			String propertiesValue = get(key);
-
-			value = StringUtil.split(propertiesValue);
-
-			_propertiesArrayCache.put(key, value);
-		}
-
-		return value;
+		return _propertiesArrayCache.computeIfAbsent(
+			key, k -> StringUtil.split(get(k)));
 	}
 
 	public static Properties getProperties() {
