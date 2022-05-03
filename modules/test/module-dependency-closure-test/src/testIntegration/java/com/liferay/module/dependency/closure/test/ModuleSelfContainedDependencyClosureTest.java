@@ -109,7 +109,8 @@ public class ModuleSelfContainedDependencyClosureTest {
 				Paths.get(
 					SystemProperties.get(
 						SystemPropsKeys.MODULE_FRAMEWORK_BASE_DIR),
-					"test"), "*.jar")) {
+					"test"),
+				"*.jar")) {
 
 			for (Path jarPath : directoryStream) {
 				Path deployedJarPath = modulesPath.resolve(

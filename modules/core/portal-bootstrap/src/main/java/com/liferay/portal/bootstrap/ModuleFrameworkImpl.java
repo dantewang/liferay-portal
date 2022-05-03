@@ -833,7 +833,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			FileUtil.mkdirs(dirName);
 		}
 
-		FileUtil.mkdirs(SystemPropsValues.MODULE_FRAMEWORK_BASE_DIR + "/static");
+		FileUtil.mkdirs(
+			SystemPropsValues.MODULE_FRAMEWORK_BASE_DIR + "/static");
 		FileUtil.mkdirs(
 			PropsValues.MODULE_FRAMEWORK_MARKETPLACE_DIR + "/override");
 	}
@@ -937,7 +938,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 					"org.osgi.service.cm.ConfigurationAdmin")),
 			PropsValues.MODULE_FRAMEWORK_FILE_INSTALL_CONFIG_ENCODING);
 
-		File dir = new File(PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR);
+		File dir = new File(SystemPropsValues.MODULE_FRAMEWORK_CONFIGS_DIR);
 
 		dir = dir.getCanonicalFile();
 
