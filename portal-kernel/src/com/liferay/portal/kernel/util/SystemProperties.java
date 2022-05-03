@@ -37,6 +37,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SystemProperties {
 
+	public static final String SYSTEM_ENV_OVERRIDE_PREFIX = "SYSTEM_";
+
 	public static final String SYSTEM_PROPERTIES_QUIET =
 		"system.properties.quiet";
 
@@ -178,6 +180,9 @@ public class SystemProperties {
 		// java.util.Properties
 
 		PropertiesUtil.fromProperties(properties, _properties);
+
+		EnvPropertiesUtil.parseProperties(
+			SYSTEM_ENV_OVERRIDE_PREFIX, properties::setProperty);
 
 		_parseProperties(_properties);
 

@@ -29,15 +29,10 @@ public class SystemEnv {
 		for (Map.Entry<String, String> entry : env.entrySet()) {
 			String key = entry.getKey();
 
-			if (!key.startsWith(_SYSTEM_ENV_OVERRIDE_PREFIX)) {
+			if (!key.startsWith(SystemProperties.SYSTEM_ENV_OVERRIDE_PREFIX)) {
 				properties.setProperty("env." + key, entry.getValue());
 			}
 		}
-
-		EnvPropertiesUtil.parseProperties(
-			_SYSTEM_ENV_OVERRIDE_PREFIX, properties::setProperty);
 	}
-
-	private static final String _SYSTEM_ENV_OVERRIDE_PREFIX = "SYSTEM_";
 
 }
