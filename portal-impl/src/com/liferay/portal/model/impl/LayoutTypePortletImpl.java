@@ -329,8 +329,6 @@ public class LayoutTypePortletImpl
 	public List<Portlet> getExplicitlyAddedPortlets(
 		boolean includeCustomizableColumns) {
 
-		List<Portlet> portlets = new ArrayList<>();
-
 		Layout layout = getLayout();
 
 		if (layout.isTypeAssetDisplay() || layout.isTypeContent()) {
@@ -347,9 +345,11 @@ public class LayoutTypePortletImpl
 				portletIds.add(portletPreferences.getPortletId());
 			}
 
-			portlets = _getPortlets(portletIds.toArray(new String[0]));
+			return _getPortlets(portletIds.toArray(new String[0]));
 		}
 		else {
+			List<Portlet> portlets = new ArrayList<>();
+
 			List<String> columns = getColumns();
 
 			for (String columnId : columns) {
@@ -367,9 +367,9 @@ public class LayoutTypePortletImpl
 
 				portlets.addAll(getAllPortlets(columnId));
 			}
-		}
 
-		return portlets;
+			return portlets;
+		}
 	}
 
 	@Override
