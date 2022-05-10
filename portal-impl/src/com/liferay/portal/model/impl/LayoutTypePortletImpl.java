@@ -334,7 +334,7 @@ public class LayoutTypePortletImpl
 		Layout layout = getLayout();
 
 		if (layout.isTypeAssetDisplay() || layout.isTypeContent()) {
-			List<String> portletIds = new ArrayList<>();
+			Set<String> portletIds = new HashSet<>();
 
 			List<com.liferay.portal.kernel.model.PortletPreferences>
 				portletPreferencesList =
@@ -344,9 +344,7 @@ public class LayoutTypePortletImpl
 			for (com.liferay.portal.kernel.model.PortletPreferences
 					portletPreferences : portletPreferencesList) {
 
-				if (!portletIds.contains(portletPreferences.getPortletId())) {
-					portletIds.add(portletPreferences.getPortletId());
-				}
+				portletIds.add(portletPreferences.getPortletId());
 			}
 
 			portlets = _getPortlets(portletIds.toArray(new String[0]));
