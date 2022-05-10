@@ -180,10 +180,16 @@ public class DBUpgrader {
 		}
 	}
 
-	public static void verify() throws VerifyException {
+	public static void verifyAll() throws VerifyException{
 		VerifyProperties verifyProperties = new VerifyProperties();
 
 		verifyProperties.verify();
+
+		verify();
+	}
+
+	public static void verify() throws VerifyException {
+
 
 		VerifyGroup verifyGroup = new VerifyGroup();
 
@@ -416,7 +422,7 @@ public class DBUpgrader {
 
 		_checkClassNamesAndResourceActions();
 
-		verify();
+		verifyAll();
 	}
 
 	private static final Version _VERSION_7010 = new Version(0, 0, 6);

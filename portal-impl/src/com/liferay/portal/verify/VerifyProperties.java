@@ -41,9 +41,13 @@ public class VerifyProperties extends VerifyProcess {
 	protected void doVerify() throws Exception {
 		verifySystemProperties();
 
-		verifyPortalProperties();
+		boolean legal = verifyPortalProperties();
 
 		verifyDocumentLibrary();
+
+		if(!legal){
+			throw new VerifyException("Illegal Portal Properties!");
+		}
 	}
 
 	protected InputStream getPropertiesResourceAsStream(String resourceName)
@@ -110,7 +114,7 @@ public class VerifyProperties extends VerifyProcess {
 		}
 	}
 
-	protected void verifyMigratedPortalProperty(
+	protected int verifyMigratedPortalProperty(
 			Properties portalProperties, String oldKey, String newKey)
 		throws Exception {
 
@@ -119,7 +123,9 @@ public class VerifyProperties extends VerifyProcess {
 				StringBundler.concat(
 					"Portal property \"", oldKey,
 					"\" was migrated to the system property \"", newKey, "\""));
+			return 1;
 		}
+		return 0;
 	}
 
 	protected void verifyMigratedSystemProperty(String oldKey, String newKey)
@@ -178,7 +184,8 @@ public class VerifyProperties extends VerifyProcess {
 		}
 	}
 
-	protected void verifyPortalProperties() throws Exception {
+	protected boolean verifyPortalProperties() throws Exception {
+		int illegalPortalProperties = 0;
 		try (LoggingTimer loggingTimer = new LoggingTimer()) {
 			Properties portalProperties = loadPortalProperties();
 
@@ -186,7 +193,9 @@ public class VerifyProperties extends VerifyProcess {
 				String oldKey = keys[0];
 				String newKey = keys[1];
 
-				verifyMigratedPortalProperty(portalProperties, oldKey, newKey);
+				int illegalPortalProperty =
+					verifyMigratedPortalProperty(portalProperties, oldKey, newKey);
+				illegalPortalProperties += illegalPortalProperty;
 			}
 
 			for (String[] keys : _RENAMED_PORTAL_KEYS) {
@@ -209,6 +218,7 @@ public class VerifyProperties extends VerifyProcess {
 					portalProperties, oldKey, newKey, moduleName);
 			}
 		}
+		return (illegalPortalProperties == 0);
 	}
 
 	protected void verifyRenamedPortalProperty(

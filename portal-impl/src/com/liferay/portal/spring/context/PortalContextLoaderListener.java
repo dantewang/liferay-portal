@@ -14,6 +14,7 @@
 
 package com.liferay.portal.spring.context;
 
+import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalServiceUtil;
 import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.petra.log4j.Log4JUtil;
@@ -85,6 +86,8 @@ import javax.servlet.ServletContextEvent;
 
 import javax.sql.DataSource;
 
+import com.liferay.portal.verify.VerifyException;
+import com.liferay.portal.verify.VerifyProperties;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
@@ -281,9 +284,23 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 			ModuleFrameworkUtil.registerContext(_arrayApplicationContext);
 
 			ModuleFrameworkUtil.startFramework();
+
 		}
 		catch (Exception exception) {
 			throw new RuntimeException(exception);
+		}
+
+		try {
+
+			if (StartupHelperUtil.isDBNew()) {
+
+				VerifyProperties verifyProperties = new VerifyProperties();
+
+				verifyProperties.verify();
+
+			}
+		}catch (VerifyException verifyException){
+			System.exit(1);
 		}
 
 		if (springInitTask == null) {
