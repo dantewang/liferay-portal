@@ -32,7 +32,7 @@ import java.util.function.BiConsumer;
 public class EnvPropertiesUtil {
 
 	public static void loadEnvOverrides(
-		String envPrefix, BiConsumer<String, String> setProperty) {
+		String envPrefix, BiConsumer<String, String> biConsumer) {
 
 		Map<String, String> env = System.getenv();
 
@@ -50,7 +50,7 @@ public class EnvPropertiesUtil {
 				continue;
 			}
 
-			setProperty.accept(newKey, entry.getValue());
+			biConsumer.accept(newKey, entry.getValue());
 
 			if (_log.isInfoEnabled()) {
 				_log.info(
