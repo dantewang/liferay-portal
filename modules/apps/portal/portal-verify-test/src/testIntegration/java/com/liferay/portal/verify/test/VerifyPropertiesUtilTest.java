@@ -48,7 +48,7 @@ public class VerifyPropertiesUtilTest {
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void testMigratedPortalKeys() throws Exception {
+	public void testMigratedPortalKeys() {
 		String migratedPortalKey = getFirstPortalPropertyKey();
 
 		String[][] originalMigratedPortalKeys = _setPropertyKeys(
@@ -58,7 +58,8 @@ public class VerifyPropertiesUtilTest {
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
 				VerifyPropertiesUtil.class.getName(), LoggerTestUtil.ERROR)) {
 
-			VerifyPropertiesUtil.verify();
+			ReflectionTestUtil.invoke(
+				VerifyPropertiesUtil.class, "verifyPortalProperties", null);
 
 			List<LogEntry> logEntries = logCapture.getLogEntries();
 
