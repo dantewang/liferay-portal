@@ -132,7 +132,7 @@ public class PortalJSONObjectUtil {
 				continue;
 			}
 
-			if (normalizedFileName.endsWith("/VerifyProperties.java")) {
+			if (normalizedFileName.endsWith("/VerifyPropertiesUtil.java")) {
 				portalJSONObject.put(
 					"legacyProperties",
 					_getLegacyPropertiesJSONObject(normalizedFileName));

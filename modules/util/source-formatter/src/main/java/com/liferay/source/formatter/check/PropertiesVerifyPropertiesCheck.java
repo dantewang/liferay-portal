@@ -134,7 +134,7 @@ public class PropertiesVerifyPropertiesCheck extends BaseFileCheck {
 	}
 
 	private static final String _VERIFY_PROPERTIES_FILE_NAME =
-		"portal-impl/src/com/liferay/portal/verify/VerifyProperties.java";
+		"portal-impl/src/com/liferay/portal/verify/VerifyPropertiesUtil.java";
 
 	private List<LegacyProperty> _legacyProperties;
 

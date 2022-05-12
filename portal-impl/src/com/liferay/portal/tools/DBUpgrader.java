@@ -45,7 +45,7 @@ import com.liferay.portal.util.InitUtil;
 import com.liferay.portal.util.PortalClassPathUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.verify.VerifyGroup;
-import com.liferay.portal.verify.VerifyProperties;
+import com.liferay.portal.verify.VerifyPropertiesUtil;
 import com.liferay.portal.verify.VerifyResourcePermissions;
 import com.liferay.portlet.documentlibrary.store.StoreFactory;
 import com.liferay.util.dao.orm.CustomSQLUtil;
@@ -182,7 +182,7 @@ public class DBUpgrader {
 	}
 
 	public static void verify() throws Exception {
-		VerifyProperties.verify();
+		VerifyPropertiesUtil.verify();
 
 		VerifyGroup verifyGroup = new VerifyGroup();
 

@@ -36,7 +36,7 @@ import java.util.Properties;
 /**
  * @author Brian Wing Shun Chan
  */
-public class VerifyProperties {
+public class VerifyPropertiesUtil {
 
 	public static void verify() throws Exception {
 		verifySystemProperties();
@@ -64,7 +64,7 @@ public class VerifyProperties {
 			return new FileInputStream(propertyFile);
 		}
 
-		ClassLoader classLoader = VerifyProperties.class.getClassLoader();
+		ClassLoader classLoader = VerifyPropertiesUtil.class.getClassLoader();
 
 		try {
 			return classLoader.getResourceAsStream(resourceName);
@@ -2185,6 +2185,6 @@ public class VerifyProperties {
 	};
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		VerifyProperties.class);
+		VerifyPropertiesUtil.class);
 
 }
