@@ -156,7 +156,7 @@ public class DBUpgrader {
 	public static void upgrade(ApplicationContext applicationContext)
 		throws Exception {
 
-		verify();
+		VerifyPropertiesUtil.verify();
 
 		StartupHelperUtil.setUpgrading(true);
 
@@ -182,8 +182,6 @@ public class DBUpgrader {
 	}
 
 	public static void verify() throws Exception {
-		VerifyPropertiesUtil.verify();
-
 		VerifyGroup verifyGroup = new VerifyGroup();
 
 		verifyGroup.verify();

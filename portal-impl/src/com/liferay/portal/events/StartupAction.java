@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.tools.DBUpgrader;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.verify.VerifyPropertiesUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -174,6 +175,8 @@ public class StartupAction extends SimpleAction {
 		StartupHelperUtil.initResourceActions();
 
 		if (StartupHelperUtil.isDBNew()) {
+			VerifyPropertiesUtil.verify();
+
 			DBUpgrader.verify();
 
 			DLFileEntryTypeLocalServiceUtil.getBasicDocumentDLFileEntryType();
