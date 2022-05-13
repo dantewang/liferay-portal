@@ -68,6 +68,13 @@ public class SystemProperties {
 		return PropertiesUtil.fromMap(_properties);
 	}
 
+	public static Properties getProperties(
+		String prefix, boolean removePrefix) {
+
+		return PropertiesUtil.getProperties(
+			getProperties(), prefix, removePrefix);
+	}
+
 	public static void load(ClassLoader classLoader) {
 		Properties properties = new Properties();
 
