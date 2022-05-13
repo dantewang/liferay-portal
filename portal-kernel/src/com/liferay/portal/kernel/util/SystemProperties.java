@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.string.StringPool;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -172,6 +174,8 @@ public class SystemProperties {
 
 		PropertiesUtil.fromProperties(properties, _properties);
 
+		_parseProperties(_properties);
+
 		if (urls != null) {
 			for (URL url : urls) {
 				System.out.println("Loading " + url);
@@ -180,9 +184,82 @@ public class SystemProperties {
 	}
 
 	public static void set(String key, String value) {
+		value = _replacePlaceholders(value, null);
+
 		System.setProperty(key, value);
 
 		_properties.put(key, value);
+	}
+
+	private static void _parseProperties(Map<String, String> properties) {
+		Map<String, String> placeholderProperties = new ConcurrentHashMap<>();
+
+		for (Map.Entry<String, String> entry : properties.entrySet()) {
+			String oldValue = entry.getValue();
+
+			String newValue = _replacePlaceholders(
+				oldValue, placeholderProperties);
+
+			if (!oldValue.equals(newValue)) {
+				placeholderProperties.put(entry.getKey(), newValue);
+
+				entry.setValue(newValue);
+
+				System.setProperty(entry.getKey(), newValue);
+			}
+		}
+	}
+
+	private static String _replacePlaceholders(
+		String value, Map<String, String> placeholderProperties) {
+
+		int startIndex = value.indexOf(StringPool.DOLLAR_AND_OPEN_CURLY_BRACE);
+
+		if (startIndex != -1) {
+			int endIndex = value.indexOf(
+				StringPool.CLOSE_CURLY_BRACE, startIndex);
+
+			if (endIndex != -1) {
+				String placeholderKey = value.substring(
+					startIndex +
+						StringPool.DOLLAR_AND_OPEN_CURLY_BRACE.length(),
+					endIndex);
+
+				String placeholderValue = null;
+
+				if (placeholderProperties != null) {
+					placeholderValue = placeholderProperties.get(
+						placeholderKey);
+				}
+
+				if (placeholderValue == null) {
+					placeholderValue = get(placeholderKey);
+
+					if (placeholderValue == null) {
+						placeholderValue = StringPool.BLANK;
+					}
+					else {
+						placeholderValue = _replacePlaceholders(
+							placeholderValue, placeholderProperties);
+					}
+
+					if (placeholderProperties != null) {
+						placeholderProperties.put(
+							placeholderKey, placeholderValue);
+					}
+				}
+
+				value = StringUtil.replace(
+					value,
+					StringPool.DOLLAR_AND_OPEN_CURLY_BRACE + placeholderKey +
+						StringPool.CLOSE_CURLY_BRACE,
+					placeholderValue, startIndex);
+
+				value = _replacePlaceholders(value, placeholderProperties);
+			}
+		}
+
+		return value;
 	}
 
 	private static final Map<String, String[]> _arrayValues =
