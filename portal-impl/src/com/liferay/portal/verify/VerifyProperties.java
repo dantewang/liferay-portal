@@ -292,6 +292,7 @@ public class VerifyProperties {
 
 	private static final String[][] _MIGRATED_PORTAL_KEYS = {
 		{"cookie.http.only.names.excludes", "cookie.http.only.names.excludes"},
+		{"liferay.home", "liferay.home"},
 		{
 			"http.header.secure.x.content.type.options",
 			"http.header.secure.x.content.type.options"
