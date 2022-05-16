@@ -27,6 +27,7 @@ import com.liferay.portal.verify.VerifyProperties;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -292,9 +293,9 @@ public class VerifyPropertiesTest {
 	}
 
 	protected String getFirstSystemPropertyKey() {
-		Properties systemProperties = SystemProperties.getProperties();
+		Map<String, String> systemProperties = SystemProperties.getProperties();
 
-		Set<String> propertyNames = systemProperties.stringPropertyNames();
+		Set<String> propertyNames = systemProperties.keySet();
 
 		Assert.assertFalse(propertyNames.toString(), propertyNames.isEmpty());
 

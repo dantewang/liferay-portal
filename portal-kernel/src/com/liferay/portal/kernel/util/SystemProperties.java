@@ -26,6 +26,7 @@ import java.net.URI;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -64,15 +65,15 @@ public class SystemProperties {
 		return _arrayValues.computeIfAbsent(key, k -> StringUtil.split(get(k)));
 	}
 
-	public static Properties getProperties() {
-		return PropertiesUtil.fromMap(_properties);
+	public static Map<String, String> getProperties() {
+		return Collections.unmodifiableMap(_properties);
 	}
 
 	public static Properties getProperties(
 		String prefix, boolean removePrefix) {
 
 		Properties properties = PropertiesUtil.getProperties(
-			getProperties(), prefix, removePrefix);
+			PropertiesUtil.fromMap(_properties), prefix, removePrefix);
 
 		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
 			Object key = entry.getKey();

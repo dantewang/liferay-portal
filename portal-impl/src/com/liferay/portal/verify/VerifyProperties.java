@@ -31,6 +31,7 @@ import java.io.InputStream;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -277,7 +278,8 @@ public class VerifyProperties {
 				verifyObsoleteSystemProperty(key);
 			}
 
-			Properties systemProperties = SystemProperties.getProperties();
+			Map<String, String> systemProperties =
+				SystemProperties.getProperties();
 
 			for (String[] keys : _MODULARIZED_SYSTEM_KEYS) {
 				String oldKey = keys[0];
