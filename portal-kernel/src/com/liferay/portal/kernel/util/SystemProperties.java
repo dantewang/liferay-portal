@@ -27,6 +27,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -54,13 +55,7 @@ public class SystemProperties {
 	}
 
 	public static String get(String key) {
-		String value = _properties.get(key);
-
-		if (value == null) {
-			value = System.getProperty(key);
-		}
-
-		return value;
+		return _parseProperty(_get(key));
 	}
 
 	public static String[] getArray(String key) {
@@ -74,12 +69,27 @@ public class SystemProperties {
 	public static Properties getProperties(
 		String prefix, boolean removePrefix) {
 
-		return PropertiesUtil.getProperties(
+		Properties properties = PropertiesUtil.getProperties(
 			getProperties(), prefix, removePrefix);
+
+		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+			Object key = entry.getKey();
+			if(key != null){
+				String newValue = _parseProperty(properties.getProperty((String)key));
+				entry.setValue(newValue);
+
+			}
+		}
+		return properties;
 	}
 
 	public static void load(ClassLoader classLoader) {
 		Properties properties = new Properties();
+
+		// Default liferay home directory
+
+		properties.put(
+			SystemPropsKeys.DEFAULT_LIFERAY_HOME, _getDefaultLiferayHome());
 
 		List<URL> urls = null;
 
@@ -137,10 +147,6 @@ public class SystemProperties {
 
 		SystemEnv.setProperties(properties);
 
-		// Default liferay home directory
-
-		set(SystemPropsKeys.DEFAULT_LIFERAY_HOME, _getDefaultLiferayHome());
-
 		// Set system properties
 
 		if (GetterUtil.getBoolean(
@@ -155,7 +161,10 @@ public class SystemProperties {
 				if (systemPropertiesSetOverride ||
 					Validator.isNull(System.getProperty(key))) {
 
-					System.setProperty(key, String.valueOf(entry.getValue()));
+					String value = _parseProperty(
+						String.valueOf(entry.getValue()));
+
+					System.setProperty(key, value);
 				}
 			}
 
@@ -179,8 +188,6 @@ public class SystemProperties {
 
 		PropertiesUtil.fromProperties(properties, _properties);
 
-		_parseProperties(_properties);
-
 		if (urls != null) {
 			for (URL url : urls) {
 				System.out.println("Loading " + url);
@@ -189,11 +196,19 @@ public class SystemProperties {
 	}
 
 	public static void set(String key, String value) {
-		value = _replacePlaceholders(value, null);
-
 		System.setProperty(key, value);
 
 		_properties.put(key, value);
+	}
+
+	private static String _get(String key) {
+		String value = _properties.get(key);
+
+		if (value == null) {
+			value = System.getProperty(key);
+		}
+
+		return value;
 	}
 
 	private static String _getDefaultLiferayHome() {
@@ -230,27 +245,14 @@ public class SystemProperties {
 		return defaultLiferayHome;
 	}
 
-	private static void _parseProperties(Map<String, String> properties) {
-		Map<String, String> placeholderProperties = new ConcurrentHashMap<>();
-
-		for (Map.Entry<String, String> entry : properties.entrySet()) {
-			String oldValue = entry.getValue();
-
-			String newValue = _replacePlaceholders(
-				oldValue, placeholderProperties);
-
-			if (!oldValue.equals(newValue)) {
-				placeholderProperties.put(entry.getKey(), newValue);
-
-				entry.setValue(newValue);
-
-				System.setProperty(entry.getKey(), newValue);
-			}
-		}
+	private static String _parseProperty(String value) {
+		return _replacePlaceholders(value);
 	}
 
-	private static String _replacePlaceholders(
-		String value, Map<String, String> placeholderProperties) {
+	private static String _replacePlaceholders(String value) {
+		if (value == null) {
+			return StringPool.BLANK;
+		}
 
 		int startIndex = value.indexOf(StringPool.DOLLAR_AND_OPEN_CURLY_BRACE);
 
@@ -264,37 +266,22 @@ public class SystemProperties {
 						StringPool.DOLLAR_AND_OPEN_CURLY_BRACE.length(),
 					endIndex);
 
-				String placeholderValue = null;
-
-				if (placeholderProperties != null) {
-					placeholderValue = placeholderProperties.get(
-						placeholderKey);
-				}
+				String placeholderValue = _get(placeholderKey);
 
 				if (placeholderValue == null) {
-					placeholderValue = get(placeholderKey);
-
-					if (placeholderValue == null) {
-						placeholderValue = StringPool.BLANK;
-					}
-					else {
-						placeholderValue = _replacePlaceholders(
-							placeholderValue, placeholderProperties);
-					}
-
-					if (placeholderProperties != null) {
-						placeholderProperties.put(
-							placeholderKey, placeholderValue);
-					}
+					placeholderValue = StringPool.BLANK;
+				}
+				else {
+					placeholderValue = _replacePlaceholders(placeholderValue);
 				}
 
-				value = StringUtil.replace(
+				String newvalue = StringUtil.replace(
 					value,
 					StringPool.DOLLAR_AND_OPEN_CURLY_BRACE + placeholderKey +
 						StringPool.CLOSE_CURLY_BRACE,
 					placeholderValue, startIndex);
 
-				value = _replacePlaceholders(value, placeholderProperties);
+				value = _replacePlaceholders(newvalue);
 			}
 		}
 
