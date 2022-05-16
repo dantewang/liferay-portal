@@ -17,9 +17,12 @@ package com.liferay.portal.kernel.util;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.net.URI;
 import java.net.URL;
 
 import java.util.ArrayList;
@@ -27,7 +30,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -74,12 +76,15 @@ public class SystemProperties {
 
 		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
 			Object key = entry.getKey();
-			if(key != null){
-				String newValue = _parseProperty(properties.getProperty((String)key));
-				entry.setValue(newValue);
 
+			if (key != null) {
+				String newValue = _parseProperty(
+					properties.getProperty((String)key));
+
+				entry.setValue(newValue);
 			}
 		}
+
 		return properties;
 	}
 
@@ -135,6 +140,33 @@ public class SystemProperties {
 				}
 
 				if (urls != null) {
+					urls.add(url);
+				}
+			}
+		}
+		catch (IOException ioException) {
+			throw new ExceptionInInitializerError(ioException);
+		}
+
+		// liferay.home/system-ext.properties
+
+		PropertiesUtil.fromProperties(properties, _properties);
+
+		String liferayHome = get(SystemPropsKeys.LIFERAY_HOME);
+
+		try {
+			File file = new File(liferayHome + "/system-ext.properties");
+
+			if (file.exists()) {
+				URI uri = file.toURI();
+
+				FileReader fileReader = new FileReader(file);
+
+				properties.load(fileReader);
+
+				if (urls != null) {
+					URL url = uri.toURL();
+
 					urls.add(url);
 				}
 			}
