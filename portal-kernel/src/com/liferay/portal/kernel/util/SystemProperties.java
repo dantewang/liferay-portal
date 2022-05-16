@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -66,10 +67,6 @@ public class SystemProperties {
 		return _arrayValues.computeIfAbsent(key, k -> StringUtil.split(get(k)));
 	}
 
-	public static Map<String, String> getProperties() {
-		return Collections.unmodifiableMap(_properties);
-	}
-
 	public static Map<String, String> getProperties(
 		String prefix, boolean removePrefix) {
 
@@ -88,6 +85,10 @@ public class SystemProperties {
 		}
 
 		return properties;
+	}
+
+	public static Set<String> getPropertyNames() {
+		return Collections.unmodifiableSet(_properties.keySet());
 	}
 
 	public static void load(ClassLoader classLoader) {

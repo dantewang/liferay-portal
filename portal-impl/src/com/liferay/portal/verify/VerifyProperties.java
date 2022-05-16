@@ -31,8 +31,8 @@ import java.io.InputStream;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author Brian Wing Shun Chan
@@ -278,13 +278,12 @@ public class VerifyProperties {
 				verifyObsoleteSystemProperty(key);
 			}
 
-			Map<String, String> systemProperties =
-				SystemProperties.getProperties();
+			Set<String> propertyNames = SystemProperties.getPropertyNames();
 
 			for (String[] keys : _MODULARIZED_SYSTEM_KEYS) {
 				String oldKey = keys[0];
 
-				if (systemProperties.containsKey(oldKey)) {
+				if (propertyNames.contains(oldKey)) {
 					String newKey = keys[1];
 					String moduleName = keys[2];
 
