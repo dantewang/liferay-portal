@@ -17,6 +17,12 @@
 <%@ include file="/document_library/init.jsp" %>
 
 <%
+DLPortletInstanceSettingsHelper dlPortletInstanceSettingsHelper = new DLPortletInstanceSettingsHelper(dlRequestHelper);
+
+if (!dlPortletInstanceSettingsHelper.isShowActions()) {
+	return;
+}
+
 ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
 FileEntry fileEntry = null;
