@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -153,7 +153,7 @@ public class SanitizedServletResponse extends HttpServletResponseWrapper {
 		String httpHeaderSecureXFrameOptionsKey =
 			"http.header.secure.x.frame.options";
 
-		Properties properties = SystemProperties.getProperties(
+		Map<String, String> properties = SystemProperties.getProperties(
 			httpHeaderSecureXFrameOptionsKey.concat(StringPool.PERIOD), true);
 
 		List<KeyValuePair> xFrameOptionKVPs = new ArrayList<>(

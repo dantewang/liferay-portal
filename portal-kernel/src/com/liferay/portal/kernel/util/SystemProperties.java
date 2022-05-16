@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -69,20 +70,20 @@ public class SystemProperties {
 		return Collections.unmodifiableMap(_properties);
 	}
 
-	public static Properties getProperties(
+	public static Map<String, String> getProperties(
 		String prefix, boolean removePrefix) {
 
-		Properties properties = PropertiesUtil.getProperties(
-			PropertiesUtil.fromMap(_properties), prefix, removePrefix);
+		Map<String, String> properties = new HashMap<>();
 
-		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-			Object key = entry.getKey();
+		for (Map.Entry<String, String> entry : _properties.entrySet()) {
+			String key = entry.getKey();
 
-			if (key != null) {
-				String newValue = _parseProperty(
-					properties.getProperty((String)key));
+			if (key.startsWith(prefix)) {
+				if (removePrefix) {
+					key = key.substring(prefix.length());
+				}
 
-				entry.setValue(newValue);
+				properties.put(key, _parseProperty(entry.getValue()));
 			}
 		}
 
