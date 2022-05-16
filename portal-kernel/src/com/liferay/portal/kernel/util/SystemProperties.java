@@ -14,6 +14,10 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.string.StringPool;
+
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -51,13 +55,7 @@ public class SystemProperties {
 	}
 
 	public static String get(String key) {
-		String value = _properties.get(key);
-
-		if (value == null) {
-			value = System.getProperty(key);
-		}
-
-		return value;
+		return _parseProperty(key, _get(key));
 	}
 	public static String[] getArray(String key) {
 		return _arrayValues.computeIfAbsent(key, k -> StringUtil.split(get(k)));
@@ -126,6 +124,27 @@ public class SystemProperties {
 
 		SystemEnv.setProperties(properties);
 
+		//get include-and-override
+		PropertiesUtil.fromProperties(properties, _properties);
+		String[] includeAndOverrides = getArray("include-and-override");
+		try {
+			for (String includeAndOverride : includeAndOverrides) {
+				File file = new File(includeAndOverride);
+				URL url = file.toURI().toURL();
+				try(FileReader fileReader = new FileReader(file)) {
+					properties.load(fileReader);
+				}
+
+				if (urls != null) {
+					urls.add(url);
+				}
+
+			}
+		}catch (IOException ioException) {
+			throw new ExceptionInInitializerError(ioException);
+		}
+
+
 		// Set system properties
 
 		if (GetterUtil.getBoolean(
@@ -139,8 +158,9 @@ public class SystemProperties {
 
 				if (systemPropertiesSetOverride ||
 					Validator.isNull(System.getProperty(key))) {
-
-					System.setProperty(key, String.valueOf(entry.getValue()));
+					String value =
+						_parseProperty(key, String.valueOf(entry.getValue()));
+					System.setProperty(key, value);
 				}
 			}
 
@@ -177,6 +197,71 @@ public class SystemProperties {
 		_properties.put(key, value);
 	}
 
+	private static String _get(String key){
+		String value = _properties.get(key);
+
+		if (value == null) {
+			value = System.getProperty(key);
+		}
+
+		return value;
+	}
+
+	private static String _parseProperty(String key, String value) {
+		return _replacePlaceholders(key, value);
+	}
+
+	private static String _replacePlaceholders(String key,String value) {
+		List<String> keys = new ArrayList<>();
+		keys.add(key);
+		return _replacePlaceholders(value, keys);
+	}
+
+	private static String _replacePlaceholders(String value, List<String> keys) {
+
+		if(value == null){
+			return StringPool.BLANK;
+		}
+
+		int startIndex = value.indexOf(StringPool.DOLLAR_AND_OPEN_CURLY_BRACE);
+
+		if (startIndex != -1) {
+			int endIndex = value.indexOf(StringPool.CLOSE_CURLY_BRACE, startIndex);
+
+			if (endIndex != -1) {
+				String placeholderKey = value.substring(
+					startIndex + StringPool.DOLLAR_AND_OPEN_CURLY_BRACE.length(), endIndex);
+				if(keys.contains(placeholderKey)){
+					System.out.println("Circular reference occurs to property "+keys.get(0)+"->"+placeholderKey);
+					System.exit(1);
+				}
+
+				String placeholderValue = null;
+				placeholderValue = _get(placeholderKey);
+
+				if (placeholderValue == null) {
+					placeholderValue = StringPool.BLANK;
+				}
+				else {
+					keys.add(placeholderKey);
+					placeholderValue = _replacePlaceholders(
+						placeholderValue,keys);
+				}
+
+
+				String newvalue = StringUtil.replace(
+					value,
+					StringPool.DOLLAR_AND_OPEN_CURLY_BRACE + placeholderKey +
+					StringPool.CLOSE_CURLY_BRACE,
+					placeholderValue, startIndex);
+				keys.add(value);
+				value = _replacePlaceholders(newvalue, keys);
+			}
+		}
+		keys.remove(keys.size()-1);
+
+		return value;
+	}
 
 	private static final Map<String, String[]> _arrayValues =
 		new ConcurrentHashMap<>();
