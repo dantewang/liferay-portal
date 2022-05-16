@@ -281,11 +281,17 @@ public class VerifyProperties {
 
 			for (String[] keys : _MODULARIZED_SYSTEM_KEYS) {
 				String oldKey = keys[0];
-				String newKey = keys[1];
-				String moduleName = keys[2];
 
-				verifyModularizedSystemProperty(
-					systemProperties, oldKey, newKey, moduleName);
+				if (systemProperties.containsKey(oldKey)) {
+					String newKey = keys[1];
+					String moduleName = keys[2];
+
+					_log.error(
+						StringBundler.concat(
+							"System property \"", oldKey,
+							"\" was modularized to ", moduleName, " as \"",
+							newKey, "\""));
+				}
 			}
 		}
 	}
