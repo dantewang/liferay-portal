@@ -37,6 +37,7 @@ import java.security.ProtectionDomain;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -213,7 +214,14 @@ public class UpgradeClient {
 			BufferedReader bufferedReader = new BufferedReader(
 				inputStreamReader)) {
 
+			// systemProperties Map:
+			// 1. system-upgrade.properties/system-upgrade-ext.properties
+			// 2. if liferay.home is absent, user input liferay.home
+
+			Map<String, String> systemProperties = new HashMap<>();
+
 			bootstrapObjectOutputStream.writeObject(_getClassPath());
+			bootstrapObjectOutputStream.writeObject(systemProperties);
 
 			bootstrapObjectOutputStream.flush();
 
