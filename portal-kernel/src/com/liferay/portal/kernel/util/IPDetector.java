@@ -31,7 +31,7 @@ public class IPDetector {
 		}
 
 		_prefersV4 = Boolean.valueOf(
-			System.getProperty("java.net.preferIPv4Stack"));
+			SystemProperties.get("java.net.preferIPv4Stack"));
 
 		return _prefersV4.booleanValue();
 	}
@@ -42,7 +42,7 @@ public class IPDetector {
 		}
 
 		_prefersV6 = Boolean.valueOf(
-			System.getProperty("java.net.preferIPv6Stack"));
+			SystemProperties.get("java.net.preferIPv6Stack"));
 
 		return _prefersV6.booleanValue();
 	}

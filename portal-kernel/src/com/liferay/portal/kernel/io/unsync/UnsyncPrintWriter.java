@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.io.OutputStreamWriter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -450,7 +451,7 @@ public class UnsyncPrintWriter extends PrintWriter {
 		}
 	}
 
-	private static final String _LINE_SEPARATOR = System.getProperty(
+	private static final String _LINE_SEPARATOR = SystemProperties.get(
 		"line.separator");
 
 	private static final Log _log = LogFactoryUtil.getLog(

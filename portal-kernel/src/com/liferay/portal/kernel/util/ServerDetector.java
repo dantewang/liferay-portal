@@ -118,7 +118,7 @@ public class ServerDetector {
 	}
 
 	private static ServerType _detectServerType() {
-		String serverId = System.getProperty(
+		String serverId = SystemProperties.get(
 			SYSTEM_PROPERTY_KEY_SERVER_DETECTOR_SERVER_ID);
 
 		if (serverId != null) {
@@ -169,7 +169,7 @@ public class ServerDetector {
 	}
 
 	private static boolean _hasSystemProperty(String key) {
-		String value = System.getProperty(key);
+		String value = SystemProperties.get(key);
 
 		if (value != null) {
 			return true;
@@ -188,8 +188,8 @@ public class ServerDetector {
 		_serverType = _detectServerType();
 
 		if (!GetterUtil.getBoolean(
-				System.getProperty("server.detector.quiet")) &&
-			(System.getProperty("external-properties") == null)) {
+				SystemProperties.get("server.detector.quiet")) &&
+			(SystemProperties.get("external-properties") == null)) {
 
 			if (_log.isInfoEnabled()) {
 				_log.info("Detected server " + _serverType.getLowerCaseName());

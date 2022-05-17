@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.process;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.io.PathHolder;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 
 import java.io.File;
 import java.io.Serializable;
@@ -118,7 +119,7 @@ public class ProcessConfig implements Serializable {
 		}
 
 		private List<String> _arguments = Collections.emptyList();
-		private String _bootstrapClassPath = System.getProperty(
+		private String _bootstrapClassPath = SystemProperties.get(
 			"java.class.path");
 		private Map<String, String> _environment;
 		private String _javaExecutable = "java";

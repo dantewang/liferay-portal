@@ -68,7 +68,7 @@ public class ThreadUtil {
 	}
 
 	private static String _getThreadDumpFromJstack() {
-		String vendorURL = System.getProperty("java.vendor.url");
+		String vendorURL = SystemProperties.get("java.vendor.url");
 
 		if ((!vendorURL.equals("http://java.oracle.com/") &&
 			 !vendorURL.equals("http://java.sun.com/")) ||
@@ -101,8 +101,8 @@ public class ThreadUtil {
 
 	private static String _getThreadDumpFromStackTrace() {
 		String jvm =
-			System.getProperty("java.vm.name") + " " +
-				System.getProperty("java.vm.version");
+			SystemProperties.get("java.vm.name") + " " +
+				SystemProperties.get("java.vm.version");
 
 		StringBundler sb = new StringBundler(
 			StringBundler.concat(

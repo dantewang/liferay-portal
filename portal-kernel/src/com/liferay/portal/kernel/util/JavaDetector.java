@@ -104,19 +104,19 @@ public class JavaDetector {
 	}
 
 	protected JavaDetector() {
-		_javaClassPath = System.getProperty("java.class.path");
+		_javaClassPath = SystemProperties.get("java.class.path");
 		_javaClassVersion = GetterUtil.getDouble(
-			System.getProperty("java.class.version"));
-		_javaRuntimeName = System.getProperty("java.runtime.name");
-		_javaRuntimeVersion = System.getProperty("java.runtime.version");
+			SystemProperties.get("java.class.version"));
+		_javaRuntimeName = SystemProperties.get("java.runtime.name");
+		_javaRuntimeVersion = SystemProperties.get("java.runtime.version");
 		_javaSpecificationVersion = GetterUtil.getDouble(
-			System.getProperty("java.specification.version"));
-		_javaVendor = System.getProperty("java.vendor");
-		_javaVersion = System.getProperty("java.version");
-		_javaVmVersion = System.getProperty("java.vm.version");
+			SystemProperties.get("java.specification.version"));
+		_javaVendor = SystemProperties.get("java.vendor");
+		_javaVersion = SystemProperties.get("java.version");
+		_javaVmVersion = SystemProperties.get("java.vm.version");
 
 		_64bit = Objects.equals(
-			System.getProperty("sun.arch.data.model"), "64");
+			SystemProperties.get("sun.arch.data.model"), "64");
 
 		boolean oracle = false;
 

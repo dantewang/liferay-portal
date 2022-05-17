@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.io.unsync;
 
+import com.liferay.portal.kernel.util.SystemProperties;
+
 import java.io.IOException;
 import java.io.Writer;
 
@@ -169,7 +171,7 @@ public class UnsyncBufferedWriter extends Writer {
 
 	private static final int _DEFAULT_BUFFER_SIZE = 8192;
 
-	private static final String _LINE_SEPARATOR = System.getProperty(
+	private static final String _LINE_SEPARATOR = SystemProperties.get(
 		"line.separator");
 
 }

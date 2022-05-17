@@ -28,14 +28,14 @@ public class OSDetector {
 			return _bitMode;
 		}
 
-		_bitMode = System.getProperty("sun.arch.data.model");
+		_bitMode = SystemProperties.get("sun.arch.data.model");
 
 		if (Validator.isNull(_bitMode)) {
-			_bitMode = System.getProperty("com.ibm.vm.bitmode");
+			_bitMode = SystemProperties.get("com.ibm.vm.bitmode");
 		}
 
 		if (Validator.isNull(_bitMode)) {
-			String arch = System.getProperty("os.arch");
+			String arch = SystemProperties.get("os.arch");
 
 			arch = StringUtil.toLowerCase(arch);
 
@@ -57,7 +57,7 @@ public class OSDetector {
 			return _aix.booleanValue();
 		}
 
-		String osName = System.getProperty("os.name");
+		String osName = SystemProperties.get("os.name");
 
 		osName = StringUtil.toLowerCase(osName);
 
@@ -76,7 +76,7 @@ public class OSDetector {
 			return _apple.booleanValue();
 		}
 
-		String osName = System.getProperty("os.name");
+		String osName = SystemProperties.get("os.name");
 
 		osName = StringUtil.toLowerCase(osName);
 
@@ -95,7 +95,7 @@ public class OSDetector {
 			return _linux.booleanValue();
 		}
 
-		String osName = System.getProperty("os.name");
+		String osName = SystemProperties.get("os.name");
 
 		osName = StringUtil.toLowerCase(osName);
 
