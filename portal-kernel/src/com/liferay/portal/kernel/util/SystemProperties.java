@@ -308,13 +308,13 @@ public class SystemProperties {
 					placeholderValue = _replacePlaceholders(placeholderValue);
 				}
 
-				String newvalue = StringUtil.replace(
+				String newValue = StringUtil.replace(
 					value,
 					StringPool.DOLLAR_AND_OPEN_CURLY_BRACE + placeholderKey +
 						StringPool.CLOSE_CURLY_BRACE,
 					placeholderValue, startIndex);
 
-				value = _replacePlaceholders(newvalue);
+				value = _replacePlaceholders(newValue);
 			}
 		}
 
