@@ -196,8 +196,7 @@ public class SystemProperties {
 				if (systemPropertiesSetOverride ||
 					Validator.isNull(System.getProperty(key))) {
 
-					System.setProperty(
-						key, _parseProperty(String.valueOf(entry.getValue())));
+					System.setProperty(key, String.valueOf(entry.getValue()));
 				}
 			}
 
