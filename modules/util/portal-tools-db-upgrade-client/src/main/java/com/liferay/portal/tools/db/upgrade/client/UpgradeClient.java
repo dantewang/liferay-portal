@@ -203,23 +203,6 @@ public class UpgradeClient {
 	public void upgrade() throws IOException {
 		verifyProperties();
 
-		Map<String, String> systemProperties = new HashMap<>();
-
-		Set<String> systemKeys = _systemUpgradeProperties.propertyNames();
-
-		for (String systemKey : systemKeys) {
-			systemProperties.put(
-				systemKey, _systemUpgradeProperties.getProperty(systemKey));
-		}
-
-		Set<String> systemExtKeys = _systemUpgradeExtProperties.propertyNames();
-
-		for (String systemExtKey : systemExtKeys) {
-			systemProperties.put(
-				systemExtKey,
-				_systemUpgradeExtProperties.getProperty(systemExtKey));
-		}
-
 		System.setOut(new TeePrintStream(_fileOutputStream, System.out));
 
 		ProcessBuilder processBuilder = new ProcessBuilder();
@@ -264,7 +247,7 @@ public class UpgradeClient {
 				inputStreamReader)) {
 
 			bootstrapObjectOutputStream.writeObject(_getClassPath());
-			bootstrapObjectOutputStream.writeObject(systemProperties);
+			bootstrapObjectOutputStream.writeObject(_getSystemProperties());
 			bootstrapObjectOutputStream.flush();
 
 			String line = null;
@@ -415,6 +398,27 @@ public class UpgradeClient {
 		_appendClassPath(sb, _appServer.getExtraLibDirs());
 
 		return sb.toString();
+	}
+
+	private Map<String, String> _getSystemProperties() {
+		Map<String, String> systemProperties = new HashMap<>();
+
+		Set<String> systemKeys = _systemUpgradeProperties.propertyNames();
+
+		for (String systemKey : systemKeys) {
+			systemProperties.put(
+				systemKey, _systemUpgradeProperties.getProperty(systemKey));
+		}
+
+		Set<String> systemExtKeys = _systemUpgradeExtProperties.propertyNames();
+
+		for (String systemExtKey : systemExtKeys) {
+			systemProperties.put(
+				systemExtKey,
+				_systemUpgradeExtProperties.getProperty(systemExtKey));
+		}
+
+		return systemProperties;
 	}
 
 	private GogoShellClient _initGogoShellClient() throws IOException {
