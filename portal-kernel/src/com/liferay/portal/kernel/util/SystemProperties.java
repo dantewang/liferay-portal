@@ -266,35 +266,40 @@ public class SystemProperties {
 			return null;
 		}
 
-		int startIndex = value.indexOf(StringPool.DOLLAR_AND_OPEN_CURLY_BRACE);
+		int startIndex = 0;
 
-		if (startIndex != -1) {
+		StringBundler sb = new StringBundler();
+
+		while ((startIndex = value.indexOf(
+					StringPool.DOLLAR_AND_OPEN_CURLY_BRACE)) != -1) {
+
 			int endIndex = value.indexOf(
 				StringPool.CLOSE_CURLY_BRACE, startIndex);
 
-			if (endIndex != -1) {
-				String placeholderKey = value.substring(
-					startIndex +
-						StringPool.DOLLAR_AND_OPEN_CURLY_BRACE.length(),
-					endIndex);
-
-				String placeholderValue = _get(placeholderKey);
-
-				if (placeholderValue == null) {
-					placeholderValue = StringPool.BLANK;
-				}
-				else {
-					placeholderValue = _replacePlaceholders(placeholderValue);
-				}
-
-				String newValue = StringUtil.replace(
-					value,
-					StringPool.DOLLAR_AND_OPEN_CURLY_BRACE + placeholderKey +
-						StringPool.CLOSE_CURLY_BRACE,
-					placeholderValue, startIndex);
-
-				value = _replacePlaceholders(newValue);
+			if (endIndex == -1) {
+				break;
 			}
+
+			sb.append(value.substring(0, startIndex));
+
+			String placeholderKey = value.substring(
+				startIndex + StringPool.DOLLAR_AND_OPEN_CURLY_BRACE.length(),
+				endIndex);
+
+			String placeholderValue = _get(placeholderKey);
+
+			if (placeholderValue == null) {
+				sb.append(value.substring(startIndex, endIndex + 1));
+			}
+			else {
+				sb.append(_replacePlaceholders(placeholderValue));
+			}
+
+			value = value.substring(endIndex + 1);
+		}
+
+		if (sb.index() > 0) {
+			return sb.toString();
 		}
 
 		return value;

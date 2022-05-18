@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.util;
 
-import com.liferay.petra.string.StringPool;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,7 +24,7 @@ public class SystemPropertiesTest {
 
 	@Test
 	public void testGetSetAndClear() {
-		Assert.assertEquals(StringPool.BLANK, SystemProperties.get(_TEST_KEY));
+		Assert.assertNull(SystemProperties.get(_TEST_KEY));
 
 		SystemProperties.set(_TEST_KEY, _TEST_VALUE);
 
@@ -34,12 +32,12 @@ public class SystemPropertiesTest {
 
 		SystemProperties.clear(_TEST_KEY);
 
-		Assert.assertEquals(StringPool.BLANK, SystemProperties.get(_TEST_KEY));
+		Assert.assertNull(SystemProperties.get(_TEST_KEY));
 	}
 
 	@Test
 	public void testGetSetAndClearWithReference() {
-		Assert.assertEquals(StringPool.BLANK, SystemProperties.get(_TEST_KEY));
+		Assert.assertNull(SystemProperties.get(_TEST_KEY));
 
 		SystemProperties.set("test.reference.key", "${test.reference.key.1}");
 		SystemProperties.set("test.reference.key.1", "${test.reference.key.2}");
@@ -49,21 +47,24 @@ public class SystemPropertiesTest {
 
 		Assert.assertEquals(_TEST_VALUE, SystemProperties.get(_TEST_KEY));
 
+		SystemProperties.clear("test.reference.key.2");
+
+		Assert.assertEquals(
+			"${test.reference.key.2}", SystemProperties.get(_TEST_KEY));
+
 		SystemProperties.clear("test.reference.key.1");
 
-		Assert.assertEquals(StringPool.BLANK, SystemProperties.get(_TEST_KEY));
+		Assert.assertEquals(
+			"${test.reference.key.1}", SystemProperties.get(_TEST_KEY));
 
 		SystemProperties.clear("test.reference.key");
 
-		Assert.assertEquals(StringPool.BLANK, SystemProperties.get(_TEST_KEY));
-
-		SystemProperties.clear("test.reference.key.2");
-
-		Assert.assertEquals(StringPool.BLANK, SystemProperties.get(_TEST_KEY));
+		Assert.assertEquals(
+			"${test.reference.key}", SystemProperties.get(_TEST_KEY));
 
 		SystemProperties.clear(_TEST_KEY);
 
-		Assert.assertEquals(StringPool.BLANK, SystemProperties.get(_TEST_KEY));
+		Assert.assertNull(SystemProperties.get(_TEST_KEY));
 	}
 
 	private static final String _TEST_KEY = "test.key";
