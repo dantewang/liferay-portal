@@ -61,7 +61,11 @@ public class SystemProperties {
 	}
 
 	public static String get(String key, String defaultValue) {
-		String value = _get(key);
+		String value = _properties.get(key);
+
+		if (value == null) {
+			value = System.getProperty(key);
+		}
 
 		if (value == null) {
 			return defaultValue;
@@ -213,16 +217,6 @@ public class SystemProperties {
 		_properties.put(key, value);
 	}
 
-	private static String _get(String key) {
-		String value = _properties.get(key);
-
-		if (value == null) {
-			value = System.getProperty(key);
-		}
-
-		return value;
-	}
-
 	private static String _getDefaultLiferayHome() {
 		String defaultLiferayHome = null;
 
@@ -278,13 +272,13 @@ public class SystemProperties {
 				startIndex + StringPool.DOLLAR_AND_OPEN_CURLY_BRACE.length(),
 				endIndex);
 
-			String placeholderValue = _get(placeholderKey);
+			String placeholderValue = get(placeholderKey);
 
 			if (placeholderValue == null) {
 				sb.append(value.substring(startIndex, endIndex + 1));
 			}
 			else {
-				sb.append(_resolveReference(placeholderValue));
+				sb.append(placeholderValue);
 			}
 
 			value = value.substring(endIndex + 1);
