@@ -258,10 +258,10 @@ public class SystemProperties {
 	}
 
 	private static String _parseProperty(String value) {
-		return _replacePlaceholders(value);
+		return _resolveReference(value);
 	}
 
-	private static String _replacePlaceholders(String value) {
+	private static String _resolveReference(String value) {
 		if (value == null) {
 			return null;
 		}
@@ -292,7 +292,7 @@ public class SystemProperties {
 				sb.append(value.substring(startIndex, endIndex + 1));
 			}
 			else {
-				sb.append(_replacePlaceholders(placeholderValue));
+				sb.append(_resolveReference(placeholderValue));
 			}
 
 			value = value.substring(endIndex + 1);
