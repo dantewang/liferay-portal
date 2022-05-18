@@ -57,11 +57,11 @@ public class SystemProperties {
 	}
 
 	public static String get(String key) {
-		return _parseProperty(_get(key));
+		return _resolveReference(_get(key));
 	}
 
 	public static String get(String key, String defaultValue) {
-		String value = _parseProperty(_get(key));
+		String value = _resolveReference(_get(key));
 
 		if (value == null) {
 			return defaultValue;
@@ -87,7 +87,7 @@ public class SystemProperties {
 					key = key.substring(prefix.length());
 				}
 
-				properties.put(key, _parseProperty(entry.getValue()));
+				properties.put(key, _resolveReference(entry.getValue()));
 			}
 		}
 
@@ -255,10 +255,6 @@ public class SystemProperties {
 		}
 
 		return defaultLiferayHome;
-	}
-
-	private static String _parseProperty(String value) {
-		return _resolveReference(value);
 	}
 
 	private static String _resolveReference(String value) {
