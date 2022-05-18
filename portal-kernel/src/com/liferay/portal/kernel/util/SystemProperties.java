@@ -263,7 +263,7 @@ public class SystemProperties {
 
 	private static String _replacePlaceholders(String value) {
 		if (value == null) {
-			return value;
+			return null;
 		}
 
 		int startIndex = value.indexOf(StringPool.DOLLAR_AND_OPEN_CURLY_BRACE);
