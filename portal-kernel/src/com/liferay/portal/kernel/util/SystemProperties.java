@@ -61,13 +61,13 @@ public class SystemProperties {
 	}
 
 	public static String get(String key, String defaultValue) {
-		String value = _resolveReference(_get(key));
+		String value = _get(key);
 
 		if (value == null) {
 			return defaultValue;
 		}
 
-		return value;
+		return _resolveReference(value);
 	}
 
 	public static String[] getArray(String key) {
@@ -258,10 +258,6 @@ public class SystemProperties {
 	}
 
 	private static String _resolveReference(String value) {
-		if (value == null) {
-			return null;
-		}
-
 		int startIndex = 0;
 
 		StringBundler sb = new StringBundler();
