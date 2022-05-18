@@ -57,7 +57,7 @@ public class SystemProperties {
 	}
 
 	public static String get(String key) {
-		return _resolveReference(_get(key));
+		return get(key, null);
 	}
 
 	public static String get(String key, String defaultValue) {
