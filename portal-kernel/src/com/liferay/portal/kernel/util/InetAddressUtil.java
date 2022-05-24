@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -25,6 +26,8 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 
 import java.util.Enumeration;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -37,44 +40,57 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class InetAddressUtil {
 
+	public static void clearResolvedAddresses() {
+		_resolvedAddresses.clear();
+	}
+
 	public static InetAddress getInetAddressByName(String domain)
 		throws UnknownHostException {
 
-		try {
-			if (_atomicInteger.getAndDecrement() <= 0) {
-				_log.error(
-					"Thread limit exceeded to resolve domain: " + domain);
+		return _resolvedAddresses.computeIfAbsent(
+			domain,
+			key -> {
+				try {
+					if (_atomicInteger.getAndDecrement() <= 0) {
+						_log.error(
+							"Thread limit exceeded to resolve domain: " +
+								domain);
+
+						return null;
+					}
+
+					DefaultNoticeableFuture<InetAddress>
+						defaultNoticeableFuture = new DefaultNoticeableFuture<>(
+							() -> InetAddress.getByName(domain));
+
+					Thread thread = new Thread(
+						defaultNoticeableFuture, "Inet Address Util");
+
+					thread.setDaemon(true);
+
+					thread.start();
+
+					return defaultNoticeableFuture.get(
+						_DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS,
+						TimeUnit.SECONDS);
+				}
+				catch (ExecutionException | InterruptedException |
+					   TimeoutException exception) {
+
+					if (_log.isDebugEnabled()) {
+						_log.debug(exception);
+					}
+
+					ReflectionUtil.throwException(
+						new UnknownHostException(
+							"Unable to resolve domain: " + domain));
+				}
+				finally {
+					_atomicInteger.incrementAndGet();
+				}
 
 				return null;
-			}
-
-			DefaultNoticeableFuture<InetAddress> defaultNoticeableFuture =
-				new DefaultNoticeableFuture<>(
-					() -> InetAddress.getByName(domain));
-
-			Thread thread = new Thread(
-				defaultNoticeableFuture, "Inet Address Util");
-
-			thread.setDaemon(true);
-
-			thread.start();
-
-			return defaultNoticeableFuture.get(
-				_DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-		}
-		catch (ExecutionException | InterruptedException | TimeoutException
-					exception) {
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(exception);
-			}
-
-			throw new UnknownHostException(
-				"Unable to resolve domain: " + domain);
-		}
-		finally {
-			_atomicInteger.incrementAndGet();
-		}
+			});
 	}
 
 	public static String getLocalHostName() throws Exception {
@@ -133,6 +149,8 @@ public class InetAddressUtil {
 	private static final AtomicInteger _atomicInteger = new AtomicInteger(
 		GetterUtil.getInteger(
 			PropsUtil.get(PropsKeys.DNS_SECURITY_THREAD_LIMIT)));
+	private static final Map<String, InetAddress> _resolvedAddresses =
+		new ConcurrentHashMap<>();
 
 	private static class LocalHostNameHolder {
 
