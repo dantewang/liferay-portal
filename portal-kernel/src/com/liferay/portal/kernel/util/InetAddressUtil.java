@@ -40,11 +40,8 @@ public class InetAddressUtil {
 	public static InetAddress getInetAddressByName(String domain)
 		throws UnknownHostException {
 
-		AtomicInteger atomicInteger = new AtomicInteger(
-			_DNS_SECURITY_THREAD_LIMIT);
-
 		try {
-			if (atomicInteger.getAndDecrement() <= 0) {
+			if (_atomicInteger.getAndDecrement() <= 0) {
 				_log.error(
 					"Thread limit exceeded to resolve domain: " + domain);
 
@@ -76,7 +73,7 @@ public class InetAddressUtil {
 				"Unable to resolve domain: " + domain);
 		}
 		finally {
-			atomicInteger.incrementAndGet();
+			_atomicInteger.incrementAndGet();
 		}
 	}
 
@@ -130,11 +127,12 @@ public class InetAddressUtil {
 		GetterUtil.getInteger(
 			PropsUtil.get(PropsKeys.DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS));
 
-	private static final int _DNS_SECURITY_THREAD_LIMIT = GetterUtil.getInteger(
-		PropsUtil.get(PropsKeys.DNS_SECURITY_THREAD_LIMIT));
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		InetAddressUtil.class);
+
+	private static final AtomicInteger _atomicInteger = new AtomicInteger(
+		GetterUtil.getInteger(
+			PropsUtil.get(PropsKeys.DNS_SECURITY_THREAD_LIMIT)));
 
 	private static class LocalHostNameHolder {
 
