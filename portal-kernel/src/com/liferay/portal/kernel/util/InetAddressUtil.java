@@ -24,6 +24,8 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 
 import java.util.Enumeration;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.SynchronousQueue;
@@ -41,24 +43,35 @@ public class InetAddressUtil {
 	public static InetAddress getInetAddressByName(String domain)
 		throws UnknownHostException {
 
-		try {
-			DNSResolveTask dnsResolveTask = new DNSResolveTask(domain);
+		Address address = _resolvedAddresses.computeIfAbsent(
+			domain,
+			key -> {
+				try {
+					DNSResolveTask dnsResolveTask = new DNSResolveTask(key);
 
-			_threadPoolExecutor.execute(dnsResolveTask);
+					_threadPoolExecutor.execute(dnsResolveTask);
 
-			return dnsResolveTask.get(
-				_DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-		}
-		catch (ExecutionException | InterruptedException | TimeoutException
-					exception) {
+					return new Address(
+						dnsResolveTask.get(
+							_DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS,
+							TimeUnit.SECONDS),
+						null);
+				}
+				catch (ExecutionException | InterruptedException |
+					   TimeoutException exception) {
 
-			if (_log.isDebugEnabled()) {
-				_log.debug(exception);
-			}
+					if (_log.isDebugEnabled()) {
+						_log.debug(exception);
+					}
 
-			throw new UnknownHostException(
-				"Unable to resolve domain: " + domain);
-		}
+					return new Address(
+						null,
+						new UnknownHostException(
+							"Unable to resolve domain: " + key));
+				}
+			});
+
+		return address.get();
 	}
 
 	public static String getLocalHostName() throws Exception {
@@ -114,6 +127,9 @@ public class InetAddressUtil {
 	private static final Log _log = LogFactoryUtil.getLog(
 		InetAddressUtil.class);
 
+	private static final Map<String, Address> _resolvedAddresses =
+		new ConcurrentHashMap<>();
+
 	private static final ThreadPoolExecutor _threadPoolExecutor =
 		new ThreadPoolExecutor(
 			1,
@@ -136,6 +152,29 @@ public class InetAddressUtil {
 
 				dnsResolveTask.reject();
 			});
+
+	private static class Address {
+
+		public Address(
+			InetAddress inetAddress,
+			UnknownHostException unknownHostException) {
+
+			_inetAddress = inetAddress;
+			_unknownHostException = unknownHostException;
+		}
+
+		public InetAddress get() throws UnknownHostException {
+			if (_inetAddress == null) {
+				throw _unknownHostException;
+			}
+
+			return _inetAddress;
+		}
+
+		private final InetAddress _inetAddress;
+		private final UnknownHostException _unknownHostException;
+
+	}
 
 	private static class DNSResolveTask extends FutureTask<InetAddress> {
 
