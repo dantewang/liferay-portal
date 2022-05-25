@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -24,6 +25,8 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 
 import java.util.Enumeration;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.SynchronousQueue;
@@ -41,24 +44,32 @@ public class InetAddressUtil {
 	public static InetAddress getInetAddressByName(String domain)
 		throws UnknownHostException {
 
-		try {
-			DNSResolveTask dnsResolveTask = new DNSResolveTask(domain);
+		return _resolvedAddresses.computeIfAbsent(
+			domain,
+			key -> {
+				try {
+					DNSResolveTask dnsResolveTask = new DNSResolveTask(key);
 
-			_threadPoolExecutor.execute(dnsResolveTask);
+					_threadPoolExecutor.execute(dnsResolveTask);
 
-			return dnsResolveTask.get(
-				_DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-		}
-		catch (ExecutionException | InterruptedException | TimeoutException
-					exception) {
+					return dnsResolveTask.get(
+						_DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS,
+						TimeUnit.SECONDS);
+				}
+				catch (ExecutionException | InterruptedException |
+					   TimeoutException exception) {
 
-			if (_log.isDebugEnabled()) {
-				_log.debug(exception);
-			}
+					if (_log.isDebugEnabled()) {
+						_log.debug(exception);
+					}
 
-			throw new UnknownHostException(
-				"Unable to resolve domain: " + domain);
-		}
+					ReflectionUtil.throwException(
+						new UnknownHostException(
+							"Unable to resolve domain: " + key));
+
+					return null;
+				}
+			});
 	}
 
 	public static String getLocalHostName() throws Exception {
@@ -113,6 +124,9 @@ public class InetAddressUtil {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		InetAddressUtil.class);
+
+	private static final Map<String, InetAddress> _resolvedAddresses =
+		new ConcurrentHashMap<>();
 
 	private static final ThreadPoolExecutor _threadPoolExecutor =
 		new ThreadPoolExecutor(
