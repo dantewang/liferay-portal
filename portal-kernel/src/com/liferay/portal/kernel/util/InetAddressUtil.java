@@ -14,7 +14,6 @@
 
 package com.liferay.portal.kernel.util;
 
-import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -26,9 +25,11 @@ import java.net.UnknownHostException;
 
 import java.util.Enumeration;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Michael C. Han
@@ -41,25 +42,11 @@ public class InetAddressUtil {
 		throws UnknownHostException {
 
 		try {
-			if (_atomicInteger.getAndDecrement() <= 0) {
-				_log.error(
-					"Thread limit exceeded to resolve domain: " + domain);
+			DNSResolveTask dnsResolveTask = new DNSResolveTask(domain);
 
-				return null;
-			}
+			_threadPoolExecutor.execute(dnsResolveTask);
 
-			DefaultNoticeableFuture<InetAddress> defaultNoticeableFuture =
-				new DefaultNoticeableFuture<>(
-					() -> InetAddress.getByName(domain));
-
-			Thread thread = new Thread(
-				defaultNoticeableFuture, "Inet Address Util");
-
-			thread.setDaemon(true);
-
-			thread.start();
-
-			return defaultNoticeableFuture.get(
+			return dnsResolveTask.get(
 				_DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 		}
 		catch (ExecutionException | InterruptedException | TimeoutException
@@ -71,9 +58,6 @@ public class InetAddressUtil {
 
 			throw new UnknownHostException(
 				"Unable to resolve domain: " + domain);
-		}
-		finally {
-			_atomicInteger.incrementAndGet();
 		}
 	}
 
@@ -130,9 +114,48 @@ public class InetAddressUtil {
 	private static final Log _log = LogFactoryUtil.getLog(
 		InetAddressUtil.class);
 
-	private static final AtomicInteger _atomicInteger = new AtomicInteger(
-		GetterUtil.getInteger(
-			PropsUtil.get(PropsKeys.DNS_SECURITY_THREAD_LIMIT)));
+	private static final ThreadPoolExecutor _threadPoolExecutor =
+		new ThreadPoolExecutor(
+			1,
+			GetterUtil.getInteger(
+				PropsUtil.get(PropsKeys.DNS_SECURITY_THREAD_LIMIT)),
+			60L, TimeUnit.SECONDS, new SynchronousQueue<>(),
+			new NamedThreadFactory(
+				"InetAddressUtil DNS Resolve Thread - ", Thread.NORM_PRIORITY,
+				InetAddressUtil.class.getClassLoader()),
+			(runnable, executor) -> {
+				if (!(runnable instanceof DNSResolveTask)) {
+					return;
+				}
+
+				DNSResolveTask dnsResolveTask = (DNSResolveTask)runnable;
+
+				_log.error(
+					"Thread limit exceeded to resolve domain: " +
+						dnsResolveTask.getDomain());
+
+				dnsResolveTask.reject();
+			});
+
+	private static class DNSResolveTask extends FutureTask<InetAddress> {
+
+		public DNSResolveTask(String domain) {
+			super(() -> InetAddress.getByName(domain));
+
+			_domain = domain;
+		}
+
+		public String getDomain() {
+			return _domain;
+		}
+
+		public void reject() {
+			set(null);
+		}
+
+		private final String _domain;
+
+	}
 
 	private static class LocalHostNameHolder {
 
