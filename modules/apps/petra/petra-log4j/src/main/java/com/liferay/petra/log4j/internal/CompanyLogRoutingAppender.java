@@ -74,7 +74,7 @@ public final class CompanyLogRoutingAppender extends AbstractAppender {
 		RollingFileAppender rollingFileAppender =
 			_rollingFileAppenders.computeIfAbsent(
 				CompanyThreadLocal.getCompanyId(),
-				key -> _createRollingFileAppender(key));
+				this::_createRollingFileAppender);
 
 		rollingFileAppender.append(logEvent);
 	}
