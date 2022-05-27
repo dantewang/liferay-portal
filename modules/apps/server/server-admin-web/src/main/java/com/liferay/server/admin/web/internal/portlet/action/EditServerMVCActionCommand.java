@@ -88,6 +88,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.InetAddressUtil;
 import com.liferay.portal.kernel.util.InstancePool;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LoggingTimer;
@@ -195,6 +196,9 @@ public class EditServerMVCActionCommand
 		}
 		else if (cmd.equals("cleanUpAddToPagePermissions")) {
 			_cleanUpAddToPagePermissions(actionRequest);
+		}
+		else if (cmd.equals("cleanUpDNSCache")) {
+			InetAddressUtil.cleanCachedInetAddresses();
 		}
 		else if (cmd.equals("cleanUpLayoutRevisionPortletPreferences")) {
 			_cleanUpLayoutRevisionPortletPreferences();

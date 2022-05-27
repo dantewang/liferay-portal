@@ -40,6 +40,10 @@ import java.util.concurrent.TimeoutException;
  */
 public class InetAddressUtil {
 
+	public static void cleanCachedInetAddresses() {
+		_resolvedAddresses.clear();
+	}
+
 	public static InetAddress getInetAddressByName(String domain)
 		throws UnknownHostException {
 
