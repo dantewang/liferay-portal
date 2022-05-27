@@ -276,6 +276,15 @@ long usedMemory = totalMemory - runtime.freeMemory();
 					<aui:button cssClass="save-server-button" data-cmd="cleanUpOrphanedPortletPreferences" value="execute" />
 				</div>
 			</li>
+			<li class="clearfix list-group-item">
+				<div class="float-left">
+					<h5><liferay-ui:message key="clean-up-DNS-cache" /> <liferay-ui:icon-help message="clean-up-DNS-cache-help" /></h5>
+				</div>
+
+				<div class="float-right">
+					<aui:button cssClass="save-server-button" data-cmd="cleanUpDNSCache" value="execute" />
+				</div>
+			</li>
 		</ul>
 	</liferay-ui:panel>
 </liferay-ui:panel-container>
