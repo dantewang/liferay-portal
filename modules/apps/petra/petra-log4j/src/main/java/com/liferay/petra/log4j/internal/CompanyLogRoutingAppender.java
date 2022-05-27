@@ -14,7 +14,12 @@
 
 package com.liferay.petra.log4j.internal;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
 import java.io.Serializable;
+
+import java.util.zip.Deflater;
 
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.Core;
@@ -22,6 +27,9 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
+import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
+import org.apache.logging.log4j.core.appender.rolling.DirectFileRolloverStrategy;
+import org.apache.logging.log4j.core.appender.rolling.DirectWriteRolloverStrategy;
 import org.apache.logging.log4j.core.appender.rolling.RolloverStrategy;
 import org.apache.logging.log4j.core.appender.rolling.TriggeringPolicy;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
@@ -58,6 +66,69 @@ public final class CompanyLogRoutingAppender extends AbstractAppender {
 
 		@Override
 		public CompanyLogRoutingAppender build() {
+			if (getName() == null) {
+				if (_log.isErrorEnabled()) {
+					_log.error("No name provided");
+				}
+
+				return null;
+			}
+
+			if (!_bufferedIo && (_bufferSize > 0)) {
+				if (_log.isErrorEnabled()) {
+					_log.error(
+						"The bufferSize is set to " + _bufferSize +
+							" but bufferedIO is not true");
+				}
+			}
+
+			if (_filePattern == null) {
+				if (_log.isErrorEnabled()) {
+					_log.error("No file name pattern provided");
+				}
+
+				return null;
+			}
+
+			if (_policy == null) {
+				if (_log.isErrorEnabled()) {
+					_log.error("No TriggeringPolicy provided");
+				}
+
+				return null;
+			}
+
+			if (_strategy == null) {
+				if (_fileName != null) {
+					_strategy = DefaultRolloverStrategy.newBuilder(
+					).withCompressionLevelStr(
+						String.valueOf(Deflater.DEFAULT_COMPRESSION)
+					).withConfig(
+						getConfiguration()
+					).build();
+				}
+				else {
+					_strategy = DirectWriteRolloverStrategy.newBuilder(
+					).withCompressionLevelStr(
+						String.valueOf(Deflater.DEFAULT_COMPRESSION)
+					).withConfig(
+						getConfiguration()
+					).build();
+				}
+			}
+			else if ((_fileName == null) &&
+					 !(_strategy instanceof DirectFileRolloverStrategy)) {
+
+				if (_log.isErrorEnabled()) {
+					_log.error(
+						"When no file name is provided a " +
+							DirectFileRolloverStrategy.class.getSimpleName() +
+								" must be configured");
+				}
+
+				return null;
+			}
+
 			return new CompanyLogRoutingAppender(
 				_advertise, _advertiseUri, _append, _bufferedIo, _bufferSize,
 				_createOnDemand, _fileGroup, _fileName, _fileOwner,
@@ -140,6 +211,9 @@ public final class CompanyLogRoutingAppender extends AbstractAppender {
 		_triggeringPolicy = triggeringPolicy;
 		_rolloverStrategy = rolloverStrategy;
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		CompanyLogRoutingAppender.class);
 
 	private final boolean _advertise;
 	private final String _advertiseUri;
