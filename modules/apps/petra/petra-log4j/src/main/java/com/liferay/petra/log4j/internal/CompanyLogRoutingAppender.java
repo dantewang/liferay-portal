@@ -76,6 +76,10 @@ public final class CompanyLogRoutingAppender extends AbstractAppender {
 				CompanyThreadLocal.getCompanyId(),
 				this::_createRollingFileAppender);
 
+		if (rollingFileAppender == null) {
+			return;
+		}
+
 		rollingFileAppender.append(logEvent);
 	}
 
@@ -241,7 +245,9 @@ public final class CompanyLogRoutingAppender extends AbstractAppender {
 
 		RollingFileAppender rollingFileAppender = builder.build();
 
-		rollingFileAppender.start();
+		if (rollingFileAppender != null) {
+			rollingFileAppender.start();
+		}
 
 		return rollingFileAppender;
 	}
