@@ -67,7 +67,7 @@ public final class CompanyLogRoutingAppender extends AbstractAppender {
 
 	@PluginBuilderFactory
 	public static Builder newBuilder() {
-		return (Builder)new Builder().asBuilder();
+		return new Builder();
 	}
 
 	@Override
