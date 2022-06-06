@@ -1,10 +1,6 @@
 Bundle-Name: Liferay Document Library Web
 Bundle-SymbolicName: com.liferay.document.library.web
 Bundle-Version: 6.0.87
-Import-Package:\
-	org.apache.xerces.parsers,\
-	\
-	*
 Liferay-JS-Config: /META-INF/resources/document_library/js/legacy/config.js
 Web-ContextPath: /document-library-web
 -dsannotations-options: inherit

@@ -22,8 +22,6 @@ import com.liferay.portal.kernel.util.KeyValuePair;
 
 import java.io.InputStream;
 
-import org.apache.xerces.xni.XNIException;
-
 import org.xml.sax.InputSource;
 
 /**
@@ -86,7 +84,7 @@ public class EntityResolver implements org.xml.sax.EntityResolver {
 			}
 
 			if (!systemId.endsWith(".dtd") && !systemId.endsWith(".xsd")) {
-				throw new XNIException("Invalid system id " + systemId);
+				throw new RuntimeException("Invalid system id " + systemId);
 			}
 
 			if (!systemId.startsWith(Http.HTTP_WITH_SLASH) &&
@@ -103,7 +101,7 @@ public class EntityResolver implements org.xml.sax.EntityResolver {
 					return inputSource;
 				}
 
-				throw new XNIException("Invalid system id " + systemId);
+				throw new RuntimeException("Invalid system id " + systemId);
 			}
 		}
 
