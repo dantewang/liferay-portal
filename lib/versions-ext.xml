@@ -1564,29 +1564,6 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>lib/portal/xercesImpl.jar</file-name>
-				<version>2.12.2</version>
-				<project-name>Xerces</project-name>
-				<project-url>http://xerces.apache.org/xerces2-j</project-url>
-				<licenses>
-					<license>
-						<license-name>Apache License 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-						<copyright-notice>Copyright (c) 1999, IBM Corporation., http://www.ibm.com</copyright-notice>
-					</license>
-					<license>
-						<license-name>Apache License 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-						<copyright-notice>copyright (c) 1999, Sun Microsystems., http://www.sun.com</copyright-notice>
-					</license>
-					<license>
-						<license-name>Apache License 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-						<copyright-notice>Copyright (c) 1999, iClick, Inc.</copyright-notice>
-					</license>
-				</licenses>
-			</library>
-			<library>
 				<file-name>lib/portal/xml-apis.jar</file-name>
 				<version>1.4.01</version>
 				<project-name>xml-commons</project-name>
