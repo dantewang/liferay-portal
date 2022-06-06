@@ -24,9 +24,9 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLInputFactory;
 
-import org.apache.xerces.parsers.SAXParser;
-
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * @author Tomas Polesovsky
@@ -115,10 +115,13 @@ public class SecureXMLFactoryProviderImpl implements SecureXMLFactoryProvider {
 				currentThread.setContextClassLoader(classLoader);
 			}
 
-			xmlReader = new SAXParser();
+			xmlReader = XMLReaderFactory.createXMLReader();
 		}
 		catch (RuntimeException runtimeException) {
 			throw new SystemException(runtimeException);
+		}
+		catch (SAXException saxException) {
+			_log.error(saxException);
 		}
 		finally {
 			if (classLoader != contextClassLoader) {
