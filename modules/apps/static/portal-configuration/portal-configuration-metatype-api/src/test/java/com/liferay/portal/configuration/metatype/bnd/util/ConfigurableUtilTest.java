@@ -16,19 +16,24 @@ package com.liferay.portal.configuration.metatype.bnd.util;
 
 import aQute.bnd.annotation.metatype.Meta;
 
+import com.liferay.petra.process.ClassPathUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.util.ReflectionUtilTestUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
+import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.test.rule.AdviseWith;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.util.PropsImpl;
 
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -84,10 +89,45 @@ public class ConfigurableUtilTest {
 		}
 	}
 
-	@AdviseWith(adviceClasses = ConfigurableUtilAdvice.class)
-	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
 	public void testConcurrentCreateConfigurable() throws Exception {
+		TestClassLoader testClassLoader = new TestClassLoader(
+			ClassPathUtil.getClassPathURLs(
+				ClassPathUtil.getJVMClassPath(true)), null);
+
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader contextClassLoader =
+			currentThread.getContextClassLoader();
+
+		currentThread.setContextClassLoader(testClassLoader);
+
+		try {
+			Class<?> clazz = testClassLoader.loadClass(
+				ConfigurableUtilTest.class.getName());
+
+			Object object = clazz.newInstance();
+
+			Method testDefineClassMethod = ReflectionTestUtil.getMethod(
+				TestClassLoader.class, "testDefineClass", String.class,
+				byte[].class, int.class, int.class);
+
+			Method testMethod = ReflectionTestUtil.getMethod(
+				clazz, "_testConcurrentCreateConfigurable", Method.class, CountDownLatch.class, CountDownLatch.class);
+
+			testMethod.invoke(object, testDefineClassMethod, TestClassLoader._waitingCountDownLatch, TestClassLoader._blockingCountDownLatch);
+		}
+		finally {
+			currentThread.setContextClassLoader(contextClassLoader);
+		}
+	}
+
+	private void _testConcurrentCreateConfigurable(Method method, CountDownLatch waitingCountDownLatch, CountDownLatch blockingCountDownLatch) throws Exception {
+		PropsUtil.setProps(new PropsImpl());
+
+		ReflectionTestUtil.setFieldValue(
+			ConfigurableUtil.class, "_defineClassMethod", method);
+
 		Callable<TestConfiguration> callable =
 			() -> ConfigurableUtil.createConfigurable(
 				TestConfiguration.class,
@@ -105,12 +145,36 @@ public class ConfigurableUtilTest {
 		thread1.start();
 		thread2.start();
 
-		ConfigurableUtilAdvice.waitUntilBlock();
+		waitingCountDownLatch.await();
 
-		ConfigurableUtilAdvice.unblock();
+		blockingCountDownLatch.countDown();
 
 		_assertTestConfiguration(futureTask1.get(), "testReqiredString");
 		_assertTestConfiguration(futureTask2.get(), "testReqiredString");
+	}
+
+	private static class TestClassLoader extends URLClassLoader {
+
+		public TestClassLoader(URL[] urls, ClassLoader parent) {
+			super(urls, parent);
+		}
+
+		public Class<?> testDefineClass(
+				String name, byte[] bytes, int off, int len)
+			throws InterruptedException {
+
+			_waitingCountDownLatch.countDown();
+
+			_blockingCountDownLatch.await();
+
+			return super.defineClass(name, bytes, off, len);
+		}
+
+		public static final CountDownLatch _blockingCountDownLatch =
+			new CountDownLatch(1);
+		public static final CountDownLatch _waitingCountDownLatch =
+			new CountDownLatch(2);
+
 	}
 
 	@Test
