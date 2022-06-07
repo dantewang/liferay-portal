@@ -16,6 +16,7 @@ package com.liferay.portal.util;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.OSDetector;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
@@ -25,6 +26,7 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -238,7 +240,13 @@ public class FileImplTest {
 	public void testUnzip() throws Exception {
 		_setUpForUnzipTests();
 
-		File file = _createZipFileTestZip();
+		File file = _createZipFile(
+			"test.zip",
+			HashMapBuilder.put(
+				"zip/test/directory/", () -> (String)null
+			).put(
+				"zip/test/entry/entry.txt", "Test String"
+			).build());
 
 		_fileImpl.unzip(file, _tempFolder);
 
@@ -258,7 +266,13 @@ public class FileImplTest {
 	public void testUnzipZipSlipVulnerable() throws Exception {
 		_setUpForUnzipTests();
 
-		File file = _createZipFileTestSlipZip();
+		File file = _createZipFile(
+			"test_slip.zip",
+			HashMapBuilder.put(
+				"../../../../../../bad.txt", "I am bad!"
+			).put(
+				"good.txt", "I am good!"
+			).build());
 
 		_fileImpl.unzip(file, _tempFolder);
 
@@ -297,68 +311,33 @@ public class FileImplTest {
 		return false;
 	}
 
-	private File _createZipFileTestSlipZip() throws Exception {
-		File file = new File(
-			_tempFolderForCreatingZip.getCanonicalPath(), "/test_slip.zip");
+	private File _createZipFile(String fileName, Map<String, String> entries)
+		throws Exception {
+
+		File zipFile = new File(
+			_tempFolderForCreatingZip.getCanonicalPath(), fileName);
 
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
-				new FileOutputStream(file))) {
+				new FileOutputStream(zipFile))) {
 
-			ZipEntry e1 = new ZipEntry("good.txt");
+			for (Map.Entry<String, String> entry : entries.entrySet()) {
+				ZipEntry zipEntry = new ZipEntry(entry.getKey());
 
-			zipOutputStream.putNextEntry(e1);
+				zipOutputStream.putNextEntry(zipEntry);
 
-			String sbForGoodTxt = "I am good!";
+				String content = entry.getValue();
 
-			byte[] dataForGood = sbForGoodTxt.getBytes();
+				if (content != null) {
+					byte[] data = content.getBytes();
 
-			zipOutputStream.write(dataForGood, 0, dataForGood.length);
+					zipOutputStream.write(data, 0, data.length);
+				}
 
-			zipOutputStream.closeEntry();
-
-			ZipEntry e2 = new ZipEntry("../../../../../../bad.txt");
-
-			zipOutputStream.putNextEntry(e2);
-
-			String sbForBadTxt = "I am bad!";
-
-			byte[] dataForBad = sbForBadTxt.getBytes();
-
-			zipOutputStream.write(dataForBad, 0, dataForBad.length);
-
-			zipOutputStream.closeEntry();
+				zipOutputStream.closeEntry();
+			}
 		}
 
-		return file;
-	}
-
-	private File _createZipFileTestZip() throws Exception {
-		File file = new File(
-			_tempFolderForCreatingZip.getCanonicalPath(), "/test.zip");
-
-		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
-				new FileOutputStream(file))) {
-
-			ZipEntry e1 = new ZipEntry("zip/test/entry/entry.txt");
-
-			zipOutputStream.putNextEntry(e1);
-
-			String tempStr = "Test String";
-
-			byte[] data = tempStr.getBytes();
-
-			zipOutputStream.write(data, 0, data.length);
-
-			zipOutputStream.closeEntry();
-
-			ZipEntry e2 = new ZipEntry("zip/test/directory/");
-
-			zipOutputStream.putNextEntry(e2);
-
-			zipOutputStream.closeEntry();
-		}
-
-		return file;
+		return zipFile;
 	}
 
 	private Path _getTempTestFilePath(String path) throws Exception {
