@@ -17,7 +17,9 @@ package com.liferay.portal.util;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.OSDetector;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.io.File;
@@ -26,7 +28,9 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -243,23 +247,22 @@ public class FileImplTest {
 		File file = _createZipFile(
 			"test.zip",
 			HashMapBuilder.put(
-				"zip/test/directory/", () -> (String)null
-			).put(
 				"zip/test/entry/entry.txt", "Test String"
 			).build());
 
-		_fileImpl.unzip(file, _tempFolder);
+		Path destinationPath = Files.createTempDirectory(null);
 
-		_assertExists("zip/test/directory");
-		_assertExists("zip/test/entry/entry.txt");
+		try {
+			_fileImpl.unzip(file, destinationPath.toFile());
 
-		Assert.assertTrue(
-			_canFileReadWrite(_getTempTestFilePath("zip/test/directory")));
-
-		Assert.assertTrue(
-			_canFileReadWrite(
-				_getTempTestFilePath("zip/test/entry/entry.txt")));
-		_tearDown();
+			Assert.assertTrue(
+				Files.exists(
+					destinationPath.resolve("zip/test/entry/entry.txt")));
+		}
+		finally {
+			_fileImpl.deltree(destinationPath.toFile());
+			_fileImpl.deltree(_tempFolderForCreatingZip);
+		}
 	}
 
 	@Test
@@ -269,46 +272,38 @@ public class FileImplTest {
 		File file = _createZipFile(
 			"test_slip.zip",
 			HashMapBuilder.put(
-				"../../../../../../bad.txt", "I am bad!"
+				"../bad.txt", "I am bad!"
 			).put(
 				"good.txt", "I am good!"
 			).build());
 
-		_fileImpl.unzip(file, _tempFolder);
+		Path parentPath = Files.createTempDirectory(null);
 
-		_assertExists("good.txt");
-		_assertDoesNotExist("tmp/bad.txt");
-		_tearDown();
-	}
+		Path destinationPath = Files.createTempDirectory(parentPath, null);
 
-	private void _assertDoesNotExist(String name) throws Exception {
-		Path fullPath = _getTempTestFilePath(name);
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				FileImpl.class.getName(), Level.WARNING)) {
 
-		Assert.assertFalse(Files.exists(fullPath));
-	}
+			_fileImpl.unzip(file, destinationPath.toFile());
 
-	private void _assertExists(String name) throws Exception {
-		Path fullPath = _getTempTestFilePath(name);
+			List<LogEntry> logEntries = logCapture.getLogEntries();
 
-		Assert.assertTrue(Files.exists(fullPath));
-	}
+			Assert.assertEquals(logEntries.toString(), 1, logEntries.size());
 
-	private boolean _canFileReadWrite(Path path) {
-		if (OSDetector.isWindows()) {
-			File file = path.toFile();
+			LogEntry logEntry = logEntries.get(0);
 
-			if (file.canExecute() && file.canRead() && file.canWrite()) {
-				return true;
-			}
+			Assert.assertEquals(
+				"Entry is outside of the target dir: ../bad.txt",
+				logEntry.getMessage());
 
-			return false;
+			Assert.assertTrue(
+				Files.exists(destinationPath.resolve("good.txt")));
+			Assert.assertFalse(Files.exists(parentPath.resolve("bad.txt")));
 		}
-
-		if (Files.isReadable(path) && Files.isWritable(path)) {
-			return true;
+		finally {
+			_fileImpl.deltree(parentPath.toFile());
+			_fileImpl.deltree(_tempFolderForCreatingZip);
 		}
-
-		return false;
 	}
 
 	private File _createZipFile(String fileName, Map<String, String> entries)
@@ -340,12 +335,6 @@ public class FileImplTest {
 		return zipFile;
 	}
 
-	private Path _getTempTestFilePath(String path) throws Exception {
-		Path pathToTempFolder = _tempFolder.toPath();
-
-		return pathToTempFolder.resolve(path);
-	}
-
 	private void _setUpForUnzipTests() throws Exception {
 		FastDateFormatFactoryUtil fastDateFormatFactoryUtil =
 			new FastDateFormatFactoryUtil();
@@ -353,17 +342,10 @@ public class FileImplTest {
 		fastDateFormatFactoryUtil.setFastDateFormatFactory(
 			new FastDateFormatFactoryImpl());
 
-		_tempFolder = _fileImpl.createTempFolder();
 		_tempFolderForCreatingZip = _fileImpl.createTempFolder();
 	}
 
-	private void _tearDown() throws Exception {
-		_fileImpl.deltree(_tempFolder);
-		_fileImpl.deltree(_tempFolderForCreatingZip);
-	}
-
 	private final FileImpl _fileImpl = new FileImpl();
-	private File _tempFolder;
 	private File _tempFolderForCreatingZip;
 
 }
