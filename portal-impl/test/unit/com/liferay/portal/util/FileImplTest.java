@@ -299,7 +299,7 @@ public class FileImplTest {
 
 	private File _createZipFileTestSlipZip() throws Exception {
 		File file = new File(
-			_tempFolderForCreatingZip.getCanonicalPath() + "/test_slip.zip");
+			_tempFolderForCreatingZip.getCanonicalPath(), "/test_slip.zip");
 
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
 				new FileOutputStream(file))) {
@@ -334,7 +334,7 @@ public class FileImplTest {
 
 	private File _createZipFileTestZip() throws Exception {
 		File file = new File(
-			_tempFolderForCreatingZip.getCanonicalPath() + "/test.zip");
+			_tempFolderForCreatingZip.getCanonicalPath(), "/test.zip");
 
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
 				new FileOutputStream(file))) {
