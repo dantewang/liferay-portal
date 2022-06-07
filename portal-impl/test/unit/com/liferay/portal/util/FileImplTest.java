@@ -301,34 +301,33 @@ public class FileImplTest {
 		File file = new File(
 			_tempFolderForCreatingZip.getCanonicalPath() + "/test_slip.zip");
 
-		ZipOutputStream zipOutputStream = new ZipOutputStream(
-			new FileOutputStream(file));
+		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
+				new FileOutputStream(file))) {
 
-		ZipEntry e1 = new ZipEntry("good.txt");
+			ZipEntry e1 = new ZipEntry("good.txt");
 
-		zipOutputStream.putNextEntry(e1);
+			zipOutputStream.putNextEntry(e1);
 
-		String sbForGoodTxt = "I am good!";
+			String sbForGoodTxt = "I am good!";
 
-		byte[] dataForGood = sbForGoodTxt.getBytes();
+			byte[] dataForGood = sbForGoodTxt.getBytes();
 
-		zipOutputStream.write(dataForGood, 0, dataForGood.length);
+			zipOutputStream.write(dataForGood, 0, dataForGood.length);
 
-		zipOutputStream.closeEntry();
+			zipOutputStream.closeEntry();
 
-		ZipEntry e2 = new ZipEntry("../../../../../../bad.txt");
+			ZipEntry e2 = new ZipEntry("../../../../../../bad.txt");
 
-		zipOutputStream.putNextEntry(e2);
+			zipOutputStream.putNextEntry(e2);
 
-		String sbForBadTxt = "I am bad!";
+			String sbForBadTxt = "I am bad!";
 
-		byte[] dataForBad = sbForBadTxt.getBytes();
+			byte[] dataForBad = sbForBadTxt.getBytes();
 
-		zipOutputStream.write(dataForBad, 0, dataForBad.length);
+			zipOutputStream.write(dataForBad, 0, dataForBad.length);
 
-		zipOutputStream.closeEntry();
-
-		zipOutputStream.close();
+			zipOutputStream.closeEntry();
+		}
 
 		return file;
 	}
@@ -337,28 +336,27 @@ public class FileImplTest {
 		File file = new File(
 			_tempFolderForCreatingZip.getCanonicalPath() + "/test.zip");
 
-		ZipOutputStream zipOutputStream = new ZipOutputStream(
-			new FileOutputStream(file));
+		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
+				new FileOutputStream(file))) {
 
-		ZipEntry e1 = new ZipEntry("zip/test/entry/entry.txt");
+			ZipEntry e1 = new ZipEntry("zip/test/entry/entry.txt");
 
-		zipOutputStream.putNextEntry(e1);
+			zipOutputStream.putNextEntry(e1);
 
-		String tempStr = "Test String";
+			String tempStr = "Test String";
 
-		byte[] data = tempStr.getBytes();
+			byte[] data = tempStr.getBytes();
 
-		zipOutputStream.write(data, 0, data.length);
+			zipOutputStream.write(data, 0, data.length);
 
-		zipOutputStream.closeEntry();
+			zipOutputStream.closeEntry();
 
-		ZipEntry e2 = new ZipEntry("zip/test/directory/");
+			ZipEntry e2 = new ZipEntry("zip/test/directory/");
 
-		zipOutputStream.putNextEntry(e2);
+			zipOutputStream.putNextEntry(e2);
 
-		zipOutputStream.closeEntry();
-
-		zipOutputStream.close();
+			zipOutputStream.closeEntry();
+		}
 
 		return file;
 	}
