@@ -16,8 +16,10 @@ package com.liferay.portal.configuration.metatype.bnd.util;
 
 import aQute.bnd.annotation.metatype.Meta;
 
+import com.liferay.petra.process.ClassPathUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.SwappableSecurityManager;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
@@ -25,18 +27,18 @@ import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.util.ReflectionUtilTestUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.test.rule.AdviseWith;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.util.PropsImpl;
+
+import java.lang.reflect.Method;
+
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
-
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -84,33 +86,43 @@ public class ConfigurableUtilTest {
 		}
 	}
 
-	@AdviseWith(adviceClasses = ConfigurableUtilAdvice.class)
-	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
 	public void testConcurrentCreateConfigurable() throws Exception {
-		Callable<TestConfiguration> callable =
-			() -> ConfigurableUtil.createConfigurable(
-				TestConfiguration.class,
-				Collections.singletonMap(
-					"testReqiredString", "testReqiredString"));
+		CountDownLatch blockingCountDownLatch = new CountDownLatch(1);
 
-		FutureTask<TestConfiguration> futureTask1 = new FutureTask<>(callable);
-		FutureTask<TestConfiguration> futureTask2 = new FutureTask<>(callable);
+		CountDownLatch waitingCountDownLatch = new CountDownLatch(2);
 
-		Thread thread1 = new Thread(
-			futureTask1, "Configurable Util Test Thread 1");
-		Thread thread2 = new Thread(
-			futureTask2, "Configurable Util Test Thread 2");
+		TestClassLoader testClassLoader = new TestClassLoader(
+			ClassPathUtil.getClassPathURLs(ClassPathUtil.getJVMClassPath(true)),
+			null, blockingCountDownLatch, waitingCountDownLatch);
 
-		thread1.start();
-		thread2.start();
+		Thread currentThread = Thread.currentThread();
 
-		ConfigurableUtilAdvice.waitUntilBlock();
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
-		ConfigurableUtilAdvice.unblock();
+		currentThread.setContextClassLoader(testClassLoader);
 
-		_assertTestConfiguration(futureTask1.get(), "testReqiredString");
-		_assertTestConfiguration(futureTask2.get(), "testReqiredString");
+		try {
+			Class<?> clazz = testClassLoader.loadClass(
+				ConfigurableUtilTest.class.getName());
+
+			Object object = clazz.newInstance();
+
+			Method testDefineClassMethod = ReflectionTestUtil.getMethod(
+				TestClassLoader.class, "testDefineClass", String.class,
+				byte[].class, int.class, int.class);
+
+			Method testMethod = ReflectionTestUtil.getMethod(
+				clazz, "_testConcurrentCreateConfigurable", Method.class,
+				CountDownLatch.class, CountDownLatch.class);
+
+			testMethod.invoke(
+				object, testDefineClassMethod, waitingCountDownLatch,
+				blockingCountDownLatch);
+		}
+		finally {
+			currentThread.setContextClassLoader(contextClassLoader);
+		}
 	}
 
 	@Test
@@ -207,39 +219,6 @@ public class ConfigurableUtilTest {
 			"test_string", testSyntheticMethodConfiguration.testString());
 	}
 
-	@Aspect
-	public static class ConfigurableUtilAdvice {
-
-		public static void unblock() {
-			_blockingCountDownLatch.countDown();
-		}
-
-		public static void waitUntilBlock() throws InterruptedException {
-			_waitingCountDownLatch.await();
-		}
-
-		@Around(
-			"execution(private * com.liferay.portal.configuration.metatype." +
-				"bnd.util.ConfigurableUtil._generateSnapshotClassData(..))"
-		)
-		public Object generateSnapshotClassData(
-				ProceedingJoinPoint proceedingJoinPoint)
-			throws Throwable {
-
-			_waitingCountDownLatch.countDown();
-
-			_blockingCountDownLatch.await();
-
-			return proceedingJoinPoint.proceed();
-		}
-
-		private static final CountDownLatch _blockingCountDownLatch =
-			new CountDownLatch(1);
-		private static final CountDownLatch _waitingCountDownLatch =
-			new CountDownLatch(2);
-
-	}
-
 	public static class TestClass {
 
 		public TestClass(String name) {
@@ -300,6 +279,70 @@ public class ConfigurableUtilTest {
 				TestConfiguration.class,
 				Collections.singletonMap("testReqiredString", bigString)),
 			bigString);
+	}
+
+	private void _testConcurrentCreateConfigurable(
+			Method method, CountDownLatch waitingCountDownLatch,
+			CountDownLatch blockingCountDownLatch)
+		throws Exception {
+
+		PropsUtil.setProps(new PropsImpl());
+
+		ReflectionTestUtil.setFieldValue(
+			ConfigurableUtil.class, "_defineClassMethod", method);
+
+		Callable<TestConfiguration> callable =
+			() -> ConfigurableUtil.createConfigurable(
+				TestConfiguration.class,
+				Collections.singletonMap(
+					"testReqiredString", "testReqiredString"));
+
+		FutureTask<TestConfiguration> futureTask1 = new FutureTask<>(callable);
+		FutureTask<TestConfiguration> futureTask2 = new FutureTask<>(callable);
+
+		Thread thread1 = new Thread(
+			futureTask1, "Configurable Util Test Thread 1");
+		Thread thread2 = new Thread(
+			futureTask2, "Configurable Util Test Thread 2");
+
+		thread1.start();
+		thread2.start();
+
+		waitingCountDownLatch.await();
+
+		blockingCountDownLatch.countDown();
+
+		_assertTestConfiguration(futureTask1.get(), "testReqiredString");
+		_assertTestConfiguration(futureTask2.get(), "testReqiredString");
+	}
+
+	private static class TestClassLoader extends URLClassLoader {
+
+		public TestClassLoader(
+			URL[] urls, ClassLoader parent,
+			CountDownLatch blockingCountDownLatch,
+			CountDownLatch waitingCountDownLatch) {
+
+			super(urls, parent);
+
+			_blockingCountDownLatch = blockingCountDownLatch;
+			_waitingCountDownLatch = waitingCountDownLatch;
+		}
+
+		public Class<?> testDefineClass(
+				String name, byte[] bytes, int off, int len)
+			throws InterruptedException {
+
+			_waitingCountDownLatch.countDown();
+
+			_blockingCountDownLatch.await();
+
+			return super.defineClass(name, bytes, off, len);
+		}
+
+		private final CountDownLatch _blockingCountDownLatch;
+		private final CountDownLatch _waitingCountDownLatch;
+
 	}
 
 	private interface TestConfiguration {
