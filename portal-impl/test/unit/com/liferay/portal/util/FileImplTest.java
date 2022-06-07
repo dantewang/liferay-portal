@@ -298,14 +298,6 @@ public class FileImplTest {
 	}
 
 	private File _createZipFileTestSlipZip() throws Exception {
-		StringBuilder sbForGoodTxt = new StringBuilder();
-
-		sbForGoodTxt.append("I am good!");
-
-		StringBuilder sbForBadTxt = new StringBuilder();
-
-		sbForBadTxt.append("I am bad!");
-
 		File file = new File(
 			_tempFolderForCreatingZip.getCanonicalPath() + "/test_slip.zip");
 
@@ -316,9 +308,9 @@ public class FileImplTest {
 
 		zipOutputStream.putNextEntry(e1);
 
-		String tempStrGood = sbForGoodTxt.toString();
+		String sbForGoodTxt = "I am good!";
 
-		byte[] dataForGood = tempStrGood.getBytes();
+		byte[] dataForGood = sbForGoodTxt.getBytes();
 
 		zipOutputStream.write(dataForGood, 0, dataForGood.length);
 
@@ -328,9 +320,9 @@ public class FileImplTest {
 
 		zipOutputStream.putNextEntry(e2);
 
-		String tempStrBad = sbForBadTxt.toString();
+		String sbForBadTxt = "I am bad!";
 
-		byte[] dataForBad = tempStrBad.getBytes();
+		byte[] dataForBad = sbForBadTxt.getBytes();
 
 		zipOutputStream.write(dataForBad, 0, dataForBad.length);
 
@@ -342,10 +334,6 @@ public class FileImplTest {
 	}
 
 	private File _createZipFileTestZip() throws Exception {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("Test String");
-
 		File file = new File(
 			_tempFolderForCreatingZip.getCanonicalPath() + "/test.zip");
 
@@ -356,7 +344,7 @@ public class FileImplTest {
 
 		zipOutputStream.putNextEntry(e1);
 
-		String tempStr = sb.toString();
+		String tempStr = "Test String";
 
 		byte[] data = tempStr.getBytes();
 
