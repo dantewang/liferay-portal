@@ -54,26 +54,6 @@ public class MVCCPortalCacheTest {
 			},
 			LiferayUnitTestRule.INSTANCE);
 
-	public static void block() {
-		_semaphore = new Semaphore(0);
-	}
-
-	public static void unblock(int permits) {
-		Semaphore semaphore = _semaphore;
-
-		_semaphore = null;
-
-		semaphore.release(permits);
-	}
-
-	public static void waitUntilBlock(int threadCount) {
-		Semaphore semaphore = _semaphore;
-
-		if (semaphore != null) {
-			while (semaphore.getQueueLength() < threadCount);
-		}
-	}
-
 	@Before
 	public void setUp() {
 		_portalCache = new TestPortalCache<>(_PORTAL_CACHE_NAME);
@@ -137,23 +117,23 @@ public class MVCCPortalCacheTest {
 
 		// Concurrent put 1
 
-		block();
+		_block();
 
 		Thread thread1 = new Thread(
 			() -> _mvccPortalCache.put(_KEY_1, new MockMVCCModel(_VERSION_1)));
 
 		thread1.start();
 
-		waitUntilBlock(1);
+		_waitUntilBlock(1);
 
 		Thread thread2 = new Thread(
 			() -> _mvccPortalCache.put(_KEY_1, new MockMVCCModel(_VERSION_1)));
 
 		thread2.start();
 
-		waitUntilBlock(2);
+		_waitUntilBlock(2);
 
-		unblock(2);
+		_unblock(2);
 
 		thread1.join();
 		thread2.join();
@@ -175,7 +155,7 @@ public class MVCCPortalCacheTest {
 
 		// Concurrent put 2
 
-		block();
+		_block();
 
 		thread1 = new Thread(
 			() -> PortalCacheHelperUtil.putWithoutReplicator(
@@ -183,7 +163,7 @@ public class MVCCPortalCacheTest {
 
 		thread1.start();
 
-		waitUntilBlock(1);
+		_waitUntilBlock(1);
 
 		thread2 = new Thread(
 			() -> PortalCacheHelperUtil.putWithoutReplicator(
@@ -191,9 +171,9 @@ public class MVCCPortalCacheTest {
 
 		thread2.start();
 
-		waitUntilBlock(2);
+		_waitUntilBlock(2);
 
-		unblock(2);
+		_unblock(2);
 
 		thread1.join();
 		thread2.join();
@@ -340,6 +320,26 @@ public class MVCCPortalCacheTest {
 		Assert.assertEquals(version, mockMVCCModel.getMvccVersion());
 	}
 
+	private void _block() {
+		_semaphore = new Semaphore(0);
+	}
+
+	private void _unblock(int permits) {
+		Semaphore semaphore = _semaphore;
+
+		_semaphore = null;
+
+		semaphore.release(permits);
+	}
+
+	private void _waitUntilBlock(int threadCount) {
+		Semaphore semaphore = _semaphore;
+
+		if (semaphore != null) {
+			while (semaphore.getQueueLength() < threadCount);
+		}
+	}
+
 	private static final String _KEY_1 = "KEY_1";
 
 	private static final String _KEY_2 = "KEY_2";
@@ -352,10 +352,9 @@ public class MVCCPortalCacheTest {
 
 	private static final long _VERSION_2 = 2;
 
-	private static volatile Semaphore _semaphore;
-
 	private MVCCPortalCache<String, MockMVCCModel> _mvccPortalCache;
 	private PortalCache<String, MockMVCCModel> _portalCache;
+	private volatile Semaphore _semaphore;
 	private TestPortalCacheListener<String, MockMVCCModel>
 		_testPortalCacheListener;
 	private TestPortalCacheReplicator<String, MockMVCCModel>

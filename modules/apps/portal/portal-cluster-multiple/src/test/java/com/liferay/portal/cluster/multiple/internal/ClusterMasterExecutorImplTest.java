@@ -71,32 +71,6 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 		new AggregateTestRule(
 			CodeCoverageAssertor.INSTANCE, LiferayUnitTestRule.INSTANCE);
 
-	public static void block() {
-		_semaphore = new Semaphore(0);
-	}
-
-	public static void unblock(int permits) {
-		_semaphore.release(permits);
-	}
-
-	public static String waitClusterNodeId() throws Exception {
-		try {
-			return _clusterNodeIdExchanger.exchange(
-				null, 1000, TimeUnit.MILLISECONDS);
-		}
-		catch (TimeoutException timeoutException) {
-			return "null";
-		}
-	}
-
-	public static void waitUntilBlock(int threadCount) {
-		Semaphore semaphore = _semaphore;
-
-		if (semaphore != null) {
-			while (semaphore.getQueueLength() < threadCount);
-		}
-	}
-
 	@Test
 	public void testClusterMasterTokenClusterEventListener() throws Exception {
 
@@ -464,7 +438,7 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 
 		mockClusterExecutor.setCoordinatorAddress(_TEST_ADDRESS);
 
-		block();
+		_block();
 
 		Thread thread = new Thread(
 			() -> {
@@ -495,22 +469,22 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 
 		thread.start();
 
-		waitUntilBlock(1);
+		_waitUntilBlock(1);
 
-		unblock(1);
+		_unblock(1);
 
-		Assert.assertNull(waitClusterNodeId());
+		Assert.assertNull(_waitClusterNodeId());
 
-		waitUntilBlock(1);
+		_waitUntilBlock(1);
 
 		ClusterNode clusterNode = new ClusterNode(
 			_TEST_CLUSTER_NODE_ID, InetAddress.getLocalHost());
 
 		mockClusterExecutor.addClusterNode(_TEST_ADDRESS, clusterNode);
 
-		unblock(1);
+		_unblock(1);
 
-		Assert.assertSame(_TEST_CLUSTER_NODE_ID, waitClusterNodeId());
+		Assert.assertSame(_TEST_CLUSTER_NODE_ID, _waitClusterNodeId());
 
 		thread.join();
 
@@ -518,7 +492,7 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 
 		mockClusterExecutor.removeClusterNode(_TEST_ADDRESS);
 
-		block();
+		_block();
 
 		thread = new Thread(
 			() -> {
@@ -539,19 +513,19 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 
 		thread.start();
 
-		waitUntilBlock(1);
+		_waitUntilBlock(1);
 
-		unblock(1);
+		_unblock(1);
 
-		Assert.assertNull(waitClusterNodeId());
+		Assert.assertNull(_waitClusterNodeId());
 
-		waitUntilBlock(1);
+		_waitUntilBlock(1);
 
 		mockClusterExecutor.addClusterNode(_TEST_ADDRESS, clusterNode);
 
-		unblock(1);
+		_unblock(1);
 
-		Assert.assertSame(_TEST_CLUSTER_NODE_ID, waitClusterNodeId());
+		Assert.assertSame(_TEST_CLUSTER_NODE_ID, _waitClusterNodeId());
 
 		thread.join();
 	}
@@ -666,6 +640,32 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 				isMasterTokenReleasedNotified());
 	}
 
+	private void _block() {
+		_semaphore = new Semaphore(0);
+	}
+
+	private void _unblock(int permits) {
+		_semaphore.release(permits);
+	}
+
+	private String _waitClusterNodeId() throws Exception {
+		try {
+			return _clusterNodeIdExchanger.exchange(
+				null, 1000, TimeUnit.MILLISECONDS);
+		}
+		catch (TimeoutException timeoutException) {
+			return "null";
+		}
+	}
+
+	private void _waitUntilBlock(int threadCount) {
+		Semaphore semaphore = _semaphore;
+
+		if (semaphore != null) {
+			while (semaphore.getQueueLength() < threadCount);
+		}
+	}
+
 	private static final MethodHandler _BAD_METHOD_HANDLER = new MethodHandler(
 		new MethodKey());
 
@@ -678,7 +678,8 @@ public class ClusterMasterExecutorImplTest extends BaseClusterTestCase {
 
 	private static final Exchanger<String> _clusterNodeIdExchanger =
 		new Exchanger<>();
-	private static volatile Semaphore _semaphore;
+
+	private volatile Semaphore _semaphore;
 
 	private static class MockClusterExecutor extends ClusterExecutorImpl {
 
