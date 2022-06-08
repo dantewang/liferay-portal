@@ -252,13 +252,13 @@ public class FileImplTest {
 
 	@Test
 	public void testUnzip() throws Exception {
-		File file = _createZipFile(
+		File zipFile = _createZipFile(
 			"test.zip", Collections.singletonList("zip/test/entry/entry.txt"));
 
 		Path destinationPath = Files.createTempDirectory(null);
 
 		try {
-			_fileImpl.unzip(file, destinationPath.toFile());
+			_fileImpl.unzip(zipFile, destinationPath.toFile());
 
 			Assert.assertTrue(
 				Files.exists(
@@ -266,13 +266,13 @@ public class FileImplTest {
 		}
 		finally {
 			_fileImpl.deltree(destinationPath.toFile());
-			_fileImpl.deltree(file.getParentFile());
+			_fileImpl.deltree(zipFile.getParentFile());
 		}
 	}
 
 	@Test
 	public void testUnzipZipSlipVulnerable() throws Exception {
-		File file = _createZipFile(
+		File zipFile = _createZipFile(
 			"test_slip.zip", Arrays.asList("../bad.txt", "good.txt"));
 
 		Path parentPath = Files.createTempDirectory(null);
@@ -282,7 +282,7 @@ public class FileImplTest {
 		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
 				FileImpl.class.getName(), Level.WARNING)) {
 
-			_fileImpl.unzip(file, destinationPath.toFile());
+			_fileImpl.unzip(zipFile, destinationPath.toFile());
 
 			Assert.assertTrue(
 				Files.exists(destinationPath.resolve("good.txt")));
@@ -300,7 +300,7 @@ public class FileImplTest {
 		}
 		finally {
 			_fileImpl.deltree(parentPath.toFile());
-			_fileImpl.deltree(file.getParentFile());
+			_fileImpl.deltree(zipFile.getParentFile());
 		}
 	}
 
