@@ -252,8 +252,6 @@ public class FileImplTest {
 
 	@Test
 	public void testUnzip() throws Exception {
-		_setUpForUnzipTests();
-
 		File file = _createZipFile(
 			"test.zip",
 			HashMapBuilder.put(
@@ -277,8 +275,6 @@ public class FileImplTest {
 
 	@Test
 	public void testUnzipZipSlipVulnerable() throws Exception {
-		_setUpForUnzipTests();
-
 		File file = _createZipFile(
 			"test_slip.zip",
 			HashMapBuilder.put(
@@ -319,6 +315,8 @@ public class FileImplTest {
 	private File _createZipFile(String fileName, Map<String, String> entries)
 		throws Exception {
 
+		_tempFolderForCreatingZip = _fileImpl.createTempFolder();
+
 		File zipFile = new File(
 			_tempFolderForCreatingZip.getCanonicalPath(), fileName);
 
@@ -343,10 +341,6 @@ public class FileImplTest {
 		}
 
 		return zipFile;
-	}
-
-	private void _setUpForUnzipTests() throws Exception {
-		_tempFolderForCreatingZip = _fileImpl.createTempFolder();
 	}
 
 	private final FileImpl _fileImpl = new FileImpl();
