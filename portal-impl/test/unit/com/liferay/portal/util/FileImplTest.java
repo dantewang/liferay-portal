@@ -292,6 +292,10 @@ public class FileImplTest {
 
 			_fileImpl.unzip(file, destinationPath.toFile());
 
+			Assert.assertTrue(
+				Files.exists(destinationPath.resolve("good.txt")));
+			Assert.assertFalse(Files.exists(parentPath.resolve("bad.txt")));
+
 			List<LogEntry> logEntries = logCapture.getLogEntries();
 
 			Assert.assertEquals(logEntries.toString(), 1, logEntries.size());
@@ -301,10 +305,6 @@ public class FileImplTest {
 			Assert.assertEquals(
 				"Entry is outside of the target dir: ../bad.txt",
 				logEntry.getMessage());
-
-			Assert.assertTrue(
-				Files.exists(destinationPath.resolve("good.txt")));
-			Assert.assertFalse(Files.exists(parentPath.resolve("bad.txt")));
 		}
 		finally {
 			_fileImpl.deltree(parentPath.toFile());
