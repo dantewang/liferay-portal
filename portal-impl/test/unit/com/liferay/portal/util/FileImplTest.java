@@ -26,8 +26,6 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
@@ -241,8 +239,7 @@ public class FileImplTest {
 
 	@Test
 	public void testUnzip() throws Exception {
-		File zipFile = _createZipFile(
-			"test.zip", Collections.singletonList("zip/test/entry/entry.txt"));
+		File zipFile = _createZipFile("test.zip", "zip/test/entry/entry.txt");
 
 		Path destinationPath = Files.createTempDirectory(null);
 
@@ -263,7 +260,7 @@ public class FileImplTest {
 	@Test
 	public void testUnzipZipSlipVulnerable() throws Exception {
 		File zipFile = _createZipFile(
-			"test_slip.zip", Arrays.asList("../bad.txt", "good.txt"));
+			"test_slip.zip", "../bad.txt", "good.txt");
 
 		Path parentPath = Files.createTempDirectory(null);
 
@@ -297,7 +294,7 @@ public class FileImplTest {
 		}
 	}
 
-	private File _createZipFile(String fileName, List<String> entries)
+	private File _createZipFile(String fileName, String... entries)
 		throws Exception {
 
 		Path tempPathForCreatingZip = Files.createTempDirectory(null);
