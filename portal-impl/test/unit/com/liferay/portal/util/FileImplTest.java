@@ -15,7 +15,6 @@
 package com.liferay.portal.util;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
@@ -35,7 +34,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,15 +48,6 @@ public class FileImplTest {
 	@Rule
 	public static final LiferayUnitTestRule liferayUnitTestRule =
 		LiferayUnitTestRule.INSTANCE;
-
-	@BeforeClass
-	public static void setUpClass() {
-		FastDateFormatFactoryUtil fastDateFormatFactoryUtil =
-			new FastDateFormatFactoryUtil();
-
-		fastDateFormatFactoryUtil.setFastDateFormatFactory(
-			new FastDateFormatFactoryImpl());
-	}
 
 	@Test
 	public void testAppendParentheticalSuffixWhenFileNameHasParenthesis() {
@@ -311,10 +300,9 @@ public class FileImplTest {
 	private File _createZipFile(String fileName, List<String> entries)
 		throws Exception {
 
-		File tempFolderForCreatingZip = _fileImpl.createTempFolder();
+		Path tempPathForCreatingZip = Files.createTempDirectory(null);
 
-		File zipFile = new File(
-			tempFolderForCreatingZip.getCanonicalPath(), fileName);
+		File zipFile = new File(tempPathForCreatingZip.toFile(), fileName);
 
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
 				new FileOutputStream(zipFile))) {
