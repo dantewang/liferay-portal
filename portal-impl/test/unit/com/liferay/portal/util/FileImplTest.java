@@ -16,7 +16,6 @@ package com.liferay.portal.util;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.test.log.LogCapture;
 import com.liferay.portal.test.log.LogEntry;
 import com.liferay.portal.test.log.LoggerTestUtil;
@@ -28,8 +27,9 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -253,10 +253,7 @@ public class FileImplTest {
 	@Test
 	public void testUnzip() throws Exception {
 		File file = _createZipFile(
-			"test.zip",
-			HashMapBuilder.put(
-				"zip/test/entry/entry.txt", "Test String"
-			).build());
+			"test.zip", Collections.singletonList("zip/test/entry/entry.txt"));
 
 		Path destinationPath = Files.createTempDirectory(null);
 
@@ -276,12 +273,7 @@ public class FileImplTest {
 	@Test
 	public void testUnzipZipSlipVulnerable() throws Exception {
 		File file = _createZipFile(
-			"test_slip.zip",
-			HashMapBuilder.put(
-				"../bad.txt", "I am bad!"
-			).put(
-				"good.txt", "I am good!"
-			).build());
+			"test_slip.zip", Arrays.asList("../bad.txt", "good.txt"));
 
 		Path parentPath = Files.createTempDirectory(null);
 
@@ -312,7 +304,7 @@ public class FileImplTest {
 		}
 	}
 
-	private File _createZipFile(String fileName, Map<String, String> entries)
+	private File _createZipFile(String fileName, List<String> entries)
 		throws Exception {
 
 		File tempFolderForCreatingZip = _fileImpl.createTempFolder();
@@ -323,18 +315,12 @@ public class FileImplTest {
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
 				new FileOutputStream(zipFile))) {
 
-			for (Map.Entry<String, String> entry : entries.entrySet()) {
-				ZipEntry zipEntry = new ZipEntry(entry.getKey());
+			for (String entry : entries) {
+				ZipEntry zipEntry = new ZipEntry(entry);
 
 				zipOutputStream.putNextEntry(zipEntry);
 
-				String content = entry.getValue();
-
-				if (content != null) {
-					byte[] data = content.getBytes();
-
-					zipOutputStream.write(data, 0, data.length);
-				}
+				zipOutputStream.write(_ENTRY_CONTENT, 0, _ENTRY_CONTENT.length);
 
 				zipOutputStream.closeEntry();
 			}
@@ -342,6 +328,8 @@ public class FileImplTest {
 
 		return zipFile;
 	}
+
+	private static final byte[] _ENTRY_CONTENT = StringPool.CONTENT.getBytes();
 
 	private final FileImpl _fileImpl = new FileImpl();
 
