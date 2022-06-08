@@ -261,6 +261,7 @@ public class FileImplTest {
 			_fileImpl.unzip(zipFile, destinationPath.toFile());
 
 			Assert.assertTrue(
+				"The file should be extracted",
 				Files.exists(
 					destinationPath.resolve("zip/test/entry/entry.txt")));
 		}
@@ -285,8 +286,11 @@ public class FileImplTest {
 			_fileImpl.unzip(zipFile, destinationPath.toFile());
 
 			Assert.assertTrue(
+				"The good file should be extracted",
 				Files.exists(destinationPath.resolve("good.txt")));
-			Assert.assertFalse(Files.exists(parentPath.resolve("bad.txt")));
+			Assert.assertFalse(
+				"The bad zip slip file should not be extracted",
+				Files.exists(parentPath.resolve("bad.txt")));
 
 			List<LogEntry> logEntries = logCapture.getLogEntries();
 
