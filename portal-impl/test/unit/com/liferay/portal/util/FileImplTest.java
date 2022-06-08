@@ -269,7 +269,7 @@ public class FileImplTest {
 		}
 		finally {
 			_fileImpl.deltree(destinationPath.toFile());
-			_fileImpl.deltree(_tempFolderForCreatingZip);
+			_fileImpl.deltree(file.getParentFile());
 		}
 	}
 
@@ -308,17 +308,17 @@ public class FileImplTest {
 		}
 		finally {
 			_fileImpl.deltree(parentPath.toFile());
-			_fileImpl.deltree(_tempFolderForCreatingZip);
+			_fileImpl.deltree(file.getParentFile());
 		}
 	}
 
 	private File _createZipFile(String fileName, Map<String, String> entries)
 		throws Exception {
 
-		_tempFolderForCreatingZip = _fileImpl.createTempFolder();
+		File tempFolderForCreatingZip = _fileImpl.createTempFolder();
 
 		File zipFile = new File(
-			_tempFolderForCreatingZip.getCanonicalPath(), fileName);
+			tempFolderForCreatingZip.getCanonicalPath(), fileName);
 
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(
 				new FileOutputStream(zipFile))) {
@@ -344,6 +344,5 @@ public class FileImplTest {
 	}
 
 	private final FileImpl _fileImpl = new FileImpl();
-	private File _tempFolderForCreatingZip;
 
 }
