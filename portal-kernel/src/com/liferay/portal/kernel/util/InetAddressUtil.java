@@ -90,10 +90,8 @@ public class InetAddressUtil {
 			return true;
 		}
 
-		return isLocalInetAddress(getInetAddressByName(host));
-	}
+		InetAddress inetAddress = getInetAddressByName(host);
 
-	public static boolean isLocalInetAddress(InetAddress inetAddress) {
 		if (inetAddress.isAnyLocalAddress() ||
 			inetAddress.isLinkLocalAddress() ||
 			inetAddress.isLoopbackAddress() ||
