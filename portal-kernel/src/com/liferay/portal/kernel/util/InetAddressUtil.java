@@ -15,16 +15,12 @@
 package com.liferay.portal.kernel.util;
 
 import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
-import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 
-import java.util.Enumeration;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -77,34 +73,6 @@ public class InetAddressUtil {
 		}
 	}
 
-	public static String getLocalHostName() throws Exception {
-		return LocalHostNameHolder._LOCAL_HOST_NAME;
-	}
-
-	public static InetAddress getLocalInetAddress() throws Exception {
-		Enumeration<NetworkInterface> enumeration1 =
-			NetworkInterface.getNetworkInterfaces();
-
-		while (enumeration1.hasMoreElements()) {
-			NetworkInterface networkInterface = enumeration1.nextElement();
-
-			Enumeration<InetAddress> enumeration2 =
-				networkInterface.getInetAddresses();
-
-			while (enumeration2.hasMoreElements()) {
-				InetAddress inetAddress = enumeration2.nextElement();
-
-				if (!inetAddress.isLoopbackAddress() &&
-					(inetAddress instanceof Inet4Address)) {
-
-					return inetAddress;
-				}
-			}
-		}
-
-		throw new SystemException("No local internet address");
-	}
-
 	public static InetAddress getLoopbackInetAddress()
 		throws UnknownHostException {
 
@@ -133,22 +101,5 @@ public class InetAddressUtil {
 	private static final AtomicInteger _atomicInteger = new AtomicInteger(
 		GetterUtil.getInteger(
 			PropsUtil.get(PropsKeys.DNS_SECURITY_THREAD_LIMIT)));
-
-	private static class LocalHostNameHolder {
-
-		private static final String _LOCAL_HOST_NAME;
-
-		static {
-			try {
-				InetAddress inetAddress = getLocalInetAddress();
-
-				_LOCAL_HOST_NAME = inetAddress.getHostName();
-			}
-			catch (Exception exception) {
-				throw new ExceptionInInitializerError(exception);
-			}
-		}
-
-	}
 
 }
