@@ -18,9 +18,15 @@ import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -79,6 +85,14 @@ public class InetAddressUtil {
 		return InetAddress.getByName("127.0.0.1");
 	}
 
+	public static boolean isLocalHost(String host) throws UnknownHostException {
+		if (_localHosts.contains(host)) {
+			return true;
+		}
+
+		return isLocalInetAddress(getInetAddressByName(host));
+	}
+
 	public static boolean isLocalInetAddress(InetAddress inetAddress) {
 		if (inetAddress.isAnyLocalAddress() ||
 			inetAddress.isLinkLocalAddress() ||
@@ -101,5 +115,28 @@ public class InetAddressUtil {
 	private static final AtomicInteger _atomicInteger = new AtomicInteger(
 		GetterUtil.getInteger(
 			PropsUtil.get(PropsKeys.DNS_SECURITY_THREAD_LIMIT)));
+	private static final Set<String> _localHosts = new HashSet<>();
+
+	static {
+		try {
+			List<NetworkInterface> networkInterfaces = Collections.list(
+				NetworkInterface.getNetworkInterfaces());
+
+			for (NetworkInterface networkInterface : networkInterfaces) {
+				List<InetAddress> inetAddresses = Collections.list(
+					networkInterface.getInetAddresses());
+
+				for (InetAddress inetAddress : inetAddresses) {
+					if (inetAddress instanceof Inet4Address) {
+						_localHosts.add(inetAddress.getHostAddress());
+						_localHosts.add(inetAddress.getHostName());
+					}
+				}
+			}
+		}
+		catch (Exception exception) {
+			_log.error("Unable to initalize local hosts", exception);
+		}
+	}
 
 }
