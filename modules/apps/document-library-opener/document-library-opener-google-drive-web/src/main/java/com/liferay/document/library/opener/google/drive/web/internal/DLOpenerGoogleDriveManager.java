@@ -50,7 +50,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -298,9 +297,7 @@ public class DLOpenerGoogleDriveManager
 					"Only HTTP links are allowed: " + url);
 			}
 
-			if (InetAddressUtil.isLocalInetAddress(
-					InetAddress.getByName(url.getHost()))) {
-
+			if (InetAddressUtil.isLocalHost(url.getHost())) {
 				throw new SecurityException(
 					"Local links are not allowed: " + url);
 			}

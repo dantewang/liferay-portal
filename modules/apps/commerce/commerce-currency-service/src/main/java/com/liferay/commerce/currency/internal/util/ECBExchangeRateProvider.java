@@ -159,18 +159,13 @@ public class ECBExchangeRateProvider implements ExchangeRateProvider {
 		if (url == null) {
 			url = new URL(_url);
 
-			if (_isLocalNetworkURL(url)) {
+			if (InetAddressUtil.isLocalHost(url.getHost())) {
 				throw new PortalException(
 					"Invalid European Central Bank URL: " + url);
 			}
 		}
 
 		return url;
-	}
-
-	private boolean _isLocalNetworkURL(URL url) throws Exception {
-		return InetAddressUtil.isLocalInetAddress(
-			InetAddressUtil.getInetAddressByName(url.getHost()));
 	}
 
 	@Reference

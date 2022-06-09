@@ -1110,9 +1110,7 @@ public class TemplateContextHelper {
 			if (_disableLocalNetworkAccess) {
 				URL url = new URL(location);
 
-				if (InetAddressUtil.isLocalInetAddress(
-						InetAddressUtil.getInetAddressByName(url.getHost()))) {
-
+				if (InetAddressUtil.isLocalHost(url.getHost())) {
 					return true;
 				}
 			}
