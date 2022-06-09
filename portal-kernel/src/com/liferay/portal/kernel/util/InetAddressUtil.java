@@ -24,8 +24,9 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -85,8 +86,31 @@ public class InetAddressUtil {
 		return InetAddress.getByName("127.0.0.1");
 	}
 
+	public static boolean isHostAllowed(String host, Set<String> allowedHosts)
+		throws UnknownHostException {
+
+		if (allowedHosts.isEmpty()) {
+			return true;
+		}
+
+		if (allowedHosts.contains(host) ||
+			(allowedHosts.contains("SERVER_IP") &&
+			 _localHosts.containsKey(host))) {
+
+			return true;
+		}
+
+		InetAddress inetAddress = _localHosts.get(host);
+
+		if (inetAddress == null) {
+			inetAddress = getInetAddressByName(host);
+		}
+
+		return allowedHosts.contains(inetAddress.getHostAddress());
+	}
+
 	public static boolean isLocalHost(String host) throws UnknownHostException {
-		if (_localHosts.contains(host)) {
+		if (_localHosts.containsKey(host)) {
 			return true;
 		}
 
@@ -113,7 +137,7 @@ public class InetAddressUtil {
 	private static final AtomicInteger _atomicInteger = new AtomicInteger(
 		GetterUtil.getInteger(
 			PropsUtil.get(PropsKeys.DNS_SECURITY_THREAD_LIMIT)));
-	private static final Set<String> _localHosts = new HashSet<>();
+	private static final Map<String, InetAddress> _localHosts = new HashMap<>();
 
 	static {
 		try {
@@ -126,8 +150,9 @@ public class InetAddressUtil {
 
 				for (InetAddress inetAddress : inetAddresses) {
 					if (inetAddress instanceof Inet4Address) {
-						_localHosts.add(inetAddress.getHostAddress());
-						_localHosts.add(inetAddress.getHostName());
+						_localHosts.put(
+							inetAddress.getHostAddress(), inetAddress);
+						_localHosts.put(inetAddress.getHostName(), inetAddress);
 					}
 				}
 			}
