@@ -411,7 +411,6 @@ public class PingbackMethodImplTest {
 	private PingbackMethodImpl _getPingbackMethodImpl() {
 		PingbackMethodImpl pingbackMethodImpl = new PingbackMethodImpl();
 
-		pingbackMethodImpl.setInetAddressLookup(_inetAddressLookup);
 		pingbackMethodImpl.setPingbackProperties(_pingbackProperties);
 		pingbackMethodImpl.setPortletIdLookup(_portletIdLookup);
 
@@ -739,9 +738,6 @@ public class PingbackMethodImplTest {
 
 	@Mock
 	private Http _http;
-
-	@Mock
-	private PingbackMethodImpl.InetAddressLookup _inetAddressLookup;
 
 	@Mock
 	private Language _language;

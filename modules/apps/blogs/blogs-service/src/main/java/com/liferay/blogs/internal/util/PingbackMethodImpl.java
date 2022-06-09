@@ -46,9 +46,7 @@ import com.liferay.portal.kernel.xmlrpc.XmlRpc;
 import com.liferay.portal.kernel.xmlrpc.XmlRpcConstants;
 import com.liferay.portal.util.PropsValues;
 
-import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -138,22 +136,12 @@ public class PingbackMethodImpl implements Method {
 		}
 	}
 
-	public void setInetAddressLookup(InetAddressLookup inetAddressLookup) {
-		_inetAddressLookup = inetAddressLookup;
-	}
-
 	public void setPingbackProperties(PingbackProperties pingbackProperties) {
 		_pingbackProperties = pingbackProperties;
 	}
 
 	public void setPortletIdLookup(PortletIdLookup portletIdLookup) {
 		_portletIdLookup = portletIdLookup;
-	}
-
-	public interface InetAddressLookup {
-
-		public InetAddress getInetAddressByName(String domain);
-
 	}
 
 	public interface PingbackProperties {
@@ -347,16 +335,6 @@ public class PingbackMethodImpl implements Method {
 		return StringPool.BLANK;
 	}
 
-	private InetAddress _getInetAddressByName(String domain)
-		throws UnknownHostException {
-
-		if (_inetAddressLookup != null) {
-			return _inetAddressLookup.getInetAddressByName(domain);
-		}
-
-		return InetAddressUtil.getInetAddressByName(domain);
-	}
-
 	private int _getLinkbackExcerptLength() {
 		if (_pingbackProperties != null) {
 			return _pingbackProperties.getLinkbackExcerptLength();
@@ -405,8 +383,7 @@ public class PingbackMethodImpl implements Method {
 		try {
 			URL url = new URL(_sourceURI);
 
-			return InetAddressUtil.isLocalInetAddress(
-				_getInetAddressByName(url.getHost()));
+			return InetAddressUtil.isLocalHost(url.getHost());
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
@@ -465,7 +442,6 @@ public class PingbackMethodImpl implements Method {
 	@Reference
 	private Http _http;
 
-	private InetAddressLookup _inetAddressLookup;
 	private PingbackProperties _pingbackProperties;
 
 	@Reference
