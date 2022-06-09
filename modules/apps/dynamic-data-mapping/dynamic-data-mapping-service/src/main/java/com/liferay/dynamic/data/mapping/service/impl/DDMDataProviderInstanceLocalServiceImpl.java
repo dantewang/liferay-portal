@@ -392,8 +392,7 @@ public class DDMDataProviderInstanceLocalServiceImpl
 		try {
 			URL url = new URL(value);
 
-			return InetAddressUtil.isLocalInetAddress(
-				InetAddressUtil.getInetAddressByName(url.getHost()));
+			return InetAddressUtil.isLocalHost(url.getHost());
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
