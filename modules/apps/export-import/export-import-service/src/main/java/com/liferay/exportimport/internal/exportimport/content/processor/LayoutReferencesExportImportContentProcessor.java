@@ -55,7 +55,6 @@ import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.staging.StagingGroupHelper;
 
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -1194,10 +1193,7 @@ public class LayoutReferencesExportImportContentProcessor
 				}
 			}
 
-			if ((uri != null) &&
-				InetAddressUtil.isLocalInetAddress(
-					InetAddress.getByName(uri.getHost()))) {
-
+			if ((uri != null) && InetAddressUtil.isLocalHost(uri.getHost())) {
 				return StringBundler.concat(
 					uri.getScheme(), "://", uri.getHost(), StringPool.COLON,
 					uri.getPort());

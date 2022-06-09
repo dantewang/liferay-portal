@@ -104,9 +104,7 @@ public class MSCognitiveServicesImageAssetAutoTagProvider
 
 		URL url = new URL(apiEndpoint);
 
-		if (InetAddressUtil.isLocalInetAddress(
-				InetAddressUtil.getInetAddressByName(url.getHost()))) {
-
+		if (InetAddressUtil.isLocalHost(url.getHost())) {
 			throw new SecurityException(
 				"Microsoft Cognitive Services Image Auto Tagging API " +
 					"endpoint is a local address");
