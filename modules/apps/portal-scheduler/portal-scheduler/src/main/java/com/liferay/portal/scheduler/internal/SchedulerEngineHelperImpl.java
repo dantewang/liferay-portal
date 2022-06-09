@@ -50,7 +50,6 @@ import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListen
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerResponse;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
-import com.liferay.portal.kernel.util.InetAddressUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -128,7 +127,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				triggerState.toString(), new Date(),
 				_jsonFactory.createJSONObject(_jsonFactory.serialize(message)));
 
-			auditMessage.setServerName(InetAddressUtil.getLocalHostName());
+			auditMessage.setServerName(_portal.getComputerName());
 			auditMessage.setServerPort(_portal.getPortalLocalPort(false));
 
 			_auditRouter.route(auditMessage);
