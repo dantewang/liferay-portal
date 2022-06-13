@@ -200,10 +200,15 @@ public class ExpandoValueLocalServiceTest {
 
 				// Add different value so that ExpandoValue gets modified and
 				// ExpandoRow gets updated. ExpandoRow isn't persisted on the
-				// database yet because transaction hasn't finish and no flush
+				// database yet because transaction hasn't finished and no flush
 				// in between should have happened.
 
 				ExpandoTestUtil.addValue(_expandoTable, column, classPK, "two");
+
+				// Register a model listener to do a select-all query to trigger
+				// auto flush. This model listener will be invoked after
+				// updating the value, but before updating the row, in
+				// ExpandoValueLocalServiceImpl#doAddValue
 
 				ServiceRegistration<ModelListener<ExpandoValue>>
 					serviceRegistration = _registerExpandoValueModelListener();
@@ -211,9 +216,10 @@ public class ExpandoValueLocalServiceTest {
 				try {
 
 					// Add a new different value so that both ExpandoValue and
-					// ExpandoRow are updated. Since ExpandoRow was updated in
-					// the previous addValue we must ensure that ExpandoRow
-					// isn't stale before updating it again.
+					// ExpandoRow are updated. This time, auto flush will be
+					// performed after updating the value and before updating
+					// the row. We must ensure that ExpandoRow isn't stale
+					// before updating it again.
 
 					ExpandoTestUtil.addValue(
 						_expandoTable, column, classPK, "three");
@@ -381,10 +387,6 @@ public class ExpandoValueLocalServiceTest {
 				public void onAfterUpdate(
 						ExpandoValue originalModel, ExpandoValue model)
 					throws ModelListenerException {
-
-					// Force flushing to persist in the database to be able
-					// to check afterwards that ExpandoRow isn't stale and can
-					// safely be updated.
 
 					ExpandoRowLocalServiceUtil.getExpandoRowsCount();
 				}
