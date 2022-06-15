@@ -14,9 +14,10 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.io.unsync.UnsyncBufferedReader;
+import com.liferay.petra.io.unsync.UnsyncStringReader;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
-import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -68,7 +69,7 @@ public class SystemProperties {
 			value = System.getProperty(key, defaultValue);
 		}
 
-		return value;
+		return _resolveReference(value);
 	}
 
 	public static String[] getArray(String key) {
@@ -92,7 +93,7 @@ public class SystemProperties {
 					key = key.substring(prefix.length());
 				}
 
-				properties.put(key, entry.getValue());
+				properties.put(key, _resolveReference(entry.getValue()));
 			}
 		}
 
@@ -241,6 +242,56 @@ public class SystemProperties {
 				}
 			}
 		}
+	}
+
+	private static String _resolveReference(String value) {
+		if (value == null) {
+			return null;
+		}
+
+		int startIndex = 0;
+		int endIndex = 0;
+
+		StringBundler sb = new StringBundler();
+
+		while (((startIndex = value.indexOf(
+					StringPool.DOLLAR_AND_OPEN_CURLY_BRACE)) != -1) &&
+			   ((endIndex = value.indexOf(
+				   StringPool.CLOSE_CURLY_BRACE, startIndex)) != -1)) {
+
+			sb.append(value.substring(0, startIndex));
+
+			String placeholderKey = value.substring(
+				startIndex + StringPool.DOLLAR_AND_OPEN_CURLY_BRACE.length(),
+				endIndex);
+
+			if (placeholderKey.equals(StringPool.BLANK)) {
+				sb.append(StringPool.DOLLAR_AND_OPEN_CURLY_BRACE);
+				sb.append(StringPool.CLOSE_CURLY_BRACE);
+			}
+			else {
+				String placeholderValue = get(placeholderKey);
+
+				if (placeholderValue == null) {
+					sb.append(StringPool.DOLLAR_AND_OPEN_CURLY_BRACE);
+					sb.append(placeholderKey);
+					sb.append(StringPool.CLOSE_CURLY_BRACE);
+				}
+				else {
+					sb.append(placeholderValue);
+				}
+			}
+
+			value = value.substring(endIndex + 1);
+		}
+
+		if (sb.index() > 0) {
+			sb.append(value);
+
+			return sb.toString();
+		}
+
+		return value;
 	}
 
 	private static final Map<String, String> _properties =
