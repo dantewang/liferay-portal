@@ -112,8 +112,6 @@ public class ExpandoPortlet extends MVCPortlet {
 			throw new ColumnNameException.MustValidate();
 		}
 
-		Serializable defaultValue = _getDefaultValue(actionRequest, type);
-
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
@@ -127,7 +125,8 @@ public class ExpandoPortlet extends MVCPortlet {
 
 		expandoBridge.addAttribute(name, type);
 
-		expandoBridge.setAttributeDefault(name, defaultValue);
+		expandoBridge.setAttributeDefault(
+			name, _getDefaultValue(actionRequest, type));
 
 		_updateProperties(actionRequest, expandoBridge, name);
 	}
@@ -157,10 +156,6 @@ public class ExpandoPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		int type = ParamUtil.getInteger(actionRequest, "type");
-
-		Serializable defaultValue = _getDefaultValue(actionRequest, type);
-
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
@@ -174,7 +169,10 @@ public class ExpandoPortlet extends MVCPortlet {
 		ExpandoBridge expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(
 			themeDisplay.getCompanyId(), modelResource, resourcePrimKey);
 
-		expandoBridge.setAttributeDefault(name, defaultValue);
+		int type = ParamUtil.getInteger(actionRequest, "type");
+
+		expandoBridge.setAttributeDefault(
+			name, _getDefaultValue(actionRequest, type));
 
 		_updateProperties(actionRequest, expandoBridge, name);
 	}
