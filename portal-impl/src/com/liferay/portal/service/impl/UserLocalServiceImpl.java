@@ -3718,6 +3718,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		mailTemplateContextBuilder.put(
 			"[$PORTAL_URL$]", serviceContext.getPortalURL());
 		mailTemplateContextBuilder.put(
+			"[$PORTAL_FRIENDLY_URL$]",
+			serviceContext.getPortalURL() + PortalUtil.getPathContext());
+		mailTemplateContextBuilder.put(
 			"[$REMOTE_ADDRESS$]", serviceContext.getRemoteAddr());
 		mailTemplateContextBuilder.put(
 			"[$REMOTE_HOST$]", HtmlUtil.escape(serviceContext.getRemoteHost()));
@@ -6097,7 +6100,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		String fromName = PrefsPropsUtil.getString(
 			user.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
 		String passwordResetURL = StringPool.BLANK;
-		String portalURL = serviceContext.getPortalURL();
 
 		PortletPreferences companyPortletPreferences =
 			PrefsPropsUtil.getPreferences(user.getCompanyId(), true);
@@ -6158,7 +6160,11 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		mailTemplateContextBuilder.put("[$FROM_ADDRESS$]", fromAddress);
 		mailTemplateContextBuilder.put(
 			"[$FROM_NAME$]", HtmlUtil.escape(fromName));
-		mailTemplateContextBuilder.put("[$PORTAL_URL$]", portalURL);
+		mailTemplateContextBuilder.put(
+			"[$PORTAL_URL$]", serviceContext.getPortalURL());
+		mailTemplateContextBuilder.put(
+			"[$PORTAL_FRIENDLY_URL$]",
+			serviceContext.getPortalURL() + PortalUtil.getPathContext());
 		mailTemplateContextBuilder.put(
 			"[$TO_ADDRESS$]", user.getEmailAddress());
 		mailTemplateContextBuilder.put(
@@ -6330,6 +6336,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			"[$PASSWORD_RESET_URL$]", passwordResetURL);
 		mailTemplateContextBuilder.put(
 			"[$PORTAL_URL$]", serviceContext.getPortalURL());
+		mailTemplateContextBuilder.put(
+			"[$PORTAL_FRIENDLY_URL$]",
+			serviceContext.getPortalURL() + PortalUtil.getPathContext());
 		mailTemplateContextBuilder.put(
 			"[$REMOTE_ADDRESS$]", serviceContext.getRemoteAddr());
 		mailTemplateContextBuilder.put(
