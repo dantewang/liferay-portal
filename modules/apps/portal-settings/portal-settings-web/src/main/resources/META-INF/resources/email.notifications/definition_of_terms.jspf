@@ -53,10 +53,10 @@
 	</c:if>
 
 	<dt>
-		[$PORTAL_URL$]
+		[$PORTAL_FRIENDLY_URL$]
 	</dt>
 	<dd>
-		<%= company.getPortalURL(GroupConstants.DEFAULT_PARENT_GROUP_ID) %>
+		<%= company.getPortalURL(GroupConstants.DEFAULT_PARENT_GROUP_ID) + PortalUtil.getPathContext() %>
 	</dd>
 	<dt class="password-changed-notification">
 		[$REMOTE_ADDRESS$]
