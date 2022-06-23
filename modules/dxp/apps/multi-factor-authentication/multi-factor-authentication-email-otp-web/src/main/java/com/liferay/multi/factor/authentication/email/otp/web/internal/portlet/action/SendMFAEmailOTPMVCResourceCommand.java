@@ -207,6 +207,10 @@ public class SendMFAEmailOTPMVCResourceCommand implements MVCResourceCommand {
 		mailTemplateContextBuilder.put(
 			"[$PORTAL_URL$]", _portal.getPortalURL(httpServletRequest));
 		mailTemplateContextBuilder.put(
+			"[$PORTAL_FRIENDLY_URL$]",
+			_portal.getPortalURL(httpServletRequest) +
+				_portal.getPathContext());
+		mailTemplateContextBuilder.put(
 			"[$REMOTE_ADDRESS$]", httpServletRequest.getRemoteAddr());
 		mailTemplateContextBuilder.put(
 			"[$REMOTE_HOST$]",
