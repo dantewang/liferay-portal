@@ -144,10 +144,10 @@ String notificationTemplateBody = BeanPropertiesUtil.getString(calendarNotificat
 				<%= HtmlUtil.escape(fromName) %>
 			</dd>
 			<dt>
-				[$PORTAL_URL$]
+				[$PORTAL_FRIENDLY_URL$]
 			</dt>
 			<dd>
-				<%= company.getVirtualHostname() %>
+				<%= company.getVirtualHostname() + PortalUtil.getPathContext() %>
 			</dd>
 
 			<%
