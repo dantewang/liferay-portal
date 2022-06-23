@@ -370,6 +370,9 @@ public class MembershipRequestLocalServiceImpl
 		mailTemplateContextBuilder.put(
 			"[$PORTAL_URL$]", company.getPortalURL(0));
 		mailTemplateContextBuilder.put(
+			"[$PORTAL_FRIENDLY_URL$]",
+			company.getPortalURL(0) + PortalUtil.getPathContext());
+		mailTemplateContextBuilder.put(
 			"[$REPLY_COMMENTS$]",
 			HtmlUtil.escape(membershipRequest.getReplyComments()));
 		mailTemplateContextBuilder.put(
