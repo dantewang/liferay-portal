@@ -679,6 +679,9 @@ public class AnnouncementsEntryLocalServiceImpl
 		mailTemplateContextBuilder.put(
 			"[$PORTAL_URL$]", company.getPortalURL(0));
 		mailTemplateContextBuilder.put(
+			"[$PORTAL_FRIENDLY_URL$]",
+			company.getPortalURL(0) + PortalUtil.getPathContext());
+		mailTemplateContextBuilder.put(
 			"[$PORTLET_NAME$]",
 			new EscapableLocalizableFunction(
 				locale -> LanguageUtil.get(
