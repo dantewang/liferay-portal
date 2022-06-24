@@ -88,9 +88,7 @@ public class InetAddressUtil {
 		return InetAddress.getByName("127.0.0.1");
 	}
 
-	public static boolean isHostAllowed(String host, Set<String> allowedHosts)
-		throws UnknownHostException {
-
+	public static boolean isHostAllowed(String host, Set<String> allowedHosts) {
 		if (allowedHosts.isEmpty()) {
 			return true;
 		}
@@ -105,7 +103,12 @@ public class InetAddressUtil {
 		InetAddress inetAddress = _localHosts.get(host);
 
 		if (inetAddress == null) {
-			inetAddress = getInetAddressByName(host);
+			try {
+				inetAddress = getInetAddressByName(host);
+			}
+			catch (UnknownHostException unknownHostException) {
+				return false;
+			}
 		}
 
 		if (allowedHosts.contains(inetAddress.getHostAddress())) {
