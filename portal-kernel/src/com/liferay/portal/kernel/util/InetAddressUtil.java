@@ -15,6 +15,8 @@
 package com.liferay.portal.kernel.util;
 
 import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
+import com.liferay.portal.kernel.internal.security.access.control.AllowedIPAddressesValidator;
+import com.liferay.portal.kernel.internal.security.access.control.AllowedIPAddressesValidatorFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -106,7 +108,20 @@ public class InetAddressUtil {
 			inetAddress = getInetAddressByName(host);
 		}
 
-		return allowedHosts.contains(inetAddress.getHostAddress());
+		if (allowedHosts.contains(inetAddress.getHostAddress())) {
+			return true;
+		}
+
+		for (String allowedHost : allowedHosts) {
+			AllowedIPAddressesValidator allowedIPAddressesValidator =
+				AllowedIPAddressesValidatorFactory.create(allowedHost);
+
+			if (allowedIPAddressesValidator.isAllowedIPAddress(host)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static boolean isLocalHost(String host) throws UnknownHostException {
