@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.security.access.control.AccessControlUtil;
 import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.security.access.control.BaseAccessControlPolicy;
 import com.liferay.portal.kernel.security.auth.AccessControlContext;
+import com.liferay.portal.kernel.util.InetAddressUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -73,8 +74,8 @@ public class AllowedHostsAccessControlPolicy extends BaseAccessControlPolicy {
 
 		Set<String> hostsAllowedSet = SetUtil.fromArray(hostsAllowed);
 
-		if (!AccessControlUtil.isAccessAllowed(
-				httpServletRequest, hostsAllowedSet)) {
+		if (!InetAddressUtil.isHostAllowed(
+				httpServletRequest.getRemoteAddr(), hostsAllowedSet)) {
 
 			throw new SecurityException(
 				"Access denied for " + httpServletRequest.getRemoteAddr());

@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.InetAddressUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.SetUtil;
@@ -173,8 +174,8 @@ public abstract class JSONAction implements Action {
 		}
 
 		if (PropsValues.JSON_SERVICE_AUTH_TOKEN_ENABLED &&
-			!AccessControlUtil.isAccessAllowed(
-				httpServletRequest, _hostsAllowed)) {
+			!InetAddressUtil.isHostAllowed(
+				httpServletRequest.getRemoteAddr(), _hostsAllowed)) {
 
 			AuthTokenUtil.checkCSRFToken(
 				httpServletRequest, getCSRFOrigin(httpServletRequest));
