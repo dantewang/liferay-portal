@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.servlet.ProtectedServletRequest;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpComponentsUtil;
+import com.liferay.portal.kernel.util.InetAddressUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -283,8 +284,8 @@ public class AuthVerifierFilter extends BasePortalFilter {
 
 		String remoteAddr = httpServletRequest.getRemoteAddr();
 
-		if (AccessControlUtil.isAccessAllowed(
-				httpServletRequest, _hostsAllowed)) {
+		if (InetAddressUtil.isHostAllowed(
+				httpServletRequest.getRemoteAddr(), _hostsAllowed)) {
 
 			if (_log.isDebugEnabled()) {
 				_log.debug("Access allowed for " + remoteAddr);
