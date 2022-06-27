@@ -65,10 +65,35 @@ public class ClassLoaderResourceParserTest {
 
 		Assert.assertNull(classLoaderResourceParser.getURL(templateId));
 
+		String contextName = "test-context";
+
+		String composedTemplateId = StringBundler.concat(
+			contextName, TemplateConstants.CLASS_LOADER_SEPARATOR, templateId);
+
+		Assert.assertNull(classLoaderResourceParser.getURL(composedTemplateId));
+
 		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
 				ClassLoaderResourceParser.class.getName(), Level.FINEST)) {
 
-			Assert.assertNull(classLoaderResourceParser.getURL(templateId));
+			URL dummyURL = new URL("file://");
+
+			ClassLoaderPool.register(
+				contextName,
+				new ClassLoader() {
+
+					@Override
+					public URL getResource(String name) {
+						if (name.equals(templateId)) {
+							return dummyURL;
+						}
+
+						return null;
+					}
+
+				});
+
+			Assert.assertSame(
+				dummyURL, classLoaderResourceParser.getURL(composedTemplateId));
 
 			List<LogEntry> logEntries = logCapture.getLogEntries();
 
@@ -76,34 +101,9 @@ public class ClassLoaderResourceParserTest {
 
 			LogEntry logEntry = logEntries.get(0);
 
-			Assert.assertEquals("Loading " + templateId, logEntry.getMessage());
+			Assert.assertEquals(
+				"Loading " + composedTemplateId, logEntry.getMessage());
 		}
-
-		String contextName = "test-context";
-
-		URL dummyURL = new URL("file://");
-
-		ClassLoaderPool.register(
-			contextName,
-			new ClassLoader() {
-
-				@Override
-				public URL getResource(String name) {
-					if (name.equals(templateId)) {
-						return dummyURL;
-					}
-
-					return null;
-				}
-
-			});
-
-		Assert.assertSame(
-			dummyURL,
-			classLoaderResourceParser.getURL(
-				StringBundler.concat(
-					contextName, TemplateConstants.CLASS_LOADER_SEPARATOR,
-					templateId)));
 	}
 
 }
