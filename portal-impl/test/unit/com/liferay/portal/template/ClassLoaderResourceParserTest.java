@@ -101,8 +101,7 @@ public class ClassLoaderResourceParserTest {
 
 			LogEntry logEntry = logEntries.get(0);
 
-			Assert.assertEquals(
-				"Loading " + composedTemplateId, logEntry.getMessage());
+			Assert.assertEquals("Loading " + templateId, logEntry.getMessage());
 		}
 	}
 

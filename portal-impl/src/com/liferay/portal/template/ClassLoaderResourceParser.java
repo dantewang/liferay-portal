@@ -50,15 +50,15 @@ public class ClassLoaderResourceParser extends URLResourceParser {
 			return null;
 		}
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("Loading " + templateId);
-		}
-
 		ClassLoader classLoader = ClassLoaderPool.getClassLoader(
 			templateId.substring(0, pos));
 
 		templateId = templateId.substring(
 			pos + TemplateConstants.CLASS_LOADER_SEPARATOR.length());
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Loading " + templateId);
+		}
 
 		return classLoader.getResource(templateId);
 	}
