@@ -1720,6 +1720,10 @@ public class ExpandoValueLocalServiceImpl
 		}
 
 		if (value == null) {
+			row.setModifiedDate(new Date());
+
+			expandoRowPersistence.update(row);
+
 			long valueId = counterLocalService.increment();
 
 			value = expandoValuePersistence.create(valueId);
