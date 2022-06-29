@@ -1698,32 +1698,10 @@ public class ExpandoValueLocalServiceImpl
 		long companyId, long classNameId, long tableId, long columnId,
 		long classPK, String data) {
 
-		ExpandoRow row = expandoRowPersistence.fetchByT_C(tableId, classPK);
-
-		ExpandoValue value = null;
-
-		if (row == null) {
-			long rowId = counterLocalService.increment();
-
-			row = expandoRowPersistence.create(rowId);
-
-			row.setCompanyId(companyId);
-			row.setModifiedDate(new Date());
-			row.setTableId(tableId);
-			row.setClassPK(classPK);
-
-			row = expandoRowPersistence.update(row);
-		}
-		else {
-			value = expandoValuePersistence.fetchByC_R(
-				columnId, row.getRowId());
-		}
+		ExpandoValue value = expandoValuePersistence.fetchByT_C_C(
+			tableId, columnId, classPK);
 
 		if (value == null) {
-			row.setModifiedDate(new Date());
-
-			expandoRowPersistence.update(row);
-
 			long valueId = counterLocalService.increment();
 
 			value = expandoValuePersistence.create(valueId);
@@ -1731,7 +1709,7 @@ public class ExpandoValueLocalServiceImpl
 			value.setCompanyId(companyId);
 			value.setTableId(tableId);
 			value.setColumnId(columnId);
-			value.setRowId(row.getRowId());
+			value.setRowId(_createOrUpdateRow(companyId, tableId, classPK));
 			value.setClassNameId(classNameId);
 			value.setClassPK(classPK);
 			value.setData(data);
@@ -1744,9 +1722,7 @@ public class ExpandoValueLocalServiceImpl
 
 			value = expandoValuePersistence.update(value);
 
-			row.setModifiedDate(new Date());
-
-			expandoRowPersistence.update(row);
+			_createOrUpdateRow(companyId, tableId, classPK);
 		}
 
 		return value;
@@ -1899,6 +1875,30 @@ public class ExpandoValueLocalServiceImpl
 		}
 
 		return false;
+	}
+
+	private long _createOrUpdateRow(
+		long companyId, long tableId, long classPK) {
+
+		ExpandoRow row = expandoRowPersistence.fetchByT_C(tableId, classPK);
+
+		if (row == null) {
+			row = expandoRowPersistence.create(counterLocalService.increment());
+
+			row.setCompanyId(companyId);
+			row.setModifiedDate(new Date());
+			row.setTableId(tableId);
+			row.setClassPK(classPK);
+
+			row = expandoRowPersistence.update(row);
+		}
+		else {
+			row.setModifiedDate(new Date());
+
+			row = expandoRowPersistence.update(row);
+		}
+
+		return row.getRowId();
 	}
 
 	private static class ExpandoValueDeleteHandlerHolder {
