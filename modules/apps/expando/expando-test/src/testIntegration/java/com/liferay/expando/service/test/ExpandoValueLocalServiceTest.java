@@ -25,14 +25,21 @@ import com.liferay.expando.kernel.model.ExpandoValue;
 import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
 import com.liferay.expando.kernel.service.ExpandoRowLocalService;
 import com.liferay.expando.kernel.service.ExpandoValueLocalService;
+import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.BaseModelListener;
+import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.TransactionConfig;
+import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -53,6 +60,11 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceRegistration;
 
 /**
  * @author Marcellus Tavares
@@ -165,6 +177,60 @@ public class ExpandoValueLocalServiceTest {
 		Assert.assertEquals(Arrays.toString(data), 2, data.length);
 		Assert.assertEquals("one", data[0]);
 		Assert.assertEquals("two, three", data[1]);
+	}
+
+	@Test
+	public void testAddValuesWithFlushInBetween() throws Throwable {
+		TransactionInvokerUtil.invoke(
+			TransactionConfig.Factory.create(
+				Propagation.REQUIRED, new Class<?>[] {Exception.class}),
+			() -> {
+				ExpandoColumn column = ExpandoTestUtil.addColumn(
+					_expandoTable, "Test Column",
+					ExpandoColumnConstants.STRING);
+
+				long classPK = CounterLocalServiceUtil.increment();
+
+				// Create initial ExpandoValue.
+
+				_expandoValueLocalService.addValue(
+					TestPropsValues.getCompanyId(),
+					PortalUtil.getClassName(_expandoTable.getClassNameId()),
+					_expandoTable.getName(), column.getName(), classPK, "one");
+
+				// Add different value so that ExpandoValue gets modified and
+				// ExpandoRow gets updated. ExpandoRow isn't persisted on the
+				// database yet because transaction hasn't finished and no flush
+				// in between should have happened.
+
+				_expandoValueLocalService.addValue(
+					TestPropsValues.getCompanyId(),
+					PortalUtil.getClassName(_expandoTable.getClassNameId()),
+					_expandoTable.getName(), column.getName(), classPK, "two");
+
+				// Register a model listener to do a select-all query to trigger
+				// auto flush. This model listener will be invoked after
+				// updating the value, but before updating the row, in
+				// ExpandoValueLocalServiceImpl#doAddValue
+
+				try (AutoCloseable autoCloseable =
+						_withExpandoValueModelListener()) {
+
+					// Add a new different value so that both ExpandoValue and
+					// ExpandoRow are updated. This time, auto flush will be
+					// performed after updating the value and before updating
+					// the row. We must ensure that ExpandoRow isn't stale
+					// before updating it again.
+
+					_expandoValueLocalService.addValue(
+						TestPropsValues.getCompanyId(),
+						PortalUtil.getClassName(_expandoTable.getClassNameId()),
+						_expandoTable.getName(), column.getName(), classPK,
+						"three");
+				}
+
+				return null;
+			});
 	}
 
 	@Test
@@ -302,6 +368,31 @@ public class ExpandoValueLocalServiceTest {
 
 		Assert.assertEquals(Arrays.toString(enValues), 2, enValues.length);
 		Assert.assertEquals("Hi, Joe", enValues[1]);
+	}
+
+	private AutoCloseable _withExpandoValueModelListener() {
+		Bundle bundle = FrameworkUtil.getBundle(
+			ExpandoValueLocalServiceTest.class);
+
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		ServiceRegistration<?> modelListenerServiceRegistration =
+			bundleContext.registerService(
+				ModelListener.class,
+				new BaseModelListener<ExpandoValue>() {
+
+					@Override
+					public void onAfterUpdate(
+							ExpandoValue originalModel, ExpandoValue model)
+						throws ModelListenerException {
+
+						_expandoRowLocalService.getExpandoRowsCount();
+					}
+
+				},
+				new HashMapDictionary<>());
+
+		return modelListenerServiceRegistration::unregister;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
