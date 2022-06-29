@@ -22,9 +22,9 @@ import com.liferay.expando.kernel.model.ExpandoColumn;
 import com.liferay.expando.kernel.model.ExpandoColumnConstants;
 import com.liferay.expando.kernel.model.ExpandoTable;
 import com.liferay.expando.kernel.model.ExpandoValue;
-import com.liferay.expando.kernel.service.ExpandoColumnLocalServiceUtil;
-import com.liferay.expando.kernel.service.ExpandoRowLocalServiceUtil;
-import com.liferay.expando.kernel.service.ExpandoValueLocalServiceUtil;
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.expando.kernel.service.ExpandoRowLocalService;
+import com.liferay.expando.kernel.service.ExpandoValueLocalService;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portlet.expando.util.test.ExpandoTestUtil;
 
@@ -91,8 +92,7 @@ public class ExpandoValueLocalServiceTest {
 			_expandoTable, column,
 			HtmlUtil.escape(geolocationJSONObject.toString()));
 
-		value = ExpandoValueLocalServiceUtil.getExpandoValue(
-			value.getValueId());
+		value = _expandoValueLocalService.getExpandoValue(value.getValueId());
 
 		Assert.assertEquals(
 			String.valueOf(geolocationJSONObject),
@@ -113,8 +113,7 @@ public class ExpandoValueLocalServiceTest {
 				_ptLocale, new String[] {"um", "dois", "tres"}
 			).build());
 
-		value = ExpandoValueLocalServiceUtil.getExpandoValue(
-			value.getValueId());
+		value = _expandoValueLocalService.getExpandoValue(value.getValueId());
 
 		Map<Locale, String[]> stringArrayMap = value.getStringArrayMap();
 
@@ -143,8 +142,7 @@ public class ExpandoValueLocalServiceTest {
 				_ptLocale, "Teste"
 			).build());
 
-		value = ExpandoValueLocalServiceUtil.getExpandoValue(
-			value.getValueId());
+		value = _expandoValueLocalService.getExpandoValue(value.getValueId());
 
 		Map<Locale, String> stringMap = value.getStringMap();
 
@@ -160,8 +158,7 @@ public class ExpandoValueLocalServiceTest {
 		ExpandoValue value = ExpandoTestUtil.addValue(
 			_expandoTable, column, new String[] {"one", "two, three"});
 
-		value = ExpandoValueLocalServiceUtil.getExpandoValue(
-			value.getValueId());
+		value = _expandoValueLocalService.getExpandoValue(value.getValueId());
 
 		String[] data = value.getStringArray();
 
@@ -204,10 +201,10 @@ public class ExpandoValueLocalServiceTest {
 		ExpandoValue value = ExpandoTestUtil.addValue(
 			_expandoTable, column, classPK, "value");
 
-		ExpandoValueLocalServiceUtil.deleteColumnValues(column.getColumnId());
+		_expandoValueLocalService.deleteColumnValues(column.getColumnId());
 
 		Assert.assertNull(
-			ExpandoRowLocalServiceUtil.fetchExpandoRow(value.getRowId()));
+			_expandoRowLocalService.fetchExpandoRow(value.getRowId()));
 	}
 
 	@Test
@@ -225,10 +222,9 @@ public class ExpandoValueLocalServiceTest {
 
 		ExpandoTestUtil.addValue(_expandoTable, column2, classPK, "value");
 
-		ExpandoValueLocalServiceUtil.deleteColumnValues(column1.getColumnId());
+		_expandoValueLocalService.deleteColumnValues(column1.getColumnId());
 
-		Assert.assertNotNull(
-			ExpandoRowLocalServiceUtil.getRow(value.getRowId()));
+		Assert.assertNotNull(_expandoRowLocalService.getRow(value.getRowId()));
 	}
 
 	@Test
@@ -240,7 +236,7 @@ public class ExpandoValueLocalServiceTest {
 				_enLocale, "Test"
 			).build());
 
-		column = ExpandoColumnLocalServiceUtil.getColumn(column.getColumnId());
+		column = _expandoColumnLocalService.getColumn(column.getColumnId());
 
 		Map<Locale, String> data =
 			(Map<Locale, String>)column.getDefaultValue();
@@ -263,8 +259,7 @@ public class ExpandoValueLocalServiceTest {
 			).build(),
 			_ptLocale);
 
-		value = ExpandoValueLocalServiceUtil.getExpandoValue(
-			value.getValueId());
+		value = _expandoValueLocalService.getExpandoValue(value.getValueId());
 
 		Assert.assertEquals(_ptLocale, value.getDefaultLocale());
 
@@ -294,7 +289,7 @@ public class ExpandoValueLocalServiceTest {
 
 		ExpandoTestUtil.addValue(_expandoTable, column, classPK, dataMap);
 
-		Serializable serializable = ExpandoValueLocalServiceUtil.getData(
+		Serializable serializable = _expandoValueLocalService.getData(
 			TestPropsValues.getCompanyId(),
 			PortalUtil.getClassName(_classNameId), _expandoTable.getName(),
 			column.getName(), classPK);
@@ -315,8 +310,17 @@ public class ExpandoValueLocalServiceTest {
 	private long _classNameId;
 	private Locale _enLocale;
 
+	@Inject
+	private ExpandoColumnLocalService _expandoColumnLocalService;
+
+	@Inject
+	private ExpandoRowLocalService _expandoRowLocalService;
+
 	@DeleteAfterTestRun
 	private ExpandoTable _expandoTable;
+
+	@Inject
+	private ExpandoValueLocalService _expandoValueLocalService;
 
 	private Locale _frLocale;
 	private Locale _ptLocale;
