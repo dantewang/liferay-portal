@@ -1702,6 +1702,8 @@ public class ExpandoValueLocalServiceImpl
 			tableId, columnId, classPK);
 
 		if (value == null) {
+			long rowId = _createOrUpdateRow(companyId, tableId, classPK);
+
 			long valueId = counterLocalService.increment();
 
 			value = expandoValuePersistence.create(valueId);
@@ -1709,7 +1711,7 @@ public class ExpandoValueLocalServiceImpl
 			value.setCompanyId(companyId);
 			value.setTableId(tableId);
 			value.setColumnId(columnId);
-			value.setRowId(_createOrUpdateRow(companyId, tableId, classPK));
+			value.setRowId(rowId);
 			value.setClassNameId(classNameId);
 			value.setClassPK(classPK);
 			value.setData(data);
