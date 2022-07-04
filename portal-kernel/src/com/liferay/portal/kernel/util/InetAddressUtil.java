@@ -105,6 +105,10 @@ public class InetAddressUtil {
 		if (inetAddress == null) {
 			try {
 				inetAddress = getInetAddressByName(host);
+
+				if (inetAddress == null) {
+					return false;
+				}
 			}
 			catch (UnknownHostException unknownHostException) {
 				return false;
