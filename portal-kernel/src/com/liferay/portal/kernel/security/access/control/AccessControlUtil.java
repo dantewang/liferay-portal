@@ -16,12 +16,10 @@ package com.liferay.portal.kernel.security.access.control;
 
 import com.liferay.petra.lang.CentralizedThreadLocal;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.internal.security.access.control.AllowedIPAddressesValidator;
-import com.liferay.portal.kernel.internal.security.access.control.AllowedIPAddressesValidatorFactory;
 import com.liferay.portal.kernel.security.auth.AccessControlContext;
 import com.liferay.portal.kernel.security.auth.AuthException;
 import com.liferay.portal.kernel.security.auth.verifier.AuthVerifierResult;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.InetAddressUtil;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
 import java.util.Map;
@@ -60,30 +58,8 @@ public class AccessControlUtil {
 	public static boolean isAccessAllowed(
 		HttpServletRequest httpServletRequest, Set<String> hostsAllowed) {
 
-		if (hostsAllowed.isEmpty()) {
-			return true;
-		}
-
-		String remoteAddr = httpServletRequest.getRemoteAddr();
-
-		for (String hostAllowed : hostsAllowed) {
-			AllowedIPAddressesValidator allowedIPAddressesValidator =
-				AllowedIPAddressesValidatorFactory.create(hostAllowed);
-
-			if (allowedIPAddressesValidator.isAllowedIPAddress(remoteAddr)) {
-				return true;
-			}
-		}
-
-		Set<String> computerAddresses = PortalUtil.getComputerAddresses();
-
-		if (computerAddresses.contains(remoteAddr) &&
-			hostsAllowed.contains(_SERVER_IP)) {
-
-			return true;
-		}
-
-		return false;
+		return InetAddressUtil.isHostAllowed(
+			httpServletRequest.getRemoteAddr(), hostsAllowed);
 	}
 
 	public static void setAccessControlContext(
