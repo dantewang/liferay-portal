@@ -176,7 +176,7 @@ public class InetAddressUtil {
 			}
 		}
 		catch (Exception exception) {
-			_log.error("Unable to initalize local hosts", exception);
+			_log.error("Unable to initialize local hosts", exception);
 		}
 	}
 
