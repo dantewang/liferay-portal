@@ -22,10 +22,10 @@ import com.liferay.portal.kernel.audit.AuditMessage;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.security.access.control.AccessControlUtil;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.HashMapDictionary;
-import com.liferay.portal.kernel.util.InetAddressUtil;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -74,9 +74,8 @@ public class IPAddressHeadlessMFAChecker implements HeadlessMFAChecker {
 			return false;
 		}
 
-		if (InetAddressUtil.isHostAllowed(
-				httpServletRequest.getRemoteAddr(),
-				_allowedIpAddressesAndNetmasks)) {
+		if (AccessControlUtil.isAccessAllowed(
+				httpServletRequest, _allowedIpAddressesAndNetmasks)) {
 
 			_routeAuditMessage(
 				_mfaIPAddressAuditMessageBuilder.
