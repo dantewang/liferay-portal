@@ -14,9 +14,8 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
-import com.liferay.portal.kernel.internal.security.access.control.AllowedIPAddressesValidator;
-import com.liferay.portal.kernel.internal.security.access.control.AllowedIPAddressesValidatorFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -120,11 +119,13 @@ public class InetAddressUtil {
 		}
 
 		for (String allowedHost : allowedHosts) {
-			AllowedIPAddressesValidator allowedIPAddressesValidator =
-				AllowedIPAddressesValidatorFactory.create(allowedHost);
-
-			if (allowedIPAddressesValidator.isAllowedIPAddress(host)) {
-				return true;
+			try {
+				if (_isAllowedIPAddress(allowedHost, inetAddress)) {
+					return true;
+				}
+			}
+			catch (UnknownHostException unknownHostException) {
+				return false;
 			}
 		}
 
@@ -148,6 +149,80 @@ public class InetAddressUtil {
 
 		return false;
 	}
+
+	private static boolean _isAllowedIPAddress(
+			String allowedIP, InetAddress inetAddress)
+		throws UnknownHostException {
+
+		if (Validator.isNull(allowedIP)) {
+			return false;
+		}
+
+		String[] ipAddressAndNetmask = StringUtil.split(
+			allowedIP, StringPool.SLASH);
+
+		byte[] netmask = null;
+
+		if (Validator.isIPv4Address(ipAddressAndNetmask[0])) {
+			netmask = new byte[4];
+		}
+		else if (Validator.isIPv6Address(ipAddressAndNetmask[0])) {
+			netmask = new byte[16];
+		}
+		else {
+			return false;
+		}
+
+		InetAddress allowedIPInetAddress = InetAddress.getByName(
+			ipAddressAndNetmask[0]);
+
+		if (ipAddressAndNetmask.length > 1) {
+			String netmaskString = GetterUtil.getString(ipAddressAndNetmask[1]);
+
+			if (Validator.isNumber(netmaskString)) {
+				int cidr = GetterUtil.getInteger(netmaskString);
+
+				int netmaskBytes = cidr / 8;
+
+				for (int i = 0; i < netmaskBytes; i++) {
+					netmask[i] = (byte)_BYTE[8];
+				}
+
+				if (netmaskBytes < netmask.length) {
+					netmask[netmaskBytes] = (byte)_BYTE[cidr % 8];
+				}
+			}
+			else {
+				InetAddress netmaskInetAddress = InetAddress.getByName(
+					netmaskString);
+
+				netmask = netmaskInetAddress.getAddress();
+			}
+		}
+
+		byte[] allowedIpAddressBytes = allowedIPInetAddress.getAddress();
+
+		byte[] inetAddressBytes = inetAddress.getAddress();
+
+		if (!(allowedIpAddressBytes.length == inetAddressBytes.length)) {
+			return false;
+		}
+
+		for (int i = 0; i < netmask.length; i++) {
+			if ((inetAddressBytes[i] & netmask[i]) !=
+					(allowedIpAddressBytes[i] & netmask[i])) {
+
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private static final int[] _BYTE = {
+		0b00000000, 0b10000000, 0b11000000, 0b11100000, 0b11110000, 0b11111000,
+		0b11111100, 0b11111110, 0b11111111
+	};
 
 	private static final int _DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS =
 		GetterUtil.getInteger(
