@@ -218,6 +218,8 @@ public class ContentPageEditorDisplayContext {
 	public Map<String, Object> getEditorContext(String npmResolvedPackageName)
 		throws Exception {
 
+		LayoutStructure layoutStructure = _getLayoutStructure();
+
 		return HashMapBuilder.<String, Object>put(
 			"config",
 			HashMapBuilder.<String, Object>put(
@@ -673,12 +675,7 @@ public class ContentPageEditorDisplayContext {
 				"languageId",
 				LocaleUtil.toLanguageId(themeDisplay.getSiteDefaultLocale())
 			).put(
-				"layoutData",
-				() -> {
-					LayoutStructure layoutStructure = _getLayoutStructure();
-
-					return layoutStructure.toJSONObject();
-				}
+				"layoutData", layoutStructure.toJSONObject()
 			).put(
 				"mappingFields", _getMappingFieldsJSONObject()
 			).put(
