@@ -53,6 +53,7 @@ import com.liferay.item.selector.criteria.info.item.criterion.InfoListItemSelect
 import com.liferay.item.selector.criteria.url.criterion.URLItemSelectorCriterion;
 import com.liferay.item.selector.criteria.video.criterion.VideoItemSelectorCriterion;
 import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
+import com.liferay.layout.constants.LayoutWebKeys;
 import com.liferay.layout.content.page.editor.constants.ContentPageEditorPortletKeys;
 import com.liferay.layout.content.page.editor.sidebar.panel.ContentPageEditorSidebarPanel;
 import com.liferay.layout.content.page.editor.web.internal.configuration.PageEditorConfiguration;
@@ -1675,9 +1676,19 @@ public class ContentPageEditorDisplayContext {
 			return _layoutStructure;
 		}
 
+		_layoutStructure = (LayoutStructure)httpServletRequest.getAttribute(
+			LayoutWebKeys.LAYOUT_STRUCTURE);
+
+		if (_layoutStructure != null) {
+			return _layoutStructure;
+		}
+
 		_layoutStructure = LayoutStructureUtil.getLayoutStructure(
 			themeDisplay.getScopeGroupId(), themeDisplay.getPlid(),
 			getSegmentsExperienceId());
+
+		httpServletRequest.setAttribute(
+			LayoutWebKeys.LAYOUT_STRUCTURE, _layoutStructure);
 
 		return _layoutStructure;
 	}
