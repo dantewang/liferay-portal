@@ -80,6 +80,7 @@ import com.liferay.layout.util.structure.DropZoneLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.layout.util.structure.LayoutStructureItem;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.editor.configuration.EditorConfiguration;
@@ -213,6 +214,13 @@ public class ContentPageEditorDisplayContext {
 
 		themeDisplay = (ThemeDisplay)httpServletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
+
+		try {
+			_getLayoutStructure();
+		}
+		catch (Exception exception) {
+			ReflectionUtil.throwException(exception);
+		}
 	}
 
 	public Map<String, Object> getEditorContext(String npmResolvedPackageName)
@@ -673,12 +681,7 @@ public class ContentPageEditorDisplayContext {
 				"languageId",
 				LocaleUtil.toLanguageId(themeDisplay.getSiteDefaultLocale())
 			).put(
-				"layoutData",
-				() -> {
-					LayoutStructure layoutStructure = _getLayoutStructure();
-
-					return layoutStructure.toJSONObject();
-				}
+				"layoutData", _layoutStructure.toJSONObject()
 			).put(
 				"mappingFields", _getMappingFieldsJSONObject()
 			).put(
