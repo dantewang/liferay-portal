@@ -107,9 +107,7 @@ public class FreeMarkerTemplateContextHelper extends TemplateContextHelper {
 
 			// Navigation items
 
-			if (_freeMarkerEngineConfiguration.includeNavItemsInTheContext() &&
-				(themeDisplay.getLayout() != null)) {
-
+			if (themeDisplay.getLayout() != null) {
 				try {
 					List<NavItem> navItems = NavItem.fromLayouts(
 						httpServletRequest, themeDisplay, contextObjects);

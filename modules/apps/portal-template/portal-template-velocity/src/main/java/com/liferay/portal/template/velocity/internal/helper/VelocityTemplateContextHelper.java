@@ -111,9 +111,7 @@ public class VelocityTemplateContextHelper extends TemplateContextHelper {
 
 			// Navigation items
 
-			if (_velocityEngineConfiguration.includeNavItemsInTheContext() &&
-				(themeDisplay.getLayout() != null)) {
-
+			if (themeDisplay.getLayout() != null) {
 				try {
 					List<NavItem> navItems = NavItem.fromLayouts(
 						httpServletRequest, themeDisplay, contextObjects);
