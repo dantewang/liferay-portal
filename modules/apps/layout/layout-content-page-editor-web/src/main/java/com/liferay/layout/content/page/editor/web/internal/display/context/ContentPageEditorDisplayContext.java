@@ -216,7 +216,7 @@ public class ContentPageEditorDisplayContext {
 			WebKeys.THEME_DISPLAY);
 
 		try {
-			_getLayoutStructure();
+			_initLayoutStructure();
 		}
 		catch (Exception exception) {
 			ReflectionUtil.throwException(exception);
@@ -1438,7 +1438,7 @@ public class ContentPageEditorDisplayContext {
 					getGroupId(), getSegmentsExperienceId(),
 					themeDisplay.getPlid());
 
-		LayoutStructure layoutStructure = _getLayoutStructure();
+		LayoutStructure layoutStructure = _initLayoutStructure();
 
 		Map<String, Object> fragmentEntryLinksMap = new HashMap<>(
 			_getFragmentEntryLinksMap(
@@ -1514,7 +1514,7 @@ public class ContentPageEditorDisplayContext {
 					LayoutStructureUtil.
 						getCollectionStyledLayoutStructureItemIds(
 							fragmentEntryLink.getFragmentEntryLinkId(),
-							_getLayoutStructure()));
+							_initLayoutStructure()));
 
 			JSONObject jsonObject =
 				_fragmentEntryLinkManager.getFragmentEntryLinkJSONObject(
@@ -1672,28 +1672,6 @@ public class ContentPageEditorDisplayContext {
 				RequestBackedPortletURLFactoryUtil.create(httpServletRequest),
 				_renderResponse.getNamespace() + "selectLayout",
 				layoutItemSelectorCriterion));
-	}
-
-	private LayoutStructure _getLayoutStructure() throws Exception {
-		if (_layoutStructure != null) {
-			return _layoutStructure;
-		}
-
-		_layoutStructure = (LayoutStructure)httpServletRequest.getAttribute(
-			LayoutWebKeys.LAYOUT_STRUCTURE);
-
-		if (_layoutStructure != null) {
-			return _layoutStructure;
-		}
-
-		_layoutStructure = LayoutStructureUtil.getLayoutStructure(
-			themeDisplay.getScopeGroupId(), themeDisplay.getPlid(),
-			getSegmentsExperienceId());
-
-		httpServletRequest.setAttribute(
-			LayoutWebKeys.LAYOUT_STRUCTURE, _layoutStructure);
-
-		return _layoutStructure;
 	}
 
 	private int _getLayoutType() {
@@ -2077,6 +2055,28 @@ public class ContentPageEditorDisplayContext {
 		}
 
 		return false;
+	}
+
+	private LayoutStructure _initLayoutStructure() throws Exception {
+		if (_layoutStructure != null) {
+			return _layoutStructure;
+		}
+
+		_layoutStructure = (LayoutStructure)httpServletRequest.getAttribute(
+			LayoutWebKeys.LAYOUT_STRUCTURE);
+
+		if (_layoutStructure != null) {
+			return _layoutStructure;
+		}
+
+		_layoutStructure = LayoutStructureUtil.getLayoutStructure(
+			themeDisplay.getScopeGroupId(), themeDisplay.getPlid(),
+			getSegmentsExperienceId());
+
+		httpServletRequest.setAttribute(
+			LayoutWebKeys.LAYOUT_STRUCTURE, _layoutStructure);
+
+		return _layoutStructure;
 	}
 
 	private boolean _isAllowedFragmentEntryKey(String fragmentEntryKey) {
