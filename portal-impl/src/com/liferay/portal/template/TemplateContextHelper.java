@@ -62,6 +62,7 @@ import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.template.TemplateHandlerRegistryUtil;
 import com.liferay.portal.kernel.template.TemplateVariableGroup;
+import com.liferay.portal.kernel.theme.NavItem;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil_IW;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
@@ -101,6 +102,7 @@ import java.net.URL;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
@@ -220,9 +222,21 @@ public class TemplateContextHelper {
 		Map<String, Object> contextObjects,
 		HttpServletRequest httpServletRequest) {
 
+		Map<String, Object> cachedContextObjects =
+			(Map<String, Object>)httpServletRequest.getAttribute(
+				_CONTEXT_OBJECTS);
+
+		if ((cachedContextObjects != null) && !cachedContextObjects.isEmpty()) {
+			contextObjects.putAll(cachedContextObjects);
+
+			return;
+		}
+
+		cachedContextObjects = new HashMap<>();
+
 		// Request
 
-		contextObjects.put("request", httpServletRequest);
+		cachedContextObjects.put("request", httpServletRequest);
 
 		// Portlet config
 
@@ -231,7 +245,7 @@ public class TemplateContextHelper {
 				JavaConstants.JAVAX_PORTLET_CONFIG);
 
 		if (portletConfig != null) {
-			contextObjects.put("portletConfig", portletConfig);
+			cachedContextObjects.put("portletConfig", portletConfig);
 		}
 
 		// Render request
@@ -243,7 +257,7 @@ public class TemplateContextHelper {
 		if ((portletRequest != null) &&
 			(portletRequest instanceof RenderRequest)) {
 
-			contextObjects.put("renderRequest", portletRequest);
+			cachedContextObjects.put("renderRequest", portletRequest);
 		}
 
 		// Render response
@@ -255,20 +269,20 @@ public class TemplateContextHelper {
 		if ((portletResponse != null) &&
 			(portletResponse instanceof RenderResponse)) {
 
-			contextObjects.put("renderResponse", portletResponse);
+			cachedContextObjects.put("renderResponse", portletResponse);
 		}
 
 		// XML request
 
 		if ((portletRequest != null) && (portletResponse != null)) {
-			contextObjects.put(
+			cachedContextObjects.put(
 				"portletRequestModelFactory",
 				new PortletRequestModelFactory(
 					portletRequest, portletResponse));
 
 			// Deprecated
 
-			contextObjects.put(
+			cachedContextObjects.put(
 				"xmlRequest",
 				new Object() {
 
@@ -302,27 +316,29 @@ public class TemplateContextHelper {
 			String bodyCssClass = ParamUtil.getString(
 				originalHttpServletRequest, namespace + "bodyCssClass");
 
-			contextObjects.put("bodyCssClass", bodyCssClass);
+			cachedContextObjects.put("bodyCssClass", bodyCssClass);
 
-			contextObjects.put("colorScheme", themeDisplay.getColorScheme());
-			contextObjects.put("company", themeDisplay.getCompany());
-			contextObjects.put("layout", layout);
-			contextObjects.put("layouts", themeDisplay.getLayouts());
-			contextObjects.put(
+			cachedContextObjects.put(
+				"colorScheme", themeDisplay.getColorScheme());
+			cachedContextObjects.put("company", themeDisplay.getCompany());
+			cachedContextObjects.put("layout", layout);
+			cachedContextObjects.put("layouts", themeDisplay.getLayouts());
+			cachedContextObjects.put(
 				"layoutTypePortlet", themeDisplay.getLayoutTypePortlet());
-			contextObjects.put("locale", themeDisplay.getLocale());
-			contextObjects.put(
+			cachedContextObjects.put("locale", themeDisplay.getLocale());
+			cachedContextObjects.put(
 				"permissionChecker", themeDisplay.getPermissionChecker());
-			contextObjects.put("plid", String.valueOf(themeDisplay.getPlid()));
-			contextObjects.put(
+			cachedContextObjects.put(
+				"plid", String.valueOf(themeDisplay.getPlid()));
+			cachedContextObjects.put(
 				"portletDisplay", themeDisplay.getPortletDisplay());
-			contextObjects.put("realUser", themeDisplay.getRealUser());
-			contextObjects.put(
+			cachedContextObjects.put("realUser", themeDisplay.getRealUser());
+			cachedContextObjects.put(
 				"scopeGroupId", Long.valueOf(themeDisplay.getScopeGroupId()));
-			contextObjects.put(
+			cachedContextObjects.put(
 				"siteSpritemap", FrontendIconsUtil.getSpritemap(themeDisplay));
-			contextObjects.put("themeDisplay", themeDisplay);
-			contextObjects.put("timeZone", themeDisplay.getTimeZone());
+			cachedContextObjects.put("themeDisplay", themeDisplay);
+			cachedContextObjects.put("timeZone", themeDisplay.getTimeZone());
 
 			User user = UserLocalServiceUtil.fetchUser(
 				PrincipalThreadLocal.getUserId());
@@ -331,11 +347,25 @@ public class TemplateContextHelper {
 				user = themeDisplay.getUser();
 			}
 
-			contextObjects.put("user", user);
+			cachedContextObjects.put("user", user);
+
+			// Navigation items
+
+			if (layout != null) {
+				try {
+					List<NavItem> navItems = NavItem.fromLayouts(
+						httpServletRequest, themeDisplay, contextObjects);
+
+					cachedContextObjects.put("navItems", navItems);
+				}
+				catch (Exception exception) {
+					_log.error(exception);
+				}
+			}
 
 			// Deprecated
 
-			contextObjects.put(
+			cachedContextObjects.put(
 				"portletGroupId", Long.valueOf(themeDisplay.getScopeGroupId()));
 		}
 
@@ -348,12 +378,12 @@ public class TemplateContextHelper {
 		}
 
 		if (theme != null) {
-			contextObjects.put("theme", theme);
+			cachedContextObjects.put("theme", theme);
 		}
 
 		// Tiles attributes
 
-		prepareTiles(contextObjects, httpServletRequest);
+		prepareTiles(cachedContextObjects, httpServletRequest);
 
 		// Page title and subtitle
 
@@ -365,7 +395,7 @@ public class TemplateContextHelper {
 			String pageTitle = pageTitleListMergeable.mergeToString(
 				StringPool.SPACE);
 
-			contextObjects.put("pageTitle", pageTitle);
+			cachedContextObjects.put("pageTitle", pageTitle);
 		}
 
 		ListMergeable<String> pageSubtitleListMergeable =
@@ -376,8 +406,12 @@ public class TemplateContextHelper {
 			String pageSubtitle = pageSubtitleListMergeable.mergeToString(
 				StringPool.SPACE);
 
-			contextObjects.put("pageSubtitle", pageSubtitle);
+			cachedContextObjects.put("pageSubtitle", pageSubtitle);
 		}
+
+		contextObjects.putAll(cachedContextObjects);
+
+		httpServletRequest.setAttribute(_CONTEXT_OBJECTS, cachedContextObjects);
 	}
 
 	public void removeAllHelperUtilities() {
@@ -890,6 +924,9 @@ public class TemplateContextHelper {
 
 		contextObjects.put("tilesSelectable", tilesSelectable);
 	}
+
+	private static final String _CONTEXT_OBJECTS =
+		TemplateContextHelper.class.getName() + "#CONTEXT_OBJECTS";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		TemplateContextHelper.class);
