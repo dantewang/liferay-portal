@@ -41,13 +41,11 @@ public class ClusterSampleDispatcher {
 	@Activate
 	@Modified
 	protected void activate(ComponentContext componentContext) {
-		ClusterSampleConfiguration clusterSampleConfiguration =
-			(ClusterSampleConfiguration)ConfigurableUtil.createConfigurable(
-				ClusterSampleConfiguration.class,
-				componentContext.getProperties());
+		_clusterSampleConfiguration = ConfigurableUtil.createConfigurable(
+			ClusterSampleConfiguration.class, componentContext.getProperties());
 
 		String clusterSampleCommand =
-			clusterSampleConfiguration.clusterSampleCommand();
+			_clusterSampleConfiguration.clusterSampleCommand();
 
 		if (Validator.isNull(clusterSampleCommand)) {
 			if (_log.isInfoEnabled()) {
@@ -113,5 +111,7 @@ public class ClusterSampleDispatcher {
 
 	@Reference
 	private ClusterMasterExecutor _clusterMasterExecutor;
+
+	private volatile ClusterSampleConfiguration _clusterSampleConfiguration;
 
 }
