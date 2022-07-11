@@ -58,22 +58,26 @@ public class ClusterSampleDispatcher {
 		}
 
 		try {
-			if (clusterSampleCommand.equals("invoke-method-module")) {
+			if (clusterSampleCommand.equals(
+					ClusterTestCommands.INVOKE_METHOD_MODULE)) {
+
 				ClusterMethodInvoker.invokeMethodModule(
 					_clusterExecutor, _getTargetClusterNode());
 			}
 			else if (clusterSampleCommand.equals(
-						"invoke-method-module-on-master")) {
+						ClusterTestCommands.INVOKE_METHOD_MODULE_ON_MASTER)) {
 
 				ClusterMethodInvoker.invokeMethodModuleOnMaster(
 					_clusterMasterExecutor);
 			}
-			else if (clusterSampleCommand.equals("invoke-method-portal")) {
+			else if (clusterSampleCommand.equals(
+						ClusterTestCommands.INVOKE_METHOD_PORTAL)) {
+
 				ClusterMethodInvoker.invokeMethodPortal(
 					_clusterExecutor, _getTargetClusterNode());
 			}
 			else if (clusterSampleCommand.equals(
-						"invoke-method-portal-on-master")) {
+						ClusterTestCommands.INVOKE_METHOD_PORTAL_ON_MASTER)) {
 
 				ClusterMethodInvoker.invokeMethodPortalOnMaster(
 					_clusterMasterExecutor);
