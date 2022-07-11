@@ -18,4 +18,15 @@ package com.liferay.portal.cluster.multiple.sample.web.internal;
  * @author Janis Zhang
  */
 public class ClusterTestCommands {
+
+	public static final String INVOKE_METHOD_MODULE = "invoke-method-module";
+
+	public static final String INVOKE_METHOD_MODULE_ON_MASTER =
+		"invoke-method-module-on-master";
+
+	public static final String INVOKE_METHOD_PORTAL = "invoke-method-portal";
+
+	public static final String INVOKE_METHOD_PORTAL_ON_MASTER =
+		"invoke-method-portal-on-master";
+
 }
