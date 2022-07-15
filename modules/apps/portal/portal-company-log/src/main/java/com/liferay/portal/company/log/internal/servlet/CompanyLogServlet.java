@@ -177,14 +177,14 @@ public class CompanyLogServlet extends HttpServlet {
 				start = GetterUtil.getIntegerStrict(startIndex);
 			}
 
-			long end = 0;
+			long end = logFile.length();
 
 			if (Validator.isNotNull(endIndex)) {
-				end = GetterUtil.getIntegerStrict(endIndex);
-			}
+				int parsedEnd = GetterUtil.getIntegerStrict(endIndex);
 
-			if (end > logFile.length()) {
-				end = logFile.length();
+				if (parsedEnd < end) {
+					end = parsedEnd;
+				}
 			}
 
 			if ((start < 0) || (end < 0) || (start >= end)) {
