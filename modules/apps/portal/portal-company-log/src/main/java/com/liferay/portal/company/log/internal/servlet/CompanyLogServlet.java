@@ -171,11 +171,11 @@ public class CompanyLogServlet extends HttpServlet {
 				HttpHeaders.CONTENT_DISPOSITION_ATTACHMENT);
 		}
 		else {
-			if (Validator.isNull(startIndex)) {
-				startIndex = "0";
-			}
+			int start = 0;
 
-			int start = GetterUtil.getIntegerStrict(startIndex);
+			if (Validator.isNotNull(startIndex)) {
+				start = GetterUtil.getIntegerStrict(startIndex);
+			}
 
 			int logFileLength = (int)logFile.length();
 
