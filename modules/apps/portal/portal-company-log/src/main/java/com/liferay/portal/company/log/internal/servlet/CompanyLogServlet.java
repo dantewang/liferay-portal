@@ -185,9 +185,7 @@ public class CompanyLogServlet extends HttpServlet {
 
 			int end = GetterUtil.getIntegerStrict(endIndex);
 
-			if ((start < 0) || (end < 0) || ((start == 0) && (end == 0)) ||
-				(start >= end)) {
-
+			if ((start < 0) || (end < 0) || (start >= end)) {
 				throw new PrincipalException(
 					"startIndex or endIndex can not be less than 0, and " +
 						"startIndex can not be greater than or equal to " +
