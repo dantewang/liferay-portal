@@ -202,9 +202,9 @@ public class CompanyLogServlet extends HttpServlet {
 				fileChannel.position(start);
 
 				ServletResponseUtil.sendFile(
-					httpServletRequest, httpServletResponse, logFile.getName(),
+					httpServletRequest, httpServletResponse, fileName,
 					Channels.newInputStream(fileChannel), end - start,
-					_mimeTypes.getContentType(logFile.getName()),
+					_mimeTypes.getContentType(fileName),
 					HttpHeaders.CONTENT_DISPOSITION_ATTACHMENT);
 			}
 		}
