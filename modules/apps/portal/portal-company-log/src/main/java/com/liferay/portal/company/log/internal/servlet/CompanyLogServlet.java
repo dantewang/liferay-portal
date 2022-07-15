@@ -46,6 +46,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -166,7 +167,7 @@ public class CompanyLogServlet extends HttpServlet {
 		if (Validator.isNull(startIndex) && Validator.isNull(endIndex)) {
 			ServletResponseUtil.sendFile(
 				httpServletRequest, httpServletResponse, fileName,
-				new FileInputStream(logFile), logFile.length(),
+				Files.newInputStream(logFile.toPath()), logFile.length(),
 				_mimeTypes.getContentType(fileName),
 				HttpHeaders.CONTENT_DISPOSITION_ATTACHMENT);
 		}
@@ -201,8 +202,9 @@ public class CompanyLogServlet extends HttpServlet {
 			byte[] bytes = new byte[(int)logFile.length()];
 
 			try (UnsyncBufferedInputStream unsyncBufferedInputStream =
-					new UnsyncBufferedInputStream(new FileInputStream(logFile));
-				UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
+					new UnsyncBufferedInputStream(
+						Files.newInputStream(logFile.toPath()));
+				 UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
 					new UnsyncByteArrayOutputStream()) {
 
 				unsyncBufferedInputStream.read(bytes);
