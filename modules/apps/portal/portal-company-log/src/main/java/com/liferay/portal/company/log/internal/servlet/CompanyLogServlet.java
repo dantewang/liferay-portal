@@ -178,22 +178,22 @@ public class CompanyLogServlet extends HttpServlet {
 			}
 
 			int logFileLength = (int)logFile.length();
+			
+			int end = 0;
 
-			if (Validator.isNull(endIndex) && (start >= 0)) {
-				endIndex = String.valueOf(logFileLength);
+			if (Validator.isNotNull(endIndex)) {
+				end = GetterUtil.getIntegerStrict(endIndex);
 			}
 
-			int end = GetterUtil.getIntegerStrict(endIndex);
+			if (end > logFileLength) {
+				end = logFileLength;
+			}
 
 			if ((start < 0) || (end < 0) || (start >= end)) {
 				throw new PrincipalException(
 					"startIndex or endIndex can not be less than 0, and " +
 						"startIndex can not be greater than or equal to " +
 							"endIndex");
-			}
-
-			if (end > logFileLength) {
-				end = logFileLength;
 			}
 
 			if (start != 0) {
