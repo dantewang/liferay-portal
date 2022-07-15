@@ -177,16 +177,14 @@ public class CompanyLogServlet extends HttpServlet {
 				start = GetterUtil.getIntegerStrict(startIndex);
 			}
 
-			int logFileLength = (int)logFile.length();
-			
 			int end = 0;
 
 			if (Validator.isNotNull(endIndex)) {
 				end = GetterUtil.getIntegerStrict(endIndex);
 			}
 
-			if (end > logFileLength) {
-				end = logFileLength;
+			if (end > (int)logFile.length()) {
+				end = (int)logFile.length();
 			}
 
 			if ((start < 0) || (end < 0) || (start >= end)) {
@@ -200,7 +198,7 @@ public class CompanyLogServlet extends HttpServlet {
 				--start;
 			}
 
-			byte[] bytes = new byte[logFileLength];
+			byte[] bytes = new byte[(int)logFile.length()];
 
 			try (UnsyncBufferedInputStream unsyncBufferedInputStream =
 					new UnsyncBufferedInputStream(new FileInputStream(logFile));
