@@ -26,7 +26,14 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <%@ page import="com.liferay.portal.cluster.multiple.sample.web.internal.ClusterSampleData" %><%@
 page import="com.liferay.portal.kernel.cache.PortalCache" %><%@
 page import="com.liferay.portal.kernel.cache.PortalCacheHelperUtil" %><%@
-page import="com.liferay.portal.kernel.cache.PortalCacheManagerNames" %>
+page import="com.liferay.portal.kernel.cache.PortalCacheManagerNames" %><%@
+page import="com.liferay.portal.kernel.cluster.ClusterExecutorUtil" %><%@
+page import="com.liferay.portal.kernel.cluster.ClusterNode" %><%@
+page import="com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil" %><%@
+page import="com.liferay.portal.kernel.scheduler.SchedulerException" %><%@
+page import="com.liferay.portal.kernel.scheduler.StorageType" %><%@
+page import="com.liferay.portal.kernel.scheduler.TimeUnit" %><%@
+page import="com.liferay.portal.kernel.scheduler.TriggerFactoryUtil" %>
 
 <%@ page import="java.util.HashMap" %><%@
 page import="java.util.List" %><%@
