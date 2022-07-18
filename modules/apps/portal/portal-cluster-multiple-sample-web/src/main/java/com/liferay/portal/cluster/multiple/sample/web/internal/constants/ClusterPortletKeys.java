@@ -23,4 +23,8 @@ public class ClusterPortletKeys {
 		"com_liferay_portal_cluster_multiple_sample_web_internal_portlet_" +
 			"ClusterSampleCachePortlet";
 
+	public static final String SCHEDULER =
+		"com_liferay_portal_cluster_multiple_sample_web_internal_portlet_" +
+			"ClusterSampleSchedulerPortlet";
+
 }
