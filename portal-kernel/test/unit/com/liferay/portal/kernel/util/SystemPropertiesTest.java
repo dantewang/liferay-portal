@@ -43,16 +43,14 @@ public class SystemPropertiesTest {
 
 	@Test
 	public void testGetArray() {
-		String testArrayKey = _PREFIX + "array.key";
-
 		Assert.assertTrue(
-			ArrayUtil.isEmpty(SystemProperties.getArray(testArrayKey)));
+			ArrayUtil.isEmpty(SystemProperties.getArray(_TEST_KEY)));
 
-		SystemProperties.set(testArrayKey, "test.array.value,test.array.value");
+		SystemProperties.set(_TEST_KEY, "test.array.value,test.array.value");
 
 		Assert.assertArrayEquals(
 			new String[] {"test.array.value", "test.array.value"},
-			SystemProperties.getArray(testArrayKey));
+			SystemProperties.getArray(_TEST_KEY));
 	}
 
 	@Test
