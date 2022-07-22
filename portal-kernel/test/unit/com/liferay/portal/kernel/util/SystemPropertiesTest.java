@@ -16,10 +16,8 @@ package com.liferay.portal.kernel.util;
 
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -32,20 +30,13 @@ public class SystemPropertiesTest {
 
 	@After
 	public void tearDown() {
-		Map<String, String> properties = ReflectionTestUtil.getFieldValue(
-			SystemProperties.class, "_properties");
+		Properties properties = SystemProperties.getProperties();
 
-		Set<String> propertyKeys = properties.keySet();
+		for (Object key : properties.keySet()) {
+			String keyString = (String)key;
 
-		Iterator<String> iterator = propertyKeys.iterator();
-
-		while (iterator.hasNext()) {
-			String propertyKey = iterator.next();
-
-			if (StringUtil.startsWith(propertyKey, _PREFIX)) {
-				System.clearProperty(propertyKey);
-
-				iterator.remove();
+			if (keyString.startsWith(_PREFIX)) {
+				SystemProperties.clear(keyString);
 			}
 		}
 	}
