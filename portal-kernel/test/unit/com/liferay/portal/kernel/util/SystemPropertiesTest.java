@@ -27,15 +27,7 @@ public class SystemPropertiesTest {
 
 	@After
 	public void tearDown() {
-		Properties properties = SystemProperties.getProperties();
-
-		for (Object key : properties.keySet()) {
-			String keyString = (String)key;
-
-			if (keyString.startsWith(_PREFIX)) {
-				SystemProperties.clear(keyString);
-			}
-		}
+		SystemProperties.clear(_TEST_KEY);
 	}
 
 	@Test
@@ -90,8 +82,6 @@ public class SystemPropertiesTest {
 
 		Assert.assertEquals(_TEST_VALUE, SystemProperties.get(_TEST_KEY));
 		Assert.assertEquals(_TEST_VALUE, System.getProperty(_TEST_KEY));
-
-		System.clearProperty(_TEST_KEY);
 	}
 
 	@Test
@@ -107,9 +97,8 @@ public class SystemPropertiesTest {
 			_TEST_VALUE, SystemProperties.get(_TEST_KEY, "defaultValue"));
 	}
 
-	private static final String _PREFIX = "test.system.property.";
-
-	private static final String _TEST_KEY = _PREFIX + "key";
+	private static final String _TEST_KEY =
+		SystemPropertiesTest.class.getName() + ".test.key";
 
 	private static final String _TEST_VALUE = "test.value";
 
