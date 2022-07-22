@@ -14,9 +14,6 @@
 
 package com.liferay.portal.kernel.util;
 
-import com.liferay.portal.kernel.test.ReflectionTestUtil;
-
-import java.util.Map;
 import java.util.Properties;
 
 import org.junit.After;
@@ -55,19 +52,17 @@ public class SystemPropertiesTest {
 
 	@Test
 	public void testGetProperties() {
-		Map<String, String> propertiesMap = ReflectionTestUtil.getFieldValue(
-			SystemProperties.class, "_properties");
+		Properties properties1 = SystemProperties.getProperties();
 
-		propertiesMap.clear();
-
-		Assert.assertTrue(MapUtil.isEmpty(SystemProperties.getProperties()));
+		Assert.assertNull(properties1.getProperty(_TEST_KEY));
 
 		SystemProperties.set(_TEST_KEY, _TEST_VALUE);
 
-		Properties properties = SystemProperties.getProperties();
+		Properties properties2 = SystemProperties.getProperties();
 
-		Assert.assertEquals(1, properties.size());
-		Assert.assertEquals(_TEST_VALUE, properties.get(_TEST_KEY));
+		Assert.assertEquals(properties1.size() + 1, properties2.size());
+		Assert.assertNull(properties1.getProperty(_TEST_KEY));
+		Assert.assertEquals(_TEST_VALUE, properties2.get(_TEST_KEY));
 	}
 
 	@Test
