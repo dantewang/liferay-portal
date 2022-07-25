@@ -15,7 +15,7 @@
 package com.liferay.portal.cluster.multiple.sample.web.internal.portlet;
 
 import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterPortletConstants;
-import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterPortletKeys;
+import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterSamplePortletKeys;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
@@ -46,7 +46,7 @@ import org.osgi.service.component.annotations.Reference;
 		"javax.portlet.display-name=Cluster Sample Cache",
 		"javax.portlet.init-param.template-path=/META-INF/resources/",
 		"javax.portlet.init-param.view-template=/cluster_cache_replication/view.jsp",
-		"javax.portlet.name=" + ClusterPortletKeys.CLUSTER_SAMPLE_CACHE_REPLICATION,
+		"javax.portlet.name=" + ClusterSamplePortletKeys.CLUSTER_SAMPLE_CACHE_REPLICATION,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user",
 		"javax.portlet.version=3.0"

@@ -17,7 +17,7 @@ package com.liferay.portal.cluster.multiple.sample.web.internal.constants;
 /**
  * @author Janis Zhang
  */
-public interface ClusterPortletKeys {
+public interface ClusterSamplePortletKeys {
 
 	public static final String CLUSTER_SAMPLE_CACHE_REPLICATION =
 		"com_liferay_portal_cluster_multiple_sample_web_internal_portlet_" +

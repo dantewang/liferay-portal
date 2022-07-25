@@ -15,7 +15,7 @@
 package com.liferay.portal.cluster.multiple.sample.web.internal.portlet.action;
 
 import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterPortletConstants;
-import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterPortletKeys;
+import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterSamplePortletKeys;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + ClusterPortletKeys.CLUSTER_SAMPLE_CACHE_REPLICATION,
+		"javax.portlet.name=" + ClusterSamplePortletKeys.CLUSTER_SAMPLE_CACHE_REPLICATION,
 		"mvc.command.name=/cluster_sample_cache_replication/edit_cache"
 	},
 	service = MVCActionCommand.class
