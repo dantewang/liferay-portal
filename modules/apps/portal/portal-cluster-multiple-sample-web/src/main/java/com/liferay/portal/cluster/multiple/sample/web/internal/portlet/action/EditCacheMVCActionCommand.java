@@ -51,8 +51,7 @@ public class EditCacheMVCActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(
-			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws Exception {
+			ActionRequest actionRequest, ActionResponse actionResponse) {
 
 		String cmd = ParamUtil.getString(
 			actionRequest, ClusterSampleConstants.CMD);
