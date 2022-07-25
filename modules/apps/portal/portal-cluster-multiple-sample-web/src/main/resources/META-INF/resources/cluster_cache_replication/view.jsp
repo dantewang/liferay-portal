@@ -43,11 +43,11 @@ ClusterSampleData clusterSampleData = new ClusterSampleData();
 	<span>Following data is cache get </span>
 	<br />
 
-	<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="clusterCacheRemoveAllURL">
+	<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="removeAllCacheEntriesURL">
 		<portlet:param name="<%= ClusterSampleConstants.CMD %>" value="<%= ClusterSampleConstants.REMOVE_ALL_CACHE_ENTRIES %>" />
 	</liferay-portlet:actionURL>
 
-	<aui:button href="<%= clusterCacheRemoveAllURL %>" value="Remove All" />
+	<aui:button href="<%= removeAllCacheEntriesURL %>" value="Remove All" />
 
 	<br /><br />
 
@@ -68,12 +68,12 @@ ClusterSampleData clusterSampleData = new ClusterSampleData();
 				</td>
 				<td>
 					<aui:button-row>
-						<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="clusterCacheRemoveURL">
+						<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="removeCacheEntryURL">
 							<portlet:param name="curKey" value="${cacheEntry.key}" />
 							<portlet:param name="<%= ClusterSampleConstants.CMD %>" value="<%= ClusterSampleConstants.REMOVE_CACHE_ENTRY %>" />
 						</liferay-portlet:actionURL>
 
-						<aui:button href="<%= clusterCacheRemoveURL %>" value="remove" />
+						<aui:button href="<%= removeCacheEntryURL %>" value="remove" />
 					</aui:button-row>
 				</td>
 			</tr>
@@ -81,11 +81,11 @@ ClusterSampleData clusterSampleData = new ClusterSampleData();
 	</table>
 </c:if>
 
-<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="clusterCachePutURL">
+<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="putCacheEntryURL">
 	<portlet:param name="<%= ClusterSampleConstants.CMD %>" value="<%= ClusterSampleConstants.PUT_CACHE_ENTRY %>" />
 </liferay-portlet:actionURL>
 
-<aui:form action="<%= clusterCachePutURL %>" method="post" name="fm">
+<aui:form action="<%= putCacheEntryURL %>" method="post" name="fm">
 	<aui:input label="Cache key" name="key" required="<%= true %>" type="text" />
 	<aui:input label="Cache value" name="value" required="<%= true %>" type="text" />
 
