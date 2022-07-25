@@ -23,10 +23,11 @@ public interface ClusterSampleConstants {
 
 	public static final String PORTAL_CACHE_NAME = "test.cache";
 
-	public static final String PUT = "put";
+	public static final String PUT_CACHE_ENTRY = "put_cache_entry";
 
-	public static final String REMOVE = "remove";
+	public static final String REMOVE_CACHE_ENTRY = "remove_cache_entry";
 
-	public static final String REMOVE_ALL = "remove_all";
+	public static final String REMOVE_ALL_CACHE_ENTRIES =
+		"remove_all_cache_entries";
 
 }

@@ -44,7 +44,7 @@ ClusterSampleData clusterSampleData = new ClusterSampleData();
 	<br />
 
 	<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="clusterCacheRemoveAllURL">
-		<portlet:param name="<%= ClusterSampleConstants.CMD %>" value="<%= ClusterSampleConstants.REMOVE_ALL %>" />
+		<portlet:param name="<%= ClusterSampleConstants.CMD %>" value="<%= ClusterSampleConstants.REMOVE_ALL_CACHE_ENTRIES %>" />
 	</liferay-portlet:actionURL>
 
 	<aui:button href="<%= clusterCacheRemoveAllURL %>" value="Remove All" />
@@ -70,7 +70,7 @@ ClusterSampleData clusterSampleData = new ClusterSampleData();
 					<aui:button-row>
 						<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="clusterCacheRemoveURL">
 							<portlet:param name="curKey" value="${cacheEntry.key}" />
-							<portlet:param name="<%= ClusterSampleConstants.CMD %>" value="<%= ClusterSampleConstants.REMOVE %>" />
+							<portlet:param name="<%= ClusterSampleConstants.CMD %>" value="<%= ClusterSampleConstants.REMOVE_CACHE_ENTRY %>" />
 						</liferay-portlet:actionURL>
 
 						<aui:button href="<%= clusterCacheRemoveURL %>" value="remove" />
@@ -82,7 +82,7 @@ ClusterSampleData clusterSampleData = new ClusterSampleData();
 </c:if>
 
 <liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="clusterCachePutURL">
-	<portlet:param name="<%= ClusterSampleConstants.CMD %>" value="<%= ClusterSampleConstants.PUT %>" />
+	<portlet:param name="<%= ClusterSampleConstants.CMD %>" value="<%= ClusterSampleConstants.PUT_CACHE_ENTRY %>" />
 </liferay-portlet:actionURL>
 
 <aui:form action="<%= clusterCachePutURL %>" method="post" name="fm">

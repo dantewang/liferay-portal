@@ -56,13 +56,13 @@ public class EditCacheMVCActionCommand extends BaseMVCActionCommand {
 		String cmd = ParamUtil.getString(
 			actionRequest, ClusterSampleConstants.CMD);
 
-		if (cmd.equals(ClusterSampleConstants.PUT)) {
+		if (cmd.equals(ClusterSampleConstants.PUT_CACHE_ENTRY)) {
 			_putCache(actionRequest);
 		}
-		else if (cmd.equals(ClusterSampleConstants.REMOVE)) {
+		else if (cmd.equals(ClusterSampleConstants.REMOVE_CACHE_ENTRY)) {
 			_removeCache(actionRequest);
 		}
-		else if (cmd.equals(ClusterSampleConstants.REMOVE_ALL)) {
+		else if (cmd.equals(ClusterSampleConstants.REMOVE_ALL_CACHE_ENTRIES)) {
 			_removeAllCache();
 		}
 	}
