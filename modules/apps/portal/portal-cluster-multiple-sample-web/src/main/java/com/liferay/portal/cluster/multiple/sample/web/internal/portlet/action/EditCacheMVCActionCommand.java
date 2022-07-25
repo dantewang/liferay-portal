@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import javax.portlet.ActionRequest;
@@ -53,8 +54,7 @@ public class EditCacheMVCActionCommand extends BaseMVCActionCommand {
 	protected void doProcessAction(
 			ActionRequest actionRequest, ActionResponse actionResponse) {
 
-		String cmd = ParamUtil.getString(
-			actionRequest, ClusterSampleConstants.CMD);
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
 		if (cmd.equals(ClusterSampleConstants.PUT_CACHE_ENTRY)) {
 			String key = ParamUtil.getString(actionRequest, "key");

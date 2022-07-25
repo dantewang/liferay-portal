@@ -19,8 +19,6 @@ package com.liferay.portal.cluster.multiple.sample.web.internal.constants;
  */
 public interface ClusterSampleConstants {
 
-	public static final String CMD = "cmd";
-
 	public static final String PORTAL_CACHE_NAME = "test.cache";
 
 	public static final String PUT_CACHE_ENTRY = "put_cache_entry";
