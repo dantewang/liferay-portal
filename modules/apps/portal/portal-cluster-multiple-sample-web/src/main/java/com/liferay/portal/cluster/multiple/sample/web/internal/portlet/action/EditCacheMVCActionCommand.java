@@ -67,7 +67,7 @@ public class EditCacheMVCActionCommand extends BaseMVCActionCommand {
 			_portalCache.put(key, value);
 		}
 		else if (cmd.equals(ClusterSampleConstants.REMOVE_CACHE_ENTRY)) {
-			String cacheKey = ParamUtil.getString(actionRequest, "curKey");
+			String cacheKey = ParamUtil.getString(actionRequest, "currentKey");
 
 			if (Validator.isNull(cacheKey)) {
 				return;

@@ -69,7 +69,7 @@ ClusterSampleData clusterSampleData = new ClusterSampleData();
 				<td>
 					<aui:button-row>
 						<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="removeCacheEntryURL">
-							<portlet:param name="curKey" value="${cacheEntry.key}" />
+							<portlet:param name="currentKey" value="${cacheEntry.key}" />
 							<portlet:param name="<%= ClusterSampleConstants.CMD %>" value="<%= ClusterSampleConstants.REMOVE_CACHE_ENTRY %>" />
 						</liferay-portlet:actionURL>
 
