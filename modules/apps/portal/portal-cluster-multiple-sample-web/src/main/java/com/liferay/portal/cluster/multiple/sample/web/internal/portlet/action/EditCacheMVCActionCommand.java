@@ -57,30 +57,18 @@ public class EditCacheMVCActionCommand extends BaseMVCActionCommand {
 			actionRequest, ClusterSampleConstants.CMD);
 
 		if (cmd.equals(ClusterSampleConstants.PUT_CACHE_ENTRY)) {
-			_putCache(actionRequest);
+			_portalCache.put(
+				ParamUtil.getString(actionRequest, "key"),
+				ParamUtil.getString(actionRequest, "value"));
 		}
 		else if (cmd.equals(ClusterSampleConstants.REMOVE_CACHE_ENTRY)) {
-			_removeCache(actionRequest);
+			String cacheKey = ParamUtil.getString(actionRequest, "curKey");
+
+			_portalCache.remove(cacheKey);
 		}
 		else if (cmd.equals(ClusterSampleConstants.REMOVE_ALL_CACHE_ENTRIES)) {
-			_removeAllCache();
+			_portalCache.removeAll();
 		}
-	}
-
-	private void _putCache(ActionRequest actionRequest) {
-		_portalCache.put(
-			ParamUtil.getString(actionRequest, "key"),
-			ParamUtil.getString(actionRequest, "value"));
-	}
-
-	private void _removeAllCache() {
-		_portalCache.removeAll();
-	}
-
-	private void _removeCache(ActionRequest actionRequest) {
-		String cacheKey = ParamUtil.getString(actionRequest, "curKey");
-
-		_portalCache.remove(cacheKey);
 	}
 
 	@Reference
