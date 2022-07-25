@@ -45,7 +45,7 @@ import org.osgi.service.component.annotations.Reference;
 		"com.liferay.portlet.instanceable=true",
 		"javax.portlet.display-name=Cluster Sample Cache",
 		"javax.portlet.init-param.template-path=/META-INF/resources/",
-		"javax.portlet.init-param.view-template=/cluster_cache_replication/view.jsp",
+		"javax.portlet.init-param.view-template=/cache_replication/view.jsp",
 		"javax.portlet.name=" + ClusterSamplePortletKeys.CLUSTER_SAMPLE_CACHE_REPLICATION,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user",
