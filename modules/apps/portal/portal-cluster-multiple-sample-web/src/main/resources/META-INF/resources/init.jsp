@@ -24,7 +24,7 @@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 
 <%@ page import="com.liferay.portal.cluster.multiple.sample.web.internal.ClusterSampleData" %><%@
-page import="com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterPortletConstants" %>
+page import="com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterSampleConstants" %>
 
 <%@ page import="java.util.Map" %>
 

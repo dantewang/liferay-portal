@@ -14,7 +14,7 @@
 
 package com.liferay.portal.cluster.multiple.sample.web.internal.portlet.action;
 
-import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterPortletConstants;
+import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterSampleConstants;
 import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterSamplePortletKeys;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
@@ -45,7 +45,7 @@ public class EditCacheMVCActionCommand extends BaseMVCActionCommand {
 	@Activate
 	protected void activate() {
 		_portalCache = (PortalCache<String, String>)_multiVMPool.getPortalCache(
-			ClusterPortletConstants.PORTAL_CACHE_NAME);
+			ClusterSampleConstants.PORTAL_CACHE_NAME);
 	}
 
 	@Override
@@ -54,15 +54,15 @@ public class EditCacheMVCActionCommand extends BaseMVCActionCommand {
 		throws Exception {
 
 		String cmd = ParamUtil.getString(
-			actionRequest, ClusterPortletConstants.CMD);
+			actionRequest, ClusterSampleConstants.CMD);
 
-		if (cmd.equals(ClusterPortletConstants.PUT)) {
+		if (cmd.equals(ClusterSampleConstants.PUT)) {
 			_putCache(actionRequest);
 		}
-		else if (cmd.equals(ClusterPortletConstants.REMOVE)) {
+		else if (cmd.equals(ClusterSampleConstants.REMOVE)) {
 			_removeCache(actionRequest);
 		}
-		else if (cmd.equals(ClusterPortletConstants.REMOVE_ALL)) {
+		else if (cmd.equals(ClusterSampleConstants.REMOVE_ALL)) {
 			_removeAllCache();
 		}
 	}
