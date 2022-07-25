@@ -40,7 +40,7 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = MVCActionCommand.class
 )
-public class ClusterCacheActionCommand extends BaseMVCActionCommand {
+public class EditCacheMVCActionCommand extends BaseMVCActionCommand {
 
 	@Activate
 	protected void activate() {
