@@ -17,7 +17,7 @@ package com.liferay.portal.cluster.multiple.sample.web.internal.constants;
 /**
  * @author Janis Zhang
  */
-public class ClusterPortletConstants {
+public interface ClusterPortletConstants {
 
 	public static final String CMD = "cmd";
 
