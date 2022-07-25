@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
+import com.liferay.portal.kernel.util.Validator;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -57,12 +58,21 @@ public class EditCacheMVCActionCommand extends BaseMVCActionCommand {
 			actionRequest, ClusterSampleConstants.CMD);
 
 		if (cmd.equals(ClusterSampleConstants.PUT_CACHE_ENTRY)) {
-			_portalCache.put(
-				ParamUtil.getString(actionRequest, "key"),
-				ParamUtil.getString(actionRequest, "value"));
+			String key = ParamUtil.getString(actionRequest, "key");
+			String value = ParamUtil.getString(actionRequest, "value");
+
+			if (Validator.isNull(key) || Validator.isNull(value)) {
+				return;
+			}
+
+			_portalCache.put(key, value);
 		}
 		else if (cmd.equals(ClusterSampleConstants.REMOVE_CACHE_ENTRY)) {
 			String cacheKey = ParamUtil.getString(actionRequest, "curKey");
+
+			if (Validator.isNull(cacheKey)) {
+				return;
+			}
 
 			_portalCache.remove(cacheKey);
 		}
