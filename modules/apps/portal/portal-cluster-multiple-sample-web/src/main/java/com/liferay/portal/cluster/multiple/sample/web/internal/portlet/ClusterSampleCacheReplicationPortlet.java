@@ -16,6 +16,7 @@ package com.liferay.portal.cluster.multiple.sample.web.internal.portlet;
 
 import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterSampleConstants;
 import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterSamplePortletKeys;
+import com.liferay.portal.cluster.multiple.sample.web.internal.constants.ClusterSampleWebKeys;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
@@ -69,7 +70,7 @@ public class ClusterSampleCacheReplicationPortlet extends MVCPortlet {
 		}
 
 		renderRequest.setAttribute(
-			ClusterSampleConstants.PORTAL_CACHE_NAME, cacheEntries);
+			ClusterSampleWebKeys.CLUSTER_SAMPLE_CACHE_ENTRIES, cacheEntries);
 
 		super.render(renderRequest, renderResponse);
 	}

@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-Map<String, String> cacheEntries = (Map<String, String>)request.getAttribute(ClusterSampleConstants.PORTAL_CACHE_NAME);
+Map<String, String> cacheEntries = (Map<String, String>)request.getAttribute(ClusterSampleWebKeys.CLUSTER_SAMPLE_CACHE_ENTRIES);
 
 ClusterSampleData clusterSampleData = new ClusterSampleData();
 %>
