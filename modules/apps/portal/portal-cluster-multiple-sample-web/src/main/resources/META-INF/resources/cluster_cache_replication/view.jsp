@@ -43,7 +43,7 @@ ClusterSampleData clusterSampleData = new ClusterSampleData();
 	<span>Following data is cache get </span>
 	<br />
 
-	<liferay-portlet:actionURL name="/cluster_cache" var="clusterCacheRemoveAllURL">
+	<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="clusterCacheRemoveAllURL">
 		<portlet:param name="<%= ClusterPortletConstants.CMD %>" value="<%= ClusterPortletConstants.REMOVE_ALL %>" />
 	</liferay-portlet:actionURL>
 
@@ -68,7 +68,7 @@ ClusterSampleData clusterSampleData = new ClusterSampleData();
 				</td>
 				<td>
 					<aui:button-row>
-						<liferay-portlet:actionURL name="/cluster_cache" var="clusterCacheRemoveURL">
+						<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="clusterCacheRemoveURL">
 							<portlet:param name="curKey" value="${cacheEntry.key}" />
 							<portlet:param name="<%= ClusterPortletConstants.CMD %>" value="<%= ClusterPortletConstants.REMOVE %>" />
 						</liferay-portlet:actionURL>
@@ -81,7 +81,7 @@ ClusterSampleData clusterSampleData = new ClusterSampleData();
 	</table>
 </c:if>
 
-<liferay-portlet:actionURL name="/cluster_cache" var="clusterCachePutURL">
+<liferay-portlet:actionURL name="/cluster_sample_cache_replication/edit_cache" var="clusterCachePutURL">
 	<portlet:param name="<%= ClusterPortletConstants.CMD %>" value="<%= ClusterPortletConstants.PUT %>" />
 </liferay-portlet:actionURL>
 

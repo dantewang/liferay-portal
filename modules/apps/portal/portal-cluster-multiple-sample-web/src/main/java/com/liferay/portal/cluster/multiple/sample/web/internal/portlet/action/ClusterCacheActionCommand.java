@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true,
 	property = {
 		"javax.portlet.name=" + ClusterPortletKeys.CLUSTER_SAMPLE_CACHE_REPLICATION,
-		"mvc.command.name=/cluster_cache"
+		"mvc.command.name=/cluster_sample_cache_replication/edit_cache"
 	},
 	service = MVCActionCommand.class
 )
