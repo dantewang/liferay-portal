@@ -23,9 +23,9 @@ public interface ClusterSampleConstants {
 
 	public static final String PUT_CACHE_ENTRY = "put_cache_entry";
 
-	public static final String REMOVE_CACHE_ENTRY = "remove_cache_entry";
-
 	public static final String REMOVE_ALL_CACHE_ENTRIES =
 		"remove_all_cache_entries";
+
+	public static final String REMOVE_CACHE_ENTRY = "remove_cache_entry";
 
 }
