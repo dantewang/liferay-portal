@@ -25,6 +25,7 @@ import com.liferay.commerce.price.list.exception.CommercePriceListParentPriceLis
 import com.liferay.commerce.price.list.exception.DuplicateCommerceBasePriceListException;
 import com.liferay.commerce.price.list.exception.DuplicateCommercePriceListException;
 import com.liferay.commerce.price.list.exception.NoSuchPriceListException;
+import com.liferay.commerce.price.list.internal.helper.CommercePriceListCacheHelper;
 import com.liferay.commerce.price.list.model.CommercePriceEntry;
 import com.liferay.commerce.price.list.model.CommercePriceEntryTable;
 import com.liferay.commerce.price.list.model.CommercePriceList;
@@ -338,11 +339,7 @@ public class CommercePriceListLocalServiceImpl
 
 	@Override
 	public void cleanPriceListCache(long companyId) {
-		PortalCache<String, Serializable> portalCache =
-			(PortalCache<String, Serializable>)_multiVMPool.getPortalCache(
-				"PRICE_LISTS_" + companyId);
-
-		portalCache.removeAll();
+		_commercePriceListCacheHelper.cleanPriceListCache(companyId);
 	}
 
 	@Indexable(type = IndexableType.DELETE)
@@ -1788,6 +1785,9 @@ public class CommercePriceListLocalServiceImpl
 	@Reference
 	private CommercePriceListAccountRelLocalService
 		_commercePriceListAccountRelLocalService;
+
+	@Reference
+	private CommercePriceListCacheHelper _commercePriceListCacheHelper;
 
 	@Reference
 	private CommercePriceListChannelRelLocalService
