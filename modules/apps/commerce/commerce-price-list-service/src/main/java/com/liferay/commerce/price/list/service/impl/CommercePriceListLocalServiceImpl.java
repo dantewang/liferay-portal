@@ -53,7 +53,6 @@ import com.liferay.petra.sql.dsl.query.JoinStep;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
-import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -588,8 +587,7 @@ public class CommercePriceListLocalServiceImpl
 			StringUtil.merge(commerceAccountGroupIds));
 
 		PortalCache<String, Serializable> portalCache =
-			(PortalCache<String, Serializable>)_multiVMPool.getPortalCache(
-				"PRICE_LISTS_" + company.getCompanyId());
+			_commercePriceListCacheHelper.getPriceListCache(companyId);
 
 		boolean priceListCalculated = GetterUtil.getBoolean(
 			portalCache.get(cacheKey + "_calculated"));
@@ -1814,9 +1812,6 @@ public class CommercePriceListLocalServiceImpl
 
 	@Reference
 	private ExpandoRowLocalService _expandoRowLocalService;
-
-	@Reference
-	private MultiVMPool _multiVMPool;
 
 	@Reference
 	private ResourceLocalService _resourceLocalService;
