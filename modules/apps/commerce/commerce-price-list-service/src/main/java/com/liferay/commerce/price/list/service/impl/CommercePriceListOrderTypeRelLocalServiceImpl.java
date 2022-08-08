@@ -18,6 +18,7 @@ import com.liferay.commerce.model.CommerceOrderTypeTable;
 import com.liferay.commerce.price.list.model.CommercePriceList;
 import com.liferay.commerce.price.list.model.CommercePriceListOrderTypeRel;
 import com.liferay.commerce.price.list.model.CommercePriceListOrderTypeRelTable;
+import com.liferay.commerce.price.list.service.CommercePriceListLocalService;
 import com.liferay.commerce.price.list.service.base.CommercePriceListOrderTypeRelLocalServiceBaseImpl;
 import com.liferay.expando.kernel.service.ExpandoRowLocalService;
 import com.liferay.petra.sql.dsl.DSLFunctionFactoryUtil;
@@ -27,12 +28,14 @@ import com.liferay.petra.sql.dsl.query.FromStep;
 import com.liferay.petra.sql.dsl.query.GroupByStep;
 import com.liferay.petra.sql.dsl.query.JoinStep;
 import com.liferay.portal.dao.orm.custom.sql.CustomSQL;
+import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
@@ -52,7 +55,7 @@ public class CommercePriceListOrderTypeRelLocalServiceImpl
 			int priority, ServiceContext serviceContext)
 		throws PortalException {
 
-		User user = userLocalService.getUser(userId);
+		User user = _userLocalService.getUser(userId);
 
 		CommercePriceListOrderTypeRel commercePriceListOrderTypeRel =
 			commercePriceListOrderTypeRelPersistence.create(
@@ -75,7 +78,7 @@ public class CommercePriceListOrderTypeRelLocalServiceImpl
 
 		reindexCommercePriceList(commercePriceListId);
 
-		commercePriceListLocalService.cleanPriceListCache(
+		_commercePriceListLocalService.cleanPriceListCache(
 			serviceContext.getCompanyId());
 
 		return commercePriceListOrderTypeRel;
@@ -96,7 +99,7 @@ public class CommercePriceListOrderTypeRelLocalServiceImpl
 		reindexCommercePriceList(
 			commercePriceListOrderTypeRel.getCommercePriceListId());
 
-		commercePriceListLocalService.cleanPriceListCache(
+		_commercePriceListLocalService.cleanPriceListCache(
 			commercePriceListOrderTypeRel.getCompanyId());
 
 		return commercePriceListOrderTypeRel;
@@ -219,10 +222,16 @@ public class CommercePriceListOrderTypeRelLocalServiceImpl
 			});
 	}
 
+	@BeanReference(type = CommercePriceListLocalService.class)
+	private CommercePriceListLocalService _commercePriceListLocalService;
+
 	@ServiceReference(type = CustomSQL.class)
 	private CustomSQL _customSQL;
 
 	@ServiceReference(type = ExpandoRowLocalService.class)
 	private ExpandoRowLocalService _expandoRowLocalService;
+
+	@ServiceReference(type = UserLocalService.class)
+	private UserLocalService _userLocalService;
 
 }

@@ -33,7 +33,14 @@ import com.liferay.commerce.price.list.model.CommercePriceListChannelRelTable;
 import com.liferay.commerce.price.list.model.CommercePriceListCommerceAccountGroupRelTable;
 import com.liferay.commerce.price.list.model.CommercePriceListOrderTypeRelTable;
 import com.liferay.commerce.price.list.model.CommercePriceListTable;
+import com.liferay.commerce.price.list.service.CommercePriceEntryLocalService;
+import com.liferay.commerce.price.list.service.CommercePriceListAccountRelLocalService;
+import com.liferay.commerce.price.list.service.CommercePriceListChannelRelLocalService;
+import com.liferay.commerce.price.list.service.CommercePriceListCommerceAccountGroupRelLocalService;
+import com.liferay.commerce.price.list.service.CommercePriceListDiscountRelLocalService;
+import com.liferay.commerce.price.list.service.CommercePriceListOrderTypeRelLocalService;
 import com.liferay.commerce.price.list.service.base.CommercePriceListLocalServiceBaseImpl;
+import com.liferay.commerce.price.list.service.persistence.CommercePriceEntryPersistence;
 import com.liferay.commerce.pricing.exception.CommerceUndefinedBasePriceListException;
 import com.liferay.commerce.pricing.service.CommercePriceModifierLocalService;
 import com.liferay.expando.kernel.service.ExpandoRowLocalService;
@@ -44,6 +51,7 @@ import com.liferay.petra.sql.dsl.query.GroupByStep;
 import com.liferay.petra.sql.dsl.query.JoinStep;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
@@ -70,7 +78,9 @@ import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.SortFactoryUtil;
 import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.ResourceLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.WorkflowInstanceLinkLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -161,7 +171,7 @@ public class CommercePriceListLocalServiceImpl
 
 		// Commerce price list
 
-		User user = userLocalService.getUser(userId);
+		User user = _userLocalService.getUser(userId);
 
 		if (Validator.isBlank(externalReferenceCode)) {
 			externalReferenceCode = null;
@@ -239,7 +249,7 @@ public class CommercePriceListLocalServiceImpl
 
 		// Resources
 
-		resourceLocalService.addModelResources(
+		_resourceLocalService.addModelResources(
 			commercePriceList, serviceContext);
 
 		return commercePriceList;
@@ -430,36 +440,36 @@ public class CommercePriceListLocalServiceImpl
 
 		// Commerce price entries
 
-		commercePriceEntryLocalService.deleteCommercePriceEntries(
+		_commercePriceEntryLocalService.deleteCommercePriceEntries(
 			commercePriceList.getCommercePriceListId());
 
 		// Commerce price list account rels
 
-		commercePriceListAccountRelLocalService.
+		_commercePriceListAccountRelLocalService.
 			deleteCommercePriceListAccountRels(
 				commercePriceList.getCommercePriceListId());
 
 		// Commerce price list channel rels
 
-		commercePriceListChannelRelLocalService.
+		_commercePriceListChannelRelLocalService.
 			deleteCommercePriceListChannelRels(
 				commercePriceList.getCommercePriceListId());
 
 		// Commerce price list commerce account group rels
 
-		commercePriceListCommerceAccountGroupRelLocalService.
+		_commercePriceListCommerceAccountGroupRelLocalService.
 			deleteCommercePriceListCommerceAccountGroupRels(
 				commercePriceList.getCommercePriceListId());
 
 		// Commerce price list commerce discount rels
 
-		commercePriceListDiscountRelLocalService.
+		_commercePriceListDiscountRelLocalService.
 			deleteCommercePriceListDiscountRels(
 				commercePriceList.getCommercePriceListId());
 
 		// Commerce price list commerce order type rels
 
-		commercePriceListOrderTypeRelLocalService.
+		_commercePriceListOrderTypeRelLocalService.
 			deleteCommercePriceListOrderTypeRels(
 				commercePriceList.getCommercePriceListId());
 
@@ -471,7 +481,7 @@ public class CommercePriceListLocalServiceImpl
 
 		// Resources
 
-		resourceLocalService.deleteResource(
+		_resourceLocalService.deleteResource(
 			commercePriceList, ResourceConstants.SCOPE_INDIVIDUAL);
 
 		// Commerce price list
@@ -885,7 +895,7 @@ public class CommercePriceListLocalServiceImpl
 		throws PortalException {
 
 		List<CommercePriceEntry> commercePriceEntries =
-			commercePriceEntryPersistence.dslQuery(
+			_commercePriceEntryPersistence.dslQuery(
 				_getGroupByStep(
 					DSLQueryFactoryUtil.selectDistinct(
 						CommercePriceEntryTable.INSTANCE),
@@ -1119,7 +1129,7 @@ public class CommercePriceListLocalServiceImpl
 
 		// Commerce price list
 
-		User user = userLocalService.getUser(serviceContext.getUserId());
+		User user = _userLocalService.getUser(serviceContext.getUserId());
 
 		CommercePriceList commercePriceList =
 			commercePriceListPersistence.findByPrimaryKey(commercePriceListId);
@@ -1227,7 +1237,7 @@ public class CommercePriceListLocalServiceImpl
 			Map<String, Serializable> workflowContext)
 		throws PortalException {
 
-		User user = userLocalService.getUser(userId);
+		User user = _userLocalService.getUser(userId);
 		Date date = new Date();
 
 		CommercePriceList commercePriceList =
@@ -1762,6 +1772,34 @@ public class CommercePriceListLocalServiceImpl
 	@ServiceReference(type = CommerceCurrencyLocalService.class)
 	private CommerceCurrencyLocalService _commerceCurrencyLocalService;
 
+	@BeanReference(type = CommercePriceEntryLocalService.class)
+	private CommercePriceEntryLocalService _commercePriceEntryLocalService;
+
+	@BeanReference(type = CommercePriceEntryPersistence.class)
+	private CommercePriceEntryPersistence _commercePriceEntryPersistence;
+
+	@BeanReference(type = CommercePriceListAccountRelLocalService.class)
+	private CommercePriceListAccountRelLocalService
+		_commercePriceListAccountRelLocalService;
+
+	@BeanReference(type = CommercePriceListChannelRelLocalService.class)
+	private CommercePriceListChannelRelLocalService
+		_commercePriceListChannelRelLocalService;
+
+	@BeanReference(
+		type = CommercePriceListCommerceAccountGroupRelLocalService.class
+	)
+	private CommercePriceListCommerceAccountGroupRelLocalService
+		_commercePriceListCommerceAccountGroupRelLocalService;
+
+	@BeanReference(type = CommercePriceListDiscountRelLocalService.class)
+	private CommercePriceListDiscountRelLocalService
+		_commercePriceListDiscountRelLocalService;
+
+	@BeanReference(type = CommercePriceListOrderTypeRelLocalService.class)
+	private CommercePriceListOrderTypeRelLocalService
+		_commercePriceListOrderTypeRelLocalService;
+
 	@ServiceReference(type = CommercePriceModifierLocalService.class)
 	private CommercePriceModifierLocalService
 		_commercePriceModifierLocalService;
@@ -1774,6 +1812,12 @@ public class CommercePriceListLocalServiceImpl
 
 	@ServiceReference(type = MultiVMPool.class)
 	private MultiVMPool _multiVMPool;
+
+	@ServiceReference(type = ResourceLocalService.class)
+	private ResourceLocalService _resourceLocalService;
+
+	@ServiceReference(type = UserLocalService.class)
+	private UserLocalService _userLocalService;
 
 	@ServiceReference(type = WorkflowInstanceLinkLocalService.class)
 	private WorkflowInstanceLinkLocalService _workflowInstanceLinkLocalService;
