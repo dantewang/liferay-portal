@@ -131,6 +131,10 @@ public class HeaderFilter extends BasePortalFilter {
 				value = _dateFormat.format(
 					System.currentTimeMillis() + (seconds * Time.SECOND));
 			}
+
+			httpServletResponse.setHeader(name, value);
+
+			return;
 		}
 
 		httpServletResponse.addHeader(name, value);
