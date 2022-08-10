@@ -174,6 +174,8 @@ public class HeaderFilter extends BasePortalFilter {
 	private String _mergeCacheDirectives(
 		String newCacheDirectives, String existingCacheDirectives) {
 
+		// LPS-159737
+
 		Map<String, String> cacheDirectives = new LinkedHashMap<>();
 
 		for (String existingCacheDirective :
