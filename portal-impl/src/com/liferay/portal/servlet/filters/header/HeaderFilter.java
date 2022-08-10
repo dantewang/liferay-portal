@@ -14,6 +14,7 @@
 
 package com.liferay.portal.servlet.filters.header;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -29,7 +30,9 @@ import com.liferay.portal.util.PropsValues;
 
 import java.text.Format;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.FilterChain;
@@ -119,6 +122,22 @@ public class HeaderFilter extends BasePortalFilter {
 					}
 				}
 			}
+
+			String existingCacheDirectives = httpServletResponse.getHeader(
+				HttpHeaders.CACHE_CONTROL);
+
+			if ((existingCacheDirectives == null) ||
+				StringUtil.equals(existingCacheDirectives, StringPool.BLANK)) {
+
+				httpServletResponse.setHeader(name, value);
+
+				return;
+			}
+
+			httpServletResponse.setHeader(
+				name, _mergeCacheDirectives(value, existingCacheDirectives));
+
+			return;
 		}
 		else if (StringUtil.equalsIgnoreCase(name, HttpHeaders.EXPIRES)) {
 			if (_isNewSession(httpServletRequest)) {
@@ -148,6 +167,30 @@ public class HeaderFilter extends BasePortalFilter {
 		}
 
 		return false;
+	}
+
+	private String _mergeCacheDirectives(
+		String newCacheDirectives, String existingCacheDirectives) {
+
+		List<String> cacheDirectives = new ArrayList<>();
+
+		for (String existingCacheDirective :
+				StringUtil.split(existingCacheDirectives)) {
+
+			cacheDirectives.add(existingCacheDirective.trim());
+		}
+
+		for (String newCacheDirective : StringUtil.split(newCacheDirectives)) {
+			newCacheDirective = newCacheDirective.trim();
+
+			if (cacheDirectives.contains(newCacheDirective)) {
+				continue;
+			}
+
+			cacheDirectives.add(newCacheDirective);
+		}
+
+		return StringUtil.merge(cacheDirectives);
 	}
 
 	private static final Format _dateFormat =
