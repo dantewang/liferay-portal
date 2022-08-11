@@ -89,7 +89,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -195,13 +195,13 @@ public class CommercePriceListLocalServiceImpl
 		Date expirationDate = null;
 		Date date = new Date();
 
-		Date displayDate = PortalUtil.getDate(
+		Date displayDate = _portal.getDate(
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, user.getTimeZone(),
 			CommercePriceListDisplayDateException.class);
 
 		if (!neverExpire) {
-			expirationDate = PortalUtil.getDate(
+			expirationDate = _portal.getDate(
 				expirationDateMonth, expirationDateDay, expirationDateYear,
 				expirationDateHour, expirationDateMinute, user.getTimeZone(),
 				CommercePriceListExpirationDateException.class);
@@ -1135,13 +1135,13 @@ public class CommercePriceListLocalServiceImpl
 		Date expirationDate = null;
 		Date date = new Date();
 
-		Date displayDate = PortalUtil.getDate(
+		Date displayDate = _portal.getDate(
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, user.getTimeZone(),
 			CommercePriceListDisplayDateException.class);
 
 		if (!neverExpire) {
-			expirationDate = PortalUtil.getDate(
+			expirationDate = _portal.getDate(
 				expirationDateMonth, expirationDateDay, expirationDateYear,
 				expirationDateHour, expirationDateMinute, user.getTimeZone(),
 				CommercePriceListExpirationDateException.class);
@@ -1346,7 +1346,7 @@ public class CommercePriceListLocalServiceImpl
 				new Date(), WorkflowConstants.STATUS_SCHEDULED);
 
 		for (CommercePriceList commercePriceList : commercePriceLists) {
-			long userId = PortalUtil.getValidUserId(
+			long userId = _portal.getValidUserId(
 				commercePriceList.getCompanyId(),
 				commercePriceList.getUserId());
 
@@ -1379,7 +1379,7 @@ public class CommercePriceListLocalServiceImpl
 
 		if ((commercePriceLists != null) && !commercePriceLists.isEmpty()) {
 			for (CommercePriceList commercePriceList : commercePriceLists) {
-				long userId = PortalUtil.getValidUserId(
+				long userId = _portal.getValidUserId(
 					commercePriceList.getCompanyId(),
 					commercePriceList.getUserId());
 
@@ -1797,6 +1797,9 @@ public class CommercePriceListLocalServiceImpl
 
 	@Reference
 	private MultiVMPool _multiVMPool;
+
+	@Reference
+	private Portal _portal;
 
 	private PortalCache<String, CommercePriceList> _portalCache;
 
