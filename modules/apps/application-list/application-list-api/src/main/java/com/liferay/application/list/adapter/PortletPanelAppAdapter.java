@@ -75,10 +75,16 @@ public class PortletPanelAppAdapter extends BasePanelApp {
 	}
 
 	@Override
+	public Portlet getPortlet() {
+		return _portlet;
+	}
+
+	@Override
 	public String getPortletId() {
 		return _portletId;
 	}
 
+	private Portlet _portlet;
 	private final String _portletId;
 
 }
