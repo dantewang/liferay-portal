@@ -375,7 +375,7 @@ public interface CommercePriceListLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Optional<CommercePriceList> getCommercePriceList(
-			long companyId, long groupId, long commerceAccountId,
+			long groupId, long commerceAccountId,
 			long[] commerceAccountGroupIds)
 		throws PortalException;
 
