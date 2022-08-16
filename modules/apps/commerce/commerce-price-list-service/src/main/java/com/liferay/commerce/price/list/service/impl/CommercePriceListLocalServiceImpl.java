@@ -69,7 +69,6 @@ import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.SortFactoryUtil;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
-import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.WorkflowInstanceLinkLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
@@ -1774,9 +1773,6 @@ public class CommercePriceListLocalServiceImpl
 	@ServiceReference(type = CommercePriceModifierLocalService.class)
 	private CommercePriceModifierLocalService
 		_commercePriceModifierLocalService;
-
-	@ServiceReference(type = CompanyLocalService.class)
-	private CompanyLocalService _companyLocalService;
 
 	@ServiceReference(type = ExpandoRowLocalService.class)
 	private ExpandoRowLocalService _expandoRowLocalService;
