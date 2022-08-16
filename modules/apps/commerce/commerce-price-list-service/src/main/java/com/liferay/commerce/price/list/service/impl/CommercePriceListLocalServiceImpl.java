@@ -81,6 +81,7 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -318,7 +319,7 @@ public class CommercePriceListLocalServiceImpl
 		super.afterPropertiesSet();
 
 		_portalCache =
-			(PortalCache<String, Serializable>)_multiVMPool.getPortalCache(
+			(PortalCache<String, CommercePriceList>)_multiVMPool.getPortalCache(
 				"PRICE_LISTS", false, true);
 	}
 
@@ -583,14 +584,10 @@ public class CommercePriceListLocalServiceImpl
 			groupId, StringPool.POUND, commerceAccountId, StringPool.POUND,
 			StringUtil.merge(commerceAccountGroupIds));
 
-		boolean priceListCalculated = GetterUtil.getBoolean(
-			_portalCache.get(cacheKey + "_calculated"));
+		CommercePriceList commercePriceList = _portalCache.get(cacheKey);
 
-		CommercePriceList commercePriceList =
-			(CommercePriceList)_portalCache.get(cacheKey);
-
-		if (priceListCalculated) {
-			return Optional.ofNullable(commercePriceList);
+		if (commercePriceList == _dummyCommercePriceList) {
+			return Optional.empty();
 		}
 
 		SearchContext searchContext = buildSearchContext(
@@ -605,7 +602,7 @@ public class CommercePriceListLocalServiceImpl
 		List<Document> documents = hits.toList();
 
 		if (documents.isEmpty()) {
-			_portalCache.put(cacheKey + "_calculated", true);
+			_portalCache.put(cacheKey, _dummyCommercePriceList);
 
 			return Optional.empty();
 		}
@@ -617,11 +614,15 @@ public class CommercePriceListLocalServiceImpl
 
 		commercePriceList = fetchCommercePriceList(commercePriceListId);
 
+		if (commercePriceList == null) {
+			_portalCache.put(cacheKey, _dummyCommercePriceList);
+
+			return Optional.empty();
+		}
+
 		_portalCache.put(cacheKey, commercePriceList);
 
-		_portalCache.put(cacheKey + "_calculated", true);
-
-		return Optional.ofNullable(commercePriceList);
+		return Optional.of(commercePriceList);
 	}
 
 	@Override
@@ -1765,6 +1766,9 @@ public class CommercePriceListLocalServiceImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		CommercePriceListLocalServiceImpl.class);
 
+	private static final CommercePriceList _dummyCommercePriceList =
+		ProxyFactory.newDummyInstance(CommercePriceList.class);
+
 	@ServiceReference(type = CommerceCurrencyLocalService.class)
 	private CommerceCurrencyLocalService _commerceCurrencyLocalService;
 
@@ -1781,7 +1785,7 @@ public class CommercePriceListLocalServiceImpl
 	@ServiceReference(type = MultiVMPool.class)
 	private MultiVMPool _multiVMPool;
 
-	private PortalCache<String, Serializable> _portalCache;
+	private PortalCache<String, CommercePriceList> _portalCache;
 
 	@ServiceReference(type = WorkflowInstanceLinkLocalService.class)
 	private WorkflowInstanceLinkLocalService _workflowInstanceLinkLocalService;
