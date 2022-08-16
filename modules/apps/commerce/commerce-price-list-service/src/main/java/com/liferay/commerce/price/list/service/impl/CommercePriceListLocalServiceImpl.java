@@ -558,8 +558,6 @@ public class CommercePriceListLocalServiceImpl
 			long[] commerceAccountGroupIds)
 		throws PortalException {
 
-		Company company = _companyLocalService.getCompany(companyId);
-
 		if (commerceAccountGroupIds == null) {
 			commerceAccountGroupIds = new long[0];
 		}
@@ -575,7 +573,7 @@ public class CommercePriceListLocalServiceImpl
 
 		PortalCache<String, Serializable> portalCache =
 			(PortalCache<String, Serializable>)_multiVMPool.getPortalCache(
-				"PRICE_LISTS_" + company.getCompanyId());
+				"PRICE_LISTS_" + companyId);
 
 		boolean priceListCalculated = GetterUtil.getBoolean(
 			portalCache.get(cacheKey + "_calculated"));
@@ -588,8 +586,7 @@ public class CommercePriceListLocalServiceImpl
 		}
 
 		SearchContext searchContext = buildSearchContext(
-			company.getCompanyId(), groupId, commerceAccountId,
-			commerceAccountGroupIds);
+			companyId, groupId, commerceAccountId, commerceAccountGroupIds);
 
 		Indexer<CommercePriceList> indexer =
 			IndexerRegistryUtil.nullSafeGetIndexer(CommercePriceList.class);
