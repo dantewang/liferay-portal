@@ -579,6 +579,9 @@ public class CommercePriceListLocalServiceImpl
 		if (commercePriceList == _dummyCommercePriceList) {
 			return null;
 		}
+		else if (commercePriceList != null) {
+			return commercePriceList;
+		}
 
 		SearchContext searchContext = buildSearchContext(
 			CompanyThreadLocal.getCompanyId(), groupId, commerceAccountId,
