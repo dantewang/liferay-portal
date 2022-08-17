@@ -17,6 +17,7 @@ package com.liferay.portal.spring.extender.internal.upgrade;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.configuration.Configuration;
+import com.liferay.portal.kernel.configuration.ConfigurationFactoryUtil;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBContext;
 import com.liferay.portal.kernel.dao.db.DBManager;
@@ -148,7 +149,7 @@ public class InitialUpgradeExtender
 					bundleWiring.getClassLoader(), "service")) {
 
 				Configuration configuration =
-					ConfigurationUtil.getConfiguration(
+					ConfigurationFactoryUtil.getConfiguration(
 						bundleWiring.getClassLoader(), "service");
 
 				String buildNumber = configuration.get("build.number");
