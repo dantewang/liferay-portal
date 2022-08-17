@@ -203,6 +203,8 @@ public class CommercePriceListIndexer extends BaseIndexer<CommercePriceList> {
 		deleteDocument(
 			commercePriceList.getCompanyId(),
 			commercePriceList.getCommercePriceListId());
+
+		_commercePriceListLocalService.cleanPriceListCache();
 	}
 
 	@Override
@@ -301,6 +303,8 @@ public class CommercePriceListIndexer extends BaseIndexer<CommercePriceList> {
 			_log.debug(
 				"Document " + commercePriceList + " indexed successfully");
 		}
+
+		_commercePriceListLocalService.cleanPriceListCache();
 
 		return document;
 	}
