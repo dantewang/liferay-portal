@@ -1,7 +1,7 @@
-diff --git org/apache/bcel/classfile/ConstantPool.java org/apache/bcel/classfile/ConstantPool.java
+diff --git a/org/apache/bcel/classfile/ConstantPool.java b/org/apache/bcel/classfile/ConstantPool.java
 index a10ad43f10444..b81955317b609 100644
---- org/apache/bcel/classfile/ConstantPool.java
-+++ org/apache/bcel/classfile/ConstantPool.java
+--- a/org/apache/bcel/classfile/ConstantPool.java
++++ b/org/apache/bcel/classfile/ConstantPool.java
 @@ -55,6 +55,7 @@ package org.apache.bcel.classfile;
   */
  
@@ -30,10 +30,10 @@ index a10ad43f10444..b81955317b609 100644
        if(constant_pool[i] != null)
  	constant_pool[i].dump(file);
    }
-diff --git org/apache/bcel/generic/ConstantPoolGen.java org/apache/bcel/generic/ConstantPoolGen.java
+diff --git a/org/apache/bcel/generic/ConstantPoolGen.java b/org/apache/bcel/generic/ConstantPoolGen.java
 index 54cf2bb14081b..e5b91904bb946 100644
---- org/apache/bcel/generic/ConstantPoolGen.java
-+++ org/apache/bcel/generic/ConstantPoolGen.java
+--- a/org/apache/bcel/generic/ConstantPoolGen.java
++++ b/org/apache/bcel/generic/ConstantPoolGen.java
 @@ -73,6 +73,7 @@ import java.util.HashMap;
   * @see Constant
   */
