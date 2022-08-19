@@ -77,12 +77,7 @@ public class PanelAppMyAccountPermissionsTest {
 		Bundle bundle = FrameworkUtil.getBundle(
 			PanelAppMyAccountPermissionsTest.class);
 
-		if (bundle == null) {
-			_bundleContext = null;
-		}
-		else {
-			_bundleContext = bundle.getBundleContext();
-		}
+		_bundleContext = bundle.getBundleContext();
 	}
 
 	@Before
