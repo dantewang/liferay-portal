@@ -379,6 +379,12 @@ public class PanelAppRegistry {
 
 				basePanelApp.setPortletLocalService(_portletLocalService);
 			}
+
+			Portlet portlet = panelApp.getPortlet();
+
+			if (portlet != null) {
+				portlet.setControlPanelEntryCategory(panelCategoryKey);
+			}
 		}
 
 		@Override
