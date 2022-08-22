@@ -108,6 +108,15 @@ public abstract class BasePanelApp implements PanelApp {
 	}
 
 	@Override
+	public Portlet getPortlet() {
+		if (_portletLocalService != null) {
+			return _portletLocalService.getPortletById(getPortletId());
+		}
+
+		return null;
+	}
+
+	@Override
 	public PortletURL getPortletURL(HttpServletRequest httpServletRequest)
 		throws PortalException {
 
@@ -205,10 +214,6 @@ public abstract class BasePanelApp implements PanelApp {
 		}
 
 		return groupProvider.getGroup(httpServletRequest);
-	}
-
-	protected PortletLocalService getPortletLocalService() {
-		return _portletLocalService;
 	}
 
 	protected void setPortletLocalService(
