@@ -20,7 +20,10 @@ import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.service.PortletLocalService;
+import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 
 import java.util.Locale;
 
@@ -47,6 +50,17 @@ public class ObjectEntriesPanelApp extends BasePanelApp {
 	@Override
 	public String getLabel(Locale locale) {
 		return _objectDefinition.getPluralLabel(locale);
+	}
+
+	@Override
+	public Portlet getPortlet() {
+		PortletLocalService portletLocalService = getPortletLocalService();
+
+		if (portletLocalService != null) {
+			return portletLocalService.getPortletById(getPortletId());
+		}
+
+		return PortletLocalServiceUtil.getPortletById(getPortletId());
 	}
 
 	@Override

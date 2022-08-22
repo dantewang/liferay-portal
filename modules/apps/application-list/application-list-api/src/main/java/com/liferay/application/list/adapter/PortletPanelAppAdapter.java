@@ -19,6 +19,8 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.PortletConfigFactoryUtil;
+import com.liferay.portal.kernel.service.PortletLocalService;
+import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 
 import java.util.Locale;
@@ -72,6 +74,17 @@ public class PortletPanelAppAdapter extends BasePanelApp {
 		}
 
 		return key;
+	}
+
+	@Override
+	public Portlet getPortlet() {
+		PortletLocalService portletLocalService = getPortletLocalService();
+
+		if (portletLocalService != null) {
+			return portletLocalService.getPortletById(getPortletId());
+		}
+
+		return PortletLocalServiceUtil.getPortletById(getPortletId());
 	}
 
 	@Override
