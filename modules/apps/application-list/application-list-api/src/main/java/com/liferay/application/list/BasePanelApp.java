@@ -207,6 +207,10 @@ public abstract class BasePanelApp implements PanelApp {
 		return groupProvider.getGroup(httpServletRequest);
 	}
 
+	protected PortletLocalService getPortletLocalService() {
+		return _portletLocalService;
+	}
+
 	protected void setPortletLocalService(
 		PortletLocalService portletLocalService) {
 
