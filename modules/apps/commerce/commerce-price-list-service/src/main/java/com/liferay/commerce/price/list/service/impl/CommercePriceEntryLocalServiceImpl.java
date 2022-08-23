@@ -919,21 +919,6 @@ public class CommercePriceEntryLocalServiceImpl
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommercePriceEntry setHasTierPrice(
-			long commercePriceEntryId, boolean hasTierPrice)
-		throws PortalException {
-
-		CommercePriceEntry commercePriceEntry =
-			commercePriceEntryPersistence.findByPrimaryKey(
-				commercePriceEntryId);
-
-		commercePriceEntry.setHasTierPrice(hasTierPrice);
-		commercePriceEntry.setBulkPricing(true);
-
-		return commercePriceEntryPersistence.update(commercePriceEntry);
-	}
-
-	@Override
-	public CommercePriceEntry setHasTierPrice(
 			long commercePriceEntryId, boolean hasTierPrice,
 			boolean bulkPricing)
 		throws PortalException {

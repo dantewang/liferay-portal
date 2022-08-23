@@ -485,7 +485,7 @@ public class CommerceTierPriceEntryLocalServiceImpl
 
 		if (commerceTierPriceEntries.isEmpty()) {
 			_commercePriceEntryLocalService.setHasTierPrice(
-				commerceTierPriceEntry.getCommercePriceEntryId(), false);
+				commerceTierPriceEntry.getCommercePriceEntryId(), false, true);
 		}
 
 		// Expando
