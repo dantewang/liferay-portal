@@ -645,16 +645,6 @@ public interface CommercePriceEntryLocalService
 			long companyId, long commercePriceListId, String keywords)
 		throws PortalException;
 
-	@Indexable(type = IndexableType.REINDEX)
-	public CommercePriceEntry setHasTierPrice(
-			long commercePriceEntryId, boolean hasTierPrice)
-		throws PortalException;
-
-	public CommercePriceEntry setHasTierPrice(
-			long commercePriceEntryId, boolean hasTierPrice,
-			boolean bulkPricing)
-		throws PortalException;
-
 	/**
 	 * Updates the commerce price entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

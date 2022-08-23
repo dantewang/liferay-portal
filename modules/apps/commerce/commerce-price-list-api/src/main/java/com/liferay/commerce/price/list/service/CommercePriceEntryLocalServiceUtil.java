@@ -859,22 +859,6 @@ public class CommercePriceEntryLocalServiceUtil {
 			companyId, commercePriceListId, keywords);
 	}
 
-	public static CommercePriceEntry setHasTierPrice(
-			long commercePriceEntryId, boolean hasTierPrice)
-		throws PortalException {
-
-		return getService().setHasTierPrice(commercePriceEntryId, hasTierPrice);
-	}
-
-	public static CommercePriceEntry setHasTierPrice(
-			long commercePriceEntryId, boolean hasTierPrice,
-			boolean bulkPricing)
-		throws PortalException {
-
-		return getService().setHasTierPrice(
-			commercePriceEntryId, hasTierPrice, bulkPricing);
-	}
-
 	/**
 	 * Updates the commerce price entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

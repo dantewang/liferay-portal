@@ -948,25 +948,6 @@ public class CommercePriceEntryLocalServiceWrapper
 			companyId, commercePriceListId, keywords);
 	}
 
-	@Override
-	public CommercePriceEntry setHasTierPrice(
-			long commercePriceEntryId, boolean hasTierPrice)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _commercePriceEntryLocalService.setHasTierPrice(
-			commercePriceEntryId, hasTierPrice);
-	}
-
-	@Override
-	public CommercePriceEntry setHasTierPrice(
-			long commercePriceEntryId, boolean hasTierPrice,
-			boolean bulkPricing)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _commercePriceEntryLocalService.setHasTierPrice(
-			commercePriceEntryId, hasTierPrice, bulkPricing);
-	}
-
 	/**
 	 * Updates the commerce price entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
