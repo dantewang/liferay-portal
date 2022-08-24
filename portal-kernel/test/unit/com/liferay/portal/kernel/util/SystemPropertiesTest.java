@@ -38,7 +38,7 @@ public class SystemPropertiesTest {
 		SystemProperties.clear(_TEST_KEY);
 
 		Map<String, String> properties = SystemProperties.getProperties(
-			"test.reference", false);
+			"test.reference.key", false);
 
 		for (String propertyKey : properties.keySet()) {
 			SystemProperties.clear(propertyKey);
@@ -153,87 +153,76 @@ public class SystemPropertiesTest {
 
 	@Test
 	public void testReference() {
-		SystemProperties.set("test.reference.key", "test.value");
+		SystemProperties.set("test.reference.key.origin", "test.value");
 
-		// Simple reference
-
-		Assert.assertNull(SystemProperties.get("test.reference.reference.key"));
+		// Correct References
 
 		SystemProperties.set(
-			"test.reference.reference.key", "${test.reference.key}");
+			"test.reference.key.1", "${test.reference.key.origin}");
+		SystemProperties.set("test.reference.key.2", "${test.reference.key.1}");
+		SystemProperties.set("test.reference.key.3", "${test.reference.key.2}");
+		SystemProperties.set(
+			"test.reference.key.4",
+			"${test.reference.key.1},${test.reference.key.2}");
 
 		Assert.assertEquals(
-			"test.value", SystemProperties.get("test.reference.reference.key"));
+			"test.value", SystemProperties.get("test.reference.key.1"));
+		Assert.assertEquals(
+			"test.value", SystemProperties.get("test.reference.key.2"));
+		Assert.assertEquals(
+			"test.value", SystemProperties.get("test.reference.key.3"));
+		Assert.assertEquals(
+			"test.value,test.value",
+			SystemProperties.get("test.reference.key.4"));
+
+		SystemProperties.clear("test.reference.key.2");
+
+		Assert.assertNull(SystemProperties.get("test.reference.key.2"));
+		Assert.assertEquals(
+			"test.value", SystemProperties.get("test.reference.key.1"));
+		Assert.assertEquals(
+			"${test.reference.key.2}",
+			SystemProperties.get("test.reference.key.3"));
+		Assert.assertEquals(
+			"test.value,${test.reference.key.2}",
+			SystemProperties.get("test.reference.key.4"));
 
 		// Blank reference
 
-		Assert.assertNull(
-			SystemProperties.get("test.reference.blank.reference.key"));
-
-		SystemProperties.set("test.reference.blank.reference.key", "${}");
+		SystemProperties.set("test.reference.key.blank", "${}");
 
 		Assert.assertEquals(
-			"${}", SystemProperties.get("test.reference.blank.reference.key"));
-
-		// Value contains a single symbol "}"
-
-		Assert.assertNull(
-			SystemProperties.get("test.reference.right.part.reference.key"));
-
-		SystemProperties.set(
-			"test.reference.right.part.reference.key",
-			"test.reference.key}${test.reference.key}");
-
-		Assert.assertEquals(
-			"test.reference.key}test.value",
-			SystemProperties.get("test.reference.right.part.reference.key"));
-
-		// Value contains a single symbol "${"
-
-		Assert.assertNull(
-			SystemProperties.get("test.reference.left.part.reference.key"));
-
-		SystemProperties.set(
-			"test.reference.left.part.reference.key",
-			"test.reference.key${test.reference.key}${");
-
-		Assert.assertEquals(
-			"test.reference.keytest.value${",
-			SystemProperties.get("test.reference.left.part.reference.key"));
-
-		// Multiple reference
-
-		Assert.assertNull(
-			SystemProperties.get("test.reference.double.reference.key"));
-
-		SystemProperties.set(
-			"test.reference.double.reference.key",
-			"${test.reference.key}${test.reference.key}");
-
-		Assert.assertEquals(
-			"test.valuetest.value",
-			SystemProperties.get("test.reference.double.reference.key"));
+			"${}", SystemProperties.get("test.reference.key.blank"));
 
 		// Nested references
 
-		Assert.assertNull(
-			SystemProperties.get("test.reference.nested.reference.key"));
+		SystemProperties.set(
+			"test.reference.key.nested",
+			"${test.reference.key.origin${test.reference.key.origin}}");
+
+		Assert.assertEquals(
+			"${test.reference.key.origin${test.reference.key.origin}}",
+			SystemProperties.get("test.reference.key.nested"));
+
+		// Value contains a single symbol "}"
 
 		SystemProperties.set(
-			"test.reference.nested.reference.key",
-			"${test.reference.key${test.reference.key}}");
+			"test.reference.key.right.part",
+			"test.reference.key.origin}${test.reference.key.origin}");
 
 		Assert.assertEquals(
-			"${test.reference.key${test.reference.key}}",
-			SystemProperties.get("test.reference.nested.reference.key"));
+			"test.reference.key.origin}test.value",
+			SystemProperties.get("test.reference.key.right.part"));
 
-		// The referenced property does not exist
+		// Value contains a single symbol "${"
 
-		SystemProperties.clear("test.reference.key");
+		SystemProperties.set(
+			"test.reference.key.left.part",
+			"test.reference.key.origin${test.reference.key.origin}${");
 
 		Assert.assertEquals(
-			"${test.reference.key}",
-			SystemProperties.get("test.reference.reference.key"));
+			"test.reference.key.origintest.value${",
+			SystemProperties.get("test.reference.key.left.part"));
 	}
 
 	private static final String _KEY = "test.key";
