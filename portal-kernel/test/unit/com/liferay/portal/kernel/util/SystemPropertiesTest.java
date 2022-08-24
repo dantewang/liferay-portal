@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 
 import java.io.IOException;
@@ -34,6 +35,8 @@ public class SystemPropertiesTest {
 
 	@After
 	public void tearDown() {
+		SystemProperties.clear(_TEST_KEY);
+
 		Map<String, String> properties = SystemProperties.getProperties(
 			_PREFIX, false);
 
@@ -150,14 +153,7 @@ public class SystemPropertiesTest {
 
 	@Test
 	public void testReference() {
-
-		// Properties that refer to other Properties can also be parsed
-		// by SystemProperties
-
 		SystemProperties.set("test.SystemProperties.test.key", "test.value");
-		Assert.assertEquals(
-			"test.value",
-			SystemProperties.get("test.SystemProperties.test.key"));
 
 		// Simple reference
 
@@ -261,7 +257,8 @@ public class SystemPropertiesTest {
 
 	private static final String _KEY = "test.key";
 
-	private static final String _PREFIX = "test.SystemProperties.";
+	private static final String _PREFIX =
+		SystemPropertiesTest.class.getName() + StringPool.PERIOD;
 
 	private static final String _TEST_KEY = _PREFIX + _KEY;
 
