@@ -16,6 +16,7 @@ package com.liferay.source.formatter.checkstyle.check;
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
+import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
 
 import java.util.List;
 
@@ -47,11 +48,48 @@ public class UnusedVariableCheck extends BaseCheck {
 		DetailAST modifiersDetailAST = detailAST.findFirstToken(
 			TokenTypes.MODIFIERS);
 
-		if (modifiersDetailAST.branchContains(TokenTypes.ANNOTATION) ||
-			modifiersDetailAST.branchContains(TokenTypes.LITERAL_PROTECTED) ||
+		if (modifiersDetailAST.branchContains(TokenTypes.LITERAL_PROTECTED) ||
 			modifiersDetailAST.branchContains(TokenTypes.LITERAL_PUBLIC)) {
 
 			return;
+		}
+
+		if (modifiersDetailAST.branchContains(TokenTypes.ANNOTATION)) {
+			String absolutePath = getAbsolutePath();
+
+			int x = absolutePath.indexOf("/modules/");
+
+			if (x == -1) {
+				return;
+			}
+
+			String modulePath = absolutePath.substring(x + 1);
+
+			if (!modulePath.startsWith("modules/apps") &&
+				!modulePath.startsWith("modules/dxp")) {
+
+				return;
+			}
+
+			List<String> moduleNames = getAttributeValues(
+				_MODULE_NAMES_WHITELIST);
+
+			boolean inWhitelist = false;
+
+			for (String moduleName : moduleNames) {
+				if (modulePath.startsWith(moduleName)) {
+					inWhitelist = true;
+
+					break;
+				}
+			}
+
+			if (!inWhitelist ||
+				(inWhitelist &&
+				 !AnnotationUtil.containsAnnotation(detailAST, "Reference"))) {
+
+				return;
+			}
 		}
 
 		String variableName = getName(detailAST);
@@ -133,6 +171,9 @@ public class UnusedVariableCheck extends BaseCheck {
 
 		return false;
 	}
+
+	private static final String _MODULE_NAMES_WHITELIST =
+		"moduleNamesWhitelist";
 
 	private static final String _MSG_UNUSED_VARIABLE = "variable.unused";
 
