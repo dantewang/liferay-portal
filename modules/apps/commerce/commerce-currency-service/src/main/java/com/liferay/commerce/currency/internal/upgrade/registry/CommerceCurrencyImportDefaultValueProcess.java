@@ -19,6 +19,8 @@ import com.liferay.commerce.currency.constants.CommerceCurrencyConstants;
 import com.liferay.commerce.currency.constants.RoundingTypeConstants;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.model.impl.CommerceCurrencyImpl;
+import com.liferay.commerce.currency.util.ExchangeRateProvider;
+import com.liferay.commerce.currency.util.ExchangeRateProviderRegistry;
 import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -61,13 +63,15 @@ public class CommerceCurrencyImportDefaultValueProcess extends UpgradeProcess {
 		CompanyLocalService companyLocalService,
 		ConfigurationProvider configurationProvider,
 		CounterLocalService counterLocalService,
-		UserLocalService userLocalService, PortalUUID portalUUID) {
+		UserLocalService userLocalService, PortalUUID portalUUID,
+		ExchangeRateProviderRegistry exchangeRateProviderRegistry) {
 
 		_companyLocalService = companyLocalService;
 		_configurationProvider = configurationProvider;
 		_counterLocalService = counterLocalService;
 		_userLocalService = userLocalService;
 		_portalUUID = portalUUID;
+		_exchangeRateProviderRegistry = exchangeRateProviderRegistry;
 	}
 
 	@Override
@@ -226,7 +230,45 @@ public class CommerceCurrencyImportDefaultValueProcess extends UpgradeProcess {
 							UpgradeProcessUtil.getDefaultLanguageId(
 								company.getCompanyId())));
 					preparedStatement.setString(10, symbol);
-					preparedStatement.setBigDecimal(11, BigDecimal.ONE);
+
+					BigDecimal exchangeRate = BigDecimal.ONE;
+
+					for (String exchangeRateProviderKey :
+							_exchangeRateProviderRegistry.
+								getExchangeRateProviderKeys()) {
+
+						ExchangeRateProvider exchangeRateProvider =
+							_exchangeRateProviderRegistry.
+								getExchangeRateProvider(
+									exchangeRateProviderKey);
+
+						if (exchangeRateProvider == null) {
+							return;
+						}
+
+						CommerceCurrency primaryCommerceCurrency =
+							new CommerceCurrencyImpl();
+
+						primaryCommerceCurrency.setCode("USD");
+
+						commerceCurrency = new CommerceCurrencyImpl();
+
+						commerceCurrency.setCode(jsonObject.getString("code"));
+
+						try {
+							exchangeRate = exchangeRateProvider.getExchangeRate(
+								primaryCommerceCurrency, commerceCurrency);
+						}
+						catch (Exception exception) {
+							if (_log.isDebugEnabled()) {
+								_log.debug(exception);
+							}
+
+							return;
+						}
+					}
+
+					preparedStatement.setBigDecimal(11, exchangeRate);
 					preparedStatement.setString(
 						12,
 						LocalizationUtil.updateLocalization(
@@ -249,15 +291,6 @@ public class CommerceCurrencyImportDefaultValueProcess extends UpgradeProcess {
 				}
 			}
 		}
-
-		//		for (String exchangeRateProviderKey :
-		//				_exchangeRateProviderRegistry.getExchangeRateProviderKeys()) {
-		//
-		//			_updateExchangeRates(
-		//					serviceContext.getCompanyId(), exchangeRateProviderKey);
-		//
-		//			break;
-		//		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -266,6 +299,7 @@ public class CommerceCurrencyImportDefaultValueProcess extends UpgradeProcess {
 	private final CompanyLocalService _companyLocalService;
 	private final ConfigurationProvider _configurationProvider;
 	private final CounterLocalService _counterLocalService;
+	private final ExchangeRateProviderRegistry _exchangeRateProviderRegistry;
 	private final PortalUUID _portalUUID;
 	private final UserLocalService _userLocalService;
 

@@ -14,6 +14,7 @@
 
 package com.liferay.commerce.currency.internal.upgrade.registry;
 
+import com.liferay.commerce.currency.util.ExchangeRateProviderRegistry;
 import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -68,7 +69,8 @@ public class CommerceCurrencyServiceUpgradeStepRegistrator
 				commerceCurrencyImportDefaultValueProcess =
 					new CommerceCurrencyImportDefaultValueProcess(
 						_companyLocalService, _configurationProvider,
-						_counterLocalService, _userLocalService, _portalUUID);
+						_counterLocalService, _userLocalService, _portalUUID,
+						_exchangeRateProviderRegistry);
 
 			commerceCurrencyImportDefaultValueProcess.doUpgrade();
 		}
@@ -94,6 +96,9 @@ public class CommerceCurrencyServiceUpgradeStepRegistrator
 
 	@Reference
 	private CounterLocalService _counterLocalService;
+
+	@Reference
+	private ExchangeRateProviderRegistry _exchangeRateProviderRegistry;
 
 	@Reference
 	private PortalUUID _portalUUID;
