@@ -601,31 +601,18 @@ public class CommerceAddressLocalServiceImpl
 			long billingAddressId = commerceOrder.getBillingAddressId();
 			long shippingAddressId = commerceOrder.getShippingAddressId();
 
-			long commerceShippingMethodId =
-				commerceOrder.getCommerceShippingMethodId();
-			String shippingOptionName = commerceOrder.getShippingOptionName();
-			BigDecimal shippingPrice = commerceOrder.getShippingAmount();
-
 			if (billingAddressId == commerceAddressId) {
-				billingAddressId = 0;
+				commerceOrder.setBillingAddressId(0);
 			}
 
 			if (shippingAddressId == commerceAddressId) {
-				shippingAddressId = 0;
-
-				commerceShippingMethodId = 0;
-				shippingOptionName = null;
-				shippingPrice = BigDecimal.ZERO;
+				commerceOrder.setShippingAddressId(0);
+				commerceOrder.setCommerceShippingMethodId(0);
+				commerceOrder.setShippingOptionName(null);
+				commerceOrder.setShippingAmount(BigDecimal.ZERO);
 			}
 
-			_commerceOrderLocalService.updateCommerceOrder(
-				null, commerceOrder.getCommerceOrderId(), billingAddressId,
-				commerceShippingMethodId, shippingAddressId,
-				commerceOrder.getAdvanceStatus(),
-				commerceOrder.getCommercePaymentMethodKey(),
-				commerceOrder.getPurchaseOrderNumber(), shippingPrice,
-				shippingOptionName, commerceOrder.getSubtotal(),
-				commerceOrder.getTotal(), null);
+			_commerceOrderLocalService.updateCommerceOrder(commerceOrder);
 		}
 	}
 
