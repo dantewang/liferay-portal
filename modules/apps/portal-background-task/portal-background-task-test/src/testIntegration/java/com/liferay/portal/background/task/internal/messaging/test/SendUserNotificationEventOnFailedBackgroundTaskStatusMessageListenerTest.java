@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.background.task.test;
+package com.liferay.portal.background.task.internal.messaging.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
@@ -48,7 +48,8 @@ import org.junit.runner.RunWith;
  * @author Dante Wang
  */
 @RunWith(Arquillian.class)
-public class SendUserNotificationEventOnFailedBackgroundTaskTest {
+public class
+	SendUserNotificationEventOnFailedBackgroundTaskStatusMessageListenerTest {
 
 	@ClassRule
 	@Rule
@@ -68,7 +69,7 @@ public class SendUserNotificationEventOnFailedBackgroundTaskTest {
 		try {
 			_backgroundTaskManager.addBackgroundTask(
 				_user.getUserId(), CompanyConstants.SYSTEM,
-				SendUserNotificationEventOnFailedBackgroundTaskTest.class.
+				SendUserNotificationEventOnFailedBackgroundTaskStatusMessageListenerTest.class.
 					getName(),
 				TestBackgroundTaskExecutor.class.getName(), new HashMap<>(),
 				new ServiceContext());
@@ -91,7 +92,7 @@ public class SendUserNotificationEventOnFailedBackgroundTaskTest {
 				userNotificationEvent.getPayload());
 
 			Assert.assertEquals(
-				SendUserNotificationEventOnFailedBackgroundTaskTest.class.
+				SendUserNotificationEventOnFailedBackgroundTaskStatusMessageListenerTest.class.
 					getName(),
 				jsonObject.getString("name"));
 			Assert.assertEquals(
