@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.background.task.internal.notification;
+package com.liferay.portal.background.task.internal.notifications;
 
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
