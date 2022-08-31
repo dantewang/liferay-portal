@@ -33,10 +33,10 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true, property = "javax.portlet.name=BackgroundTask",
 	service = UserNotificationHandler.class
 )
-public class BackgroundTaskFailedUserNotificationHandler
+public class BackgroundTaskUserNotificationHandler
 	extends BaseUserNotificationHandler {
 
-	public BackgroundTaskFailedUserNotificationHandler() {
+	public BackgroundTaskUserNotificationHandler() {
 		setPortletId("BackgroundTask");
 	}
 
