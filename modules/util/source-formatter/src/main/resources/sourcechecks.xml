@@ -1647,6 +1647,7 @@
 		<check name="XMLSpringExtenderServiceCheck">
 			<category name="Performance" />
 			<description name="Finds cases where Spring extender service is used as a dependency injection." />
+			<property name="enabled" value="false" />
 		</check>
 		<check name="XMLSpringFileCheck">
 			<category name="Styling" />
