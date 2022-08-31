@@ -78,6 +78,10 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 		_companyLocalService.forEachCompany(
 			company -> {
 				try {
+					if (_hasPrimaryCommerceCurrency(company)) {
+						return;
+					}
+
 					_importDefaultValues(company);
 				}
 				catch (Exception exception) {
@@ -147,10 +151,6 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 	}
 
 	private void _importDefaultValues(Company company) throws Exception {
-		if (_hasPrimaryCommerceCurrency(company)) {
-			return;
-		}
-
 		Class<?> clazz = getClass();
 
 		String currenciesPath =
