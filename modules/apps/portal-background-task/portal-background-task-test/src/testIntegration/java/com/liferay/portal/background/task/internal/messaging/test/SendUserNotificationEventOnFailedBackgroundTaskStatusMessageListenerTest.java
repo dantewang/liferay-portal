@@ -57,9 +57,7 @@ public class
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void testSendUserNotificationEventOnFailedBackgroundTask()
-		throws Exception {
-
+	public void testDoReceive() throws Exception {
 		_user = UserTestUtil.addUser();
 
 		_backgroundTaskExecutorRegistry.registerBackgroundTaskExecutor(
