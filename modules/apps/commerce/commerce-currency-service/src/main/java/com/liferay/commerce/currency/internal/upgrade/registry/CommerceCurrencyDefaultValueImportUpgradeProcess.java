@@ -74,7 +74,7 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 	}
 
 	@Override
-	protected void doUpgrade() throws Exception {
+	protected void doUpgrade() {
 		_companyLocalService.forEachCompany(
 			company -> {
 				try {
