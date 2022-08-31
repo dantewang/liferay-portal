@@ -102,8 +102,6 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 
 		commerceCurrency.setCode(currentCommerceCurrencyCode);
 
-		BigDecimal exchangeRate = BigDecimal.ONE;
-
 		for (String exchangeRateProviderKey :
 				_exchangeRateProviderRegistry.getExchangeRateProviderKeys()) {
 
@@ -112,23 +110,21 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 					exchangeRateProviderKey);
 
 			if (exchangeRateProvider == null) {
-				return null;
+				return BigDecimal.ONE;
 			}
 
 			try {
-				exchangeRate = exchangeRateProvider.getExchangeRate(
+				return exchangeRateProvider.getExchangeRate(
 					primaryCommerceCurrency, commerceCurrency);
 			}
 			catch (Exception exception) {
 				if (_log.isDebugEnabled()) {
 					_log.debug(exception);
 				}
-
-				return null;
 			}
 		}
 
-		return exchangeRate;
+		return BigDecimal.ONE;
 	}
 
 	private Boolean _hasPrimaryCommerceCurrency(Company company)
@@ -241,9 +237,14 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 							company.getCompanyId())));
 				preparedStatement.setString(10, symbol);
 
-				preparedStatement.setBigDecimal(
-					11,
-					_getExchangeRate(firstPrimaryCommerceCurrencyCode, code));
+				BigDecimal exchangeRate = BigDecimal.ONE;
+
+				if (!primary) {
+					exchangeRate = _getExchangeRate(
+						firstPrimaryCommerceCurrencyCode, code);
+				}
+
+				preparedStatement.setBigDecimal(11, exchangeRate);
 
 				preparedStatement.setString(
 					12,
