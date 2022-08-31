@@ -65,7 +65,7 @@ public class
 		User user = _userLocalService.fetchUser(backgroundTask.getUserId());
 
 		if ((user != null) && !user.isDefaultUser()) {
-			_sendUserNotification(backgroundTask, user.getUserId());
+			_sendUserNotificationEvents(backgroundTask, user.getUserId());
 
 			return;
 		}
@@ -76,11 +76,11 @@ public class
 		long[] userIds = _userLocalService.getRoleUserIds(role.getRoleId());
 
 		for (long userId : userIds) {
-			_sendUserNotification(backgroundTask, userId);
+			_sendUserNotificationEvents(backgroundTask, userId);
 		}
 	}
 
-	private void _sendUserNotification(
+	private void _sendUserNotificationEvents(
 			BackgroundTask backgroundTask, long userId)
 		throws PortalException {
 
