@@ -127,8 +127,27 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 		return exchangeRate;
 	}
 
+	private Boolean _hasPrimaryCommerceCurrency(Company company)
+		throws Exception {
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"select * from CommerceCurrency where companyId = ? and " +
+					"primary_ = true and active_ = true")) {
+
+			preparedStatement.setLong(1, company.getCompanyId());
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					return true;
+				}
+
+				return false;
+			}
+		}
+	}
+
 	private void _importDefaultValues(Company company) throws Exception {
-		if (_isPrimaryCommerceCurrencyExisted(company)) {
+		if (_hasPrimaryCommerceCurrency(company)) {
 			return;
 		}
 
@@ -162,7 +181,7 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 
 			String code = jsonObject.getString("code");
 
-			if (_isCommerceCurrencyExisted(company, code)) {
+			if (_isCommerceCurrencyExisting(company, code)) {
 				return;
 			}
 
@@ -253,7 +272,7 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 		}
 	}
 
-	private Boolean _isCommerceCurrencyExisted(Company company, String code)
+	private Boolean _isCommerceCurrencyExisting(Company company, String code)
 		throws Exception {
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
@@ -263,25 +282,6 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 			preparedStatement.setLong(1, company.getCompanyId());
 
 			preparedStatement.setString(2, code);
-
-			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
-					return true;
-				}
-
-				return false;
-			}
-		}
-	}
-
-	private Boolean _isPrimaryCommerceCurrencyExisted(Company company)
-		throws Exception {
-
-		try (PreparedStatement preparedStatement = connection.prepareStatement(
-				"select * from CommerceCurrency where companyId = ? and " +
-					"primary_ = true and active_ = true")) {
-
-			preparedStatement.setLong(1, company.getCompanyId());
 
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
