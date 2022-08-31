@@ -162,19 +162,7 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(countriesJSON);
 
-		String primaryCommerceCurrencyCode = StringPool.BLANK;
-
-		for (int i = 0; i < jsonArray.length(); i++) {
-			JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-			Boolean primary = jsonObject.getBoolean("primary");
-
-			if (primary) {
-				primaryCommerceCurrencyCode = jsonObject.getString("code");
-
-				break;
-			}
-		}
+		String firstPrimaryCommerceCurrencyCode = null;
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -183,6 +171,12 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 
 			if (_isCommerceCurrencyExisting(company, code)) {
 				return;
+			}
+
+			boolean primary = jsonObject.getBoolean("primary");
+
+			if (primary && (firstPrimaryCommerceCurrencyCode == null)) {
+				firstPrimaryCommerceCurrencyCode = code;
 			}
 
 			String symbol = jsonObject.getString("symbol");
@@ -248,7 +242,8 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 				preparedStatement.setString(10, symbol);
 
 				preparedStatement.setBigDecimal(
-					11, _getExchangeRate(primaryCommerceCurrencyCode, code));
+					11,
+					_getExchangeRate(firstPrimaryCommerceCurrencyCode, code));
 
 				preparedStatement.setString(
 					12,
@@ -261,8 +256,7 @@ public class CommerceCurrencyDefaultValueImportUpgradeProcess
 				preparedStatement.setInt(
 					14, roundingTypeConfiguration.minimumFractionDigits());
 				preparedStatement.setString(15, roundingMode.name());
-				preparedStatement.setBoolean(
-					16, jsonObject.getBoolean("primary"));
+				preparedStatement.setBoolean(16, primary);
 				preparedStatement.setDouble(
 					17, jsonObject.getDouble("priority"));
 				preparedStatement.setBoolean(18, true);
