@@ -29,10 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Dante Wang
  */
-@Component(
-	immediate = true, property = "javax.portlet.name=BackgroundTask",
-	service = UserNotificationHandler.class
-)
+@Component(immediate = true, service = UserNotificationHandler.class)
 public class BackgroundTaskUserNotificationHandler
 	extends BaseUserNotificationHandler {
 
