@@ -1837,8 +1837,7 @@ public class LayoutStagedModelDataHandler
 
 		return _friendlyURLEntryLocalService.getFriendlyURLEntries(
 			layoutFriendlyURL.getGroupId(),
-			_portal.getClassNameId(Layout.class),
-			layoutFriendlyURL.getPlid());
+			_portal.getClassNameId(Layout.class), layoutFriendlyURL.getPlid());
 	}
 
 	private String _getLayoutPrototypeUuid(
