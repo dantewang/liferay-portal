@@ -16,13 +16,14 @@ package com.liferay.layout.internal.model.listener;
 
 import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
 import com.liferay.friendly.url.service.FriendlyURLEntryLocalService;
-import com.liferay.layout.friendly.url.LayoutFriendlyURLEntryHelper;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.BaseModelListener;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutFriendlyURL;
 import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.staging.StagingGroupHelper;
 
 import java.util.Collections;
@@ -64,8 +65,7 @@ public class LayoutFriendlyURLModelListener
 
 				_friendlyURLEntryLocalService.addFriendlyURLEntry(
 					layoutFriendlyURL.getGroupId(),
-					_layoutFriendlyURLEntryHelper.getClassNameId(
-						layoutFriendlyURL.isPrivateLayout()),
+					_portal.getClassNameId(Layout.class),
 					layoutFriendlyURL.getPlid(),
 					Collections.singletonMap(
 						layoutFriendlyURL.getLanguageId(),
@@ -82,7 +82,7 @@ public class LayoutFriendlyURLModelListener
 	private FriendlyURLEntryLocalService _friendlyURLEntryLocalService;
 
 	@Reference
-	private LayoutFriendlyURLEntryHelper _layoutFriendlyURLEntryHelper;
+	private Portal _portal;
 
 	@Reference
 	private StagingGroupHelper _stagingGroupHelper;

@@ -16,7 +16,6 @@ package com.liferay.layout.internal.model.listener;
 
 import com.liferay.client.extension.service.ClientExtensionEntryRelLocalService;
 import com.liferay.friendly.url.service.FriendlyURLEntryLocalService;
-import com.liferay.layout.friendly.url.LayoutFriendlyURLEntryHelper;
 import com.liferay.layout.service.LayoutClassedModelUsageLocalService;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.model.BaseModelListener;
@@ -43,18 +42,8 @@ public class LayoutModelListener extends BaseModelListener<Layout> {
 			_portal.getClassNameId(Layout.class), layout.getPlid());
 
 		_friendlyURLEntryLocalService.deleteFriendlyURLEntry(
-			layout.getGroupId(),
-			_layoutFriendlyURLEntryHelper.getClassNameId(
-				layout.isPrivateLayout()),
+			layout.getGroupId(), _portal.getClassNameId(Layout.class),
 			layout.getPlid());
-
-		if (layout.isTypeAssetDisplay()) {
-			_friendlyURLEntryLocalService.deleteFriendlyURLEntry(
-				layout.getGroupId(),
-				_layoutFriendlyURLEntryHelper.getClassNameId(
-					!layout.isPrivateLayout()),
-				layout.getPlid());
-		}
 	}
 
 	@Override
@@ -73,9 +62,6 @@ public class LayoutModelListener extends BaseModelListener<Layout> {
 	@Reference
 	private LayoutClassedModelUsageLocalService
 		_layoutClassedModelUsageLocalService;
-
-	@Reference
-	private LayoutFriendlyURLEntryHelper _layoutFriendlyURLEntryHelper;
 
 	@Reference
 	private Portal _portal;

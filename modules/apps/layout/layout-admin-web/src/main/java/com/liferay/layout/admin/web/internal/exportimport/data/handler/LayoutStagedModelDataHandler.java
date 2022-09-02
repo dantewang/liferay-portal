@@ -46,7 +46,6 @@ import com.liferay.friendly.url.service.FriendlyURLEntryLocalService;
 import com.liferay.item.selector.criteria.InfoListItemSelectorReturnType;
 import com.liferay.layout.admin.web.internal.exportimport.data.handler.helper.LayoutPageTemplateStructureDataHandlerHelper;
 import com.liferay.layout.configuration.LayoutExportImportConfiguration;
-import com.liferay.layout.friendly.url.LayoutFriendlyURLEntryHelper;
 import com.liferay.layout.model.LayoutClassedModelUsage;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
@@ -1838,8 +1837,7 @@ public class LayoutStagedModelDataHandler
 
 		return _friendlyURLEntryLocalService.getFriendlyURLEntries(
 			layoutFriendlyURL.getGroupId(),
-			_layoutFriendlyURLEntryHelper.getClassNameId(
-				layoutFriendlyURL.isPrivateLayout()),
+			_portal.getClassNameId(Layout.class),
 			layoutFriendlyURL.getPlid());
 	}
 
@@ -2080,8 +2078,7 @@ public class LayoutStagedModelDataHandler
 
 		Map<Long, Long> layoutNewPrimaryKeys =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
-				_layoutFriendlyURLEntryHelper.getClassName(
-					portletDataContext.isPrivateLayout()));
+				Layout.class.getName());
 
 		layoutNewPrimaryKeys.put(
 			layout.getPrimaryKey(), importedLayout.getPrimaryKey());
@@ -2967,10 +2964,6 @@ public class LayoutStagedModelDataHandler
 
 	private volatile LayoutExportImportConfiguration
 		_layoutExportImportConfiguration;
-
-	@Reference
-	private LayoutFriendlyURLEntryHelper _layoutFriendlyURLEntryHelper;
-
 	private LayoutFriendlyURLLocalService _layoutFriendlyURLLocalService;
 	private LayoutLocalService _layoutLocalService;
 	private LayoutLocalServiceHelper _layoutLocalServiceHelper;

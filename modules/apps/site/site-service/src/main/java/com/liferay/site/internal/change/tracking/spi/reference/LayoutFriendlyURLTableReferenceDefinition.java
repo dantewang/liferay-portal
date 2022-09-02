@@ -18,13 +18,14 @@ import com.liferay.change.tracking.spi.reference.TableReferenceDefinition;
 import com.liferay.change.tracking.spi.reference.builder.ChildTableReferenceInfoBuilder;
 import com.liferay.change.tracking.spi.reference.builder.ParentTableReferenceInfoBuilder;
 import com.liferay.friendly.url.model.FriendlyURLEntryTable;
-import com.liferay.layout.friendly.url.LayoutFriendlyURLEntryHelper;
 import com.liferay.petra.sql.dsl.query.FromStep;
 import com.liferay.petra.sql.dsl.query.JoinStep;
 import com.liferay.portal.kernel.model.ClassNameTable;
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutFriendlyURLTable;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
 import com.liferay.portal.kernel.service.persistence.LayoutFriendlyURLPersistence;
+import com.liferay.portal.kernel.util.Portal;
 
 import java.util.function.Function;
 
@@ -87,8 +88,7 @@ public class LayoutFriendlyURLTableReferenceDefinition
 			ClassNameTable.INSTANCE.classNameId.eq(
 				FriendlyURLEntryTable.INSTANCE.classNameId
 			).and(
-				ClassNameTable.INSTANCE.value.eq(
-					_layoutFriendlyURLEntryHelper.getClassName(privateLayout))
+				ClassNameTable.INSTANCE.value.eq(Layout.class.getName())
 			).and(
 				LayoutFriendlyURLTable.INSTANCE.privateLayout.eq(privateLayout)
 			)
@@ -96,9 +96,9 @@ public class LayoutFriendlyURLTableReferenceDefinition
 	}
 
 	@Reference
-	private LayoutFriendlyURLEntryHelper _layoutFriendlyURLEntryHelper;
+	private LayoutFriendlyURLPersistence _layoutFriendlyURLPersistence;
 
 	@Reference
-	private LayoutFriendlyURLPersistence _layoutFriendlyURLPersistence;
+	private Portal _portal;
 
 }

@@ -23,7 +23,6 @@ import com.liferay.exportimport.kernel.service.ExportImportConfigurationLocalSer
 import com.liferay.exportimport.kernel.service.ExportImportLocalService;
 import com.liferay.friendly.url.model.FriendlyURLEntry;
 import com.liferay.friendly.url.service.FriendlyURLEntryLocalService;
-import com.liferay.layout.friendly.url.LayoutFriendlyURLEntryHelper;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
 import com.liferay.layout.page.template.model.LayoutPageTemplateCollection;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
@@ -207,7 +206,7 @@ public class ExportImportLocalServiceTest {
 			layout.getUserId(), layout.getPlid(),
 			StringPool.SLASH + newFriendlyURL, layout.getDefaultLanguageId());
 
-		long classNameId = _layoutFriendlyURLEntryHelper.getClassNameId(false);
+		long classNameId = _portal.getClassNameId(Layout.class);
 
 		String oldFriendlyURL = FriendlyURLNormalizerUtil.normalize(name);
 
@@ -315,9 +314,6 @@ public class ExportImportLocalServiceTest {
 
 	@Inject
 	private ExportImportLocalService _exportImportLocalService;
-
-	@Inject
-	private LayoutFriendlyURLEntryHelper _layoutFriendlyURLEntryHelper;
 
 	@Inject
 	private LayoutLocalService _layoutLocalService;

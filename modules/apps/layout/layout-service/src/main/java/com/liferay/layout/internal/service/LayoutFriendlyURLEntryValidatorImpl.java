@@ -16,11 +16,11 @@ package com.liferay.layout.internal.service;
 
 import com.liferay.friendly.url.exception.DuplicateFriendlyURLEntryException;
 import com.liferay.friendly.url.service.FriendlyURLEntryLocalService;
-import com.liferay.layout.friendly.url.LayoutFriendlyURLEntryHelper;
 import com.liferay.portal.kernel.exception.LayoutFriendlyURLException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.service.LayoutFriendlyURLEntryValidator;
+import com.liferay.portal.kernel.util.Portal;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -40,9 +40,8 @@ public class LayoutFriendlyURLEntryValidatorImpl
 
 		try {
 			_friendlyURLEntryLocalService.validate(
-				groupId,
-				_layoutFriendlyURLEntryHelper.getClassNameId(privateLayout),
-				classPK, urlTitle);
+				groupId, _portal.getClassNameId(Layout.class), classPK,
+				urlTitle);
 		}
 		catch (DuplicateFriendlyURLEntryException
 					duplicateFriendlyURLEntryException) {
@@ -63,6 +62,6 @@ public class LayoutFriendlyURLEntryValidatorImpl
 	private FriendlyURLEntryLocalService _friendlyURLEntryLocalService;
 
 	@Reference
-	private LayoutFriendlyURLEntryHelper _layoutFriendlyURLEntryHelper;
+	private Portal _portal;
 
 }

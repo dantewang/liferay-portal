@@ -18,10 +18,10 @@ import com.liferay.friendly.url.info.item.provider.InfoItemFriendlyURLProvider;
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
 import com.liferay.friendly.url.service.FriendlyURLEntryLocalService;
 import com.liferay.friendly.url.util.comparator.FriendlyURLEntryLocalizationComparator;
-import com.liferay.layout.friendly.url.LayoutFriendlyURLEntryHelper;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.Portal;
 
 import java.util.List;
 
@@ -48,9 +48,7 @@ public class LayoutInfoItemFriendlyURLProvider
 		Layout layout, String languageId) {
 
 		return _friendlyURLEntryLocalService.getFriendlyURLEntryLocalizations(
-			layout.getGroupId(),
-			_layoutFriendlyURLEntryHelper.getClassNameId(
-				layout.isPrivateLayout()),
+			layout.getGroupId(), _portal.getClassNameId(Layout.class),
 			layout.getPlid(), languageId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
 			_friendlyURLEntryLocalizationComparator);
 	}
@@ -63,6 +61,6 @@ public class LayoutInfoItemFriendlyURLProvider
 	private FriendlyURLEntryLocalService _friendlyURLEntryLocalService;
 
 	@Reference
-	private LayoutFriendlyURLEntryHelper _layoutFriendlyURLEntryHelper;
+	private Portal _portal;
 
 }
