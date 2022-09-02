@@ -1,13 +1,12 @@
 Bundle-Name: Liferay Layout API
 Bundle-SymbolicName: com.liferay.layout.api
-Bundle-Version: 19.1.1
+Bundle-Version: 20.0.0
 Export-Package:\
 	com.liferay.layout.adaptive.media,\
 	com.liferay.layout.configuration,\
 	com.liferay.layout.constants,\
 	com.liferay.layout.crawler,\
 	com.liferay.layout.exception,\
-	com.liferay.layout.friendly.url,\
 	com.liferay.layout.helper,\
 	com.liferay.layout.list.retriever,\
 	com.liferay.layout.model,\
