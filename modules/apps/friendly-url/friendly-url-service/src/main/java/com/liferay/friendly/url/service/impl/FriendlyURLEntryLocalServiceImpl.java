@@ -548,7 +548,8 @@ public class FriendlyURLEntryLocalServiceImpl
 		throws PortalException {
 
 		for (String urlTitle : urlTitleMap.values()) {
-			validate(groupId, classNameId, classPK, urlTitle);
+			friendlyURLEntryLocalService.validate(
+				groupId, classNameId, classPK, urlTitle);
 		}
 	}
 
@@ -588,7 +589,8 @@ public class FriendlyURLEntryLocalServiceImpl
 	public void validate(long groupId, long classNameId, String urlTitle)
 		throws PortalException {
 
-		validate(groupId, classNameId, 0, urlTitle);
+		friendlyURLEntryLocalService.validate(
+			groupId, classNameId, 0, urlTitle);
 	}
 
 	private boolean _containsAllURLTitles(
