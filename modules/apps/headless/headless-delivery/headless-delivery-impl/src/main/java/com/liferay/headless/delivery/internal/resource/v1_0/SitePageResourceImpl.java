@@ -35,7 +35,6 @@ import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.search.filter.TermFilter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.LayoutFriendlyURLLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutService;
@@ -252,12 +251,9 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 	private Layout _getLayout(long groupId, String friendlyUrlPath)
 		throws Exception {
 
-		String resourceName = ResourceActionsUtil.getCompositeModelName(
-			Layout.class.getName(), "false");
-
 		FriendlyURLEntryLocalization friendlyURLEntryLocalization =
 			_friendlyURLEntryLocalService.getFriendlyURLEntryLocalization(
-				groupId, _portal.getClassNameId(resourceName),
+				groupId, _portal.getClassNameId(Layout.class.getName()),
 				StringPool.FORWARD_SLASH + friendlyUrlPath);
 
 		return _layoutLocalService.getLayout(
