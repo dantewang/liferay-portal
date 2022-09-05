@@ -91,6 +91,10 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 			return contentType;
 		}
 
+		if (inputStream == null) {
+			return null;
+		}
+
 		Metadata metadata = new Metadata();
 
 		if (Validator.isNotNull(fileName)) {
@@ -98,7 +102,7 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 				Metadata.RESOURCE_NAME_KEY, HtmlUtil.escapeURL(fileName));
 		}
 
-		if ((inputStream != null) && !inputStream.markSupported()) {
+		if (!inputStream.markSupported()) {
 			inputStream = new UnsyncBufferedInputStream(inputStream);
 		}
 
