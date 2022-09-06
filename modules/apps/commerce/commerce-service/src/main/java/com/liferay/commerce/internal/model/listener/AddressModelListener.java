@@ -14,6 +14,7 @@
 
 package com.liferay.commerce.internal.model.listener;
 
+import com.liferay.account.model.AccountEntry;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.service.CommerceOrderLocalService;
 import com.liferay.portal.kernel.exception.ModelListenerException;
@@ -37,6 +38,10 @@ public class AddressModelListener extends BaseModelListener<Address> {
 
 	@Override
 	public void onAfterRemove(Address address) throws ModelListenerException {
+		if (!_isCommerceRelatedModel(address)) {
+			return;
+		}
+
 		try {
 			List<CommerceOrder> commerceOrders =
 				_commerceOrderLocalService.getCommerceOrdersByBillingAddress(
@@ -61,6 +66,10 @@ public class AddressModelListener extends BaseModelListener<Address> {
 	public void onAfterUpdate(Address originalAddress, Address address)
 		throws ModelListenerException {
 
+		if (!_isCommerceRelatedModel(address)) {
+			return;
+		}
+
 		try {
 			List<CommerceOrder> commerceOrders =
 				_commerceOrderLocalService.getCommerceOrdersByShippingAddress(
@@ -74,6 +83,18 @@ public class AddressModelListener extends BaseModelListener<Address> {
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
+	}
+
+	private boolean _isCommerceRelatedModel(Address address) {
+		String className = address.getClassName();
+
+		if (className.equals(AccountEntry.class.getName()) ||
+			className.startsWith("com.liferay.commerce")) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private void _removeCommerceOrderAddresses(
