@@ -23,11 +23,8 @@ import com.liferay.commerce.exception.CommerceAddressTypeException;
 import com.liferay.commerce.exception.CommerceAddressZipException;
 import com.liferay.commerce.model.CommerceAddress;
 import com.liferay.commerce.model.CommerceGeocoder;
-import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.impl.CommerceAddressImpl;
-import com.liferay.commerce.service.CommerceOrderLocalService;
 import com.liferay.commerce.service.base.CommerceAddressLocalServiceBaseImpl;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Address;
 import com.liferay.portal.kernel.model.Group;
@@ -561,17 +558,6 @@ public class CommerceAddressLocalServiceImpl
 			CommerceAddressImpl.toAddressTypeId(type), address.isMailing(),
 			address.isPrimary(), phoneNumber);
 
-		// Commerce orders
-
-		List<CommerceOrder> commerceOrders =
-			_commerceOrderLocalService.getCommerceOrdersByShippingAddress(
-				commerceAddressId);
-
-		for (CommerceOrder commerceOrder : commerceOrders) {
-			_commerceOrderLocalService.resetCommerceOrderShipping(
-				commerceOrder.getCommerceOrderId());
-		}
-
 		return CommerceAddressImpl.fromAddress(address);
 	}
 
@@ -629,9 +615,6 @@ public class CommerceAddressLocalServiceImpl
 
 	@ServiceReference(type = CommerceGeocoder.class)
 	private CommerceGeocoder _commerceGeocoder;
-
-	@BeanReference(type = CommerceOrderLocalService.class)
-	private CommerceOrderLocalService _commerceOrderLocalService;
 
 	@ServiceReference(type = GroupLocalService.class)
 	private GroupLocalService _groupLocalService;
