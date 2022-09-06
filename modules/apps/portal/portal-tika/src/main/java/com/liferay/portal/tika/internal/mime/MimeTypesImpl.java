@@ -149,6 +149,12 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 				"tika-mimetypes.xml"),
 			_extensionsMap);
 
+		for (Map.Entry<String, Set<String>> entry : _extensionsMap.entrySet()) {
+			for (String mimeType : entry.getValue()) {
+				_contentTypes.put(mimeType, entry.getKey());
+			}
+		}
+
 		Map<String, Set<String>> extensionsMap = new HashMap<>();
 
 		read(
