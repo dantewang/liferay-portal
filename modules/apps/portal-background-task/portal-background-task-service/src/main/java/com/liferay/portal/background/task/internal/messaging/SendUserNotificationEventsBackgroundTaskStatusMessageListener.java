@@ -33,11 +33,10 @@ import com.liferay.portal.kernel.util.GetterUtil;
 /**
  * @author Dante Wang
  */
-public class
-	SendUserNotificationEventOnFailedBackgroundTaskStatusMessageListener
-		extends BaseMessageListener {
+public class SendUserNotificationEventsBackgroundTaskStatusMessageListener
+	extends BaseMessageListener {
 
-	public SendUserNotificationEventOnFailedBackgroundTaskStatusMessageListener(
+	public SendUserNotificationEventsBackgroundTaskStatusMessageListener(
 		BackgroundTaskLocalService backgroundTaskLocalService,
 		RoleLocalService roleLocalService, UserLocalService userLocalService,
 		UserNotificationEventLocalService userNotificationEventLocalService) {

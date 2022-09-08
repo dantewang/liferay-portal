@@ -48,8 +48,7 @@ import org.junit.runner.RunWith;
  * @author Dante Wang
  */
 @RunWith(Arquillian.class)
-public class
-	SendUserNotificationEventOnFailedBackgroundTaskStatusMessageListenerTest {
+public class SendUserNotificationEventsBackgroundTaskStatusMessageListenerTest {
 
 	@ClassRule
 	@Rule
@@ -67,7 +66,7 @@ public class
 		try {
 			_backgroundTaskManager.addBackgroundTask(
 				_user.getUserId(), CompanyConstants.SYSTEM,
-				SendUserNotificationEventOnFailedBackgroundTaskStatusMessageListenerTest.class.
+				SendUserNotificationEventsBackgroundTaskStatusMessageListenerTest.class.
 					getName(),
 				TestBackgroundTaskExecutor.class.getName(), new HashMap<>(),
 				new ServiceContext());
@@ -90,7 +89,7 @@ public class
 				userNotificationEvent.getPayload());
 
 			Assert.assertEquals(
-				SendUserNotificationEventOnFailedBackgroundTaskStatusMessageListenerTest.class.
+				SendUserNotificationEventsBackgroundTaskStatusMessageListenerTest.class.
 					getName(),
 				jsonObject.getString("name"));
 			Assert.assertEquals(

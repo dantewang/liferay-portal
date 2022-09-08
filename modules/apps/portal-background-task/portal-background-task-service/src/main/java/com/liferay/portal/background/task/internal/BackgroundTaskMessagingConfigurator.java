@@ -17,7 +17,7 @@ package com.liferay.portal.background.task.internal;
 import com.liferay.portal.background.task.internal.messaging.BackgroundTaskMessageListener;
 import com.liferay.portal.background.task.internal.messaging.BackgroundTaskQueuingMessageListener;
 import com.liferay.portal.background.task.internal.messaging.RemoveOnCompletionBackgroundTaskStatusMessageListener;
-import com.liferay.portal.background.task.internal.messaging.SendUserNotificationEventOnFailedBackgroundTaskStatusMessageListener;
+import com.liferay.portal.background.task.internal.messaging.SendUserNotificationEventsBackgroundTaskStatusMessageListener;
 import com.liferay.portal.background.task.service.BackgroundTaskLocalService;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutorRegistry;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusRegistry;
@@ -74,7 +74,7 @@ public class BackgroundTaskMessagingConfigurator {
 			new RemoveOnCompletionBackgroundTaskStatusMessageListener(
 				_backgroundTaskLocalService));
 		backgroundTaskStatusDestination.register(
-			new SendUserNotificationEventOnFailedBackgroundTaskStatusMessageListener(
+			new SendUserNotificationEventsBackgroundTaskStatusMessageListener(
 				_backgroundTaskLocalService, _roleLocalService,
 				_userLocalService, _userNotificationEventLocalService));
 	}
