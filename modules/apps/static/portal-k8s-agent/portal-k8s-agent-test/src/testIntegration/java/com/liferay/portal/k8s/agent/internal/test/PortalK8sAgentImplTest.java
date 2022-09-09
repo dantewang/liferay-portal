@@ -51,7 +51,6 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.mockwebserver.MockResponse;
@@ -68,12 +67,9 @@ import org.junit.runner.RunWith;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.cm.ManagedService;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -301,30 +297,10 @@ public class PortalK8sAgentImplTest {
 			).build()
 		);
 
-		CountDownLatch countDownLatch = new CountDownLatch(2);
-
-		ServiceRegistration<ManagedService> serviceRegistration =
-			_bundleContext.registerService(
-				ManagedService.class, properties -> countDownLatch.countDown(),
-				HashMapDictionaryBuilder.<String, Object>put(
-					Constants.SERVICE_PID, "test.pid"
-				).build());
-
 		try {
-			countDownLatch.await(10000, TimeUnit.MILLISECONDS);
-		}
-		finally {
-			serviceRegistration.unregister();
-		}
+			Configuration configuration =
+				ConfigurationTestUtil.awaitConfiguration("test.pid");
 
-		Configuration[] configurations = _configurationAdmin.listConfigurations(
-			"(service.pid=test.pid)");
-
-		Assert.assertNotNull(configurations);
-
-		Configuration configuration = configurations[0];
-
-		try {
 			Dictionary<String, Object> properties =
 				configuration.getProcessedProperties(null);
 
@@ -337,7 +313,7 @@ public class PortalK8sAgentImplTest {
 			Assert.assertEquals("test.value", properties.get("test.key"));
 		}
 		finally {
-			ConfigurationTestUtil.deleteConfiguration(configuration);
+			ConfigurationTestUtil.deleteConfiguration("test.pid");
 		}
 	}
 

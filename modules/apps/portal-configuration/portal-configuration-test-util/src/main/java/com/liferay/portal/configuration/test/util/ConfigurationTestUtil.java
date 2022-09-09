@@ -19,6 +19,7 @@ import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Dictionary;
@@ -38,6 +39,36 @@ import org.osgi.service.cm.ManagedService;
  * @author Drew Brokke
  */
 public class ConfigurationTestUtil {
+
+	public static Configuration awaitConfiguration(String pid)
+		throws Exception {
+
+		CountDownLatch countDownLatch = new CountDownLatch(2);
+
+		ServiceRegistration<ManagedService> serviceRegistration =
+			_bundleContext.registerService(
+				ManagedService.class, props -> countDownLatch.countDown(),
+				MapUtil.singletonDictionary(Constants.SERVICE_PID, pid));
+
+		try {
+			countDownLatch.await();
+		}
+		finally {
+			serviceRegistration.unregister();
+		}
+
+		Configuration[] configurations = OSGiServiceUtil.callService(
+			_bundleContext, ConfigurationAdmin.class,
+			configurationAdmin -> configurationAdmin.listConfigurations(
+				StringBundler.concat(
+					"(", Constants.SERVICE_PID, "=", pid, ")")));
+
+		if ((configurations == null) || (configurations.length == 0)) {
+			return null;
+		}
+
+		return configurations[0];
+	}
 
 	public static String createFactoryConfiguration(
 			String factoryPid, Dictionary<String, Object> properties)

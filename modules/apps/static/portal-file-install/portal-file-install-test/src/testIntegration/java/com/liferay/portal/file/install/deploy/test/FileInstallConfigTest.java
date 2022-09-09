@@ -60,7 +60,6 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
 
 /**
@@ -360,30 +359,7 @@ public class FileInstallConfigTest {
 			configurationFile.setReadOnly();
 		}
 
-		CountDownLatch countDownLatch = new CountDownLatch(2);
-
-		ServiceRegistration<ManagedService> serviceRegistration =
-			_bundleContext.registerService(
-				ManagedService.class, props -> countDownLatch.countDown(),
-				MapUtil.singletonDictionary(
-					Constants.SERVICE_PID, configurationPid));
-
-		try {
-			countDownLatch.await();
-		}
-		finally {
-			serviceRegistration.unregister();
-		}
-
-		Configuration[] configurations = _configurationAdmin.listConfigurations(
-			StringBundler.concat(
-				"(", Constants.SERVICE_PID, "=", configurationPid, ")"));
-
-		if (configurations == null) {
-			return null;
-		}
-
-		return configurations[0];
+		return ConfigurationTestUtil.awaitConfiguration(configurationPid);
 	}
 
 	private Configuration _createConfiguration(
