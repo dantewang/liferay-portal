@@ -44,12 +44,12 @@ public class BaseSearchEngine implements SearchEngine {
 
 	@Override
 	public IndexSearcher getIndexSearcher() {
-		return _indexSearcher;
+		return new DummyIndexSearcher();
 	}
 
 	@Override
 	public IndexWriter getIndexWriter() {
-		return _indexWriter;
+		return new DummyIndexWriter();
 	}
 
 	@Override
@@ -81,20 +81,10 @@ public class BaseSearchEngine implements SearchEngine {
 		throws SearchException {
 	}
 
-	public void setIndexSearcher(IndexSearcher indexSearcher) {
-		_indexSearcher = indexSearcher;
-	}
-
-	public void setIndexWriter(IndexWriter indexWriter) {
-		_indexWriter = indexWriter;
-	}
-
 	public void setVendor(String vendor) {
 		_vendor = vendor;
 	}
 
-	private IndexSearcher _indexSearcher = new DummyIndexSearcher();
-	private IndexWriter _indexWriter = new DummyIndexWriter();
 	private String _vendor;
 
 }
