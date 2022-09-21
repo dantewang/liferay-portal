@@ -76,9 +76,10 @@ public class HttpAdapter {
 
 		Class<?> clazz = getClass();
 
-		_servletContextProxy = (ServletContext)Proxy.newProxyInstance(
-			clazz.getClassLoader(), _INTERFACES,
-			new ServletContextAdaptor(_servletContext));
+		ServletContext servletContextProxy =
+			(ServletContext)Proxy.newProxyInstance(
+				clazz.getClassLoader(), _INTERFACES,
+				new ServletContextAdaptor(_servletContext));
 
 		ServletConfig servletConfig = new ServletConfig() {
 
@@ -87,21 +88,21 @@ public class HttpAdapter {
 				if (name.equals(
 						HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT)) {
 
-					return _servletContextProxy.getContextPath() +
-						_servletContextProxy.getInitParameter(name);
+					return servletContextProxy.getContextPath() +
+						servletContextProxy.getInitParameter(name);
 				}
 
-				return _servletContextProxy.getInitParameter(name);
+				return servletContextProxy.getInitParameter(name);
 			}
 
 			@Override
 			public Enumeration<String> getInitParameterNames() {
-				return _servletContextProxy.getInitParameterNames();
+				return servletContextProxy.getInitParameterNames();
 			}
 
 			@Override
 			public ServletContext getServletContext() {
-				return _servletContextProxy;
+				return servletContextProxy;
 			}
 
 			@Override
@@ -115,7 +116,7 @@ public class HttpAdapter {
 			_httpServiceServlet.init(servletConfig);
 		}
 		catch (ServletException servletException) {
-			_servletContextProxy.log(
+			servletContextProxy.log(
 				servletException.getMessage(), servletException);
 
 			return;
@@ -177,8 +178,6 @@ public class HttpAdapter {
 
 	@Reference(target = "(original.bean=true)")
 	private ServletContext _servletContext;
-
-	private ServletContext _servletContextProxy;
 
 	private static class ServletContextAdaptor implements InvocationHandler {
 
