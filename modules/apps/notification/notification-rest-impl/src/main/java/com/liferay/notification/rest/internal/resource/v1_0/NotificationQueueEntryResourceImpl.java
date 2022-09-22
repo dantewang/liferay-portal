@@ -23,6 +23,7 @@ import com.liferay.notification.type.NotificationType;
 import com.liferay.notification.util.NotificationTypeRegistry;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -71,10 +72,7 @@ public class NotificationQueueEntryResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			filter,
-			com.liferay.notification.model.NotificationQueueEntry.class.
-				getName(),
-			search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> searchContext.setCompanyId(
@@ -169,6 +167,12 @@ public class NotificationQueueEntryResourceImpl
 			}
 		};
 	}
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.notification.model.NotificationQueueEntry)"
+	)
+	private Indexer<com.liferay.notification.model.NotificationQueueEntry>
+		_indexer;
 
 	@Reference
 	private NotificationQueueEntryService _notificationQueueEntryService;
