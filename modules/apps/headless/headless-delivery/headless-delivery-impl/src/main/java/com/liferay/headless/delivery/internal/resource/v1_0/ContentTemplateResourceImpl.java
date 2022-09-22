@@ -24,6 +24,7 @@ import com.liferay.headless.delivery.resource.v1_0.ContentTemplateResource;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -100,7 +101,7 @@ public class ContentTemplateResourceImpl
 					Group.class.getName(), siteId)),
 			booleanQuery -> {
 			},
-			filter, DDMTemplate.class.getName(), search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -150,6 +151,11 @@ public class ContentTemplateResourceImpl
 
 	@Reference
 	private DDMTemplateService _ddmTemplateService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.dynamic.data.mapping.model.DDMTemplate)"
+	)
+	private Indexer<DDMTemplate> _indexer;
 
 	@Reference
 	private Portal _portal;

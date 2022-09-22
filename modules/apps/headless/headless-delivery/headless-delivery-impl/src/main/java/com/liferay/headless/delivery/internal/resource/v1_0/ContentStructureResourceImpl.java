@@ -24,6 +24,7 @@ import com.liferay.headless.delivery.resource.v1_0.ContentStructureResource;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
@@ -87,7 +88,7 @@ public class ContentStructureResourceImpl
 			Collections.emptyMap(),
 			booleanQuery -> {
 			},
-			filter, DDMStructure.class.getName(), search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -135,6 +136,11 @@ public class ContentStructureResourceImpl
 
 	@Reference
 	private DDMStructureService _ddmStructureService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.dynamic.data.mapping.model.DDMStructure)"
+	)
+	private Indexer<DDMStructure> _indexer;
 
 	@Reference
 	private Portal _portal;

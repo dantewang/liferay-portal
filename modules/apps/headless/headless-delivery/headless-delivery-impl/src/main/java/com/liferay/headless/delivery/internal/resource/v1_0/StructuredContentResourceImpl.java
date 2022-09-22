@@ -74,6 +74,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Document;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -886,8 +887,8 @@ public class StructuredContentResourceImpl
 
 		return SearchUtil.search(
 			actions, booleanQueryUnsafeConsumer,
-			FilterUtil.processFilter(_ddmIndexer, filter),
-			JournalArticle.class.getName(), keywords, pagination,
+			FilterUtil.processFilter(_ddmIndexer, filter), _indexer, keywords,
+			pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				com.liferay.portal.kernel.search.Field.ARTICLE_ID,
 				com.liferay.portal.kernel.search.Field.SCOPE_GROUP_ID),
@@ -1255,6 +1256,11 @@ public class StructuredContentResourceImpl
 
 	@Reference
 	private GroupLocalService _groupLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.journal.model.JournalArticle)"
+	)
+	private Indexer<JournalArticle> _indexer;
 
 	@Reference
 	private InfoItemServiceTracker _infoItemServiceTracker;

@@ -34,6 +34,7 @@ import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -305,8 +306,8 @@ public class MessageBoardSectionResourceImpl
 
 		return SearchUtil.search(
 			actions, booleanQueryUnsafeConsumer,
-			FilterUtil.processFilter(_ddmIndexer, filter),
-			MBCategory.class.getName(), keywords, pagination,
+			FilterUtil.processFilter(_ddmIndexer, filter), _indexer, keywords,
+			pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -398,6 +399,11 @@ public class MessageBoardSectionResourceImpl
 
 	@Reference
 	private ExpandoTableLocalService _expandoTableLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.message.boards.model.MBCategory)"
+	)
+	private Indexer<MBCategory> _indexer;
 
 	@Reference
 	private MBCategoryService _mbCategoryService;

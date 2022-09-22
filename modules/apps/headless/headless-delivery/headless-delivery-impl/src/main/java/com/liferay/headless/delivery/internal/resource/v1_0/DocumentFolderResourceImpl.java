@@ -34,6 +34,7 @@ import com.liferay.headless.delivery.search.sort.SortUtil;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -355,8 +356,8 @@ public class DocumentFolderResourceImpl extends BaseDocumentFolderResourceImpl {
 						BooleanClauseOccur.MUST);
 				}
 			},
-			FilterUtil.processFilter(_ddmIndexer, filter),
-			DLFolder.class.getName(), keywords, pagination,
+			FilterUtil.processFilter(_ddmIndexer, filter), _indexer, keywords,
+			pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -466,6 +467,11 @@ public class DocumentFolderResourceImpl extends BaseDocumentFolderResourceImpl {
 
 	@Reference
 	private ExpandoTableLocalService _expandoTableLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.document.library.kernel.model.DLFolder)"
+	)
+	private Indexer<DLFolder> _indexer;
 
 	@Reference
 	private Portal _portal;

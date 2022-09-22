@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -172,7 +173,7 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 					new TermFilter(Field.GROUP_ID, String.valueOf(siteId)),
 					BooleanClauseOccur.MUST);
 			},
-			filter, Layout.class.getName(), search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -451,6 +452,11 @@ public class SitePageResourceImpl extends BaseSitePageResourceImpl {
 
 	@Reference
 	private FriendlyURLEntryLocalService _friendlyURLEntryLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.portal.kernel.model.Layout)"
+	)
+	private Indexer<Layout> _indexer;
 
 	@Reference
 	private LayoutFriendlyURLLocalService _layoutFriendlyURLLocalService;

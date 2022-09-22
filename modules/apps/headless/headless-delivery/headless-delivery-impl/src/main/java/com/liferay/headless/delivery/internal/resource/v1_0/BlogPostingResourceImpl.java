@@ -39,6 +39,7 @@ import com.liferay.layout.display.page.LayoutDisplayPageProviderTracker;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryService;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -195,7 +196,7 @@ public class BlogPostingResourceImpl extends BaseBlogPostingResourceImpl {
 			).build(),
 			booleanQuery -> {
 			},
-			filter, BlogsEntry.class.getName(), search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -493,6 +494,11 @@ public class BlogPostingResourceImpl extends BaseBlogPostingResourceImpl {
 
 	@Reference
 	private ExpandoTableLocalService _expandoTableLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.blogs.model.BlogsEntry)"
+	)
+	private Indexer<BlogsEntry> _indexer;
 
 	@Reference
 	private InfoItemServiceTracker _infoItemServiceTracker;

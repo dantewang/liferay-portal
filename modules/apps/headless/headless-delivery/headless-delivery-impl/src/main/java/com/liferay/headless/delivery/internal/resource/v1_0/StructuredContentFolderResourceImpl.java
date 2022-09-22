@@ -34,6 +34,7 @@ import com.liferay.journal.service.JournalFolderLocalService;
 import com.liferay.journal.service.JournalFolderService;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -477,8 +478,8 @@ public class StructuredContentFolderResourceImpl
 						BooleanClauseOccur.MUST);
 				}
 			},
-			FilterUtil.processFilter(_ddmIndexer, filter),
-			JournalFolder.class.getName(), keywords, pagination,
+			FilterUtil.processFilter(_ddmIndexer, filter), _indexer, keywords,
+			pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -579,6 +580,11 @@ public class StructuredContentFolderResourceImpl
 
 	@Reference
 	private ExpandoTableLocalService _expandoTableLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.journal.model.JournalFolder)"
+	)
+	private Indexer<JournalFolder> _indexer;
 
 	@Reference
 	private JournalFolderLocalService _journalFolderLocalService;
