@@ -26,6 +26,7 @@ import com.liferay.list.type.service.ListTypeEntryLocalService;
 import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -100,9 +101,7 @@ public class ListTypeDefinitionResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			filter,
-			com.liferay.list.type.model.ListTypeDefinition.class.getName(),
-			search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -220,6 +219,11 @@ public class ListTypeDefinitionResourceImpl
 
 	private static final EntityModel _entityModel =
 		new ListTypeDefinitionEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.list.type.model.ListTypeDefinition)"
+	)
+	private Indexer<com.liferay.list.type.model.ListTypeDefinition> _indexer;
 
 	@Reference
 	private ListTypeDefinitionService _listTypeDefinitionService;
