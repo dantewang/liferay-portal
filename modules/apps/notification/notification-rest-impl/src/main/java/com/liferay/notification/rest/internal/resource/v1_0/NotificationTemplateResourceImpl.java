@@ -24,6 +24,7 @@ import com.liferay.notification.service.NotificationTemplateAttachmentLocalServi
 import com.liferay.notification.service.NotificationTemplateService;
 import com.liferay.notification.util.LocalizedMapUtil;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -98,9 +99,7 @@ public class NotificationTemplateResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			filter,
-			com.liferay.notification.model.NotificationTemplate.class.getName(),
-			search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -243,6 +242,12 @@ public class NotificationTemplateResourceImpl
 
 	private static final EntityModel _entityModel =
 		new NotificationTemplateEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.notification.model.NotificationTemplate)"
+	)
+	private Indexer<com.liferay.notification.model.NotificationTemplate>
+		_indexer;
 
 	@Reference
 	private NotificationTemplateAttachmentLocalService
