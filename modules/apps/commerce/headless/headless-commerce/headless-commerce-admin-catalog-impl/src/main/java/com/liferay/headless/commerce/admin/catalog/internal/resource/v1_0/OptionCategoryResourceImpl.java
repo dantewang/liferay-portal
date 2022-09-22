@@ -25,6 +25,7 @@ import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.change.tracking.CTAware;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -80,7 +81,7 @@ public class OptionCategoryResourceImpl extends BaseOptionCategoryResourceImpl {
 		return SearchUtil.search(
 			Collections.emptyMap(),
 			booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			CPOptionCategory.class.getName(), StringPool.BLANK, pagination,
+			_indexer, StringPool.BLANK, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> searchContext.setCompanyId(
@@ -169,6 +170,11 @@ public class OptionCategoryResourceImpl extends BaseOptionCategoryResourceImpl {
 
 	@Reference
 	private CPOptionCategoryService _cpOptionCategoryService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.product.model.CPOptionCategory)"
+	)
+	private Indexer<CPOptionCategory> _indexer;
 
 	@Reference
 	private OptionCategoryDTOConverter _optionCategoryDTOConverter;

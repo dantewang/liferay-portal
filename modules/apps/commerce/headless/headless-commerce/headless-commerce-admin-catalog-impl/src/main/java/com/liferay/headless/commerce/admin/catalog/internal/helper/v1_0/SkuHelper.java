@@ -24,6 +24,7 @@ import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -79,7 +80,7 @@ public class SkuHelper {
 
 		return SearchUtil.search(
 			null, booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			CPInstance.class.getName(), search, pagination,
+			_indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			new UnsafeConsumer() {
@@ -114,6 +115,11 @@ public class SkuHelper {
 
 	@Reference
 	private CPInstanceService _cpInstanceService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.product.model.CPInstance)"
+	)
+	private Indexer<CPInstance> _indexer;
 
 	@Reference
 	private SkuDTOConverter _skuDTOConverter;

@@ -33,6 +33,7 @@ import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.portal.kernel.change.tracking.CTAware;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -124,7 +125,7 @@ public class ProductGroupResourceImpl extends BaseProductGroupResourceImpl {
 
 		return SearchUtil.search(
 			null, booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			CommercePricingClass.class.getName(), search, pagination,
+			_indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> searchContext.setCompanyId(
@@ -301,6 +302,11 @@ public class ProductGroupResourceImpl extends BaseProductGroupResourceImpl {
 
 	@Reference
 	private CProductLocalService _cProductLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.pricing.model.CommercePricingClass)"
+	)
+	private Indexer<CommercePricingClass> _indexer;
 
 	@Reference
 	private ProductGroupDTOConverter _productGroupDTOConverter;

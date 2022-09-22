@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -89,7 +90,7 @@ public class SpecificationResourceImpl extends BaseSpecificationResourceImpl {
 		return SearchUtil.search(
 			Collections.emptyMap(),
 			booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			CPSpecificationOption.class.getName(), search, pagination,
+			_indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> searchContext.setCompanyId(
@@ -248,6 +249,11 @@ public class SpecificationResourceImpl extends BaseSpecificationResourceImpl {
 
 	@Reference
 	private CPSpecificationOptionService _cpSpecificationOptionService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.product.model.CPSpecificationOption)"
+	)
+	private Indexer<CPSpecificationOption> _indexer;
 
 	@Reference
 	private ServiceContextHelper _serviceContextHelper;
