@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.ResourceAction;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -333,7 +334,7 @@ public class DataRecordCollectionResourceImpl
 			Collections.emptyMap(),
 			booleanQuery -> {
 			},
-			null, DDLRecordSet.class.getName(), keywords, pagination,
+			null, _indexer, keywords, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -420,6 +421,11 @@ public class DataRecordCollectionResourceImpl
 
 	@Reference
 	private DDMStructureLocalService _ddmStructureLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.dynamic.data.lists.model.DDLRecordSet)"
+	)
+	private Indexer<DDLRecordSet> _indexer;
 
 	@Reference
 	private Language _language;

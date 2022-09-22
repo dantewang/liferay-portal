@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -151,7 +152,7 @@ public class DataListViewResourceImpl extends BaseDataListViewResourceImpl {
 			Collections.emptyMap(),
 			booleanQuery -> {
 			},
-			null, DEDataListView.class.getName(), keywords, pagination,
+			null, _indexer, keywords, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -432,6 +433,11 @@ public class DataListViewResourceImpl extends BaseDataListViewResourceImpl {
 
 	@Reference
 	private DEDataListViewLocalService _deDataListViewLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.data.engine.model.DEDataListView)"
+	)
+	private Indexer<DEDataListView> _indexer;
 
 	@Reference
 	private JSONFactory _jsonFactory;
