@@ -23,6 +23,7 @@ import com.liferay.headless.commerce.admin.channel.internal.odata.entity.v1_0.Ch
 import com.liferay.headless.commerce.admin.channel.resource.v1_0.ChannelResource;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -112,7 +113,7 @@ public class ChannelResourceImpl extends BaseChannelResourceImpl {
 		return SearchUtil.search(
 			Collections.emptyMap(),
 			booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			CommerceChannel.class.getName(), search, pagination,
+			_indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> searchContext.setCompanyId(
@@ -251,6 +252,11 @@ public class ChannelResourceImpl extends BaseChannelResourceImpl {
 
 	@Reference
 	private CommerceChannelService _commerceChannelService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.product.model.CommerceChannel)"
+	)
+	private Indexer<CommerceChannel> _indexer;
 
 	@Reference
 	private ServiceContextHelper _serviceContextHelper;
