@@ -20,6 +20,7 @@ import com.liferay.object.admin.rest.dto.v1_0.util.ObjectActionUtil;
 import com.liferay.object.admin.rest.resource.v1_0.ObjectActionResource;
 import com.liferay.object.service.ObjectActionService;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -83,8 +84,7 @@ public class ObjectActionResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			null, com.liferay.object.model.ObjectAction.class.getName(), search,
-			pagination,
+			null, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -156,6 +156,11 @@ public class ObjectActionResourceImpl
 			).build(),
 			contextAcceptLanguage.getPreferredLocale(), objectAction);
 	}
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.object.model.ObjectAction)"
+	)
+	private Indexer<com.liferay.object.model.ObjectAction> _indexer;
 
 	@Reference
 	private ObjectActionService _objectActionService;

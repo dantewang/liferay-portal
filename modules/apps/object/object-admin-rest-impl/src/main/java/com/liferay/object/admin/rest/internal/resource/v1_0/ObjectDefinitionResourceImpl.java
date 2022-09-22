@@ -55,6 +55,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -150,8 +151,7 @@ public class ObjectDefinitionResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			filter, com.liferay.object.model.ObjectDefinition.class.getName(),
-			search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -653,6 +653,11 @@ public class ObjectDefinitionResourceImpl
 
 	private static final EntityModel _entityModel =
 		new ObjectDefinitionEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.object.model.ObjectDefinition)"
+	)
+	private Indexer<com.liferay.object.model.ObjectDefinition> _indexer;
 
 	@Reference
 	private Language _language;

@@ -27,6 +27,7 @@ import com.liferay.object.service.ObjectFieldService;
 import com.liferay.object.service.ObjectFieldSettingLocalService;
 import com.liferay.object.service.ObjectFilterLocalService;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -105,8 +106,7 @@ public class ObjectFieldResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			filter, com.liferay.object.model.ObjectField.class.getName(),
-			search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -269,6 +269,11 @@ public class ObjectFieldResourceImpl
 
 	private static final EntityModel _entityModel =
 		new ObjectFieldEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.object.model.ObjectField)"
+	)
+	private Indexer<com.liferay.object.model.ObjectField> _indexer;
 
 	@Reference
 	private ObjectDefinitionLocalService _objectDefinitionLocalService;

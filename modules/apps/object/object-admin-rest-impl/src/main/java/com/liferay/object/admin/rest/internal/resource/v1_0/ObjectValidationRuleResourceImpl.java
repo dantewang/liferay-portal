@@ -20,6 +20,7 @@ import com.liferay.object.admin.rest.resource.v1_0.ObjectValidationRuleResource;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.service.ObjectValidationRuleService;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -78,8 +79,7 @@ public class ObjectValidationRuleResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			null, com.liferay.object.model.ObjectValidationRule.class.getName(),
-			search, pagination,
+			null, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -165,6 +165,11 @@ public class ObjectValidationRuleResourceImpl
 			contextAcceptLanguage.getPreferredLocale(),
 			serviceBuilderObjectValidationRule);
 	}
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.object.model.ObjectValidationRule)"
+	)
+	private Indexer<com.liferay.object.model.ObjectValidationRule> _indexer;
 
 	@Reference
 	private ObjectValidationRuleService _objectValidationRuleService;
