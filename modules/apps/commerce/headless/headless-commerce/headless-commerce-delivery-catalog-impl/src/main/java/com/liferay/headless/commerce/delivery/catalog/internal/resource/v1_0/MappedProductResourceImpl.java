@@ -33,6 +33,7 @@ import com.liferay.headless.commerce.delivery.catalog.internal.dto.v1_0.converte
 import com.liferay.headless.commerce.delivery.catalog.internal.dto.v1_0.converter.MappedProductDTOConverterContext;
 import com.liferay.headless.commerce.delivery.catalog.resource.v1_0.MappedProductResource;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -129,7 +130,7 @@ public class MappedProductResourceImpl extends BaseMappedProductResourceImpl {
 			null,
 			booleanQuery -> {
 			},
-			null, CSDiagramEntry.class.getName(), search, pagination,
+			null, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -175,6 +176,11 @@ public class MappedProductResourceImpl extends BaseMappedProductResourceImpl {
 
 	@Reference
 	private CPDefinitionLocalService _cpDefinitionLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.shop.by.diagram.model.CSDiagramEntry)"
+	)
+	private Indexer<CSDiagramEntry> _indexer;
 
 	@Reference
 	private MappedProductDTOConverter _mappedProductDTOConverter;
