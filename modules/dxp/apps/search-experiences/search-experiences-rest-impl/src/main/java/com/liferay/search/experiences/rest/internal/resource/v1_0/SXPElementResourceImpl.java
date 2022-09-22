@@ -18,6 +18,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -138,9 +139,7 @@ public class SXPElementResourceImpl extends BaseSXPElementResourceImpl {
 			Collections.emptyMap(),
 			booleanQuery -> SearchUtil.processSXPBooleanQuery(
 				contextAcceptLanguage, booleanQuery, search),
-			filter,
-			com.liferay.search.experiences.model.SXPElement.class.getName(),
-			search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -294,6 +293,11 @@ public class SXPElementResourceImpl extends BaseSXPElementResourceImpl {
 
 	private final SXPElementEntityModel _entityEntityModel =
 		new SXPElementEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.search.experiences.model.SXPElement)"
+	)
+	private Indexer<com.liferay.search.experiences.model.SXPElement> _indexer;
 
 	@Reference
 	private JSONFactory _jsonFactory;
