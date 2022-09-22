@@ -28,6 +28,7 @@ import com.liferay.headless.commerce.core.util.ExpandoUtil;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -148,8 +149,7 @@ public class AccountGroupResourceImpl extends BaseAccountGroupResourceImpl {
 		return SearchUtil.search(
 			Collections.emptyMap(),
 			booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			com.liferay.account.model.AccountGroup.class.getName(),
-			StringPool.BLANK, pagination,
+			_indexer, StringPool.BLANK, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> searchContext.setCompanyId(
@@ -303,6 +303,11 @@ public class AccountGroupResourceImpl extends BaseAccountGroupResourceImpl {
 	private CommerceAccountService _commerceAccountService;
 
 	private final EntityModel _entityModel = new AccountGroupEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.account.model.AccountGroup)"
+	)
+	private Indexer<com.liferay.account.model.AccountGroup> _indexer;
 
 	@Reference
 	private ServiceContextHelper _serviceContextHelper;

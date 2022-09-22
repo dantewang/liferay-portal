@@ -52,6 +52,7 @@ import com.liferay.portal.kernel.model.Country;
 import com.liferay.portal.kernel.model.Region;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -203,7 +204,7 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 		return SearchUtil.search(
 			Collections.emptyMap(),
 			booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			AccountEntry.class.getName(), search, pagination,
+			_indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -708,6 +709,11 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 
 	@Reference
 	private CountryService _countryService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.account.model.AccountEntry)"
+	)
+	private Indexer<AccountEntry> _indexer;
 
 	@Reference
 	private OrganizationLocalService _organizationLocalService;
