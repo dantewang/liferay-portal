@@ -48,6 +48,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -159,7 +160,7 @@ public class StructuredContentResourceImpl
 						BooleanClauseOccur.MUST);
 				}
 			},
-			filter, JournalArticle.class.getName(), search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ARTICLE_ID, Field.SCOPE_GROUP_ID,
 				Field.ROOT_ENTRY_CLASS_PK),
@@ -451,6 +452,11 @@ public class StructuredContentResourceImpl
 	private DTOConverterRegistry _dtoConverterRegistry;
 
 	private final EntityModel _entityModel = new StructuredContentEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.journal.model.JournalArticle)"
+	)
+	private Indexer<JournalArticle> _indexer;
 
 	@Reference
 	private JournalArticleLocalService _journalArticleLocalService;
