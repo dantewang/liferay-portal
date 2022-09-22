@@ -27,6 +27,7 @@ import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
@@ -121,8 +122,7 @@ public class WarehouseResourceImpl extends BaseWarehouseResourceImpl {
 		return SearchUtil.search(
 			Collections.emptyMap(),
 			booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			CommerceInventoryWarehouse.class.getName(), StringPool.BLANK,
-			pagination,
+			_indexer, StringPool.BLANK, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> searchContext.setCompanyId(
@@ -347,6 +347,11 @@ public class WarehouseResourceImpl extends BaseWarehouseResourceImpl {
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.inventory.model.CommerceInventoryWarehouse)"
+	)
+	private Indexer<CommerceInventoryWarehouse> _indexer;
 
 	@Reference
 	private ServiceContextHelper _serviceContextHelper;
