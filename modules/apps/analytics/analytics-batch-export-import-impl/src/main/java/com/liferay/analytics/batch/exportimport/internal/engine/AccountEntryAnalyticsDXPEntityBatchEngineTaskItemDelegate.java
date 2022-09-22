@@ -22,6 +22,7 @@ import com.liferay.batch.engine.BatchEngineTaskItemDelegate;
 import com.liferay.batch.engine.pagination.Page;
 import com.liferay.batch.engine.pagination.Pagination;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -58,7 +59,7 @@ public class AccountEntryAnalyticsDXPEntityBatchEngineTaskItemDelegate
 		com.liferay.portal.vulcan.pagination.Page<DXPEntity> page =
 			SearchUtil.search(
 				null, booleanQuery -> booleanQuery.getPreBooleanFilter(),
-				filter, AccountEntry.class.getName(), null, vulcanPagination,
+				filter, _indexer, null, vulcanPagination,
 				queryConfig -> queryConfig.setSelectedFieldNames(
 					Field.ENTRY_CLASS_PK),
 				searchContext -> searchContext.setCompanyId(
@@ -80,5 +81,10 @@ public class AccountEntryAnalyticsDXPEntityBatchEngineTaskItemDelegate
 
 	@Reference
 	private DXPEntityDTOConverter _dxpEntityDTOConverter;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.account.model.AccountEntry)"
+	)
+	private Indexer<AccountEntry> _indexer;
 
 }
