@@ -48,6 +48,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.Website;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -193,9 +194,7 @@ public class OrganizationResourceImpl
 						"accountEntryIds", String.valueOf(accountId)),
 					BooleanClauseOccur.MUST);
 			},
-			filter,
-			com.liferay.portal.kernel.model.Organization.class.getName(),
-			search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> searchContext.setCompanyId(
@@ -671,9 +670,7 @@ public class OrganizationResourceImpl
 						BooleanClauseOccur.MUST);
 				}
 			},
-			filter,
-			com.liferay.portal.kernel.model.Organization.class.getName(),
-			keywords, pagination,
+			filter, _indexer, keywords, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> searchContext.setCompanyId(
@@ -890,6 +887,11 @@ public class OrganizationResourceImpl
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.portal.kernel.model.Organization)"
+	)
+	private Indexer<com.liferay.portal.kernel.model.Organization> _indexer;
 
 	@Reference
 	private OrganizationLocalService _organizationLocalService;
