@@ -33,6 +33,7 @@ import com.liferay.headless.commerce.admin.pricing.resource.v2_0.PriceEntryResou
 import com.liferay.headless.commerce.core.util.DateConfig;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
@@ -162,7 +163,7 @@ public class PriceEntryResourceImpl extends BasePriceEntryResourceImpl {
 
 		return SearchUtil.search(
 			null, booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			CommercePriceEntry.class.getName(), search, pagination,
+			_indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -417,6 +418,11 @@ public class PriceEntryResourceImpl extends BasePriceEntryResourceImpl {
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.price.list.model.CommercePriceEntry)"
+	)
+	private Indexer<CommercePriceEntry> _indexer;
 
 	@Reference
 	private PriceEntryDTOConverter _priceEntryDTOConverter;

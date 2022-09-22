@@ -64,6 +64,7 @@ import com.liferay.headless.commerce.core.util.DateConfig;
 import com.liferay.headless.commerce.core.util.ExpandoUtil;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -151,7 +152,7 @@ public class DiscountResourceImpl extends BaseDiscountResourceImpl {
 
 		return SearchUtil.search(
 			null, booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			CommerceDiscount.class.getName(), search, pagination,
+			_indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -645,6 +646,11 @@ public class DiscountResourceImpl extends BaseDiscountResourceImpl {
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.discount.model.CommerceDiscount)"
+	)
+	private Indexer<CommerceDiscount> _indexer;
 
 	@Reference
 	private ServiceContextHelper _serviceContextHelper;
