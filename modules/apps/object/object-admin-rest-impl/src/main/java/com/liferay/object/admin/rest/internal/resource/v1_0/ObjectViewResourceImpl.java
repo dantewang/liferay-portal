@@ -27,6 +27,7 @@ import com.liferay.object.service.persistence.ObjectViewColumnPersistence;
 import com.liferay.object.service.persistence.ObjectViewFilterColumnPersistence;
 import com.liferay.object.service.persistence.ObjectViewSortColumnPersistence;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -86,8 +87,7 @@ public class ObjectViewResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			null, com.liferay.object.model.ObjectView.class.getName(), search,
-			pagination,
+			null, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -249,6 +249,11 @@ public class ObjectViewResourceImpl
 
 		return serviceBuilderObjectViewSortColumn;
 	}
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.object.model.ObjectView)"
+	)
+	private Indexer<com.liferay.object.model.ObjectView> _indexer;
 
 	@Reference
 	private ObjectViewColumnPersistence _objectViewColumnPersistence;

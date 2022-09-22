@@ -30,6 +30,7 @@ import com.liferay.object.service.persistence.ObjectLayoutColumnPersistence;
 import com.liferay.object.service.persistence.ObjectLayoutRowPersistence;
 import com.liferay.object.service.persistence.ObjectLayoutTabPersistence;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -88,8 +89,7 @@ public class ObjectLayoutResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			null, com.liferay.object.model.ObjectLayout.class.getName(), search,
-			pagination,
+			null, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -249,6 +249,11 @@ public class ObjectLayoutResourceImpl
 
 		return serviceBuilderObjectLayoutTab;
 	}
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.object.model.ObjectLayout)"
+	)
+	private Indexer<com.liferay.object.model.ObjectLayout> _indexer;
 
 	@Reference
 	private ObjectFieldLocalService _objectFieldLocalService;

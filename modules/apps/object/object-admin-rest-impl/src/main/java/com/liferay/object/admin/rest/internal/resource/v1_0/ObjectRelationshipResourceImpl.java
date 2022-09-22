@@ -24,6 +24,7 @@ import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectRelationshipService;
 import com.liferay.object.util.LocalizedMapUtil;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -90,8 +91,7 @@ public class ObjectRelationshipResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			filter, com.liferay.object.model.ObjectRelationship.class.getName(),
-			search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -204,6 +204,11 @@ public class ObjectRelationshipResourceImpl
 
 	private static final EntityModel _entityModel =
 		new ObjectRelationshipEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.object.model.ObjectRelationship)"
+	)
+	private Indexer<com.liferay.object.model.ObjectRelationship> _indexer;
 
 	@Reference
 	private ObjectDefinitionLocalService _objectDefinitionLocalService;
