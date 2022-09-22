@@ -135,25 +135,6 @@ public class SearchUtil {
 			_getFacets(searchContext), items, pagination, totalCount);
 	}
 
-	public static <T> Page<T> search(
-			Map<String, Map<String, String>> actions,
-			UnsafeConsumer<BooleanQuery, Exception> booleanQueryUnsafeConsumer,
-			Filter filter, String indexerClassName, String keywords,
-			Pagination pagination,
-			UnsafeConsumer<QueryConfig, Exception> queryConfigUnsafeConsumer,
-			UnsafeConsumer<SearchContext, Exception>
-				searchContextUnsafeConsumer,
-			Sort[] sorts,
-			UnsafeFunction<Document, T, Exception> transformUnsafeFunction)
-		throws Exception {
-
-		return search(
-			actions, booleanQueryUnsafeConsumer, filter,
-			IndexerRegistryUtil.getIndexer(indexerClassName), keywords,
-			pagination, queryConfigUnsafeConsumer, searchContextUnsafeConsumer,
-			sorts, transformUnsafeFunction);
-	}
-
 	public static class SearchContext
 		extends com.liferay.portal.kernel.search.SearchContext {
 
