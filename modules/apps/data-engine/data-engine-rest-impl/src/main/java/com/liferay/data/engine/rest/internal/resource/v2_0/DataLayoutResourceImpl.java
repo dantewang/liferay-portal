@@ -61,6 +61,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -467,7 +468,7 @@ public class DataLayoutResourceImpl extends BaseDataLayoutResourceImpl {
 			Collections.emptyMap(),
 			booleanQuery -> {
 			},
-			null, DDMStructureLayout.class.getName(), keywords, pagination,
+			null, _indexer, keywords, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -717,6 +718,11 @@ public class DataLayoutResourceImpl extends BaseDataLayoutResourceImpl {
 	@Reference
 	private DEDataDefinitionFieldLinkLocalService
 		_deDataDefinitionFieldLinkLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.dynamic.data.mapping.model.DDMStructureLayout)"
+	)
+	private Indexer<DDMStructureLayout> _indexer;
 
 	@Reference
 	private Language _language;

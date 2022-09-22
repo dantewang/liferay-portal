@@ -94,6 +94,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -393,7 +394,7 @@ public class DataDefinitionResourceImpl extends BaseDataDefinitionResourceImpl {
 			Collections.emptyMap(),
 			booleanQuery -> {
 			},
-			null, DDMStructure.class.getName(), keywords, pagination,
+			null, _indexer, keywords, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.CLASS_NAME_ID, Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -1577,6 +1578,11 @@ public class DataDefinitionResourceImpl extends BaseDataDefinitionResourceImpl {
 
 	@Reference
 	private EditorConfigurationFactory _editorConfigurationFactory;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.dynamic.data.mapping.model.DDMStructure)"
+	)
+	private Indexer<DDMStructure> _indexer;
 
 	@Reference
 	private JSONFactory _jsonFactory;

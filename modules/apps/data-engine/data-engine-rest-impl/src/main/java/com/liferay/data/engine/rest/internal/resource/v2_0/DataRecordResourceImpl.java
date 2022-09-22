@@ -51,6 +51,7 @@ import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.QueryFilter;
@@ -215,8 +216,8 @@ public class DataRecordResourceImpl extends BaseDataRecordResourceImpl {
 					new QueryFilter(ddmContentBooleanQuery),
 					BooleanClauseOccur.MUST);
 			},
-			_getBooleanFilter(dataListViewId, ddlRecordSet),
-			DDLRecord.class.getName(), null, pagination,
+			_getBooleanFilter(dataListViewId, ddlRecordSet), _indexer, null,
+			pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -562,6 +563,11 @@ public class DataRecordResourceImpl extends BaseDataRecordResourceImpl {
 
 	@Reference
 	private DEDataListViewLocalService _deDataListViewLocalService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.dynamic.data.lists.model.DDLRecord)"
+	)
+	private Indexer<DDLRecord> _indexer;
 
 	@Reference
 	private Language _language;
