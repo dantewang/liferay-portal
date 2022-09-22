@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -654,7 +655,7 @@ public class TaxonomyVocabularyResourceImpl
 			actions,
 			booleanQuery -> {
 			},
-			filter, AssetVocabulary.class.getName(), search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ASSET_VOCABULARY_ID),
 			searchContext -> {
@@ -789,6 +790,11 @@ public class TaxonomyVocabularyResourceImpl
 
 	@Reference
 	private AssetVocabularyService _assetVocabularyService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.asset.kernel.model.AssetVocabulary)"
+	)
+	private Indexer<AssetVocabulary> _indexer;
 
 	@Reference
 	private Portal _portal;

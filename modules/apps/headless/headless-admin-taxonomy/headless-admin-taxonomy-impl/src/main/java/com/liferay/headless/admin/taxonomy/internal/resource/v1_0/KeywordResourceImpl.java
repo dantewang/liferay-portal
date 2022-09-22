@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.dao.orm.ProjectionList;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -255,7 +256,7 @@ public class KeywordResourceImpl extends BaseKeywordResourceImpl {
 			actions,
 			booleanQuery -> {
 			},
-			filter, AssetTag.class.getName(), search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -393,6 +394,11 @@ public class KeywordResourceImpl extends BaseKeywordResourceImpl {
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.asset.kernel.model.AssetTag)"
+	)
+	private Indexer<AssetTag> _indexer;
 
 	@Reference
 	private KeywordDTOConverter _keywordDTOConverter;
