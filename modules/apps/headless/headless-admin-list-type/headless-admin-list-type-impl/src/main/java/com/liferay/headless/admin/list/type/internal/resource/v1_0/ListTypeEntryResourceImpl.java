@@ -21,6 +21,7 @@ import com.liferay.headless.admin.list.type.internal.odata.entity.v1_0.ListTypeE
 import com.liferay.headless.admin.list.type.resource.v1_0.ListTypeEntryResource;
 import com.liferay.list.type.service.ListTypeEntryService;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -91,8 +92,7 @@ public class ListTypeEntryResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			filter, com.liferay.list.type.model.ListTypeEntry.class.getName(),
-			search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -175,6 +175,11 @@ public class ListTypeEntryResourceImpl
 
 	private static final EntityModel _entityModel =
 		new ListTypeEntryEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.list.type.model.ListTypeEntry)"
+	)
+	private Indexer<com.liferay.list.type.model.ListTypeEntry> _indexer;
 
 	@Reference
 	private ListTypeEntryService _listTypeEntryService;
