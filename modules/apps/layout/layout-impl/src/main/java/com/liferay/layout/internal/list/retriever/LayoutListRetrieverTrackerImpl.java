@@ -16,15 +16,19 @@ package com.liferay.layout.internal.list.retriever;
 
 import com.liferay.layout.list.retriever.LayoutListRetriever;
 import com.liferay.layout.list.retriever.LayoutListRetrieverTracker;
+import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.petra.reflect.GenericUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Eudaldo Alonso
@@ -38,26 +42,69 @@ public class LayoutListRetrieverTrackerImpl
 		return _layoutListRetrievers.get(type);
 	}
 
-	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
-	)
-	protected void setLayoutListRetrievers(
-		LayoutListRetriever<?, ?> layoutListRetriever) {
-
-		_layoutListRetrievers.put(
-			GenericUtil.getGenericClassName(layoutListRetriever),
-			layoutListRetriever);
+	@Activate
+	protected void activate(BundleContext bundleContext) {
+		_serviceTracker = ServiceTrackerFactory.open(
+			bundleContext,
+			(Class<LayoutListRetriever<?, ?>>)
+				(Class<?>)LayoutListRetriever.class,
+			new LayoutListRetrieverServiceTrackerCustomizer(bundleContext));
 	}
 
-	protected void unsetLayoutListRetrievers(
-		LayoutListRetriever<?, ?> layoutListRetriever) {
-
-		_layoutListRetrievers.remove(
-			GenericUtil.getGenericClassName(layoutListRetriever));
+	@Deactivate
+	protected void deactivate() {
+		_serviceTracker.close();
 	}
 
 	private final Map<String, LayoutListRetriever<?, ?>> _layoutListRetrievers =
 		new ConcurrentHashMap<>();
+	private ServiceTracker<LayoutListRetriever<?, ?>, LayoutListRetriever<?, ?>>
+		_serviceTracker;
+
+	private class LayoutListRetrieverServiceTrackerCustomizer
+		implements ServiceTrackerCustomizer
+			<LayoutListRetriever<?, ?>, LayoutListRetriever<?, ?>> {
+
+		public LayoutListRetrieverServiceTrackerCustomizer(
+			BundleContext bundleContext) {
+
+			_bundleContext = bundleContext;
+		}
+
+		@Override
+		public LayoutListRetriever<?, ?> addingService(
+			ServiceReference<LayoutListRetriever<?, ?>> serviceReference) {
+
+			LayoutListRetriever<?, ?> layoutListRetriever =
+				_bundleContext.getService(serviceReference);
+
+			_layoutListRetrievers.put(
+				GenericUtil.getGenericClassName(layoutListRetriever),
+				layoutListRetriever);
+
+			return layoutListRetriever;
+		}
+
+		@Override
+		public void modifiedService(
+			ServiceReference<LayoutListRetriever<?, ?>> serviceReference,
+			LayoutListRetriever<?, ?> layoutListRetriever) {
+		}
+
+		@Override
+		public void removedService(
+			ServiceReference<LayoutListRetriever<?, ?>> serviceReference,
+			LayoutListRetriever<?, ?> layoutListRetriever) {
+
+				_layoutListRetrievers.remove(
+						GenericUtil.getGenericClassName(layoutListRetriever));
+
+				_bundleContext.ungetService(serviceReference);
+
+		}
+
+		private final BundleContext _bundleContext;
+
+	}
 
 }
