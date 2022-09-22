@@ -25,6 +25,7 @@ import com.liferay.batch.engine.pagination.Pagination;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -68,7 +69,7 @@ public class UserAnalyticsDXPEntityBatchEngineTaskItemDelegate
 			SearchUtil.search(
 				null, booleanQuery -> booleanQuery.getPreBooleanFilter(),
 				_createBooleanFilter(contextCompany.getCompanyId(), filter),
-				User.class.getName(), null, vulcanPagination,
+				_indexer, null, vulcanPagination,
 				queryConfig -> queryConfig.setSelectedFieldNames(
 					Field.ENTRY_CLASS_PK),
 				searchContext -> {
@@ -144,6 +145,11 @@ public class UserAnalyticsDXPEntityBatchEngineTaskItemDelegate
 
 	@Reference
 	private DXPEntityDTOConverter _dxpEntityDTOConverter;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.portal.kernel.model.User)"
+	)
+	private Indexer<User> _indexer;
 
 	@Reference
 	private UserLocalService _userLocalService;
