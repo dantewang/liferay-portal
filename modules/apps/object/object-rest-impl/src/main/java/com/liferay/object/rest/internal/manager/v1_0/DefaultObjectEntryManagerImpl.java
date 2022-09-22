@@ -56,6 +56,7 @@ import com.liferay.portal.kernel.sanitizer.Sanitizer;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -280,7 +281,9 @@ public class DefaultObjectEntryManagerImpl
 							objectDefinition.getObjectDefinitionId())),
 					BooleanClauseOccur.MUST);
 			},
-			filter, objectDefinition.getClassName(), search, pagination,
+			filter,
+			IndexerRegistryUtil.getIndexer(objectDefinition.getClassName()),
+			search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
