@@ -20,6 +20,7 @@ import com.liferay.batch.engine.pagination.Pagination;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.headless.commerce.machine.learning.dto.v1_0.Product;
 import com.liferay.headless.commerce.machine.learning.internal.dto.v1_0.converter.ProductDTOConverter;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 
@@ -55,9 +56,13 @@ public class ProductBatchEngineTaskItemDelegate
 		throws Exception {
 
 		return search(
-			_productDTOConverter, CPDefinition.class.getName(), filter,
-			pagination, sorts, search);
+			_productDTOConverter, _indexer, filter, pagination, sorts, search);
 	}
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.product.model.CPDefinition)"
+	)
+	private Indexer<CPDefinition> _indexer;
 
 	@Reference
 	private ProductDTOConverter _productDTOConverter;

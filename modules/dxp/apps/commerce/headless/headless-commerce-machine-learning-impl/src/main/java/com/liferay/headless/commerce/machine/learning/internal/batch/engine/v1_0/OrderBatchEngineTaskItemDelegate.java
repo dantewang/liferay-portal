@@ -20,6 +20,7 @@ import com.liferay.batch.engine.pagination.Pagination;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.headless.commerce.machine.learning.dto.v1_0.Order;
 import com.liferay.headless.commerce.machine.learning.internal.dto.v1_0.converter.OrderDTOConverter;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 
@@ -55,9 +56,13 @@ public class OrderBatchEngineTaskItemDelegate
 		throws Exception {
 
 		return search(
-			_orderDTOConverter, CommerceOrder.class.getName(), filter,
-			pagination, sorts, search);
+			_orderDTOConverter, _indexer, filter, pagination, sorts, search);
 	}
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.model.CommerceOrder)"
+	)
+	private Indexer<CommerceOrder> _indexer;
 
 	@Reference
 	private OrderDTOConverter _orderDTOConverter;

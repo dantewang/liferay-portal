@@ -20,6 +20,7 @@ import com.liferay.batch.engine.pagination.Page;
 import com.liferay.batch.engine.pagination.Pagination;
 import com.liferay.headless.commerce.machine.learning.dto.v1_0.Category;
 import com.liferay.headless.commerce.machine.learning.internal.dto.v1_0.converter.CategoryDTOConverter;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 
@@ -55,11 +56,15 @@ public class CategoryBatchEngineTaskItemDelegate
 		throws Exception {
 
 		return search(
-			_categoryDTOConverter, AssetCategory.class.getName(), filter,
-			pagination, sorts, search);
+			_categoryDTOConverter, _indexer, filter, pagination, sorts, search);
 	}
 
 	@Reference
 	private CategoryDTOConverter _categoryDTOConverter;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.asset.kernel.model.AssetCategory)"
+	)
+	private Indexer<AssetCategory> _indexer;
 
 }
