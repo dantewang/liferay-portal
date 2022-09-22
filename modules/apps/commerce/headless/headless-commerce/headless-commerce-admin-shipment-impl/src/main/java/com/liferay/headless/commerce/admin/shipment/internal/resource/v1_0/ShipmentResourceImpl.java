@@ -32,6 +32,7 @@ import com.liferay.headless.commerce.admin.shipment.internal.util.v1_0.ShippingA
 import com.liferay.headless.commerce.admin.shipment.resource.v1_0.ShipmentResource;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.service.CountryService;
@@ -126,7 +127,7 @@ public class ShipmentResourceImpl extends BaseShipmentResourceImpl {
 
 		return SearchUtil.search(
 			null, booleanQuery -> booleanQuery.getPreBooleanFilter(), filter,
-			CommerceShipment.class.getName(), search, pagination,
+			_indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -502,6 +503,11 @@ public class ShipmentResourceImpl extends BaseShipmentResourceImpl {
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.commerce.model.CommerceShipment)"
+	)
+	private Indexer<CommerceShipment> _indexer;
 
 	@Reference
 	private RegionService _regionService;
