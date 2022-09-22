@@ -29,6 +29,7 @@ import com.liferay.headless.delivery.search.filter.FilterUtil;
 import com.liferay.headless.delivery.search.sort.SortUtil;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -148,8 +149,8 @@ public class WikiPageResourceImpl extends BaseWikiPageResourceImpl {
 					new TermFilter(Field.NODE_ID, String.valueOf(wikiNodeId)),
 					BooleanClauseOccur.MUST);
 			},
-			FilterUtil.processFilter(_ddmIndexer, filter),
-			com.liferay.wiki.model.WikiPage.class.getName(), search, pagination,
+			FilterUtil.processFilter(_ddmIndexer, filter), _indexer, search,
+			pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -454,6 +455,9 @@ public class WikiPageResourceImpl extends BaseWikiPageResourceImpl {
 
 	@Reference
 	private ExpandoTableLocalService _expandoTableLocalService;
+
+	@Reference(target = "(indexer.class.name=com.liferay.wiki.model.WikiPage)")
+	private Indexer<com.liferay.wiki.model.WikiPage> _indexer;
 
 	@Reference
 	private Portal _portal;

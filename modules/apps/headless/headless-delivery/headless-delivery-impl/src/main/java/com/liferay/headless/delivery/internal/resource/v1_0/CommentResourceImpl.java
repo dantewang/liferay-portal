@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.comment.DuplicateCommentException;
 import com.liferay.portal.kernel.exception.NoSuchModelException;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -701,7 +702,7 @@ public class CommentResourceImpl extends BaseCommentResourceImpl {
 						"parentMessageId", String.valueOf(commentId)),
 					BooleanClauseOccur.MUST);
 			},
-			filter, MBMessage.class.getName(), search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -839,6 +840,11 @@ public class CommentResourceImpl extends BaseCommentResourceImpl {
 
 	@Reference
 	private DLFileEntryService _dlFileEntryService;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.message.boards.model.MBMessage)"
+	)
+	private Indexer<MBMessage> _indexer;
 
 	@Reference
 	private JournalArticleService _journalArticleService;

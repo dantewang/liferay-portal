@@ -21,6 +21,7 @@ import com.liferay.headless.delivery.internal.odata.entity.v1_0.WikiNodeEntityMo
 import com.liferay.headless.delivery.resource.v1_0.WikiNodeResource;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -122,8 +123,7 @@ public class WikiNodeResourceImpl extends BaseWikiNodeResourceImpl {
 					new TermFilter(Field.GROUP_ID, String.valueOf(siteId)),
 					BooleanClauseOccur.MUST);
 			},
-			filter, com.liferay.wiki.model.WikiNode.class.getName(), search,
-			pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -265,6 +265,9 @@ public class WikiNodeResourceImpl extends BaseWikiNodeResourceImpl {
 
 	@Reference
 	private DTOConverterRegistry _dtoConverterRegistry;
+
+	@Reference(target = "(indexer.class.name=com.liferay.wiki.model.WikiNode)")
+	private Indexer<com.liferay.wiki.model.WikiNode> _indexer;
 
 	@Reference
 	private WikiNodeDTOConverter _wikiNodeDTOConverter;

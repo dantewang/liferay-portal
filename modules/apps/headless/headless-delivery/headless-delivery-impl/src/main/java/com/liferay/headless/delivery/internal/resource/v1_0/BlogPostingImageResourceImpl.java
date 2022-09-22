@@ -26,6 +26,7 @@ import com.liferay.headless.delivery.resource.v1_0.BlogPostingImageResource;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -90,7 +91,7 @@ public class BlogPostingImageResourceImpl
 			Collections.emptyMap(),
 			booleanQuery -> {
 			},
-			filter, DLFileEntry.class.getName(), search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> {
@@ -187,5 +188,10 @@ public class BlogPostingImageResourceImpl
 
 	@Reference
 	private DLURLHelper _dlURLHelper;
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.document.library.kernel.model.DLFileEntry)"
+	)
+	private Indexer<DLFileEntry> _indexer;
 
 }
