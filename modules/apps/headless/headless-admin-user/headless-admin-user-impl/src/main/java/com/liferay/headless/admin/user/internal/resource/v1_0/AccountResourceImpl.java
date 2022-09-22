@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -150,7 +151,7 @@ public class AccountResourceImpl
 			).build(),
 			booleanQuery -> {
 			},
-			filter, AccountEntry.class.getName(), search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> {
 			},
 			searchContext -> {
@@ -404,8 +405,8 @@ public class AccountResourceImpl
 		throws Exception {
 
 		return SearchUtil.search(
-			actions, booleanQueryUnsafeConsumer, filter,
-			AccountEntry.class.getName(), search, pagination,
+			actions, booleanQueryUnsafeConsumer, filter, _indexer, search,
+			pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
 			searchContext -> searchContext.setCompanyId(
@@ -472,6 +473,11 @@ public class AccountResourceImpl
 	private AccountResourceDTOConverter _accountResourceDTOConverter;
 
 	private final EntityModel _entityModel = new AccountEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.account.model.AccountEntry)"
+	)
+	private Indexer<AccountEntry> _indexer;
 
 	@Reference
 	private OrganizationResourceDTOConverter _organizationResourceDTOConverter;

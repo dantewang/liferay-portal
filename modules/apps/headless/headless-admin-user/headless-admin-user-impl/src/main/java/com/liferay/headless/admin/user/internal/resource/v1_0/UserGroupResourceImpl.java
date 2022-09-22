@@ -20,6 +20,7 @@ import com.liferay.headless.admin.user.internal.odata.entity.v1_0.UserGroupEntit
 import com.liferay.headless.admin.user.resource.v1_0.UserGroupResource;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -118,8 +119,7 @@ public class UserGroupResourceImpl extends BaseUserGroupResourceImpl {
 			).build(),
 			booleanQuery -> {
 			},
-			filter, com.liferay.portal.kernel.model.UserGroup.class.getName(),
-			search, pagination,
+			filter, _indexer, search, pagination,
 			queryConfig -> {
 			},
 			searchContext -> {
@@ -246,6 +246,11 @@ public class UserGroupResourceImpl extends BaseUserGroupResourceImpl {
 	}
 
 	private final EntityModel _entityModel = new UserGroupEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.portal.kernel.model.UserGroup)"
+	)
+	private Indexer<com.liferay.portal.kernel.model.UserGroup> _indexer;
 
 	@Reference(
 		target = "(model.class.name=com.liferay.portal.kernel.model.UserGroup)"

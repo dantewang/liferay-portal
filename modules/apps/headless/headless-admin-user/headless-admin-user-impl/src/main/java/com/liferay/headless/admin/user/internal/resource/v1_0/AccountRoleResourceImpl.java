@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -141,8 +142,7 @@ public class AccountRoleResourceImpl extends BaseAccountRoleResourceImpl {
 
 					preBooleanFilter.add(termsFilter, BooleanClauseOccur.MUST);
 				},
-				filter, com.liferay.account.model.AccountRole.class.getName(),
-				keywords, pagination,
+				filter, _indexer, keywords, pagination,
 				queryConfig -> {
 				},
 				searchContext -> {
@@ -297,6 +297,11 @@ public class AccountRoleResourceImpl extends BaseAccountRoleResourceImpl {
 	private AccountRoleLocalService _accountRoleLocalService;
 
 	private final EntityModel _entityModel = new AccountRoleEntityModel();
+
+	@Reference(
+		target = "(indexer.class.name=com.liferay.account.model.AccountRole)"
+	)
+	private Indexer<com.liferay.account.model.AccountRole> _indexer;
 
 	@Reference
 	private UserLocalService _userLocalService;
