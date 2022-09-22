@@ -27,7 +27,6 @@ import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.IndexSearcherHelperUtil;
 import com.liferay.portal.kernel.search.Indexer;
-import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.Query;
 import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.Sort;
@@ -133,25 +132,6 @@ public class SearchUtil {
 		return Page.of(
 			(actions != null) ? actions : Collections.emptyMap(),
 			_getFacets(searchContext), items, pagination, totalCount);
-	}
-
-	public static <T> Page<T> search(
-			Map<String, Map<String, String>> actions,
-			UnsafeConsumer<BooleanQuery, Exception> booleanQueryUnsafeConsumer,
-			Filter filter, String indexerClassName, String keywords,
-			Pagination pagination,
-			UnsafeConsumer<QueryConfig, Exception> queryConfigUnsafeConsumer,
-			UnsafeConsumer<SearchContext, Exception>
-				searchContextUnsafeConsumer,
-			Sort[] sorts,
-			UnsafeFunction<Document, T, Exception> transformUnsafeFunction)
-		throws Exception {
-
-		return search(
-			actions, booleanQueryUnsafeConsumer, filter,
-			IndexerRegistryUtil.getIndexer(indexerClassName), keywords,
-			pagination, queryConfigUnsafeConsumer, searchContextUnsafeConsumer,
-			sorts, transformUnsafeFunction);
 	}
 
 	public static class SearchContext
