@@ -75,7 +75,11 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
  */
 @Component(
 	immediate = true,
-	property = {"index.on.startup=false", "system.index=true"},
+	property = {
+		"index.on.startup=false",
+		"indexer.class.name=com.liferay.configuration.admin.web.internal.model.ConfigurationModel",
+		"system.index=true"
+	},
 	service = {ConfigurationModelIndexer.class, Indexer.class}
 )
 public class ConfigurationModelIndexer extends BaseIndexer<ConfigurationModel> {

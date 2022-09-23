@@ -81,7 +81,11 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @author Marco Leo
  * @author Alessio Antonio Rendina
  */
-@Component(enabled = false, immediate = true, service = Indexer.class)
+@Component(
+	enabled = false, immediate = true,
+	property = "indexer.class.name=com.liferay.commerce.discount.model.CommerceDiscount",
+	service = Indexer.class
+)
 public class CommerceDiscountIndexer extends BaseIndexer<CommerceDiscount> {
 
 	public static final String CLASS_NAME = CommerceDiscount.class.getName();

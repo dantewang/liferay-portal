@@ -48,7 +48,11 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Marco Leo
  */
-@Component(enabled = false, immediate = true, service = Indexer.class)
+@Component(
+	enabled = false, immediate = true,
+	property = "indexer.class.name=com.liferay.commerce.product.model.CPDefinitionOptionValueRel",
+	service = Indexer.class
+)
 public class CPDefinitionOptionValueRelIndexer
 	extends BaseIndexer<CPDefinitionOptionValueRel> {
 

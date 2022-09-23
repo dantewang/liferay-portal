@@ -57,7 +57,11 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alessio Antonio Rendina
  */
-@Component(enabled = false, immediate = true, service = Indexer.class)
+@Component(
+	enabled = false, immediate = true,
+	property = "indexer.class.name=com.liferay.commerce.product.model.CPDisplayLayout",
+	service = Indexer.class
+)
 public class CPDisplayLayoutIndexer extends BaseIndexer<CPDisplayLayout> {
 
 	public static final String CLASS_NAME = CPDisplayLayout.class.getName();

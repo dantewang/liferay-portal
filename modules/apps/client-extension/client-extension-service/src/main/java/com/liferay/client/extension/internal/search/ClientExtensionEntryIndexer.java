@@ -43,7 +43,11 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Bruno Basto
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(
+	immediate = true,
+	property = "indexer.class.name=com.liferay.client.extension.model.ClientExtensionEntry",
+	service = Indexer.class
+)
 public class ClientExtensionEntryIndexer
 	extends BaseIndexer<ClientExtensionEntry> {
 

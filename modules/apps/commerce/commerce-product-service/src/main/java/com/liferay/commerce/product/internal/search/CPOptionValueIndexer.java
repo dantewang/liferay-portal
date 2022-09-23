@@ -43,7 +43,11 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Marco Leo
  */
-@Component(enabled = false, immediate = true, service = Indexer.class)
+@Component(
+	enabled = false, immediate = true,
+	property = "indexer.class.name=com.liferay.commerce.product.model.CPOptionValue",
+	service = Indexer.class
+)
 public class CPOptionValueIndexer extends BaseIndexer<CPOptionValue> {
 
 	public static final String CLASS_NAME = CPOptionValue.class.getName();

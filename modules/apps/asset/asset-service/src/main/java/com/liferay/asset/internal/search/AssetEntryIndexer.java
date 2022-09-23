@@ -35,7 +35,11 @@ import org.osgi.service.component.annotations.Component;
  * @author Brian Wing Shun Chan
  * @author Julio Camarero
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(
+	immediate = true,
+	property = "indexer.class.name=com.liferay.asset.kernel.model.AssetEntry",
+	service = Indexer.class
+)
 public class AssetEntryIndexer extends BaseIndexer<AssetEntry> {
 
 	public static final String CLASS_NAME = AssetEntry.class.getName();

@@ -51,7 +51,11 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alessio Antonio Rendina
  */
-@Component(enabled = false, immediate = true, service = Indexer.class)
+@Component(
+	enabled = false, immediate = true,
+	property = "indexer.class.name=com.liferay.commerce.product.model.CPSpecificationOption",
+	service = Indexer.class
+)
 public class CPSpecificationOptionIndexer
 	extends BaseIndexer<CPSpecificationOption> {
 

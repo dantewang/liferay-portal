@@ -46,7 +46,11 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alessio Antonio Rendina
  */
-@Component(enabled = false, immediate = true, service = Indexer.class)
+@Component(
+	enabled = false, immediate = true,
+	property = "indexer.class.name=com.liferay.commerce.price.list.model.CommercePriceEntry",
+	service = Indexer.class
+)
 public class CommercePriceEntryIndexer extends BaseIndexer<CommercePriceEntry> {
 
 	public static final String CLASS_NAME = CommercePriceEntry.class.getName();

@@ -44,7 +44,11 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Alec Sloan
  */
-@Component(enabled = false, immediate = true, service = Indexer.class)
+@Component(
+	enabled = false, immediate = true,
+	property = "indexer.class.name=com.liferay.commerce.shipping.engine.fixed.model.CommerceShippingFixedOption",
+	service = Indexer.class
+)
 public class CommerceShippingFixedOptionIndexer
 	extends BaseIndexer<CommerceShippingFixedOption> {
 
