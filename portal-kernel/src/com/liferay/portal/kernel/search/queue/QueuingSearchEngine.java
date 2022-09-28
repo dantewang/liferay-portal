@@ -59,7 +59,7 @@ public class QueuingSearchEngine extends BaseSearchEngine {
 		_indexWriterProxyProviderFunction = ProxyUtil.getProxyProviderFunction(
 			IndexWriter.class);
 
-	private final IndexSearcher _indexSearcher = new DummyIndexSearcher();
+	private final IndexSearcher _indexSearcher = DummyIndexSearcher.INSTANCE;
 	private final IndexWriter _indexWriter;
 	private final QueuingInvocationHandler _queuingInvocationHandler;
 

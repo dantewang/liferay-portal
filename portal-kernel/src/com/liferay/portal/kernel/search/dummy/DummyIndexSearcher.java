@@ -35,6 +35,8 @@ import java.util.Map;
  */
 public class DummyIndexSearcher implements IndexSearcher {
 
+	public static final DummyIndexSearcher INSTANCE = new DummyIndexSearcher();
+
 	@Override
 	public String getQueryString(SearchContext searchContext, Query query) {
 		return StringPool.BLANK;
@@ -74,6 +76,9 @@ public class DummyIndexSearcher implements IndexSearcher {
 		SearchContext searchContext, int max) {
 
 		return new String[0];
+	}
+
+	private DummyIndexSearcher() {
 	}
 
 	private Hits _getHits() {

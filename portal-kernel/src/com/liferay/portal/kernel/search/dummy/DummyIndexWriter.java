@@ -26,6 +26,8 @@ import java.util.Collection;
  */
 public class DummyIndexWriter implements IndexWriter {
 
+	public static final DummyIndexWriter INSTANCE = new DummyIndexWriter();
+
 	@Override
 	public void addDocument(SearchContext searchContext, Document document) {
 	}
@@ -101,6 +103,9 @@ public class DummyIndexWriter implements IndexWriter {
 	@Override
 	public void updateDocuments(
 		SearchContext searchContext, Collection<Document> documents) {
+	}
+
+	private DummyIndexWriter() {
 	}
 
 }

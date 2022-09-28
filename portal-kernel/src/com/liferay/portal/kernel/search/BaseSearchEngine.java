@@ -44,12 +44,12 @@ public class BaseSearchEngine implements SearchEngine {
 
 	@Override
 	public IndexSearcher getIndexSearcher() {
-		return new DummyIndexSearcher();
+		return DummyIndexSearcher.INSTANCE;
 	}
 
 	@Override
 	public IndexWriter getIndexWriter() {
-		return new DummyIndexWriter();
+		return DummyIndexWriter.INSTANCE;
 	}
 
 	@Override

@@ -160,9 +160,10 @@ public class ElasticsearchSearchEngineFixture implements SearchEngineFixture {
 			_createSearchEngineAdapter(elasticsearchClientResolver));
 		ReflectionTestUtil.setFieldValue(
 			elasticsearchSearchEngine, "_indexSearcher",
-			new DummyIndexSearcher());
+			DummyIndexSearcher.INSTANCE);
 		ReflectionTestUtil.setFieldValue(
-			elasticsearchSearchEngine, "_indexWriter", new DummyIndexWriter());
+			elasticsearchSearchEngine, "_indexWriter",
+			DummyIndexWriter.INSTANCE);
 
 		return elasticsearchSearchEngine;
 	}
