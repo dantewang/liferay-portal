@@ -70,7 +70,9 @@ public class BackgroundTaskMessagingConfigurator {
 
 		backgroundTaskStatusDestination.register(
 			new BackgroundTaskGlobalStatusMessageListener(
-				_backgroundTaskLocalService, _lockManager));
+				_backgroundTaskLocalService,
+				backgroundTaskStatusMessageTranslatorRegistry,
+				_backgroundTaskStatusRegistry, _lockManager));
 	}
 
 	@Deactivate
