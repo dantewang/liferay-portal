@@ -16,6 +16,7 @@ package com.liferay.portal.background.task.internal;
 
 import com.liferay.portal.background.task.internal.messaging.BackgroundTaskGlobalStatusMessageListener;
 import com.liferay.portal.background.task.internal.messaging.BackgroundTaskMessageListener;
+import com.liferay.portal.background.task.internal.messaging.BackgroundTaskStatusMessageTranslatorRegistry;
 import com.liferay.portal.background.task.service.BackgroundTaskLocalService;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutorRegistry;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusRegistry;
@@ -48,6 +49,10 @@ public class BackgroundTaskMessagingConfigurator {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
+		BackgroundTaskStatusMessageTranslatorRegistry
+			backgroundTaskStatusMessageTranslatorRegistry =
+				new BackgroundTaskStatusMessageTranslatorRegistry();
+
 		Destination backgroundTaskDestination = _registerDestination(
 			bundleContext, DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
 			DestinationNames.BACKGROUND_TASK, 5, 10);
@@ -55,6 +60,7 @@ public class BackgroundTaskMessagingConfigurator {
 		backgroundTaskDestination.register(
 			new BackgroundTaskMessageListener(
 				_backgroundTaskExecutorRegistry, _backgroundTaskLocalService,
+				backgroundTaskStatusMessageTranslatorRegistry,
 				_backgroundTaskStatusRegistry,
 				_backgroundTaskThreadLocalManager, _lockManager, _messageBus));
 

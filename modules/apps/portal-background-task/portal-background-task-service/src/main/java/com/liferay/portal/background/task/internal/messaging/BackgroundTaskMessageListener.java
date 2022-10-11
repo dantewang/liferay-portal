@@ -59,12 +59,16 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 	public BackgroundTaskMessageListener(
 		BackgroundTaskExecutorRegistry backgroundTaskExecutorRegistry,
 		BackgroundTaskLocalService backgroundTaskLocalService,
+		BackgroundTaskStatusMessageTranslatorRegistry
+			backgroundTaskStatusMessageTranslatorRegistry,
 		BackgroundTaskStatusRegistry backgroundTaskStatusRegistry,
 		BackgroundTaskThreadLocalManager backgroundTaskThreadLocalManager,
 		LockManager lockManager, MessageBus messageBus) {
 
 		_backgroundTaskExecutorRegistry = backgroundTaskExecutorRegistry;
 		_backgroundTaskLocalService = backgroundTaskLocalService;
+		_backgroundTaskStatusMessageTranslatorRegistry =
+			backgroundTaskStatusMessageTranslatorRegistry;
 		_backgroundTaskStatusRegistry = backgroundTaskStatusRegistry;
 		_backgroundTaskThreadLocalManager = backgroundTaskThreadLocalManager;
 		_lockManager = lockManager;
@@ -97,8 +101,6 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 			}
 
 			BackgroundTaskExecutor backgroundTaskExecutor = null;
-			BackgroundTaskStatusMessageListener
-				backgroundTaskStatusMessageListener = null;
 
 			int status = backgroundTask.getStatus();
 			String statusMessage = null;
@@ -119,15 +121,10 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 							getBackgroundTaskStatusMessageTranslator();
 
 				if (backgroundTaskStatusMessageTranslator != null) {
-					backgroundTaskStatusMessageListener =
-						new BackgroundTaskStatusMessageListener(
+					_backgroundTaskStatusMessageTranslatorRegistry.
+						registerBackgroundTaskStatusMessageTranslator(
 							backgroundTaskId,
-							backgroundTaskStatusMessageTranslator,
-							_backgroundTaskStatusRegistry);
-
-					_messageBus.registerMessageListener(
-						DestinationNames.BACKGROUND_TASK_STATUS,
-						backgroundTaskStatusMessageListener);
+							backgroundTaskStatusMessageTranslator);
 				}
 
 				backgroundTask =
@@ -199,11 +196,9 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 				_backgroundTaskStatusRegistry.unregisterBackgroundTaskStatus(
 					backgroundTaskId);
 
-				if (backgroundTaskStatusMessageListener != null) {
-					_messageBus.unregisterMessageListener(
-						DestinationNames.BACKGROUND_TASK_STATUS,
-						backgroundTaskStatusMessageListener);
-				}
+				_backgroundTaskStatusMessageTranslatorRegistry.
+					unregisterBackgroundTaskStatusMessageTranslator(
+						backgroundTaskId);
 
 				Message responseMessage = new Message();
 
@@ -338,6 +333,8 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 	private final BackgroundTaskExecutorRegistry
 		_backgroundTaskExecutorRegistry;
 	private final BackgroundTaskLocalService _backgroundTaskLocalService;
+	private final BackgroundTaskStatusMessageTranslatorRegistry
+		_backgroundTaskStatusMessageTranslatorRegistry;
 	private final BackgroundTaskStatusRegistry _backgroundTaskStatusRegistry;
 	private final BackgroundTaskThreadLocalManager
 		_backgroundTaskThreadLocalManager;
