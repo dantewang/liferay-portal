@@ -370,7 +370,10 @@ public interface UserLocalService
 	 that login does not exist.
 	 * @see AuthPipeline
 	 */
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRED,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
 	public int authenticateByEmailAddress(
 			long companyId, String emailAddress, String password,
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap,
@@ -396,7 +399,10 @@ public interface UserLocalService
 	 that login does not exist.
 	 * @see AuthPipeline
 	 */
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRED,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
 	public int authenticateByScreenName(
 			long companyId, String screenName, String password,
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap,
@@ -422,7 +428,10 @@ public interface UserLocalService
 	 that login does not exist.
 	 * @see AuthPipeline
 	 */
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRED,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
 	public int authenticateByUserId(
 			long companyId, long userId, String password,
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap,
@@ -462,7 +471,10 @@ public interface UserLocalService
 	 * @return the user's primary key if authentication is successful;
 	 <code>0</code> otherwise
 	 */
-	@Transactional(propagation = Propagation.SUPPORTS)
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.SUPPORTS,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
 	public long authenticateForBasic(
 			long companyId, String authType, String login, String password)
 		throws PortalException;
@@ -483,7 +495,10 @@ public interface UserLocalService
 	 <code>0</code> otherwise
 	 */
 	@Deprecated
-	@Transactional(propagation = Propagation.SUPPORTS)
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.SUPPORTS,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
 	public long authenticateForDigest(
 			long companyId, String userName, String realm, String nonce,
 			String method, String uri, String response)
