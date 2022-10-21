@@ -148,6 +148,7 @@ import com.liferay.portal.kernel.service.persistence.RolePersistence;
 import com.liferay.portal.kernel.service.persistence.TeamPersistence;
 import com.liferay.portal.kernel.service.persistence.UserGroupPersistence;
 import com.liferay.portal.kernel.service.persistence.UserGroupRolePersistence;
+import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -1374,7 +1375,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 * @see    AuthPipeline
 	 */
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRED,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
 	public int authenticateByEmailAddress(
 			long companyId, String emailAddress, String password,
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap,
@@ -1406,7 +1410,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 * @see    AuthPipeline
 	 */
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRED,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
 	public int authenticateByScreenName(
 			long companyId, String screenName, String password,
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap,
@@ -1438,7 +1445,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 * @see    AuthPipeline
 	 */
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRED,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
 	public int authenticateByUserId(
 			long companyId, long userId, String password,
 			Map<String, String[]> headerMap, Map<String, String[]> parameterMap,
@@ -1484,7 +1494,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 *         <code>0</code> otherwise
 	 */
 	@Override
-	@Transactional(propagation = Propagation.SUPPORTS)
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.SUPPORTS,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
 	public long authenticateForBasic(
 			long companyId, String authType, String login, String password)
 		throws PortalException {
@@ -1554,7 +1567,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 */
 	@Deprecated
 	@Override
-	@Transactional(propagation = Propagation.SUPPORTS)
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.SUPPORTS,
+		rollbackFor = {PortalException.class, SystemException.class}
+	)
 	public long authenticateForDigest(
 			long companyId, String userName, String realm, String nonce,
 			String method, String uri, String response)
