@@ -21,6 +21,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletContextClassLoaderPool;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -39,6 +40,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
@@ -98,7 +100,20 @@ public class CustomServletContextHelper
 
 	@Override
 	public String getMimeType(String name) {
-		return MimeTypesUtil.getContentType(name);
+		String extension = StringUtil.extractLast(name, CharPool.PERIOD);
+
+		Set<String> extensions = MimeTypesUtil.getExtensions(
+			ContentTypes.APPLICATION_OCTET_STREAM);
+
+		String mimeType = MimeTypesUtil.getContentType(name);
+
+		if (!extensions.contains(extension) &&
+			Objects.equals(mimeType, ContentTypes.APPLICATION_OCTET_STREAM)) {
+
+			return null;
+		}
+
+		return mimeType;
 	}
 
 	@Override
