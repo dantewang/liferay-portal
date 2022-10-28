@@ -14,6 +14,7 @@
 
 package com.liferay.portal.search.internal.buffer;
 
+import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapperFactory;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -72,16 +73,14 @@ public class IndexerRequestBufferExecutorWatcher {
 
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
 			bundleContext, IndexerRequestBufferExecutor.class, null,
-			(serviceReference, emitter) -> {
-				String bufferedExecutionMode = GetterUtil.getString(
-					serviceReference.getProperty("buffered.execution.mode"));
+			ServiceReferenceMapperFactory.createFromBiFunction(
+				bundleContext,
+				(serviceReference, indexerRequestBufferExecutor) -> {
+					String bufferedExecutionMode = GetterUtil.getString(
+						serviceReference.getProperty(
+							"buffered.execution.mode"));
 
-				if (Validator.isNull(bufferedExecutionMode)) {
-					try {
-						IndexerRequestBufferExecutor
-							indexerRequestBufferExecutor =
-								bundleContext.getService(serviceReference);
-
+					if (Validator.isNull(bufferedExecutionMode)) {
 						String className = ClassUtil.getClassName(
 							indexerRequestBufferExecutor);
 
@@ -89,13 +88,9 @@ public class IndexerRequestBufferExecutorWatcher {
 							"The property \"buffered.execution.mode\" is " +
 								"invalid for " + className);
 					}
-					finally {
-						bundleContext.ungetService(serviceReference);
-					}
-				}
 
-				emitter.emit(bufferedExecutionMode);
-			});
+					return bufferedExecutionMode;
+				}));
 	}
 
 	@Deactivate
