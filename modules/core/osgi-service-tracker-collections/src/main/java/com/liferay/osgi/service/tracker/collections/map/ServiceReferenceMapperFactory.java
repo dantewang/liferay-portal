@@ -40,10 +40,11 @@ public final class ServiceReferenceMapperFactory {
 		};
 	}
 
-	public static <K, S> Function<BundleContext, ServiceReferenceMapper<K, S>>
-		createFromBiFunction(BiFunction<ServiceReference<S>, S, K> biFunction) {
+	public static <K, S> ServiceReferenceMapper<K, S> createFromBiFunction(
+		BundleContext bundleContext,
+		BiFunction<ServiceReference<S>, S, K> biFunction) {
 
-		return bundleContext -> (serviceReference, emitter) -> {
+		return (serviceReference, emitter) -> {
 			S service = bundleContext.getService(serviceReference);
 
 			try {
@@ -53,17 +54,6 @@ public final class ServiceReferenceMapperFactory {
 				bundleContext.ungetService(serviceReference);
 			}
 		};
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #createFromBiFunction(BiFunction)}
-	 */
-	@Deprecated
-	public static <K, S> Function<BundleContext, ServiceReferenceMapper<K, S>>
-		createFromFunction(BiFunction<ServiceReference<S>, S, K> biFunction) {
-
-		return createFromBiFunction(biFunction);
 	}
 
 	public static <K, S> ServiceReferenceMapper<K, S> createFromFunction(
