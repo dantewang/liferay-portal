@@ -337,7 +337,7 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 		};
 	}
 
-	public class ConfigurationBeanDeclarationRegistrar
+	public class ConfigurationBeanClassBundleTrackerCustomizer
 		implements BundleTrackerCustomizer<List<SafeCloseable>> {
 
 		@Override
@@ -434,7 +434,7 @@ public class SettingsLocatorHelperImpl implements SettingsLocatorHelper {
 
 		_bundleTracker = new BundleTracker<>(
 			bundleContext, Bundle.ACTIVE,
-			new ConfigurationBeanDeclarationRegistrar());
+			new ConfigurationBeanClassBundleTrackerCustomizer());
 
 		_bundleTracker.open();
 	}
