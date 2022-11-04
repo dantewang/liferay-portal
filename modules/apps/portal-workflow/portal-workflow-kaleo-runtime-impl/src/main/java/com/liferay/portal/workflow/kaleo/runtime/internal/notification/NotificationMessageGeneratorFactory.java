@@ -15,9 +15,6 @@
 package com.liferay.portal.workflow.kaleo.runtime.internal.notification;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.ClassUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.workflow.kaleo.runtime.internal.util.WorkflowServiceTrackerCustomizer;
 import com.liferay.portal.workflow.kaleo.runtime.notification.NotificationMessageGenerator;
@@ -66,24 +63,6 @@ public class NotificationMessageGeneratorFactory {
 	@Deactivate
 	protected void deactivate() {
 		_serviceTracker.close();
-	}
-
-	private String[] _getTemplateLanguages(
-		NotificationMessageGenerator notificationMessageGenerator,
-		Map<String, Object> properties) {
-
-		Object value = properties.get("template.language");
-
-		String[] templateLanguages = GetterUtil.getStringValues(
-			value, new String[] {String.valueOf(value)});
-
-		if (ArrayUtil.isEmpty(templateLanguages)) {
-			throw new IllegalArgumentException(
-				"The property \"template.language\" is invalid for " +
-					ClassUtil.getClassName(notificationMessageGenerator));
-		}
-
-		return templateLanguages;
 	}
 
 	private final Map<String, NotificationMessageGenerator>

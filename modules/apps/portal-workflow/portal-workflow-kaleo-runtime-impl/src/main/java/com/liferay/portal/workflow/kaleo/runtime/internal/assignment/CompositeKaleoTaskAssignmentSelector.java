@@ -16,9 +16,6 @@ package com.liferay.portal.workflow.kaleo.runtime.internal.assignment;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.ClassUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.assignment.KaleoTaskAssignmentSelector;
@@ -76,24 +73,6 @@ public class CompositeKaleoTaskAssignmentSelector
 	@Deactivate
 	protected void deactivate() {
 		_serviceTracker.close();
-	}
-
-	private String[] _getAssigneeClassNames(
-		KaleoTaskAssignmentSelector kaleoTaskAssignmentSelector,
-		Map<String, Object> properties) {
-
-		Object value = properties.get("assignee.class.name");
-
-		String[] assigneeClassNames = GetterUtil.getStringValues(
-			value, new String[] {String.valueOf(value)});
-
-		if (ArrayUtil.isEmpty(assigneeClassNames)) {
-			throw new IllegalArgumentException(
-				"The property \"assignee.class.name\" is invalid for " +
-					ClassUtil.getClassName(kaleoTaskAssignmentSelector));
-		}
-
-		return assigneeClassNames;
 	}
 
 	private final Map<String, KaleoTaskAssignmentSelector>

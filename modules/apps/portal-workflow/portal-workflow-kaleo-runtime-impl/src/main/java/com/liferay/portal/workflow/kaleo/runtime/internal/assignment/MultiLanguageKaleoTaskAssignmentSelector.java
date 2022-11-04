@@ -18,9 +18,6 @@ import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ResourceAction;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.ClassUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.workflow.kaleo.definition.ScriptLanguage;
 import com.liferay.portal.workflow.kaleo.definition.exception.KaleoDefinitionValidationException;
@@ -126,24 +123,6 @@ public class MultiLanguageKaleoTaskAssignmentSelector
 		}
 
 		return language;
-	}
-
-	private String[] _getScriptingLanguages(
-		KaleoTaskAssignmentSelector kaleoTaskAssignmentSelector,
-		Map<String, Object> properties) {
-
-		Object value = properties.get("scripting.language");
-
-		String[] scriptingLanguages = GetterUtil.getStringValues(
-			value, new String[] {String.valueOf(value)});
-
-		if (ArrayUtil.isEmpty(scriptingLanguages)) {
-			throw new IllegalArgumentException(
-				"The property \"scripting.language\" is invalid for " +
-					ClassUtil.getClassName(kaleoTaskAssignmentSelector));
-		}
-
-		return scriptingLanguages;
 	}
 
 	@Reference

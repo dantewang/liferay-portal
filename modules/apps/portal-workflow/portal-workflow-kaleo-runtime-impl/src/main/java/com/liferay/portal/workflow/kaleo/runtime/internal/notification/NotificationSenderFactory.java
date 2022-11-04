@@ -15,9 +15,6 @@
 package com.liferay.portal.workflow.kaleo.runtime.internal.notification;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.ClassUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.workflow.kaleo.runtime.internal.util.WorkflowServiceTrackerCustomizer;
 import com.liferay.portal.workflow.kaleo.runtime.notification.NotificationSender;
@@ -65,23 +62,6 @@ public class NotificationSenderFactory {
 	@Deactivate
 	protected void deactivate() {
 		_serviceTracker.close();
-	}
-
-	private String[] _getNotificationTypes(
-		NotificationSender notificationSender, Map<String, Object> properties) {
-
-		Object value = properties.get("notification.type");
-
-		String[] notificationTypes = GetterUtil.getStringValues(
-			value, new String[] {String.valueOf(value)});
-
-		if (ArrayUtil.isEmpty(notificationTypes)) {
-			throw new IllegalArgumentException(
-				"The property \"notification.type\" is invalid for " +
-					ClassUtil.getClassName(notificationSender));
-		}
-
-		return notificationTypes;
 	}
 
 	private final Map<String, NotificationSender> _notificationSenders =
