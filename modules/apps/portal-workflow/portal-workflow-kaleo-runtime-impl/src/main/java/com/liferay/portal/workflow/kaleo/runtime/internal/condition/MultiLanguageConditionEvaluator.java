@@ -14,6 +14,7 @@
 
 package com.liferay.portal.workflow.kaleo.runtime.internal.condition;
 
+import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -25,15 +26,16 @@ import com.liferay.portal.workflow.kaleo.definition.exception.KaleoDefinitionVal
 import com.liferay.portal.workflow.kaleo.model.KaleoCondition;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.condition.ConditionEvaluator;
+import com.liferay.portal.workflow.kaleo.runtime.internal.util.WorkflowServiceTrackerCustomizer;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Michael C. Han
@@ -62,43 +64,20 @@ public class MultiLanguageConditionEvaluator implements ConditionEvaluator {
 		return conditionEvaluator.evaluate(kaleoCondition, executionContext);
 	}
 
-	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY,
-		target = "(scripting.language=*)"
-	)
-	protected void addConditionEvaluator(
-			ConditionEvaluator conditionEvaluator,
-			Map<String, Object> properties)
-		throws KaleoDefinitionValidationException {
-
-		String[] scriptingLanguages = _getScriptingLanguages(
-			conditionEvaluator, properties);
-
-		for (String scriptingLanguage : scriptingLanguages) {
-			_conditionEvaluators.put(
-				_getConditionEvaluatorKey(
-					scriptingLanguage,
-					ClassUtil.getClassName(conditionEvaluator)),
-				conditionEvaluator);
-		}
+	@Activate
+	protected void activate(BundleContext bundleContext) {
+		_serviceTracker = ServiceTrackerFactory.open(
+			bundleContext,
+			"(&(scripting.language=*)(objectClass=" +
+				ConditionEvaluator.class.getName() + "))",
+			new WorkflowServiceTrackerCustomizer<ConditionEvaluator>(
+				bundleContext, null, true, "scripting.language",
+				_conditionEvaluators, true));
 	}
 
-	protected void removeConditionEvaluator(
-			ConditionEvaluator conditionEvaluator,
-			Map<String, Object> properties)
-		throws KaleoDefinitionValidationException {
-
-		String[] scriptingLanguages = _getScriptingLanguages(
-			conditionEvaluator, properties);
-
-		for (String scriptingLanguage : scriptingLanguages) {
-			_conditionEvaluators.remove(
-				_getConditionEvaluatorKey(
-					scriptingLanguage,
-					ClassUtil.getClassName(conditionEvaluator)));
-		}
+	@Deactivate
+	protected void deactivate() {
+		_serviceTracker.close();
 	}
 
 	private String _getConditionEvaluatorKey(
@@ -132,6 +111,8 @@ public class MultiLanguageConditionEvaluator implements ConditionEvaluator {
 	}
 
 	private final Map<String, ConditionEvaluator> _conditionEvaluators =
-		new HashMap<>();
+		new ConcurrentHashMap<>();
+	private ServiceTracker<ConditionEvaluator, ConditionEvaluator>
+		_serviceTracker;
 
 }

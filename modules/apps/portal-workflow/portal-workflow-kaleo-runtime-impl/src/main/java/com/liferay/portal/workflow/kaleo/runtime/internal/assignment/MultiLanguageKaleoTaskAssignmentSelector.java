@@ -14,6 +14,7 @@
 
 package com.liferay.portal.workflow.kaleo.runtime.internal.assignment;
 
+import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ResourceAction;
@@ -28,17 +29,19 @@ import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.assignment.BaseKaleoTaskAssignmentSelector;
 import com.liferay.portal.workflow.kaleo.runtime.assignment.KaleoTaskAssignmentSelector;
+import com.liferay.portal.workflow.kaleo.runtime.internal.util.WorkflowServiceTrackerCustomizer;
 import com.liferay.portal.workflow.kaleo.service.KaleoInstanceLocalService;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Michael C. Han
@@ -95,43 +98,20 @@ public class MultiLanguageKaleoTaskAssignmentSelector
 		return kaleoTaskAssignments;
 	}
 
-	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY,
-		target = "(scripting.language=*)"
-	)
-	protected void addKaleoTaskAssignmentSelector(
-			KaleoTaskAssignmentSelector kaleoTaskAssignmentSelector,
-			Map<String, Object> properties)
-		throws KaleoDefinitionValidationException {
-
-		String[] scriptingLanguages = _getScriptingLanguages(
-			kaleoTaskAssignmentSelector, properties);
-
-		for (String scriptingLanguage : scriptingLanguages) {
-			_kaleoTaskAssignmentSelectors.put(
-				_getKaleoTaskAssignmentSelectKey(
-					scriptingLanguage,
-					ClassUtil.getClassName(kaleoTaskAssignmentSelector)),
-				kaleoTaskAssignmentSelector);
-		}
+	@Activate
+	protected void activate(BundleContext bundleContext) {
+		_serviceTracker = ServiceTrackerFactory.open(
+			bundleContext,
+			"(&(scripting.language=*)(objectClass=" +
+				KaleoTaskAssignmentSelector.class.getName() + "))",
+			new WorkflowServiceTrackerCustomizer<KaleoTaskAssignmentSelector>(
+				bundleContext, null, true, "scripting.language",
+				_kaleoTaskAssignmentSelectors, true));
 	}
 
-	protected void removeKaleoTaskAssignmentSelector(
-			KaleoTaskAssignmentSelector kaleoTaskAssignmentSelector,
-			Map<String, Object> properties)
-		throws KaleoDefinitionValidationException {
-
-		String[] scriptingLanguages = _getScriptingLanguages(
-			kaleoTaskAssignmentSelector, properties);
-
-		for (String scriptingLanguage : scriptingLanguages) {
-			_kaleoTaskAssignmentSelectors.remove(
-				_getKaleoTaskAssignmentSelectKey(
-					scriptingLanguage,
-					ClassUtil.getClassName(kaleoTaskAssignmentSelector)));
-		}
+	@Deactivate
+	protected void deactivate() {
+		_serviceTracker.close();
 	}
 
 	private String _getKaleoTaskAssignmentSelectKey(
@@ -170,6 +150,9 @@ public class MultiLanguageKaleoTaskAssignmentSelector
 	private KaleoInstanceLocalService _kaleoInstanceLocalService;
 
 	private final Map<String, KaleoTaskAssignmentSelector>
-		_kaleoTaskAssignmentSelectors = new HashMap<>();
+		_kaleoTaskAssignmentSelectors = new ConcurrentHashMap<>();
+	private ServiceTracker
+		<KaleoTaskAssignmentSelector, KaleoTaskAssignmentSelector>
+			_serviceTracker;
 
 }

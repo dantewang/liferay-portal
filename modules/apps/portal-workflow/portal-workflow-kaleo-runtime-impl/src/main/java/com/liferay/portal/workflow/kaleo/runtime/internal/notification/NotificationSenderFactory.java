@@ -14,20 +14,22 @@
 
 package com.liferay.portal.workflow.kaleo.runtime.internal.notification;
 
+import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.workflow.WorkflowException;
+import com.liferay.portal.workflow.kaleo.runtime.internal.util.WorkflowServiceTrackerCustomizer;
 import com.liferay.portal.workflow.kaleo.runtime.notification.NotificationSender;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Michael C. Han
@@ -49,32 +51,20 @@ public class NotificationSenderFactory {
 		return notificationSender;
 	}
 
-	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY,
-		target = "(notification.type=*)"
-	)
-	protected void addNotificationSender(
-		NotificationSender notificationSender, Map<String, Object> properties) {
-
-		String[] notificationTypes = _getNotificationTypes(
-			notificationSender, properties);
-
-		for (String notificationType : notificationTypes) {
-			_notificationSenders.put(notificationType, notificationSender);
-		}
+	@Activate
+	protected void activate(BundleContext bundleContext) {
+		_serviceTracker = ServiceTrackerFactory.open(
+			bundleContext,
+			"(&(notification.type=*)(objectClass=" +
+				NotificationSender.class.getName() + "))",
+			new WorkflowServiceTrackerCustomizer<NotificationSender>(
+				bundleContext, null, false, "notification.type",
+				_notificationSenders, true));
 	}
 
-	protected void removeNotificationSender(
-		NotificationSender notificationSender, Map<String, Object> properties) {
-
-		String[] notificationTypes = _getNotificationTypes(
-			notificationSender, properties);
-
-		for (String notificationType : notificationTypes) {
-			_notificationSenders.remove(notificationType);
-		}
+	@Deactivate
+	protected void deactivate() {
+		_serviceTracker.close();
 	}
 
 	private String[] _getNotificationTypes(
@@ -95,6 +85,8 @@ public class NotificationSenderFactory {
 	}
 
 	private final Map<String, NotificationSender> _notificationSenders =
-		new HashMap<>();
+		new ConcurrentHashMap<>();
+	private ServiceTracker<NotificationSender, NotificationSender>
+		_serviceTracker;
 
 }
