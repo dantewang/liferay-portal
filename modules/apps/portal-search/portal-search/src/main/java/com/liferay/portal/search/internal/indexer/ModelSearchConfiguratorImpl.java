@@ -14,8 +14,6 @@
 
 package com.liferay.portal.search.internal.indexer;
 
-import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
-import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.search.spi.model.index.contributor.ModelDocumentContributor;
 import com.liferay.portal.search.spi.model.index.contributor.ModelIndexerWriterContributor;
@@ -27,8 +25,6 @@ import com.liferay.portal.search.spi.model.registrar.ModelSearchSettings;
 import com.liferay.portal.search.spi.model.result.contributor.ModelSummaryContributor;
 import com.liferay.portal.search.spi.model.result.contributor.ModelVisibilityContributor;
 
-import org.osgi.framework.BundleContext;
-
 /**
  * @author Michael C. Han
  */
@@ -36,44 +32,23 @@ public class ModelSearchConfiguratorImpl<T extends BaseModel<?>>
 	implements ModelSearchConfigurator<T> {
 
 	public ModelSearchConfiguratorImpl(
-		BundleContext bundleContext,
 		ModelIndexerWriterContributor<T> modelIndexerWriterContributor,
 		ModelVisibilityContributor modelVisibilityContributor,
 		ModelSearchSettings modelSearchSettings,
-		ModelSummaryContributor modelSummaryContributor) {
+		ModelSummaryContributor modelSummaryContributor,
+		ModelSearchRegistrarHelperImpl modelSearchRegistrarHelperImpl) {
 
 		_modelIndexerWriterContributor = modelIndexerWriterContributor;
 		_modelVisibilityContributor = modelVisibilityContributor;
 		_modelSearchSettings = modelSearchSettings;
 		_modelSummaryContributor = modelSummaryContributor;
+		_modelSearchRegistrarHelperImpl = modelSearchRegistrarHelperImpl;
 
-		String className = _modelSearchSettings.getClassName();
-
-		_keywordQueryContributors = ServiceTrackerListFactory.open(
-			bundleContext, KeywordQueryContributor.class,
-			"(indexer.class.name=" + className + ")");
-
-		_queryConfigContributors = ServiceTrackerListFactory.open(
-			bundleContext, QueryConfigContributor.class,
-			"(indexer.class.name=" + className + ")");
-
-		_searchContextContributors = ServiceTrackerListFactory.open(
-			bundleContext, SearchContextContributor.class,
-			"(indexer.class.name=" + className + ")");
-
-		_modelDocumentContributors = ServiceTrackerListFactory.open(
-			bundleContext,
-			(Class<ModelDocumentContributor<?>>)
-				(Class<?>)ModelDocumentContributor.class,
-			"(indexer.class.name=" + modelSearchSettings.getClassName() + ")");
+		_indexerClassName = _modelSearchSettings.getClassName();
 	}
 
 	@Override
 	public void close() {
-		_modelDocumentContributors.close();
-		_keywordQueryContributors.close();
-		_queryConfigContributors.close();
-		_searchContextContributors.close();
 	}
 
 	@Override
@@ -83,14 +58,16 @@ public class ModelSearchConfiguratorImpl<T extends BaseModel<?>>
 
 	@Override
 	public Iterable<KeywordQueryContributor> getKeywordQueryContributors() {
-		return _keywordQueryContributors;
+		return _modelSearchRegistrarHelperImpl.getKeywordQueryContributors(
+			_indexerClassName);
 	}
 
 	@Override
 	public Iterable<ModelDocumentContributor<?>>
 		getModelDocumentContributors() {
 
-		return _modelDocumentContributors;
+		return _modelSearchRegistrarHelperImpl.getModelDocumentContributors(
+			_indexerClassName);
 	}
 
 	@Override
@@ -115,26 +92,23 @@ public class ModelSearchConfiguratorImpl<T extends BaseModel<?>>
 
 	@Override
 	public Iterable<QueryConfigContributor> getQueryConfigContributors() {
-		return _queryConfigContributors;
+		return _modelSearchRegistrarHelperImpl.getQueryConfigContributors(
+			_indexerClassName);
 	}
 
 	@Override
 	public Iterable<SearchContextContributor> getSearchContextContributors() {
-		return _searchContextContributors;
+		return _modelSearchRegistrarHelperImpl.getSearchContextContributors(
+			_indexerClassName);
 	}
 
-	private final ServiceTrackerList<KeywordQueryContributor>
-		_keywordQueryContributors;
-	private final ServiceTrackerList<ModelDocumentContributor<?>>
-		_modelDocumentContributors;
+	private final String _indexerClassName;
 	private final ModelIndexerWriterContributor<T>
 		_modelIndexerWriterContributor;
+	private final ModelSearchRegistrarHelperImpl
+		_modelSearchRegistrarHelperImpl;
 	private final ModelSearchSettings _modelSearchSettings;
 	private final ModelSummaryContributor _modelSummaryContributor;
 	private final ModelVisibilityContributor _modelVisibilityContributor;
-	private final ServiceTrackerList<QueryConfigContributor>
-		_queryConfigContributors;
-	private final ServiceTrackerList<SearchContextContributor>
-		_searchContextContributors;
 
 }

@@ -14,8 +14,14 @@
 
 package com.liferay.portal.search.internal.indexer;
 
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.search.spi.model.index.contributor.ModelDocumentContributor;
 import com.liferay.portal.search.spi.model.index.contributor.ModelIndexerWriterContributor;
+import com.liferay.portal.search.spi.model.query.contributor.KeywordQueryContributor;
+import com.liferay.portal.search.spi.model.query.contributor.QueryConfigContributor;
+import com.liferay.portal.search.spi.model.query.contributor.SearchContextContributor;
 import com.liferay.portal.search.spi.model.registrar.ModelSearchConfigurator;
 import com.liferay.portal.search.spi.model.registrar.ModelSearchDefinition;
 import com.liferay.portal.search.spi.model.registrar.ModelSearchRegistrarHelper;
@@ -25,10 +31,13 @@ import com.liferay.portal.search.spi.model.result.contributor.ModelVisibilityCon
 
 import java.util.Collections;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 
 /**
  * @author André de Oliveira
@@ -36,6 +45,58 @@ import org.osgi.service.component.annotations.Component;
 @Component(immediate = true, service = ModelSearchRegistrarHelper.class)
 public class ModelSearchRegistrarHelperImpl
 	implements ModelSearchRegistrarHelper {
+
+	public List<KeywordQueryContributor> getKeywordQueryContributors(
+		String indexerClassName) {
+
+		List<KeywordQueryContributor> keywordQueryContributors =
+			_keywordQueryContributors.getService(indexerClassName);
+
+		if (keywordQueryContributors == null) {
+			return Collections.emptyList();
+		}
+
+		return keywordQueryContributors;
+	}
+
+	public List<ModelDocumentContributor<?>> getModelDocumentContributors(
+		String indexerClassName) {
+
+		List<ModelDocumentContributor<?>> modelDocumentContributors =
+			_modelDocumentContributors.getService(indexerClassName);
+
+		if (modelDocumentContributors == null) {
+			return Collections.emptyList();
+		}
+
+		return modelDocumentContributors;
+	}
+
+	public List<QueryConfigContributor> getQueryConfigContributors(
+		String indexerClassName) {
+
+		List<QueryConfigContributor> queryConfigContributors =
+			_queryConfigContributors.getService(indexerClassName);
+
+		if (queryConfigContributors == null) {
+			return Collections.emptyList();
+		}
+
+		return queryConfigContributors;
+	}
+
+	public List<SearchContextContributor> getSearchContextContributors(
+		String indexerClassName) {
+
+		List<SearchContextContributor> searchContextContributors =
+			_searchContextContributors.getService(indexerClassName);
+
+		if (searchContextContributors == null) {
+			return Collections.emptyList();
+		}
+
+		return searchContextContributors;
+	}
 
 	@Override
 	public ServiceRegistration<?> register(
@@ -59,14 +120,49 @@ public class ModelSearchRegistrarHelperImpl
 		return bundleContext.registerService(
 			ModelSearchConfigurator.class,
 			new ModelSearchConfiguratorImpl<>(
-				bundleContext,
 				modelSearchDefinitionImpl._modelIndexWriterContributor,
 				modelSearchDefinitionImpl._modelVisibilityContributor,
 				modelSearchDefinitionImpl._modelSearchSettingsImpl,
-				modelSearchDefinitionImpl._modelSummaryContributor),
+				modelSearchDefinitionImpl._modelSummaryContributor, this),
 			new Hashtable<>(
 				Collections.singletonMap("indexer.class.name", className)));
 	}
+
+	@Activate
+	protected void activate(BundleContext bundleContext) {
+		_keywordQueryContributors = ServiceTrackerMapFactory.openMultiValueMap(
+			bundleContext, KeywordQueryContributor.class, "indexer.class.name");
+
+		_queryConfigContributors = ServiceTrackerMapFactory.openMultiValueMap(
+			bundleContext, QueryConfigContributor.class, "indexer.class.name");
+
+		_searchContextContributors = ServiceTrackerMapFactory.openMultiValueMap(
+			bundleContext, SearchContextContributor.class,
+			"indexer.class.name");
+
+		_modelDocumentContributors = ServiceTrackerMapFactory.openMultiValueMap(
+			bundleContext,
+			(Class<ModelDocumentContributor<?>>)
+				(Class<?>)ModelDocumentContributor.class,
+			"indexer.class.name");
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		_keywordQueryContributors.close();
+		_queryConfigContributors.close();
+		_searchContextContributors.close();
+		_modelDocumentContributors.close();
+	}
+
+	private ServiceTrackerMap<String, List<KeywordQueryContributor>>
+		_keywordQueryContributors;
+	private ServiceTrackerMap<String, List<ModelDocumentContributor<?>>>
+		_modelDocumentContributors;
+	private ServiceTrackerMap<String, List<QueryConfigContributor>>
+		_queryConfigContributors;
+	private ServiceTrackerMap<String, List<SearchContextContributor>>
+		_searchContextContributors;
 
 	private class ModelSearchDefinitionImpl implements ModelSearchDefinition {
 
