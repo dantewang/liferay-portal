@@ -71,33 +71,6 @@ public class ServiceTrackerListTest {
 	}
 
 	@Test
-	public void testGetListAndArray() {
-		try (ServiceTrackerList<TrackedOne> serviceTrackerList =
-				ServiceTrackerListFactory.open(
-					_bundleContext, TrackedOne.class)) {
-
-			TrackedOne[] trackedOnes = {new TrackedOne(), new TrackedOne()};
-
-			Collection<ServiceRegistration<TrackedOne>> serviceRegistrations =
-				registerServices(TrackedOne.class, trackedOnes);
-
-			List<TrackedOne> trackedOneList = serviceTrackerList.toList();
-
-			Assert.assertArrayEquals(
-				serviceTrackerList.toString(), trackedOnes,
-				trackedOneList.toArray(new TrackedOne[0]));
-
-			TrackedOne[] trackedOneArray = serviceTrackerList.toArray(
-				new TrackedOne[0]);
-
-			Assert.assertArrayEquals(
-				serviceTrackerList.toString(), trackedOnes, trackedOneArray);
-
-			unregister(serviceRegistrations);
-		}
-	}
-
-	@Test
 	public void testGetServiceWithCustomComparator() {
 		try (ServiceTrackerList<TrackedOne> serviceTrackerList =
 				ServiceTrackerListFactory.open(
@@ -287,6 +260,33 @@ public class ServiceTrackerListTest {
 
 			Assert.assertEquals(
 				serviceTrackerList.toString(), 0, serviceTrackerList.size());
+		}
+	}
+
+	@Test
+	public void testToListAndArray() {
+		try (ServiceTrackerList<TrackedOne> serviceTrackerList =
+				ServiceTrackerListFactory.open(
+					_bundleContext, TrackedOne.class)) {
+
+			TrackedOne[] trackedOnes = {new TrackedOne(), new TrackedOne()};
+
+			Collection<ServiceRegistration<TrackedOne>> serviceRegistrations =
+				registerServices(TrackedOne.class, trackedOnes);
+
+			List<TrackedOne> trackedOneList = serviceTrackerList.toList();
+
+			Assert.assertArrayEquals(
+				serviceTrackerList.toString(), trackedOnes,
+				trackedOneList.toArray(new TrackedOne[0]));
+
+			TrackedOne[] trackedOneArray = serviceTrackerList.toArray(
+				new TrackedOne[0]);
+
+			Assert.assertArrayEquals(
+				serviceTrackerList.toString(), trackedOnes, trackedOneArray);
+
+			unregister(serviceRegistrations);
 		}
 	}
 
