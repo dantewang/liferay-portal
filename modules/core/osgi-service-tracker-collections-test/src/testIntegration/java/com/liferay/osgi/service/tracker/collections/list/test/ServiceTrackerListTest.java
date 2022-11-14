@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Dictionary;
@@ -277,14 +278,14 @@ public class ServiceTrackerListTest {
 			List<TrackedOne> trackedOneList = serviceTrackerList.toList();
 
 			Assert.assertArrayEquals(
-				serviceTrackerList.toString(), trackedOnes,
+				trackedOneList.toString(), trackedOnes,
 				trackedOneList.toArray(new TrackedOne[0]));
 
 			TrackedOne[] trackedOneArray = serviceTrackerList.toArray(
 				new TrackedOne[0]);
 
 			Assert.assertArrayEquals(
-				serviceTrackerList.toString(), trackedOnes, trackedOneArray);
+				Arrays.toString(trackedOneArray), trackedOnes, trackedOneArray);
 
 			unregister(serviceRegistrations);
 		}
