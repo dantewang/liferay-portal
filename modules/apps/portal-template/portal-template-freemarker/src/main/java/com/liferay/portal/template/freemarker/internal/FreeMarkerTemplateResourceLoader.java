@@ -14,27 +14,21 @@
 
 package com.liferay.portal.template.freemarker.internal;
 
-import com.liferay.petra.string.StringBundler;
+import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
+import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateResourceLoader;
 import com.liferay.portal.template.BaseTemplateResourceLoader;
 import com.liferay.portal.template.TemplateResourceParser;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Igor Spasic
@@ -51,67 +45,28 @@ public class FreeMarkerTemplateResourceLoader
 	@Activate
 	@Modified
 	protected void activate(
-			BundleContext bundleContext, Map<String, Object> properties)
-		throws InvalidSyntaxException {
+		BundleContext bundleContext, Map<String, Object> properties) {
 
-		String filterString = StringBundler.concat(
-			"(&(lang.type=", TemplateConstants.LANG_TYPE_FTL, ")(objectClass=",
-			TemplateResourceParser.class.getName(), "))");
-
-		_serviceTracker = new ServiceTracker<>(
-			bundleContext, bundleContext.createFilter(filterString),
-			new ServiceTrackerCustomizer
-				<TemplateResourceParser, TemplateResourceParser>() {
-
-				@Override
-				public TemplateResourceParser addingService(
-					ServiceReference<TemplateResourceParser> serviceReference) {
-
-					TemplateResourceParser templateResourceParser =
-						bundleContext.getService(serviceReference);
-
-					_templateResourceParsers.add(templateResourceParser);
-
-					return templateResourceParser;
-				}
-
-				@Override
-				public void modifiedService(
-					ServiceReference<TemplateResourceParser> serviceReference,
-					TemplateResourceParser templateResourceParser) {
-				}
-
-				@Override
-				public void removedService(
-					ServiceReference<TemplateResourceParser> serviceReference,
-					TemplateResourceParser templateResourceParser) {
-
-					_templateResourceParsers.remove(templateResourceParser);
-
-					bundleContext.ungetService(serviceReference);
-				}
-
-			});
-
-		_serviceTracker.open();
+		_serviceTrackerList = ServiceTrackerListFactory.open(
+			bundleContext, TemplateResourceParser.class,
+			"&(lang.type=" + TemplateConstants.LANG_TYPE_FTL + ")");
 
 		init(
-			TemplateConstants.LANG_TYPE_FTL, _templateResourceParsers,
+			TemplateConstants.LANG_TYPE_FTL, _serviceTrackerList,
 			_freeMarkerTemplateResourceCache);
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		_serviceTracker.close();
+		_serviceTrackerList.close();
+
 		destroy();
 	}
 
 	@Reference
 	private FreeMarkerTemplateResourceCache _freeMarkerTemplateResourceCache;
 
-	private volatile ServiceTracker
-		<TemplateResourceParser, TemplateResourceParser> _serviceTracker;
-	private final Set<TemplateResourceParser> _templateResourceParsers =
-		Collections.newSetFromMap(new ConcurrentHashMap<>());
+	private volatile ServiceTrackerList<TemplateResourceParser>
+		_serviceTrackerList;
 
 }
