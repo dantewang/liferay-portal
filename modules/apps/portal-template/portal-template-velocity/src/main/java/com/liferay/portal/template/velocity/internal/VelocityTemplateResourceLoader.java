@@ -106,7 +106,7 @@ public class VelocityTemplateResourceLoader extends BaseTemplateResourceLoader {
 		destroy();
 	}
 
-	private ServiceTracker
+	private volatile ServiceTracker
 		<TemplateResourceParser, TemplateResourceParser> _serviceTracker;
 	private final Set<TemplateResourceParser> _templateResourceParsers =
 		Collections.newSetFromMap(new ConcurrentHashMap<>());
