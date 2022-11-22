@@ -18,10 +18,12 @@ import com.liferay.dynamic.data.mapping.io.exporter.DDMFormInstanceRecordWriter;
 import com.liferay.dynamic.data.mapping.io.exporter.DDMFormInstanceRecordWriterRegistry;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapListener;
 import com.liferay.portal.kernel.util.StringUtil;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
@@ -44,22 +46,41 @@ public class DDMFormInstanceRecordWriterRegistryImpl
 
 	@Override
 	public Map<String, String> getDDMFormInstanceRecordWriterExtensions() {
-		Map<String, String> ddMFormInstanceRecordWriterExtensions =
-			new HashMap<>();
-
-		for (String type : _serviceTrackerMap.keySet()) {
-			ddMFormInstanceRecordWriterExtensions.put(
-				type, StringUtil.toUpperCase(type));
-		}
-
-		return ddMFormInstanceRecordWriterExtensions;
+		return Collections.unmodifiableMap(
+			_ddmFormInstanceRecordWriterExtensions);
 	}
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
 			bundleContext, DDMFormInstanceRecordWriter.class,
-			"ddm.form.instance.record.writer.type");
+			"ddm.form.instance.record.writer.type",
+			new ServiceTrackerMapListener
+				<String, DDMFormInstanceRecordWriter,
+				 DDMFormInstanceRecordWriter>() {
+
+				@Override
+				public void keyEmitted(
+					ServiceTrackerMap<String, DDMFormInstanceRecordWriter>
+						serviceTrackerMap,
+					String key, DDMFormInstanceRecordWriter service,
+					DDMFormInstanceRecordWriter content) {
+
+					_ddmFormInstanceRecordWriterExtensions.put(
+						key, StringUtil.toUpperCase(key));
+				}
+
+				@Override
+				public void keyRemoved(
+					ServiceTrackerMap<String, DDMFormInstanceRecordWriter>
+						serviceTrackerMap,
+					String key, DDMFormInstanceRecordWriter service,
+					DDMFormInstanceRecordWriter content) {
+
+					_ddmFormInstanceRecordWriterExtensions.remove(key);
+				}
+
+			});
 	}
 
 	@Deactivate
@@ -67,6 +88,8 @@ public class DDMFormInstanceRecordWriterRegistryImpl
 		_serviceTrackerMap.close();
 	}
 
+	private final Map<String, String> _ddmFormInstanceRecordWriterExtensions =
+		new ConcurrentHashMap<>();
 	private ServiceTrackerMap<String, DDMFormInstanceRecordWriter>
 		_serviceTrackerMap;
 
