@@ -23,11 +23,8 @@ import com.liferay.portal.kernel.search.SearchException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Michael C. Han
@@ -84,32 +81,9 @@ public class IndexerRequestBufferExecutor {
 		}
 	}
 
-	@Activate
-	protected void activate(BundleContext bundleContext) {
-		_indexWriterHelperServiceTracker = new ServiceTracker<>(
-			bundleContext, IndexWriterHelper.class, null);
-
-		_indexWriterHelperServiceTracker.open();
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_indexWriterHelperServiceTracker.close();
-	}
-
 	private void _commit() {
-		IndexWriterHelper indexWriterHelper = _getIndexWriterHelper();
-
-		if (indexWriterHelper == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Index writer helper is null");
-			}
-
-			return;
-		}
-
 		try {
-			indexWriterHelper.commit();
+			_indexWriterHelper.commit();
 		}
 		catch (SearchException searchException) {
 			if (_log.isWarnEnabled()) {
@@ -131,14 +105,10 @@ public class IndexerRequestBufferExecutor {
 		}
 	}
 
-	private IndexWriterHelper _getIndexWriterHelper() {
-		return _indexWriterHelperServiceTracker.getService();
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		IndexerRequestBufferExecutor.class);
 
-	private ServiceTracker<IndexWriterHelper, IndexWriterHelper>
-		_indexWriterHelperServiceTracker;
+	@Reference
+	private IndexWriterHelper _indexWriterHelper;
 
 }
