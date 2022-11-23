@@ -63,7 +63,16 @@ public class IndexerRequestBufferExecutor {
 						indexerRequest));
 			}
 
-			_executeIndexerRequest(indexerRequest);
+			try {
+				indexerRequest.execute();
+			}
+			catch (Exception exception) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Unable to execute index request " + indexerRequest,
+						exception);
+				}
+			}
 
 			completedIndexerRequests.add(indexerRequest);
 
@@ -77,30 +86,14 @@ public class IndexerRequestBufferExecutor {
 		}
 
 		if (!BufferOverflowThreadLocal.isOverflowMode()) {
-			_commit();
-		}
-	}
-
-	private void _commit() {
-		try {
-			_indexWriterHelper.commit();
-		}
-		catch (SearchException searchException) {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to commit search engine", searchException);
+			try {
+				_indexWriterHelper.commit();
 			}
-		}
-	}
-
-	private void _executeIndexerRequest(IndexerRequest indexerRequest) {
-		try {
-			indexerRequest.execute();
-		}
-		catch (Exception exception) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"Unable to execute index request " + indexerRequest,
-					exception);
+			catch (SearchException searchException) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Unable to commit search engine", searchException);
+				}
 			}
 		}
 	}
