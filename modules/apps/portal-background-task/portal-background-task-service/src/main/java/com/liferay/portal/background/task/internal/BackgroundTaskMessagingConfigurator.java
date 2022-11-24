@@ -30,7 +30,8 @@ import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.util.MapUtil;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.BundleContext;
@@ -51,7 +52,6 @@ import org.osgi.service.component.annotations.Reference;
 public class BackgroundTaskMessagingConfigurator {
 
 	@Activate
-	@Modified
 	protected void activate(
 		BundleContext bundleContext, Map<String, Object> properties) {
 
@@ -84,12 +84,19 @@ public class BackgroundTaskMessagingConfigurator {
 	@Deactivate
 	protected void deactivate() {
 		for (ServiceRegistration<Destination> serviceRegistration :
-				_serviceRegistrations.values()) {
+				_serviceRegistrations) {
 
 			serviceRegistration.unregister();
 		}
+	}
 
-		_serviceRegistrations.clear();
+	@Modified
+	protected void modified(
+		BundleContext bundleContext, Map<String, Object> properties) {
+
+		deactivate();
+
+		activate(bundleContext, properties);
 	}
 
 	private Destination _registerDestination(
@@ -105,15 +112,7 @@ public class BackgroundTaskMessagingConfigurator {
 		Destination destination = _destinationFactory.createDestination(
 			destinationConfiguration);
 
-		ServiceRegistration<Destination> oldServiceRegistration =
-			_serviceRegistrations.get(destination.getName());
-
-		if (oldServiceRegistration != null) {
-			oldServiceRegistration.unregister();
-		}
-
-		_serviceRegistrations.put(
-			destination.getName(),
+		_serviceRegistrations.add(
 			bundleContext.registerService(
 				Destination.class, destination,
 				MapUtil.singletonDictionary(
@@ -143,7 +142,7 @@ public class BackgroundTaskMessagingConfigurator {
 	@Reference
 	private MessageBus _messageBus;
 
-	private final Map<String, ServiceRegistration<Destination>>
-		_serviceRegistrations = new HashMap<>();
+	private final List<ServiceRegistration<Destination>> _serviceRegistrations =
+		new ArrayList<>();
 
 }
