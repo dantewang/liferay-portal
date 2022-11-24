@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.version.Version;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -279,7 +280,7 @@ public class UpgradeReportLogAppenderTest {
 		_assertReport(
 			StringBundler.concat(
 				PropsKeys.LIFERAY_HOME, StringPool.EQUAL,
-				PropsValues.LIFERAY_HOME, StringPool.NEW_LINE,
+				SystemProperties.LIFERAY_HOME, StringPool.NEW_LINE,
 				PropsKeys.LOCALES, StringPool.EQUAL,
 				Arrays.toString(PropsValues.LOCALES), StringPool.NEW_LINE,
 				PropsKeys.LOCALES_ENABLED, StringPool.EQUAL,

@@ -496,11 +496,11 @@ public class SetupWizardUtil {
 
 		try {
 			FileUtil.write(
-				PropsValues.LIFERAY_HOME, PROPERTIES_FILE_NAME,
+				SystemProperties.LIFERAY_HOME, PROPERTIES_FILE_NAME,
 				_getUnicodePropertiesStringWithEmptyValue(unicodeProperties));
 
 			if (FileUtil.exists(
-					PropsValues.LIFERAY_HOME + StringPool.SLASH +
+					SystemProperties.LIFERAY_HOME + StringPool.SLASH +
 						PROPERTIES_FILE_NAME)) {
 
 				return true;
