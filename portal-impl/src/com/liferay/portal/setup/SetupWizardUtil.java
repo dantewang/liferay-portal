@@ -166,9 +166,6 @@ public class SetupWizardUtil {
 		UnicodeProperties unicodeProperties = PropertiesParamUtil.getProperties(
 			httpServletRequest, _PROPERTIES_PREFIX);
 
-		unicodeProperties.setProperty(
-			"liferay.home", SystemProperties.get("liferay.home"));
-
 		boolean databaseConfigured = _isDatabaseConfigured(unicodeProperties);
 
 		_processDatabaseProperties(
