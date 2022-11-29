@@ -59,16 +59,13 @@ public class ConfigurationFileInstaller implements FileInstaller {
 
 	@Override
 	public boolean canTransformURL(File file) throws IOException {
-		String name = file.getName();
-		String path = file.getParent();
+		Path configsPath = Paths.get(PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR);
 
-		String configsDir = PropsValues.MODULE_FRAMEWORK_CONFIGS_DIR;
+		String configsDir = String.valueOf(configsPath.toRealPath());
 
-		Path configsPath = Paths.get(configsDir);
+		if (StringUtil.equals(file.getParent(), configsDir)) {
+			String name = file.getName();
 
-		configsDir = String.valueOf(configsPath.toRealPath());
-
-		if (StringUtil.equals(path, configsDir)) {
 			if (name.endsWith(".config")) {
 				return true;
 			}
