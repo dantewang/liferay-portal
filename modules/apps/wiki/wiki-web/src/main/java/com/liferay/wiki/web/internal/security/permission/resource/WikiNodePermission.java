@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermi
 import com.liferay.wiki.model.WikiNode;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Preston Crary
@@ -44,11 +43,7 @@ public class WikiNodePermission {
 			permissionChecker, node, actionId);
 	}
 
-	@Reference(
-		target = "(model.class.name=com.liferay.wiki.model.WikiNode)",
-		unbind = "-"
-	)
-	protected void setModelResourcePermission(
+	protected static void setModelResourcePermission(
 		ModelResourcePermission<WikiNode> modelResourcePermission) {
 
 		_wikiNodeModelResourcePermission = modelResourcePermission;
