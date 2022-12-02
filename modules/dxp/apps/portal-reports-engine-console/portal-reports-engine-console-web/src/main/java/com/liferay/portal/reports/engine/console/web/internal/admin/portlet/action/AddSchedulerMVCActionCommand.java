@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.reports.engine.ReportFormat;
 import com.liferay.portal.reports.engine.console.constants.ReportsEngineConsolePortletKeys;
 import com.liferay.portal.reports.engine.console.model.Definition;
 import com.liferay.portal.reports.engine.console.model.Entry;
@@ -76,7 +77,8 @@ public class AddSchedulerMVCActionCommand extends BaseMVCActionCommand {
 			WebKeys.THEME_DISPLAY);
 
 		long definitionId = ParamUtil.getLong(actionRequest, "definitionId");
-		String format = ParamUtil.getString(actionRequest, "format");
+		ReportFormat reportFormat = ReportFormat.valueOf(
+			ParamUtil.getString(actionRequest, "format"));
 		Calendar startCalendar = ReportsEngineConsoleUtil.getDate(
 			actionRequest, "schedulerStartDate", true);
 		String emailNotifications = ParamUtil.getString(
@@ -162,7 +164,7 @@ public class AddSchedulerMVCActionCommand extends BaseMVCActionCommand {
 			Entry.class.getName(), actionRequest);
 
 		_entryService.addEntry(
-			themeDisplay.getScopeGroupId(), definitionId, format, true,
+			themeDisplay.getScopeGroupId(), definitionId, reportFormat, true,
 			startCalendar.getTime(), schedulerEndDate,
 			recurrenceType != Recurrence.NO_RECURRENCE, cronText,
 			emailNotifications, emailDelivery, portletId, generatedReportsURL,
