@@ -66,6 +66,7 @@ import net.sf.ehcache.event.CacheManagerEventListenerRegistry;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -387,7 +388,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 					getPortalCacheManagerListenerPropertiesSet()) {
 
 			PortalCacheManagerListener portalCacheManagerListener =
-				portalCacheManagerListenerFactory.create(this, properties);
+				_portalCacheManagerListenerFactory.create(this, properties);
 
 			if (portalCacheManagerListener != null) {
 				registerPortalCacheManagerListener(portalCacheManagerListener);
@@ -396,10 +397,9 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	}
 
 	protected BundleContext bundleContext;
-	protected PortalCacheListenerFactory portalCacheListenerFactory;
-	protected PortalCacheManagerListenerFactory<PortalCacheManager<K, V>>
-		portalCacheManagerListenerFactory;
-	protected volatile Props props;
+
+	@Reference
+	protected Props props;
 
 	private void _initPortalCacheListeners(
 		PortalCache<K, V> portalCache,
@@ -414,7 +414,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 					getPortalCacheListenerPropertiesSet()) {
 
 			PortalCacheListener<K, V> portalCacheListener =
-				portalCacheListenerFactory.create(properties);
+				_portalCacheListenerFactory.create(properties);
 
 			if (portalCacheListener == null) {
 				continue;
@@ -601,7 +601,16 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	private String _defaultConfigFile;
 	private ServiceTracker<MBeanServer, ManagementService>
 		_mBeanServerServiceTracker;
+
+	@Reference
+	private PortalCacheListenerFactory _portalCacheListenerFactory;
+
 	private PortalCacheManagerConfiguration _portalCacheManagerConfiguration;
+
+	@Reference
+	private PortalCacheManagerListenerFactory<PortalCacheManager<K, V>>
+		_portalCacheManagerListenerFactory;
+
 	private String _portalCacheManagerName;
 	private final ConcurrentMap<String, PortalCache<K, V>> _portalCaches =
 		new ConcurrentHashMap<>();
