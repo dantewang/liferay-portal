@@ -19,6 +19,7 @@ import com.liferay.portal.background.task.constants.BackgroundTaskContextMapCons
 import com.liferay.portal.background.task.internal.BackgroundTaskImpl;
 import com.liferay.portal.background.task.internal.lock.helper.BackgroundTaskLockHelper;
 import com.liferay.portal.background.task.model.BackgroundTask;
+import com.liferay.portal.background.task.notifications.constants.BackgroundTaskUserNotificationEventConstants;
 import com.liferay.portal.background.task.service.BackgroundTaskLocalService;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatus;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusMessageTranslator;
@@ -189,7 +190,7 @@ public class BackgroundTaskStatusMessageListener extends BaseMessageListener {
 
 		for (long userId : userIds) {
 			_userNotificationEventLocalService.sendUserNotificationEvents(
-				userId, "BackgroundTask",
+				userId, BackgroundTaskUserNotificationEventConstants.TYPE,
 				UserNotificationDeliveryConstants.TYPE_WEBSITE, false,
 				JSONUtil.put(
 					"name", backgroundTask.getName()

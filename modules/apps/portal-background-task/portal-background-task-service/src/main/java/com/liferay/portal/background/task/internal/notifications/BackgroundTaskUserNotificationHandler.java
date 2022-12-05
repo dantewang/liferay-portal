@@ -14,6 +14,7 @@
 
 package com.liferay.portal.background.task.internal.notifications;
 
+import com.liferay.portal.background.task.notifications.constants.BackgroundTaskUserNotificationEventConstants;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.Language;
@@ -34,7 +35,7 @@ public class BackgroundTaskUserNotificationHandler
 	extends BaseUserNotificationHandler {
 
 	public BackgroundTaskUserNotificationHandler() {
-		setPortletId("BackgroundTask");
+		setPortletId(BackgroundTaskUserNotificationEventConstants.TYPE);
 	}
 
 	@Override

@@ -15,6 +15,7 @@
 package com.liferay.portal.background.task.internal.messaging.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.background.task.notifications.constants.BackgroundTaskUserNotificationEventConstants;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutorRegistry;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManager;
@@ -96,7 +97,8 @@ public class BackgroundTaskStatusMessageListenerTest {
 				userNotificationEvents.get(0);
 
 			Assert.assertEquals(
-				"BackgroundTask", userNotificationEvent.getType());
+				BackgroundTaskUserNotificationEventConstants.TYPE,
+				userNotificationEvent.getType());
 
 			JSONObject jsonObject = _jsonFactory.createJSONObject(
 				userNotificationEvent.getPayload());
