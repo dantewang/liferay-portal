@@ -15,6 +15,7 @@
 package com.liferay.account.admin.web.internal.display;
 
 import com.liferay.account.admin.web.internal.util.CurrentAccountEntryManagerUtil;
+import com.liferay.account.manager.CurrentAccountEntryManager;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.model.AccountEntryWrapper;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -25,6 +26,12 @@ import com.liferay.portal.kernel.model.User;
  * @author Pei-Jung Lan
  */
 public class AccountEntryDisplay extends AccountEntryWrapper {
+
+	public static void setCurrentAccountEntryManager(
+		CurrentAccountEntryManager currentAccountEntryManager) {
+
+		_currentAccountEntryManager = currentAccountEntryManager;
+	}
 
 	public AccountEntryDisplay(AccountEntry accountEntry) {
 		super(accountEntry);
@@ -114,6 +121,8 @@ public class AccountEntryDisplay extends AccountEntryWrapper {
 	public void setValidateUserEmailAddress(boolean validateUserEmailAddress) {
 		_validateUserEmailAddress = validateUserEmailAddress;
 	}
+
+	private static CurrentAccountEntryManager _currentAccountEntryManager;
 
 	private String _defaultLogoURL;
 	private boolean _emailAddressDomainValidationEnabled = true;
