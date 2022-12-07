@@ -14,7 +14,6 @@
 
 package com.liferay.account.admin.web.internal.display;
 
-import com.liferay.account.admin.web.internal.util.CurrentAccountEntryManagerUtil;
 import com.liferay.account.manager.CurrentAccountEntryManager;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.model.AccountEntryWrapper;
@@ -26,6 +25,19 @@ import com.liferay.portal.kernel.model.User;
  * @author Pei-Jung Lan
  */
 public class AccountEntryDisplay extends AccountEntryWrapper {
+
+	public static long getCurrentAccountEntryId(long groupId, long userId)
+		throws PortalException {
+
+		AccountEntry accountEntry =
+			_currentAccountEntryManager.getCurrentAccountEntry(groupId, userId);
+
+		if (accountEntry != null) {
+			return accountEntry.getAccountEntryId();
+		}
+
+		return 0;
+	}
 
 	public static void setCurrentAccountEntryManager(
 		CurrentAccountEntryManager currentAccountEntryManager) {
@@ -72,9 +84,7 @@ public class AccountEntryDisplay extends AccountEntryWrapper {
 			return false;
 		}
 
-		long currentAccountEntryId =
-			CurrentAccountEntryManagerUtil.getCurrentAccountEntryId(
-				groupId, userId);
+		long currentAccountEntryId = getCurrentAccountEntryId(groupId, userId);
 
 		if (currentAccountEntryId == getAccountEntryId()) {
 			return true;
