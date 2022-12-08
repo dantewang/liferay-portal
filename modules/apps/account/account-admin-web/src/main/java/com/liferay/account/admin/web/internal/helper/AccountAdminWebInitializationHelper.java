@@ -15,10 +15,15 @@
 package com.liferay.account.admin.web.internal.helper;
 
 import com.liferay.account.admin.web.internal.dao.search.AccountOrganizationSearchContainerFactory;
+import com.liferay.account.admin.web.internal.dao.search.AccountUserDisplaySearchContainerFactory;
 import com.liferay.account.admin.web.internal.display.AccountEntryDisplay;
 import com.liferay.account.manager.CurrentAccountEntryManager;
 import com.liferay.account.retriever.AccountOrganizationRetriever;
+import com.liferay.account.retriever.AccountUserRetriever;
+import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryOrganizationRelLocalService;
+import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
+import com.liferay.users.admin.kernel.util.UsersAdmin;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -41,7 +46,18 @@ public class AccountAdminWebInitializationHelper {
 
 		AccountOrganizationSearchContainerFactory.
 			setAccountOrganizationRetriever(_accountOrganizationRetriever);
+
+		AccountUserDisplaySearchContainerFactory.setAccountEntryLocalService(
+			_accountEntryLocalService);
+		AccountUserDisplaySearchContainerFactory.setAccountUserRetriever(
+			_accountUserRetriever);
+		AccountUserDisplaySearchContainerFactory.setUserGroupRoleLocalService(
+			_userGroupRoleLocalService);
+		AccountUserDisplaySearchContainerFactory.setUsersAdmin(_usersAdmin);
 	}
+
+	@Reference
+	private AccountEntryLocalService _accountEntryLocalService;
 
 	@Reference
 	private AccountEntryOrganizationRelLocalService
@@ -51,6 +67,15 @@ public class AccountAdminWebInitializationHelper {
 	private AccountOrganizationRetriever _accountOrganizationRetriever;
 
 	@Reference
+	private AccountUserRetriever _accountUserRetriever;
+
+	@Reference
 	private CurrentAccountEntryManager _currentAccountEntryManager;
+
+	@Reference
+	private UserGroupRoleLocalService _userGroupRoleLocalService;
+
+	@Reference
+	private UsersAdmin _usersAdmin;
 
 }
