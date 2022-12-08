@@ -16,12 +16,15 @@ package com.liferay.account.admin.web.internal.helper;
 
 import com.liferay.account.admin.web.internal.dao.search.AccountOrganizationSearchContainerFactory;
 import com.liferay.account.admin.web.internal.dao.search.AccountUserDisplaySearchContainerFactory;
+import com.liferay.account.admin.web.internal.dao.search.AssignableAccountUserDisplaySearchContainerFactory;
 import com.liferay.account.admin.web.internal.display.AccountEntryDisplay;
 import com.liferay.account.manager.CurrentAccountEntryManager;
 import com.liferay.account.retriever.AccountOrganizationRetriever;
 import com.liferay.account.retriever.AccountUserRetriever;
 import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryOrganizationRelLocalService;
+import com.liferay.account.service.AccountEntryUserRelLocalService;
+import com.liferay.account.service.AccountRoleLocalService;
 import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
 import com.liferay.users.admin.kernel.util.UsersAdmin;
 
@@ -54,6 +57,18 @@ public class AccountAdminWebInitializationHelper {
 		AccountUserDisplaySearchContainerFactory.setUserGroupRoleLocalService(
 			_userGroupRoleLocalService);
 		AccountUserDisplaySearchContainerFactory.setUsersAdmin(_usersAdmin);
+
+		AssignableAccountUserDisplaySearchContainerFactory.
+			setAccountEntryLocalService(_accountEntryLocalService);
+		AssignableAccountUserDisplaySearchContainerFactory.
+			setAccountEntryUserRelLocalService(
+				_accountEntryUserRelLocalService);
+		AssignableAccountUserDisplaySearchContainerFactory.
+			setAccountRoleLocalService(_accountRoleLocalService);
+		AssignableAccountUserDisplaySearchContainerFactory.
+			setAccountUserRetriever(_accountUserRetriever);
+		AssignableAccountUserDisplaySearchContainerFactory.
+			setUserGroupRoleLocalService(_userGroupRoleLocalService);
 	}
 
 	@Reference
@@ -64,7 +79,13 @@ public class AccountAdminWebInitializationHelper {
 		_accountEntryOrganizationRelLocalService;
 
 	@Reference
+	private AccountEntryUserRelLocalService _accountEntryUserRelLocalService;
+
+	@Reference
 	private AccountOrganizationRetriever _accountOrganizationRetriever;
+
+	@Reference
+	private AccountRoleLocalService _accountRoleLocalService;
 
 	@Reference
 	private AccountUserRetriever _accountUserRetriever;
