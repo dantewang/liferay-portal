@@ -68,34 +68,31 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
  */
 @Component(immediate = true, service = {})
 public class LiferayPortalServiceExtender
-	implements BundleTrackerCustomizer<LiferayPortalServiceExtension> {
+	implements BundleTrackerCustomizer<List<LiferayPortalServiceExtension>> {
 
 	@Override
-	public LiferayPortalServiceExtension addingBundle(
+	public List<LiferayPortalServiceExtension> addingBundle(
 		Bundle bundle, BundleEvent bundleEvent) {
 
 		if (!BundleUtil.isLiferayServiceBundle(bundle)) {
 			return null;
 		}
 
+		List<LiferayPortalServiceExtension> liferayPortalServiceExtensions =
+			new ArrayList<>();
+
 		try {
-			_startLiferayServiceExtension(bundle);
-			_startInitialUpgradeExtension(bundle);
-			_startPortletConfigurationExtension(bundle);
-			_startServiceConfigurationExtension(bundle);
+			_startLiferayServiceExtension(
+				bundle, liferayPortalServiceExtensions);
+			_startInitialUpgradeExtension(
+				bundle, liferayPortalServiceExtensions);
+			_startPortletConfigurationExtension(
+				bundle, liferayPortalServiceExtensions);
+			_startServiceConfigurationExtension(
+				bundle, liferayPortalServiceExtensions);
 			_registerLiferayPortalServiceExtension(bundle);
 
-			return new LiferayPortalServiceExtension() {
-
-				@Override
-				public void destroy() {
-				}
-
-				@Override
-				public void start() {
-				}
-
-			};
+			return liferayPortalServiceExtensions;
 		}
 		catch (Exception exception) {
 			_log.error(exception);
@@ -107,61 +104,26 @@ public class LiferayPortalServiceExtender
 	@Override
 	public void modifiedBundle(
 		Bundle bundle, BundleEvent bundleEvent,
-		LiferayPortalServiceExtension liferayPortalServiceExtension) {
+		List<LiferayPortalServiceExtension> liferayPortalServiceExtensions) {
 	}
 
 	@Override
 	public void removedBundle(
 		Bundle bundle, BundleEvent bundleEvent,
-		LiferayPortalServiceExtension liferayPortalServiceExtension) {
+		List<LiferayPortalServiceExtension> liferayPortalServiceExtensions) {
 
-		String bundleSymbolicName = bundle.getSymbolicName();
+		for (LiferayPortalServiceExtension liferayPortalServiceExtension :
+				liferayPortalServiceExtensions) {
 
-		if (_liferayServiceExtensions != null) {
-			LiferayServiceExtension liferayServiceExtension =
-				_liferayServiceExtensions.remove(bundleSymbolicName);
-
-			if (liferayServiceExtension != null) {
-				liferayServiceExtension.destroy();
-			}
+			liferayPortalServiceExtension.destroy();
 		}
 
-		if (_initialUpgradeExtensions != null) {
-			InitialUpgradeExtension initialUpgradeExtension =
-				_initialUpgradeExtensions.remove(bundleSymbolicName);
+		ServiceRegistration<LiferayPortalServiceExtension> serviceRegistration =
+			_liferayPortalServiceExtensionServiceRegistrations.remove(
+				bundle.getSymbolicName());
 
-			if (initialUpgradeExtension != null) {
-				initialUpgradeExtension.destroy();
-			}
-		}
-
-		if (_portletConfigurationExtensions != null) {
-			PortletConfigurationExtension portletConfigurationExtension =
-				_portletConfigurationExtensions.remove(bundleSymbolicName);
-
-			if (portletConfigurationExtension != null) {
-				portletConfigurationExtension.destroy();
-			}
-		}
-
-		if (_serviceConfigurationExtensions != null) {
-			ServiceConfigurationExtension serviceConfigurationExtension =
-				_serviceConfigurationExtensions.remove(bundleSymbolicName);
-
-			if (serviceConfigurationExtension != null) {
-				serviceConfigurationExtension.destroy();
-			}
-		}
-
-		if (_liferayPortalServiceExtensionServiceRegistrations != null) {
-			ServiceRegistration<LiferayPortalServiceExtension>
-				serviceRegistration =
-					_liferayPortalServiceExtensionServiceRegistrations.remove(
-						bundleSymbolicName);
-
-			if (serviceRegistration != null) {
-				serviceRegistration.unregister();
-			}
+		if (serviceRegistration != null) {
+			serviceRegistration.unregister();
 		}
 	}
 
@@ -390,17 +352,23 @@ public class LiferayPortalServiceExtender
 				liferayPortalServiceExtension, null));
 	}
 
-	private void _startInitialUpgradeExtension(Bundle bundle) {
+	private void _startInitialUpgradeExtension(
+		Bundle bundle,
+		List<LiferayPortalServiceExtension> liferayPortalServiceExtensions) {
+
 		InitialUpgradeExtension initialUpgradeExtension =
 			new InitialUpgradeExtension(bundle);
 
 		initialUpgradeExtension.start();
 
-		_initialUpgradeExtensions.put(
-			bundle.getSymbolicName(), initialUpgradeExtension);
+		liferayPortalServiceExtensions.add(initialUpgradeExtension);
 	}
 
-	private void _startLiferayServiceExtension(Bundle bundle) throws Exception {
+	private void _startLiferayServiceExtension(
+			Bundle bundle,
+			List<LiferayPortalServiceExtension> liferayPortalServiceExtensions)
+		throws Exception {
+
 		Dictionary<String, String> headers = bundle.getHeaders(
 			StringPool.BLANK);
 
@@ -415,11 +383,13 @@ public class LiferayPortalServiceExtender
 
 		liferayServiceExtension.start();
 
-		_liferayServiceExtensions.put(
-			bundle.getSymbolicName(), liferayServiceExtension);
+		liferayPortalServiceExtensions.add(liferayServiceExtension);
 	}
 
-	private void _startPortletConfigurationExtension(Bundle bundle) {
+	private void _startPortletConfigurationExtension(
+		Bundle bundle,
+		List<LiferayPortalServiceExtension> liferayPortalServiceExtensions) {
+
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
 		ClassLoader classLoader = bundleWiring.getClassLoader();
@@ -437,11 +407,13 @@ public class LiferayPortalServiceExtender
 
 		portletConfigurationExtension.start();
 
-		_portletConfigurationExtensions.put(
-			bundle.getSymbolicName(), portletConfigurationExtension);
+		liferayPortalServiceExtensions.add(portletConfigurationExtension);
 	}
 
-	private void _startServiceConfigurationExtension(Bundle bundle) {
+	private void _startServiceConfigurationExtension(
+		Bundle bundle,
+		List<LiferayPortalServiceExtension> liferayPortalServiceExtensions) {
+
 		Dictionary<String, String> headers = bundle.getHeaders(
 			StringPool.BLANK);
 
@@ -470,29 +442,19 @@ public class LiferayPortalServiceExtender
 
 		serviceConfigurationExtension.start();
 
-		_serviceConfigurationExtensions.put(
-			bundle.getSymbolicName(), serviceConfigurationExtension);
+		liferayPortalServiceExtensions.add(serviceConfigurationExtension);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		LiferayPortalServiceExtender.class);
 
 	private BundleTracker<?> _bundleTracker;
-	private final Map<String, InitialUpgradeExtension>
-		_initialUpgradeExtensions = new HashMap<>();
 	private final Map
 		<String, ServiceRegistration<LiferayPortalServiceExtension>>
 			_liferayPortalServiceExtensionServiceRegistrations =
 				new HashMap<>();
-	private final Map<String, LiferayServiceExtension>
-		_liferayServiceExtensions = new HashMap<>();
-	private final Map<String, PortletConfigurationExtension>
-		_portletConfigurationExtensions = new HashMap<>();
 
 	@Reference
 	private ServiceComponentLocalService _serviceComponentLocalService;
-
-	private final Map<String, ServiceConfigurationExtension>
-		_serviceConfigurationExtensions = new HashMap<>();
 
 }
