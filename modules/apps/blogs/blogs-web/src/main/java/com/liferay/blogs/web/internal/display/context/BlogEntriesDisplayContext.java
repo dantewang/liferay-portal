@@ -335,7 +335,7 @@ public class BlogEntriesDisplayContext {
 						BlogsEntry entry = _toBlogsEntry(searchResult);
 
 						if (entry == null) {
-							throw new NullPointerException();
+							continue;
 						}
 
 						blogsEntry.add(entry);
