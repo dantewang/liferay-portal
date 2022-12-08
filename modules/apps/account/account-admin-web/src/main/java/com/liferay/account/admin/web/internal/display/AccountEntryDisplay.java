@@ -26,19 +26,6 @@ import com.liferay.portal.kernel.model.User;
  */
 public class AccountEntryDisplay extends AccountEntryWrapper {
 
-	public static long getCurrentAccountEntryId(long groupId, long userId)
-		throws PortalException {
-
-		AccountEntry accountEntry =
-			_currentAccountEntryManager.getCurrentAccountEntry(groupId, userId);
-
-		if (accountEntry != null) {
-			return accountEntry.getAccountEntryId();
-		}
-
-		return 0;
-	}
-
 	public static void setCurrentAccountEntryManager(
 		CurrentAccountEntryManager currentAccountEntryManager) {
 
@@ -84,7 +71,14 @@ public class AccountEntryDisplay extends AccountEntryWrapper {
 			return false;
 		}
 
-		long currentAccountEntryId = getCurrentAccountEntryId(groupId, userId);
+		long currentAccountEntryId = 0;
+
+		AccountEntry accountEntry =
+			_currentAccountEntryManager.getCurrentAccountEntry(groupId, userId);
+
+		if (accountEntry != null) {
+			currentAccountEntryId = accountEntry.getAccountEntryId();
+		}
 
 		if (currentAccountEntryId == getAccountEntryId()) {
 			return true;
