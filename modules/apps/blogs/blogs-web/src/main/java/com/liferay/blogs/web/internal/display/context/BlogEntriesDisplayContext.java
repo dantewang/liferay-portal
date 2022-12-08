@@ -332,7 +332,13 @@ public class BlogEntriesDisplayContext {
 					List<BlogsEntry> blogsEntry = new ArrayList<>();
 
 					for (SearchResult searchResult : searchResults) {
-						blogsEntry.add(_toBlogsEntry(searchResult));
+						BlogsEntry entry = _toBlogsEntry(searchResult);
+
+						if (entry == null) {
+							throw new NullPointerException();
+						}
+
+						blogsEntry.add(entry);
 					}
 
 					return blogsEntry;
