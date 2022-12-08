@@ -14,8 +14,11 @@
 
 package com.liferay.account.admin.web.internal.helper;
 
+import com.liferay.account.admin.web.internal.dao.search.AccountOrganizationSearchContainerFactory;
 import com.liferay.account.admin.web.internal.display.AccountEntryDisplay;
 import com.liferay.account.manager.CurrentAccountEntryManager;
+import com.liferay.account.retriever.AccountOrganizationRetriever;
+import com.liferay.account.service.AccountEntryOrganizationRelLocalService;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -31,7 +34,21 @@ public class AccountAdminWebInitializationHelper {
 	protected void activate() {
 		AccountEntryDisplay.setCurrentAccountEntryManager(
 			_currentAccountEntryManager);
+
+		AccountOrganizationSearchContainerFactory.
+			setAccountEntryOrganizationRelLocalService(
+				_accountEntryOrganizationRelLocalService);
+
+		AccountOrganizationSearchContainerFactory.
+			setAccountOrganizationRetriever(_accountOrganizationRetriever);
 	}
+
+	@Reference
+	private AccountEntryOrganizationRelLocalService
+		_accountEntryOrganizationRelLocalService;
+
+	@Reference
+	private AccountOrganizationRetriever _accountOrganizationRetriever;
 
 	@Reference
 	private CurrentAccountEntryManager _currentAccountEntryManager;
