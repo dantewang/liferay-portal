@@ -359,9 +359,9 @@ public class LiferayPortalServiceExtender
 		InitialUpgradeExtension initialUpgradeExtension =
 			new InitialUpgradeExtension(bundle);
 
-		initialUpgradeExtension.start();
-
 		liferayPortalServiceExtensions.add(initialUpgradeExtension);
+
+		initialUpgradeExtension.start();
 	}
 
 	private void _startLiferayServiceExtension(
@@ -381,9 +381,9 @@ public class LiferayPortalServiceExtender
 				bundle, _getModuleAggregareClassLoader(bundle),
 				_getDataSource(bundle));
 
-		liferayServiceExtension.start();
-
 		liferayPortalServiceExtensions.add(liferayServiceExtension);
+
+		liferayServiceExtension.start();
 	}
 
 	private void _startPortletConfigurationExtension(
@@ -405,9 +405,9 @@ public class LiferayPortalServiceExtender
 			new PortletConfigurationExtension(
 				bundle, classLoader, portletConfiguration);
 
-		portletConfigurationExtension.start();
-
 		liferayPortalServiceExtensions.add(portletConfigurationExtension);
+
+		portletConfigurationExtension.start();
 	}
 
 	private void _startServiceConfigurationExtension(
@@ -440,9 +440,9 @@ public class LiferayPortalServiceExtender
 			new ServiceConfigurationExtension(
 				bundle, requireSchemaVersion, serviceConfigurationInitializer);
 
-		serviceConfigurationExtension.start();
-
 		liferayPortalServiceExtensions.add(serviceConfigurationExtension);
+
+		serviceConfigurationExtension.start();
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
