@@ -1232,3 +1232,27 @@ Delete usages of `<liferay-frontend:fieldset-group>` and replace usages of `<aui
 ### Why was this change made?
 
 The tags `<aui:fieldset-group>` and `<liferay-frontend:fieldset-group>` added unnecessary markup to the page and caused accessibility issues.
+
+---------------------------------------
+
+## Removed ContentUtil class and its module com.liferay.petra.content
+- **Date:** 2022-Dec-09
+- **JIRA Ticket:** [LPS-149147](https://issues.liferay.com/browse/LPS-149147)
+
+### What changed?
+
+The class `ContentUtil` and its related module, `com.liferay.petra.content`, have been deleted and are no longer available.
+
+### Who is affected?
+
+This affects any development that uses the `ContentUtil` class.
+
+### How should I update my code?
+
+If you still need to use this class, you can replace the calls to `com.liferay.petra.content.ContentUtil.get` with `com.liferay.petra.string.StringUtil.read` from `com.liferay.petra.string` module.
+
+### Why was this change made?
+
+ContentUtil class caches the content read from files, but there are several issues with this cache:
+- It is not thread safe.
+- It does not provide a way to clear, which may cause leaking.
