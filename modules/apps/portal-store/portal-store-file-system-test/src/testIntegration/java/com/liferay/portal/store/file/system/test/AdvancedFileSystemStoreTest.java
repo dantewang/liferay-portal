@@ -49,8 +49,7 @@ public class AdvancedFileSystemStoreTest extends BaseStoreTestCase {
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		_rootDir =
-			SystemProperties.get("liferay.home") +
-				"/test/store/advanced_file_system";
+			SystemProperties.LIFERAY_HOME + "/test/store/advanced_file_system";
 
 		_configuration = _configurationAdmin.getConfiguration(
 			"com.liferay.portal.store.file.system.configuration." +

@@ -198,7 +198,7 @@ public class AlloyControllerInvokerManager {
 						controllerClass, alloyControllerInvokerClassName);
 
 				final String fileName = StringBundler.concat(
-					SystemProperties.get("liferay.home"), "/data/alloy/",
+					SystemProperties.LIFERAY_HOME, "/data/alloy/",
 					_getClassBinaryName(alloyControllerInvokerClassName),
 					".class");
 

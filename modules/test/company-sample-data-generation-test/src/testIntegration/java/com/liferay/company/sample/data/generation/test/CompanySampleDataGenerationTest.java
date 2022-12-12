@@ -250,7 +250,7 @@ public class CompanySampleDataGenerationTest {
 		}
 
 		Path outputDirPath = Paths.get(
-			SystemProperties.get("liferay.home"), outputDir);
+			SystemProperties.LIFERAY_HOME, outputDir);
 
 		File outputDirFile = outputDirPath.toFile();
 

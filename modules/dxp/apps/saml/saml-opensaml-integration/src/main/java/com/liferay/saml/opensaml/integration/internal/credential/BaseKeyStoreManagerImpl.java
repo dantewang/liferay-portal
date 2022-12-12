@@ -40,7 +40,7 @@ public abstract class BaseKeyStoreManagerImpl implements KeyStoreManager {
 	protected String getSamlKeyStorePath() {
 		String keyStorePath = samlConfiguration.keyStorePath();
 
-		String liferayHome = SystemProperties.get("liferay.home");
+		String liferayHome = SystemProperties.LIFERAY_HOME;
 
 		if (Validator.isNull(keyStorePath)) {
 			return liferayHome.concat("/data/keystore.jks");

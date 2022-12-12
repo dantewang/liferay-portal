@@ -178,8 +178,7 @@ public class Log4JUtil {
 
 	private static String _getLiferayHome() {
 		if (_liferayHome == null) {
-			_liferayHome = _escapeXMLAttribute(
-				SystemProperties.get("liferay.home"));
+			_liferayHome = _escapeXMLAttribute(SystemProperties.LIFERAY_HOME);
 		}
 
 		return _liferayHome;

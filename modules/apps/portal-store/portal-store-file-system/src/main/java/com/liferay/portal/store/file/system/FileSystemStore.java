@@ -55,7 +55,7 @@ public class FileSystemStore implements Store {
 		File rootDir = new File(path);
 
 		if (!rootDir.isAbsolute()) {
-			rootDir = new File(SystemProperties.get("liferay.home"), path);
+			rootDir = new File(SystemProperties.LIFERAY_HOME, path);
 		}
 
 		_rootDir = rootDir;

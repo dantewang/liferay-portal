@@ -184,7 +184,7 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 		ElasticsearchInstancePathsBuilder elasticsearchInstancePathsBuilder =
 			new ElasticsearchInstancePathsBuilder();
 
-		Path workPath = Paths.get(SystemProperties.get("liferay.home"));
+		Path workPath = Paths.get(SystemProperties.LIFERAY_HOME);
 
 		Path dataPath = workPath.resolve("data/elasticsearch7");
 

@@ -73,6 +73,6 @@ public class MarketplaceLicenseUtil {
 	}
 
 	private static final String _LICENSE_SERVER_ID_FILE_NAME =
-		SystemProperties.get("liferay.home") + "/data/license/server/serverId";
+		SystemProperties.LIFERAY_HOME + "/data/license/server/serverId";
 
 }
