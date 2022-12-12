@@ -37,6 +37,7 @@ import java.text.NumberFormat;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -143,9 +144,11 @@ public class NumericDDMFormFieldTypeReportProcessor
 			List<BigDecimal> list = _getValueBigDecimals(
 				ddmFormFieldValue.getName(), ddmFormInstanceRecords);
 
-			BigDecimal maxValueBigDecimal = Collections.max(list);
+			BigDecimal maxValueBigDecimal = Collections.max(
+				list, Comparator.comparingDouble(Number::doubleValue));
 
-			BigDecimal minValueBigDecimal = Collections.min(list);
+			BigDecimal minValueBigDecimal = Collections.min(
+				list, Comparator.comparingDouble(Number::doubleValue));
 
 			summaryJSONObject.put(
 				"max", maxValueBigDecimal.toString()
