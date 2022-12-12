@@ -40,7 +40,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -127,10 +126,9 @@ public class NumericDDMFormFieldTypeReportProcessor
 			for (DDMFormInstanceRecord currentDDMFormInstanceRecord :
 					ddmFormInstance.getFormInstanceRecords()) {
 
-				if (!Objects.equals(
-						formInstanceRecordId,
+				if (formInstanceRecordId !=
 						currentDDMFormInstanceRecord.
-							getFormInstanceRecordId())) {
+							getFormInstanceRecordId()) {
 
 					ddmFormInstanceRecords.add(currentDDMFormInstanceRecord);
 				}
