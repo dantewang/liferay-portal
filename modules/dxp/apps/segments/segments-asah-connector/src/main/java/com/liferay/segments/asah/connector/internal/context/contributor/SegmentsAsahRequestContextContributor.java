@@ -46,18 +46,7 @@ public class SegmentsAsahRequestContextContributor
 	public void contribute(
 		Context context, HttpServletRequest httpServletRequest) {
 
-		String segmentsAnonymousUserId = _getSegmentsAnonymousUserId(
-			httpServletRequest);
-
-		httpServletRequest.setAttribute(
-			SegmentsWebKeys.SEGMENTS_ANONYMOUS_USER_ID,
-			segmentsAnonymousUserId);
-
-		context.put(KEY_SEGMENTS_ANONYMOUS_USER_ID, segmentsAnonymousUserId);
-	}
-
-	private String _getSegmentsAnonymousUserId(
-		HttpServletRequest httpServletRequest) {
+		String segmentsAnonymousUserId = StringPool.BLANK;
 
 		for (Cookie cookie : httpServletRequest.getCookies()) {
 			if (Objects.equals(
@@ -66,14 +55,18 @@ public class SegmentsAsahRequestContextContributor
 				String value = cookie.getValue();
 
 				if (value != null) {
-					return value;
+					segmentsAnonymousUserId = value;
 				}
 
 				break;
 			}
 		}
 
-		return StringPool.BLANK;
+		httpServletRequest.setAttribute(
+			SegmentsWebKeys.SEGMENTS_ANONYMOUS_USER_ID,
+			segmentsAnonymousUserId);
+
+		context.put(KEY_SEGMENTS_ANONYMOUS_USER_ID, segmentsAnonymousUserId);
 	}
 
 	private static final String _AC_CLIENT_USER_ID_COOKIE_NAME =
