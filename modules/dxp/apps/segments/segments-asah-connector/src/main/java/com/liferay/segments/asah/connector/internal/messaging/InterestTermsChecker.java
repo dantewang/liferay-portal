@@ -28,8 +28,8 @@ import com.liferay.segments.asah.connector.internal.client.model.Results;
 import com.liferay.segments.asah.connector.internal.client.model.Topic;
 import com.liferay.segments.asah.connector.internal.util.AsahUtil;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -75,19 +75,15 @@ public class InterestTermsChecker {
 			return;
 		}
 
-		Stream<Topic> stream = topics.stream();
+		List<String> termList = new ArrayList<>();
 
-		String[] terms = stream.flatMap(
-			topic -> {
-				List<Topic.TopicTerm> topicTerms = topic.getTerms();
-
-				return topicTerms.stream();
+		for (Topic topic : topics) {
+			for (Topic.TopicTerm term : topic.getTerms()) {
+				termList.add(term.getKeyword());
 			}
-		).map(
-			Topic.TopicTerm::getKeyword
-		).toArray(
-			String[]::new
-		);
+		}
+
+		String[] terms = termList.toArray(new String[0]);
 
 		if (_log.isDebugEnabled()) {
 			_log.debug(
