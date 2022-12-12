@@ -141,14 +141,16 @@ public class NumericDDMFormFieldTypeReportProcessor
 				return jsonObject;
 			}
 
-			List<BigDecimal> list = _getValueBigDecimals(
+			List<BigDecimal> valueBigDecimals = _getValueBigDecimals(
 				ddmFormFieldValue.getName(), ddmFormInstanceRecords);
 
 			BigDecimal maxValueBigDecimal = Collections.max(
-				list, Comparator.comparingDouble(Number::doubleValue));
+				valueBigDecimals,
+				Comparator.comparingDouble(Number::doubleValue));
 
 			BigDecimal minValueBigDecimal = Collections.min(
-				list, Comparator.comparingDouble(Number::doubleValue));
+				valueBigDecimals,
+				Comparator.comparingDouble(Number::doubleValue));
 
 			summaryJSONObject.put(
 				"max", maxValueBigDecimal.toString()
