@@ -15,13 +15,11 @@
 package com.liferay.segments.asah.connector.internal.context.contributor;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.segments.constants.SegmentsWebKeys;
 import com.liferay.segments.context.Context;
 import com.liferay.segments.context.contributor.RequestContextContributor;
 
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -61,23 +59,21 @@ public class SegmentsAsahRequestContextContributor
 	private String _getSegmentsAnonymousUserId(
 		HttpServletRequest httpServletRequest) {
 
-		Cookie[] cookies = httpServletRequest.getCookies();
+		for (Cookie cookie : httpServletRequest.getCookies()) {
+			if (Objects.equals(
+					cookie.getName(), _AC_CLIENT_USER_ID_COOKIE_NAME)) {
 
-		if (ArrayUtil.isEmpty(cookies)) {
-			return StringPool.BLANK;
+				String value = cookie.getValue();
+
+				if (value != null) {
+					return value;
+				}
+
+				break;
+			}
 		}
 
-		return Stream.of(
-			cookies
-		).filter(
-			cookie -> Objects.equals(
-				cookie.getName(), _AC_CLIENT_USER_ID_COOKIE_NAME)
-		).map(
-			Cookie::getValue
-		).findFirst(
-		).orElse(
-			StringPool.BLANK
-		);
+		return StringPool.BLANK;
 	}
 
 	private static final String _AC_CLIENT_USER_ID_COOKIE_NAME =
