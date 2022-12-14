@@ -138,7 +138,8 @@ public class AsahSegmentsEntryProvider implements SegmentsEntryProvider {
 						segmentsEntry1.getModifiedDate());
 				});
 
-			List<Long> segmentsEntryIdList = new ArrayList<>();
+			List<Long> segmentsEntryIdList = new ArrayList<>(
+				segmentsEntries.size());
 
 			for (SegmentsEntry segmentsEntry : segmentsEntries) {
 				segmentsEntryIdList.add(segmentsEntry.getSegmentsEntryId());
