@@ -41,9 +41,9 @@ import com.liferay.segments.provider.SegmentsEntryProvider;
 import com.liferay.segments.service.SegmentsEntryLocalService;
 import com.liferay.segments.service.SegmentsEntryRelLocalService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -70,15 +70,16 @@ public class AsahSegmentsEntryProvider implements SegmentsEntryProvider {
 			long segmentsEntryId, int start, int end)
 		throws PortalException {
 
-		List<SegmentsEntryRel> segmentsEntryRels =
-			_segmentsEntryRelLocalService.getSegmentsEntryRels(
-				segmentsEntryId, start, end, null);
+		List<Long> classPKs = new ArrayList<>();
 
-		Stream<SegmentsEntryRel> stream = segmentsEntryRels.stream();
+		for (SegmentsEntryRel segmentsEntryRel :
+				_segmentsEntryRelLocalService.getSegmentsEntryRels(
+					segmentsEntryId, start, end, null)) {
 
-		return stream.mapToLong(
-			SegmentsEntryRel::getClassPK
-		).toArray();
+			classPKs.add(segmentsEntryRel.getClassPK());
+		}
+
+		return ArrayUtil.toLongArray(classPKs);
 	}
 
 	@Override
@@ -108,39 +109,42 @@ public class AsahSegmentsEntryProvider implements SegmentsEntryProvider {
 		}
 
 		if (GetterUtil.getBoolean(context.get(Context.SIGNED_IN))) {
-			List<SegmentsEntry> segmentsEntries =
-				_segmentsEntryLocalService.getSegmentsEntries(
-					groupId, true,
-					SegmentsEntryConstants.SOURCE_ASAH_FARO_BACKEND, className,
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+			List<SegmentsEntry> segmentsEntries = new ArrayList<>();
 
-			if (segmentsEntries.isEmpty()) {
-				return new long[0];
-			}
+			for (SegmentsEntry segmentsEntry :
+					_segmentsEntryLocalService.getSegmentsEntries(
+						groupId, true,
+						SegmentsEntryConstants.SOURCE_ASAH_FARO_BACKEND,
+						className, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+						null)) {
 
-			Stream<SegmentsEntry> stream = segmentsEntries.stream();
-
-			return stream.filter(
-				segmentsEntry ->
-					ArrayUtil.isEmpty(filterSegmentsEntryIds) ||
-					ArrayUtil.contains(
-						filterSegmentsEntryIds,
-						segmentsEntry.getSegmentsEntryId())
-			).filter(
-				segmentsEntry ->
+				if ((ArrayUtil.isEmpty(filterSegmentsEntryIds) ||
+					 ArrayUtil.contains(
+						 filterSegmentsEntryIds,
+						 segmentsEntry.getSegmentsEntryId())) &&
 					_segmentsEntryRelLocalService.hasSegmentsEntryRel(
 						segmentsEntry.getSegmentsEntryId(),
-						_portal.getClassNameId(className), classPK)
-			).sorted(
+						_portal.getClassNameId(className), classPK)) {
+
+					segmentsEntries.add(segmentsEntry);
+				}
+			}
+
+			segmentsEntries.sort(
 				(segmentsEntry1, segmentsEntry2) -> {
 					Date modifiedDate = segmentsEntry2.getModifiedDate();
 
 					return modifiedDate.compareTo(
 						segmentsEntry1.getModifiedDate());
-				}
-			).mapToLong(
-				SegmentsEntry::getSegmentsEntryId
-			).toArray();
+				});
+
+			List<Long> segmentsEntryIdList = new ArrayList<>();
+
+			for (SegmentsEntry segmentsEntry : segmentsEntries) {
+				segmentsEntryIdList.add(segmentsEntry.getSegmentsEntryId());
+			}
+
+			return ArrayUtil.toLongArray(segmentsEntryIdList);
 		}
 
 		String userId = GetterUtil.getString(
