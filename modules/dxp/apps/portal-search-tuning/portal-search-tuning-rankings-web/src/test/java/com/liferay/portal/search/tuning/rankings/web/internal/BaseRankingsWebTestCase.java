@@ -738,7 +738,7 @@ public abstract class BaseRankingsWebTestCase {
 			Stream.of(document)
 		).when(
 			searchResponse
-		).getDocumentsStream();
+		).getDocuments();
 
 		Mockito.doReturn(
 			1
