@@ -64,6 +64,7 @@ import com.liferay.portal.search.web.interpreter.SearchResultInterpreterProvider
 
 import java.text.SimpleDateFormat;
 
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.function.Consumer;
@@ -735,7 +736,7 @@ public abstract class BaseRankingsWebTestCase {
 		SearchResponse searchResponse = Mockito.mock(SearchResponse.class);
 
 		Mockito.doReturn(
-			Stream.of(document)
+			Collections.singletonList(document)
 		).when(
 			searchResponse
 		).getDocuments();
