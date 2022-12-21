@@ -53,7 +53,7 @@ public class DynamicDataSourceAdvice extends ChainableMethodAdvice {
 			TransactionAttributeBuilder.build(transactional);
 
 		if (transactionAttribute == null) {
-			return null;
+			return Operation.WRITE;
 		}
 
 		MasterDataSource masterDataSource = (MasterDataSource)annotations.get(
