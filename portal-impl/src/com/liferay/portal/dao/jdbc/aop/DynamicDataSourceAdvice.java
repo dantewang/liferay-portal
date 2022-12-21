@@ -59,7 +59,11 @@ public class DynamicDataSourceAdvice extends ChainableMethodAdvice {
 		MasterDataSource masterDataSource = (MasterDataSource)annotations.get(
 			MasterDataSource.class);
 
-		if ((masterDataSource == null) && transactional.readOnly()) {
+		if (masterDataSource != null) {
+			return Operation.WRITE;
+		}
+
+		if (transactional.readOnly()) {
 			return Operation.READ;
 		}
 
