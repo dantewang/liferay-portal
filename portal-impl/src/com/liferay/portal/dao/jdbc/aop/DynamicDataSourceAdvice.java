@@ -56,16 +56,14 @@ public class DynamicDataSourceAdvice extends ChainableMethodAdvice {
 			return null;
 		}
 
-		Operation operation = Operation.WRITE;
-
 		MasterDataSource masterDataSource = (MasterDataSource)annotations.get(
 			MasterDataSource.class);
 
 		if ((masterDataSource == null) && transactional.readOnly()) {
-			operation = Operation.READ;
+			return Operation.READ;
 		}
 
-		return operation;
+		return Operation.WRITE;
 	}
 
 	@Override
