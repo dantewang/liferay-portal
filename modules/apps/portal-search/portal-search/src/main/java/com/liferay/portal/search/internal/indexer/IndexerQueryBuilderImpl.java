@@ -161,12 +161,6 @@ public class IndexerQueryBuilderImpl<T extends BaseModel<?>>
 					}
 
 					@Override
-					public Stream<String> getSearchClassNamesStream() {
-						return Stream.of(
-							_modelSearchSettings.getSearchClassNames());
-					}
-
-					@Override
 					public SearchContext getSearchContext() {
 						return searchContext;
 					}

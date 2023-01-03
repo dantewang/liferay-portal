@@ -101,11 +101,6 @@ public class AddSearchKeywordsQueryContributorHelperImpl
 					}
 
 					@Override
-					public Stream<String> getSearchClassNamesStream() {
-						throw new UnsupportedOperationException();
-					}
-
-					@Override
 					public SearchContext getSearchContext() {
 						return searchContext;
 					}
