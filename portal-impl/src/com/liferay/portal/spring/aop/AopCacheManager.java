@@ -78,14 +78,6 @@ public class AopCacheManager {
 			chainableMethodAdvices.add(new ClusterableAdvice());
 		}
 
-		DynamicDataSourceTargetSource dynamicDataSourceTargetSource =
-			InfrastructureUtil.getDynamicDataSourceTargetSource();
-
-		if (dynamicDataSourceTargetSource != null) {
-			chainableMethodAdvices.add(
-				new DynamicDataSourceAdvice(dynamicDataSourceTargetSource));
-		}
-
 		chainableMethodAdvices.add(new IndexableAdvice());
 
 		chainableMethodAdvices.add(new RetryAdvice());
@@ -97,6 +89,14 @@ public class AopCacheManager {
 		chainableMethodAdvices.add(new ThreadLocalCacheAdvice());
 
 		chainableMethodAdvices.sort(_CHAINABLE_METHOD_ADVICE_COMPARATOR);
+
+		DynamicDataSourceTargetSource dynamicDataSourceTargetSource =
+			InfrastructureUtil.getDynamicDataSourceTargetSource();
+
+		if (dynamicDataSourceTargetSource != null) {
+			chainableMethodAdvices.add(
+				0, new DynamicDataSourceAdvice(dynamicDataSourceTargetSource));
+		}
 
 		return chainableMethodAdvices;
 	}
@@ -138,6 +138,10 @@ public class AopCacheManager {
 
 				if (index < 0) {
 					index = -index - 1;
+				}
+
+				if (index == 0) {
+					index += 1;
 				}
 
 				_chainableMethodAdvices.add(index, chainableMethodAdvice);
