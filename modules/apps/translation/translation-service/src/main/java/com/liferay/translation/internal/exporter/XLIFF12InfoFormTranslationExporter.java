@@ -112,14 +112,13 @@ public class XLIFF12InfoFormTranslationExporter
 			sourceElement.addAttribute(
 				"xml:lang", fileElement.attributeValue("source-language"));
 
-			List<InfoFieldValue<Object>> infoFieldValuesList = entry.getValue();
+			List<InfoFieldValue<Object>> infoFieldValues = entry.getValue();
 
-			StringBundler sb = new StringBundler();
+			StringBundler sb = new StringBundler(infoFieldValues.size() * 2);
 
-			for (InfoFieldValue<Object> infoFieldValue : infoFieldValuesList) {
-				sb.append(
-					(String)infoFieldValue.getValue(sourceLocale) +
-						StringPool.COMMA_AND_SPACE);
+			for (InfoFieldValue<Object> infoFieldValue : infoFieldValues) {
+				sb.append(infoFieldValue.getValue(sourceLocale));
+				sb.append(StringPool.COMMA_AND_SPACE);
 			}
 
 			if (sb.index() > 1) {
@@ -128,14 +127,14 @@ public class XLIFF12InfoFormTranslationExporter
 
 			sourceElement.addCDATA(_getStringValue(sb));
 
-			if (infoFieldValuesList.size() > 1) {
+			if (infoFieldValues.size() > 1) {
 				Element segSourceElement = transUnitElement.addElement(
 					"seg-source");
 
 				int mid = 0;
 
 				for (InfoFieldValue<Object> infoFieldValue :
-						infoFieldValuesList) {
+						infoFieldValues) {
 
 					Element mrkElement = segSourceElement.addElement("mrk");
 
@@ -153,11 +152,11 @@ public class XLIFF12InfoFormTranslationExporter
 			targetElement.addAttribute(
 				"xml:lang", fileElement.attributeValue("target-language"));
 
-			if (infoFieldValuesList.size() > 1) {
+			if (infoFieldValues.size() > 1) {
 				int mid = 0;
 
 				for (InfoFieldValue<Object> infoFieldValue :
-						infoFieldValuesList) {
+						infoFieldValues) {
 
 					Element mrkElement = targetElement.addElement("mrk");
 
@@ -170,7 +169,7 @@ public class XLIFF12InfoFormTranslationExporter
 				}
 			}
 			else {
-				InfoFieldValue<Object> infoFieldValue = infoFieldValuesList.get(
+				InfoFieldValue<Object> infoFieldValue = infoFieldValues.get(
 					0);
 
 				targetElement.addCDATA(
