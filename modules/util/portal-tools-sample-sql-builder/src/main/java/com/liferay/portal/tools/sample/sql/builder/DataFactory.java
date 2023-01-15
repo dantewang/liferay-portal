@@ -32,7 +32,6 @@ import com.liferay.blogs.model.BlogsEntryModel;
 import com.liferay.blogs.model.impl.BlogsEntryModelImpl;
 import com.liferay.blogs.social.BlogsActivityKeys;
 import com.liferay.commerce.account.constants.CommerceAccountConstants;
-import com.liferay.commerce.account.model.CommerceAccount;
 import com.liferay.commerce.constants.CommerceOrderConstants;
 import com.liferay.commerce.currency.model.CommerceCurrencyModel;
 import com.liferay.commerce.currency.model.impl.CommerceCurrencyModelImpl;
@@ -614,6 +613,10 @@ public class DataFactory {
 		return BenchmarksPropsValues.MAX_BLOGS_ENTRY_COMMENT_COUNT;
 	}
 
+	public int getMaxCommerceAccountOrderCount() {
+		return BenchmarksPropsValues.MAX_COMMERCE_ACCOUNT_ORDER_COUNT;
+	}
+
 	public int getMaxCommerceGroupCount() {
 		return BenchmarksPropsValues.MAX_COMMERCE_GROUP_COUNT;
 	}
@@ -771,6 +774,29 @@ public class DataFactory {
 		_journalArticleContent = new String(chars);
 	}
 
+	public List<CommerceOrderModel> newAccountEntryCommerceOrderModels(
+		long groupId, long accountEntryId, long commerceCurrencyId,
+		long billingAddressId, long shippingAddressId,
+		long commerceShippingMethodId, String commerceShippingOptionName,
+		int orderStatus) {
+
+		List<CommerceOrderModel> commerceOrderModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_COMMERCE_ACCOUNT_ORDER_COUNT);
+
+		for (int i = 1;
+			 i <= BenchmarksPropsValues.MAX_COMMERCE_ACCOUNT_ORDER_COUNT; i++) {
+
+			commerceOrderModels.add(
+				newCommerceOrderModel(
+					groupId, accountEntryId, commerceCurrencyId,
+					billingAddressId, shippingAddressId,
+					commerceShippingMethodId, commerceShippingOptionName,
+					orderStatus));
+		}
+
+		return commerceOrderModels;
+	}
+
 	public AccountEntryModel newAccountEntryModel(String type, int index) {
 		AccountEntryModel accountEntryModel = new AccountEntryModelImpl();
 
@@ -850,7 +876,7 @@ public class DataFactory {
 
 		// Other fields
 
-		addressModel.setClassNameId(getClassNameId(CommerceAccount.class));
+		addressModel.setClassNameId(getClassNameId(AccountEntry.class));
 		addressModel.setClassPK(accountEntryId);
 		addressModel.setCountryId(countryId);
 		addressModel.setListTypeId(14001);
@@ -868,6 +894,20 @@ public class DataFactory {
 		addressModel.setExternalReferenceCode(uuid);
 
 		return addressModel;
+	}
+
+	public List<AddressModel> newAddressModels(
+		List<AccountEntryModel> accountEntryModels, long countryId) {
+
+		List<AddressModel> addressModels = new ArrayList<>();
+
+		for (AccountEntryModel accountEntryModel : accountEntryModels) {
+			addressModels.add(
+				newAddressModel(
+					accountEntryModel.getAccountEntryId(), countryId));
+		}
+
+		return addressModels;
 	}
 
 	public List<AssetCategoryModel> newAssetCategoryModels(
@@ -1847,7 +1887,7 @@ public class DataFactory {
 	}
 
 	public List<CommerceOrderModel> newCommerceOrderModels(
-		long groupId, long commerceAccountId, long commerceCurrencyId,
+		long groupId, long accountEntryId, long commerceCurrencyId,
 		long billingAddressId, long shippingAddressId,
 		long commerceShippingMethodId, String commerceShippingOptionName,
 		int orderStatus) {
@@ -1885,7 +1925,7 @@ public class DataFactory {
 		for (int i = 1; i <= maxCommerceOrderCount; i++) {
 			commerceOrderModels.add(
 				newCommerceOrderModel(
-					groupId, commerceAccountId, commerceCurrencyId,
+					groupId, accountEntryId, commerceCurrencyId,
 					billingAddressId, shippingAddressId,
 					commerceShippingMethodId, commerceShippingOptionName,
 					orderStatus));
@@ -2105,6 +2145,20 @@ public class DataFactory {
 		commerceShippingMethodModel.setActive(true);
 
 		return commerceShippingMethodModel;
+	}
+
+	public List<CommerceShippingMethodModel> newCommerceShippingMethodModels(
+		List<GroupModel> groupModels) {
+
+		List<CommerceShippingMethodModel> commerceShippingMethodModels =
+			new ArrayList<>();
+
+		for (GroupModel groupModel : groupModels) {
+			commerceShippingMethodModels.add(
+				newCommerceShippingMethodModel(groupModel.getGroupId()));
+		}
+
+		return commerceShippingMethodModels;
 	}
 
 	public List<DDMTemplateModel>
