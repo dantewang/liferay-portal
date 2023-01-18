@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.dao.jdbc.aop.DynamicDataSourceTargetSource;
 import com.liferay.portal.kernel.dao.jdbc.aop.Operation;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionAttribute;
 import com.liferay.portal.kernel.transaction.TransactionLifecycleListener;
 import com.liferay.portal.kernel.transaction.TransactionLifecycleManager;
@@ -30,6 +31,7 @@ import java.util.LinkedList;
 import javax.sql.DataSource;
 
 import org.springframework.aop.TargetSource;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * @author Michael Young
@@ -76,6 +78,17 @@ public class DefaultDynamicDataSourceTargetSource
 				}
 
 				if (transactionStatus.isNewTransaction()) {
+					return Operation.READ;
+				}
+
+				Propagation propagation = transactionAttribute.getPropagation();
+
+				if (((propagation == Propagation.SUPPORTS) &&
+					 !TransactionSynchronizationManager.
+						 isActualTransactionActive()) ||
+					(propagation == Propagation.NEVER) ||
+					(propagation == Propagation.NOT_SUPPORTED)) {
+
 					return Operation.READ;
 				}
 
