@@ -16,6 +16,7 @@ package com.liferay.portal.spring.transaction;
 
 import com.liferay.portal.kernel.aop.AopMethodInvocation;
 import com.liferay.portal.kernel.aop.ChainableMethodAdvice;
+import com.liferay.portal.kernel.dao.jdbc.aop.MasterDataSource;
 import com.liferay.portal.kernel.transaction.Transactional;
 
 import java.lang.annotation.Annotation;
@@ -49,7 +50,16 @@ public class TransactionInterceptor extends ChainableMethodAdvice {
 			return null;
 		}
 
-		return new TransactionAttributeAdapter(transactionAttribute);
+		MasterDataSource masterDataSource = (MasterDataSource)annotations.get(
+			MasterDataSource.class);
+
+		if (masterDataSource == null) {
+			return new TransactionAttributeAdapter(
+				transactionAttribute, false, false);
+		}
+
+		return new TransactionAttributeAdapter(
+			transactionAttribute, false, true);
 	}
 
 	@Override
