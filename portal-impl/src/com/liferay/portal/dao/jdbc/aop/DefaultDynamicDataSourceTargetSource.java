@@ -19,6 +19,10 @@ import com.liferay.portal.kernel.dao.jdbc.aop.DynamicDataSourceTargetSource;
 import com.liferay.portal.kernel.dao.jdbc.aop.Operation;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.transaction.TransactionAttribute;
+import com.liferay.portal.kernel.transaction.TransactionLifecycleListener;
+import com.liferay.portal.kernel.transaction.TransactionLifecycleManager;
+import com.liferay.portal.kernel.transaction.TransactionStatus;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -32,6 +36,12 @@ import org.springframework.aop.TargetSource;
  */
 public class DefaultDynamicDataSourceTargetSource
 	implements DynamicDataSourceTargetSource, TargetSource {
+
+	public void afterPropertiesSet() {
+		_defaultDynamicDataSourceTargetSource = this;
+
+		TransactionLifecycleManager.register(_TRANSACTION_LIFECYCLE_LISTENER);
+	}
 
 	@Override
 	public Operation getOperation() {
@@ -113,9 +123,53 @@ public class DefaultDynamicDataSourceTargetSource
 		_writeDataSource = writeDataSource;
 	}
 
+	private static final TransactionLifecycleListener
+		_TRANSACTION_LIFECYCLE_LISTENER = new TransactionLifecycleListener() {
+
+			@Override
+			public void committed(
+				TransactionAttribute transactionAttribute,
+				TransactionStatus transactionStatus) {
+
+				_defaultDynamicDataSourceTargetSource.popOperation();
+			}
+
+			@Override
+			public void created(
+				TransactionAttribute transactionAttribute,
+				TransactionStatus transactionStatus) {
+
+				_defaultDynamicDataSourceTargetSource.pushOperation(
+					_getOperation(transactionAttribute));
+			}
+
+			@Override
+			public void rollbacked(
+				TransactionAttribute transactionAttribute,
+				TransactionStatus transactionStatus, Throwable throwable) {
+
+				_defaultDynamicDataSourceTargetSource.popOperation();
+			}
+
+			private Operation _getOperation(
+				TransactionAttribute transactionAttribute) {
+
+				if (transactionAttribute.isMasterDataSource() ||
+					!transactionAttribute.isReadOnly()) {
+
+					return Operation.WRITE;
+				}
+
+				return Operation.READ;
+			}
+
+		};
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		DefaultDynamicDataSourceTargetSource.class);
 
+	private static DefaultDynamicDataSourceTargetSource
+		_defaultDynamicDataSourceTargetSource;
 	private static final ThreadLocal<Deque<Operation>> _operations =
 		new CentralizedThreadLocal<>(
 			DefaultDynamicDataSourceTargetSource.class + "._operations",
