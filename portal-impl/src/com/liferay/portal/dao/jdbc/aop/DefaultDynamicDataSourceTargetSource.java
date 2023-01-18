@@ -92,7 +92,7 @@ public class DefaultDynamicDataSourceTargetSource
 					return Operation.READ;
 				}
 
-				return Operation.WRITE;
+				return _defaultDynamicDataSourceTargetSource.getOperation();
 			}
 
 		};
