@@ -75,7 +75,11 @@ public class DefaultDynamicDataSourceTargetSource
 					return Operation.WRITE;
 				}
 
-				return Operation.READ;
+				if (transactionStatus.isNewTransaction()) {
+					return Operation.READ;
+				}
+
+				return Operation.WRITE;
 			}
 
 		};
