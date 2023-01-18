@@ -35,8 +35,16 @@ public class TransactionAttributeAdapter
 	public TransactionAttributeAdapter(
 		TransactionAttribute transactionAttribute, boolean strictReadOnly) {
 
+		this(transactionAttribute, strictReadOnly, false);
+	}
+
+	public TransactionAttributeAdapter(
+		TransactionAttribute transactionAttribute, boolean strictReadOnly,
+		boolean masterDataSource) {
+
 		_transactionAttribute = transactionAttribute;
 		_strictReadOnly = strictReadOnly;
+		_masterDataSource = masterDataSource;
 	}
 
 	@Override
@@ -77,6 +85,11 @@ public class TransactionAttributeAdapter
 	}
 
 	@Override
+	public boolean isMasterDataSource() {
+		return _masterDataSource;
+	}
+
+	@Override
 	public boolean isReadOnly() {
 		return _transactionAttribute.isReadOnly();
 	}
@@ -91,6 +104,7 @@ public class TransactionAttributeAdapter
 		return _transactionAttribute.rollbackOn(throwable);
 	}
 
+	private final boolean _masterDataSource;
 	private final boolean _strictReadOnly;
 	private final TransactionAttribute _transactionAttribute;
 
