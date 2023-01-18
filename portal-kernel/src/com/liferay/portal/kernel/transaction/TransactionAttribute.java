@@ -26,6 +26,8 @@ public interface TransactionAttribute {
 
 	public Propagation getPropagation();
 
+	public boolean isMasterDataSource();
+
 	public boolean isReadOnly();
 
 	public boolean isStrictReadOnly();
@@ -82,6 +84,11 @@ public interface TransactionAttribute {
 		@Override
 		public Propagation getPropagation() {
 			return _propagation;
+		}
+
+		@Override
+		public boolean isMasterDataSource() {
+			return false;
 		}
 
 		@Override
