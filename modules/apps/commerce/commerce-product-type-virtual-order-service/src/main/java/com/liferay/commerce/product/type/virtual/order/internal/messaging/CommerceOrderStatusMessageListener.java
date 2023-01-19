@@ -52,8 +52,16 @@ public class CommerceOrderStatusMessageListener extends BaseMessageListener {
 
 	@Override
 	protected void doReceive(Message message) throws Exception {
-		JSONObject jsonObject = _jsonFactory.createJSONObject(
-			String.valueOf(message.getPayload()));
+		Object payload = message.getPayload();
+
+		JSONObject jsonObject = null;
+
+		if (payload instanceof JSONObject) {
+			jsonObject = (JSONObject)payload;
+		}
+		else {
+			jsonObject = _jsonFactory.createJSONObject(String.valueOf(payload));
+		}
 
 		long commerceOrderId = jsonObject.getLong("commerceOrderId");
 
