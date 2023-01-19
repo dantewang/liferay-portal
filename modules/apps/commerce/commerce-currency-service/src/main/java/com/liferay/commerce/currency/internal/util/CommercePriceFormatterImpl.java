@@ -31,6 +31,7 @@ import java.text.DecimalFormatSymbols;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -102,7 +103,7 @@ public class CommercePriceFormatterImpl implements CommercePriceFormatter {
 		_roundingTypeConfiguration = null;
 	}
 
-	private DecimalFormat _getDecimalFormat(
+	private DecimalFormat _createDecimalFormat(
 		CommerceCurrency commerceCurrency, Locale locale) {
 
 		String formatPattern = CommerceCurrencyConstants.DECIMAL_FORMAT_PATTERN;
@@ -136,6 +137,25 @@ public class CommercePriceFormatterImpl implements CommercePriceFormatter {
 		return decimalFormat;
 	}
 
+	private DecimalFormat _getDecimalFormat(
+		CommerceCurrency commerceCurrency, Locale locale) {
+
+		long commerceCurrencyId = 0;
+
+		if (commerceCurrency != null) {
+			commerceCurrencyId = commerceCurrency.getCommerceCurrencyId();
+		}
+
+		Map<Locale, DecimalFormat> decimalFormats =
+			_decimalFormatsMap.computeIfAbsent(
+				commerceCurrencyId, key -> new ConcurrentHashMap<>());
+
+		return decimalFormats.computeIfAbsent(
+			locale, key -> _createDecimalFormat(commerceCurrency, key));
+	}
+
+	private final Map<Long, Map<Locale, DecimalFormat>> _decimalFormatsMap =
+		new ConcurrentHashMap<>();
 	private volatile RoundingTypeConfiguration _roundingTypeConfiguration;
 
 }
