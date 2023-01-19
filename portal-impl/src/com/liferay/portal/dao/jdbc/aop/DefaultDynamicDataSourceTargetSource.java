@@ -39,68 +39,10 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 public class DefaultDynamicDataSourceTargetSource
 	implements DynamicDataSourceTargetSource, TargetSource {
 
-	public static final TransactionLifecycleListener
-		TRANSACTION_LIFECYCLE_LISTENER = new TransactionLifecycleListener() {
-
-			@Override
-			public void committed(
-				TransactionAttribute transactionAttribute,
-				TransactionStatus transactionStatus) {
-
-				_defaultDynamicDataSourceTargetSource.popOperation();
-			}
-
-			@Override
-			public void created(
-				TransactionAttribute transactionAttribute,
-				TransactionStatus transactionStatus) {
-
-				_defaultDynamicDataSourceTargetSource.pushOperation(
-					_getOperation(transactionAttribute, transactionStatus));
-			}
-
-			@Override
-			public void rollbacked(
-				TransactionAttribute transactionAttribute,
-				TransactionStatus transactionStatus, Throwable throwable) {
-
-				_defaultDynamicDataSourceTargetSource.popOperation();
-			}
-
-			private Operation _getOperation(
-				TransactionAttribute transactionAttribute,
-				TransactionStatus transactionStatus) {
-
-				if (transactionAttribute.isMasterDataSource() ||
-					!transactionAttribute.isReadOnly()) {
-
-					return Operation.WRITE;
-				}
-
-				if (transactionStatus.isNewTransaction()) {
-					return Operation.READ;
-				}
-
-				Propagation propagation = transactionAttribute.getPropagation();
-
-				if (((propagation == Propagation.SUPPORTS) &&
-					 !TransactionSynchronizationManager.
-						 isActualTransactionActive()) ||
-					(propagation == Propagation.NEVER) ||
-					(propagation == Propagation.NOT_SUPPORTED)) {
-
-					return Operation.READ;
-				}
-
-				return _defaultDynamicDataSourceTargetSource.getOperation();
-			}
-
-		};
-
 	public void afterPropertiesSet() {
 		_defaultDynamicDataSourceTargetSource = this;
 
-		TransactionLifecycleManager.register(TRANSACTION_LIFECYCLE_LISTENER);
+		TransactionLifecycleManager.register(_TRANSACTION_LIFECYCLE_LISTENER);
 	}
 
 	@Override
@@ -182,6 +124,64 @@ public class DefaultDynamicDataSourceTargetSource
 	public void setWriteDataSource(DataSource writeDataSource) {
 		_writeDataSource = writeDataSource;
 	}
+
+	private static final TransactionLifecycleListener
+		_TRANSACTION_LIFECYCLE_LISTENER = new TransactionLifecycleListener() {
+
+			@Override
+			public void committed(
+				TransactionAttribute transactionAttribute,
+				TransactionStatus transactionStatus) {
+
+				_defaultDynamicDataSourceTargetSource.popOperation();
+			}
+
+			@Override
+			public void created(
+				TransactionAttribute transactionAttribute,
+				TransactionStatus transactionStatus) {
+
+				_defaultDynamicDataSourceTargetSource.pushOperation(
+					_getOperation(transactionAttribute, transactionStatus));
+			}
+
+			@Override
+			public void rollbacked(
+				TransactionAttribute transactionAttribute,
+				TransactionStatus transactionStatus, Throwable throwable) {
+
+				_defaultDynamicDataSourceTargetSource.popOperation();
+			}
+
+			private Operation _getOperation(
+				TransactionAttribute transactionAttribute,
+				TransactionStatus transactionStatus) {
+
+				if (transactionAttribute.isMasterDataSource() ||
+					!transactionAttribute.isReadOnly()) {
+
+					return Operation.WRITE;
+				}
+
+				if (transactionStatus.isNewTransaction()) {
+					return Operation.READ;
+				}
+
+				Propagation propagation = transactionAttribute.getPropagation();
+
+				if (((propagation == Propagation.SUPPORTS) &&
+					 !TransactionSynchronizationManager.
+						 isActualTransactionActive()) ||
+					(propagation == Propagation.NEVER) ||
+					(propagation == Propagation.NOT_SUPPORTED)) {
+
+					return Operation.READ;
+				}
+
+				return _defaultDynamicDataSourceTargetSource.getOperation();
+			}
+
+		};
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DefaultDynamicDataSourceTargetSource.class);
