@@ -209,7 +209,7 @@ public class EditRankingMVCActionCommand extends BaseMVCActionCommand {
 
 		String id = rankingStorageAdapter.create(rankingIndexName, ranking);
 
-		return rankingIndexReader.fetchRanking(rankingIndexName, id);
+		return rankingIndexReader.fetch(rankingIndexName, id);
 	}
 
 	private void _deactivate(
@@ -384,7 +384,7 @@ public class EditRankingMVCActionCommand extends BaseMVCActionCommand {
 		RankingIndexName rankingIndexName = getRankingIndexName();
 
 		for (String rankingDocumentId : rankingDocumentIds) {
-			Ranking ranking = rankingIndexReader.fetchRanking(
+			Ranking ranking = rankingIndexReader.fetch(
 				rankingIndexName, rankingDocumentId);
 
 			if (ranking != null) {
@@ -526,7 +526,7 @@ public class EditRankingMVCActionCommand extends BaseMVCActionCommand {
 
 		String id = editRankingMVCActionRequest.getResultsRankingUid();
 
-		Ranking ranking = rankingIndexReader.fetchRanking(
+		Ranking ranking = rankingIndexReader.fetch(
 			rankingIndexNameBuilder.getRankingIndexName(
 				portal.getCompanyId(actionRequest)),
 			id);

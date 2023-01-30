@@ -42,6 +42,17 @@ import org.osgi.service.component.annotations.Reference;
 public class RankingIndexReaderImpl implements RankingIndexReader {
 
 	@Override
+	public Ranking fetch(RankingIndexName rankingIndexName, String id) {
+		Document document = _getDocument(rankingIndexName, id);
+
+		if (document == null) {
+			return null;
+		}
+
+		return translate(document, id);
+	}
+
+	@Override
 	public Ranking fetchByQueryString(
 		RankingIndexName rankingIndexName, String queryString) {
 
@@ -59,17 +70,6 @@ public class RankingIndexReaderImpl implements RankingIndexReader {
 			_searchEngineAdapter.execute(searchSearchRequest);
 
 		return _getFirstRanking(rankingIndexName, searchSearchResponse);
-	}
-
-	@Override
-	public Ranking fetchRanking(RankingIndexName rankingIndexName, String id) {
-		Document document = _getDocument(rankingIndexName, id);
-
-		if (document == null) {
-			return null;
-		}
-
-		return translate(document, id);
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class RankingIndexReaderImpl implements RankingIndexReader {
 
 		SearchHit searchHit = _getFirstSearchHit(searchSearchResponse);
 
-		return fetchRanking(rankingIndexName, searchHit.getId());
+		return fetch(rankingIndexName, searchHit.getId());
 	}
 
 	private SearchHit _getFirstSearchHit(

@@ -62,7 +62,7 @@ public class RankingIndexReaderImplTest extends BaseRankingsIndexTestCase {
 
 		Assert.assertEquals(
 			_setUpDocumentToRankingTranslator(),
-			_rankingIndexReaderImpl.fetchRanking(
+			_rankingIndexReaderImpl.fetch(
 				Mockito.mock(RankingIndexName.class), "id"));
 	}
 

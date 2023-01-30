@@ -21,10 +21,10 @@ import com.liferay.portal.search.tuning.rankings.web.internal.index.name.Ranking
  */
 public interface RankingIndexReader {
 
+	public Ranking fetch(RankingIndexName rankingIndexName, String id);
+
 	public Ranking fetchByQueryString(
 		RankingIndexName rankingIndexName, String queryString);
-
-	public Ranking fetchRanking(RankingIndexName rankingIndexName, String id);
 
 	public boolean isExists(RankingIndexName rankingIndexName);
 

@@ -148,7 +148,7 @@ public abstract class BaseRankingsPortletActionTestCase
 			ranking
 		).when(
 			rankingIndexReader
-		).fetchRanking(
+		).fetch(
 			Mockito.any(), Mockito.anyString()
 		);
 	}

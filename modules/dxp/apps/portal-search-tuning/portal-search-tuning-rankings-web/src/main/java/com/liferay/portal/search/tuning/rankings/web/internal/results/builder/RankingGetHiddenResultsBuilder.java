@@ -67,7 +67,7 @@ public class RankingGetHiddenResultsBuilder {
 	}
 
 	public JSONObject build() {
-		Ranking ranking = _rankingIndexReader.fetchRanking(
+		Ranking ranking = _rankingIndexReader.fetch(
 			_rankingIndexName, _rankingId);
 
 		if (ranking == null) {
