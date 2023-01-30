@@ -14,6 +14,7 @@
 
 package com.liferay.portal.search.tuning.rankings.web.internal.portlet.action;
 
+import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
@@ -376,23 +377,11 @@ public class EditRankingMVCActionCommand extends BaseMVCActionCommand {
 		ActionRequest actionRequest,
 		EditRankingMVCActionRequest editRankingMVCActionRequest) {
 
-		List<Ranking> rankings = new ArrayList<>();
-
-		String[] rankingDocumentIds = _getRankingDocumentIds(
-			actionRequest, editRankingMVCActionRequest);
-
 		RankingIndexName rankingIndexName = getRankingIndexName();
 
-		for (String rankingDocumentId : rankingDocumentIds) {
-			Ranking ranking = rankingIndexReader.fetch(
-				rankingIndexName, rankingDocumentId);
-
-			if (ranking != null) {
-				rankings.add(ranking);
-			}
-		}
-
-		return rankings;
+		return TransformUtil.transformToList(
+			_getRankingDocumentIds(actionRequest, editRankingMVCActionRequest),
+			id -> rankingIndexReader.fetch(rankingIndexName, id));
 	}
 
 	private String _getSaveAndContinueRedirect(
