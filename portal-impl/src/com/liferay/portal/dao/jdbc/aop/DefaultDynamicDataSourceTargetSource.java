@@ -47,13 +47,7 @@ public class DefaultDynamicDataSourceTargetSource
 	public Operation getOperation() {
 		Deque<Operation> operations = _operations.get();
 
-		Operation operation = operations.peek();
-
-		if (operation == null) {
-			operation = Operation.WRITE;
-		}
-
-		return operation;
+		return operations.peek();
 	}
 
 	@Override
@@ -160,7 +154,14 @@ public class DefaultDynamicDataSourceTargetSource
 					return Operation.WRITE;
 				}
 
-				return Operation.READ;
+				Operation operation =
+					_defaultDynamicDataSourceTargetSource.getOperation();
+
+				if (operation == null) {
+					return Operation.READ;
+				}
+
+				return operation;
 			}
 
 		};
