@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -39,7 +40,6 @@ import com.liferay.segments.provider.SegmentsEntryProvider;
 import com.liferay.segments.service.SegmentsEntryLocalService;
 import com.liferay.segments.service.SegmentsEntryRelLocalService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Reference;
@@ -157,30 +157,23 @@ public abstract class BaseSegmentsEntryProvider
 			return new long[0];
 		}
 
-		List<SegmentsEntry> segmentsEntriesAfterFilterList = new ArrayList<>();
-
-		for (SegmentsEntry segmentsEntry : segmentsEntries) {
-			if (!ArrayUtil.isEmpty(filterSegmentsEntryIds) &&
-				!ArrayUtil.contains(
-					filterSegmentsEntryIds,
-					segmentsEntry.getSegmentsEntryId())) {
-
-				continue;
-			}
-
-			if (isMember(
-					className, classPK, context, segmentsEntry,
-					segmentsEntryIds)) {
-
-				segmentsEntriesAfterFilterList.add(segmentsEntry);
-			}
+		if (!ArrayUtil.isEmpty(filterSegmentsEntryIds)) {
+			segmentsEntries = ListUtil.filter(
+				segmentsEntries,
+				segmentsEntry ->
+					ArrayUtil.contains(
+						filterSegmentsEntryIds,
+						segmentsEntry.getSegmentsEntryId()) &&
+					isMember(
+						className, classPK, context, segmentsEntry,
+						segmentsEntryIds));
 		}
 
 		long[] segmentsEntryIdsAfterFilterArray =
-			new long[segmentsEntriesAfterFilterList.size()];
+			new long[segmentsEntries.size()];
 
 		for (int i = 0; i < segmentsEntryIdsAfterFilterArray.length; i++) {
-			SegmentsEntry segmentsEntry = segmentsEntriesAfterFilterList.get(i);
+			SegmentsEntry segmentsEntry = segmentsEntries.get(i);
 
 			segmentsEntryIdsAfterFilterArray[i] =
 				segmentsEntry.getSegmentsEntryId();
