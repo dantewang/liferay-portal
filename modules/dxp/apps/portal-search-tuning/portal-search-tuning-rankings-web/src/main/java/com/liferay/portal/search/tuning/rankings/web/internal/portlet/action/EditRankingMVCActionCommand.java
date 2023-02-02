@@ -318,10 +318,9 @@ public class EditRankingMVCActionCommand extends BaseMVCActionCommand {
 	private List<String> _getAliases(
 		EditRankingMVCActionRequest editRankingMVCActionRequest) {
 
-		List<String> strings = new ArrayList<>(
-			editRankingMVCActionRequest.getAliases());
-
-		return ListUtil.filter(strings, string -> !_isUpdateSpecial(string));
+		return ListUtil.filter(
+			editRankingMVCActionRequest.getAliases(),
+			string -> !_isUpdateSpecial(string));
 	}
 
 	private String _getCompanyIndexName() {
