@@ -67,6 +67,10 @@ public class WSDDBuilder {
 	}
 
 	public void build() throws Exception {
+		System.setProperty(
+			"javax.xml.parsers.SAXParserFactory",
+			"com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl");
+
 		File serverConfigFile = new File(_serverConfigFileName);
 
 		if (!serverConfigFile.exists()) {
