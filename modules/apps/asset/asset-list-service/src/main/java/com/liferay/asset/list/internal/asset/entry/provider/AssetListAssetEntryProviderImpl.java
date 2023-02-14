@@ -794,9 +794,6 @@ public class AssetListAssetEntryProviderImpl
 	private long[] _getCombinedSegmentsEntryIds(
 		AssetListEntry assetListEntry, long[] segmentEntryIds) {
 
-		List<AssetListEntrySegmentsEntryRel> assetListEntrySegmentsEntryRels =
-			new ArrayList<>();
-
 		if ((segmentEntryIds.length > 1) &&
 			ArrayUtil.contains(
 				segmentEntryIds, SegmentsEntryConstants.ID_DEFAULT)) {
@@ -805,22 +802,15 @@ public class AssetListAssetEntryProviderImpl
 				segmentEntryIds, SegmentsEntryConstants.ID_DEFAULT);
 		}
 
-		for (long segmentsEntryId : segmentEntryIds) {
-			AssetListEntrySegmentsEntryRel assetListEntrySegmentsEntryRel =
-				_assetListEntrySegmentsEntryRelLocalService.
-					fetchAssetListEntrySegmentsEntryRel(
-						assetListEntry.getAssetListEntryId(), segmentsEntryId);
-
-			if (assetListEntrySegmentsEntryRel == null) {
-				continue;
-			}
-
-			assetListEntrySegmentsEntryRels.add(assetListEntrySegmentsEntryRel);
-		}
-
 		long[] combinedSegmentsEntryIds = TransformUtil.transformToLongArray(
 			ListUtil.sort(
-				assetListEntrySegmentsEntryRels,
+				TransformUtil.transformToList(
+					segmentEntryIds,
+					segmentsEntryId ->
+						_assetListEntrySegmentsEntryRelLocalService.
+							fetchAssetListEntrySegmentsEntryRel(
+								assetListEntry.getAssetListEntryId(),
+								segmentsEntryId)),
 				Comparator.comparing(
 					AssetListEntrySegmentsEntryRel::getPriority)),
 			AssetListEntrySegmentsEntryRelModel::getSegmentsEntryId);
