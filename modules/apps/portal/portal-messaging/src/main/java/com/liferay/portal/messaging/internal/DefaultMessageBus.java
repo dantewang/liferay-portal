@@ -16,7 +16,8 @@ package com.liferay.portal.messaging.internal;
 
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
-import com.liferay.petra.string.StringBundler;
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
+import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -27,15 +28,11 @@ import com.liferay.portal.kernel.messaging.MessageBusEventListener;
 import com.liferay.portal.kernel.messaging.MessageBusInterceptor;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
-import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.messaging.internal.configuration.DestinationWorkerConfiguration;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +40,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.service.component.annotations.Activate;
@@ -53,8 +49,6 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Michael C. Han
@@ -107,6 +101,14 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 			}
 
 			return;
+		}
+
+		destination.unregisterMessageListeners();
+
+		for (MessageListener messageListener :
+				_serviceTrackerMap.getService(destinationName)) {
+
+			destination.register(messageListener);
 		}
 
 		message.setDestinationName(destinationName);
@@ -172,59 +174,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		_messageListenerServiceTracker = new ServiceTracker<>(
-			bundleContext, MessageListener.class,
-			new ServiceTrackerCustomizer
-				<MessageListener, ObjectValuePair<String, MessageListener>>() {
-
-				@Override
-				public ObjectValuePair<String, MessageListener> addingService(
-					ServiceReference<MessageListener> serviceReference) {
-
-					String destinationName =
-						(String)serviceReference.getProperty(
-							"destination.name");
-
-					if (destinationName == null) {
-						return null;
-					}
-
-					MessageListener messageListener = bundleContext.getService(
-						serviceReference);
-
-					_registerMessageListener(destinationName, messageListener);
-
-					return new ObjectValuePair<>(
-						destinationName, messageListener);
-				}
-
-				@Override
-				public void modifiedService(
-					ServiceReference<MessageListener> serviceReference,
-					ObjectValuePair<String, MessageListener> objectValuePair) {
-
-					removedService(serviceReference, objectValuePair);
-
-					ObjectValuePair<String, MessageListener>
-						newObjectValuePair = addingService(serviceReference);
-
-					objectValuePair.setKey(newObjectValuePair.getKey());
-				}
-
-				@Override
-				public void removedService(
-					ServiceReference<MessageListener> serviceReference,
-					ObjectValuePair<String, MessageListener> objectValuePair) {
-
-					_unregisterMessageListener(
-						objectValuePair.getKey(), objectValuePair.getValue());
-
-					bundleContext.ungetService(serviceReference);
-				}
-
-			});
-
-		_messageListenerServiceTracker.open();
+		_serviceTrackerMap = ServiceTrackerMapFactory.openMultiValueMap(
+			bundleContext, MessageListener.class, "destination.name");
 
 		_serviceTrackerList = ServiceTrackerListFactory.open(
 			bundleContext, MessageBusInterceptor.class);
@@ -234,7 +185,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	protected void deactivate() {
 		_serviceTrackerList.close();
 
-		_messageListenerServiceTracker.close();
+		_serviceTrackerMap.close();
 
 		shutdown(true);
 
@@ -293,28 +244,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	private void _addDestination(Destination destination) {
 		Destination oldDestination = _destinations.get(destination.getName());
 
-		if (oldDestination != null) {
-			oldDestination.copyMessageListeners(destination);
-		}
-		else {
-			List<MessageListener> messageListeners =
-				_queuedMessageListeners.remove(destination.getName());
-
-			if (ListUtil.isNotEmpty(messageListeners)) {
-				if (_log.isDebugEnabled()) {
-					_log.debug(
-						StringBundler.concat(
-							"Registering ", messageListeners.size(),
-							" queued message listeners for destination ",
-							destination.getName()));
-				}
-
-				for (MessageListener messageListener : messageListeners) {
-					destination.register(messageListener);
-				}
-			}
-		}
-
 		destination.open();
 
 		_destinations.put(destination.getName(), destination);
@@ -336,36 +265,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 	}
 
-	private synchronized boolean _registerMessageListener(
-		String destinationName, MessageListener messageListener) {
-
-		Destination destination = _destinations.get(destinationName);
-
-		if (destination != null) {
-			return destination.register(messageListener);
-		}
-
-		List<MessageListener> queuedMessageListeners =
-			_queuedMessageListeners.get(destinationName);
-
-		if (queuedMessageListeners == null) {
-			queuedMessageListeners = new ArrayList<>();
-
-			_queuedMessageListeners.put(
-				destinationName, queuedMessageListeners);
-		}
-
-		queuedMessageListeners.add(messageListener);
-
-		if (_log.isWarnEnabled()) {
-			_log.warn(
-				"Queuing message listener until destination " +
-					destinationName + " is added");
-		}
-
-		return false;
-	}
-
 	private Destination _removeDestination(String destinationName) {
 		Destination destination = _destinations.remove(destinationName);
 
@@ -382,25 +281,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 
 		return destination;
-	}
-
-	private synchronized boolean _unregisterMessageListener(
-		String destinationName, MessageListener messageListener) {
-
-		Destination destination = _destinations.get(destinationName);
-
-		if (destination != null) {
-			return destination.unregister(messageListener);
-		}
-
-		List<MessageListener> queuedMessageListeners =
-			_queuedMessageListeners.get(destinationName);
-
-		if (ListUtil.isEmpty(queuedMessageListeners)) {
-			return false;
-		}
-
-		return queuedMessageListeners.remove(messageListener);
 	}
 
 	private void _updateDestination(
@@ -434,11 +314,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		new ConcurrentHashMap<>();
 	private final Set<MessageBusEventListener> _messageBusEventListeners =
 		Collections.newSetFromMap(new ConcurrentHashMap<>());
-	private ServiceTracker
-		<MessageListener, ObjectValuePair<String, MessageListener>>
-			_messageListenerServiceTracker;
-	private final Map<String, List<MessageListener>> _queuedMessageListeners =
-		new HashMap<>();
 	private ServiceTrackerList<MessageBusInterceptor> _serviceTrackerList;
+	private ServiceTrackerMap<String, List<MessageListener>> _serviceTrackerMap;
 
 }
