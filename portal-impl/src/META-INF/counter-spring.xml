@@ -12,7 +12,7 @@
 		<constructor-arg ref="liferayDataSource" />
 		<constructor-arg>
 			<bean class="com.liferay.portal.dao.orm.hibernate.SessionFactoryImpl">
-				<property name="sessionFactoryImplementor" ref="counterHibernateSessionFactory" />
+				<property name="sessionFactoryImplementor" ref="liferayHibernateSessionFactory" />
 			</bean>
 		</constructor-arg>
 	</bean>
