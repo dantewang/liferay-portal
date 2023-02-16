@@ -14,7 +14,10 @@
 
 package com.liferay.portal.cluster.multiple.internal;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.cluster.ClusterEventListener;
+import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.util.PortalInetSocketAddressEventListener;
 
 import java.io.File;
@@ -22,6 +25,7 @@ import java.io.InputStream;
 
 import java.util.Collection;
 import java.util.Dictionary;
+import java.util.Objects;
 
 import org.junit.Assert;
 
@@ -30,6 +34,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceObjects;
@@ -98,6 +103,9 @@ public class MockComponentContext implements ComponentContext {
 		return null;
 	}
 
+	private static final BundleContext _bundleContext =
+		SystemBundleUtil.getBundleContext();
+
 	private final Dictionary<String, Object> _properties;
 
 	private class MockBundleContext implements BundleContext {
@@ -116,12 +124,17 @@ public class MockComponentContext implements ComponentContext {
 
 		@Override
 		public void addServiceListener(
-			ServiceListener serviceListener, String serviceName) {
+				ServiceListener serviceListener, String serviceName)
+			throws InvalidSyntaxException {
+
+			_bundleContext.addServiceListener(serviceListener, serviceName);
 		}
 
 		@Override
-		public Filter createFilter(String filterString) {
-			return null;
+		public Filter createFilter(String filterString)
+			throws InvalidSyntaxException {
+
+			return _bundleContext.createFilter(filterString);
 		}
 
 		@Override
@@ -163,7 +176,7 @@ public class MockComponentContext implements ComponentContext {
 
 		@Override
 		public <S> S getService(ServiceReference<S> serviceReference) {
-			return null;
+			return _bundleContext.getService(serviceReference);
 		}
 
 		@Override
@@ -192,9 +205,11 @@ public class MockComponentContext implements ComponentContext {
 
 		@Override
 		public ServiceReference<?>[] getServiceReferences(
-			String serviceName, String filterString) {
+				String serviceName, String filterString)
+			throws InvalidSyntaxException {
 
-			return null;
+			return _bundleContext.getServiceReferences(
+				serviceName, filterString);
 		}
 
 		@Override
@@ -213,27 +228,22 @@ public class MockComponentContext implements ComponentContext {
 		public <S> ServiceRegistration<S> registerService(
 			Class<S> clazz, S object, Dictionary<String, ?> dictionary) {
 
-			Assert.assertEquals(
-				PortalInetSocketAddressEventListener.class, clazz);
+			if (!Objects.equals(
+					clazz, PortalInetSocketAddressEventListener.class) &&
+				!Objects.equals(clazz, ClusterEventListener.class)) {
+
+				Assert.fail(
+					StringBundler.concat(
+						"expected: <",
+						PortalInetSocketAddressEventListener.class, ", ",
+						ClusterEventListener.class, "> but was: <", clazz,
+						">"));
+			}
+
 			Assert.assertNotNull(object);
 			Assert.assertTrue(dictionary.isEmpty());
 
-			return new ServiceRegistration<S>() {
-
-				@Override
-				public ServiceReference<S> getReference() {
-					return null;
-				}
-
-				@Override
-				public void setProperties(Dictionary<String, ?> dictionary) {
-				}
-
-				@Override
-				public void unregister() {
-				}
-
-			};
+			return _bundleContext.registerService(clazz, object, dictionary);
 		}
 
 		@Override
