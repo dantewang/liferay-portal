@@ -212,8 +212,7 @@ public class ClusterExecutorImpl implements ClusterExecutor {
 
 		_serviceRegistration = _bundleContext.registerService(
 			PortalInetSocketAddressEventListener.class,
-			new ClusterExecutorPortalInetSocketAddressEventListener(),
-			new HashMapDictionary<String, Object>());
+			new ClusterExecutorPortalInetSocketAddressEventListener(), null);
 	}
 
 	@Deactivate

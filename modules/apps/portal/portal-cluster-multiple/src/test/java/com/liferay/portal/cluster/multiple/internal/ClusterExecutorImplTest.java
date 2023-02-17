@@ -95,8 +95,7 @@ public class ClusterExecutorImplTest extends BaseClusterTestCase {
 
 		ServiceRegistration<ClusterEventListener> serviceRegistration =
 			bundleContext.registerService(
-				ClusterEventListener.class, clusterEventListener,
-				new HashMapDictionary<>());
+				ClusterEventListener.class, clusterEventListener, null);
 
 		clusterEventListeners = clusterExecutorImpl.getClusterEventListeners();
 
