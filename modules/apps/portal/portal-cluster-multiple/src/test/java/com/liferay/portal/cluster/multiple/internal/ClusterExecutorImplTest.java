@@ -25,6 +25,8 @@ import com.liferay.portal.kernel.cluster.ClusterNodeResponse;
 import com.liferay.portal.kernel.cluster.ClusterNodeResponses;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cluster.FutureClusterResponses;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.NewEnv;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
@@ -50,6 +52,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.mockito.Mockito;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
@@ -91,10 +94,8 @@ public class ClusterExecutorImplTest extends BaseClusterTestCase {
 
 		};
 
-		BundleContext bundleContext = _componentContext.getBundleContext();
-
 		ServiceRegistration<ClusterEventListener> serviceRegistration =
-			bundleContext.registerService(
+			_bundleContext.registerService(
 				ClusterEventListener.class, clusterEventListener, null);
 
 		clusterEventListeners = clusterExecutorImpl.getClusterEventListeners();
@@ -399,12 +400,27 @@ public class ClusterExecutorImplTest extends BaseClusterTestCase {
 					"configuration.override.", new Properties()
 				).build()));
 
-		clusterExecutorImpl.activate(_componentContext);
+		ComponentContext componentContext = Mockito.mock(
+			ComponentContext.class);
+
+		Mockito.when(
+			componentContext.getBundleContext()
+		).thenReturn(
+			_bundleContext
+		);
+
+		Mockito.when(
+			componentContext.getProperties()
+		).thenReturn(
+			new HashMapDictionary<>()
+		);
+
+		clusterExecutorImpl.activate(componentContext);
 
 		return clusterExecutorImpl;
 	}
 
-	private static final ComponentContext _componentContext =
-		new MockComponentContext(new HashMapDictionary<>());
+	private static final BundleContext _bundleContext =
+		SystemBundleUtil.getBundleContext();
 
 }
