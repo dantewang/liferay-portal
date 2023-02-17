@@ -17,7 +17,6 @@ package com.liferay.portal.cluster.multiple.internal;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.cluster.multiple.configuration.ClusterExecutorConfiguration;
 import com.liferay.portal.kernel.cluster.Address;
-import com.liferay.portal.kernel.cluster.ClusterEvent;
 import com.liferay.portal.kernel.cluster.ClusterEventListener;
 import com.liferay.portal.kernel.cluster.ClusterInvokeThreadLocal;
 import com.liferay.portal.kernel.cluster.ClusterNode;
@@ -25,7 +24,6 @@ import com.liferay.portal.kernel.cluster.ClusterNodeResponse;
 import com.liferay.portal.kernel.cluster.ClusterNodeResponses;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cluster.FutureClusterResponses;
-import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.NewEnv;
@@ -53,6 +51,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.mockito.Mockito;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
@@ -86,12 +85,7 @@ public class ClusterExecutorImplTest extends BaseClusterTestCase {
 		Assert.assertEquals(
 			clusterEventListeners.toString(), 0, clusterEventListeners.size());
 
-		ClusterEventListener clusterEventListener = new ClusterEventListener() {
-
-			@Override
-			public void processClusterEvent(ClusterEvent clusterEvent) {
-			}
-
+		ClusterEventListener clusterEventListener = clusterEvent -> {
 		};
 
 		ServiceRegistration<ClusterEventListener> serviceRegistration =
