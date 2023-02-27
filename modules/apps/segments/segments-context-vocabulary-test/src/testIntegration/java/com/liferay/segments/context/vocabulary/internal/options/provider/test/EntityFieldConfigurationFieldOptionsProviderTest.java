@@ -41,22 +41,12 @@ public class EntityFieldConfigurationFieldOptionsProviderTest {
 
 	@Test
 	public void testGetOptionsWithDoubleEntityField() {
-		ConfigurationFieldOptionsProvider.Option option = null;
-
 		for (ConfigurationFieldOptionsProvider.Option curOption :
 				_configurationFieldOptionsProvider.getOptions()) {
 
-			if (Objects.equals(
-					Context.DEVICE_SCREEN_RESOLUTION_HEIGHT,
-					curOption.getValue())) {
-
-				option = curOption;
-
-				break;
-			}
+			Assert.assertNotEquals(
+				Context.DEVICE_SCREEN_RESOLUTION_HEIGHT, curOption.getValue());
 		}
-
-		Assert.assertNull(option);
 	}
 
 	@Test
@@ -66,13 +56,11 @@ public class EntityFieldConfigurationFieldOptionsProviderTest {
 		for (ConfigurationFieldOptionsProvider.Option curOption :
 				_configurationFieldOptionsProvider.getOptions()) {
 
-			if (!Objects.equals(Context.BROWSER, curOption.getValue())) {
-				continue;
+			if (Objects.equals(Context.BROWSER, curOption.getValue())) {
+				option = curOption;
+
+				break;
 			}
-
-			option = curOption;
-
-			break;
 		}
 
 		Assert.assertNotNull(option);
