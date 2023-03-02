@@ -165,8 +165,9 @@ public class SampleSQLBuilderTest {
 		properties.put(BenchmarksPropsKeys.MAX_JOURNAL_ARTICLE_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_JOURNAL_ARTICLE_PAGE_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_JOURNAL_ARTICLE_SIZE, "1");
-		properties.put(
-			BenchmarksPropsKeys.MAX_JOURNAL_ARTICLE_VERSION_COUNT, "1");
+                properties.put(BenchmarksPropsKeys.MAX_JOURNAL_ARTICLE_VERSION_COUNT, "1");
+		properties.put(BenchmarksPropsKeys.MAX_LANGUAGE_PAGE_COUNT, "1");
+		properties.put(BenchmarksPropsKeys.MAX_LANGUAGE_PORTLET_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_MB_CATEGORY_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_MB_MESSAGE_COUNT, "1");
 		properties.put(BenchmarksPropsKeys.MAX_MB_THREAD_COUNT, "1");
@@ -182,7 +183,7 @@ public class SampleSQLBuilderTest {
 			StringBundler.concat(
 				"assetPublisher,blog,company,commerceInventoryWarehouseItem,",
 				"commerceOrder,commerceProduct,cpDefinition,documentLibrary,",
-				"dynamicDataList,fragment,layout,mbCategory,mbThread,",
+				"dynamicDataList,fragment,language,layout,mbCategory,mbThread,",
 				"repository,user,wiki"));
 		properties.put(BenchmarksPropsKeys.OUTPUT_MERGE, "true");
 		properties.put(
