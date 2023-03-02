@@ -325,6 +325,7 @@ import com.liferay.segments.criteria.CriteriaSerializer;
 import com.liferay.segments.model.SegmentsEntry;
 import com.liferay.segments.model.SegmentsEntryModel;
 import com.liferay.segments.model.impl.SegmentsEntryImpl;
+import com.liferay.site.navigation.language.constants.SiteNavigationLanguagePortletKeys;
 import com.liferay.social.kernel.model.SocialActivity;
 import com.liferay.social.kernel.model.SocialActivityConstants;
 import com.liferay.social.kernel.model.SocialActivityModel;
@@ -600,6 +601,21 @@ public class DataFactory {
 
 			sb.append(portletPrefix);
 			sb.append(i);
+			sb.append(StringPool.COMMA);
+		}
+
+		return sb.toString();
+	}
+
+	public String getLanguageLayoutColumn() {
+		StringBundler sb = new StringBundler(
+			2 * BenchmarksPropsValues.MAX_LANGUAGE_PORTLET_COUNT);
+
+		for (int i = 0; i < BenchmarksPropsValues.MAX_LANGUAGE_PORTLET_COUNT;
+			 i++) {
+
+			sb.append(
+				SiteNavigationLanguagePortletKeys.SITE_NAVIGATION_LANGUAGE);
 			sb.append(StringPool.COMMA);
 		}
 
@@ -4481,6 +4497,22 @@ public class DataFactory {
 
 		return newLayoutModel(
 			groupId, name, false, "2_columns_ii", column1, column2);
+	}
+
+	public List<LayoutModel> newLayoutModels(long groupId) {
+		List<LayoutModel> layoutModels = new ArrayList<>(
+			BenchmarksPropsValues.MAX_LANGUAGE_PAGE_COUNT);
+
+		for (int i = 0; i < BenchmarksPropsValues.MAX_LANGUAGE_PAGE_COUNT;
+			 i++) {
+
+			layoutModels.add(
+				newLayoutModel(
+					groupId, groupId + "_language_page_" + i, "",
+					getLanguageLayoutColumn()));
+		}
+
+		return layoutModels;
 	}
 
 	public LayoutPageTemplateStructureModel newLayoutPageTemplateStructureModel(

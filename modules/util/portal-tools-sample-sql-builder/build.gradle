@@ -74,6 +74,7 @@ dependencies {
 	compileInclude project(":apps:portlet-display-template:portlet-display-template-api")
 	compileInclude project(":apps:segments:segments-api")
 	compileInclude project(":apps:segments:segments-service")
+	compileInclude project(":apps:site-navigation:site-navigation-language-api")
 	compileInclude project(":apps:subscription:subscription-api")
 	compileInclude project(":apps:subscription:subscription-service")
 	compileInclude project(":apps:view-count:view-count-api")
