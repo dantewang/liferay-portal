@@ -206,6 +206,12 @@ public class BenchmarksPropsValues {
 			PropertiesHolder._get(
 				BenchmarksPropsKeys.MAX_JOURNAL_ARTICLE_VERSION_COUNT));
 
+	public static final int MAX_LANGUAGE_PAGE_COUNT = GetterUtil.getInteger(
+		PropertiesHolder._get(BenchmarksPropsKeys.MAX_LANGUAGE_PAGE_COUNT));
+
+	public static final int MAX_LANGUAGE_PORTLET_COUNT = GetterUtil.getInteger(
+		PropertiesHolder._get(BenchmarksPropsKeys.MAX_LANGUAGE_PORTLET_COUNT));
+
 	public static final int MAX_MB_CATEGORY_COUNT = GetterUtil.getInteger(
 		PropertiesHolder._get(BenchmarksPropsKeys.MAX_MB_CATEGORY_COUNT));
 

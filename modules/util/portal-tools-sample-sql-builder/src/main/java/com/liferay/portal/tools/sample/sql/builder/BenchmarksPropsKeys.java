@@ -144,6 +144,12 @@ public interface BenchmarksPropsKeys {
 	public static final String MAX_JOURNAL_ARTICLE_VERSION_COUNT =
 		"sample.sql.max.journal.article.version.count";
 
+	public static final String MAX_LANGUAGE_PAGE_COUNT =
+		"sample.sql.max.language.page.count";
+
+	public static final String MAX_LANGUAGE_PORTLET_COUNT =
+		"sample.sql.max.language.portlet.count";
+
 	public static final String MAX_MB_CATEGORY_COUNT =
 		"sample.sql.max.mb.category.count";
 
