@@ -37,6 +37,8 @@ ${dataFactory.toInsertSQL(countryModel)}
 
 	<#include "journal_article.ftl">
 
+	<#include "language.ftl">
+
 	<#include "fragment.ftl">
 
 	<#include "mb.ftl">
