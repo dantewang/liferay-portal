@@ -152,10 +152,6 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 		super.afterPropertiesSet();
 	}
 
-	public void setConfigurationResources(String[] configurationResources) {
-		_configurationResources = configurationResources;
-	}
-
 	public void setDataSource(DataSource dataSource) {
 		super.setDataSource(dataSource);
 
@@ -248,11 +244,7 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 	}
 
 	protected String[] getConfigurationResources() {
-		if (_configurationResources == null) {
-			return PropsUtil.getArray(PropsKeys.HIBERNATE_CONFIGS);
-		}
-
-		return _configurationResources;
+		return PropsUtil.getArray(PropsKeys.HIBERNATE_CONFIGS);
 	}
 
 	protected void readResource(Configuration configuration, String resource)
@@ -398,7 +390,6 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 		}
 	}
 
-	private String[] _configurationResources;
 	private DataSource _dataSource;
 	private boolean _mvccEnabled = true;
 
