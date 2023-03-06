@@ -899,6 +899,9 @@ public class PropsValues {
 	public static final int HIBERNATE_JDBC_BATCH_SIZE = GetterUtil.getInteger(
 		PropsUtil.get(PropsKeys.HIBERNATE_JDBC_BATCH_SIZE));
 
+	public static final boolean HIBERNATE_MVCC_ENABLED = GetterUtil.getBoolean(
+		PropsUtil.get(PropsKeys.HIBERNATE_MVCC_ENABLED), true);
+
 	public static final String HTTP_HEADER_VERSION_VERBOSITY = PropsUtil.get(
 		PropsKeys.HTTP_HEADER_VERSION_VERBOSITY);
 
