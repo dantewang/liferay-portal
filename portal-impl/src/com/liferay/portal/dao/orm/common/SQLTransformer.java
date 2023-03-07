@@ -78,6 +78,10 @@ public class SQLTransformer {
 			return newSQL;
 		}
 
+		if (sql.startsWith("SELECT commerceInventoryBookedQuantity")) {
+			return sql;
+		}
+
 		newSQL = _sqlTransformer.transform(sql);
 
 		Function[] functions = {
@@ -100,6 +104,14 @@ public class SQLTransformer {
 
 		if (newSQL != null) {
 			return newSQL;
+		}
+
+		if (sql.startsWith("SELECT commerceInventoryBookedQuantity") && sql.contains("IN")) {
+			System.out.println(sql);
+
+			new Exception().printStackTrace();
+
+			return sql;
 		}
 
 		newSQL = _sqlTransformer.transform(sql);
