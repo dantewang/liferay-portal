@@ -34,6 +34,7 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.InitUtil;
 import com.liferay.portal.util.PortalClassPathUtil;
+import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
@@ -240,6 +241,8 @@ public class CounterLocalServiceTest {
 
 			cacheKeyGeneratorUtil.setDefaultCacheKeyGenerator(
 				new SimpleCacheKeyGenerator());
+
+			PropsUtil.set("hibernate.configs", "META-INF/counter-hbm.xml");
 
 			InitUtil.initWithSpring(
 				Arrays.asList(
