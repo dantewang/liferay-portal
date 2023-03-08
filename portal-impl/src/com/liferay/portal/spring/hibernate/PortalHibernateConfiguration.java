@@ -136,15 +136,12 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 
 		bootstrapServiceRegistryBuilder.applyIntegrator(
 			GlobalEventListenerIntegrator.INSTANCE);
+		bootstrapServiceRegistryBuilder.applyIntegrator(
+			new CTModelIntegrator());
+		bootstrapServiceRegistryBuilder.applyIntegrator(
+			MVCCEventListenerIntegrator.INSTANCE);
 
-		if (_mvccEnabled) {
-			bootstrapServiceRegistryBuilder.applyIntegrator(
-				new CTModelIntegrator());
-			bootstrapServiceRegistryBuilder.applyIntegrator(
-				MVCCEventListenerIntegrator.INSTANCE);
-
-			setEntityInterceptor(new CTSQLInterceptor());
-		}
+		setEntityInterceptor(new CTSQLInterceptor());
 
 		setMetadataSources(
 			new MetadataSources(bootstrapServiceRegistryBuilder.build()));
@@ -156,10 +153,6 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 		super.setDataSource(dataSource);
 
 		_dataSource = dataSource;
-	}
-
-	public void setMvccEnabled(boolean mvccEnabled) {
-		_mvccEnabled = mvccEnabled;
 	}
 
 	protected static Map<String, Class<?>> getPreloadClassLoaderClasses() {
@@ -391,7 +384,6 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 	}
 
 	private DataSource _dataSource;
-	private boolean _mvccEnabled = true;
 
 	private static class SessionFactoryDelegate {
 
