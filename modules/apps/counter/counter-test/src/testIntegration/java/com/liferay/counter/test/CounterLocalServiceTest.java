@@ -21,10 +21,8 @@ import com.liferay.petra.process.ProcessChannel;
 import com.liferay.petra.process.ProcessConfig;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.process.ProcessExecutor;
-import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.cache.key.SimpleCacheKeyGenerator;
-import com.liferay.portal.change.tracking.sql.CTSQLTransformer;
 import com.liferay.portal.kernel.cache.key.CacheKeyGeneratorUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -36,12 +34,12 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.InitUtil;
 import com.liferay.portal.util.PortalClassPathUtil;
+import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 
 import java.lang.management.ManagementFactory;
-import java.lang.reflect.Field;
 
 import java.net.URL;
 
@@ -244,18 +242,7 @@ public class CounterLocalServiceTest {
 			cacheKeyGeneratorUtil.setDefaultCacheKeyGenerator(
 				new SimpleCacheKeyGenerator());
 
-			try {
-				Field field = ReflectionUtil.getDeclaredField(
-					Class.forName(
-						"com.liferay.portal.internal.change.tracking." +
-							"hibernate.CTSQLInterceptor"),
-					"_ctSQLTransformer");
-
-				field.set(null, (CTSQLTransformer)sql -> sql);
-			}
-			catch (Exception exception) {
-				throw new ProcessException(exception);
-			}
+			PropsUtil.set("hibernate.configs", "META-INF/counter-hbm.xml");
 
 			InitUtil.initWithSpring(
 				Arrays.asList(
