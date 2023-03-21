@@ -68,7 +68,7 @@ public class ThemeContributorTopHeadDynamicInclude implements DynamicInclude {
 			portalCDNURL = themeDisplay.getPortalURL();
 		}
 
-		ResourceURLsBag resourceURLsBag = _resourceURLsBag;
+		ResourceURLsBag resourceURLsBag = _getResourceURLsBag();
 
 		if (resourceURLsBag._cssResourceURLs.length > 0) {
 			if (themeDisplay.isThemeCssFastLoad()) {
@@ -111,8 +111,6 @@ public class ThemeContributorTopHeadDynamicInclude implements DynamicInclude {
 	protected void activate(BundleContext bundleContext) {
 		_bundleContext = bundleContext;
 
-		_rebuild();
-
 		_comboContextPath = _portal.getPathContext() + "/combo";
 	}
 
@@ -128,7 +126,7 @@ public class ThemeContributorTopHeadDynamicInclude implements DynamicInclude {
 			_bundleWebResourcesServiceReferences.add(
 				bundleWebResourcesServiceReference);
 
-			_rebuild();
+			_resourceURLsBag = null;
 		}
 	}
 
@@ -140,7 +138,25 @@ public class ThemeContributorTopHeadDynamicInclude implements DynamicInclude {
 			_bundleWebResourcesServiceReferences.remove(
 				bundleWebResourcesServiceReference);
 
+			_resourceURLsBag = null;
+		}
+	}
+
+	private ResourceURLsBag _getResourceURLsBag() {
+		ResourceURLsBag resourceURLsBag = _resourceURLsBag;
+
+		if (resourceURLsBag != null) {
+			return resourceURLsBag;
+		}
+
+		synchronized (_bundleWebResourcesServiceReferences) {
+			if (_resourceURLsBag != null) {
+				return _resourceURLsBag;
+			}
+
 			_rebuild();
+
+			return _resourceURLsBag;
 		}
 	}
 
@@ -218,7 +234,7 @@ public class ThemeContributorTopHeadDynamicInclude implements DynamicInclude {
 
 		printWriter.write(portalURL + staticResourceURL);
 
-		ResourceURLsBag resourceURLsBag = _resourceURLsBag;
+		ResourceURLsBag resourceURLsBag = _getResourceURLsBag();
 
 		printWriter.write(resourceURLsBag._mergedCSSResourceURLs);
 	}
@@ -235,7 +251,7 @@ public class ThemeContributorTopHeadDynamicInclude implements DynamicInclude {
 
 		printWriter.write(portalURL + staticResourceURL);
 
-		ResourceURLsBag resourceURLsBag = _resourceURLsBag;
+		ResourceURLsBag resourceURLsBag = _getResourceURLsBag();
 
 		printWriter.write(resourceURLsBag._mergedJSResourceURLs);
 	}
