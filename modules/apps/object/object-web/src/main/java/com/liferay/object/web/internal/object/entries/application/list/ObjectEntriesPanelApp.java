@@ -17,9 +17,11 @@ package com.liferay.object.web.internal.object.entries.application.list;
 import com.liferay.application.list.BasePanelApp;
 import com.liferay.object.constants.ObjectDefinitionConstants;
 import com.liferay.object.model.ObjectDefinition;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -32,6 +34,14 @@ import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
+
 /**
  * @author Marco Leo
  * @author Brian Wing Shun Chan
@@ -40,6 +50,46 @@ public class ObjectEntriesPanelApp extends BasePanelApp {
 
 	public ObjectEntriesPanelApp(ObjectDefinition objectDefinition) {
 		_objectDefinition = objectDefinition;
+
+		String filter = StringBundler.concat(
+			"(&(javax.portlet.name=", _objectDefinition.getPortletId(),
+			")(objectClass=", Portlet.class, "))");
+
+		try {
+			_serviceTracker = new ServiceTracker<>(
+				_bundleContext, _bundleContext.createFilter(filter),
+				new ServiceTrackerCustomizer<Portlet, Portlet>() {
+
+					@Override
+					public Portlet addingService(
+						ServiceReference<Portlet> serviceReference) {
+
+						_portlet = _bundleContext.getService(serviceReference);
+
+						return _portlet;
+					}
+
+					@Override
+					public void modifiedService(
+						ServiceReference<Portlet> serviceReference,
+						Portlet portlet) {
+					}
+
+					@Override
+					public void removedService(
+						ServiceReference<Portlet> serviceReference,
+						Portlet portlet) {
+
+						_portlet = null;
+
+						_bundleContext.ungetService(serviceReference);
+					}
+
+				});
+		}
+		catch (InvalidSyntaxException invalidSyntaxException) {
+			throw new RuntimeException(invalidSyntaxException);
+		}
 	}
 
 	@Override
@@ -51,6 +101,13 @@ public class ObjectEntriesPanelApp extends BasePanelApp {
 	@Override
 	public String getLabel(Locale locale) {
 		return _objectDefinition.getPluralLabel(locale);
+	}
+
+	@Override
+	public Portlet getPortlet() {
+		_openServiceTracker();
+
+		return _portlet;
 	}
 
 	@Override
@@ -98,6 +155,32 @@ public class ObjectEntriesPanelApp extends BasePanelApp {
 		return super.getGroup(httpServletRequest);
 	}
 
+	private void _openServiceTracker() {
+		boolean opened = _opened;
+
+		if (opened) {
+			return;
+		}
+
+		synchronized (_opened) {
+			if (_opened) {
+				return;
+			}
+
+			_serviceTracker.open();
+
+			_opened = true;
+		}
+	}
+
+	private static final Bundle _bundle = FrameworkUtil.getBundle(
+		ObjectEntriesPanelApp.class);
+	private static final BundleContext _bundleContext =
+		_bundle.getBundleContext();
+
 	private final ObjectDefinition _objectDefinition;
+	private Boolean _opened = false;
+	private Portlet _portlet = null;
+	private final ServiceTracker<Portlet, Portlet> _serviceTracker;
 
 }
