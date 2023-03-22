@@ -180,7 +180,7 @@ public class ObjectEntriesPanelApp extends BasePanelApp {
 
 	private final ObjectDefinition _objectDefinition;
 	private Boolean _opened = false;
-	private Portlet _portlet = null;
+	private final Portlet _portlet;
 	private final ServiceTracker<Portlet, Portlet> _serviceTracker;
 
 }
