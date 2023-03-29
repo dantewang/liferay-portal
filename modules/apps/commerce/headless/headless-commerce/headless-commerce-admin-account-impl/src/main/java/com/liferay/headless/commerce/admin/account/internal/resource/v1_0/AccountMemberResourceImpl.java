@@ -40,6 +40,7 @@ import com.liferay.portal.vulcan.pagination.Pagination;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.ws.rs.core.Response;
 
@@ -291,10 +292,15 @@ public class AccountMemberResourceImpl
 		AccountRole[] accountRoles = accountMember.getAccountRoles();
 
 		if (accountRoles != null) {
+			Stream<AccountRole> accountRoleStream = Arrays.stream(accountRoles);
+
+			long[] roleIds = accountRoleStream.mapToLong(
+				AccountRole::getRoleId
+			).toArray();
+
 			_userGroupRoleLocalService.addUserGroupRoles(
 				user.getUserId(), accountEntry.getAccountEntryGroupId(),
-				transformToLongArray(
-					Arrays.asList(accountRoles), AccountRole::getRoleId));
+				roleIds);
 		}
 	}
 
