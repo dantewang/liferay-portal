@@ -510,7 +510,7 @@ public class NodeMetricResourceImpl extends BaseNodeMetricResourceImpl {
 		boolean completed, String key, String latestProcessVersion,
 		long processId, String processVersion) {
 
-		Map<String, Bucket> taskBuckets = new LinkedHashMap<>();
+		Map<String, Bucket> taskBucketsMap = new LinkedHashMap<>();
 
 		SearchSearchRequest searchSearchRequest = new SearchSearchRequest();
 
@@ -539,10 +539,10 @@ public class NodeMetricResourceImpl extends BaseNodeMetricResourceImpl {
 			(TermsAggregationResult)aggregationResultsMap.get("name");
 
 		for (Bucket bucket : termsAggregationResult.getBuckets()) {
-			taskBuckets.put(bucket.getKey(), bucket);
+			taskBucketsMap.put(bucket.getKey(), bucket);
 		}
 
-		return taskBuckets;
+		return taskBucketsMap;
 	}
 
 	private boolean _isOrderByDurationAvg(String fieldName) {
