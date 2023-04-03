@@ -256,9 +256,8 @@ public class ProcessMetricResourceImpl extends BaseProcessMetricResourceImpl {
 	private TermsQuery _createProcessIdTermsQuery(Set<Long> processIds) {
 		TermsQuery termsQuery = _queries.terms("processId");
 
-		List<String> processIdList = transform(processIds, String::valueOf);
-
-		termsQuery.addValues(processIdList.toArray(new Object[0]));
+		termsQuery.addValues(
+			transformToArray(processIds, String::valueOf, Object.class));
 
 		return termsQuery;
 	}
