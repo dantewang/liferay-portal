@@ -690,6 +690,8 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 		Sort[] sorts, Long startInstanceId, String[] statuses,
 		String[] taskNames) {
 
+		Map<Long, Instance> instancesMap = new LinkedHashMap<>();
+
 		SearchSearchRequest searchSearchRequest = new SearchSearchRequest();
 
 		searchSearchRequest.addSorts(_toFieldSort(sorts));
@@ -715,8 +717,6 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 
 		SearchHits searchHits = searchSearchResponse.getSearchHits();
 
-		Map<Long, Instance> instancesMap = new LinkedHashMap<>();
-
 		for (SearchHit searchHit : searchHits.getSearchHits()) {
 			Instance instance = _createInstance(searchHit.getDocument());
 
@@ -735,6 +735,8 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 
 	private List<String> _getNextTransitionNames(
 		long processId, long instanceId) {
+
+		List<String> names = new ArrayList<>();
 
 		SearchSearchRequest searchSearchRequest = new SearchSearchRequest();
 
@@ -802,8 +804,6 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 
 		TermsAggregationResult termsAggregationResult =
 			(TermsAggregationResult)aggregationResultsMap.get("nodeId");
-
-		List<String> names = new ArrayList<>();
 
 		for (Bucket bucket : termsAggregationResult.getBuckets()) {
 			FilterAggregationResult filterAggregationResult =
