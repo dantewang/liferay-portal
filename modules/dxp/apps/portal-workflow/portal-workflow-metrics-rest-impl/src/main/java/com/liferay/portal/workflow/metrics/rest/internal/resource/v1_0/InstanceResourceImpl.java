@@ -829,11 +829,11 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 
 		return transform(
 			termsAggregationResult.getBuckets(),
-			bucketItem -> _language.get(
+			nameBucket -> _language.get(
 				ResourceBundleUtil.getModuleAndPortalResourceBundle(
 					contextAcceptLanguage.getPreferredLocale(),
 					InstanceResourceImpl.class),
-				bucketItem.getKey()));
+				nameBucket.getKey()));
 	}
 
 	private boolean _isReviewer(Map<String, Object> task) {
