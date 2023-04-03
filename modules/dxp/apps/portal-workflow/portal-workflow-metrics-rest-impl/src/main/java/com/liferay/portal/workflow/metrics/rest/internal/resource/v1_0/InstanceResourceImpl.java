@@ -223,9 +223,9 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 		for (SearchHit searchHit : searchHits.getSearchHits()) {
 			Document document = searchHit.getDocument();
 
-			String uuid = document.getString("uid");
+			String uid = document.getString("uid");
 
-			if (uuid.startsWith("WorkflowMetricsInstance")) {
+			if (uid.startsWith("WorkflowMetricsInstance")) {
 				instance = _createInstance(document);
 
 				break;

@@ -397,9 +397,9 @@ public class ResourceHelper {
 			return StringPool.BLANK;
 		}
 
-		SearchHit firstSearchHit = searchHitList.get(0);
+		SearchHit searchHit = searchHitList.get(0);
 
-		Document document = firstSearchHit.getDocument();
+		Document document = searchHit.getDocument();
 
 		String string = document.getString("version");
 
