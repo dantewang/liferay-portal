@@ -139,9 +139,8 @@ public class AssigneeMetricResourceImpl extends BaseAssigneeMetricResourceImpl {
 		TermsQuery termsQuery = _queries.terms(
 			completed ? "completionUserId" : "assigneeIds");
 
-		List<String> userIdList = transform(userIds, String::valueOf);
-
-		termsQuery.addValues(userIdList.toArray(new Object[0]));
+		termsQuery.addValues(
+			(Object[])transformToArray(userIds, String::valueOf, Object.class));
 
 		return termsQuery;
 	}
