@@ -569,12 +569,12 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 			assignees.addAll(
 				transform(
 					termsAggregationResult.getBuckets(),
-					assignBucket -> AssigneeUtil.toAssignee(
+					assigneeBucket -> AssigneeUtil.toAssignee(
 						_language, _portal,
 						ResourceBundleUtil.getModuleAndPortalResourceBundle(
 							contextAcceptLanguage.getPreferredLocale(),
 							InstanceResourceImpl.class),
-						GetterUtil.getLong(assignBucket.getKey()),
+						GetterUtil.getLong(assigneeBucket.getKey()),
 						_userLocalService::fetchUser)));
 
 			assignees.sort(
@@ -671,9 +671,9 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 			return startInstanceId;
 		}
 
-		SearchHit firstSearchHit = searchHitList.get(0);
+		SearchHit searchHit = searchHitList.get(0);
 
-		Document document = firstSearchHit.getDocument();
+		Document document = searchHit.getDocument();
 
 		Long instanceId = document.getLong("instanceId");
 
