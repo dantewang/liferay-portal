@@ -140,7 +140,7 @@ public class AssigneeMetricResourceImpl extends BaseAssigneeMetricResourceImpl {
 			completed ? "completionUserId" : "assigneeIds");
 
 		termsQuery.addValues(
-			(Object[])transformToArray(userIds, String::valueOf, Object.class));
+			transformToArray(userIds, String::valueOf, Object.class));
 
 		return termsQuery;
 	}
