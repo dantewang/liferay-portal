@@ -102,10 +102,10 @@ public class ProcessMetricResourceImpl extends BaseProcessMetricResourceImpl {
 			return new ProcessMetric();
 		}
 
-		SearchHit firstSearchHit = searchHitList.get(0);
+		SearchHit searchHit = searchHitList.get(0);
 
 		ProcessMetric processMetric = _createProcessMetric(
-			firstSearchHit.getDocument());
+			searchHit.getDocument());
 
 		Bucket bucket = _getProcessBucket(
 			GetterUtil.getBoolean(completed), dateEnd, dateStart, processId);
