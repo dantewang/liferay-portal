@@ -248,9 +248,7 @@ public class InstanceResourceImpl extends BaseInstanceResourceImpl {
 		for (Bucket bucket : termsAggregationResult.getBuckets()) {
 			firstBucket = bucket;
 
-			if (firstBucket != null) {
-				break;
-			}
+			break;
 		}
 
 		if (firstBucket == null) {
