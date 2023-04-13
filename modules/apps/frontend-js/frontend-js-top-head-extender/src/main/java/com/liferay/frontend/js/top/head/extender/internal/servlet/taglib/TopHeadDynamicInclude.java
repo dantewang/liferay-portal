@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
@@ -113,6 +114,7 @@ public class TopHeadDynamicInclude implements DynamicInclude {
 					synchronized (_topHeadResourcesServiceReferences) {
 						_topHeadResourcesServiceReferences.add(
 							serviceReference);
+
 						_resourceURLsBag = null;
 					}
 
@@ -207,9 +209,7 @@ public class TopHeadDynamicInclude implements DynamicInclude {
 	private void _addPortalBundles(List<String> urls, String propsKey) {
 		String[] fileNames = JavaScriptBundleUtil.getFileNames(propsKey);
 
-		for (String fileName : fileNames) {
-			urls.add(fileName);
-		}
+		urls.addAll(Arrays.asList(fileNames));
 	}
 
 	private ResourceURLsBag _getResourceURLsBag() {
@@ -236,8 +236,6 @@ public class TopHeadDynamicInclude implements DynamicInclude {
 		_addPortalBundles(
 			resourceURLsBag._allJsResourceURLs,
 			PropsKeys.JAVASCRIPT_EVERYTHING_FILES);
-
-		resourceURLsBag._jsResourceURLs.clear();
 
 		_addPortalBundles(
 			resourceURLsBag._jsResourceURLs,
