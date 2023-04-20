@@ -14,53 +14,34 @@
 
 package com.liferay.portal.cluster.multiple.internal;
 
-import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.cluster.ClusterEvent;
 import com.liferay.portal.kernel.cluster.ClusterEventListener;
 import com.liferay.portal.kernel.cluster.ClusterEventType;
-import com.liferay.portal.kernel.cluster.ClusterNode;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-
-import java.util.List;
+import com.liferay.portal.kernel.cluster.ClusterMasterExecutor;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Tina Tian
+ * @author Jiaxu Wei
  */
 @Component(service = ClusterEventListener.class)
-public class DebuggingClusterEventListenerImpl implements ClusterEventListener {
+public class ClusterMasterTokenClusterEventListener
+	implements ClusterEventListener {
 
 	@Override
 	public void processClusterEvent(ClusterEvent clusterEvent) {
-		if (!_log.isInfoEnabled()) {
-			return;
-		}
-
 		ClusterEventType clusterEventType = clusterEvent.getClusterEventType();
 
-		List<ClusterNode> clusterNodes = clusterEvent.getClusterNodes();
+		if (clusterEventType == ClusterEventType.COORDINATOR_ADDRESS_UPDATE) {
+			ClusterMasterExecutorImpl clusterMasterExecutorImpl =
+				(ClusterMasterExecutorImpl)_clusterMasterExecutor;
 
-		StringBundler sb = new StringBundler((clusterNodes.size() * 3) + 3);
-
-		sb.append("Cluster event ");
-		sb.append(clusterEventType);
-		sb.append(StringPool.NEW_LINE);
-
-		for (ClusterNode clusterNode : clusterNodes) {
-			sb.append("Cluster node ");
-			sb.append(clusterNode);
-			sb.append(StringPool.NEW_LINE);
+			clusterMasterExecutorImpl.getMasterClusterNodeId(true);
 		}
-
-		sb.setIndex(sb.index() - 1);
-
-		_log.info(sb.toString());
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		DebuggingClusterEventListenerImpl.class);
+	@Reference
+	private ClusterMasterExecutor _clusterMasterExecutor;
 
 }

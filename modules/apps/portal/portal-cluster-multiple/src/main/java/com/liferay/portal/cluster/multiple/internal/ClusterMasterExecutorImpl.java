@@ -16,9 +16,6 @@ package com.liferay.portal.cluster.multiple.internal;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.cluster.Address;
-import com.liferay.portal.kernel.cluster.ClusterEvent;
-import com.liferay.portal.kernel.cluster.ClusterEventListener;
-import com.liferay.portal.kernel.cluster.ClusterEventType;
 import com.liferay.portal.kernel.cluster.ClusterMasterExecutor;
 import com.liferay.portal.kernel.cluster.ClusterMasterTokenTransitionListener;
 import com.liferay.portal.kernel.cluster.ClusterNode;
@@ -139,10 +136,6 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 			return;
 		}
 
-		_clusterEventListener = new ClusterMasterTokenClusterEventListener();
-
-		_clusterExecutorImpl.addClusterEventListener(_clusterEventListener);
-
 		ClusterNode localClusterNode =
 			_clusterExecutorImpl.getLocalClusterNode();
 
@@ -155,12 +148,6 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 
 	@Deactivate
 	protected void deactivate() {
-		if (_clusterEventListener != null) {
-			_clusterExecutorImpl.removeClusterEventListener(
-				_clusterEventListener);
-		}
-
-		_clusterEventListener = null;
 		_enabled = false;
 		_localClusterNodeId = null;
 	}
@@ -245,8 +232,6 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 
 	private static volatile boolean _master;
 
-	private ClusterEventListener _clusterEventListener;
-
 	@Reference
 	private ClusterExecutorImpl _clusterExecutorImpl;
 
@@ -254,22 +239,5 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 		_clusterMasterTokenTransitionListeners = new HashSet<>();
 	private boolean _enabled;
 	private volatile String _localClusterNodeId;
-
-	private class ClusterMasterTokenClusterEventListener
-		implements ClusterEventListener {
-
-		@Override
-		public void processClusterEvent(ClusterEvent clusterEvent) {
-			ClusterEventType clusterEventType =
-				clusterEvent.getClusterEventType();
-
-			if (clusterEventType ==
-					ClusterEventType.COORDINATOR_ADDRESS_UPDATE) {
-
-				getMasterClusterNodeId(true);
-			}
-		}
-
-	}
 
 }
