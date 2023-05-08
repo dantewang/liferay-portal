@@ -14,15 +14,13 @@
 
 package com.liferay.message.boards.service.permission;
 
-import com.liferay.message.boards.model.MBDiscussion;
 import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.service.MBBanLocalService;
-import com.liferay.message.boards.service.MBDiscussionLocalService;
 import com.liferay.message.boards.service.MBMessageLocalService;
+import com.liferay.osgi.util.service.Snapshot;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.BaseModelPermissionChecker;
 import com.liferay.portal.kernel.security.permission.BaseModelPermissionCheckerUtil;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
@@ -33,19 +31,12 @@ import com.liferay.portal.util.PropsValues;
 
 import java.util.List;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
 /**
  * @author Charles May
  * @author Roberto Díaz
  * @author Sergio González
  */
-@Component(
-	property = "model.class.name=com.liferay.message.boards.model.MBDiscussion",
-	service = BaseModelPermissionChecker.class
-)
-public class MBDiscussionPermission implements BaseModelPermissionChecker {
+public class MBDiscussionPermission {
 
 	public static void check(
 			PermissionChecker permissionChecker, long companyId, long groupId,
@@ -77,7 +68,9 @@ public class MBDiscussionPermission implements BaseModelPermissionChecker {
 		PermissionChecker permissionChecker, long companyId, long groupId,
 		String className, long classPK, String actionId) {
 
-		if (_mbBanLocalService.hasBan(groupId, permissionChecker.getUserId())) {
+		MBBanLocalService mbBanLocalService = _mbBanLocalServiceSnapshot.get();
+
+		if (mbBanLocalService.hasBan(groupId, permissionChecker.getUserId())) {
 			return false;
 		}
 
@@ -105,8 +98,11 @@ public class MBDiscussionPermission implements BaseModelPermissionChecker {
 			String actionId)
 		throws PortalException {
 
+		MBMessageLocalService mbMessageLocalService =
+			_mbMessageLocalServiceSnapshot.get();
+
 		return contains(
-			permissionChecker, _mbMessageLocalService.getMessage(messageId),
+			permissionChecker, mbMessageLocalService.getMessage(messageId),
 			actionId);
 	}
 
@@ -130,7 +126,10 @@ public class MBDiscussionPermission implements BaseModelPermissionChecker {
 		}
 
 		if (message.isPending()) {
-			Boolean hasPermission = _workflowPermission.hasPermission(
+			WorkflowPermission workflowPermission =
+				_workflowPermissionSnapshot.get();
+
+			Boolean hasPermission = workflowPermission.hasPermission(
 				permissionChecker, message.getGroupId(),
 				message.getWorkflowClassName(), message.getMessageId(),
 				actionId);
@@ -145,49 +144,14 @@ public class MBDiscussionPermission implements BaseModelPermissionChecker {
 			className, message.getClassPK(), actionId);
 	}
 
-	@Override
-	public void checkBaseModel(
-			PermissionChecker permissionChecker, long groupId, long primaryKey,
-			String actionId)
-		throws PortalException {
-
-		MBDiscussion mbDiscussion = _mbDiscussionLocalService.getMBDiscussion(
-			primaryKey);
-
-		check(
-			permissionChecker, mbDiscussion.getCompanyId(), groupId,
-			mbDiscussion.getClassName(), mbDiscussion.getClassPK(), actionId);
-	}
-
-	@Reference(unbind = "-")
-	protected void setMBBanLocalService(MBBanLocalService mbBanLocalService) {
-		_mbBanLocalService = mbBanLocalService;
-	}
-
-	@Reference(unbind = "-")
-	protected void setMBDiscussionLocalService(
-		MBDiscussionLocalService mbDiscussionLocalService) {
-
-		_mbDiscussionLocalService = mbDiscussionLocalService;
-	}
-
-	@Reference(unbind = "-")
-	protected void setMBMessageLocalService(
-		MBMessageLocalService mbMessageLocalService) {
-
-		_mbMessageLocalService = mbMessageLocalService;
-	}
-
-	@Reference(unbind = "-")
-	protected void setWorkflowPermission(
-		WorkflowPermission workflowPermission) {
-
-		_workflowPermission = workflowPermission;
-	}
-
-	private static MBBanLocalService _mbBanLocalService;
-	private static MBDiscussionLocalService _mbDiscussionLocalService;
-	private static MBMessageLocalService _mbMessageLocalService;
-	private static WorkflowPermission _workflowPermission;
+	private static final Snapshot<MBBanLocalService>
+		_mbBanLocalServiceSnapshot = new Snapshot<>(
+			MBDiscussionPermission.class, MBBanLocalService.class);
+	private static final Snapshot<MBMessageLocalService>
+		_mbMessageLocalServiceSnapshot = new Snapshot<>(
+			MBDiscussionPermission.class, MBMessageLocalService.class);
+	private static final Snapshot<WorkflowPermission>
+		_workflowPermissionSnapshot = new Snapshot<>(
+			MBDiscussionPermission.class, WorkflowPermission.class);
 
 }
