@@ -24,6 +24,9 @@ public class BackgroundTaskConstants {
 
 	public static final String BACKGROUND_TASK_ID = "backgroundTaskId";
 
+	public static final String BACKGROUND_TASK_THREAD_NAME =
+		"backgroundTaskThreadName";
+
 	public static final int ISOLATION_LEVEL_CLASS = 1;
 
 	public static final int ISOLATION_LEVEL_COMPANY = 2;

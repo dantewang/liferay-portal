@@ -41,11 +41,14 @@ import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.servlet.ServletContextClassLoaderPool;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StackTraceUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,9 +84,15 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 
 			ServiceContext serviceContext = new ServiceContext();
 
+			Thread currentThread = Thread.currentThread();
+
 			BackgroundTask backgroundTask =
 				_backgroundTaskLocalService.amendBackgroundTask(
-					backgroundTaskId, null,
+					backgroundTaskId,
+					HashMapBuilder.<String, Serializable>put(
+						BackgroundTaskConstants.BACKGROUND_TASK_THREAD_NAME,
+						currentThread.getName()
+					).build(),
 					BackgroundTaskConstants.STATUS_IN_PROGRESS, serviceContext);
 
 			if (backgroundTask == null) {
