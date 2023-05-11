@@ -45,6 +45,7 @@ import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -58,6 +59,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -247,9 +249,7 @@ public class BackgroundTaskLocalServiceImpl
 			backgroundTaskPersistence.findByCompleted(false);
 
 		for (BackgroundTask backgroundTask : backgroundTasks) {
-			if (backgroundTask.getStatus() ==
-					BackgroundTaskConstants.STATUS_IN_PROGRESS) {
-
+			if (_isStaleBackgroundTask(backgroundTask)) {
 				backgroundTask.setCompleted(true);
 				backgroundTask.setStatus(BackgroundTaskConstants.STATUS_FAILED);
 
@@ -753,6 +753,56 @@ public class BackgroundTaskLocalServiceImpl
 			});
 
 		return backgroundTask;
+	}
+
+	private boolean _isStaleBackgroundTask(BackgroundTask backgroundTask) {
+		if (backgroundTask.getStatus() !=
+				BackgroundTaskConstants.STATUS_IN_PROGRESS) {
+
+			return false;
+		}
+
+		Map<String, Serializable> taskContextMap =
+			backgroundTask.getTaskContextMap();
+
+		String threadName = GetterUtil.getString(
+			taskContextMap.get(
+				BackgroundTaskConstants.BACKGROUND_TASK_THREAD_NAME),
+			null);
+
+		if (threadName == null) {
+			return true;
+		}
+
+		Thread currentThread = Thread.currentThread();
+
+		ThreadGroup rootGroup = currentThread.getThreadGroup();
+
+		ThreadGroup parentGroup = null;
+
+		while ((parentGroup = rootGroup.getParent()) != null) {
+			rootGroup = parentGroup;
+		}
+
+		Thread[] threads = new Thread[rootGroup.activeCount()];
+
+		while (rootGroup.enumerate(threads, true) == threads.length) {
+			threads = new Thread[threads.length * 2];
+		}
+
+		for (Thread thread : threads) {
+			if ((thread.getState() == Thread.State.NEW) ||
+				(thread.getState() == Thread.State.TERMINATED)) {
+
+				continue;
+			}
+
+			if (Objects.equals(threadName, thread.getName())) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
