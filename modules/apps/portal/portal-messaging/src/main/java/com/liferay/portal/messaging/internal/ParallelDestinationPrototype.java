@@ -52,6 +52,8 @@ public class ParallelDestinationPrototype implements DestinationPrototype {
 		parallelDestination.setPortalExecutorManager(_portalExecutorManager);
 		parallelDestination.setRejectedExecutionHandler(
 			destinationConfiguration.getRejectedExecutionHandler());
+		parallelDestination.setThreadNameSuffixSupplier(
+			destinationConfiguration.getThreadNameSuffixSupplier());
 		parallelDestination.setUserLocalService(_userLocalService);
 		parallelDestination.setWorkersSize(
 			destinationConfiguration.getWorkersCoreSize(),

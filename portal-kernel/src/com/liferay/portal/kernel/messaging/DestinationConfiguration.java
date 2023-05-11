@@ -21,6 +21,7 @@ import java.io.Serializable;
 
 import java.util.Objects;
 import java.util.concurrent.RejectedExecutionHandler;
+import java.util.function.Supplier;
 
 /**
  * @author Michael C. Han
@@ -104,6 +105,10 @@ public class DestinationConfiguration implements Serializable {
 		return _rejectedExecutionHandler;
 	}
 
+	public Supplier<String> getThreadNameSuffixSupplier() {
+		return _threadNameSuffixSupplier;
+	}
+
 	public int getWorkersCoreSize() {
 		return _workersCoreSize;
 	}
@@ -129,6 +134,12 @@ public class DestinationConfiguration implements Serializable {
 		RejectedExecutionHandler rejectedExecutionHandler) {
 
 		_rejectedExecutionHandler = rejectedExecutionHandler;
+	}
+
+	public void setThreadNameSuffixSupplier(
+		Supplier<String> threadNameSuffixSupplier) {
+
+		_threadNameSuffixSupplier = threadNameSuffixSupplier;
 	}
 
 	public void setWorkersCoreSize(int workersCoreSize) {
@@ -157,6 +168,7 @@ public class DestinationConfiguration implements Serializable {
 	private String _destinationType;
 	private int _maximumQueueSize = Integer.MAX_VALUE;
 	private RejectedExecutionHandler _rejectedExecutionHandler;
+	private Supplier<String> _threadNameSuffixSupplier;
 	private int _workersCoreSize = _WORKERS_CORE_SIZE;
 	private int _workersMaxSize = _WORKERS_MAX_SIZE;
 

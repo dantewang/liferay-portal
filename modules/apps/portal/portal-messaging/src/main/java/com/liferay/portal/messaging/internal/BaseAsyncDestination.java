@@ -37,6 +37,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 
 /**
  * @author Michael C. Han
@@ -118,7 +119,8 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 				new LinkedBlockingQueue<>(_maximumQueueSize),
 				new NamedThreadFactory(
 					getName(), Thread.NORM_PRIORITY,
-					PortalClassLoaderUtil.getClassLoader()),
+					PortalClassLoaderUtil.getClassLoader(),
+					_threadNameSuffixSupplier),
 				_rejectedExecutionHandler, new ThreadPoolHandlerAdapter());
 
 		NoticeableExecutorService oldNoticeableExecutorService =
@@ -196,6 +198,12 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 			rejectedExecutionHandler.rejectedExecution(
 				runnable, threadPoolExecutor);
 		};
+	}
+
+	public void setThreadNameSuffixSupplier(
+		Supplier<String> threadNameSuffixSupplier) {
+
+		_threadNameSuffixSupplier = threadNameSuffixSupplier;
 	}
 
 	public void setUserLocalService(UserLocalService userLocalService) {
@@ -297,6 +305,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	private PortalExecutorManager _portalExecutorManager;
 	private RejectedExecutionHandler _rejectedExecutionHandler;
 	private final AtomicLong _rejectedTaskCounter = new AtomicLong();
+	private Supplier<String> _threadNameSuffixSupplier;
 	private int _workersCoreSize = _WORKERS_CORE_SIZE;
 	private int _workersMaxSize = _WORKERS_MAX_SIZE;
 
