@@ -18,6 +18,7 @@ import com.liferay.petra.string.StringPool;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 /**
  * @author Michael C. Han
@@ -27,6 +28,13 @@ public class NamedThreadFactory implements ThreadFactory {
 
 	public NamedThreadFactory(
 		String name, int priority, ClassLoader contextClassLoader) {
+
+		this(name, priority, contextClassLoader, null);
+	}
+
+	public NamedThreadFactory(
+		String name, int priority, ClassLoader contextClassLoader,
+		Supplier<String> suffixSupplier) {
 
 		SecurityManager securityManager = System.getSecurityManager();
 
@@ -42,15 +50,12 @@ public class NamedThreadFactory implements ThreadFactory {
 		_name = name;
 		_priority = priority;
 		_contextClassLoader = contextClassLoader;
+		_suffixSupplier = suffixSupplier;
 	}
 
 	@Override
 	public Thread newThread(Runnable runnable) {
-		Thread thread = new Thread(
-			_group, runnable,
-			StringBundler.concat(
-				_name, StringPool.MINUS,
-				String.valueOf(_counter.incrementAndGet())));
+		Thread thread = new Thread(_group, runnable, _getThreadName());
 
 		thread.setDaemon(true);
 		thread.setPriority(_priority);
@@ -62,10 +67,23 @@ public class NamedThreadFactory implements ThreadFactory {
 		return thread;
 	}
 
+	private String _getThreadName() {
+		if (_suffixSupplier == null) {
+			return StringBundler.concat(
+				_name, StringPool.MINUS,
+				String.valueOf(_counter.incrementAndGet()));
+		}
+
+		return StringBundler.concat(
+			_name, StringPool.MINUS, String.valueOf(_counter.incrementAndGet()),
+			StringPool.MINUS, _suffixSupplier.get());
+	}
+
 	private final ClassLoader _contextClassLoader;
 	private final AtomicInteger _counter = new AtomicInteger();
 	private final ThreadGroup _group;
 	private final String _name;
 	private final int _priority;
+	private final Supplier<String> _suffixSupplier;
 
 }
