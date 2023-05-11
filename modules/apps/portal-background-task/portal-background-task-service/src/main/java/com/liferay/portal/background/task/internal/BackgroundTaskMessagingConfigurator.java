@@ -32,10 +32,12 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalService;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.uuid.PortalUUID;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -63,7 +65,7 @@ public class BackgroundTaskMessagingConfigurator {
 
 		Destination backgroundTaskDestination = _registerDestination(
 			bundleContext, DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
-			DestinationNames.BACKGROUND_TASK,
+			DestinationNames.BACKGROUND_TASK, _portalUUID::generate,
 			backgroundTaskManagerConfiguration.workersCoreSize(),
 			backgroundTaskManagerConfiguration.workersMaxSize());
 
@@ -75,7 +77,7 @@ public class BackgroundTaskMessagingConfigurator {
 
 		Destination backgroundTaskStatusDestination = _registerDestination(
 			bundleContext, DestinationConfiguration.DESTINATION_TYPE_SERIAL,
-			DestinationNames.BACKGROUND_TASK_STATUS, 1, 1);
+			DestinationNames.BACKGROUND_TASK_STATUS, null, 1, 1);
 
 		backgroundTaskStatusDestination.register(
 			new BackgroundTaskStatusMessageListener(
@@ -95,13 +97,16 @@ public class BackgroundTaskMessagingConfigurator {
 
 	private Destination _registerDestination(
 		BundleContext bundleContext, String destinationType,
-		String destinationName, int workersCoreSize, int workersMaxSize) {
+		String destinationName, Supplier<String> threadNameSuffixSupplier,
+		int workersCoreSize, int workersMaxSize) {
 
 		DestinationConfiguration destinationConfiguration =
 			new DestinationConfiguration(destinationType, destinationName);
 
 		destinationConfiguration.setWorkersCoreSize(workersCoreSize);
 		destinationConfiguration.setWorkersMaxSize(workersMaxSize);
+		destinationConfiguration.setThreadNameSuffixSupplier(
+			threadNameSuffixSupplier);
 
 		Destination destination = _destinationFactory.createDestination(
 			destinationConfiguration);
@@ -135,6 +140,9 @@ public class BackgroundTaskMessagingConfigurator {
 
 	@Reference
 	private MessageBus _messageBus;
+
+	@Reference
+	private PortalUUID _portalUUID;
 
 	@Reference
 	private RoleLocalService _roleLocalService;
