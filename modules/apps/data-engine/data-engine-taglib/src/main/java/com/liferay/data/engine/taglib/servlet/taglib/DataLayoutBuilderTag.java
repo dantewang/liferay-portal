@@ -698,8 +698,7 @@ public class DataLayoutBuilderTag extends BaseDataLayoutBuilderTag {
 						LocalizedValueUtil.toJSONObject(dataRule.getName())
 					)));
 
-			return JSONFactoryUtil.createJSONObject(
-				JSONFactoryUtil.looseSerializeDeep(ddmFormTemplateContext));
+			return JSONFactoryUtil.createJSONObject(ddmFormTemplateContext);
 		}
 
 		private Map<String, Object> _createDDMFormFieldSettingContext(
