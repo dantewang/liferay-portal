@@ -40,7 +40,6 @@ import com.liferay.portal.kernel.security.SecureRandomUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.Http;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.PortalInetSocketAddressEventListener;
 import com.liferay.portal.kernel.util.Props;
@@ -162,17 +161,7 @@ public class ClusterExecutorImpl implements ClusterExecutor {
 
 	@Override
 	public List<ClusterEventListener> getClusterEventListeners() {
-		return ListUtil.filter(
-			_serviceTrackerList.toList(),
-			clusterEventListener -> {
-				if (clusterEventListener instanceof
-						DebuggingClusterEventListenerImpl) {
-
-					return clusterExecutorConfiguration.debugEnabled();
-				}
-
-				return true;
-			});
+		return _serviceTrackerList.toList();
 	}
 
 	@Override
@@ -298,12 +287,6 @@ public class ClusterExecutorImpl implements ClusterExecutor {
 
 	protected void fireClusterEvent(ClusterEvent clusterEvent) {
 		for (ClusterEventListener listener : _serviceTrackerList) {
-			if ((listener instanceof DebuggingClusterEventListenerImpl) &&
-				!clusterExecutorConfiguration.debugEnabled()) {
-
-				continue;
-			}
-
 			listener.processClusterEvent(clusterEvent);
 		}
 	}
