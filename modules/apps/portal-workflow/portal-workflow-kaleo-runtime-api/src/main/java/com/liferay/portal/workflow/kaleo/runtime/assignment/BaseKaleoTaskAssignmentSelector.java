@@ -41,26 +41,28 @@ public abstract class BaseKaleoTaskAssignmentSelector
 
 		List<KaleoTaskAssignment> kaleoTaskAssignments = new ArrayList<>();
 
-		if (results.get(AssignmentConstant.ROLES_ASSIGNMENT) != null) {
+		Object roles = results.get(AssignmentConstant.ROLES_ASSIGNMENT);
+
+		if (roles != null) {
 			getRoleKaleoTaskAssignments(
-				(List<Role>)results.get(AssignmentConstant.ROLES_ASSIGNMENT),
-				kaleoTaskAssignments);
+				(List<Role>)roles, kaleoTaskAssignments);
 
 			return kaleoTaskAssignments;
 		}
 
-		if (results.get(AssignmentConstant.USER_ASSIGNMENT) != null) {
-			kaleoTaskAssignments.add(
-				getUserKaleoTaskAssignment(
-					(User)results.get(AssignmentConstant.USER_ASSIGNMENT)));
+		Object user = results.get(AssignmentConstant.USER_ASSIGNMENT);
+
+		if (user != null) {
+			kaleoTaskAssignments.add(_getUserKaleoTaskAssignment((User)user));
 
 			return kaleoTaskAssignments;
 		}
 
-		for (User user :
-				(List<User>)results.get(AssignmentConstant.USERS_ASSIGNMENT)) {
+		Object users = results.get(AssignmentConstant.USERS_ASSIGNMENT);
 
-			kaleoTaskAssignments.add(getUserKaleoTaskAssignment(user));
+		if (users != null) {
+			_getUserKaleoTaskAssignments(
+				(List<User>)users, kaleoTaskAssignments);
 		}
 
 		return kaleoTaskAssignments;
@@ -84,7 +86,10 @@ public abstract class BaseKaleoTaskAssignmentSelector
 		}
 	}
 
-	protected KaleoTaskAssignment getUserKaleoTaskAssignment(User user) {
+	@Reference
+	protected KaleoTaskAssignmentFactory kaleoTaskAssignmentFactory;
+
+	private KaleoTaskAssignment _getUserKaleoTaskAssignment(User user) {
 		KaleoTaskAssignment kaleoTaskAssignment =
 			kaleoTaskAssignmentFactory.createKaleoTaskAssignment();
 
@@ -94,7 +99,12 @@ public abstract class BaseKaleoTaskAssignmentSelector
 		return kaleoTaskAssignment;
 	}
 
-	@Reference
-	protected KaleoTaskAssignmentFactory kaleoTaskAssignmentFactory;
+	private void _getUserKaleoTaskAssignments(
+		List<User> users, List<KaleoTaskAssignment> kaleoTaskAssignments) {
+
+		for (User user : users) {
+			kaleoTaskAssignments.add(_getUserKaleoTaskAssignment(user));
+		}
+	}
 
 }
