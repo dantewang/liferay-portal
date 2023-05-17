@@ -16,13 +16,17 @@ package com.liferay.portal.workflow.kaleo.runtime.internal.assignment;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.model.impl.UserImpl;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
+import com.liferay.portal.workflow.kaleo.KaleoTaskAssignmentFactory;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstance;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
+import com.liferay.portal.workflow.kaleo.model.impl.KaleoTaskAssignmentImpl;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.assignment.ScriptingKaleoTaskAssignmentSelector;
 import com.liferay.portal.workflow.kaleo.runtime.constants.AssignmentConstant;
@@ -31,12 +35,16 @@ import com.liferay.portal.workflow.kaleo.service.KaleoInstanceLocalService;
 import java.util.Collection;
 import java.util.Map;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.mockito.Mockito;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 /**
  * @author Jiaxu Wei
@@ -48,23 +56,29 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 	public static final LiferayUnitTestRule liferayUnitTestRule =
 		LiferayUnitTestRule.INSTANCE;
 
+	@After
+	public void tearDown() {
+		if (_serviceRegistration != null) {
+			_serviceRegistration.unregister();
+		}
+	}
+
 	@Test
 	public void testUseJavaScriptingKaleoTaskAssignmentSelector()
 		throws PortalException {
-
-		MultiLanguageKaleoTaskAssignmentSelector
-			multiLanguageKaleoTaskAssignmentSelector =
-				_getMultiLanguageKaleoTaskAssignmentSelector();
 
 		TestJavaScriptingKaleoTaskAssignmentSelector
 			testJavaScriptingKaleoTaskAssignmentSelector =
 				new TestJavaScriptingKaleoTaskAssignmentSelector();
 
-		multiLanguageKaleoTaskAssignmentSelector.addKaleoTaskAssignmentSelector(
+		_serviceRegistration = _bundleContext.registerService(
+			ScriptingKaleoTaskAssignmentSelector.class,
 			testJavaScriptingKaleoTaskAssignmentSelector,
-			HashMapBuilder.put(
-				"scripting.language", (Object)"java"
-			).build());
+			MapUtil.singletonDictionary("scripting.language", (Object)"java"));
+
+		MultiLanguageKaleoTaskAssignmentSelector
+			multiLanguageKaleoTaskAssignmentSelector =
+				_getMultiLanguageKaleoTaskAssignmentSelector();
 
 		Collection<KaleoTaskAssignment> kaleoTaskAssignments =
 			multiLanguageKaleoTaskAssignmentSelector.getKaleoTaskAssignments(
@@ -144,8 +158,29 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 			multiLanguageKaleoTaskAssignmentSelector,
 			"_kaleoInstanceLocalService", _getKaleoInstanceLocalService());
 
+		KaleoTaskAssignmentFactory kaleoTaskAssignmentFactory = Mockito.mock(
+			KaleoTaskAssignmentFactory.class);
+
+		Mockito.when(
+			kaleoTaskAssignmentFactory.createKaleoTaskAssignment()
+		).thenReturn(
+			new KaleoTaskAssignmentImpl()
+		);
+
+		ReflectionTestUtil.setFieldValue(
+			multiLanguageKaleoTaskAssignmentSelector,
+			"kaleoTaskAssignmentFactory", kaleoTaskAssignmentFactory);
+
+		multiLanguageKaleoTaskAssignmentSelector.activate(_bundleContext);
+
 		return multiLanguageKaleoTaskAssignmentSelector;
 	}
+
+	private static final BundleContext _bundleContext =
+		SystemBundleUtil.getBundleContext();
+
+	private ServiceRegistration<ScriptingKaleoTaskAssignmentSelector>
+		_serviceRegistration;
 
 	private class TestJavaScriptingKaleoTaskAssignmentSelector
 		implements ScriptingKaleoTaskAssignmentSelector {
