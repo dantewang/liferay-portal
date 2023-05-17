@@ -18,18 +18,17 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.model.impl.UserImpl;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
-import com.liferay.portal.workflow.kaleo.KaleoTaskAssignmentFactory;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstance;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
-import com.liferay.portal.workflow.kaleo.model.impl.KaleoTaskAssignmentImpl;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
-import com.liferay.portal.workflow.kaleo.runtime.assignment.KaleoTaskAssignmentSelector;
+import com.liferay.portal.workflow.kaleo.runtime.assignment.ScriptingKaleoTaskAssignmentSelector;
 import com.liferay.portal.workflow.kaleo.service.KaleoInstanceLocalService;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -58,7 +57,7 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 
 		TestJavaScriptingKaleoTaskAssignmentSelector
 			testJavaScriptingKaleoTaskAssignmentSelector =
-				_getTestJavaScriptingKaleoTaskAssignmentSelector();
+				new TestJavaScriptingKaleoTaskAssignmentSelector();
 
 		multiLanguageKaleoTaskAssignmentSelector.addKaleoTaskAssignmentSelector(
 			testJavaScriptingKaleoTaskAssignmentSelector,
@@ -106,7 +105,7 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 	}
 
 	private KaleoTaskAssignment _getKaleoTaskAssignment(
-		Class<? extends KaleoTaskAssignmentSelector> clazz,
+		Class<? extends ScriptingKaleoTaskAssignmentSelector> clazz,
 		String scriptLanguage) {
 
 		KaleoTaskAssignment kaleoTaskAssignment = Mockito.mock(
@@ -147,47 +146,27 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 		return multiLanguageKaleoTaskAssignmentSelector;
 	}
 
-	private TestJavaScriptingKaleoTaskAssignmentSelector
-		_getTestJavaScriptingKaleoTaskAssignmentSelector() {
-
-		KaleoTaskAssignmentFactory kaleoTaskAssignmentFactory = Mockito.mock(
-			KaleoTaskAssignmentFactory.class);
-
-		Mockito.when(
-			kaleoTaskAssignmentFactory.createKaleoTaskAssignment()
-		).thenReturn(
-			new KaleoTaskAssignmentImpl()
-		);
-
-		return new TestJavaScriptingKaleoTaskAssignmentSelector(
-			kaleoTaskAssignmentFactory);
-	}
-
 	private class TestJavaScriptingKaleoTaskAssignmentSelector
-		implements KaleoTaskAssignmentSelector {
-
-		public TestJavaScriptingKaleoTaskAssignmentSelector(
-			KaleoTaskAssignmentFactory kaleoTaskAssignmentFactory) {
-
-			_kaleoTaskAssignmentFactory = kaleoTaskAssignmentFactory;
-		}
+		implements ScriptingKaleoTaskAssignmentSelector {
 
 		@Override
-		public Collection<KaleoTaskAssignment> getKaleoTaskAssignments(
+		public Map<String, ?> getKaleoTaskAssignments(
 				KaleoTaskAssignment kaleoTaskAssignment,
 				ExecutionContext executionContext)
 			throws PortalException {
 
-			KaleoTaskAssignment newKaleoTaskAssignment =
-				_kaleoTaskAssignmentFactory.createKaleoTaskAssignment();
-
-			newKaleoTaskAssignment.setAssigneeClassName(User.class.getName());
-			newKaleoTaskAssignment.setAssigneeClassPK(
-				kaleoTaskAssignment.getUserId());
-
 			_executed = true;
 
-			return Collections.singletonList(newKaleoTaskAssignment);
+			return HashMapBuilder.put(
+				"user",
+				() -> {
+					User user = new UserImpl();
+
+					user.setUserId(kaleoTaskAssignment.getUserId());
+
+					return user;
+				}
+			).build();
 		}
 
 		public boolean isExecuted() {
@@ -195,7 +174,6 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 		}
 
 		private boolean _executed;
-		private final KaleoTaskAssignmentFactory _kaleoTaskAssignmentFactory;
 
 	}
 
