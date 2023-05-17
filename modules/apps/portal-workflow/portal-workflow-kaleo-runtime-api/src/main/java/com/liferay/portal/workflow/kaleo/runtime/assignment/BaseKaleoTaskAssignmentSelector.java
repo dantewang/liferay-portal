@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.workflow.kaleo.KaleoTaskAssignmentFactory;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
+import com.liferay.portal.workflow.kaleo.runtime.constants.AssignmentConstant;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,22 +41,25 @@ public abstract class BaseKaleoTaskAssignmentSelector
 
 		List<KaleoTaskAssignment> kaleoTaskAssignments = new ArrayList<>();
 
-		if (results.get(ROLES_ASSIGNMENT) != null) {
+		if (results.get(AssignmentConstant.ROLES_ASSIGNMENT) != null) {
 			getRoleKaleoTaskAssignments(
-				(List<Role>)results.get(ROLES_ASSIGNMENT),
+				(List<Role>)results.get(AssignmentConstant.ROLES_ASSIGNMENT),
 				kaleoTaskAssignments);
 
 			return kaleoTaskAssignments;
 		}
 
-		if (results.get(USER_ASSIGNMENT) != null) {
+		if (results.get(AssignmentConstant.USER_ASSIGNMENT) != null) {
 			kaleoTaskAssignments.add(
-				getUserKaleoTaskAssignment((User)results.get(USER_ASSIGNMENT)));
+				getUserKaleoTaskAssignment(
+					(User)results.get(AssignmentConstant.USER_ASSIGNMENT)));
 
 			return kaleoTaskAssignments;
 		}
 
-		for (User user : (List<User>)results.get(USERS_ASSIGNMENT)) {
+		for (User user :
+				(List<User>)results.get(AssignmentConstant.USERS_ASSIGNMENT)) {
+
 			kaleoTaskAssignments.add(getUserKaleoTaskAssignment(user));
 		}
 
@@ -89,12 +93,6 @@ public abstract class BaseKaleoTaskAssignmentSelector
 
 		return kaleoTaskAssignment;
 	}
-
-	protected static final String ROLES_ASSIGNMENT = "roles";
-
-	protected static final String USER_ASSIGNMENT = "user";
-
-	protected static final String USERS_ASSIGNMENT = "users";
 
 	@Reference
 	protected KaleoTaskAssignmentFactory kaleoTaskAssignmentFactory;

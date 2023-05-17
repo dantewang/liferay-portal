@@ -25,6 +25,7 @@ import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.assignment.ScriptingKaleoTaskAssignmentSelector;
+import com.liferay.portal.workflow.kaleo.runtime.constants.AssignmentConstant;
 import com.liferay.portal.workflow.kaleo.service.KaleoInstanceLocalService;
 
 import java.util.Collection;
@@ -158,7 +159,7 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 			_executed = true;
 
 			return HashMapBuilder.put(
-				"user",
+				AssignmentConstant.USER_ASSIGNMENT,
 				() -> {
 					User user = new UserImpl();
 

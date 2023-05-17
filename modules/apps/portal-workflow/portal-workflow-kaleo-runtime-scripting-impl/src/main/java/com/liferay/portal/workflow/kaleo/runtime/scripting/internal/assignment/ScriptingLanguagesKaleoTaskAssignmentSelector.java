@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.assignment.ScriptingKaleoTaskAssignmentSelector;
+import com.liferay.portal.workflow.kaleo.runtime.constants.AssignmentConstant;
 import com.liferay.portal.workflow.kaleo.runtime.scripting.internal.util.KaleoScriptingEvaluator;
 import com.liferay.portal.workflow.kaleo.runtime.util.WorkflowContextUtil;
 
@@ -61,7 +62,9 @@ public class ScriptingLanguagesKaleoTaskAssignmentSelector
 
 	private static final Set<String> _outputNames = new HashSet<>(
 		Arrays.asList(
-			"roles", "user", "users",
+			AssignmentConstant.ROLES_ASSIGNMENT,
+			AssignmentConstant.USER_ASSIGNMENT,
+			AssignmentConstant.USERS_ASSIGNMENT,
 			WorkflowContextUtil.WORKFLOW_CONTEXT_NAME));
 
 	@Reference
