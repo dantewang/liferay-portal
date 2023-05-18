@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.workflow.kaleo.KaleoTaskAssignmentFactory;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
-import com.liferay.portal.workflow.kaleo.runtime.constants.AssignmentConstant;
+import com.liferay.portal.workflow.kaleo.runtime.constants.AssignmentConstants;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +41,7 @@ public abstract class BaseKaleoTaskAssignmentSelector
 
 		List<KaleoTaskAssignment> kaleoTaskAssignments = new ArrayList<>();
 
-		Object roles = results.get(AssignmentConstant.ROLES_ASSIGNMENT);
+		Object roles = results.get(AssignmentConstants.ROLES);
 
 		if (roles != null) {
 			getRoleKaleoTaskAssignments(
@@ -50,7 +50,7 @@ public abstract class BaseKaleoTaskAssignmentSelector
 			return kaleoTaskAssignments;
 		}
 
-		Object user = results.get(AssignmentConstant.USER_ASSIGNMENT);
+		Object user = results.get(AssignmentConstants.USER);
 
 		if (user != null) {
 			kaleoTaskAssignments.add(_getUserKaleoTaskAssignment((User)user));
@@ -58,7 +58,7 @@ public abstract class BaseKaleoTaskAssignmentSelector
 			return kaleoTaskAssignments;
 		}
 
-		Object users = results.get(AssignmentConstant.USERS_ASSIGNMENT);
+		Object users = results.get(AssignmentConstants.USERS);
 
 		if (users != null) {
 			_getUserKaleoTaskAssignments(

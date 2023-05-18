@@ -17,12 +17,12 @@ package com.liferay.portal.workflow.kaleo.runtime.constants;
 /**
  * @author Jiaxu Wei
  */
-public class AssignmentConstant {
+public class AssignmentConstants {
 
-	public static final String ROLES_ASSIGNMENT = "roles";
+	public static final String ROLES = "roles";
 
-	public static final String USER_ASSIGNMENT = "user";
+	public static final String USER = "user";
 
-	public static final String USERS_ASSIGNMENT = "users";
+	public static final String USERS = "users";
 
 }
