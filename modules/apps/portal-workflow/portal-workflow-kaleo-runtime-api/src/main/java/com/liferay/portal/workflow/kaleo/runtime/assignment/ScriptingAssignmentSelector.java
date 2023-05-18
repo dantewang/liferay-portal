@@ -23,9 +23,9 @@ import java.util.Map;
 /**
  * @author Jiaxu Wei
  */
-public interface ScriptingKaleoTaskAssignmentSelector {
+public interface ScriptingAssignmentSelector {
 
-	public Map<String, ?> getKaleoTaskAssignments(
+	public Map<String, ?> getAssignments(
 			KaleoTaskAssignment kaleoTaskAssignment,
 			ExecutionContext executionContext)
 		throws PortalException;

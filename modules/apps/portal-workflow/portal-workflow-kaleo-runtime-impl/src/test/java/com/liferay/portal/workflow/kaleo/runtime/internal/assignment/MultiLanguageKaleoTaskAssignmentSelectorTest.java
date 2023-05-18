@@ -28,7 +28,7 @@ import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
 import com.liferay.portal.workflow.kaleo.model.impl.KaleoTaskAssignmentImpl;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
-import com.liferay.portal.workflow.kaleo.runtime.assignment.ScriptingKaleoTaskAssignmentSelector;
+import com.liferay.portal.workflow.kaleo.runtime.assignment.ScriptingAssignmentSelector;
 import com.liferay.portal.workflow.kaleo.runtime.constants.AssignmentConstant;
 import com.liferay.portal.workflow.kaleo.service.KaleoInstanceLocalService;
 
@@ -67,12 +67,12 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 	public void testUseJavaScriptingKaleoTaskAssignmentSelector()
 		throws PortalException {
 
-		TestJavaScriptingKaleoTaskAssignmentSelector
+		TestJavaScriptingAssignmentSelector
 			testJavaScriptingKaleoTaskAssignmentSelector =
-				new TestJavaScriptingKaleoTaskAssignmentSelector();
+				new TestJavaScriptingAssignmentSelector();
 
 		_serviceRegistration = _bundleContext.registerService(
-			ScriptingKaleoTaskAssignmentSelector.class,
+			ScriptingAssignmentSelector.class,
 			testJavaScriptingKaleoTaskAssignmentSelector,
 			MapUtil.singletonDictionary("scripting.language", (Object)"java"));
 
@@ -120,7 +120,7 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 	}
 
 	private KaleoTaskAssignment _getKaleoTaskAssignment(
-		Class<? extends ScriptingKaleoTaskAssignmentSelector> clazz,
+		Class<? extends ScriptingAssignmentSelector> clazz,
 		String scriptLanguage) {
 
 		KaleoTaskAssignment kaleoTaskAssignment = Mockito.mock(
@@ -179,14 +179,14 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 	private static final BundleContext _bundleContext =
 		SystemBundleUtil.getBundleContext();
 
-	private ServiceRegistration<ScriptingKaleoTaskAssignmentSelector>
+	private ServiceRegistration<ScriptingAssignmentSelector>
 		_serviceRegistration;
 
-	private class TestJavaScriptingKaleoTaskAssignmentSelector
-		implements ScriptingKaleoTaskAssignmentSelector {
+	private class TestJavaScriptingAssignmentSelector
+		implements ScriptingAssignmentSelector {
 
 		@Override
-		public Map<String, ?> getKaleoTaskAssignments(
+		public Map<String, ?> getAssignments(
 				KaleoTaskAssignment kaleoTaskAssignment,
 				ExecutionContext executionContext)
 			throws PortalException {
