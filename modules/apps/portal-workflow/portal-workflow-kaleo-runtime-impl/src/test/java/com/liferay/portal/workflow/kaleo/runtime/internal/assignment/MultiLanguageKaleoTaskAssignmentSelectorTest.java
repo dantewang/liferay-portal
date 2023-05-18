@@ -18,9 +18,9 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.MapUtil;
-import com.liferay.portal.model.impl.UserImpl;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.workflow.kaleo.KaleoTaskAssignmentFactory;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstance;
@@ -33,6 +33,7 @@ import com.liferay.portal.workflow.kaleo.runtime.constants.AssignmentConstants;
 import com.liferay.portal.workflow.kaleo.service.KaleoInstanceLocalService;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.junit.After;
@@ -90,8 +91,12 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 		Assert.assertEquals(
 			kaleoTaskAssignments.toString(), 1, kaleoTaskAssignments.size());
 
-		Assert.assertTrue(
-			testJavaScriptingKaleoTaskAssignmentSelector.isExecuted());
+		Iterator<KaleoTaskAssignment> iterator =
+			kaleoTaskAssignments.iterator();
+
+		KaleoTaskAssignment kaleoTaskAssignment = iterator.next();
+
+		Assert.assertEquals(_USER_ID, kaleoTaskAssignment.getAssigneeClassPK());
 	}
 
 	private ExecutionContext _getExecutionContext() {
@@ -177,6 +182,8 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 		return multiLanguageKaleoTaskAssignmentSelector;
 	}
 
+	private static final long _USER_ID = RandomTestUtil.randomLong();
+
 	private static final BundleContext _bundleContext =
 		SystemBundleUtil.getBundleContext();
 
@@ -186,31 +193,25 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 	private class TestJavaScriptingAssignmentSelector
 		implements ScriptingAssignmentSelector {
 
+		public TestJavaScriptingAssignmentSelector() {
+			Mockito.when(
+				_user.getUserId()
+			).thenReturn(
+				_USER_ID
+			);
+		}
+
 		@Override
 		public Map<String, ?> getAssignments(
-				KaleoTaskAssignment kaleoTaskAssignment,
-				ExecutionContext executionContext)
-			throws PortalException {
-
-			_executed = true;
+			KaleoTaskAssignment kaleoTaskAssignment,
+			ExecutionContext executionContext) {
 
 			return HashMapBuilder.put(
-				AssignmentConstants.USER,
-				() -> {
-					User user = new UserImpl();
-
-					user.setUserId(kaleoTaskAssignment.getUserId());
-
-					return user;
-				}
+				AssignmentConstants.USER, _user
 			).build();
 		}
 
-		public boolean isExecuted() {
-			return _executed;
-		}
-
-		private boolean _executed;
+		private final User _user = Mockito.mock(User.class);
 
 	}
 
