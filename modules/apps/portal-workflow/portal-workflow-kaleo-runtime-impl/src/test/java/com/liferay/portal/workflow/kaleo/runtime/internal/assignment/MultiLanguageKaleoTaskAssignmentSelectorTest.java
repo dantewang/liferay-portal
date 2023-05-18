@@ -87,7 +87,8 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 					"java"),
 				_getExecutionContext());
 
-		Assert.assertTrue(kaleoTaskAssignments.size() == 1);
+		Assert.assertEquals(
+			kaleoTaskAssignments.toString(), 1, kaleoTaskAssignments.size());
 
 		Assert.assertTrue(
 			testJavaScriptingKaleoTaskAssignmentSelector.isExecuted());
