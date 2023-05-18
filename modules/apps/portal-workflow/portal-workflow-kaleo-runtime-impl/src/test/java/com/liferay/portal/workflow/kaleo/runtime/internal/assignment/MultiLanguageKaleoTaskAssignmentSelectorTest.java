@@ -190,7 +190,7 @@ public class MultiLanguageKaleoTaskAssignmentSelectorTest {
 	private ServiceRegistration<ScriptingAssignmentSelector>
 		_serviceRegistration;
 
-	private class TestJavaScriptingAssignmentSelector
+	private static class TestJavaScriptingAssignmentSelector
 		implements ScriptingAssignmentSelector {
 
 		public TestJavaScriptingAssignmentSelector() {
