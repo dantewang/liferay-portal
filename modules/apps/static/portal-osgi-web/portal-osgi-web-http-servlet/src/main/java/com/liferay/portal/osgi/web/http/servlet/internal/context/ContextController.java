@@ -341,11 +341,9 @@ public class ContextController {
 
 		_checkPrefix(prefix);
 
-		List<String> patternList = StringPlus.from(
+		String[] patterns = StringPlus.from(
 			serviceReference.getProperty(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN));
-
-		String[] patterns = patternList.toArray(new String[0]);
 
 		if (patterns.length < 1) {
 			throw new IllegalArgumentException("Patterns must contain a value");
@@ -933,23 +931,17 @@ public class ContextController {
 			ServiceReference<Filter> serviceReference)
 		throws ServletException {
 
-		List<String> patternList = StringPlus.from(
+		String[] patterns = StringPlus.from(
 			serviceReference.getProperty(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN));
 
-		String[] patterns = patternList.toArray(new String[0]);
-
-		List<String> regexList = StringPlus.from(
+		String[] regexes = StringPlus.from(
 			serviceReference.getProperty(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX));
 
-		String[] regexes = regexList.toArray(new String[0]);
-
-		List<String> servletList = StringPlus.from(
+		String[] servletNames = StringPlus.from(
 			serviceReference.getProperty(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET));
-
-		String[] servletNames = servletList.toArray(new String[0]);
 
 		if ((patterns.length == 0) && (regexes.length == 0) &&
 			(servletNames.length == 0)) {
@@ -985,12 +977,11 @@ public class ContextController {
 			}
 		}
 
-		List<String> dispatcherList = StringPlus.from(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_DISPATCHER));
-
 		String[] dispatchers = _checkDispatcher(
-			dispatcherList.toArray(new String[0]));
+			StringPlus.from(
+				serviceReference.getProperty(
+					HttpWhiteboardConstants.
+						HTTP_WHITEBOARD_FILTER_DISPATCHER)));
 
 		Long serviceId = (Long)serviceReference.getProperty(
 			Constants.SERVICE_ID);
@@ -1127,17 +1118,13 @@ public class ContextController {
 			ServiceReference<Servlet> serviceReference)
 		throws ServletException {
 
-		List<String> errorPageList = StringPlus.from(
+		String[] errorPages = StringPlus.from(
 			serviceReference.getProperty(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE));
 
-		String[] errorPages = errorPageList.toArray(new String[0]);
-
-		List<String> patternList = StringPlus.from(
+		String[] patterns = StringPlus.from(
 			serviceReference.getProperty(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN));
-
-		String[] patterns = patternList.toArray(new String[0]);
 
 		String servletNameFromProperties = (String)serviceReference.getProperty(
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME);
@@ -1490,8 +1477,9 @@ public class ContextController {
 	private List<Class<? extends EventListener>> _getListenerClasses(
 		ServiceReference<EventListener> serviceReference) {
 
-		List<String> objectClassList = StringPlus.from(
-			serviceReference.getProperty(Constants.OBJECTCLASS));
+		List<String> objectClassList = Arrays.asList(
+			StringPlus.from(
+				serviceReference.getProperty(Constants.OBJECTCLASS)));
 
 		List<Class<? extends EventListener>> classes = new ArrayList<>();
 
