@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 /*******************************************************************************
  * Copyright (c) 2014 Raymond Augé and others.
  * All rights reserved. This program and the accompanying materials
@@ -11,66 +25,89 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.customizer;
 
-import java.util.concurrent.atomic.AtomicReference;
-import javax.servlet.Filter;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFailureException;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.FilterRegistration;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.*;
-import org.osgi.framework.*;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.BooleanPlus;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
+
+import java.util.concurrent.atomic.AtomicReference;
+
+import javax.servlet.Filter;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.FailedFilterDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
 /**
+ * @author Dante Wang
  * @author Raymond Augé
  */
 public class ContextFilterTrackerCustomizer
-	extends RegistrationServiceTrackerCustomizer<Filter, AtomicReference<FilterRegistration>> {
+	extends RegistrationServiceTrackerCustomizer
+		<Filter, AtomicReference<FilterRegistration>> {
 
 	public ContextFilterTrackerCustomizer(
-		BundleContext bundleContext, HttpServiceRuntimeImpl httpServiceRuntime,
+		BundleContext bundleContext,
+		HttpServiceRuntimeImpl httpServiceRuntimeImpl,
 		ContextController contextController) {
 
-		super(bundleContext, httpServiceRuntime);
+		super(bundleContext, httpServiceRuntimeImpl);
 
-		this.contextController = contextController;
+		_contextController = contextController;
 	}
 
 	@Override
 	public AtomicReference<FilterRegistration> addingService(
 		ServiceReference<Filter> serviceReference) {
 
-		if ((serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN) == null) &&
-			(serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX) == null) &&
-			(serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET) == null)) {
+		Object filterPattern = serviceReference.getProperty(
+			HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN);
+
+		Object filterRegex = serviceReference.getProperty(
+			HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX);
+
+		Object filterServlet = serviceReference.getProperty(
+			HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET);
+
+		if ((filterPattern == null) && (filterRegex == null) &&
+			(filterServlet == null)) {
 
 			return null;
 		}
 
-		if (!contextController.matches(serviceReference)) {
+		if (!_contextController.matches(serviceReference) ||
+			!httpServiceRuntimeImpl.matches(serviceReference)) {
+
 			return null;
 		}
 
-		if (!httpServiceRuntime.matches(serviceReference)) {
-			return null;
-		}
-
-		AtomicReference<FilterRegistration> result = new AtomicReference<FilterRegistration>();
+		AtomicReference<FilterRegistration> result = new AtomicReference<>();
 
 		try {
-			result.set(contextController.addFilterRegistration(serviceReference));
+			result.set(
+				_contextController.addFilterRegistration(serviceReference));
 		}
-		catch (HttpWhiteboardFailureException hwfe) {
-			httpServiceRuntime.log(hwfe.getMessage(), hwfe);
+		catch (HttpWhiteboardFailureException httpWhiteboardFailureException) {
+			httpServiceRuntimeImpl.log(
+				httpWhiteboardFailureException.getMessage(),
+				httpWhiteboardFailureException);
 
-			recordFailedFilterDTO(serviceReference, hwfe.getFailureReason());
+			_recordFailedFilterDTO(
+				serviceReference,
+				httpWhiteboardFailureException.getFailureReason());
 		}
-		catch (Exception e) {
-			httpServiceRuntime.log(e.getMessage(), e);
+		catch (Exception exception) {
+			httpServiceRuntimeImpl.log(exception.getMessage(), exception);
 
-			recordFailedFilterDTO(serviceReference, DTOConstants.FAILURE_REASON_EXCEPTION_ON_INIT);
+			_recordFailedFilterDTO(
+				serviceReference,
+				DTOConstants.FAILURE_REASON_EXCEPTION_ON_INIT);
 		}
 
 		return result;
@@ -82,7 +119,10 @@ public class ContextFilterTrackerCustomizer
 		AtomicReference<FilterRegistration> filterReference) {
 
 		removedService(serviceReference, filterReference);
-		AtomicReference<FilterRegistration> added = addingService(serviceReference);
+
+		AtomicReference<FilterRegistration> added = addingService(
+			serviceReference);
+
 		filterReference.set(added.get());
 	}
 
@@ -90,40 +130,56 @@ public class ContextFilterTrackerCustomizer
 	public void removedService(
 		ServiceReference<Filter> serviceReference,
 		AtomicReference<FilterRegistration> filterReference) {
+
 		FilterRegistration registration = filterReference.get();
+
 		if (registration != null) {
-			// Destroy now ungets the object we are using
 			registration.destroy();
 		}
 
-		contextController.getHttpServiceRuntime().removeFailedFilterDTO(serviceReference);
+		httpServiceRuntimeImpl.removeFailedFilterDTO(serviceReference);
 	}
 
-	private void recordFailedFilterDTO(
+	private void _recordFailedFilterDTO(
 		ServiceReference<Filter> serviceReference, int failureReason) {
 
 		FailedFilterDTO failedFilterDTO = new FailedFilterDTO();
 
 		failedFilterDTO.asyncSupported = BooleanPlus.from(
-			serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED), false);
+			serviceReference.getProperty(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED),
+			false);
 		failedFilterDTO.dispatcher = StringPlus.from(
-			serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_DISPATCHER)).toArray(new String[0]);
+			serviceReference.getProperty(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_DISPATCHER));
 		failedFilterDTO.failureReason = failureReason;
 		failedFilterDTO.initParams = ServiceProperties.parseInitParams(
-			serviceReference, HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX);
-		failedFilterDTO.name = (String)serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME);
-		failedFilterDTO.patterns = StringPlus.from(
-			serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN)).toArray(new String[0]);
-		failedFilterDTO.regexs = StringPlus.from(
-			serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX)).toArray(new String[0]);
-		failedFilterDTO.serviceId = (Long)serviceReference.getProperty(Constants.SERVICE_ID);
-		failedFilterDTO.servletContextId = contextController.getServiceId();
-		failedFilterDTO.servletNames = StringPlus.from(
-			serviceReference.getProperty(HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET)).toArray(new String[0]);
+			serviceReference,
+			HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX);
+		failedFilterDTO.name = (String)serviceReference.getProperty(
+			HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME);
 
-		contextController.getHttpServiceRuntime().recordFailedFilterDTO(serviceReference, failedFilterDTO);
+		failedFilterDTO.patterns = StringPlus.from(
+			serviceReference.getProperty(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN));
+
+		failedFilterDTO.regexs = StringPlus.from(
+			serviceReference.getProperty(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX));
+
+		failedFilterDTO.serviceId = (Long)serviceReference.getProperty(
+			Constants.SERVICE_ID);
+
+		failedFilterDTO.servletContextId = _contextController.getServiceId();
+
+		failedFilterDTO.servletNames = StringPlus.from(
+			serviceReference.getProperty(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET));
+
+		httpServiceRuntimeImpl.recordFailedFilterDTO(
+			serviceReference, failedFilterDTO);
 	}
 
-	private ContextController contextController;
+	private final ContextController _contextController;
 
 }
