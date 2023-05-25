@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 /*******************************************************************************
  * Copyright (c) 2014 Raymond Augé and others.
  * All rights reserved. This program and the accompanying materials
@@ -11,29 +25,38 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.registration;
 
-import javax.servlet.Servlet;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
-import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController.ServiceHolder;
+
+import javax.servlet.Servlet;
+
 import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.runtime.dto.ResourceDTO;
+
 /**
  * @author Raymond Augé
  */
 public class ResourceRegistration extends EndpointRegistration<ResourceDTO> {
 
 	public ResourceRegistration(
-		ServiceHolder<Servlet> servletHolder, ResourceDTO resourceDTO,
-		ServletContextHelper servletContextHelper,
+		ContextController.ServiceHolder<Servlet> serviceHolder,
+		ResourceDTO resourceDTO, ServletContextHelper servletContextHelper,
 		ContextController contextController, ClassLoader legacyTCCL) {
 
-		super(servletHolder, resourceDTO, servletContextHelper, contextController, legacyTCCL);
+		super(
+			serviceHolder, resourceDTO, servletContextHelper, contextController,
+			legacyTCCL);
 
-		name = servletHolder.get().getClass().getName().concat("#").concat(getD().prefix); //$NON-NLS-1$
+		Servlet servlet = serviceHolder.get();
+
+		Class<?> clazz = servlet.getClass();
+
+		_name = StringBundler.concat(clazz.getName(), "#", getD().prefix);
 	}
 
 	@Override
 	public String getName() {
-		return name;
+		return _name;
 	}
 
 	@Override
@@ -46,6 +69,6 @@ public class ResourceRegistration extends EndpointRegistration<ResourceDTO> {
 		return getD().serviceId;
 	}
 
-	private final String name;
+	private final String _name;
 
 }
