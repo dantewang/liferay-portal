@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 /*******************************************************************************
  * Copyright (c) 2011, 2014 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
@@ -9,49 +23,74 @@
  *     IBM Corporation - initial API and implementation
  *     Raymond Augé <raymond.auge@liferay.com> - Bug 436698
  *******************************************************************************/
+
 package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
-import java.io.IOException;
-import java.util.List;
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.EndpointRegistration;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.FilterRegistration;
 
-public class FilterChainImpl implements FilterChain {
+import java.io.IOException;
 
-	private List<FilterRegistration> matchingFilterRegistrations;
-	private EndpointRegistration<?> registration;
-	private DispatcherType dispatcherType;
-	private int filterIndex = 0;
-	private int filterCount;
+import java.util.List;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * @author Dante Wang
+ * @author Raymond Augé
+ */
+public class FilterChainImpl implements FilterChain {
 
 	public FilterChainImpl(
 		List<FilterRegistration> matchingFilterRegistrations,
 		EndpointRegistration<?> registration, DispatcherType dispatcherType) {
 
-		this.matchingFilterRegistrations = matchingFilterRegistrations;
-		this.dispatcherType = dispatcherType;
-		this.registration = registration;
-		this.filterCount = matchingFilterRegistrations.size();
+		_matchingFilterRegistrations = matchingFilterRegistrations;
+
+		_filterCount = matchingFilterRegistrations.size();
+
+		_dispatcherType = dispatcherType;
+
+		_endpointRegistration = registration;
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
-		while (filterIndex < filterCount) {
-			FilterRegistration filterRegistration = matchingFilterRegistrations.get(filterIndex++);
+	@Override
+	public void doFilter(
+			ServletRequest servletRequest, ServletResponse servletResponse)
+		throws IOException, ServletException {
+
+		while (_filterIndex < _filterCount) {
+			FilterRegistration filterRegistration =
+				_matchingFilterRegistrations.get(_filterIndex++);
 
 			if (filterRegistration.appliesTo(this)) {
-				filterRegistration.doFilter((HttpServletRequest) request, (HttpServletResponse) response, this);
+				filterRegistration.doFilter(
+					(HttpServletRequest)servletRequest,
+					(HttpServletResponse)servletResponse, this);
 
 				return;
 			}
 		}
-		registration.service((HttpServletRequest) request, (HttpServletResponse) response);
+
+		_endpointRegistration.service(
+			(HttpServletRequest)servletRequest,
+			(HttpServletResponse)servletResponse);
 	}
 
 	public DispatcherType getDispatcherType() {
-		return dispatcherType;
+		return _dispatcherType;
 	}
+
+	private final DispatcherType _dispatcherType;
+	private final EndpointRegistration<?> _endpointRegistration;
+	private final int _filterCount;
+	private int _filterIndex;
+	private final List<FilterRegistration> _matchingFilterRegistrations;
 
 }
