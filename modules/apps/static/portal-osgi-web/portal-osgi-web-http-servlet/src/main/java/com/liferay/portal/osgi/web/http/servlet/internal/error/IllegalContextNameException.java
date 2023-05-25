@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 /*******************************************************************************
  * Copyright (c) Feb 23, 2015 Raymond Augé and others.
  * All rights reserved. This program and the accompanying materials
@@ -14,12 +28,13 @@ package com.liferay.portal.osgi.web.http.servlet.internal.error;
 /**
  * @author Raymond Augé
  */
-public class IllegalContextNameException extends HttpWhiteboardFailureException {
-
-	private static final long serialVersionUID = -8790109985246626513L;
+public class IllegalContextNameException
+	extends HttpWhiteboardFailureException {
 
 	public IllegalContextNameException(String message, int failureReason) {
 		super(message, failureReason);
 	}
+
+	private static final long serialVersionUID = -8790109985246626513L;
 
 }
