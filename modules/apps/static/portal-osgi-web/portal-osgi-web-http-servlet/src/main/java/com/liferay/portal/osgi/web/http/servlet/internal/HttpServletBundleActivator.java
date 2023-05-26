@@ -28,6 +28,8 @@
 package com.liferay.portal.osgi.web.http.servlet.internal;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.osgi.web.http.servlet.ExtendedHttpService;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.HttpTuple;
@@ -242,7 +244,7 @@ public class HttpServletBundleActivator
 		int majorVersion = servletContext.getMajorVersion();
 
 		if (majorVersion < 3) {
-			servletContext.log(
+			_log.error(
 				StringBundler.concat(
 					"The http container does not support servlet 3.0+. ",
 					"Therefore, the value of ",
@@ -252,8 +254,6 @@ public class HttpServletBundleActivator
 			return new String[0];
 		}
 
-		String contextPath = servletContext.getContextPath();
-
 		ServletRegistration servletRegistration = null;
 
 		try {
@@ -261,7 +261,7 @@ public class HttpServletBundleActivator
 				servletName);
 		}
 		catch (UnsupportedOperationException unsupportedOperationException) {
-			servletContext.log(
+			_log.error(
 				"Could not find the servlet registration for the servlet: " +
 					servletName,
 				unsupportedOperationException);
@@ -270,6 +270,8 @@ public class HttpServletBundleActivator
 		if (servletRegistration == null) {
 			return new String[0];
 		}
+
+		String contextPath = servletContext.getContextPath();
 
 		Collection<String> mappings = servletRegistration.getMappings();
 
@@ -323,6 +325,9 @@ public class HttpServletBundleActivator
 
 	private static final String _PROP_GLOBAL_WHITEBOARD =
 		"equinox.http.global.whiteboard";
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		HttpServletBundleActivator.class.getName());
 
 	private static volatile BundleContext _bundleContext;
 	private static final ConcurrentMap<ProxyServlet, Object> _registrationsMap =

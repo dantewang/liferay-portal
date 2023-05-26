@@ -25,6 +25,8 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.customizer;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
@@ -94,16 +96,14 @@ public class ContextServletTrackerCustomizer
 				_contextController.addServletRegistration(serviceReference));
 		}
 		catch (HttpWhiteboardFailureException httpWhiteboardFailureException) {
-			httpServiceRuntimeImpl.log(
-				httpWhiteboardFailureException.getMessage(),
-				httpWhiteboardFailureException);
+			_log.error(httpWhiteboardFailureException);
 
 			_recordFailedServletDTO(
 				serviceReference,
 				httpWhiteboardFailureException.getFailureReason());
 		}
 		catch (Exception exception) {
-			httpServiceRuntimeImpl.log(exception.getMessage(), exception);
+			_log.error(exception);
 
 			_recordFailedServletDTO(
 				serviceReference,
@@ -166,6 +166,9 @@ public class ContextServletTrackerCustomizer
 		httpServiceRuntimeImpl.recordFailedServletDTO(
 			serviceReference, failedServletDTO);
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		ContextServletTrackerCustomizer.class.getName());
 
 	private final ContextController _contextController;
 
