@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 /*******************************************************************************
  * Copyright (c) 2015 Raymond Augé.
  * All rights reserved. This program and the accompanying materials
@@ -38,20 +52,20 @@ public class Path {
 		}
 	}
 
-	public String getRequestURI() {
-		return _requestURI;
+	public String getExtension() {
+		return _extension;
 	}
 
 	public String getQueryString() {
 		return _queryString;
 	}
 
-	public String getExtension() {
-		return _extension;
+	public String getRequestURI() {
+		return _requestURI;
 	}
 
-	private final String _requestURI;
-	private final String _queryString;
 	private final String _extension;
+	private final String _queryString;
+	private final String _requestURI;
 
 }
