@@ -25,6 +25,7 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -1031,7 +1032,7 @@ public class HttpServiceRuntimeImpl
 				catch (Exception exception) {
 					error.set(exception);
 
-					HttpServiceImpl.unchecked(exception);
+					ReflectionUtil.throwException(exception);
 				}
 			}
 
@@ -1600,7 +1601,7 @@ public class HttpServiceRuntimeImpl
 			Exception exception = error.get();
 
 			if (exception != null) {
-				HttpServiceImpl.unchecked(exception);
+				ReflectionUtil.throwException(exception);
 			}
 		}
 
@@ -1661,7 +1662,7 @@ public class HttpServiceRuntimeImpl
 			catch (Exception exception) {
 				error.set(exception);
 
-				HttpServiceImpl.unchecked(exception);
+				ReflectionUtil.throwException(exception);
 			}
 		}
 
