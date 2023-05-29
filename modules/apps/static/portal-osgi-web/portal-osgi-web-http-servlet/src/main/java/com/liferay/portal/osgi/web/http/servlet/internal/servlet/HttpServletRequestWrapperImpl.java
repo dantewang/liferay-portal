@@ -141,9 +141,9 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 			}
 
 			if (dispatcherAttribute) {
-				Object specialOveride = specialOverridesMap.get(attributeName);
+				if (specialOverridesMap.get(attributeName) ==
+						_NULL_PLACEHOLDER) {
 
-				if (specialOveride == _NULL_PLACEHOLDER) {
 					return null;
 				}
 
@@ -192,12 +192,10 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 				return null;
 			}
 
-			if (dispatcherAttribute) {
-				Object specialOverride = specialOverridesMap.get(attributeName);
+			if (dispatcherAttribute &&
+				(specialOverridesMap.get(attributeName) == _NULL_PLACEHOLDER)) {
 
-				if (specialOverride == _NULL_PLACEHOLDER) {
-					return null;
-				}
+				return null;
 			}
 
 			DispatchTargets lastDispatchTargets = _dispatchTargets.getLast();

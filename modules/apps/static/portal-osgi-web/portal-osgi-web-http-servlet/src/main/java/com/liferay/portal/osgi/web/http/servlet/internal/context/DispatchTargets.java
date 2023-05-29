@@ -290,7 +290,7 @@ public class DispatchTargets {
 				DispatchTargets.class.getSimpleName(), '[',
 				_contextController.getFullContextPath(), _requestURI,
 				(_queryString != null) ? '?' + _queryString : "", ", ",
-				_endpointRegistration.toString(), ']');
+				_endpointRegistration, ']');
 
 			_string = value;
 		}
@@ -307,9 +307,8 @@ public class DispatchTargets {
 
 		try {
 			Map<String, String[]> parameterMap = new LinkedHashMap<>();
-			String[] parameters = queryString.split(Const.AMP);
 
-			for (String parameter : parameters) {
+			for (String parameter : queryString.split(Const.AMP)) {
 				int index = parameter.indexOf('=');
 
 				String name = null;

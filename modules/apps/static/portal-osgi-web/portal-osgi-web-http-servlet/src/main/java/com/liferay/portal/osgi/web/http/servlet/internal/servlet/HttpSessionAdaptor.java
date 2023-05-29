@@ -178,11 +178,11 @@ public class HttpSessionAdaptor implements HttpSession, Serializable {
 
 		for (Class<? extends EventListener> clazz : classes) {
 			if (clazz.equals(HttpSessionListener.class)) {
-				HttpSessionEvent sessionEvent = new HttpSessionEvent(this);
 				HttpSessionListener httpSessionListener =
 					(HttpSessionListener)listener;
 
-				httpSessionListener.sessionDestroyed(sessionEvent);
+				httpSessionListener.sessionDestroyed(
+					new HttpSessionEvent(this));
 			}
 
 			if (clazz.equals(HttpSessionBindingListener.class) ||
@@ -192,11 +192,9 @@ public class HttpSessionAdaptor implements HttpSession, Serializable {
 					getAttributeNames();
 
 				while (attributeNamesEnumeration.hasMoreElements()) {
-					String attributeName =
-						attributeNamesEnumeration.nextElement();
-
 					HttpSessionBindingEvent sessionBindingEvent =
-						new HttpSessionBindingEvent(this, attributeName);
+						new HttpSessionBindingEvent(
+							this, attributeNamesEnumeration.nextElement());
 
 					if (clazz.equals(HttpSessionBindingListener.class)) {
 						HttpSessionBindingListener httpSessionBindingListener =

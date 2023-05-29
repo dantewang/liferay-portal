@@ -298,12 +298,11 @@ public class ResponseStateHandler {
 
 				};
 
-			HttpServletResponse httpServletResponse =
-				new HttpServletResponseWrapperImpl(wrappedHttpServletResponse);
-
 			ResponseStateHandler responseStateHandler =
 				new ResponseStateHandler(
-					httpServletRequest, httpServletResponse,
+					httpServletRequest,
+					new HttpServletResponseWrapperImpl(
+						wrappedHttpServletResponse),
 					errorDispatchTargets);
 
 			responseStateHandler.processRequest();
@@ -418,12 +417,11 @@ public class ResponseStateHandler {
 
 				};
 
-			HttpServletResponse httpServletResponse =
-				new HttpServletResponseWrapperImpl(wrappedHttpServletResponse);
-
 			ResponseStateHandler responseStateHandler =
 				new ResponseStateHandler(
-					httpServletRequest, httpServletResponse,
+					httpServletRequest,
+					new HttpServletResponseWrapperImpl(
+						wrappedHttpServletResponse),
 					errorDispatchTargets);
 
 			wrappedHttpServletResponse.setStatus(status);
