@@ -112,11 +112,14 @@ public class ElasticsearchFilterTranslator
 
 	@Override
 	public QueryBuilder visit(QueryFilter queryFilter) {
-		if (_elasticsearchQueryTranslator == null) {
+		ElasticsearchQueryTranslator elasticsearchQueryTranslator =
+			_elasticsearchQueryTranslator;
+
+		if (elasticsearchQueryTranslator == null) {
 			throw new IllegalStateException("No query translator configured");
 		}
 
-		return _elasticsearchQueryTranslator.translate(
+		return elasticsearchQueryTranslator.translate(
 			queryFilter.getQuery(), null);
 	}
 
