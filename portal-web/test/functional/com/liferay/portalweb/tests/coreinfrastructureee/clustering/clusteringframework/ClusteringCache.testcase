@@ -87,6 +87,8 @@ definition {
 
 	@priority = 4
 	test CanSessionReplicateBetweenNodes {
+		property ci.retries.disabled = "true";
+		property portal.acceptance = "dante";
 		property cluster.session.replicated = "true";
 		property custom.properties = "portlet.session.replicate.enabled=true";
 		property test.name.skip.portal.instance = "ClusteringCache#CanSessionReplicateBetweenNodes";
