@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.search.filter.QueryFilter;
 import com.liferay.portal.kernel.search.filter.RangeTermFilter;
 import com.liferay.portal.kernel.search.filter.TermFilter;
 import com.liferay.portal.kernel.search.filter.TermsFilter;
+import com.liferay.portal.search.elasticsearch7.internal.legacy.query.ElasticsearchQueryTranslator;
 import com.liferay.portal.search.filter.DateRangeFilter;
 import com.liferay.portal.search.filter.FilterVisitor;
 import com.liferay.portal.search.filter.TermsSetFilter;
@@ -111,12 +112,12 @@ public class ElasticsearchFilterTranslator
 
 	@Override
 	public QueryBuilder visit(QueryFilter queryFilter) {
-		if (queryFilterTranslator == null) {
-			throw new IllegalStateException(
-				"No queryFilter translator configured");
+		if (_elasticsearchQueryTranslator == null) {
+			throw new IllegalStateException("No query translator configured");
 		}
 
-		return queryFilterTranslator.translate(queryFilter);
+		return _elasticsearchQueryTranslator.translate(
+			queryFilter.getQuery(), null);
 	}
 
 	@Override
@@ -169,13 +170,6 @@ public class ElasticsearchFilterTranslator
 	@Reference
 	protected PrefixFilterTranslator prefixFilterTranslator;
 
-	@Reference(
-		cardinality = ReferenceCardinality.OPTIONAL,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY
-	)
-	protected volatile QueryFilterTranslator queryFilterTranslator;
-
 	@Reference
 	protected RangeTermFilterTranslator rangeTermFilterTranslator;
 
@@ -187,5 +181,13 @@ public class ElasticsearchFilterTranslator
 
 	@Reference
 	protected TermsSetFilterTranslator termsSetFilterTranslator;
+
+	@Reference(
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(search.engine.impl=Elasticsearch)"
+	)
+	private volatile ElasticsearchQueryTranslator _elasticsearchQueryTranslator;
 
 }
