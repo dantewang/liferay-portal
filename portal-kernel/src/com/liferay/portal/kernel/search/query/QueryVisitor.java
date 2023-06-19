@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.TermQuery;
 import com.liferay.portal.kernel.search.TermRangeQuery;
 import com.liferay.portal.kernel.search.WildcardQuery;
+import com.liferay.portal.kernel.search.filter.FilterTranslator;
 import com.liferay.portal.kernel.search.generic.DisMaxQuery;
 import com.liferay.portal.kernel.search.generic.FuzzyQuery;
 import com.liferay.portal.kernel.search.generic.MatchAllQuery;
@@ -34,6 +35,9 @@ import com.liferay.portal.kernel.search.generic.StringQuery;
 public interface QueryVisitor<T> {
 
 	public T visitQuery(BooleanQuery booleanQuery);
+
+	public T visitQuery(
+		BooleanQuery booleanQuery, FilterTranslator<T> filterTranslator);
 
 	public T visitQuery(DisMaxQuery disMaxQuery);
 

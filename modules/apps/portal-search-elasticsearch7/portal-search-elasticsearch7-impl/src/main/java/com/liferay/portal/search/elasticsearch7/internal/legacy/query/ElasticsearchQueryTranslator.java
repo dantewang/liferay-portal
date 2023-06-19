@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.TermQuery;
 import com.liferay.portal.kernel.search.TermRangeQuery;
 import com.liferay.portal.kernel.search.WildcardQuery;
+import com.liferay.portal.kernel.search.filter.FilterTranslator;
 import com.liferay.portal.kernel.search.generic.DisMaxQuery;
 import com.liferay.portal.kernel.search.generic.FuzzyQuery;
 import com.liferay.portal.kernel.search.generic.MatchAllQuery;
@@ -63,6 +64,15 @@ public class ElasticsearchQueryTranslator
 	@Override
 	public QueryBuilder visitQuery(BooleanQuery booleanQuery) {
 		return booleanQueryTranslator.translate(booleanQuery, this);
+	}
+
+	@Override
+	public QueryBuilder visitQuery(
+		BooleanQuery booleanQuery,
+		FilterTranslator<QueryBuilder> filterTranslator) {
+
+		return booleanQueryTranslator.translate(
+			booleanQuery, filterTranslator, this);
 	}
 
 	@Override
