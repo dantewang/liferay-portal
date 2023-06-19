@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.search;
 
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.kernel.search.filter.FilterTranslator;
 import com.liferay.portal.kernel.search.query.QueryVisitor;
 
 import java.io.Serializable;
@@ -26,6 +27,9 @@ import java.io.Serializable;
 public interface Query extends Serializable {
 
 	public static final float BOOST_DEFAULT = 1.0F;
+
+	public <T> T accept(
+		FilterTranslator<T> filterTranslator, QueryVisitor<T> queryVisitor);
 
 	public <T> T accept(QueryVisitor<T> queryVisitor);
 
