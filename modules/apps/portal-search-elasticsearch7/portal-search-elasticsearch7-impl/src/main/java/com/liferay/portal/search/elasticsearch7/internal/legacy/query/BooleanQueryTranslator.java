@@ -15,6 +15,7 @@
 package com.liferay.portal.search.elasticsearch7.internal.legacy.query;
 
 import com.liferay.portal.kernel.search.BooleanQuery;
+import com.liferay.portal.kernel.search.filter.FilterTranslator;
 import com.liferay.portal.kernel.search.query.QueryVisitor;
 
 import org.elasticsearch.index.query.QueryBuilder;
@@ -25,6 +26,8 @@ import org.elasticsearch.index.query.QueryBuilder;
 public interface BooleanQueryTranslator {
 
 	public QueryBuilder translate(
-		BooleanQuery booleanQuery, QueryVisitor<QueryBuilder> queryVisitor);
+		BooleanQuery booleanQuery,
+		FilterTranslator<QueryBuilder> filterTranslator,
+		QueryVisitor<QueryBuilder> queryVisitor);
 
 }

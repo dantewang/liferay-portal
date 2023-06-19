@@ -29,7 +29,6 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author André de Oliveira
@@ -40,14 +39,17 @@ public class BooleanQueryTranslatorImpl implements BooleanQueryTranslator {
 
 	@Override
 	public QueryBuilder translate(
-		BooleanQuery booleanQuery, QueryVisitor<QueryBuilder> queryVisitor) {
+		BooleanQuery booleanQuery,
+		FilterTranslator<QueryBuilder> filterTranslator,
+		QueryVisitor<QueryBuilder> queryVisitor) {
 
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
 		List<BooleanClause<Query>> clauses = booleanQuery.clauses();
 
 		for (BooleanClause<Query> clause : clauses) {
-			_addClause(clause, boolQueryBuilder, queryVisitor);
+			_addClause(
+				clause, boolQueryBuilder, filterTranslator, queryVisitor);
 		}
 
 		if (!booleanQuery.isDefaultBoost()) {
@@ -78,18 +80,17 @@ public class BooleanQueryTranslatorImpl implements BooleanQueryTranslator {
 		return wrapperBoolQueryBuilder;
 	}
 
-	@Reference(target = "(search.engine.impl=Elasticsearch)")
-	protected FilterTranslator<QueryBuilder> filterTranslator;
-
 	private void _addClause(
 		BooleanClause<Query> clause, BoolQueryBuilder boolQuery,
+		FilterTranslator<QueryBuilder> filterTranslator,
 		QueryVisitor<QueryBuilder> queryVisitor) {
 
 		BooleanClauseOccur booleanClauseOccur = clause.getBooleanClauseOccur();
 
 		Query query = clause.getClause();
 
-		QueryBuilder queryBuilder = query.accept(queryVisitor);
+		QueryBuilder queryBuilder = query.accept(
+			filterTranslator, queryVisitor);
 
 		if (booleanClauseOccur.equals(BooleanClauseOccur.MUST)) {
 			boolQuery.must(queryBuilder);
