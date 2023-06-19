@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.HttpSessionWrapper;
 import com.liferay.portal.kernel.util.TransientValue;
+import com.liferay.shielded.container.session.ValueWrapper;
 
 import java.io.Serializable;
 
@@ -52,7 +53,8 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 			_SCRUBBED_NAMES_NAME);
 
 		if ((value == null) || (scrubbedNames == null) ||
-			!scrubbedNames.contains(name)) {
+			(!scrubbedNames.contains(name) &&
+			 !(value instanceof ValueWrapper))) {
 
 			return value;
 		}
@@ -61,8 +63,10 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 			return _transientValues.get(value);
 		}
 
+		ValueWrapper valueWrapper = (ValueWrapper)value;
+
 		Deserializer deserializer = new Deserializer(
-			ByteBuffer.wrap((byte[])value));
+			ByteBuffer.wrap(valueWrapper.getValue()));
 
 		try {
 			return deserializer.readObject();
@@ -126,13 +130,17 @@ public class SessionReplicationHttpSessionWrapper extends HttpSessionWrapper {
 
 				ByteBuffer byteBuffer = serializer.toByteBuffer();
 
-				value = byteBuffer.array();
+				ValueWrapper valueWrapper = new ValueWrapper();
+
+				valueWrapper.setValue(byteBuffer.array());
+
+				value = valueWrapper;
 			}
 		}
 
 		super.setAttribute(name, value);
 
-		if (originalValue != value) {
+		if (originalValue instanceof TransientValue) {
 			Set<String> scrubbedNames = (Set<String>)super.getAttribute(
 				_SCRUBBED_NAMES_NAME);
 
