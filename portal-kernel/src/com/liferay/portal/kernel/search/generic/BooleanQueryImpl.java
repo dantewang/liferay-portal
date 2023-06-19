@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanClauseOccurImpl;
 import com.liferay.portal.kernel.search.Query;
 import com.liferay.portal.kernel.search.TermRangeQuery;
+import com.liferay.portal.kernel.search.filter.FilterTranslator;
 import com.liferay.portal.kernel.search.query.FieldQueryFactoryUtil;
 import com.liferay.portal.kernel.search.query.QueryVisitor;
 
@@ -34,6 +35,13 @@ import java.util.List;
  * @author Hugo Huijser
  */
 public class BooleanQueryImpl extends BaseBooleanQueryImpl {
+
+	@Override
+	public <T> T accept(
+		FilterTranslator<T> filterTranslator, QueryVisitor<T> queryVisitor) {
+
+		return queryVisitor.visitQuery(this, filterTranslator);
+	}
 
 	@Override
 	public <T> T accept(QueryVisitor<T> queryVisitor) {

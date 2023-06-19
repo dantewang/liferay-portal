@@ -16,12 +16,20 @@ package com.liferay.portal.kernel.search;
 
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.kernel.search.filter.FilterTranslator;
 import com.liferay.portal.kernel.search.query.QueryVisitor;
 
 /**
  * @author Michael C. Han
  */
 public abstract class BaseQueryImpl implements Query {
+
+	@Override
+	public <T> T accept(
+		FilterTranslator<T> filterTranslator, QueryVisitor<T> queryVisitor) {
+
+		return null;
+	}
 
 	@Override
 	public <T> T accept(QueryVisitor<T> queryVisitor) {
