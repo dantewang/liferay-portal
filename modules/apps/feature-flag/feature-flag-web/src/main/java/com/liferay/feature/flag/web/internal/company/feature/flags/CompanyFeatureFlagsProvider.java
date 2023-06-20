@@ -32,6 +32,10 @@ public class CompanyFeatureFlagsProvider {
 			companyId, _companyFeatureFlagsFactory::create);
 	}
 
+	public void removeCompanyFeatureFlags(long companyId) {
+		_companyFeatureFlagsMap.remove(companyId);
+	}
+
 	public <T> T withCompanyFeatureFlags(
 		long companyId, Function<CompanyFeatureFlags, T> function) {
 

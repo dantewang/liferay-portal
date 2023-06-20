@@ -14,6 +14,7 @@
 
 package com.liferay.feature.flag.web.internal.manager;
 
+import com.liferay.feature.flag.web.internal.company.feature.flags.CompanyFeatureFlagsProvider;
 import com.liferay.feature.flag.web.internal.constants.FeatureFlagConstants;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
@@ -57,6 +58,8 @@ public class FeatureFlagPreferencesManager {
 
 		_portalPreferencesLocalService.updatePreferences(
 			companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, portalPreferences);
+
+		_companyFeatureFlagsProvider.removeCompanyFeatureFlags(companyId);
 	}
 
 	private PortalPreferences _getPortalPreferences(long companyId) {
@@ -69,6 +72,9 @@ public class FeatureFlagPreferencesManager {
 	}
 
 	private static final String _NAMESPACE = FeatureFlagConstants.FEATURE_FLAG;
+
+	@Reference
+	private CompanyFeatureFlagsProvider _companyFeatureFlagsProvider;
 
 	@Reference
 	private PortalPreferencesLocalService _portalPreferencesLocalService;
