@@ -34,12 +34,19 @@ public class PreferenceAwareFeatureFlag extends FeatureFlagWrapper {
 
 	@Override
 	public boolean isEnabled() {
-		return GetterUtil.getBoolean(
+		if (_enabled != null) {
+			return _enabled;
+		}
+
+		_enabled = GetterUtil.getBoolean(
 			_featureFlagPreferencesManager.isEnabled(_companyId, getKey()),
 			super.isEnabled());
+
+		return _enabled;
 	}
 
 	private final long _companyId;
+	private volatile Boolean _enabled;
 	private final FeatureFlagPreferencesManager _featureFlagPreferencesManager;
 
 }

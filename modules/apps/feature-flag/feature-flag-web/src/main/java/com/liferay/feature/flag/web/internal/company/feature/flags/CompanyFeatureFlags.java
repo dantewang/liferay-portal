@@ -60,13 +60,19 @@ public class CompanyFeatureFlags {
 			return PropsValues.FEATURE_FLAGS_JSON;
 		}
 
+		if (_json != null) {
+			return _json;
+		}
+
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		for (FeatureFlag featureFlag : _featureFlagsMap.values()) {
 			jsonObject.put(featureFlag.getKey(), featureFlag.isEnabled());
 		}
 
-		return jsonObject.toString();
+		_json = jsonObject.toString();
+
+		return _json;
 	}
 
 	public boolean isEnabled(String key) {
@@ -81,5 +87,6 @@ public class CompanyFeatureFlags {
 	}
 
 	private final Map<String, FeatureFlag> _featureFlagsMap;
+	private volatile String _json;
 
 }
