@@ -14,7 +14,6 @@
 package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
-import com.liferay.portal.osgi.web.http.servlet.internal.HttpServletBundleActivator;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 
 import java.io.IOException;
@@ -34,16 +33,12 @@ public class ProxyServlet extends HttpServlet {
 
 	@Override
 	public void destroy() {
-		HttpServletBundleActivator.unregisterHttpService(this);
-
 		super.destroy();
 	}
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-
-		HttpServletBundleActivator.addProxyServlet(this);
 	}
 
 	public void setHttpServiceRuntimeImpl(
