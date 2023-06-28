@@ -86,15 +86,6 @@ public class HttpServletBundleActivator
 			dictionary.put(name, servletConfig.getInitParameter(name));
 		}
 
-		if (dictionary.get(Constants.SERVICE_VENDOR) == null) {
-			dictionary.put(Constants.SERVICE_VENDOR, _DEFAULT_SERVICE_VENDOR);
-		}
-
-		if (dictionary.get(Constants.SERVICE_DESCRIPTION) == null) {
-			dictionary.put(
-				Constants.SERVICE_DESCRIPTION, _DEFAULT_SERVICE_DESCRIPTION);
-		}
-
 		Object httpServiceEndpointObject = dictionary.get(
 			HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT);
 
@@ -245,11 +236,6 @@ public class HttpServletBundleActivator
 
 		return httpServiceEndpoints.toArray(new String[0]);
 	}
-
-	private static final String _DEFAULT_SERVICE_DESCRIPTION =
-		"Equinox Servlet Bridge";
-
-	private static final String _DEFAULT_SERVICE_VENDOR = "Eclipse.org";
 
 	private static final String[] _HTTP_SERVICES_CLASSES = {
 		HttpService.class.getName(), ExtendedHttpService.class.getName()
