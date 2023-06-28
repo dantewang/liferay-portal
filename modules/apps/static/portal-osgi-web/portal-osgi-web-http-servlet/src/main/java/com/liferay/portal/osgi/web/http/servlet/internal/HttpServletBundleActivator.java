@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.osgi.web.http.servlet.ExtendedHttpService;
+import com.liferay.portal.osgi.web.http.servlet.HttpServiceServlet;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.HttpTuple;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.UMDictionaryMap;
@@ -32,7 +33,6 @@ import java.util.Random;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
-import javax.servlet.http.HttpServlet;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -52,23 +52,15 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 public class HttpServletBundleActivator
 	implements BundleActivator,
-			   ServiceTrackerCustomizer<HttpServlet, HttpTuple> {
+			   ServiceTrackerCustomizer<HttpServiceServlet, HttpTuple> {
 
 	public static final String UNIQUE_SERVICE_ID = "equinox.http.id";
 
 	@Override
 	public HttpTuple addingService(
-		ServiceReference<HttpServlet> serviceReference) {
+		ServiceReference<HttpServiceServlet> serviceReference) {
 
-		HttpServlet httpServlet = _bundleContext.getService(serviceReference);
-
-		if (!(httpServlet instanceof ProxyServlet)) {
-			_bundleContext.ungetService(serviceReference);
-
-			return null;
-		}
-
-		ProxyServlet proxyServlet = (ProxyServlet)httpServlet;
+		ProxyServlet proxyServlet = _bundleContext.getService(serviceReference);
 
 		ServletConfig servletConfig = proxyServlet.getServletConfig();
 
@@ -136,7 +128,8 @@ public class HttpServletBundleActivator
 
 	@Override
 	public void modifiedService(
-		ServiceReference<HttpServlet> serviceReference, HttpTuple httpTuple) {
+		ServiceReference<HttpServiceServlet> serviceReference,
+		HttpTuple httpTuple) {
 
 		removedService(serviceReference, httpTuple);
 
@@ -145,7 +138,8 @@ public class HttpServletBundleActivator
 
 	@Override
 	public void removedService(
-		ServiceReference<HttpServlet> serviceReference, HttpTuple httpTuple) {
+		ServiceReference<HttpServiceServlet> serviceReference,
+		HttpTuple httpTuple) {
 
 		_bundleContext.ungetService(serviceReference);
 
@@ -157,7 +151,7 @@ public class HttpServletBundleActivator
 		_bundleContext = bundleContext;
 
 		_serviceTracker = new ServiceTracker<>(
-			_bundleContext, HttpServlet.class, this);
+			_bundleContext, HttpServiceServlet.class, this);
 
 		_serviceTracker.open();
 	}
@@ -234,6 +228,6 @@ public class HttpServletBundleActivator
 
 	private static volatile BundleContext _bundleContext;
 
-	private ServiceTracker<HttpServlet, HttpTuple> _serviceTracker;
+	private ServiceTracker<HttpServiceServlet, HttpTuple> _serviceTracker;
 
 }
