@@ -13,7 +13,6 @@ package com.liferay.portal.osgi.web.http.servlet.internal.util;
 
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceFactory;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
-import com.liferay.portal.osgi.web.http.servlet.internal.HttpServletBundleActivator;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
 
 import org.osgi.framework.ServiceRegistration;
@@ -40,8 +39,6 @@ public class HttpTuple {
 	}
 
 	public void destroy() {
-		HttpServletBundleActivator.unregisterHttpService(_proxyServlet);
-
 		_proxyServlet.setHttpServiceRuntimeImpl(null);
 
 		_httpServiceFactoryServiceRegistration.unregister();

@@ -27,10 +27,7 @@ import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -59,32 +56,6 @@ public class HttpServletBundleActivator
 			   ServiceTrackerCustomizer<HttpServlet, HttpTuple> {
 
 	public static final String UNIQUE_SERVICE_ID = "equinox.http.id";
-
-	public static void addProxyServlet(ProxyServlet proxyServlet) {
-		Object previousRegistration = _registrationsMap.putIfAbsent(
-			proxyServlet, proxyServlet);
-
-		if (!(previousRegistration instanceof ServiceRegistration) &&
-			(_bundleContext != null)) {
-
-			_registrationsMap.put(
-				proxyServlet,
-				_bundleContext.registerService(
-					HttpServlet.class, proxyServlet,
-					new HashMapDictionary<>()));
-		}
-	}
-
-	public static void unregisterHttpService(ProxyServlet proxyServlet) {
-		Object registration = _registrationsMap.remove(proxyServlet);
-
-		if (registration instanceof ServiceRegistration) {
-			ServiceRegistration<?> serviceRegistration =
-				(ServiceRegistration<?>)registration;
-
-			serviceRegistration.unregister();
-		}
-	}
 
 	@Override
 	public HttpTuple addingService(
@@ -206,8 +177,6 @@ public class HttpServletBundleActivator
 	public void start(BundleContext bundleContext) {
 		_bundleContext = bundleContext;
 
-		_processRegistrations();
-
 		_serviceTracker = new ServiceTracker<>(
 			_bundleContext, HttpServlet.class, this);
 
@@ -277,25 +246,6 @@ public class HttpServletBundleActivator
 		return httpServiceEndpoints.toArray(new String[0]);
 	}
 
-	private void _processRegistrations() {
-		for (Map.Entry<ProxyServlet, Object> entry :
-				_registrationsMap.entrySet()) {
-
-			Object value = entry.getValue();
-
-			if (value instanceof ServiceRegistration) {
-				continue;
-			}
-
-			ServiceRegistration<HttpServlet> serviceRegistration =
-				_bundleContext.registerService(
-					HttpServlet.class, entry.getKey(),
-					new HashMapDictionary<>());
-
-			entry.setValue(serviceRegistration);
-		}
-	}
-
 	private static final String _DEFAULT_SERVICE_DESCRIPTION =
 		"Equinox Servlet Bridge";
 
@@ -312,8 +262,6 @@ public class HttpServletBundleActivator
 		HttpServletBundleActivator.class.getName());
 
 	private static volatile BundleContext _bundleContext;
-	private static final ConcurrentMap<ProxyServlet, Object> _registrationsMap =
-		new ConcurrentHashMap<>();
 
 	private ServiceTracker<HttpServlet, HttpTuple> _serviceTracker;
 
