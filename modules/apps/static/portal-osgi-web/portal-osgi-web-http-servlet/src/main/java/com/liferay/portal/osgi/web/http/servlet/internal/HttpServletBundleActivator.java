@@ -34,7 +34,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServlet;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -100,20 +99,9 @@ public class HttpServletBundleActivator
 
 		dictionary.put(UNIQUE_SERVICE_ID, random.nextLong());
 
-		BundleContext trackingBundleContext = _bundleContext;
-
-		if (Boolean.parseBoolean(
-				_bundleContext.getProperty(_PROP_GLOBAL_WHITEBOARD))) {
-
-			Bundle systemBundle = _bundleContext.getBundle(
-				Constants.SYSTEM_BUNDLE_LOCATION);
-
-			trackingBundleContext = systemBundle.getBundleContext();
-		}
-
 		HttpServiceRuntimeImpl httpServiceRuntimeImpl =
 			new HttpServiceRuntimeImpl(
-				trackingBundleContext, _bundleContext, servletContext,
+				_bundleContext, _bundleContext, servletContext,
 				new UMDictionaryMap<>(dictionary));
 
 		proxyServlet.setHttpServiceRuntimeImpl(httpServiceRuntimeImpl);
@@ -240,9 +228,6 @@ public class HttpServletBundleActivator
 	private static final String[] _HTTP_SERVICES_CLASSES = {
 		HttpService.class.getName(), ExtendedHttpService.class.getName()
 	};
-
-	private static final String _PROP_GLOBAL_WHITEBOARD =
-		"equinox.http.global.whiteboard";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		HttpServletBundleActivator.class.getName());
