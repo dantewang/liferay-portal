@@ -50,108 +50,118 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author IBM Corporation
  * @author Raymond Augé
  */
-public class HttpServletBundleActivator
-	implements BundleActivator,
-			   ServiceTrackerCustomizer<HttpServiceServlet, HttpTuple> {
+public class HttpServletBundleActivator implements BundleActivator {
 
 	public static final String UNIQUE_SERVICE_ID = "equinox.http.id";
 
 	@Override
-	public HttpTuple addingService(
-		ServiceReference<HttpServiceServlet> serviceReference) {
-
-		ProxyServlet proxyServlet = _bundleContext.getService(serviceReference);
-
-		ServletConfig servletConfig = proxyServlet.getServletConfig();
-
-		ServletContext servletContext = servletConfig.getServletContext();
-
-		Dictionary<String, Object> dictionary = new HashMapDictionary<>();
-
-		Enumeration<String> initParameterNamesEnumeration =
-			servletConfig.getInitParameterNames();
-
-		while (initParameterNamesEnumeration.hasMoreElements()) {
-			String name = initParameterNamesEnumeration.nextElement();
-
-			dictionary.put(name, servletConfig.getInitParameter(name));
-		}
-
-		Object httpServiceEndpointObject = dictionary.get(
-			HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT);
-
-		if (httpServiceEndpointObject == null) {
-			dictionary.put(
-				HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT,
-				_getHttpServiceEndpoints(
-					servletContext, servletConfig.getServletName()));
-		}
-
-		Random random = new Random();
-
-		dictionary.put(UNIQUE_SERVICE_ID, random.nextLong());
-
-		HttpServiceRuntimeImpl httpServiceRuntimeImpl =
-			new HttpServiceRuntimeImpl(
-				_bundleContext, _bundleContext, servletContext,
-				new UMDictionaryMap<>(dictionary));
-
-		proxyServlet.setHttpServiceRuntimeImpl(httpServiceRuntimeImpl);
-
-		HttpServiceFactory httpServiceFactory = new HttpServiceFactory(
-			httpServiceRuntimeImpl);
-
-		ServiceRegistration<?> httpServiceFactoryServiceRegistration =
-			_bundleContext.registerService(
-				_HTTP_SERVICES_CLASSES, httpServiceFactory, dictionary);
-
-		ServiceReference<?> httpServiceFactoryServiceReference =
-			httpServiceFactoryServiceRegistration.getReference();
-
-		dictionary.put(
-			HttpServiceRuntimeConstants.HTTP_SERVICE_ID,
-			Collections.singletonList(
-				httpServiceFactoryServiceReference.getProperty(
-					Constants.SERVICE_ID)));
-
-		ServiceRegistration<HttpServiceRuntime>
-			httpServiceRuntimeServiceRegistration =
-				_bundleContext.registerService(
-					HttpServiceRuntime.class, httpServiceRuntimeImpl,
-					dictionary);
-
-		return new HttpTuple(
-			proxyServlet, httpServiceFactory,
-			httpServiceFactoryServiceRegistration, httpServiceRuntimeImpl,
-			httpServiceRuntimeServiceRegistration);
-	}
-
-	@Override
-	public void modifiedService(
-		ServiceReference<HttpServiceServlet> serviceReference,
-		HttpTuple httpTuple) {
-
-		removedService(serviceReference, httpTuple);
-
-		addingService(serviceReference);
-	}
-
-	@Override
-	public void removedService(
-		ServiceReference<HttpServiceServlet> serviceReference,
-		HttpTuple httpTuple) {
-
-		_bundleContext.ungetService(serviceReference);
-
-		httpTuple.destroy();
-	}
-
-	@Override
 	public void start(BundleContext bundleContext) {
-		_bundleContext = bundleContext;
-
 		_serviceTracker = new ServiceTracker<>(
-			_bundleContext, HttpServiceServlet.class, this);
+			bundleContext, HttpServiceServlet.class,
+			new ServiceTrackerCustomizer<HttpServiceServlet, HttpTuple>() {
+
+				@Override
+				public HttpTuple addingService(
+					ServiceReference<HttpServiceServlet> serviceReference) {
+
+					ProxyServlet proxyServlet = bundleContext.getService(
+						serviceReference);
+
+					ServletConfig servletConfig =
+						proxyServlet.getServletConfig();
+
+					ServletContext servletContext =
+						servletConfig.getServletContext();
+
+					Dictionary<String, Object> dictionary =
+						new HashMapDictionary<>();
+
+					Enumeration<String> initParameterNamesEnumeration =
+						servletConfig.getInitParameterNames();
+
+					while (initParameterNamesEnumeration.hasMoreElements()) {
+						String name =
+							initParameterNamesEnumeration.nextElement();
+
+						dictionary.put(
+							name, servletConfig.getInitParameter(name));
+					}
+
+					Object httpServiceEndpointObject = dictionary.get(
+						HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT);
+
+					if (httpServiceEndpointObject == null) {
+						dictionary.put(
+							HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT,
+							_getHttpServiceEndpoints(
+								servletContext,
+								servletConfig.getServletName()));
+					}
+
+					Random random = new Random();
+
+					dictionary.put(UNIQUE_SERVICE_ID, random.nextLong());
+
+					HttpServiceRuntimeImpl httpServiceRuntimeImpl =
+						new HttpServiceRuntimeImpl(
+							bundleContext, bundleContext, servletContext,
+							new UMDictionaryMap<>(dictionary));
+
+					proxyServlet.setHttpServiceRuntimeImpl(
+						httpServiceRuntimeImpl);
+
+					HttpServiceFactory httpServiceFactory =
+						new HttpServiceFactory(httpServiceRuntimeImpl);
+
+					ServiceRegistration<?>
+						httpServiceFactoryServiceRegistration =
+							bundleContext.registerService(
+								_HTTP_SERVICES_CLASSES, httpServiceFactory,
+								dictionary);
+
+					ServiceReference<?> httpServiceFactoryServiceReference =
+						httpServiceFactoryServiceRegistration.getReference();
+
+					dictionary.put(
+						HttpServiceRuntimeConstants.HTTP_SERVICE_ID,
+						Collections.singletonList(
+							httpServiceFactoryServiceReference.getProperty(
+								Constants.SERVICE_ID)));
+
+					ServiceRegistration<HttpServiceRuntime>
+						httpServiceRuntimeServiceRegistration =
+							bundleContext.registerService(
+								HttpServiceRuntime.class,
+								httpServiceRuntimeImpl, dictionary);
+
+					return new HttpTuple(
+						proxyServlet, httpServiceFactory,
+						httpServiceFactoryServiceRegistration,
+						httpServiceRuntimeImpl,
+						httpServiceRuntimeServiceRegistration);
+				}
+
+				@Override
+				public void modifiedService(
+					ServiceReference<HttpServiceServlet> serviceReference,
+					HttpTuple httpTuple) {
+
+					removedService(serviceReference, httpTuple);
+
+					addingService(serviceReference);
+				}
+
+				@Override
+				public void removedService(
+					ServiceReference<HttpServiceServlet> serviceReference,
+					HttpTuple httpTuple) {
+
+					bundleContext.ungetService(serviceReference);
+
+					httpTuple.destroy();
+				}
+
+			});
 
 		_serviceTracker.open();
 	}
@@ -159,9 +169,6 @@ public class HttpServletBundleActivator
 	@Override
 	public void stop(BundleContext bundleContext) {
 		_serviceTracker.close();
-
-		_serviceTracker = null;
-		_bundleContext = null;
 	}
 
 	private String[] _getHttpServiceEndpoints(
@@ -225,8 +232,6 @@ public class HttpServletBundleActivator
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		HttpServletBundleActivator.class.getName());
-
-	private static volatile BundleContext _bundleContext;
 
 	private ServiceTracker<HttpServiceServlet, HttpTuple> _serviceTracker;
 
