@@ -52,7 +52,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 public class HttpServletBundleActivator implements BundleActivator {
 
-	public static final String UNIQUE_SERVICE_ID = "equinox.http.id";
+	public static final String UNIQUE_SERVICE_ID = "unique.service.id";
 
 	@Override
 	public void start(BundleContext bundleContext) {
