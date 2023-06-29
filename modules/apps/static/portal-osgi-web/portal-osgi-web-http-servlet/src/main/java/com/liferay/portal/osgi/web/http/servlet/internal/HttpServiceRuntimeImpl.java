@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.osgi.web.http.servlet.context.ContextPathCustomizer;
+import com.liferay.portal.osgi.web.http.servlet.internal.activator.HttpServletBundleActivator;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.DispatchTargets;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.HttpContextHelperFactory;
