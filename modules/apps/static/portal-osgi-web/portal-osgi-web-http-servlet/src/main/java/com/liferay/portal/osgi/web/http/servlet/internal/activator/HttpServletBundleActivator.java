@@ -17,12 +17,14 @@ package com.liferay.portal.osgi.web.http.servlet.internal.activator;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.osgi.web.http.servlet.ExtendedHttpService;
 import com.liferay.portal.osgi.web.http.servlet.HttpServletService;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceFactory;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
+import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpSessionTracker;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.HttpTuple;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.UMDictionaryMap;
@@ -40,6 +42,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -158,6 +163,9 @@ public class HttpServletBundleActivator implements BundleActivator {
 								HttpServiceRuntime.class,
 								httpServiceRuntimeImpl, dictionary);
 
+					PortletSessionListenerManager.addHttpSessionListener(
+						_HTTP_SESSION_LISTENER);
+
 					return new HttpTuple(
 						proxyServlet, proxyServletServiceRegistration,
 						httpServiceFactory,
@@ -180,6 +188,9 @@ public class HttpServletBundleActivator implements BundleActivator {
 				public void removedService(
 					ServiceReference<HttpServletService> serviceReference,
 					HttpTuple httpTuple) {
+
+					PortletSessionListenerManager.removeHttpSessionListener(
+						_HTTP_SESSION_LISTENER);
 
 					bundleContext.ungetService(serviceReference);
 
@@ -254,6 +265,23 @@ public class HttpServletBundleActivator implements BundleActivator {
 	private static final String[] _HTTP_SERVICES_CLASSES = {
 		HttpService.class.getName(), ExtendedHttpService.class.getName()
 	};
+
+	private static final HttpSessionListener _HTTP_SESSION_LISTENER =
+		new HttpSessionListener() {
+
+			@Override
+			public void sessionCreated(HttpSessionEvent httpSessionEvent) {
+			}
+
+			@Override
+			public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
+				HttpSession httpSession = httpSessionEvent.getSession();
+
+				HttpSessionTracker.clearHttpSessionAdaptors(
+					httpSession.getId());
+			}
+
+		};
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		HttpServletBundleActivator.class.getName());
