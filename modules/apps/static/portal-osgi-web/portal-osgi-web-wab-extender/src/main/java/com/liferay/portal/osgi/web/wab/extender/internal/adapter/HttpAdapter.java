@@ -7,7 +7,7 @@ package com.liferay.portal.osgi.web.wab.extender.internal.adapter;
 
 import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
 import com.liferay.portal.kernel.util.HashMapDictionary;
-import com.liferay.portal.osgi.web.http.servlet.HttpServiceServlet;
+import com.liferay.portal.osgi.web.http.servlet.HttpServletService;
 import com.liferay.portal.osgi.web.http.servlet.HttpSessionTrackerUtil;
 import com.liferay.portal.osgi.web.wab.extender.internal.registration.ServletRegistrationImpl;
 
@@ -23,7 +23,6 @@ import java.util.Objects;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.servlet.descriptor.JspConfigDescriptor;
 import javax.servlet.http.HttpServlet;
@@ -48,22 +47,6 @@ public class HttpAdapter {
 
 	@Activate
 	protected void activate(ComponentContext componentContext) {
-		_httpServiceServlet = new HttpServiceServlet() {
-
-			@Override
-			public ServletConfig getServletConfig() {
-				return _servletConfig;
-			}
-
-			@Override
-			public void init(ServletConfig servletConfig) {
-				_servletConfig = servletConfig;
-			}
-
-			private ServletConfig _servletConfig;
-
-		};
-
 		Class<?> clazz = getClass();
 
 		ServletContext servletContextProxy =
@@ -102,16 +85,6 @@ public class HttpAdapter {
 
 		};
 
-		try {
-			_httpServiceServlet.init(servletConfig);
-		}
-		catch (ServletException servletException) {
-			servletContextProxy.log(
-				servletException.getMessage(), servletException);
-
-			return;
-		}
-
 		BundleContext bundleContext = componentContext.getBundleContext();
 
 		Dictionary<String, Object> properties = new HashMapDictionary<>();
@@ -120,10 +93,7 @@ public class HttpAdapter {
 		properties.put("original.bean", Boolean.TRUE.toString());
 
 		_serviceRegistration = bundleContext.registerService(
-			new String[] {
-				HttpServiceServlet.class.getName(), HttpServlet.class.getName()
-			},
-			_httpServiceServlet, properties);
+			HttpServletService.class, () -> servletConfig, properties);
 
 		PortletSessionListenerManager.addHttpSessionListener(
 			_INVALIDATEHTTPSESSION_LISTENER);
@@ -137,10 +107,6 @@ public class HttpAdapter {
 		_serviceRegistration.unregister();
 
 		_serviceRegistration = null;
-
-		_httpServiceServlet.destroy();
-
-		_httpServiceServlet = null;
 	}
 
 	private static final Class<?>[] _INTERFACES = new Class<?>[] {
@@ -163,7 +129,6 @@ public class HttpAdapter {
 
 		};
 
-	private HttpServiceServlet _httpServiceServlet;
 	private ServiceRegistration<?> _serviceRegistration;
 
 	@Reference(target = "(original.bean=true)")
