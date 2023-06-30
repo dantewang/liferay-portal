@@ -15,6 +15,8 @@ import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceFactory;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
 
+import javax.servlet.http.HttpServlet;
+
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.runtime.HttpServiceRuntime;
 
@@ -24,13 +26,16 @@ import org.osgi.service.http.runtime.HttpServiceRuntime;
 public class HttpTuple {
 
 	public HttpTuple(
-		ProxyServlet proxyServlet, HttpServiceFactory httpServiceFactory,
+		ProxyServlet proxyServlet,
+		ServiceRegistration<HttpServlet> proxyServletServiceRegistration,
+		HttpServiceFactory httpServiceFactory,
 		ServiceRegistration<?> httpServiceFactoryServiceRegistration,
 		HttpServiceRuntimeImpl httpServiceRuntimeImpl,
 		ServiceRegistration<HttpServiceRuntime>
 			httpServiceRuntimeServiceRegistration) {
 
 		_proxyServlet = proxyServlet;
+		_proxyServletServiceRegistration = proxyServletServiceRegistration;
 		_httpServiceFactoryServiceRegistration =
 			httpServiceFactoryServiceRegistration;
 		_httpServiceRuntimeImpl = httpServiceRuntimeImpl;
@@ -39,7 +44,10 @@ public class HttpTuple {
 	}
 
 	public void destroy() {
+		_proxyServletServiceRegistration.unregister();
+
 		_proxyServlet.setHttpServiceRuntimeImpl(null);
+		_proxyServlet.destroy();
 
 		_httpServiceFactoryServiceRegistration.unregister();
 		_httpServiceRuntimeServiceRegistration.unregister();
@@ -51,5 +59,7 @@ public class HttpTuple {
 	private final ServiceRegistration<HttpServiceRuntime>
 		_httpServiceRuntimeServiceRegistration;
 	private final ProxyServlet _proxyServlet;
+	private final ServiceRegistration<HttpServlet>
+		_proxyServletServiceRegistration;
 
 }
