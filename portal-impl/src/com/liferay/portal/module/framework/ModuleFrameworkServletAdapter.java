@@ -5,6 +5,7 @@
 
 package com.liferay.portal.module.framework;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 
@@ -52,8 +53,10 @@ public class ModuleFrameworkServletAdapter extends HttpServlet {
 			new ServiceTracker<>(
 				SystemBundleUtil.getBundleContext(),
 				SystemBundleUtil.createFilter(
-					"(&(bean.id=" + HttpServlet.class.getName() +
-						")(original.bean=*))"),
+					StringBundler.concat(
+						"(&(bean.id=", HttpServlet.class.getName(),
+						")(original.bean=*)(objectClass=",
+						HttpServlet.class.getName(), "))")),
 				null);
 
 		serviceTracker.open();

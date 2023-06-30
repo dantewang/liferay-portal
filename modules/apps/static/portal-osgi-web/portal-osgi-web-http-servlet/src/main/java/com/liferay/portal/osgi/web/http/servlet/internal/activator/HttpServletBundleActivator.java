@@ -18,8 +18,9 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
+import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.osgi.web.http.servlet.ExtendedHttpService;
-import com.liferay.portal.osgi.web.http.servlet.HttpServiceServlet;
+import com.liferay.portal.osgi.web.http.servlet.HttpServletService;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceFactory;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
@@ -27,6 +28,7 @@ import com.liferay.portal.osgi.web.http.servlet.internal.util.HttpTuple;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.UMDictionaryMap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -35,7 +37,9 @@ import java.util.Random;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
+import javax.servlet.http.HttpServlet;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -58,18 +62,37 @@ public class HttpServletBundleActivator implements BundleActivator {
 	@Override
 	public void start(BundleContext bundleContext) {
 		_serviceTracker = new ServiceTracker<>(
-			bundleContext, HttpServiceServlet.class,
-			new ServiceTrackerCustomizer<HttpServiceServlet, HttpTuple>() {
+			bundleContext, HttpServletService.class,
+			new ServiceTrackerCustomizer<HttpServletService, HttpTuple>() {
 
 				@Override
 				public HttpTuple addingService(
-					ServiceReference<HttpServiceServlet> serviceReference) {
+					ServiceReference<HttpServletService> serviceReference) {
 
-					ProxyServlet proxyServlet = bundleContext.getService(
-						serviceReference);
+					HttpServletService httpServletService =
+						bundleContext.getService(serviceReference);
 
 					ServletConfig servletConfig =
-						proxyServlet.getServletConfig();
+						httpServletService.getServletConfig();
+
+					ProxyServlet proxyServlet = new ProxyServlet();
+
+					try {
+						proxyServlet.init(servletConfig);
+					}
+					catch (ServletException servletException) {
+						_log.error(servletException);
+					}
+
+					ServiceRegistration<HttpServlet>
+						proxyServletServiceRegistration =
+							bundleContext.registerService(
+								HttpServlet.class, proxyServlet,
+								HashMapDictionaryBuilder.put(
+									Arrays.asList(
+										serviceReference.getPropertyKeys()),
+									serviceReference::getProperty
+								).build());
 
 					ServletContext servletContext =
 						servletConfig.getServletContext();
@@ -136,7 +159,8 @@ public class HttpServletBundleActivator implements BundleActivator {
 								httpServiceRuntimeImpl, dictionary);
 
 					return new HttpTuple(
-						proxyServlet, httpServiceFactory,
+						proxyServlet, proxyServletServiceRegistration,
+						httpServiceFactory,
 						httpServiceFactoryServiceRegistration,
 						httpServiceRuntimeImpl,
 						httpServiceRuntimeServiceRegistration);
@@ -144,7 +168,7 @@ public class HttpServletBundleActivator implements BundleActivator {
 
 				@Override
 				public void modifiedService(
-					ServiceReference<HttpServiceServlet> serviceReference,
+					ServiceReference<HttpServletService> serviceReference,
 					HttpTuple httpTuple) {
 
 					removedService(serviceReference, httpTuple);
@@ -154,7 +178,7 @@ public class HttpServletBundleActivator implements BundleActivator {
 
 				@Override
 				public void removedService(
-					ServiceReference<HttpServiceServlet> serviceReference,
+					ServiceReference<HttpServletService> serviceReference,
 					HttpTuple httpTuple) {
 
 					bundleContext.ungetService(serviceReference);
@@ -234,6 +258,6 @@ public class HttpServletBundleActivator implements BundleActivator {
 	private static final Log _log = LogFactoryUtil.getLog(
 		HttpServletBundleActivator.class.getName());
 
-	private ServiceTracker<HttpServiceServlet, HttpTuple> _serviceTracker;
+	private ServiceTracker<HttpServletService, HttpTuple> _serviceTracker;
 
 }
