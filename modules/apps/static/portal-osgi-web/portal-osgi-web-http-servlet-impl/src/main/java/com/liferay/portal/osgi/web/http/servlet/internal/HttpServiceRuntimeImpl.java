@@ -17,7 +17,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.osgi.web.http.servlet.context.ContextPathCustomizer;
-import com.liferay.portal.osgi.web.http.servlet.internal.activator.HttpServletBundleActivator;
+import com.liferay.portal.osgi.web.http.servlet.internal.activator.HttpServletImplBundleActivator;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.DispatchTargets;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.HttpContextHelperFactory;
@@ -123,8 +123,8 @@ public class HttpServiceRuntimeImpl
 		_attributesMap = attributesMap;
 
 		_targetFilter = StringBundler.concat(
-			"(", HttpServletBundleActivator.UNIQUE_SERVICE_ID, "=",
-			attributesMap.get(HttpServletBundleActivator.UNIQUE_SERVICE_ID),
+			"(", HttpServletImplBundleActivator.UNIQUE_SERVICE_ID, "=",
+			attributesMap.get(HttpServletImplBundleActivator.UNIQUE_SERVICE_ID),
 			")");
 
 		_contextServiceTracker = new ServiceTracker<>(
