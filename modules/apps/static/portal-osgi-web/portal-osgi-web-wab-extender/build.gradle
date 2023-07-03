@@ -20,7 +20,7 @@ dependencies {
 	compileOnly group: "org.springframework", name: "spring-web", version: "5.2.24.RELEASE"
 	compileOnly project(":apps:static:osgi:osgi-util")
 	compileOnly project(":apps:static:portal-configuration:portal-configuration-metatype-api")
-	compileOnly project(":apps:static:portal-osgi-web:portal-osgi-web-http-servlet")
+	compileOnly project(":apps:static:portal-osgi-web:portal-osgi-web-http-servlet-api")
 	compileOnly project(":apps:static:portal-osgi-web:portal-osgi-web-servlet-api")
 	compileOnly project(":apps:static:portal-osgi-web:portal-osgi-web-servlet-context-helper-api")
 	compileOnly project(":apps:static:portal:portal-profile-api")

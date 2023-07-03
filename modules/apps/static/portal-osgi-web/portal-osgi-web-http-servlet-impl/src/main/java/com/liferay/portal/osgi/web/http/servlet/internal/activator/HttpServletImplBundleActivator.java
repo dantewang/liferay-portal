@@ -60,7 +60,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 /**
  * @author Dante Wang
  */
-public class HttpServletBundleActivator implements BundleActivator {
+public class HttpServletImplBundleActivator implements BundleActivator {
 
 	public static final String UNIQUE_SERVICE_ID = "unique.service.id";
 
@@ -284,7 +284,7 @@ public class HttpServletBundleActivator implements BundleActivator {
 		};
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		HttpServletBundleActivator.class.getName());
+		HttpServletImplBundleActivator.class.getName());
 
 	private ServiceTracker<HttpServletService, HttpTuple> _serviceTracker;
 
