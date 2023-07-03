@@ -66,146 +66,7 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 	public void start(BundleContext bundleContext) {
 		_serviceTracker = new ServiceTracker<>(
 			bundleContext, HttpServletService.class,
-			new ServiceTrackerCustomizer<HttpServletService, HttpTuple>() {
-
-				@Override
-				public HttpTuple addingService(
-					ServiceReference<HttpServletService> serviceReference) {
-
-					HttpServletService httpServletService =
-						bundleContext.getService(serviceReference);
-
-					ServletConfig servletConfig =
-						httpServletService.getServletConfig();
-
-					ProxyServlet proxyServlet = new ProxyServlet();
-
-					try {
-						proxyServlet.init(servletConfig);
-					}
-					catch (ServletException servletException) {
-						_log.error(servletException);
-					}
-
-					ServiceRegistration<HttpServlet>
-						proxyServletServiceRegistration =
-							bundleContext.registerService(
-								HttpServlet.class, proxyServlet,
-								HashMapDictionaryBuilder.put(
-									Arrays.asList(
-										serviceReference.getPropertyKeys()),
-									serviceReference::getProperty
-								).build());
-
-					ServletContext servletContext =
-						servletConfig.getServletContext();
-
-					Map<String, Object> attributesMap =
-						HashMapBuilder.<String, Object>put(
-							UNIQUE_SERVICE_ID,
-							() -> {
-								Random random = new Random();
-
-								return random.nextLong();
-							}
-						).put(
-							ListUtil.fromEnumeration(
-								servletConfig.getInitParameterNames()),
-							servletConfig::getInitParameter
-						).put(
-							HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT,
-							() -> {
-								Object httpServiceEndpoint =
-									servletConfig.getInitParameter(
-										HttpServiceRuntimeConstants.
-											HTTP_SERVICE_ENDPOINT);
-
-								if (httpServiceEndpoint != null) {
-									return null;
-								}
-
-								return _getHttpServiceEndpoints(
-									servletContext,
-									servletConfig.getServletName());
-							}
-						).build();
-
-					HttpServiceRuntimeImpl httpServiceRuntimeImpl =
-						new HttpServiceRuntimeImpl(
-							bundleContext, bundleContext, servletContext,
-							Collections.unmodifiableMap(attributesMap));
-
-					proxyServlet.setHttpServiceRuntimeImpl(
-						httpServiceRuntimeImpl);
-
-					HttpServiceFactory httpServiceFactory =
-						new HttpServiceFactory(httpServiceRuntimeImpl);
-
-					ServiceRegistration<?>
-						httpServiceFactoryServiceRegistration =
-							bundleContext.registerService(
-								_HTTP_SERVICES_CLASSES, httpServiceFactory,
-								HashMapDictionaryBuilder.putAll(
-									attributesMap
-								).build());
-
-					ServiceRegistration<HttpServiceRuntime>
-						httpServiceRuntimeServiceRegistration =
-							bundleContext.registerService(
-								HttpServiceRuntime.class,
-								httpServiceRuntimeImpl,
-								HashMapDictionaryBuilder.putAll(
-									attributesMap
-								).put(
-									HttpServiceRuntimeConstants.HTTP_SERVICE_ID,
-									() -> {
-										ServiceReference<?>
-											httpServiceFactoryServiceReference =
-												httpServiceFactoryServiceRegistration.
-													getReference();
-
-										return Collections.singletonList(
-											httpServiceFactoryServiceReference.
-												getProperty(
-													Constants.SERVICE_ID));
-									}
-								).build());
-
-					PortletSessionListenerManager.addHttpSessionListener(
-						_HTTP_SESSION_LISTENER);
-
-					return new HttpTuple(
-						proxyServlet, proxyServletServiceRegistration,
-						httpServiceFactory,
-						httpServiceFactoryServiceRegistration,
-						httpServiceRuntimeImpl,
-						httpServiceRuntimeServiceRegistration);
-				}
-
-				@Override
-				public void modifiedService(
-					ServiceReference<HttpServletService> serviceReference,
-					HttpTuple httpTuple) {
-
-					removedService(serviceReference, httpTuple);
-
-					addingService(serviceReference);
-				}
-
-				@Override
-				public void removedService(
-					ServiceReference<HttpServletService> serviceReference,
-					HttpTuple httpTuple) {
-
-					PortletSessionListenerManager.removeHttpSessionListener(
-						_HTTP_SESSION_LISTENER);
-
-					bundleContext.ungetService(serviceReference);
-
-					httpTuple.destroy();
-				}
-
-			});
+			new HttpServletServiceServiceTrackerCustomizer(bundleContext));
 
 		_serviceTracker.open();
 	}
@@ -295,5 +156,144 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 		HttpServletImplBundleActivator.class.getName());
 
 	private ServiceTracker<HttpServletService, HttpTuple> _serviceTracker;
+
+	private class HttpServletServiceServiceTrackerCustomizer
+		implements ServiceTrackerCustomizer<HttpServletService, HttpTuple> {
+
+		public HttpServletServiceServiceTrackerCustomizer(
+			BundleContext bundleContext) {
+
+			_bundleContext = bundleContext;
+		}
+
+		@Override
+		public HttpTuple addingService(
+			ServiceReference<HttpServletService> serviceReference) {
+
+			HttpServletService httpServletService = _bundleContext.getService(
+				serviceReference);
+
+			ServletConfig servletConfig = httpServletService.getServletConfig();
+
+			ProxyServlet proxyServlet = new ProxyServlet();
+
+			try {
+				proxyServlet.init(servletConfig);
+			}
+			catch (ServletException servletException) {
+				_log.error(servletException);
+			}
+
+			ServiceRegistration<HttpServlet> proxyServletServiceRegistration =
+				_bundleContext.registerService(
+					HttpServlet.class, proxyServlet,
+					HashMapDictionaryBuilder.put(
+						Arrays.asList(serviceReference.getPropertyKeys()),
+						serviceReference::getProperty
+					).build());
+
+			ServletContext servletContext = servletConfig.getServletContext();
+
+			Map<String, Object> attributesMap =
+				HashMapBuilder.<String, Object>put(
+					UNIQUE_SERVICE_ID,
+					() -> {
+						Random random = new Random();
+
+						return random.nextLong();
+					}
+				).put(
+					ListUtil.fromEnumeration(
+						servletConfig.getInitParameterNames()),
+					servletConfig::getInitParameter
+				).put(
+					HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT,
+					() -> {
+						Object httpServiceEndpoint =
+							servletConfig.getInitParameter(
+								HttpServiceRuntimeConstants.
+									HTTP_SERVICE_ENDPOINT);
+
+						if (httpServiceEndpoint != null) {
+							return null;
+						}
+
+						return _getHttpServiceEndpoints(
+							servletContext, servletConfig.getServletName());
+					}
+				).build();
+
+			HttpServiceRuntimeImpl httpServiceRuntimeImpl =
+				new HttpServiceRuntimeImpl(
+					_bundleContext, _bundleContext, servletContext,
+					Collections.unmodifiableMap(attributesMap));
+
+			proxyServlet.setHttpServiceRuntimeImpl(httpServiceRuntimeImpl);
+
+			HttpServiceFactory httpServiceFactory = new HttpServiceFactory(
+				httpServiceRuntimeImpl);
+
+			ServiceRegistration<?> httpServiceFactoryServiceRegistration =
+				_bundleContext.registerService(
+					_HTTP_SERVICES_CLASSES, httpServiceFactory,
+					HashMapDictionaryBuilder.putAll(
+						attributesMap
+					).build());
+
+			ServiceRegistration<HttpServiceRuntime>
+				httpServiceRuntimeServiceRegistration =
+					_bundleContext.registerService(
+						HttpServiceRuntime.class, httpServiceRuntimeImpl,
+						HashMapDictionaryBuilder.putAll(
+							attributesMap
+						).put(
+							HttpServiceRuntimeConstants.HTTP_SERVICE_ID,
+							() -> {
+								ServiceReference<?>
+									httpServiceFactoryServiceReference =
+										httpServiceFactoryServiceRegistration.
+											getReference();
+
+								return Collections.singletonList(
+									httpServiceFactoryServiceReference.
+										getProperty(Constants.SERVICE_ID));
+							}
+						).build());
+
+			PortletSessionListenerManager.addHttpSessionListener(
+				_HTTP_SESSION_LISTENER);
+
+			return new HttpTuple(
+				proxyServlet, proxyServletServiceRegistration,
+				httpServiceFactory, httpServiceFactoryServiceRegistration,
+				httpServiceRuntimeImpl, httpServiceRuntimeServiceRegistration);
+		}
+
+		@Override
+		public void modifiedService(
+			ServiceReference<HttpServletService> serviceReference,
+			HttpTuple httpTuple) {
+
+			removedService(serviceReference, httpTuple);
+
+			addingService(serviceReference);
+		}
+
+		@Override
+		public void removedService(
+			ServiceReference<HttpServletService> serviceReference,
+			HttpTuple httpTuple) {
+
+			PortletSessionListenerManager.removeHttpSessionListener(
+				_HTTP_SESSION_LISTENER);
+
+			_bundleContext.ungetService(serviceReference);
+
+			httpTuple.destroy();
+		}
+
+		private final BundleContext _bundleContext;
+
+	}
 
 }
