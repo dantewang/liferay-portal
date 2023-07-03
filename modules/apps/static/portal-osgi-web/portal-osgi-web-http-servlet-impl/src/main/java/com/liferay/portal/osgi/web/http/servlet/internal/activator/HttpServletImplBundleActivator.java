@@ -14,12 +14,12 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.activator;
 
-import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
-import com.liferay.portal.kernel.util.HashMapDictionary;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.osgi.web.http.servlet.ExtendedHttpService;
 import com.liferay.portal.osgi.web.http.servlet.HttpServletService;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceFactory;
@@ -27,14 +27,12 @@ import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpSessionTracker;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.HttpTuple;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.UMDictionaryMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.ServletConfig;
@@ -102,39 +100,40 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 					ServletContext servletContext =
 						servletConfig.getServletContext();
 
-					Dictionary<String, Object> dictionary =
-						new HashMapDictionary<>();
+					Map<String, Object> attributesMap =
+						HashMapBuilder.<String, Object>put(
+							UNIQUE_SERVICE_ID,
+							() -> {
+								Random random = new Random();
 
-					Enumeration<String> initParameterNamesEnumeration =
-						servletConfig.getInitParameterNames();
-
-					while (initParameterNamesEnumeration.hasMoreElements()) {
-						String name =
-							initParameterNamesEnumeration.nextElement();
-
-						dictionary.put(
-							name, servletConfig.getInitParameter(name));
-					}
-
-					Object httpServiceEndpointObject = dictionary.get(
-						HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT);
-
-					if (httpServiceEndpointObject == null) {
-						dictionary.put(
+								return random.nextLong();
+							}
+						).put(
+							ListUtil.fromEnumeration(
+								servletConfig.getInitParameterNames()),
+							servletConfig::getInitParameter
+						).put(
 							HttpServiceRuntimeConstants.HTTP_SERVICE_ENDPOINT,
-							_getHttpServiceEndpoints(
-								servletContext,
-								servletConfig.getServletName()));
-					}
+							() -> {
+								Object httpServiceEndpoint =
+									servletConfig.getInitParameter(
+										HttpServiceRuntimeConstants.
+											HTTP_SERVICE_ENDPOINT);
 
-					Random random = new Random();
+								if (httpServiceEndpoint != null) {
+									return null;
+								}
 
-					dictionary.put(UNIQUE_SERVICE_ID, random.nextLong());
+								return _getHttpServiceEndpoints(
+									servletContext,
+									servletConfig.getServletName());
+							}
+						).build();
 
 					HttpServiceRuntimeImpl httpServiceRuntimeImpl =
 						new HttpServiceRuntimeImpl(
 							bundleContext, bundleContext, servletContext,
-							new UMDictionaryMap<>(dictionary));
+							Collections.unmodifiableMap(attributesMap));
 
 					proxyServlet.setHttpServiceRuntimeImpl(
 						httpServiceRuntimeImpl);
@@ -146,22 +145,31 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 						httpServiceFactoryServiceRegistration =
 							bundleContext.registerService(
 								_HTTP_SERVICES_CLASSES, httpServiceFactory,
-								dictionary);
-
-					ServiceReference<?> httpServiceFactoryServiceReference =
-						httpServiceFactoryServiceRegistration.getReference();
-
-					dictionary.put(
-						HttpServiceRuntimeConstants.HTTP_SERVICE_ID,
-						Collections.singletonList(
-							httpServiceFactoryServiceReference.getProperty(
-								Constants.SERVICE_ID)));
+								HashMapDictionaryBuilder.putAll(
+									attributesMap
+								).build());
 
 					ServiceRegistration<HttpServiceRuntime>
 						httpServiceRuntimeServiceRegistration =
 							bundleContext.registerService(
 								HttpServiceRuntime.class,
-								httpServiceRuntimeImpl, dictionary);
+								httpServiceRuntimeImpl,
+								HashMapDictionaryBuilder.putAll(
+									attributesMap
+								).put(
+									HttpServiceRuntimeConstants.HTTP_SERVICE_ID,
+									() -> {
+										ServiceReference<?>
+											httpServiceFactoryServiceReference =
+												httpServiceFactoryServiceRegistration.
+													getReference();
+
+										return Collections.singletonList(
+											httpServiceFactoryServiceReference.
+												getProperty(
+													Constants.SERVICE_ID));
+									}
+								).build());
 
 					PortletSessionListenerManager.addHttpSessionListener(
 						_HTTP_SESSION_LISTENER);
