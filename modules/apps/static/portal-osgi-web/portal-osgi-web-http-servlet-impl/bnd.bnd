@@ -1,10 +1,7 @@
-Bundle-Activator: com.liferay.portal.osgi.web.http.servlet.internal.activator.HttpServletBundleActivator
-Bundle-Name: Liferay Portal OSGi Web Http Servlet
-Bundle-SymbolicName: com.liferay.portal.osgi.web.http.servlet
+Bundle-Activator: com.liferay.portal.osgi.web.http.servlet.internal.activator.HttpServletImplBundleActivator
+Bundle-Name: Liferay Portal OSGi Web Http Servlet Implementation
+Bundle-SymbolicName: com.liferay.portal.osgi.web.http.servlet.impl
 Bundle-Version: 1.0.0
-Export-Package:\
-	com.liferay.portal.osgi.web.http.servlet,\
-	com.liferay.portal.osgi.web.http.servlet.context
 Import-Package:\
 	javax.servlet.annotation;resolution:=optional,\
 	javax.servlet.descriptor;resolution:=optional,\
