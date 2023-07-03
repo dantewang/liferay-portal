@@ -11,7 +11,6 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.util;
 
-import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceFactory;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
 
@@ -28,7 +27,6 @@ public class HttpTuple {
 	public HttpTuple(
 		ProxyServlet proxyServlet,
 		ServiceRegistration<HttpServlet> proxyServletServiceRegistration,
-		HttpServiceFactory httpServiceFactory,
 		ServiceRegistration<?> httpServiceFactoryServiceRegistration,
 		HttpServiceRuntimeImpl httpServiceRuntimeImpl,
 		ServiceRegistration<HttpServiceRuntime>

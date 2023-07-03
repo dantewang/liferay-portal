@@ -217,12 +217,10 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 
 			proxyServlet.setHttpServiceRuntimeImpl(httpServiceRuntimeImpl);
 
-			HttpServiceFactory httpServiceFactory = new HttpServiceFactory(
-				httpServiceRuntimeImpl);
-
 			ServiceRegistration<?> httpServiceFactoryServiceRegistration =
 				_bundleContext.registerService(
-					_HTTP_SERVICES_CLASSES, httpServiceFactory,
+					_HTTP_SERVICES_CLASSES,
+					new HttpServiceFactory(httpServiceRuntimeImpl),
 					HashMapDictionaryBuilder.putAll(
 						attributesMap
 					).build());
@@ -252,8 +250,8 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 
 			return new HttpTuple(
 				proxyServlet, proxyServletServiceRegistration,
-				httpServiceFactory, httpServiceFactoryServiceRegistration,
-				httpServiceRuntimeImpl, httpServiceRuntimeServiceRegistration);
+				httpServiceFactoryServiceRegistration, httpServiceRuntimeImpl,
+				httpServiceRuntimeServiceRegistration);
 		}
 
 		@Override
