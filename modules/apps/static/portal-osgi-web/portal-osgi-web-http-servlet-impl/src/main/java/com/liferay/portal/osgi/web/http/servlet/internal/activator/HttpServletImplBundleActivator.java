@@ -17,6 +17,7 @@ package com.liferay.portal.osgi.web.http.servlet.internal.activator;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.SecureRandomUtil;
 import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
@@ -27,6 +28,7 @@ import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceFactory;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpSessionTracker;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.HttpTuple;
 
 import java.util.ArrayList;
@@ -36,7 +38,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -47,13 +48,18 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.HttpService;
+import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.runtime.HttpServiceRuntime;
 import org.osgi.service.http.runtime.HttpServiceRuntimeConstants;
+import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -188,14 +194,14 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 
 			ServletContext servletContext = servletConfig.getServletContext();
 
+			long uniqueServiceId = SecureRandomUtil.nextLong();
+
+			String targetFilter = StringBundler.concat(
+				"(", UNIQUE_SERVICE_ID, "=", uniqueServiceId, ")");
+
 			Map<String, Object> attributesMap =
 				HashMapBuilder.<String, Object>put(
-					UNIQUE_SERVICE_ID,
-					() -> {
-						Random random = new Random();
-
-						return random.nextLong();
-					}
+					UNIQUE_SERVICE_ID, uniqueServiceId
 				).put(
 					ListUtil.fromEnumeration(
 						servletConfig.getInitParameterNames()),
@@ -220,7 +226,7 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 			HttpServiceRuntimeImpl httpServiceRuntimeImpl =
 				new HttpServiceRuntimeImpl(
 					_bundleContext, _bundleContext, servletContext,
-					Collections.unmodifiableMap(attributesMap));
+					targetFilter, Collections.unmodifiableMap(attributesMap));
 
 			proxyServlet.setHttpServiceRuntimeImpl(httpServiceRuntimeImpl);
 
@@ -251,12 +257,7 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 							Collection<ServiceReference<HttpService>>
 								serviceReferences =
 									_bundleContext.getServiceReferences(
-										HttpService.class,
-										StringBundler.concat(
-											"(", UNIQUE_SERVICE_ID, "=",
-											attributesMap.get(
-												UNIQUE_SERVICE_ID),
-											")"));
+										HttpService.class, targetFilter);
 
 							Iterator<ServiceReference<HttpService>> iterator =
 								serviceReferences.iterator();
@@ -269,6 +270,42 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 								httpServiceFactoryServiceReference.getProperty(
 									Constants.SERVICE_ID));
 						}
+					).build()),
+				_bundleContext.registerService(
+					ServletContextHelper.class,
+					new ServiceFactory<ServletContextHelper>() {
+
+						@Override
+						public ServletContextHelper getService(
+							Bundle bundle,
+							ServiceRegistration<ServletContextHelper>
+								serviceRegistration) {
+
+							return new ServletContextHelper(bundle) {
+							};
+						}
+
+						@Override
+						public void ungetService(
+							Bundle bundle,
+							ServiceRegistration<ServletContextHelper>
+								serviceRegistration,
+							ServletContextHelper servletContextHelper) {
+						}
+
+					},
+					HashMapDictionaryBuilder.<String, Object>put(
+						Constants.SERVICE_RANKING, Integer.MIN_VALUE
+					).put(
+						HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME,
+						HttpWhiteboardConstants.
+							HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME
+					).put(
+						HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH,
+						Const.SLASH
+					).put(
+						HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET,
+						targetFilter
 					).build()));
 		}
 
