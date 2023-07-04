@@ -14,10 +14,10 @@ package com.liferay.portal.osgi.web.http.servlet.internal.util;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
 
-import javax.servlet.http.HttpServlet;
+import java.util.Arrays;
+import java.util.List;
 
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.http.runtime.HttpServiceRuntime;
 
 /**
  * @author Raymond Augé
@@ -26,38 +26,30 @@ public class HttpTuple {
 
 	public HttpTuple(
 		ProxyServlet proxyServlet,
-		ServiceRegistration<HttpServlet> proxyServletServiceRegistration,
-		ServiceRegistration<?> httpServiceFactoryServiceRegistration,
 		HttpServiceRuntimeImpl httpServiceRuntimeImpl,
-		ServiceRegistration<HttpServiceRuntime>
-			httpServiceRuntimeServiceRegistration) {
+		ServiceRegistration<?>... serviceRegistrations) {
 
 		_proxyServlet = proxyServlet;
-		_proxyServletServiceRegistration = proxyServletServiceRegistration;
-		_httpServiceFactoryServiceRegistration =
-			httpServiceFactoryServiceRegistration;
 		_httpServiceRuntimeImpl = httpServiceRuntimeImpl;
-		_httpServiceRuntimeServiceRegistration =
-			httpServiceRuntimeServiceRegistration;
+		_serviceRegistrations = Arrays.asList(serviceRegistrations);
 	}
 
 	public void destroy() {
-		_proxyServletServiceRegistration.unregister();
+		for (int i = _serviceRegistrations.size() - 1; i > 0; i--) {
+			ServiceRegistration<?> serviceRegistration =
+				_serviceRegistrations.get(i);
+
+			serviceRegistration.unregister();
+		}
 
 		_proxyServlet.setHttpServiceRuntimeImpl(null);
 		_proxyServlet.destroy();
 
-		_httpServiceFactoryServiceRegistration.unregister();
-		_httpServiceRuntimeServiceRegistration.unregister();
 		_httpServiceRuntimeImpl.destroy();
 	}
 
-	private final ServiceRegistration<?> _httpServiceFactoryServiceRegistration;
 	private final HttpServiceRuntimeImpl _httpServiceRuntimeImpl;
-	private final ServiceRegistration<HttpServiceRuntime>
-		_httpServiceRuntimeServiceRegistration;
 	private final ProxyServlet _proxyServlet;
-	private final ServiceRegistration<HttpServlet>
-		_proxyServletServiceRegistration;
+	private final List<ServiceRegistration<?>> _serviceRegistrations;
 
 }
