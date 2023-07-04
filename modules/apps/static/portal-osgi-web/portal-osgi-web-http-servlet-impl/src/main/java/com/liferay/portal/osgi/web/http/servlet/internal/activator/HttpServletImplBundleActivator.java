@@ -51,7 +51,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.runtime.HttpServiceRuntime;
 import org.osgi.service.http.runtime.HttpServiceRuntimeConstants;
@@ -187,14 +186,6 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 				_log.error(servletException);
 			}
 
-			ServiceRegistration<HttpServlet> proxyServletServiceRegistration =
-				_bundleContext.registerService(
-					HttpServlet.class, proxyServlet,
-					HashMapDictionaryBuilder.put(
-						Arrays.asList(serviceReference.getPropertyKeys()),
-						serviceReference::getProperty
-					).build());
-
 			ServletContext servletContext = servletConfig.getServletContext();
 
 			Map<String, Object> attributesMap =
@@ -233,53 +224,52 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 
 			proxyServlet.setHttpServiceRuntimeImpl(httpServiceRuntimeImpl);
 
-			ServiceRegistration<?> httpServiceFactoryServiceRegistration =
+			PortletSessionListenerManager.addHttpSessionListener(
+				_HTTP_SESSION_LISTENER);
+
+			return new HttpTuple(
+				proxyServlet, httpServiceRuntimeImpl,
+				_bundleContext.registerService(
+					HttpServlet.class, proxyServlet,
+					HashMapDictionaryBuilder.put(
+						Arrays.asList(serviceReference.getPropertyKeys()),
+						serviceReference::getProperty
+					).build()),
 				_bundleContext.registerService(
 					_HTTP_SERVICES_CLASSES,
 					new HttpServiceFactory(httpServiceRuntimeImpl),
 					HashMapDictionaryBuilder.putAll(
 						attributesMap
-					).build());
+					).build()),
+				_bundleContext.registerService(
+					HttpServiceRuntime.class, httpServiceRuntimeImpl,
+					HashMapDictionaryBuilder.putAll(
+						attributesMap
+					).put(
+						HttpServiceRuntimeConstants.HTTP_SERVICE_ID,
+						() -> {
+							Collection<ServiceReference<HttpService>>
+								serviceReferences =
+									_bundleContext.getServiceReferences(
+										HttpService.class,
+										StringBundler.concat(
+											"(", UNIQUE_SERVICE_ID, "=",
+											attributesMap.get(
+												UNIQUE_SERVICE_ID),
+											")"));
 
-			ServiceRegistration<HttpServiceRuntime>
-				httpServiceRuntimeServiceRegistration =
-					_bundleContext.registerService(
-						HttpServiceRuntime.class, httpServiceRuntimeImpl,
-						HashMapDictionaryBuilder.putAll(
-							attributesMap
-						).put(
-							HttpServiceRuntimeConstants.HTTP_SERVICE_ID,
-							() -> {
-								Collection<ServiceReference<HttpService>>
-									serviceReferences =
-										_bundleContext.getServiceReferences(
-											HttpService.class,
-											StringBundler.concat(
-												"(", UNIQUE_SERVICE_ID, "=",
-												attributesMap.get(
-													UNIQUE_SERVICE_ID),
-												")"));
+							Iterator<ServiceReference<HttpService>> iterator =
+								serviceReferences.iterator();
 
-								Iterator<ServiceReference<HttpService>>
-									iterator = serviceReferences.iterator();
+							ServiceReference<?>
+								httpServiceFactoryServiceReference =
+									iterator.next();
 
-								ServiceReference<?>
-									httpServiceFactoryServiceReference =
-										iterator.next();
-
-								return Collections.singletonList(
-									httpServiceFactoryServiceReference.
-										getProperty(Constants.SERVICE_ID));
-							}
-						).build());
-
-			PortletSessionListenerManager.addHttpSessionListener(
-				_HTTP_SESSION_LISTENER);
-
-			return new HttpTuple(
-				proxyServlet, proxyServletServiceRegistration,
-				httpServiceFactoryServiceRegistration, httpServiceRuntimeImpl,
-				httpServiceRuntimeServiceRegistration);
+							return Collections.singletonList(
+								httpServiceFactoryServiceReference.getProperty(
+									Constants.SERVICE_ID));
+						}
+					).build()));
 		}
 
 		@Override
