@@ -17,7 +17,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.osgi.web.http.servlet.context.ContextPathCustomizer;
-import com.liferay.portal.osgi.web.http.servlet.internal.activator.HttpServletImplBundleActivator;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.DispatchTargets;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.HttpContextHelperFactory;
@@ -76,7 +75,6 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.PrototypeServiceFactory;
-import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.dto.ServiceReferenceDTO;
@@ -114,18 +112,14 @@ public class HttpServiceRuntimeImpl
 	public HttpServiceRuntimeImpl(
 		BundleContext trackingBundleContext,
 		BundleContext consumingBundleContext,
-		ServletContext parentServletContext,
+		ServletContext parentServletContext, String targetFilter,
 		Map<String, Object> attributesMap) {
 
 		_trackingBundleContext = trackingBundleContext;
 		_consumingBundleContext = consumingBundleContext;
 		_parentServletContext = parentServletContext;
+		_targetFilter = targetFilter;
 		_attributesMap = attributesMap;
-
-		_targetFilter = StringBundler.concat(
-			"(", HttpServletImplBundleActivator.UNIQUE_SERVICE_ID, "=",
-			attributesMap.get(HttpServletImplBundleActivator.UNIQUE_SERVICE_ID),
-			")");
 
 		_contextServiceTracker = new ServiceTracker<>(
 			trackingBundleContext, ServletContextHelper.class, this);
@@ -140,43 +134,6 @@ public class HttpServiceRuntimeImpl
 		_contextPathAdaptorServiceTracker.open();
 
 		_contextServiceTracker.open();
-
-		_defaultContextServiceRegistration =
-			consumingBundleContext.registerService(
-				ServletContextHelper.class,
-				new ServiceFactory<ServletContextHelper>() {
-
-					@Override
-					public ServletContextHelper getService(
-						Bundle bundle,
-						ServiceRegistration<ServletContextHelper>
-							serviceRegistration) {
-
-						return new ServletContextHelper(bundle) {
-						};
-					}
-
-					@Override
-					public void ungetService(
-						Bundle bundle,
-						ServiceRegistration<ServletContextHelper>
-							serviceRegistration,
-						ServletContextHelper servletContextHelper) {
-					}
-
-				},
-				HashMapDictionaryBuilder.<String, Object>put(
-					Constants.SERVICE_RANKING, Integer.MIN_VALUE
-				).put(
-					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME,
-					HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME
-				).put(
-					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH,
-					Const.SLASH
-				).put(
-					HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET,
-					_targetFilter
-				).build());
 	}
 
 	@Override
@@ -256,8 +213,6 @@ public class HttpServiceRuntimeImpl
 	}
 
 	public void destroy() {
-		_defaultContextServiceRegistration.unregister();
-
 		_contextServiceTracker.close();
 		_contextPathAdaptorServiceTracker.close();
 
@@ -1439,8 +1394,6 @@ public class HttpServiceRuntimeImpl
 	private final ConcurrentMap
 		<ServiceReference<ServletContextHelper>, ContextController>
 			_controllersMap = new ConcurrentHashMap<>();
-	private final ServiceRegistration<ServletContextHelper>
-		_defaultContextServiceRegistration;
 	private final ConcurrentMap<ServiceReference<Filter>, FailedFilterDTO>
 		_failedFilterDTOsMap = new ConcurrentHashMap<>();
 	private final ConcurrentMap
