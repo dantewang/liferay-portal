@@ -144,7 +144,27 @@ public class HttpServiceRuntimeImpl
 		_defaultContextServiceRegistration =
 			consumingBundleContext.registerService(
 				ServletContextHelper.class,
-				new DefaultServletContextHelperFactory(),
+				new ServiceFactory<ServletContextHelper>() {
+
+					@Override
+					public ServletContextHelper getService(
+						Bundle bundle,
+						ServiceRegistration<ServletContextHelper>
+							serviceRegistration) {
+
+						return new ServletContextHelper(bundle) {
+						};
+					}
+
+					@Override
+					public void ungetService(
+						Bundle bundle,
+						ServiceRegistration<ServletContextHelper>
+							serviceRegistration,
+						ServletContextHelper servletContextHelper) {
+					}
+
+				},
 				HashMapDictionaryBuilder.<String, Object>put(
 					Constants.SERVICE_RANKING, Integer.MIN_VALUE
 				).put(
@@ -1544,35 +1564,6 @@ public class HttpServiceRuntimeImpl
 		private final NavigableMap
 			<ServiceReference<ContextPathCustomizer>, ContextPathCustomizer>
 				_pathCustomizersMap = new TreeMap<>(Collections.reverseOrder());
-
-	}
-
-	private static class DefaultServletContextHelper
-		extends ServletContextHelper {
-
-		public DefaultServletContextHelper(Bundle bundle) {
-			super(bundle);
-		}
-
-	}
-
-	private static class DefaultServletContextHelperFactory
-		implements ServiceFactory<ServletContextHelper> {
-
-		@Override
-		public ServletContextHelper getService(
-			Bundle bundle,
-			ServiceRegistration<ServletContextHelper> serviceRegistration) {
-
-			return new DefaultServletContextHelper(bundle);
-		}
-
-		@Override
-		public void ungetService(
-			Bundle bundle,
-			ServiceRegistration<ServletContextHelper> serviceRegistration,
-			ServletContextHelper servletContextHelper) {
-		}
 
 	}
 
