@@ -14,6 +14,7 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.activator;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
@@ -30,7 +31,9 @@ import com.liferay.portal.osgi.web.http.servlet.internal.util.HttpTuple;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -247,10 +250,22 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 						).put(
 							HttpServiceRuntimeConstants.HTTP_SERVICE_ID,
 							() -> {
+								Collection<ServiceReference<HttpService>>
+									serviceReferences =
+										_bundleContext.getServiceReferences(
+											HttpService.class,
+											StringBundler.concat(
+												"(", UNIQUE_SERVICE_ID, "=",
+												attributesMap.get(
+													UNIQUE_SERVICE_ID),
+												")"));
+
+								Iterator<ServiceReference<HttpService>>
+									iterator = serviceReferences.iterator();
+
 								ServiceReference<?>
 									httpServiceFactoryServiceReference =
-										httpServiceFactoryServiceRegistration.
-											getReference();
+										iterator.next();
 
 								return Collections.singletonList(
 									httpServiceFactoryServiceReference.
