@@ -22,11 +22,16 @@ import com.liferay.petra.process.ProcessChannel;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.TextExtractor;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.tika.internal.configuration.helper.TikaConfigurationHelper;
 import com.liferay.portal.tika.internal.util.ProcessConfigUtil;
 
@@ -74,36 +79,44 @@ public class TextExtractorImpl implements TextExtractor {
 		String text = null;
 
 		try {
-			Tika tika = new Tika(_tikaConfigurationHelper.getTikaConfig());
+			String tikaServer = _tikaConfigurationHelper.getTikaServer();
 
-			tika.setMaxStringLength(maxStringLength);
-
-			if (!inputStream.markSupported()) {
-				inputStream = new UnsyncBufferedInputStream(inputStream);
-			}
-
-			if (_tikaConfigurationHelper.useForkProcess(
-					tika.detect(inputStream))) {
-
-				InputStream finalInputStream = inputStream;
-
-				ProcessChannel<String> processChannel =
-					_processExecutor.execute(
-						ProcessConfigUtil.getProcessConfig(),
-						new ExtractTextProcessCallable(
-							tika.getParser(), tika.getDetector(),
-							tika.getMaxStringLength(),
-							StreamUtil.toByteArray(finalInputStream)));
-
-				Future<String> future =
-					processChannel.getProcessNoticeableFuture();
-
-				text = future.get();
+			if (Validator.isNotNull(tikaServer)) {
+				text = _remoteParseToString(
+					tikaServer, maxStringLength, inputStream);
 			}
 			else {
-				text = _parseToString(
-					tika.getParser(), tika.getDetector(),
-					tika.getMaxStringLength(), inputStream);
+				Tika tika = new Tika(_tikaConfigurationHelper.getTikaConfig());
+
+				tika.setMaxStringLength(maxStringLength);
+
+				if (!inputStream.markSupported()) {
+					inputStream = new UnsyncBufferedInputStream(inputStream);
+				}
+
+				if (_tikaConfigurationHelper.useForkProcess(
+						tika.detect(inputStream))) {
+
+					InputStream finalInputStream = inputStream;
+
+					ProcessChannel<String> processChannel =
+						_processExecutor.execute(
+							ProcessConfigUtil.getProcessConfig(),
+							new ExtractTextProcessCallable(
+								tika.getParser(), tika.getDetector(),
+								tika.getMaxStringLength(),
+								StreamUtil.toByteArray(finalInputStream)));
+
+					Future<String> future =
+						processChannel.getProcessNoticeableFuture();
+
+					text = future.get();
+				}
+				else {
+					text = _parseToString(
+						tika.getParser(), tika.getDetector(),
+						tika.getMaxStringLength(), inputStream);
+				}
 			}
 		}
 		catch (Exception exception) {
@@ -205,8 +218,46 @@ public class TextExtractorImpl implements TextExtractor {
 		return writeOutContentHandler.toString();
 	}
 
+	private String _remoteParseToString(
+			String tikaServer, int maxStringLength, InputStream inputStream)
+		throws Exception {
+
+		if (!tikaServer.endsWith(StringPool.SLASH)) {
+			tikaServer = tikaServer.concat(StringPool.SLASH);
+		}
+
+		Http.Options options = new Http.Options();
+
+		options.addHeader("Accept", ContentTypes.APPLICATION_JSON);
+
+		if (maxStringLength > 0) {
+			options.addHeader("writeLimit", String.valueOf(maxStringLength));
+		}
+
+		options.addHeader(
+			HttpHeaders.CONTENT_TYPE,
+			ContentTypes.MULTIPART_FORM_DATA +
+				"; boundary=__MULTIPART_BOUNDARY__");
+		options.addInputStreamPart(
+			"upload", "", inputStream, ContentTypes.APPLICATION_OCTET_STREAM);
+		options.setLocation(tikaServer.concat("tika/form/body"));
+		options.setPost(true);
+
+		String json = _http.URLtoString(options);
+
+		JSONObject jsonObject = _jsonFactory.createJSONObject(json);
+
+		return jsonObject.getString("X-TIKA:content");
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		TextExtractorImpl.class);
+
+	@Reference
+	private Http _http;
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private ProcessExecutor _processExecutor;
