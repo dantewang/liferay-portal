@@ -253,18 +253,25 @@ public class TextExtractorTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testWrongTikaConfigXml() throws Exception {
-		Map<String, Object> properties =
-			new HashMapBuilder<>().<String, Object>put(
-				"tikaConfigXml", "wrong/tika.xml"
-			).build();
-
+	public void testWrongTikaConfigXml() {
 		Object tikaConfigurationHelper = ReflectionTestUtil.getFieldValue(
 			_textExtractor, "_tikaConfigurationHelper");
 
-		ReflectionTestUtil.invoke(
-			tikaConfigurationHelper, "activate", new Class<?>[] {Map.class},
-			properties);
+		Object tikaConfiguration = ReflectionTestUtil.getFieldValue(
+			tikaConfigurationHelper, "_tikaConfiguration");
+
+		try {
+			ReflectionTestUtil.invoke(
+				tikaConfigurationHelper, "activate", new Class<?>[] {Map.class},
+				HashMapBuilder.<String, Object>put(
+					"tikaConfigXml", "wrong/tika.xml"
+				).build());
+		}
+		finally {
+			ReflectionTestUtil.setFieldValue(
+				tikaConfigurationHelper, "_tikaConfiguration",
+				tikaConfiguration);
+		}
 	}
 
 	@Test
