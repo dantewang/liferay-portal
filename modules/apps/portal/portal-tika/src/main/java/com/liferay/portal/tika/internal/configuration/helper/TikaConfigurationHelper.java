@@ -44,6 +44,10 @@ public class TikaConfigurationHelper {
 		return _tikaConfig;
 	}
 
+	public String getTikaServer() {
+		return _tikaConfiguration.tikaServer();
+	}
+
 	public boolean useForkProcess(String mimeType) {
 		if (_tikaConfiguration.textExtractionForkProcessEnabled() &&
 			ArrayUtil.contains(
