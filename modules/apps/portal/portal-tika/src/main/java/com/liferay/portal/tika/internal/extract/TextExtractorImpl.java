@@ -79,20 +79,21 @@ public class TextExtractorImpl implements TextExtractor {
 		String text = null;
 
 		try {
+			Tika tika = new Tika(_tikaConfigurationHelper.getTikaConfig());
+
+			if (!inputStream.markSupported()) {
+				inputStream = new UnsyncBufferedInputStream(inputStream);
+			}
+
 			String tikaServer = _tikaConfigurationHelper.getTikaServer();
 
 			if (Validator.isNotNull(tikaServer)) {
-				text = _remoteParseString(
-					tikaServer, maxStringLength, inputStream);
+				text = _remoteParseToString(
+					tikaServer, maxStringLength, inputStream,
+					tika.getDetector());
 			}
 			else {
-				Tika tika = new Tika(_tikaConfigurationHelper.getTikaConfig());
-
 				tika.setMaxStringLength(maxStringLength);
-
-				if (!inputStream.markSupported()) {
-					inputStream = new UnsyncBufferedInputStream(inputStream);
-				}
 
 				if (_tikaConfigurationHelper.useForkProcess(
 						tika.detect(inputStream))) {
@@ -132,16 +133,14 @@ public class TextExtractorImpl implements TextExtractor {
 		return text;
 	}
 
-	private static String _parseToString(
-			Parser parser, Detector detector, int maxStringLength,
-			InputStream inputStream)
-		throws IOException, TikaException {
+	private static Metadata _parseMetadata(InputStream inputStream)
+		throws IOException {
 
 		inputStream.mark(1);
 
 		try {
 			if (inputStream.read() == -1) {
-				return StringPool.BLANK;
+				return null;
 			}
 		}
 		finally {
@@ -166,6 +165,20 @@ public class TextExtractorImpl implements TextExtractor {
 			metadata.set("Content-Encoding", contentEncoding);
 			metadata.set(
 				"Content-Type", "text/plain; charset=" + contentEncoding);
+		}
+
+		return metadata;
+	}
+
+	private static String _parseToString(
+			Parser parser, Detector detector, int maxStringLength,
+			InputStream inputStream)
+		throws IOException, TikaException {
+
+		Metadata metadata = _parseMetadata(inputStream);
+
+		if (metadata == null) {
+			return StringPool.BLANK;
 		}
 
 		WriteOutContentHandler writeOutContentHandler =
@@ -218,13 +231,24 @@ public class TextExtractorImpl implements TextExtractor {
 		return writeOutContentHandler.toString();
 	}
 
-	private String _remoteParseString(
-			String tikaServer, int maxStringLength, InputStream inputStream)
+	private String _remoteParseToString(
+			String tikaServer, int maxStringLength, InputStream inputStream,
+			Detector detector)
 		throws Exception {
 
 		if (!tikaServer.endsWith(StringPool.SLASH)) {
 			tikaServer = tikaServer.concat(StringPool.SLASH);
 		}
+
+		Metadata metadata = _parseMetadata(inputStream);
+
+		if (metadata == null) {
+			return StringPool.BLANK;
+		}
+
+		MediaType mediaType = detector.detect(inputStream, metadata);
+
+		mediaType = mediaType.getBaseType();
 
 		Http.Options options = new Http.Options();
 
@@ -239,7 +263,7 @@ public class TextExtractorImpl implements TextExtractor {
 			ContentTypes.MULTIPART_FORM_DATA +
 				"; boundary=__MULTIPART_BOUNDARY__");
 		options.addInputStreamPart(
-			"upload", "", inputStream, ContentTypes.APPLICATION_OCTET_STREAM);
+			"upload", "", inputStream, mediaType.toString());
 		options.setLocation(tikaServer.concat("tika/form/text"));
 		options.setPost(true);
 
