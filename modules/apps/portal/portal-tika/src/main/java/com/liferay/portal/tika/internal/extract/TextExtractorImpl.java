@@ -264,7 +264,7 @@ public class TextExtractorImpl implements TextExtractor {
 				"; boundary=__MULTIPART_BOUNDARY__");
 		options.addInputStreamPart(
 			"upload", "", inputStream, mediaType.toString());
-		options.setLocation(tikaServer.concat("tika/form/text"));
+		options.setLocation(tikaServer.concat("tika/form/body"));
 		options.setPost(true);
 
 		String json = _http.URLtoString(options);
