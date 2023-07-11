@@ -1,0 +1,4 @@
+dependencies {
+	compileOnly group: "org.apache.tika", name: "tika-core", version: "1.28.5"
+	compileOnly group: "org.apache.tika", name: "tika-parsers", version: "1.28.5"
+}
