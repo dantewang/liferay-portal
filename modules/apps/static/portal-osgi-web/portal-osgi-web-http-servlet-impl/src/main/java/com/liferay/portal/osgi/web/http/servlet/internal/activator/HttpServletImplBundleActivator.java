@@ -24,12 +24,12 @@ import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.osgi.web.http.servlet.ExtendedHttpService;
 import com.liferay.portal.osgi.web.http.servlet.HttpServletService;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceBag;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceFactory;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpSessionTracker;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.HttpTuple;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -163,10 +163,11 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 	private static final Log _log = LogFactoryUtil.getLog(
 		HttpServletImplBundleActivator.class.getName());
 
-	private ServiceTracker<HttpServletService, HttpTuple> _serviceTracker;
+	private ServiceTracker<HttpServletService, HttpServiceBag> _serviceTracker;
 
 	private class HttpServletServiceServiceTrackerCustomizer
-		implements ServiceTrackerCustomizer<HttpServletService, HttpTuple> {
+		implements ServiceTrackerCustomizer
+			<HttpServletService, HttpServiceBag> {
 
 		public HttpServletServiceServiceTrackerCustomizer(
 			BundleContext bundleContext) {
@@ -175,7 +176,7 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 		}
 
 		@Override
-		public HttpTuple addingService(
+		public HttpServiceBag addingService(
 			ServiceReference<HttpServletService> serviceReference) {
 
 			HttpServletService httpServletService = _bundleContext.getService(
@@ -233,7 +234,7 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 			PortletSessionListenerManager.addHttpSessionListener(
 				_HTTP_SESSION_LISTENER);
 
-			return new HttpTuple(
+			return new HttpServiceBag(
 				proxyServlet, httpServiceRuntimeImpl,
 				_bundleContext.registerService(
 					HttpServlet.class, proxyServlet,
@@ -312,9 +313,9 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 		@Override
 		public void modifiedService(
 			ServiceReference<HttpServletService> serviceReference,
-			HttpTuple httpTuple) {
+			HttpServiceBag httpServiceBag) {
 
-			removedService(serviceReference, httpTuple);
+			removedService(serviceReference, httpServiceBag);
 
 			addingService(serviceReference);
 		}
@@ -322,14 +323,14 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 		@Override
 		public void removedService(
 			ServiceReference<HttpServletService> serviceReference,
-			HttpTuple httpTuple) {
+			HttpServiceBag httpServiceBag) {
 
 			PortletSessionListenerManager.removeHttpSessionListener(
 				_HTTP_SESSION_LISTENER);
 
 			_bundleContext.ungetService(serviceReference);
 
-			httpTuple.destroy();
+			httpServiceBag.destroy();
 		}
 
 		private final BundleContext _bundleContext;
