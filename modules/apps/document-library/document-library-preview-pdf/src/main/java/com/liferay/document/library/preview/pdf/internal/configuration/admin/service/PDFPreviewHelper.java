@@ -34,13 +34,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
@@ -49,17 +52,9 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	configurationPid = "com.liferay.document.library.preview.pdf.internal.configuration.PDFPreviewConfiguration",
-	property = Constants.SERVICE_PID + "=com.liferay.document.library.preview.pdf.internal.configuration.PDFPreviewConfiguration.scoped",
-	service = {
-		ManagedServiceFactory.class, PDFPreviewManagedServiceFactory.class
-	}
+	service = PDFPreviewHelper.class
 )
-public class PDFPreviewManagedServiceFactory implements ManagedServiceFactory {
-
-	@Override
-	public void deleted(String pid) {
-		_unmapPid(pid);
-	}
+public class PDFPreviewHelper {
 
 	public int getMaxLimitOfPages(String scope, long scopePK)
 		throws PortalException {
@@ -164,33 +159,6 @@ public class PDFPreviewManagedServiceFactory implements ManagedServiceFactory {
 		throw new IllegalArgumentException("Unsupported scope: " + scope);
 	}
 
-	@Override
-	public String getName() {
-		return "com.liferay.document.library.preview.pdf.internal." +
-			"configuration.PDFPreviewConfiguration.scoped";
-	}
-
-	@Override
-	public void updated(String pid, Dictionary<String, ?> dictionary)
-		throws ConfigurationException {
-
-		_unmapPid(pid);
-
-		long companyId = GetterUtil.getLong(
-			dictionary.get("companyId"), CompanyConstants.SYSTEM);
-
-		if (companyId != CompanyConstants.SYSTEM) {
-			_updateCompanyConfiguration(companyId, pid, dictionary);
-		}
-
-		long groupId = GetterUtil.getLong(
-			dictionary.get("groupId"), GroupConstants.DEFAULT_PARENT_GROUP_ID);
-
-		if (groupId != GroupConstants.DEFAULT_PARENT_GROUP_ID) {
-			_updateGroupConfiguration(groupId, pid, dictionary);
-		}
-	}
-
 	public void updatePDFPreview(
 			int maxNumberOfPages, String scope, long scopePK)
 		throws Exception {
@@ -241,8 +209,27 @@ public class PDFPreviewManagedServiceFactory implements ManagedServiceFactory {
 	}
 
 	@Activate
+	protected void activate(
+		BundleContext bundleContext, Map<String, Object> properties) {
+
+		modified(properties);
+
+		_serviceRegistration = bundleContext.registerService(
+			ManagedServiceFactory.class, new PDFPreviewManagedServiceFactory(),
+			HashMapDictionaryBuilder.put(
+				Constants.SERVICE_PID,
+				"com.liferay.document.library.preview.pdf.internal." +
+					"configuration.PDFPreviewConfiguration.scoped"
+			).build());
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		_serviceRegistration.unregister();
+	}
+
 	@Modified
-	protected void activate(Map<String, Object> properties) {
+	protected void modified(Map<String, Object> properties) {
 		_systemPDFPreviewConfiguration = ConfigurableUtil.createConfigurable(
 			PDFPreviewConfiguration.class, properties);
 	}
@@ -325,20 +312,6 @@ public class PDFPreviewManagedServiceFactory implements ManagedServiceFactory {
 		}
 
 		return false;
-	}
-
-	private void _unmapPid(String pid) {
-		if (_companyIds.containsKey(pid)) {
-			long companyId = _companyIds.remove(pid);
-
-			_companyConfigurationBeans.remove(companyId);
-		}
-
-		if (_groupIds.containsKey(pid)) {
-			long groupId = _groupIds.remove(pid);
-
-			_groupConfigurationBeans.remove(groupId);
-		}
 	}
 
 	private void _updateCompanyConfiguration(
@@ -436,6 +409,59 @@ public class PDFPreviewManagedServiceFactory implements ManagedServiceFactory {
 	@Reference
 	private GroupLocalService _groupLocalService;
 
+	private ServiceRegistration<ManagedServiceFactory> _serviceRegistration;
 	private volatile PDFPreviewConfiguration _systemPDFPreviewConfiguration;
+
+	private class PDFPreviewManagedServiceFactory
+		implements ManagedServiceFactory {
+
+		@Override
+		public void deleted(String pid) {
+			_unmapPid(pid);
+		}
+
+		@Override
+		public String getName() {
+			return "com.liferay.document.library.preview.pdf.internal." +
+				"configuration.PDFPreviewConfiguration.scoped";
+		}
+
+		@Override
+		public void updated(String pid, Dictionary<String, ?> dictionary)
+			throws ConfigurationException {
+
+			_unmapPid(pid);
+
+			long companyId = GetterUtil.getLong(
+				dictionary.get("companyId"), CompanyConstants.SYSTEM);
+
+			if (companyId != CompanyConstants.SYSTEM) {
+				_updateCompanyConfiguration(companyId, pid, dictionary);
+			}
+
+			long groupId = GetterUtil.getLong(
+				dictionary.get("groupId"),
+				GroupConstants.DEFAULT_PARENT_GROUP_ID);
+
+			if (groupId != GroupConstants.DEFAULT_PARENT_GROUP_ID) {
+				_updateGroupConfiguration(groupId, pid, dictionary);
+			}
+		}
+
+		private void _unmapPid(String pid) {
+			if (_companyIds.containsKey(pid)) {
+				long companyId = _companyIds.remove(pid);
+
+				_companyConfigurationBeans.remove(companyId);
+			}
+
+			if (_groupIds.containsKey(pid)) {
+				long groupId = _groupIds.remove(pid);
+
+				_groupConfigurationBeans.remove(groupId);
+			}
+		}
+
+	}
 
 }

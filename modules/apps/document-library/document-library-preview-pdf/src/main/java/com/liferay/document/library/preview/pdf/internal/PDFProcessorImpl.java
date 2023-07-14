@@ -23,7 +23,7 @@ import com.liferay.document.library.kernel.util.DLProcessor;
 import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.document.library.kernel.util.PDFProcessor;
 import com.liferay.document.library.preview.pdf.internal.background.task.PDFPreviewBackgroundTaskExecutor;
-import com.liferay.document.library.preview.pdf.internal.configuration.admin.service.PDFPreviewManagedServiceFactory;
+import com.liferay.document.library.preview.pdf.internal.configuration.admin.service.PDFPreviewHelper;
 import com.liferay.document.library.preview.pdf.internal.util.ProcessConfigUtil;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.petra.process.ProcessCallable;
@@ -121,10 +121,9 @@ public class PDFProcessorImpl
 			FileVersion sourceFileVersion, FileVersion destinationFileVersion)
 		throws Exception {
 
-		int maxNumberOfPages =
-			_pdfPreviewManagedServiceFactory.getMaxNumberOfPages(
-				ExtendedObjectClassDefinition.Scope.GROUP.getValue(),
-				destinationFileVersion.getGroupId());
+		int maxNumberOfPages = _pdfPreviewHelper.getMaxNumberOfPages(
+			ExtendedObjectClassDefinition.Scope.GROUP.getValue(),
+			destinationFileVersion.getGroupId());
 
 		_generateImages(
 			sourceFileVersion, destinationFileVersion, maxNumberOfPages);
@@ -1128,7 +1127,7 @@ public class PDFProcessorImpl
 	private boolean _ghostscriptInitialized;
 
 	@Reference
-	private PDFPreviewManagedServiceFactory _pdfPreviewManagedServiceFactory;
+	private PDFPreviewHelper _pdfPreviewHelper;
 
 	@Reference
 	private PortalUUID _portalUUID;

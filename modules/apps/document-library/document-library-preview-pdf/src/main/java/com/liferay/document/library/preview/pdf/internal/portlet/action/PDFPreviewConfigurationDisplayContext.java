@@ -14,7 +14,7 @@
 
 package com.liferay.document.library.preview.pdf.internal.portlet.action;
 
-import com.liferay.document.library.preview.pdf.internal.configuration.admin.service.PDFPreviewManagedServiceFactory;
+import com.liferay.document.library.preview.pdf.internal.configuration.admin.service.PDFPreviewHelper;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -33,12 +33,11 @@ public class PDFPreviewConfigurationDisplayContext {
 	public PDFPreviewConfigurationDisplayContext(
 		HttpServletRequest httpServletRequest,
 		LiferayPortletResponse liferayPortletResponse,
-		PDFPreviewManagedServiceFactory pdfPreviewManagedServiceFactory,
-		String scope, long scopePK) {
+		PDFPreviewHelper pdfPreviewHelper, String scope, long scopePK) {
 
 		_httpServletRequest = httpServletRequest;
 		_liferayPortletResponse = liferayPortletResponse;
-		_pdfPreviewManagedServiceFactory = pdfPreviewManagedServiceFactory;
+		_pdfPreviewHelper = pdfPreviewHelper;
 		_scope = scope;
 		_scopePK = scopePK;
 	}
@@ -58,13 +57,11 @@ public class PDFPreviewConfigurationDisplayContext {
 	}
 
 	public int getMaxLimitSize() throws PortalException {
-		return _pdfPreviewManagedServiceFactory.getMaxLimitOfPages(
-			_scope, _scopePK);
+		return _pdfPreviewHelper.getMaxLimitOfPages(_scope, _scopePK);
 	}
 
 	public int getMaxNumberOfPages() throws PortalException {
-		return _pdfPreviewManagedServiceFactory.getMaxNumberOfPages(
-			_scope, _scopePK);
+		return _pdfPreviewHelper.getMaxNumberOfPages(_scope, _scopePK);
 	}
 
 	public String getSuperiorScopeLabel() {
@@ -84,8 +81,7 @@ public class PDFPreviewConfigurationDisplayContext {
 
 	private final HttpServletRequest _httpServletRequest;
 	private final LiferayPortletResponse _liferayPortletResponse;
-	private final PDFPreviewManagedServiceFactory
-		_pdfPreviewManagedServiceFactory;
+	private final PDFPreviewHelper _pdfPreviewHelper;
 	private final String _scope;
 	private final long _scopePK;
 

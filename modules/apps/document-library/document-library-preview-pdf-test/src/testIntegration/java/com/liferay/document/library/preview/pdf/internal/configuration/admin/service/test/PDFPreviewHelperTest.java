@@ -44,7 +44,7 @@ import org.osgi.service.cm.ManagedServiceFactory;
  * @author Alicia García
  */
 @RunWith(Arquillian.class)
-public class PDFPreviewManagedServiceFactoryTest {
+public class PDFPreviewHelperTest {
 
 	@ClassRule
 	@Rule
