@@ -14,7 +14,6 @@
 package com.liferay.portal.osgi.web.http.servlet.internal;
 
 import com.liferay.petra.reflect.ReflectionUtil;
-import com.liferay.portal.osgi.web.http.servlet.ExtendedHttpService;
 
 import java.net.URL;
 
@@ -24,7 +23,6 @@ import java.security.PrivilegedExceptionAction;
 
 import java.util.Dictionary;
 
-import javax.servlet.Filter;
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +36,7 @@ import org.osgi.service.http.HttpService;
  * @author IBM Corporation
  * @author Raymond Augé
  */
-public class HttpServiceImpl implements ExtendedHttpService, HttpService {
+public class HttpServiceImpl implements HttpService {
 
 	public HttpServiceImpl(
 		Bundle bundle, HttpServiceRuntimeImpl httpServiceRuntimeImpl) {
@@ -52,29 +50,6 @@ public class HttpServiceImpl implements ExtendedHttpService, HttpService {
 		_checkShutdown();
 
 		return new DefaultHttpContext();
-	}
-
-	@Override
-	public synchronized void registerFilter(
-		String alias, Filter filter, Dictionary<String, String> initParams,
-		HttpContext httpContext) {
-
-		_checkShutdown();
-
-		try {
-			AccessController.doPrivileged(
-				(PrivilegedExceptionAction<Void>)() -> {
-					_httpServiceRuntimeImpl.registerHttpServiceFilter(
-						_bundle, alias, filter, initParams,
-						_getOrCreateHttpContext(httpContext));
-
-					return null;
-				});
-		}
-		catch (PrivilegedActionException privilegedActionException) {
-			ReflectionUtil.throwException(
-				privilegedActionException.getException());
-		}
 	}
 
 	@Override
@@ -127,13 +102,6 @@ public class HttpServiceImpl implements ExtendedHttpService, HttpService {
 		_checkShutdown();
 
 		_httpServiceRuntimeImpl.unregisterHttpServiceAlias(_bundle, alias);
-	}
-
-	@Override
-	public synchronized void unregisterFilter(Filter filter) {
-		_checkShutdown();
-
-		_httpServiceRuntimeImpl.unregisterHttpServiceFilter(_bundle, filter);
 	}
 
 	protected synchronized void shutdown() {
