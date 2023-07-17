@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.osgi.web.http.servlet.ExtendedHttpService;
 import com.liferay.portal.osgi.web.http.servlet.HttpServletService;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceBag;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceFactory;
@@ -139,10 +138,6 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 		return httpServiceEndpoints.toArray(new String[0]);
 	}
 
-	private static final String[] _HTTP_SERVICES_CLASSES = {
-		HttpService.class.getName(), ExtendedHttpService.class.getName()
-	};
-
 	private static final HttpSessionListener _HTTP_SESSION_LISTENER =
 		new HttpSessionListener() {
 
@@ -243,7 +238,7 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 						serviceReference::getProperty
 					).build()),
 				_bundleContext.registerService(
-					_HTTP_SERVICES_CLASSES,
+					HttpService.class,
 					new HttpServiceFactory(httpServiceRuntimeImpl),
 					HashMapDictionaryBuilder.putAll(
 						attributesMap

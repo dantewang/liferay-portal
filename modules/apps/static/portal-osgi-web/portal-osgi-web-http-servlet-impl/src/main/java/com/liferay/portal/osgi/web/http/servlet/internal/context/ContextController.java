@@ -737,18 +737,10 @@ public class ContextController {
 		}
 
 		if (contextSelector == null) {
-			contextSelector =
-				_httpServiceRuntimeImpl.getDefaultContextSelectFilter(
-					serviceReference);
-
-			if (contextSelector == null) {
-				contextSelector = StringBundler.concat(
-					"(", HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME,
-					"=",
-					HttpWhiteboardConstants.
-						HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
-					")");
-			}
+			contextSelector = StringBundler.concat(
+				"(", HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "=",
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME,
+				")");
 		}
 
 		if (contextSelector.startsWith(Const.OPEN_PAREN)) {
