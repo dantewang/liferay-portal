@@ -11,6 +11,7 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal;
 
+import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
@@ -27,7 +28,6 @@ import com.liferay.portal.osgi.web.http.servlet.internal.error.PatternInUseExcep
 import com.liferay.portal.osgi.web.http.servlet.internal.error.ServletAlreadyRegisteredException;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.Match;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.DTOUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Path;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
@@ -40,7 +40,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -52,8 +51,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
-import javax.servlet.Filter;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -63,31 +62,26 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.osgi.dto.DTO;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.dto.ServiceReferenceDTO;
 import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.service.http.context.ServletContextHelper;
-import org.osgi.service.http.runtime.HttpServiceRuntime;
 import org.osgi.service.http.runtime.HttpServiceRuntimeConstants;
 import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.ErrorPageDTO;
-import org.osgi.service.http.runtime.dto.FailedFilterDTO;
-import org.osgi.service.http.runtime.dto.FailedListenerDTO;
-import org.osgi.service.http.runtime.dto.FailedResourceDTO;
 import org.osgi.service.http.runtime.dto.FailedServletContextDTO;
-import org.osgi.service.http.runtime.dto.FailedServletDTO;
 import org.osgi.service.http.runtime.dto.FilterDTO;
 import org.osgi.service.http.runtime.dto.ListenerDTO;
 import org.osgi.service.http.runtime.dto.RequestInfoDTO;
 import org.osgi.service.http.runtime.dto.ResourceDTO;
-import org.osgi.service.http.runtime.dto.ServletContextDTO;
 import org.osgi.service.http.runtime.dto.ServletDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 import org.osgi.util.tracker.ServiceTracker;
@@ -180,13 +174,8 @@ public class HttpServiceRuntimeController
 		_contextServiceTracker.close();
 
 		_controllersMap.clear();
+		_dtosMap.clear();
 		_registeredObjects.clear();
-
-		_failedFilterDTOsMap.clear();
-		_failedListenerDTOsMap.clear();
-		_failedResourceDTOsMap.clear();
-		_failedServletContextDTOsMap.clear();
-		_failedServletDTOsMap.clear();
 
 		_attributesMap = null;
 		_trackingBundleContext = null;
@@ -211,6 +200,10 @@ public class HttpServiceRuntimeController
 		return dispatchTargets.doDispatch(
 			httpServletRequest, httpServletResponse, path,
 			httpServletRequest.getDispatcherType());
+	}
+
+	public Collection<ContextController> getContextControllers() {
+		return Collections.unmodifiableCollection(_controllersMap.values());
 	}
 
 	public DispatchTargets getDispatchTargets(
@@ -255,65 +248,19 @@ public class HttpServiceRuntimeController
 		return dispatchTargets;
 	}
 
-	public FailedFilterDTO[] getFailedFilterDTOs() {
-		Collection<FailedFilterDTO> ffDTOs = _failedFilterDTOsMap.values();
+	public <T> T[] getDTOs(Class<T> clazz, Function<DTO, T> function) {
+		Map<ServiceReference<?>, DTO> map = _dtosMap.get(clazz);
 
-		List<FailedFilterDTO> copies = new ArrayList<>();
+		return TransformUtil.transformToArray(
+			map.values(),
+			dto -> {
+				if (function == null) {
+					return clazz.cast(dto);
+				}
 
-		for (FailedFilterDTO failedFilterDTO : ffDTOs) {
-			copies.add(DTOUtil.clone(failedFilterDTO));
-		}
-
-		return copies.toArray(new FailedFilterDTO[0]);
-	}
-
-	public FailedListenerDTO[] getFailedListenerDTOs() {
-		Collection<FailedListenerDTO> flDTOs = _failedListenerDTOsMap.values();
-
-		List<FailedListenerDTO> copies = new ArrayList<>();
-
-		for (FailedListenerDTO failedListenerDTO : flDTOs) {
-			copies.add(DTOUtil.clone(failedListenerDTO));
-		}
-
-		return copies.toArray(new FailedListenerDTO[0]);
-	}
-
-	public FailedResourceDTO[] getFailedResourceDTOs() {
-		Collection<FailedResourceDTO> frDTOs = _failedResourceDTOsMap.values();
-
-		List<FailedResourceDTO> copies = new ArrayList<>();
-
-		for (FailedResourceDTO failedResourceDTO : frDTOs) {
-			copies.add(DTOUtil.clone(failedResourceDTO));
-		}
-
-		return copies.toArray(new FailedResourceDTO[0]);
-	}
-
-	public FailedServletContextDTO[] getFailedServletContextDTO() {
-		Collection<FailedServletContextDTO> fscDTOs =
-			_failedServletContextDTOsMap.values();
-
-		List<FailedServletContextDTO> copies = new ArrayList<>();
-
-		for (FailedServletContextDTO failedServletContextDTO : fscDTOs) {
-			copies.add(DTOUtil.clone(failedServletContextDTO));
-		}
-
-		return copies.toArray(new FailedServletContextDTO[0]);
-	}
-
-	public FailedServletDTO[] getFailedServletDTOs() {
-		Collection<FailedServletDTO> fsDTOs = _failedServletDTOsMap.values();
-
-		List<FailedServletDTO> copies = new ArrayList<>();
-
-		for (FailedServletDTO failedServletDTO : fsDTOs) {
-			copies.add(DTOUtil.clone(failedServletDTO));
-		}
-
-		return copies.toArray(new FailedServletDTO[0]);
+				return function.apply(dto);
+			},
+			clazz);
 	}
 
 	public List<String> getHttpServiceEndpoints() {
@@ -331,35 +278,6 @@ public class HttpServiceRuntimeController
 		return _registeredObjects;
 	}
 
-	public ServiceReferenceDTO getServiceDTO() {
-		Bundle bundle = _consumingBundleContext.getBundle();
-
-		for (ServiceReferenceDTO serviceReferenceDTO :
-				bundle.adapt(ServiceReferenceDTO[].class)) {
-
-			for (String type :
-					(String[])serviceReferenceDTO.properties.get(
-						Constants.OBJECTCLASS)) {
-
-				if (Objects.equals(HttpServiceRuntime.class.getName(), type)) {
-					return serviceReferenceDTO;
-				}
-			}
-		}
-
-		return null;
-	}
-
-	public ServletContextDTO[] getServletContextDTOs() {
-		List<ServletContextDTO> servletContextDTOs = new ArrayList<>();
-
-		for (ContextController contextController : _controllersMap.values()) {
-			servletContextDTOs.add(contextController.getServletContextDTO());
-		}
-
-		return servletContextDTOs.toArray(new ServletContextDTO[0]);
-	}
-
 	public boolean matches(ServiceReference<?> serviceReference) {
 		String target = (String)serviceReference.getProperty(
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET);
@@ -368,7 +286,7 @@ public class HttpServiceRuntimeController
 			return true;
 		}
 
-		org.osgi.framework.Filter targetFilter;
+		Filter targetFilter;
 
 		try {
 			targetFilter = FrameworkUtil.createFilter(target);
@@ -397,48 +315,11 @@ public class HttpServiceRuntimeController
 		contextController.set(added.get());
 	}
 
-	public void recordFailedFilterDTO(
-		ServiceReference<Filter> serviceReference,
-		FailedFilterDTO failedFilterDTO) {
+	public void recordDTO(ServiceReference<?> serviceReference, DTO dto) {
+		Map<ServiceReference<?>, DTO> dtosMap = _dtosMap.computeIfAbsent(
+			dto.getClass(), clazz -> new ConcurrentHashMap<>());
 
-		if (_failedFilterDTOsMap.containsKey(serviceReference)) {
-			return;
-		}
-
-		_failedFilterDTOsMap.put(serviceReference, failedFilterDTO);
-	}
-
-	public void recordFailedListenerDTO(
-		ServiceReference<EventListener> serviceReference,
-		FailedListenerDTO failedListenerDTO) {
-
-		if (_failedListenerDTOsMap.containsKey(serviceReference)) {
-			return;
-		}
-
-		_failedListenerDTOsMap.put(serviceReference, failedListenerDTO);
-	}
-
-	public void recordFailedResourceDTO(
-		ServiceReference<Object> serviceReference,
-		FailedResourceDTO failedResourceDTO) {
-
-		if (_failedResourceDTOsMap.containsKey(serviceReference)) {
-			return;
-		}
-
-		_failedResourceDTOsMap.put(serviceReference, failedResourceDTO);
-	}
-
-	public void recordFailedServletDTO(
-		ServiceReference<Servlet> serviceReference,
-		FailedServletDTO failedServletDTO) {
-
-		if (_failedServletDTOsMap.containsKey(serviceReference)) {
-			return;
-		}
-
-		_failedServletDTOsMap.put(serviceReference, failedServletDTO);
+		dtosMap.putIfAbsent(serviceReference, dto);
 	}
 
 	public void registerHttpServiceResources(
@@ -692,32 +573,18 @@ public class HttpServiceRuntimeController
 		}
 
 		_controllersMap.remove(serviceReference);
-		_failedServletContextDTOsMap.remove(serviceReference);
+		removeDTO(FailedServletContextDTO.class, serviceReference);
 		_trackingBundleContext.ungetService(serviceReference);
 	}
 
-	public void removeFailedFilterDTO(
-		ServiceReference<Filter> serviceReference) {
+	public void removeDTO(
+		Class<?> clazz, ServiceReference<?> serviceReference) {
 
-		_failedFilterDTOsMap.remove(serviceReference);
-	}
+		Map<ServiceReference<?>, DTO> map = _dtosMap.get(clazz);
 
-	public void removeFailedListenerDTO(
-		ServiceReference<EventListener> serviceReference) {
-
-		_failedListenerDTOsMap.remove(serviceReference);
-	}
-
-	public void removeFailedResourceDTO(
-		ServiceReference<Object> serviceReference) {
-
-		_failedResourceDTOsMap.remove(serviceReference);
-	}
-
-	public void removeFailedServletDTOs(
-		ServiceReference<Servlet> serviceReference) {
-
-		_failedServletDTOsMap.remove(serviceReference);
+		if (map != null) {
+			map.remove(serviceReference);
+		}
 	}
 
 	public void unregisterHttpServiceAlias(Bundle bundle, String alias) {
@@ -1025,8 +892,7 @@ public class HttpServiceRuntimeController
 			Constants.SERVICE_ID);
 		failedServletContextDTO.servletDTOs = new ServletDTO[0];
 
-		_failedServletContextDTOsMap.put(
-			serviceReference, failedServletContextDTO);
+		recordDTO(serviceReference, failedServletContextDTO);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -1044,18 +910,8 @@ public class HttpServiceRuntimeController
 	private final ConcurrentMap
 		<ServiceReference<ServletContextHelper>, ContextController>
 			_controllersMap = new ConcurrentHashMap<>();
-	private final ConcurrentMap<ServiceReference<Filter>, FailedFilterDTO>
-		_failedFilterDTOsMap = new ConcurrentHashMap<>();
-	private final ConcurrentMap
-		<ServiceReference<EventListener>, FailedListenerDTO>
-			_failedListenerDTOsMap = new ConcurrentHashMap<>();
-	private final ConcurrentMap<ServiceReference<Object>, FailedResourceDTO>
-		_failedResourceDTOsMap = new ConcurrentHashMap<>();
-	private final ConcurrentMap
-		<ServiceReference<ServletContextHelper>, FailedServletContextDTO>
-			_failedServletContextDTOsMap = new ConcurrentHashMap<>();
-	private final ConcurrentMap<ServiceReference<Servlet>, FailedServletDTO>
-		_failedServletDTOsMap = new ConcurrentHashMap<>();
+	private final Map<Class<?>, Map<ServiceReference<?>, DTO>> _dtosMap =
+		new ConcurrentHashMap<>();
 	private final Map<HttpContext, HttpContextHelperFactory>
 		_httpContextHelperFactoriesMap = Collections.synchronizedMap(
 			new HashMap<>());
