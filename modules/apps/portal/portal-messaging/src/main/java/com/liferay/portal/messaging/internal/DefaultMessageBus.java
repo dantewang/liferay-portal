@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.messaging.internal.configuration.DestinationWorkerConfiguration;
 
@@ -52,10 +51,6 @@ import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -144,6 +139,12 @@ public class DefaultMessageBus implements MessageBus {
 			ServiceTrackerListFactory.open(
 				bundleContext, MessageBusEventListener.class);
 
+		_destinationServiceTracker = ServiceTrackerFactory.open(
+			bundleContext,
+			"(&(objectClass=" + Destination.class.getName() +
+				")(destination.name=*))",
+			new DestinationServiceTrackerCustomizer());
+
 		_destinationEventListenerServiceTracker = ServiceTrackerFactory.open(
 			bundleContext,
 			"(&(objectClass=" + DestinationEventListener.class.getName() +
@@ -230,39 +231,9 @@ public class DefaultMessageBus implements MessageBus {
 
 		_destinationEventListenerServiceTracker.close();
 
-		for (Destination destination : _destinations.values()) {
-			destination.destroy();
-		}
-
-		_destinations.clear();
+		_destinationServiceTracker.close();
 
 		_messageBusEventListenerServiceTrackerList.close();
-	}
-
-	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY,
-		target = "(destination.name=*)"
-	)
-	protected synchronized void registerDestination(
-		Destination destination, Map<String, Object> properties) {
-
-		String destinationName = MapUtil.getString(
-			properties, "destination.name");
-
-		_addDestination(destination);
-
-		DestinationWorkerConfiguration destinationWorkerConfiguration =
-			_destinationWorkerConfigurations.get(destinationName);
-
-		_updateDestination(destination, destinationWorkerConfiguration);
-	}
-
-	protected synchronized void unregisterDestination(
-		Destination destination, Map<String, Object> properties) {
-
-		_removeDestination(destination.getName());
 	}
 
 	private void _addDestination(Destination destination) {
@@ -407,6 +378,7 @@ public class DefaultMessageBus implements MessageBus {
 		_destinationEventListenerServiceTracker;
 	private final Map<String, Destination> _destinations =
 		new ConcurrentHashMap<>();
+	private ServiceTracker<Destination, Destination> _destinationServiceTracker;
 	private final Map<String, DestinationWorkerConfiguration>
 		_destinationWorkerConfigurations = new ConcurrentHashMap<>();
 	private final Map<String, String> _factoryPidsToDestinationNames =
@@ -523,6 +495,46 @@ public class DefaultMessageBus implements MessageBus {
 					"Unable to unregister destination event listener for " +
 						destinationName);
 			}
+		}
+
+	}
+
+	private class DestinationServiceTrackerCustomizer
+		implements ServiceTrackerCustomizer<Destination, Destination> {
+
+		@Override
+		public Destination addingService(
+			ServiceReference<Destination> serviceReference) {
+
+			Destination destination = _bundleContext.getService(
+				serviceReference);
+
+			_addDestination(destination);
+
+			DestinationWorkerConfiguration destinationWorkerConfiguration =
+				_destinationWorkerConfigurations.get(
+					GetterUtil.getString(
+						serviceReference.getProperty("destination.name")));
+
+			_updateDestination(destination, destinationWorkerConfiguration);
+
+			return destination;
+		}
+
+		@Override
+		public void modifiedService(
+			ServiceReference<Destination> serviceReference,
+			Destination destination) {
+		}
+
+		@Override
+		public void removedService(
+			ServiceReference<Destination> serviceReference,
+			Destination destination) {
+
+			_bundleContext.ungetService(serviceReference);
+
+			_removeDestination(destination.getName());
 		}
 
 	}
