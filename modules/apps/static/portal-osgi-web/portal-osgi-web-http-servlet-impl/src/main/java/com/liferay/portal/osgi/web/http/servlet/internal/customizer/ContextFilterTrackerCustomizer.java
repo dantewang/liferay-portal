@@ -14,7 +14,7 @@ package com.liferay.portal.osgi.web.http.servlet.internal.customizer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFailureException;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.FilterRegistration;
@@ -41,10 +41,10 @@ public class ContextFilterTrackerCustomizer
 
 	public ContextFilterTrackerCustomizer(
 		BundleContext bundleContext,
-		HttpServiceRuntimeImpl httpServiceRuntimeImpl,
+		HttpServiceRuntimeController httpServiceRuntimeController,
 		ContextController contextController) {
 
-		super(bundleContext, httpServiceRuntimeImpl);
+		super(bundleContext, httpServiceRuntimeController);
 
 		_contextController = contextController;
 	}
@@ -69,7 +69,7 @@ public class ContextFilterTrackerCustomizer
 		}
 
 		if (!_contextController.matches(serviceReference) ||
-			!httpServiceRuntimeImpl.matches(serviceReference)) {
+			!httpServiceRuntimeController.matches(serviceReference)) {
 
 			return null;
 		}
@@ -122,7 +122,7 @@ public class ContextFilterTrackerCustomizer
 			registration.destroy();
 		}
 
-		httpServiceRuntimeImpl.removeFailedFilterDTO(serviceReference);
+		httpServiceRuntimeController.removeFailedFilterDTO(serviceReference);
 	}
 
 	private void _recordFailedFilterDTO(
@@ -161,7 +161,7 @@ public class ContextFilterTrackerCustomizer
 			serviceReference.getProperty(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET));
 
-		httpServiceRuntimeImpl.recordFailedFilterDTO(
+		httpServiceRuntimeController.recordFailedFilterDTO(
 			serviceReference, failedFilterDTO);
 	}
 

@@ -25,11 +25,11 @@ public class HttpServiceBag {
 
 	public HttpServiceBag(
 		ProxyServlet proxyServlet,
-		HttpServiceRuntimeImpl httpServiceRuntimeImpl,
+		HttpServiceRuntimeController httpServiceRuntimeController,
 		ServiceRegistration<?>... serviceRegistrations) {
 
 		_proxyServlet = proxyServlet;
-		_httpServiceRuntimeImpl = httpServiceRuntimeImpl;
+		_httpServiceRuntimeController = httpServiceRuntimeController;
 		_serviceRegistrations = serviceRegistrations;
 	}
 
@@ -38,13 +38,13 @@ public class HttpServiceBag {
 			_serviceRegistrations[i].unregister();
 		}
 
-		_proxyServlet.setHttpServiceRuntimeImpl(null);
+		_proxyServlet.setHttpServiceRuntimeController(null);
 		_proxyServlet.destroy();
 
-		_httpServiceRuntimeImpl.destroy();
+		_httpServiceRuntimeController.destroy();
 	}
 
-	private final HttpServiceRuntimeImpl _httpServiceRuntimeImpl;
+	private final HttpServiceRuntimeController _httpServiceRuntimeController;
 	private final ProxyServlet _proxyServlet;
 	private final ServiceRegistration<?>[] _serviceRegistrations;
 

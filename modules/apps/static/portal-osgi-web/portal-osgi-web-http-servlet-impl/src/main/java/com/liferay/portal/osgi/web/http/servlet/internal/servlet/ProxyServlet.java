@@ -13,7 +13,7 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
-import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 
 import java.io.IOException;
@@ -41,10 +41,10 @@ public class ProxyServlet extends HttpServlet {
 		super.init(config);
 	}
 
-	public void setHttpServiceRuntimeImpl(
-		HttpServiceRuntimeImpl httpServiceRuntimeImpl) {
+	public void setHttpServiceRuntimeController(
+		HttpServiceRuntimeController httpServiceRuntimeController) {
 
-		_httpServiceRuntimeImpl = httpServiceRuntimeImpl;
+		_httpServiceRuntimeController = httpServiceRuntimeController;
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ProxyServlet extends HttpServlet {
 			alias = Const.SLASH;
 		}
 
-		if (_httpServiceRuntimeImpl.doDispatch(
+		if (_httpServiceRuntimeController.doDispatch(
 				httpServletRequest, httpServletResponse, alias)) {
 
 			return;
@@ -73,15 +73,15 @@ public class ProxyServlet extends HttpServlet {
 	}
 
 	private void _checkRuntime() {
-		if (_httpServiceRuntimeImpl == null) {
+		if (_httpServiceRuntimeController == null) {
 			throw new IllegalStateException(
 				"Proxy servlet not properly initialized. " +
-					"httpServiceRuntimeImpl is null");
+					"httpServiceRuntimeController is null");
 		}
 	}
 
 	private static final long serialVersionUID = 4117456123807468871L;
 
-	private HttpServiceRuntimeImpl _httpServiceRuntimeImpl;
+	private HttpServiceRuntimeController _httpServiceRuntimeController;
 
 }

@@ -15,7 +15,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextFilterTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextListenerTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextResourceTrackerCustomizer;
@@ -129,8 +129,8 @@ public class ContextController {
 		BundleContext consumingBundleContext,
 		ServiceReference<ServletContextHelper> serviceReference,
 		ProxyContext proxyContext,
-		HttpServiceRuntimeImpl httpServiceRuntimeImpl, String contextName,
-		String contextPath) {
+		HttpServiceRuntimeController httpServiceRuntimeController,
+		String contextName, String contextPath) {
 
 		_validate(contextName, contextPath);
 
@@ -140,7 +140,7 @@ public class ContextController {
 		_servletContextHelperServiceReference = serviceReference;
 
 		_proxyContext = proxyContext;
-		_httpServiceRuntimeImpl = httpServiceRuntimeImpl;
+		_httpServiceRuntimeController = httpServiceRuntimeController;
 		_contextName = contextName;
 
 		if (contextPath.equals(Const.SLASH)) {
@@ -160,7 +160,7 @@ public class ContextController {
 		_servletContextListenerServiceTracker = new ServiceTracker<>(
 			_trackingBundleContext, ServletContextListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeImpl, this));
+				_trackingBundleContext, httpServiceRuntimeController, this));
 
 		_servletContextListenerServiceTracker.open();
 
@@ -168,14 +168,14 @@ public class ContextController {
 			_trackingBundleContext,
 			ServletContextAttributeListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeImpl, this));
+				_trackingBundleContext, httpServiceRuntimeController, this));
 
 		_servletContextAttributeListenerServiceTracker.open();
 
 		_servletRequestListenerServiceTracker = new ServiceTracker<>(
 			_trackingBundleContext, ServletRequestListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeImpl, this));
+				_trackingBundleContext, httpServiceRuntimeController, this));
 
 		_servletRequestListenerServiceTracker.open();
 
@@ -183,14 +183,14 @@ public class ContextController {
 			_trackingBundleContext,
 			ServletRequestAttributeListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeImpl, this));
+				_trackingBundleContext, httpServiceRuntimeController, this));
 
 		_servletRequestAttributeListenerServiceTracker.open();
 
 		_httpSessionListenerServiceTracker = new ServiceTracker<>(
 			_trackingBundleContext, HttpSessionListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeImpl, this));
+				_trackingBundleContext, httpServiceRuntimeController, this));
 
 		_httpSessionListenerServiceTracker.open();
 
@@ -198,12 +198,12 @@ public class ContextController {
 			_trackingBundleContext,
 			HttpSessionAttributeListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeImpl, this));
+				_trackingBundleContext, httpServiceRuntimeController, this));
 
 		_httpSessionAttributeListenerServiceTracker.open();
 
 		ServletContext servletContext =
-			httpServiceRuntimeImpl.getParentServletContext();
+			httpServiceRuntimeController.getParentServletContext();
 
 		if ((servletContext.getMajorVersion() >= 3) &&
 			(servletContext.getMinorVersion() > 0)) {
@@ -211,7 +211,8 @@ public class ContextController {
 			_httpSessionIdListenerServiceTracker = new ServiceTracker<>(
 				_trackingBundleContext, HttpSessionIdListener.class.getName(),
 				new ContextListenerTrackerCustomizer(
-					_trackingBundleContext, httpServiceRuntimeImpl, this));
+					_trackingBundleContext, httpServiceRuntimeController,
+					this));
 
 			_httpSessionIdListenerServiceTracker.open();
 		}
@@ -222,21 +223,21 @@ public class ContextController {
 		_filterServiceTracker = new ServiceTracker<>(
 			_trackingBundleContext, Filter.class,
 			new ContextFilterTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeImpl, this));
+				_trackingBundleContext, httpServiceRuntimeController, this));
 
 		_filterServiceTracker.open();
 
 		_servletServiceTracker = new ServiceTracker<>(
 			_trackingBundleContext, Servlet.class,
 			new ContextServletTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeImpl, this));
+				_trackingBundleContext, httpServiceRuntimeController, this));
 
 		_servletServiceTracker.open();
 
 		_resourceServiceTracker = new ServiceTracker<>(
 			_trackingBundleContext, Object.class,
 			new ContextResourceTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeImpl, this));
+				_trackingBundleContext, httpServiceRuntimeController, this));
 
 		_resourceServiceTracker.open();
 	}
@@ -256,7 +257,7 @@ public class ContextController {
 		boolean addedRegisteredObject = false;
 
 		Set<Object> registeredObjects =
-			_httpServiceRuntimeImpl.getRegisteredObjects();
+			_httpServiceRuntimeController.getRegisteredObjects();
 
 		try {
 			if (filter == null) {
@@ -401,7 +402,7 @@ public class ContextController {
 		boolean addedRegisteredObject = false;
 
 		Set<Object> registeredObjects =
-			_httpServiceRuntimeImpl.getRegisteredObjects();
+			_httpServiceRuntimeController.getRegisteredObjects();
 
 		try {
 			if (servlet == null) {
@@ -630,7 +631,7 @@ public class ContextController {
 
 	public String getFullContextPath() {
 		List<String> endpoints =
-			_httpServiceRuntimeImpl.getHttpServiceEndpoints();
+			_httpServiceRuntimeController.getHttpServiceEndpoints();
 
 		if (endpoints.isEmpty()) {
 			String servletPath = _proxyContext.getServletPath();
@@ -648,8 +649,8 @@ public class ContextController {
 		return defaultEndpoint + _contextPath;
 	}
 
-	public HttpServiceRuntimeImpl getHttpServiceRuntime() {
-		return _httpServiceRuntimeImpl;
+	public HttpServiceRuntimeController getHttpServiceRuntimeController() {
+		return _httpServiceRuntimeController;
 	}
 
 	public Map<String, String> getInitParams() {
@@ -1549,7 +1550,7 @@ public class ContextController {
 		new ConcurrentSkipListSet<>();
 	private final ServiceTracker<Filter, AtomicReference<FilterRegistration>>
 		_filterServiceTracker;
-	private final HttpServiceRuntimeImpl _httpServiceRuntimeImpl;
+	private final HttpServiceRuntimeController _httpServiceRuntimeController;
 	private final ServiceTracker
 		<EventListener, AtomicReference<ListenerRegistration>>
 			_httpSessionAttributeListenerServiceTracker;
