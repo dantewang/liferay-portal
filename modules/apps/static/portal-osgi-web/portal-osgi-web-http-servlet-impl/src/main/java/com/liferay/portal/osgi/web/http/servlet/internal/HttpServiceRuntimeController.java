@@ -1,13 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2014, 2015 Raymond Augé and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     Raymond Augé <raymond.auge@liferay.com> - Bug 436698
- ******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.portal.osgi.web.http.servlet.internal;
 
@@ -88,11 +91,9 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
- * @author Raymond Augé
+ * @author Dante Wang
  */
-public class HttpServiceRuntimeController
-	implements ServiceTrackerCustomizer
-		<ServletContextHelper, AtomicReference<ContextController>> {
+public class HttpServiceRuntimeController {
 
 	public HttpServiceRuntimeController(
 		BundleContext trackingBundleContext,
@@ -107,67 +108,10 @@ public class HttpServiceRuntimeController
 		_attributesMap = attributesMap;
 
 		_contextServiceTracker = new ServiceTracker<>(
-			trackingBundleContext, ServletContextHelper.class, this);
+			trackingBundleContext, ServletContextHelper.class,
+			new ServletContextHelperServiceTrackerCustomizer());
 
 		_contextServiceTracker.open();
-	}
-
-	@Override
-	public synchronized AtomicReference<ContextController> addingService(
-		ServiceReference<ServletContextHelper> serviceReference) {
-
-		AtomicReference<ContextController> result = new AtomicReference<>();
-
-		if (!matches(serviceReference)) {
-			return result;
-		}
-
-		String contextName = (String)serviceReference.getProperty(
-			HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME);
-		String contextPath = (String)serviceReference.getProperty(
-			HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH);
-
-		try {
-			if (contextName == null) {
-				throw new IllegalContextNameException(
-					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME +
-						" is null. Ignoring!",
-					DTOConstants.FAILURE_REASON_VALIDATION_FAILED);
-			}
-
-			if (contextPath == null) {
-				throw new IllegalContextPathException(
-					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH +
-						" is null. Ignoring!",
-					DTOConstants.FAILURE_REASON_VALIDATION_FAILED);
-			}
-
-			ContextController contextController = new ContextController(
-				_trackingBundleContext, _consumingBundleContext,
-				serviceReference,
-				new ProxyContext(contextName, _parentServletContext), this,
-				contextName, contextPath);
-
-			_controllersMap.put(serviceReference, contextController);
-
-			result.set(contextController);
-		}
-		catch (HttpWhiteboardFailureException httpWhiteboardFailureException) {
-			_log.error(httpWhiteboardFailureException);
-
-			_recordFailedServletContextDTO(
-				serviceReference, contextName, contextPath,
-				httpWhiteboardFailureException.getFailureReason());
-		}
-		catch (Exception exception) {
-			_log.error(exception);
-
-			_recordFailedServletContextDTO(
-				serviceReference, contextName, contextPath,
-				DTOConstants.FAILURE_REASON_EXCEPTION_ON_INIT);
-		}
-
-		return result;
 	}
 
 	public void destroy() {
@@ -300,19 +244,6 @@ public class HttpServiceRuntimeController
 		}
 
 		return false;
-	}
-
-	@Override
-	public synchronized void modifiedService(
-		ServiceReference<ServletContextHelper> serviceReference,
-		AtomicReference<ContextController> contextController) {
-
-		removedService(serviceReference, contextController);
-
-		AtomicReference<ContextController> added = addingService(
-			serviceReference);
-
-		contextController.set(added.get());
 	}
 
 	public void recordDTO(ServiceReference<?> serviceReference, DTO dto) {
@@ -559,22 +490,6 @@ public class HttpServiceRuntimeController
 				}
 			}
 		}
-	}
-
-	@Override
-	public synchronized void removedService(
-		ServiceReference<ServletContextHelper> serviceReference,
-		AtomicReference<ContextController> contextControllerRef) {
-
-		ContextController contextController = contextControllerRef.get();
-
-		if (contextController != null) {
-			contextController.destroy();
-		}
-
-		_controllersMap.remove(serviceReference);
-		removeDTO(FailedServletContextDTO.class, serviceReference);
-		_trackingBundleContext.ungetService(serviceReference);
 	}
 
 	public void removeDTO(
@@ -1001,6 +916,102 @@ public class HttpServiceRuntimeController
 		}
 
 		private final Servlet _servlet;
+
+	}
+
+	private class ServletContextHelperServiceTrackerCustomizer
+		implements ServiceTrackerCustomizer
+			<ServletContextHelper, AtomicReference<ContextController>> {
+
+		@Override
+		public synchronized AtomicReference<ContextController> addingService(
+			ServiceReference<ServletContextHelper> serviceReference) {
+
+			AtomicReference<ContextController> result = new AtomicReference<>();
+
+			if (!matches(serviceReference)) {
+				return result;
+			}
+
+			String contextName = (String)serviceReference.getProperty(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME);
+			String contextPath = (String)serviceReference.getProperty(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH);
+
+			try {
+				if (contextName == null) {
+					throw new IllegalContextNameException(
+						HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME +
+							" is null. Ignoring!",
+						DTOConstants.FAILURE_REASON_VALIDATION_FAILED);
+				}
+
+				if (contextPath == null) {
+					throw new IllegalContextPathException(
+						HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH +
+							" is null. Ignoring!",
+						DTOConstants.FAILURE_REASON_VALIDATION_FAILED);
+				}
+
+				ContextController contextController = new ContextController(
+					_trackingBundleContext, _consumingBundleContext,
+					serviceReference,
+					new ProxyContext(contextName, _parentServletContext),
+					HttpServiceRuntimeController.this, contextName,
+					contextPath);
+
+				_controllersMap.put(serviceReference, contextController);
+
+				result.set(contextController);
+			}
+			catch (HttpWhiteboardFailureException
+						httpWhiteboardFailureException) {
+
+				_log.error(httpWhiteboardFailureException);
+
+				_recordFailedServletContextDTO(
+					serviceReference, contextName, contextPath,
+					httpWhiteboardFailureException.getFailureReason());
+			}
+			catch (Exception exception) {
+				_log.error(exception);
+
+				_recordFailedServletContextDTO(
+					serviceReference, contextName, contextPath,
+					DTOConstants.FAILURE_REASON_EXCEPTION_ON_INIT);
+			}
+
+			return result;
+		}
+
+		@Override
+		public synchronized void modifiedService(
+			ServiceReference<ServletContextHelper> serviceReference,
+			AtomicReference<ContextController> contextController) {
+
+			removedService(serviceReference, contextController);
+
+			AtomicReference<ContextController> added = addingService(
+				serviceReference);
+
+			contextController.set(added.get());
+		}
+
+		@Override
+		public synchronized void removedService(
+			ServiceReference<ServletContextHelper> serviceReference,
+			AtomicReference<ContextController> contextControllerRef) {
+
+			ContextController contextController = contextControllerRef.get();
+
+			if (contextController != null) {
+				contextController.destroy();
+			}
+
+			_controllersMap.remove(serviceReference);
+			removeDTO(FailedServletContextDTO.class, serviceReference);
+			_trackingBundleContext.ungetService(serviceReference);
+		}
 
 	}
 
