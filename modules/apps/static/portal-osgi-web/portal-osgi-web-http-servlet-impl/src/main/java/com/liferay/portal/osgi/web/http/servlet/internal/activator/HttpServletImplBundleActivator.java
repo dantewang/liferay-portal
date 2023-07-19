@@ -247,7 +247,8 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 					).build()),
 				_bundleContext.registerService(
 					HttpServiceRuntime.class,
-					new HttpServiceRuntimeImpl(httpServiceRuntimeController),
+					new HttpServiceRuntimeImpl(
+						_bundleContext, httpServiceRuntimeController),
 					HashMapDictionaryBuilder.putAll(
 						attributesMap
 					).put(
