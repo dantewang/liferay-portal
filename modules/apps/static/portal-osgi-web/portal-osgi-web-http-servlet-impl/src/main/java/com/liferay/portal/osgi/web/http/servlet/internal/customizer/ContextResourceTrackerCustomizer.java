@@ -13,7 +13,7 @@ package com.liferay.portal.osgi.web.http.servlet.internal.customizer;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFailureException;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.ResourceRegistration;
@@ -37,10 +37,10 @@ public class ContextResourceTrackerCustomizer
 
 	public ContextResourceTrackerCustomizer(
 		BundleContext bundleContext,
-		HttpServiceRuntimeImpl httpServiceRuntimeImpl,
+		HttpServiceRuntimeController httpServiceRuntimeController,
 		ContextController contextController) {
 
-		super(bundleContext, httpServiceRuntimeImpl);
+		super(bundleContext, httpServiceRuntimeController);
 
 		_contextController = contextController;
 	}
@@ -61,7 +61,7 @@ public class ContextResourceTrackerCustomizer
 			return null;
 		}
 
-		if (!httpServiceRuntimeImpl.matches(serviceReference)) {
+		if (!httpServiceRuntimeController.matches(serviceReference)) {
 			return null;
 		}
 
@@ -113,7 +113,7 @@ public class ContextResourceTrackerCustomizer
 			resourceRegistration.destroy();
 		}
 
-		httpServiceRuntimeImpl.removeFailedResourceDTO(serviceReference);
+		httpServiceRuntimeController.removeFailedResourceDTO(serviceReference);
 	}
 
 	private void _recordFailedResourceDTO(
@@ -131,7 +131,7 @@ public class ContextResourceTrackerCustomizer
 			Constants.SERVICE_ID);
 		failedResourceDTO.servletContextId = _contextController.getServiceId();
 
-		httpServiceRuntimeImpl.recordFailedResourceDTO(
+		httpServiceRuntimeController.recordFailedResourceDTO(
 			serviceReference, failedResourceDTO);
 	}
 

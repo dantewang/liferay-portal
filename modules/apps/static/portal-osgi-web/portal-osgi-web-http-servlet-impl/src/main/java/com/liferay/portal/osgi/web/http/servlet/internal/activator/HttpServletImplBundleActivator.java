@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.osgi.web.http.servlet.HttpServletService;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceBag;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceFactory;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpSessionTracker;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
@@ -219,18 +220,19 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 					}
 				).build();
 
-			HttpServiceRuntimeImpl httpServiceRuntimeImpl =
-				new HttpServiceRuntimeImpl(
+			HttpServiceRuntimeController httpServiceRuntimeController =
+				new HttpServiceRuntimeController(
 					_bundleContext, _bundleContext, servletContext,
 					targetFilter, Collections.unmodifiableMap(attributesMap));
 
-			proxyServlet.setHttpServiceRuntimeImpl(httpServiceRuntimeImpl);
+			proxyServlet.setHttpServiceRuntimeController(
+				httpServiceRuntimeController);
 
 			PortletSessionListenerManager.addHttpSessionListener(
 				_HTTP_SESSION_LISTENER);
 
 			return new HttpServiceBag(
-				proxyServlet, httpServiceRuntimeImpl,
+				proxyServlet, httpServiceRuntimeController,
 				_bundleContext.registerService(
 					HttpServlet.class, proxyServlet,
 					HashMapDictionaryBuilder.put(
@@ -239,12 +241,13 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 					).build()),
 				_bundleContext.registerService(
 					HttpService.class,
-					new HttpServiceFactory(httpServiceRuntimeImpl),
+					new HttpServiceFactory(httpServiceRuntimeController),
 					HashMapDictionaryBuilder.putAll(
 						attributesMap
 					).build()),
 				_bundleContext.registerService(
-					HttpServiceRuntime.class, httpServiceRuntimeImpl,
+					HttpServiceRuntime.class,
+					new HttpServiceRuntimeImpl(httpServiceRuntimeController),
 					HashMapDictionaryBuilder.putAll(
 						attributesMap
 					).put(
