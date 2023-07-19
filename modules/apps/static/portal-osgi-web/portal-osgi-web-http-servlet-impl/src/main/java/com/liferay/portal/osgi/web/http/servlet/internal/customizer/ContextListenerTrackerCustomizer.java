@@ -120,7 +120,8 @@ public class ContextListenerTrackerCustomizer
 			listenerRegistration.destroy();
 		}
 
-		httpServiceRuntimeController.removeFailedListenerDTO(serviceReference);
+		httpServiceRuntimeController.removeDTO(
+			FailedListenerDTO.class, serviceReference);
 	}
 
 	private void _recordFailedListenerDTO(
@@ -135,7 +136,7 @@ public class ContextListenerTrackerCustomizer
 		failedListenerDTO.types = StringPlus.from(
 			serviceReference.getProperty(Constants.OBJECTCLASS));
 
-		httpServiceRuntimeController.recordFailedListenerDTO(
+		httpServiceRuntimeController.recordDTO(
 			serviceReference, failedListenerDTO);
 	}
 

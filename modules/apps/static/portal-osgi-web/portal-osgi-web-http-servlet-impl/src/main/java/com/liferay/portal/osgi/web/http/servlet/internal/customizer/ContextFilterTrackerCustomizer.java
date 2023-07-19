@@ -122,7 +122,8 @@ public class ContextFilterTrackerCustomizer
 			registration.destroy();
 		}
 
-		httpServiceRuntimeController.removeFailedFilterDTO(serviceReference);
+		httpServiceRuntimeController.removeDTO(
+			FailedFilterDTO.class, serviceReference);
 	}
 
 	private void _recordFailedFilterDTO(
@@ -161,7 +162,7 @@ public class ContextFilterTrackerCustomizer
 			serviceReference.getProperty(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET));
 
-		httpServiceRuntimeController.recordFailedFilterDTO(
+		httpServiceRuntimeController.recordDTO(
 			serviceReference, failedFilterDTO);
 	}
 
