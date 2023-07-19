@@ -14,7 +14,7 @@ package com.liferay.portal.osgi.web.http.servlet.internal.registration;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.FilterChainImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.Match;
@@ -141,11 +141,11 @@ public class FilterRegistration
 		try {
 			currentThread.setContextClassLoader(_classLoader);
 
-			HttpServiceRuntimeImpl httpServiceRuntimeImpl =
-				_contextController.getHttpServiceRuntime();
+			HttpServiceRuntimeController httpServiceRuntimeController =
+				_contextController.getHttpServiceRuntimeController();
 
 			Set<Object> registeredObjects =
-				httpServiceRuntimeImpl.getRegisteredObjects();
+				httpServiceRuntimeController.getRegisteredObjects();
 
 			registeredObjects.remove(getT());
 

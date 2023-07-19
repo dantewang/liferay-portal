@@ -14,7 +14,7 @@ package com.liferay.portal.osgi.web.http.servlet.internal.customizer;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFailureException;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.ListenerRegistration;
@@ -39,10 +39,10 @@ public class ContextListenerTrackerCustomizer
 
 	public ContextListenerTrackerCustomizer(
 		BundleContext bundleContext,
-		HttpServiceRuntimeImpl httpServiceRuntimeImpl,
+		HttpServiceRuntimeController httpServiceRuntimeController,
 		ContextController contextController) {
 
-		super(bundleContext, httpServiceRuntimeImpl);
+		super(bundleContext, httpServiceRuntimeController);
 
 		_contextController = contextController;
 	}
@@ -56,7 +56,7 @@ public class ContextListenerTrackerCustomizer
 
 		if ((listenerObject == null) ||
 			!_contextController.matches(serviceReference) ||
-			!httpServiceRuntimeImpl.matches(serviceReference)) {
+			!httpServiceRuntimeController.matches(serviceReference)) {
 
 			return null;
 		}
@@ -120,7 +120,7 @@ public class ContextListenerTrackerCustomizer
 			listenerRegistration.destroy();
 		}
 
-		httpServiceRuntimeImpl.removeFailedListenerDTO(serviceReference);
+		httpServiceRuntimeController.removeFailedListenerDTO(serviceReference);
 	}
 
 	private void _recordFailedListenerDTO(
@@ -135,7 +135,7 @@ public class ContextListenerTrackerCustomizer
 		failedListenerDTO.types = StringPlus.from(
 			serviceReference.getProperty(Constants.OBJECTCLASS));
 
-		httpServiceRuntimeImpl.recordFailedListenerDTO(
+		httpServiceRuntimeController.recordFailedListenerDTO(
 			serviceReference, failedListenerDTO);
 	}
 
