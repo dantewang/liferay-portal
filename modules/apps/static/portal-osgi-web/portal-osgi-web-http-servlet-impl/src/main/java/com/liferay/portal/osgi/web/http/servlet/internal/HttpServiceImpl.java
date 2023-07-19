@@ -39,10 +39,11 @@ import org.osgi.service.http.HttpService;
 public class HttpServiceImpl implements HttpService {
 
 	public HttpServiceImpl(
-		Bundle bundle, HttpServiceRuntimeImpl httpServiceRuntimeImpl) {
+		Bundle bundle,
+		HttpServiceRuntimeController httpServiceRuntimeController) {
 
 		_bundle = bundle;
-		_httpServiceRuntimeImpl = httpServiceRuntimeImpl;
+		_httpServiceRuntimeController = httpServiceRuntimeController;
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class HttpServiceImpl implements HttpService {
 		try {
 			AccessController.doPrivileged(
 				(PrivilegedExceptionAction<Void>)() -> {
-					_httpServiceRuntimeImpl.registerHttpServiceResources(
+					_httpServiceRuntimeController.registerHttpServiceResources(
 						_bundle, alias, name,
 						_getOrCreateHttpContext(httpContext));
 
@@ -84,7 +85,7 @@ public class HttpServiceImpl implements HttpService {
 		try {
 			AccessController.doPrivileged(
 				(PrivilegedExceptionAction<Void>)() -> {
-					_httpServiceRuntimeImpl.registerHttpServiceServlet(
+					_httpServiceRuntimeController.registerHttpServiceServlet(
 						_bundle, alias, servlet, initParams,
 						_getOrCreateHttpContext(httpContext));
 
@@ -101,11 +102,12 @@ public class HttpServiceImpl implements HttpService {
 	public synchronized void unregister(String alias) {
 		_checkShutdown();
 
-		_httpServiceRuntimeImpl.unregisterHttpServiceAlias(_bundle, alias);
+		_httpServiceRuntimeController.unregisterHttpServiceAlias(
+			_bundle, alias);
 	}
 
 	protected synchronized void shutdown() {
-		_httpServiceRuntimeImpl.unregisterHttpServiceObjects(_bundle);
+		_httpServiceRuntimeController.unregisterHttpServiceObjects(_bundle);
 
 		_shutdown = true;
 	}
@@ -126,7 +128,7 @@ public class HttpServiceImpl implements HttpService {
 	}
 
 	private final Bundle _bundle;
-	private final HttpServiceRuntimeImpl _httpServiceRuntimeImpl;
+	private final HttpServiceRuntimeController _httpServiceRuntimeController;
 	private boolean _shutdown;
 
 	private class DefaultHttpContext implements HttpContext {

@@ -12,7 +12,7 @@
 package com.liferay.portal.osgi.web.http.servlet.internal.registration;
 
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.Match;
 
@@ -82,11 +82,11 @@ public abstract class EndpointRegistration<D extends DTO>
 
 			endpointRegistrations.remove(this);
 
-			HttpServiceRuntimeImpl httpServiceRuntimeImpl =
-				_contextController.getHttpServiceRuntime();
+			HttpServiceRuntimeController httpServiceRuntimeController =
+				_contextController.getHttpServiceRuntimeController();
 
 			Set<Object> registeredObjects =
-				httpServiceRuntimeImpl.getRegisteredObjects();
+				httpServiceRuntimeController.getRegisteredObjects();
 
 			registeredObjects.remove(getT());
 
