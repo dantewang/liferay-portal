@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.segments.constants.SegmentsExperimentConstants;
+import com.liferay.segments.experiment.web.internal.constants.SegmentsExperimentCookiesConstants;
 import com.liferay.segments.experiment.web.internal.constants.SegmentsExperimentWebKeys;
 import com.liferay.segments.model.SegmentsExperience;
 import com.liferay.segments.model.SegmentsExperiment;
@@ -209,8 +210,8 @@ public class SegmentsExperimentSegmentsExperienceRequestProcessor
 		for (Cookie cookie : cookies) {
 			if (Objects.equals(
 					cookie.getName(),
-					SegmentsExperimentWebKeys.AB_TEST_VARIANT_ID_COOKIE_PREFIX +
-						plid)) {
+					SegmentsExperimentCookiesConstants.
+						AB_TEST_VARIANT_ID_COOKIE_PREFIX + plid)) {
 
 				return cookie;
 			}
@@ -318,7 +319,8 @@ public class SegmentsExperimentSegmentsExperienceRequestProcessor
 		long segmentsExperienceId) {
 
 		Cookie abTestVariantIdCookie = new Cookie(
-			SegmentsExperimentWebKeys.AB_TEST_VARIANT_ID_COOKIE_PREFIX + plid,
+			SegmentsExperimentCookiesConstants.
+				AB_TEST_VARIANT_ID_COOKIE_PREFIX + plid,
 			_getSegmentsExperienceKey(segmentsExperienceId));
 
 		String domain = CookiesManagerUtil.getDomain(httpServletRequest);

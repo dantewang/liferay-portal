@@ -13,7 +13,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.product.navigation.control.menu.ProductNavigationControlMenuEntry;
 import com.liferay.segments.experiment.web.internal.constants.ProductNavigationControlMenuEntryConstants;
-import com.liferay.segments.experiment.web.internal.constants.SegmentsExperimentWebKeys;
+import com.liferay.segments.experiment.web.internal.constants.SegmentsExperimentCookiesConstants;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +48,7 @@ public class LogoutPreAction extends Action {
 		for (Cookie cookie : cookies) {
 			if (StringUtil.startsWith(
 					cookie.getName(),
-					SegmentsExperimentWebKeys.
+					SegmentsExperimentCookiesConstants.
 						AB_TEST_VARIANT_ID_COOKIE_PREFIX)) {
 
 				_cookiesManager.deleteCookies(
