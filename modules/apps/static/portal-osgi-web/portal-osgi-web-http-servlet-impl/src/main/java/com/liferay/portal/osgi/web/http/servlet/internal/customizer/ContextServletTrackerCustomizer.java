@@ -123,7 +123,8 @@ public class ContextServletTrackerCustomizer
 			registration.destroy();
 		}
 
-		httpServiceRuntimeController.removeFailedServletDTOs(serviceReference);
+		httpServiceRuntimeController.removeDTO(
+			FailedServletDTO.class, serviceReference);
 	}
 
 	private void _recordFailedServletDTO(
@@ -149,7 +150,7 @@ public class ContextServletTrackerCustomizer
 		failedServletDTO.servletContextId = _contextController.getServiceId();
 		failedServletDTO.servletInfo = Const.BLANK;
 
-		httpServiceRuntimeController.recordFailedServletDTO(
+		httpServiceRuntimeController.recordDTO(
 			serviceReference, failedServletDTO);
 	}
 

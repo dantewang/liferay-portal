@@ -113,7 +113,8 @@ public class ContextResourceTrackerCustomizer
 			resourceRegistration.destroy();
 		}
 
-		httpServiceRuntimeController.removeFailedResourceDTO(serviceReference);
+		httpServiceRuntimeController.removeDTO(
+			FailedResourceDTO.class, serviceReference);
 	}
 
 	private void _recordFailedResourceDTO(
@@ -131,7 +132,7 @@ public class ContextResourceTrackerCustomizer
 			Constants.SERVICE_ID);
 		failedResourceDTO.servletContextId = _contextController.getServiceId();
 
-		httpServiceRuntimeController.recordFailedResourceDTO(
+		httpServiceRuntimeController.recordDTO(
 			serviceReference, failedResourceDTO);
 	}
 
