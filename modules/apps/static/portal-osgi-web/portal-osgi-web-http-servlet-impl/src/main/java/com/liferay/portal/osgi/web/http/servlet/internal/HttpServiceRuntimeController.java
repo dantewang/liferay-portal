@@ -77,36 +77,32 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 public class HttpServiceRuntimeController {
 
 	public HttpServiceRuntimeController(
-		BundleContext trackingBundleContext,
-		BundleContext consumingBundleContext,
-		ServletContext parentServletContext,
+		BundleContext bundleContext, ServletContext parentServletContext,
 		Map<String, Object> attributesMap) {
 
-		_trackingBundleContext = trackingBundleContext;
-		_consumingBundleContext = consumingBundleContext;
+		_bundleContext = bundleContext;
 		_parentServletContext = parentServletContext;
 		_attributesMap = attributesMap;
 
-		_contextServiceTracker = new ServiceTracker<>(
-			trackingBundleContext, ServletContextHelper.class,
+		_serviceTracker = new ServiceTracker<>(
+			bundleContext, ServletContextHelper.class,
 			new ServletContextHelperServiceTrackerCustomizer());
 
-		_contextServiceTracker.open();
+		_serviceTracker.open();
 	}
 
 	public void destroy() {
-		_contextServiceTracker.close();
+		_serviceTracker.close();
 
 		_controllersMap.clear();
 		_dtosMap.clear();
 		_registeredObjects.clear();
 
 		_attributesMap = null;
-		_trackingBundleContext = null;
-		_consumingBundleContext = null;
+		_bundleContext = null;
 		_parentServletContext = null;
 		_registeredObjects = null;
-		_contextServiceTracker = null;
+		_serviceTracker = null;
 	}
 
 	public boolean doDispatch(
@@ -375,10 +371,7 @@ public class HttpServiceRuntimeController {
 		HttpServiceRuntimeController.class.getName());
 
 	private Map<String, Object> _attributesMap;
-	private BundleContext _consumingBundleContext;
-	private ServiceTracker
-		<ServletContextHelper, AtomicReference<ContextController>>
-			_contextServiceTracker;
+	private BundleContext _bundleContext;
 	private final ConcurrentMap
 		<ServiceReference<ServletContextHelper>, ContextController>
 			_controllersMap = new ConcurrentHashMap<>();
@@ -387,7 +380,9 @@ public class HttpServiceRuntimeController {
 	private ServletContext _parentServletContext;
 	private Set<Object> _registeredObjects = Collections.newSetFromMap(
 		new ConcurrentHashMap<>());
-	private BundleContext _trackingBundleContext;
+	private ServiceTracker
+		<ServletContextHelper, AtomicReference<ContextController>>
+			_serviceTracker;
 
 	private class ServletContextHelperServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer
@@ -424,8 +419,7 @@ public class HttpServiceRuntimeController {
 				}
 
 				ContextController contextController = new ContextController(
-					_trackingBundleContext, _consumingBundleContext,
-					serviceReference,
+					_bundleContext, serviceReference,
 					new ProxyContext(contextName, _parentServletContext),
 					HttpServiceRuntimeController.this, contextName,
 					contextPath);
@@ -480,7 +474,7 @@ public class HttpServiceRuntimeController {
 
 			_controllersMap.remove(serviceReference);
 			removeDTO(FailedServletContextDTO.class, serviceReference);
-			_trackingBundleContext.ungetService(serviceReference);
+			_bundleContext.ungetService(serviceReference);
 		}
 
 	}
