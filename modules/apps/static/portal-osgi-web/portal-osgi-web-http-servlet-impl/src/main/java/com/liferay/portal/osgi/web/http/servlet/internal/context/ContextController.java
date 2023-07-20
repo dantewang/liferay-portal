@@ -125,8 +125,7 @@ public class ContextController {
 	}
 
 	public ContextController(
-		BundleContext trackingBundleContext,
-		BundleContext consumingBundleContext,
+		BundleContext bundleContext,
 		ServiceReference<ServletContextHelper> serviceReference,
 		ProxyContext proxyContext,
 		HttpServiceRuntimeController httpServiceRuntimeController,
@@ -134,8 +133,7 @@ public class ContextController {
 
 		_validate(contextName, contextPath);
 
-		_trackingBundleContext = trackingBundleContext;
-		_consumingBundleContext = consumingBundleContext;
+		_bundleContext = bundleContext;
 
 		_servletContextHelperServiceReference = serviceReference;
 
@@ -158,47 +156,44 @@ public class ContextController {
 			proxyContext.getServletContext());
 
 		_servletContextListenerServiceTracker = new ServiceTracker<>(
-			_trackingBundleContext, ServletContextListener.class.getName(),
+			_bundleContext, ServletContextListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeController, this));
+				_bundleContext, httpServiceRuntimeController, this));
 
 		_servletContextListenerServiceTracker.open();
 
 		_servletContextAttributeListenerServiceTracker = new ServiceTracker<>(
-			_trackingBundleContext,
-			ServletContextAttributeListener.class.getName(),
+			_bundleContext, ServletContextAttributeListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeController, this));
+				_bundleContext, httpServiceRuntimeController, this));
 
 		_servletContextAttributeListenerServiceTracker.open();
 
 		_servletRequestListenerServiceTracker = new ServiceTracker<>(
-			_trackingBundleContext, ServletRequestListener.class.getName(),
+			_bundleContext, ServletRequestListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeController, this));
+				_bundleContext, httpServiceRuntimeController, this));
 
 		_servletRequestListenerServiceTracker.open();
 
 		_servletRequestAttributeListenerServiceTracker = new ServiceTracker<>(
-			_trackingBundleContext,
-			ServletRequestAttributeListener.class.getName(),
+			_bundleContext, ServletRequestAttributeListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeController, this));
+				_bundleContext, httpServiceRuntimeController, this));
 
 		_servletRequestAttributeListenerServiceTracker.open();
 
 		_httpSessionListenerServiceTracker = new ServiceTracker<>(
-			_trackingBundleContext, HttpSessionListener.class.getName(),
+			_bundleContext, HttpSessionListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeController, this));
+				_bundleContext, httpServiceRuntimeController, this));
 
 		_httpSessionListenerServiceTracker.open();
 
 		_httpSessionAttributeListenerServiceTracker = new ServiceTracker<>(
-			_trackingBundleContext,
-			HttpSessionAttributeListener.class.getName(),
+			_bundleContext, HttpSessionAttributeListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeController, this));
+				_bundleContext, httpServiceRuntimeController, this));
 
 		_httpSessionAttributeListenerServiceTracker.open();
 
@@ -209,10 +204,9 @@ public class ContextController {
 			(servletContext.getMinorVersion() > 0)) {
 
 			_httpSessionIdListenerServiceTracker = new ServiceTracker<>(
-				_trackingBundleContext, HttpSessionIdListener.class.getName(),
+				_bundleContext, HttpSessionIdListener.class.getName(),
 				new ContextListenerTrackerCustomizer(
-					_trackingBundleContext, httpServiceRuntimeController,
-					this));
+					_bundleContext, httpServiceRuntimeController, this));
 
 			_httpSessionIdListenerServiceTracker.open();
 		}
@@ -221,23 +215,23 @@ public class ContextController {
 		}
 
 		_filterServiceTracker = new ServiceTracker<>(
-			_trackingBundleContext, Filter.class,
+			_bundleContext, Filter.class,
 			new ContextFilterTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeController, this));
+				_bundleContext, httpServiceRuntimeController, this));
 
 		_filterServiceTracker.open();
 
 		_servletServiceTracker = new ServiceTracker<>(
-			_trackingBundleContext, Servlet.class,
+			_bundleContext, Servlet.class,
 			new ContextServletTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeController, this));
+				_bundleContext, httpServiceRuntimeController, this));
 
 		_servletServiceTracker.open();
 
 		_resourceServiceTracker = new ServiceTracker<>(
-			_trackingBundleContext, Object.class,
+			_bundleContext, Object.class,
 			new ContextResourceTrackerCustomizer(
-				_trackingBundleContext, httpServiceRuntimeController, this));
+				_bundleContext, httpServiceRuntimeController, this));
 
 		_resourceServiceTracker.open();
 	}
@@ -249,7 +243,7 @@ public class ContextController {
 		_checkShutdown();
 
 		ServiceHolder<Filter> filterHolder = new ServiceHolder<>(
-			_consumingBundleContext.getServiceObjects(serviceReference));
+			_bundleContext.getServiceObjects(serviceReference));
 
 		Filter filter = filterHolder.get();
 
@@ -290,7 +284,7 @@ public class ContextController {
 		_checkShutdown();
 
 		ServiceHolder<EventListener> listenerHolder = new ServiceHolder<>(
-			_consumingBundleContext.getServiceObjects(serviceReference));
+			_bundleContext.getServiceObjects(serviceReference));
 
 		EventListener listener = listenerHolder.get();
 
@@ -394,7 +388,7 @@ public class ContextController {
 		_checkShutdown();
 
 		ServiceHolder<Servlet> serviceHolder = new ServiceHolder<>(
-			_consumingBundleContext.getServiceObjects(serviceReference));
+			_bundleContext.getServiceObjects(serviceReference));
 
 		Servlet servlet = serviceHolder.get();
 
@@ -469,14 +463,6 @@ public class ContextController {
 
 	public void fireSessionIdChanged(String oldSessionId) {
 		if (_shutdown) {
-			return;
-		}
-
-		ServletContext servletContext = _proxyContext.getServletContext();
-
-		if ((servletContext.getMajorVersion() <= 3) &&
-			(servletContext.getMinorVersion() < 1)) {
-
 			return;
 		}
 
@@ -773,7 +759,7 @@ public class ContextController {
 		if (value == null) {
 			value = StringBundler.concat(
 				ContextController.class.getSimpleName(), '[', _contextName,
-				", ", _trackingBundleContext.getBundle(), ']');
+				", ", _bundleContext.getBundle(), ']');
 
 			_string = value;
 		}
@@ -1470,12 +1456,7 @@ public class ContextController {
 			classes.add(HttpSessionAttributeListener.class);
 		}
 
-		ServletContext servletContext = _proxyContext.getServletContext();
-
-		if ((servletContext.getMajorVersion() >= 3) &&
-			(servletContext.getMinorVersion() > 0) &&
-			objectClassList.contains(HttpSessionIdListener.class.getName())) {
-
+		if (objectClassList.contains(HttpSessionIdListener.class.getName())) {
 			classes.add(HttpSessionIdListener.class);
 		}
 
@@ -1539,7 +1520,7 @@ public class ContextController {
 
 	private final ConcurrentMap<String, HttpSessionAdaptor> _activeSessionsMap =
 		new ConcurrentHashMap<>();
-	private final BundleContext _consumingBundleContext;
+	private final BundleContext _bundleContext;
 	private final String _contextName;
 	private final String _contextPath;
 	private final long _contextServiceId;
@@ -1584,6 +1565,5 @@ public class ContextController {
 		_servletServiceTracker;
 	private boolean _shutdown;
 	private String _string;
-	private final BundleContext _trackingBundleContext;
 
 }
