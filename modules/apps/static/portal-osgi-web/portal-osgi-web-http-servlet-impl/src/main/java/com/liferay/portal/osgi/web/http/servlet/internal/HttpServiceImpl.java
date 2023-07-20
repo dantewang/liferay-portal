@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -220,11 +221,9 @@ public class HttpServiceImpl implements HttpService {
 	private void _decrementFactoryUseCount(
 		HttpContextHelperFactory httpContextHelperFactory) {
 
-		synchronized (_httpContextHelperFactoriesMap) {
-			if (httpContextHelperFactory.decrementUseCount() == 0) {
-				_httpContextHelperFactoriesMap.remove(
-					httpContextHelperFactory.getHttpContext());
-			}
+		if (httpContextHelperFactory.decrementUseCount() == 0) {
+			_httpContextHelperFactoriesMap.remove(
+				httpContextHelperFactory.getHttpContext());
 		}
 	}
 
@@ -283,13 +282,11 @@ public class HttpServiceImpl implements HttpService {
 			throw new NullPointerException("A null HttpContext is not allowed");
 		}
 
-		synchronized (_httpContextHelperFactoriesMap) {
-			HttpContextHelperFactory httpContextHelperFactory =
-				_httpContextHelperFactoriesMap.get(httpContext);
-
-			if (httpContextHelperFactory == null) {
-				httpContextHelperFactory = new HttpContextHelperFactory(
-					httpContext);
+		return _httpContextHelperFactoriesMap.computeIfAbsent(
+			httpContext,
+			key -> {
+				HttpContextHelperFactory httpContextHelperFactory =
+					new HttpContextHelperFactory(key);
 
 				BundleContext bundleContext = _bundle.getBundleContext();
 
@@ -305,7 +302,7 @@ public class HttpServiceImpl implements HttpService {
 							HttpWhiteboardConstants.
 								HTTP_WHITEBOARD_CONTEXT_NAME,
 							() -> {
-								Class<?> clazz = httpContext.getClass();
+								Class<?> clazz = key.getClass();
 
 								String className = clazz.getName();
 
@@ -323,14 +320,10 @@ public class HttpServiceImpl implements HttpService {
 							_targetFilter
 						).build()));
 
-				_httpContextHelperFactoriesMap.put(
-					httpContext, httpContextHelperFactory);
-			}
+				httpContextHelperFactory.incrementUseCount();
 
-			httpContextHelperFactory.incrementUseCount();
-
-			return httpContextHelperFactory;
-		}
+				return httpContextHelperFactory;
+			});
 	}
 
 	private void _registerHttpServiceResources(
@@ -581,8 +574,7 @@ public class HttpServiceImpl implements HttpService {
 	private final Map<Bundle, Set<HttpServiceObjectRegistration>>
 		_bundleRegistrationsMap = new HashMap<>();
 	private final Map<HttpContext, HttpContextHelperFactory>
-		_httpContextHelperFactoriesMap = Collections.synchronizedMap(
-			new HashMap<>());
+		_httpContextHelperFactoriesMap = new ConcurrentHashMap<>();
 	private final HttpServiceRuntimeController _httpServiceRuntimeController;
 	private final AtomicLong _legacyIdGenerator = new AtomicLong(0);
 	private final Map<Object, HttpServiceObjectRegistration>
