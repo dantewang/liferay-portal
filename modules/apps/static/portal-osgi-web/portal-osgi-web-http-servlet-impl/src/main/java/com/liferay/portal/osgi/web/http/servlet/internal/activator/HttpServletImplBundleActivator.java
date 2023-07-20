@@ -210,7 +210,7 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 			HttpServiceRuntimeController httpServiceRuntimeController =
 				new HttpServiceRuntimeController(
 					_bundleContext, _bundleContext, servletContext,
-					targetFilter, Collections.unmodifiableMap(attributesMap));
+					Collections.unmodifiableMap(attributesMap));
 
 			proxyServlet.setHttpServiceRuntimeController(
 				httpServiceRuntimeController);
@@ -228,7 +228,8 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 					).build()),
 				_bundleContext.registerService(
 					HttpService.class,
-					new HttpServiceFactory(httpServiceRuntimeController),
+					new HttpServiceFactory(
+						httpServiceRuntimeController, targetFilter),
 					HashMapDictionaryBuilder.putAll(
 						attributesMap
 					).build()),
