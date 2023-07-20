@@ -26,16 +26,19 @@ import org.osgi.service.http.HttpService;
 public class HttpServiceFactory implements ServiceFactory<HttpService> {
 
 	public HttpServiceFactory(
-		HttpServiceRuntimeController httpServiceRuntimeController) {
+		HttpServiceRuntimeController httpServiceRuntimeController,
+		String targetFilter) {
 
 		_httpServiceRuntimeController = httpServiceRuntimeController;
+		_targetFilter = targetFilter;
 	}
 
 	@Override
 	public HttpService getService(
 		Bundle bundle, ServiceRegistration<HttpService> serviceRegistration) {
 
-		return new HttpServiceImpl(bundle, _httpServiceRuntimeController);
+		return new HttpServiceImpl(
+			bundle, _httpServiceRuntimeController, _targetFilter);
 	}
 
 	@Override
@@ -49,5 +52,6 @@ public class HttpServiceFactory implements ServiceFactory<HttpService> {
 	}
 
 	private final HttpServiceRuntimeController _httpServiceRuntimeController;
+	private final String _targetFilter;
 
 }
