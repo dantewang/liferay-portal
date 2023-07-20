@@ -37,7 +37,6 @@ import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -133,12 +132,7 @@ public class HttpServiceImpl implements HttpService {
 		_checkShutdown();
 
 		synchronized (_legacyMappingsMap) {
-			Map<String, String> aliasCustomizationsMap =
-				_bundleAliasCustomizationsMap.get(_bundle);
-
-			String aliasCustomization =
-				(aliasCustomizationsMap == null) ? null :
-					aliasCustomizationsMap.remove(alias);
+			String aliasCustomization = _aliasCustomizationsMap.remove(alias);
 
 			if (aliasCustomization == null) {
 				throw new IllegalArgumentException(
@@ -153,11 +147,7 @@ public class HttpServiceImpl implements HttpService {
 					"No registration found for alias: " + alias);
 			}
 
-			Set<HttpServiceObjectRegistration> httpServiceObjectRegistrations =
-				_bundleRegistrationsMap.get(_bundle);
-
-			if ((httpServiceObjectRegistrations == null) ||
-				!httpServiceObjectRegistrations.remove(
+			if (!_httpServiceObjectRegistrations.remove(
 					httpServiceObjectRegistration)) {
 
 				throw new IllegalArgumentException(
@@ -180,31 +170,25 @@ public class HttpServiceImpl implements HttpService {
 
 	protected synchronized void shutdown() {
 		synchronized (_legacyMappingsMap) {
-			_bundleAliasCustomizationsMap.remove(_bundle);
+			_aliasCustomizationsMap.clear();
 
-			Set<HttpServiceObjectRegistration> httpServiceObjectRegistrations =
-				_bundleRegistrationsMap.remove(_bundle);
+			for (HttpServiceObjectRegistration httpServiceObjectRegistration :
+					_httpServiceObjectRegistrations) {
 
-			if (httpServiceObjectRegistrations != null) {
-				for (HttpServiceObjectRegistration
-						httpServiceObjectRegistration :
-							httpServiceObjectRegistrations) {
-
-					try {
-						httpServiceObjectRegistration.serviceRegistration.
-							unregister();
-					}
-					catch (IllegalStateException illegalStateException) {
-						if (_log.isDebugEnabled()) {
-							_log.debug(illegalStateException);
-						}
-					}
-
-					_decrementFactoryUseCount(
-						httpServiceObjectRegistration.factory);
-					_legacyMappingsMap.remove(
-						httpServiceObjectRegistration.serviceKey);
+				try {
+					httpServiceObjectRegistration.serviceRegistration.
+						unregister();
 				}
+				catch (IllegalStateException illegalStateException) {
+					if (_log.isDebugEnabled()) {
+						_log.debug(illegalStateException);
+					}
+				}
+
+				_decrementFactoryUseCount(
+					httpServiceObjectRegistration.factory);
+				_legacyMappingsMap.remove(
+					httpServiceObjectRegistration.serviceKey);
 			}
 		}
 
@@ -402,19 +386,10 @@ public class HttpServiceImpl implements HttpService {
 						fullAlias, serviceRegistration,
 						httpContextHelperFactory, _bundle);
 
-				Set<HttpServiceObjectRegistration>
-					httpServiceObjectRegistrations =
-						_bundleRegistrationsMap.computeIfAbsent(
-							_bundle, key -> new HashSet<>());
-
-				httpServiceObjectRegistrations.add(
+				_httpServiceObjectRegistrations.add(
 					httpServiceObjectRegistration);
 
-				Map<String, String> aliasCustomizationsMap =
-					_bundleAliasCustomizationsMap.computeIfAbsent(
-						_bundle, key -> new HashMap<>());
-
-				aliasCustomizationsMap.put(alias, fullAlias);
+				_aliasCustomizationsMap.put(alias, fullAlias);
 
 				_legacyMappingsMap.put(
 					httpServiceObjectRegistration.serviceKey,
@@ -532,19 +507,10 @@ public class HttpServiceImpl implements HttpService {
 						fullAlias, serviceRegistration,
 						httpContextHelperFactory, _bundle);
 
-				Set<HttpServiceObjectRegistration>
-					httpServiceObjectRegistrations =
-						_bundleRegistrationsMap.computeIfAbsent(
-							_bundle, key -> new HashSet<>());
-
-				httpServiceObjectRegistrations.add(
+				_httpServiceObjectRegistrations.add(
 					httpServiceObjectRegistration);
 
-				Map<String, String> aliasCustomizationsMap =
-					_bundleAliasCustomizationsMap.computeIfAbsent(
-						_bundle, key -> new HashMap<>());
-
-				aliasCustomizationsMap.put(alias, fullAlias);
+				_aliasCustomizationsMap.put(alias, fullAlias);
 
 				_legacyMappingsMap.put(
 					httpServiceObjectRegistration.serviceKey,
@@ -568,13 +534,14 @@ public class HttpServiceImpl implements HttpService {
 	private static final Log _log = LogFactoryUtil.getLog(
 		HttpServiceImpl.class.getName());
 
+	private final Map<String, String> _aliasCustomizationsMap =
+		new ConcurrentHashMap<>();
 	private final Bundle _bundle;
-	private final Map<Bundle, Map<String, String>>
-		_bundleAliasCustomizationsMap = new HashMap<>();
-	private final Map<Bundle, Set<HttpServiceObjectRegistration>>
-		_bundleRegistrationsMap = new HashMap<>();
 	private final Map<HttpContext, HttpContextHelperFactory>
 		_httpContextHelperFactoriesMap = new ConcurrentHashMap<>();
+	private final Set<HttpServiceObjectRegistration>
+		_httpServiceObjectRegistrations = Collections.newSetFromMap(
+			new ConcurrentHashMap<>());
 	private final HttpServiceRuntimeController _httpServiceRuntimeController;
 	private final AtomicLong _legacyIdGenerator = new AtomicLong(0);
 	private final Map<Object, HttpServiceObjectRegistration>
