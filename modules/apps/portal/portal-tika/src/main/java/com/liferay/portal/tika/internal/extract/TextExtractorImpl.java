@@ -135,62 +135,16 @@ public class TextExtractorImpl implements TextExtractor {
 			inputStream.reset();
 		}
 
-		UniversalEncodingDetector universalEncodingDetector =
-			new UniversalEncodingDetector();
-
-		Metadata metadata = new Metadata();
-
-		Charset charset = universalEncodingDetector.detect(
-			inputStream, metadata);
-
-		String contentEncoding = StringPool.BLANK;
-
-		if (charset != null) {
-			contentEncoding = charset.name();
-		}
-
-		if (!contentEncoding.equals(StringPool.BLANK)) {
-			metadata.set("Content-Encoding", contentEncoding);
-			metadata.set(
-				"Content-Type", "text/plain; charset=" + contentEncoding);
-		}
-
 		WriteOutContentHandler writeOutContentHandler =
 			new WriteOutContentHandler(maxStringLength);
 
 		try {
 			ParseContext parseContext = new ParseContext();
-
-			parseContext.set(
-				EmbeddedDocumentExtractor.class,
-				new ParsingEmbeddedDocumentExtractor(parseContext) {
-
-					@Override
-					public void parseEmbedded(
-							InputStream inputStream,
-							ContentHandler contentHandler, Metadata metadata,
-							boolean outputHtml)
-						throws IOException, SAXException {
-
-						MediaType mediaType = detector.detect(
-							inputStream, new Metadata());
-
-						if (Objects.equals(
-								ContentTypes.IMAGE_PNG, mediaType.toString())) {
-
-							return;
-						}
-
-						super.parseEmbedded(
-							inputStream, contentHandler, metadata, outputHtml);
-					}
-
-				});
 			parseContext.set(Parser.class, parser);
 
 			parser.parse(
 				inputStream, new BodyContentHandler(writeOutContentHandler),
-				metadata, parseContext);
+				new Metadata(), parseContext);
 		}
 		catch (SAXException saxException) {
 			if (!writeOutContentHandler.isWriteLimitReached(saxException)) {
