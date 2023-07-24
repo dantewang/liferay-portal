@@ -16,9 +16,11 @@ package com.liferay.portal.osgi.web.http.servlet.internal;
 
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
+import com.liferay.portal.osgi.web.http.servlet.internal.constants.HttpServiceConstants;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.HttpContextHelperFactory;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.PatternInUseException;
@@ -278,11 +280,6 @@ public class HttpServiceImpl implements HttpService {
 					bundleContext.registerService(
 						ServletContextHelper.class, httpContextHelperFactory,
 						HashMapDictionaryBuilder.<String, Object>put(
-							Const.EQUINOX_LEGACY_CONTEXT_HELPER, Boolean.TRUE
-						).put(
-							Const.EQUINOX_LEGACY_HTTP_CONTEXT_INITIATING_ID,
-							_bundle.getBundleId()
-						).put(
 							HttpWhiteboardConstants.
 								HTTP_WHITEBOARD_CONTEXT_NAME,
 							() -> {
@@ -329,7 +326,7 @@ public class HttpServiceImpl implements HttpService {
 		}
 		else if (!pattern.contains("*.") &&
 				 !pattern.endsWith(Const.SLASH_STAR) &&
-				 !pattern.endsWith(Const.SLASH)) {
+				 !pattern.endsWith(StringPool.SLASH)) {
 
 			pattern += Const.SLASH_STAR;
 		}
@@ -356,14 +353,14 @@ public class HttpServiceImpl implements HttpService {
 					bundleContext.registerService(
 						Object.class, "resource",
 						HashMapDictionaryBuilder.<String, Object>put(
-							Const.EQUINOX_LEGACY_TCCL_PROP,
+							Constants.SERVICE_RANKING, Integer.MAX_VALUE
+						).put(
+							HttpServiceConstants.CONTEXT_CLASSLOADER,
 							() -> {
 								Thread currentThread = Thread.currentThread();
 
 								return currentThread.getContextClassLoader();
 							}
-						).put(
-							Constants.SERVICE_RANKING, Integer.MAX_VALUE
 						).put(
 							HttpWhiteboardConstants.
 								HTTP_WHITEBOARD_CONTEXT_SELECT,
@@ -427,7 +424,7 @@ public class HttpServiceImpl implements HttpService {
 			!alias.startsWith(Const.STAR_DOT) &&
 			!alias.contains(Const.SLASH_STAR_DOT)) {
 
-			if (alias.endsWith(Const.SLASH)) {
+			if (alias.endsWith(StringPool.SLASH)) {
 				pattern = new String[] {alias, alias + '*'};
 			}
 			else {
@@ -464,21 +461,21 @@ public class HttpServiceImpl implements HttpService {
 				String servletName = clazz.getName();
 
 				if ((initParams != null) &&
-					(initParams.get(Const.SERVLET_NAME) != null)) {
+					(initParams.get(_SERVLET_NAME) != null)) {
 
-					servletName = initParams.get(Const.SERVLET_NAME);
+					servletName = initParams.get(_SERVLET_NAME);
 				}
 
 				Dictionary<String, Object> dictionary =
 					HashMapDictionaryBuilder.<String, Object>put(
-						Const.EQUINOX_LEGACY_TCCL_PROP,
+						Constants.SERVICE_RANKING, Integer.MAX_VALUE
+					).put(
+						HttpServiceConstants.CONTEXT_CLASSLOADER,
 						() -> {
 							Thread currentThread = Thread.currentThread();
 
 							return currentThread.getContextClassLoader();
 						}
-					).put(
-						Constants.SERVICE_RANKING, Integer.MAX_VALUE
 					).put(
 						HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
 						httpContextHelperFactory.getFilter()
@@ -530,6 +527,8 @@ public class HttpServiceImpl implements HttpService {
 			}
 		}
 	}
+
+	private static final String _SERVLET_NAME = "servlet-name";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		HttpServiceImpl.class.getName());

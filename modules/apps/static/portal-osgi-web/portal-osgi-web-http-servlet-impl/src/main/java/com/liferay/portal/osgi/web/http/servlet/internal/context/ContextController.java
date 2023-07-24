@@ -12,10 +12,12 @@
 package com.liferay.portal.osgi.web.http.servlet.internal.context;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
+import com.liferay.portal.osgi.web.http.servlet.internal.constants.HttpServiceConstants;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextFilterTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextListenerTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextResourceTrackerCustomizer;
@@ -34,7 +36,6 @@ import com.liferay.portal.osgi.web.http.servlet.internal.servlet.Match;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ResourceServlet;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletConfigImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletContextAdaptor;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.DTOUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.EventListeners;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Path;
@@ -116,8 +117,9 @@ public class ContextController {
 			return;
 		}
 
-		if (!pattern.startsWith(Const.SLASH) ||
-			(pattern.endsWith(Const.SLASH) && !pattern.equals(Const.SLASH))) {
+		if (!pattern.startsWith(StringPool.SLASH) ||
+			(pattern.endsWith(StringPool.SLASH) &&
+			 !pattern.equals(StringPool.SLASH))) {
 
 			throw new IllegalArgumentException(
 				"Invalid pattern '" + pattern + "'");
@@ -141,8 +143,8 @@ public class ContextController {
 		_httpServiceRuntimeController = httpServiceRuntimeController;
 		_contextName = contextName;
 
-		if (contextPath.equals(Const.SLASH)) {
-			contextPath = Const.BLANK;
+		if (contextPath.equals(StringPool.SLASH)) {
+			contextPath = StringPool.BLANK;
 		}
 
 		_contextPath = contextPath;
@@ -334,7 +336,7 @@ public class ContextController {
 			Constants.SERVICE_ID);
 
 		ClassLoader legacyTCCL = (ClassLoader)serviceReference.getProperty(
-			Const.EQUINOX_LEGACY_TCCL_PROP);
+			HttpServiceConstants.CONTEXT_CLASSLOADER);
 
 		if (legacyTCCL != null) {
 			serviceId = -serviceId;
@@ -730,7 +732,7 @@ public class ContextController {
 				")");
 		}
 
-		if (contextSelector.startsWith(Const.OPEN_PAREN)) {
+		if (contextSelector.startsWith(StringPool.OPEN_PARENTHESIS)) {
 			org.osgi.framework.Filter targetFilter;
 
 			try {
@@ -933,7 +935,7 @@ public class ContextController {
 			Constants.SERVICE_ID);
 
 		ClassLoader legacyTCCL = (ClassLoader)serviceReference.getProperty(
-			Const.EQUINOX_LEGACY_TCCL_PROP);
+			HttpServiceConstants.CONTEXT_CLASSLOADER);
 
 		if (legacyTCCL != null) {
 			serviceId = -serviceId;
@@ -1105,7 +1107,7 @@ public class ContextController {
 			Constants.SERVICE_ID);
 
 		ClassLoader legacyTCCL = (ClassLoader)serviceReference.getProperty(
-			Const.EQUINOX_LEGACY_TCCL_PROP);
+			HttpServiceConstants.CONTEXT_CLASSLOADER);
 
 		if (legacyTCCL != null) {
 			serviceId = -serviceId;
@@ -1248,7 +1250,9 @@ public class ContextController {
 			throw new IllegalArgumentException("Prefix cannot be null");
 		}
 
-		if (prefix.endsWith(Const.SLASH) && !prefix.equals(Const.SLASH)) {
+		if (prefix.endsWith(StringPool.SLASH) &&
+			!prefix.equals(StringPool.SLASH)) {
+
 			throw new IllegalArgumentException(
 				"Invalid prefix '" + prefix + "'");
 		}
@@ -1368,7 +1372,7 @@ public class ContextController {
 
 		if (match == Match.DEFAULT_SERVLET) {
 			pathInfo = servletPath;
-			servletPath = Const.SLASH;
+			servletPath = StringPool.SLASH;
 		}
 
 		while (true) {
@@ -1492,8 +1496,7 @@ public class ContextController {
 		}
 
 		try {
-			new URI(
-				Const.HTTP, Const.LOCALHOST, preValidationContextPath, null);
+			new URI("http", "localhost", preValidationContextPath, null);
 		}
 		catch (URISyntaxException uriSyntaxException) {
 			IllegalContextPathException illegalContextPathException =

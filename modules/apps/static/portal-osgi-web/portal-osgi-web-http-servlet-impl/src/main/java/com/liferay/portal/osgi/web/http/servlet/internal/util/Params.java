@@ -11,6 +11,8 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.util;
 
+import com.liferay.petra.string.StringPool;
+
 /**
  * @author Raymond Augé
  */
@@ -25,7 +27,7 @@ public class Params {
 
 		System.arraycopy(params, 0, tmp, 0, params.length);
 
-		tmp[params.length] = (value == null) ? Const.BLANK : value;
+		tmp[params.length] = (value == null) ? StringPool.BLANK : value;
 
 		return tmp;
 	}
@@ -47,7 +49,8 @@ public class Params {
 		}
 
 		for (int i = 0; i < values.length; i++) {
-			tmp[length + i] = (values[i] == null) ? Const.BLANK : values[i];
+			tmp[length + i] =
+				(values[i] == null) ? StringPool.BLANK : values[i];
 		}
 
 		return tmp;
