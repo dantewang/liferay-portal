@@ -11,6 +11,7 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.customizer;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -18,7 +19,6 @@ import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeContr
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFailureException;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.ServletRegistration;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
 
@@ -148,7 +148,7 @@ public class ContextServletTrackerCustomizer
 		failedServletDTO.serviceId = (Long)serviceReference.getProperty(
 			Constants.SERVICE_ID);
 		failedServletDTO.servletContextId = _contextController.getServiceId();
-		failedServletDTO.servletInfo = Const.BLANK;
+		failedServletDTO.servletInfo = StringPool.BLANK;
 
 		httpServiceRuntimeController.recordDTO(
 			serviceReference, failedServletDTO);

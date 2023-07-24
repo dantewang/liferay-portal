@@ -12,6 +12,7 @@
 package com.liferay.portal.osgi.web.http.servlet.internal.context;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.EndpointRegistration;
@@ -19,7 +20,6 @@ import com.liferay.portal.osgi.web.http.servlet.internal.registration.FilterRegi
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpServletRequestWrapperImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpServletResponseWrapperImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ResponseStateHandler;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Params;
 
 import java.io.Closeable;
@@ -61,7 +61,7 @@ public class DispatchTargets {
 		_matchingFilterRegistrations = matchingFilterRegistrations;
 		_servletName = servletName;
 		_requestURI = requestURI;
-		_servletPath = (servletPath == null) ? Const.BLANK : servletPath;
+		_servletPath = (servletPath == null) ? StringPool.BLANK : servletPath;
 		_pathInfo = pathInfo;
 		_queryString = queryString;
 	}
@@ -293,14 +293,14 @@ public class DispatchTargets {
 		try {
 			Map<String, String[]> parameterMap = new LinkedHashMap<>();
 
-			for (String parameter : queryString.split(Const.AMP)) {
+			for (String parameter : queryString.split(StringPool.AMPERSAND)) {
 				int index = parameter.indexOf('=');
 
 				String name = null;
 
 				if (index > 0) {
 					name = URLDecoder.decode(
-						parameter.substring(0, index), Const.UTF8);
+						parameter.substring(0, index), StringPool.UTF8);
 				}
 
 				String[] values = parameterMap.get(name);
@@ -313,7 +313,7 @@ public class DispatchTargets {
 
 				if ((index > 0) && (parameter.length() > (index + 1))) {
 					value = URLDecoder.decode(
-						parameter.substring(index + 1), Const.UTF8);
+						parameter.substring(index + 1), StringPool.UTF8);
 				}
 
 				values = Params.append(values, value);
