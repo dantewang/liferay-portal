@@ -39,6 +39,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Michael C. Han
@@ -48,7 +49,6 @@ import org.osgi.service.component.annotations.Deactivate;
 	service = NotificationRecipientBuilder.class
 )
 public class ScriptNotificationRecipientBuilder
-	extends RoleNotificationRecipientBuilder
 	implements NotificationRecipientBuilder {
 
 	@Override
@@ -85,7 +85,7 @@ public class ScriptNotificationRecipientBuilder
 				ScriptingNotificationRecipientConstants.ROLES_RECIPIENT);
 
 			for (Role role : roles) {
-				addRoleRecipientAddresses(
+				_roleNotificationRecipientBuilder.addRoleRecipientAddresses(
 					notificationRecipients, role, notificationReceptionType,
 					executionContext);
 			}
@@ -133,6 +133,9 @@ public class ScriptNotificationRecipientBuilder
 		return notificationRecipientEvaluator.evaluate(
 			kaleoNotificationRecipient, executionContext);
 	}
+
+	@Reference
+	private RoleNotificationRecipientBuilder _roleNotificationRecipientBuilder;
 
 	private ServiceTrackerMap<String, List<NotificationRecipientEvaluator>>
 		_serviceTrackerMap;
