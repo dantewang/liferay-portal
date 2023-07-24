@@ -12,8 +12,6 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.registration;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.FilterChainImpl;
@@ -37,9 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.http.runtime.dto.FilterDTO;
 
@@ -75,30 +70,7 @@ public class FilterRegistration
 			_classLoader = bundleWiring.getClassLoader();
 		}
 
-		ServiceReference<Filter> serviceReference =
-			serviceHolder.getServiceReference();
-
-		String legacyContextFilter = (String)serviceReference.getProperty(
-			Const.EQUINOX_LEGACY_CONTEXT_SELECT);
-
-		if (legacyContextFilter != null) {
-			org.osgi.framework.Filter filter = null;
-
-			try {
-				filter = FrameworkUtil.createFilter(legacyContextFilter);
-			}
-			catch (InvalidSyntaxException invalidSyntaxException) {
-				if (_log.isDebugEnabled()) {
-					_log.debug(invalidSyntaxException);
-				}
-			}
-
-			_initDestroyWithContextController =
-				(filter == null) || contextController.matches(filter);
-		}
-		else {
-			_initDestroyWithContextController = true;
-		}
+		_initDestroyWithContextController = true;
 	}
 
 	public boolean appliesTo(FilterChainImpl filterChainImpl) {
@@ -351,9 +323,6 @@ public class FilterRegistration
 
 		return patterns;
 	}
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		FilterRegistration.class.getName());
 
 	private final ClassLoader _classLoader;
 	private final Pattern[] _compiledPatterns;

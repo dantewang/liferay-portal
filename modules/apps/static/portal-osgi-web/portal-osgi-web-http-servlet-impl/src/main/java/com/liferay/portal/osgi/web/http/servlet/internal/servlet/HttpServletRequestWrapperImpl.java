@@ -13,10 +13,10 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.DispatchTargets;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.EndpointRegistration;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.EventListeners;
 
 import java.util.Collections;
@@ -322,8 +322,8 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 		ContextController contextController =
 			dispatchTargets.getContextController();
 
-		if (!path.startsWith(Const.SLASH)) {
-			path = dispatchTargets.getServletPath() + Const.SLASH + path;
+		if (!path.startsWith(StringPool.SLASH)) {
+			path = dispatchTargets.getServletPath() + StringPool.SLASH + path;
 		}
 		else if (path.startsWith(contextController.getFullContextPath())) {
 			String fullContextPath = contextController.getFullContextPath();
@@ -376,8 +376,10 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 			return lastDispatchTargets.getServletPath();
 		}
 
-		if (Objects.equals(dispatchTargets.getServletPath(), Const.SLASH)) {
-			return Const.BLANK;
+		if (Objects.equals(
+				dispatchTargets.getServletPath(), StringPool.SLASH)) {
+
+			return StringPool.BLANK;
 		}
 
 		return dispatchTargets.getServletPath();

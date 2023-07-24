@@ -11,6 +11,7 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.registration;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.Match;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 
@@ -56,14 +57,14 @@ public abstract class MatchableRegistration<T, D extends DTO>
 
 		if (match == Match.EXTENSION) {
 			int index = pattern.lastIndexOf(Const.STAR_DOT);
-			String patterPrefix = Const.BLANK;
+			String patterPrefix = StringPool.BLANK;
 
 			if (index > 0) {
 				patterPrefix = pattern.substring(0, index - 1);
 			}
 
 			if ((index != -1) && servletPath.equals(patterPrefix)) {
-				return pattern.endsWith(Const.DOT + extension);
+				return pattern.endsWith(StringPool.PERIOD + extension);
 			}
 		}
 
