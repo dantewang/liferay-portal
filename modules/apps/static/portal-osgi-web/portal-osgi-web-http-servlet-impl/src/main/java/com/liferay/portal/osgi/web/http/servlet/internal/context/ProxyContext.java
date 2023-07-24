@@ -13,7 +13,7 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.context;
 
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
+import com.liferay.petra.string.StringPool;
 
 import java.io.File;
 import java.io.Serializable;
@@ -103,7 +103,7 @@ public class ProxyContext {
 	}
 
 	public String getServletPath() {
-		return Const.BLANK;
+		return StringPool.BLANK;
 	}
 
 	public class ContextAttributes

@@ -15,6 +15,7 @@
 package com.liferay.portal.osgi.web.http.servlet.internal.activator;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.SecureRandomUtil;
@@ -29,7 +30,6 @@ import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeContr
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpSessionTracker;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ProxyServlet;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -303,7 +303,7 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 							HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME
 					).put(
 						HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH,
-						Const.SLASH
+						StringPool.SLASH
 					).put(
 						HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET,
 						targetFilter
