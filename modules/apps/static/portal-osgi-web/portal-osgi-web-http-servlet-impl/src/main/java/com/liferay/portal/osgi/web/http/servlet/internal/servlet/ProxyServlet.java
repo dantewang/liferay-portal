@@ -13,8 +13,8 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 
 import java.io.IOException;
 
@@ -59,7 +59,7 @@ public class ProxyServlet extends HttpServlet {
 			httpServletRequest);
 
 		if (alias == null) {
-			alias = Const.SLASH;
+			alias = StringPool.SLASH;
 		}
 
 		if (_httpServiceRuntimeController.doDispatch(

@@ -14,9 +14,9 @@
 package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -53,8 +53,8 @@ public class ResourceServlet extends HttpServlet {
 		String internalName, ServletContextHelper servletContextHelper,
 		AccessControlContext accessControlContext) {
 
-		if (internalName.equals(Const.SLASH)) {
-			_internalName = Const.BLANK;
+		if (internalName.equals(StringPool.SLASH)) {
+			_internalName = StringPool.BLANK;
 		}
 		else {
 			_internalName = internalName;
@@ -79,7 +79,7 @@ public class ResourceServlet extends HttpServlet {
 				httpServletRequest);
 
 			if (pathInfo == null) {
-				pathInfo = Const.BLANK;
+				pathInfo = StringPool.BLANK;
 			}
 
 			String resourcePath = _internalName + pathInfo;

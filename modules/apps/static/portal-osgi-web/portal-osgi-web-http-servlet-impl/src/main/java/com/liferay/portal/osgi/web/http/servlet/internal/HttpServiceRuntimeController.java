@@ -15,6 +15,7 @@
 package com.liferay.portal.osgi.web.http.servlet.internal;
 
 import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
@@ -24,7 +25,6 @@ import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFai
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextNameException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextPathException;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.Match;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Path;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
@@ -307,7 +307,7 @@ public class HttpServiceRuntimeController {
 
 		if (match == Match.DEFAULT_SERVLET) {
 			pathInfo = servletPath;
-			servletPath = Const.SLASH;
+			servletPath = StringPool.SLASH;
 		}
 
 		while (true) {

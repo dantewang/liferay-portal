@@ -15,13 +15,13 @@
 package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.DispatchTargets;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ProxyContext;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.EventListeners;
 
 import java.io.IOException;
@@ -253,7 +253,7 @@ public class ServletContextAdaptor {
 	}
 
 	public RequestDispatcher getRequestDispatcher(String path) {
-		if (!path.startsWith(Const.SLASH)) {
+		if (!path.startsWith(StringPool.SLASH)) {
 			return null;
 		}
 
@@ -303,7 +303,7 @@ public class ServletContextAdaptor {
 	}
 
 	public Set<String> getResourcePaths(String name) {
-		if ((name == null) || !name.startsWith(Const.SLASH)) {
+		if ((name == null) || !name.startsWith(StringPool.SLASH)) {
 			return null;
 		}
 
