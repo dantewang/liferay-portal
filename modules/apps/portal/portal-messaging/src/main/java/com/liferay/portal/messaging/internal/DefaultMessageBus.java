@@ -227,8 +227,6 @@ public class DefaultMessageBus implements MessageBus {
 
 		_messageListenerServiceTracker.close();
 
-		shutdown(true);
-
 		_destinationEventListenerServiceTracker.close();
 
 		_destinationServiceTracker.close();
