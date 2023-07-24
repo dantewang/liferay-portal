@@ -16,21 +16,24 @@ package com.liferay.oauth2.provider.scope.internal;
 
 import com.liferay.oauth2.provider.model.OAuth2ScopeGrant;
 import com.liferay.oauth2.provider.scope.ScopeChecker;
+import com.liferay.oauth2.provider.scope.liferay.ScopeContext;
 import com.liferay.oauth2.provider.service.OAuth2ScopeGrantLocalService;
 import com.liferay.osgi.util.service.Snapshot;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.osgi.framework.Bundle;
 import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Carlos Sierra Andrés
  */
-@Component(service = ScopeChecker.class)
-public class ThreadLocalScopeChecker
-	extends ThreadLocalScopeContext implements ScopeChecker {
+@Component(service = {ScopeChecker.class, ScopeContext.class})
+public class ThreadLocalScopeContextScopeChecker
+	implements ScopeChecker, ScopeContext {
 
 	@Override
 	public boolean checkAllScopes(String... scopes) {
@@ -103,6 +106,40 @@ public class ThreadLocalScopeChecker
 		return false;
 	}
 
+	@Override
+	public void clear() {
+		_accessTokenThreadLocal.remove();
+		_applicationNameThreadLocal.remove();
+		_bundleSymbolicNameThreadLocal.remove();
+		_companyIdThreadLocal.remove();
+	}
+
+	@Override
+	public void setAccessToken(String accessToken) {
+		_accessTokenThreadLocal.set(accessToken);
+	}
+
+	@Override
+	public void setApplicationName(String applicationName) {
+		_applicationNameThreadLocal.set(applicationName);
+	}
+
+	@Override
+	public void setBundle(Bundle bundle) {
+		String symbolicName = null;
+
+		if (bundle != null) {
+			symbolicName = bundle.getSymbolicName();
+		}
+
+		_bundleSymbolicNameThreadLocal.set(symbolicName);
+	}
+
+	@Override
+	public void setCompanyId(long companyId) {
+		_companyIdThreadLocal.set(companyId);
+	}
+
 	private void _checkOAuth2ScopeGrantLocalService() {
 		if (_oAuth2ScopeGrantLocalServiceSnapshot.get() == null) {
 			throw new IllegalStateException(
@@ -116,13 +153,23 @@ public class ThreadLocalScopeChecker
 			_oAuth2ScopeGrantLocalServiceSnapshot.get();
 
 		return oAuth2ScopeGrantLocalService.getOAuth2ScopeGrants(
-			companyIdThreadLocal.get(), applicationNameThreadLocal.get(),
-			bundleSymbolicNameThreadLocal.get(), accessTokenThreadLocal.get());
+			_companyIdThreadLocal.get(), _applicationNameThreadLocal.get(),
+			_bundleSymbolicNameThreadLocal.get(),
+			_accessTokenThreadLocal.get());
 	}
 
 	private static final Snapshot<OAuth2ScopeGrantLocalService>
 		_oAuth2ScopeGrantLocalServiceSnapshot = new Snapshot<>(
-			ThreadLocalScopeChecker.class, OAuth2ScopeGrantLocalService.class,
-			null, true);
+			ThreadLocalScopeContextScopeChecker.class,
+			OAuth2ScopeGrantLocalService.class, null, true);
+
+	private final ThreadLocal<String> _accessTokenThreadLocal =
+		ThreadLocal.withInitial(() -> StringPool.BLANK);
+	private final ThreadLocal<String> _applicationNameThreadLocal =
+		ThreadLocal.withInitial(() -> StringPool.BLANK);
+	private final ThreadLocal<String> _bundleSymbolicNameThreadLocal =
+		ThreadLocal.withInitial(() -> StringPool.BLANK);
+	private final ThreadLocal<Long> _companyIdThreadLocal =
+		ThreadLocal.withInitial(() -> 0L);
 
 }
