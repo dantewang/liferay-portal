@@ -16,7 +16,6 @@ package com.liferay.oauth2.provider.scope.internal;
 
 import com.liferay.oauth2.provider.model.OAuth2ScopeGrant;
 import com.liferay.oauth2.provider.scope.ScopeChecker;
-import com.liferay.oauth2.provider.scope.internal.liferay.ThreadLocalScopeContext;
 import com.liferay.oauth2.provider.service.OAuth2ScopeGrantLocalService;
 import com.liferay.osgi.util.service.Snapshot;
 import com.liferay.portal.kernel.util.Validator;
