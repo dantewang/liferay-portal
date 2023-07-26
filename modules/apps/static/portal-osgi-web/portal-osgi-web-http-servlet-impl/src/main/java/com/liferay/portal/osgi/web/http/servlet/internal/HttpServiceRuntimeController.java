@@ -19,6 +19,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
+import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextControllerListener;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.DispatchTargets;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ProxyContext;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFailureException;
@@ -89,6 +90,12 @@ public class HttpServiceRuntimeController {
 			new ServletContextHelperServiceTrackerCustomizer());
 
 		_serviceTracker.open();
+	}
+
+	public void addContextControllerListener(
+		ContextControllerListener contextControllerListener) {
+
+		_contextControllerListeners.add(contextControllerListener);
 	}
 
 	public void destroy() {
@@ -230,6 +237,12 @@ public class HttpServiceRuntimeController {
 		dtosMap.putIfAbsent(serviceReference, dto);
 	}
 
+	public void removeContextControllerListener(
+		ContextControllerListener contextControllerListener) {
+
+		_contextControllerListeners.remove(contextControllerListener);
+	}
+
 	public void removeDTO(
 		Class<?> clazz, ServiceReference<?> serviceReference) {
 
@@ -368,6 +381,8 @@ public class HttpServiceRuntimeController {
 
 	private Map<String, Object> _attributesMap;
 	private BundleContext _bundleContext;
+	private final Set<ContextControllerListener> _contextControllerListeners =
+		Collections.newSetFromMap(new ConcurrentHashMap<>());
 	private final ConcurrentMap
 		<ServiceReference<ServletContextHelper>, ContextController>
 			_controllersMap = new ConcurrentHashMap<>();
@@ -423,6 +438,11 @@ public class HttpServiceRuntimeController {
 				_controllersMap.put(serviceReference, contextController);
 
 				result.set(contextController);
+
+				_contextControllerListeners.forEach(
+					contextControllerListener ->
+						contextControllerListener.contextControllerAdded(
+							contextController));
 			}
 			catch (HttpWhiteboardFailureException
 						httpWhiteboardFailureException) {
