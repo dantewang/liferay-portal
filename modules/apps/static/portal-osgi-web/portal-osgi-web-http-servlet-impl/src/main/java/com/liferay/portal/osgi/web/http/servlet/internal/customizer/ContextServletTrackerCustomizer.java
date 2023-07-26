@@ -69,7 +69,9 @@ public class ContextServletTrackerCustomizer
 			return null;
 		}
 
-		if (!_contextController.matches(serviceReference) ||
+		if (!_contextController.matches(
+				(String)serviceReference.getProperty(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT)) ||
 			!httpServiceRuntimeController.matches(serviceReference)) {
 
 			return null;

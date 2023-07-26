@@ -56,7 +56,9 @@ public class ContextResourceTrackerCustomizer
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN);
 
 		if (((resourcePrefix == null) && (resourcePattern == null)) ||
-			!_contextController.matches(serviceReference)) {
+			!_contextController.matches(
+				(String)serviceReference.getProperty(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT))) {
 
 			return null;
 		}

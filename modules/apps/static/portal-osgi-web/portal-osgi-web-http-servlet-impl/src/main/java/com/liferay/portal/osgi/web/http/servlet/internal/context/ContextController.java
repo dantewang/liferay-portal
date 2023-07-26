@@ -703,14 +703,7 @@ public class ContextController {
 		return httpSessionAdaptor;
 	}
 
-	public boolean matches(org.osgi.framework.Filter targetFilter) {
-		return targetFilter.match(_servletContextHelperServiceReference);
-	}
-
-	public boolean matches(ServiceReference<?> serviceReference) {
-		String contextSelector = (String)serviceReference.getProperty(
-			HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT);
-
+	public boolean matches(String contextSelector) {
 		if (_contextName.equals(contextSelector)) {
 			return true;
 		}
@@ -732,7 +725,7 @@ public class ContextController {
 				throw new IllegalArgumentException(invalidSyntaxException);
 			}
 
-			if (matches(targetFilter)) {
+			if (targetFilter.match(_servletContextHelperServiceReference)) {
 				return true;
 			}
 		}

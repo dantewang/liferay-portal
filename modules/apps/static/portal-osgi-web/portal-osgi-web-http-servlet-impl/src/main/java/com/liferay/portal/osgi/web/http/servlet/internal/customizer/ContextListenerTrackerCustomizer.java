@@ -55,7 +55,9 @@ public class ContextListenerTrackerCustomizer
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER);
 
 		if ((listenerObject == null) ||
-			!_contextController.matches(serviceReference) ||
+			!_contextController.matches(
+				(String)serviceReference.getProperty(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT)) ||
 			!httpServiceRuntimeController.matches(serviceReference)) {
 
 			return null;
