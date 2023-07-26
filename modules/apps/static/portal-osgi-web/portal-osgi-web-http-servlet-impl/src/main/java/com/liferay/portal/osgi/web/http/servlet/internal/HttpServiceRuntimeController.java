@@ -26,6 +26,7 @@ import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFai
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextNameException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextPathException;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.Match;
+import com.liferay.portal.osgi.web.http.servlet.internal.tracker.ServletTracker;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Path;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
@@ -90,6 +91,8 @@ public class HttpServiceRuntimeController {
 			new ServletContextHelperServiceTrackerCustomizer());
 
 		_serviceTracker.open();
+
+		_servletTracker = new ServletTracker(bundleContext, this);
 	}
 
 	public void addContextControllerListener(
@@ -99,6 +102,8 @@ public class HttpServiceRuntimeController {
 	}
 
 	public void destroy() {
+		_servletTracker.close();
+
 		_serviceTracker.close();
 
 		_controllersMap.clear();
@@ -394,6 +399,7 @@ public class HttpServiceRuntimeController {
 	private ServiceTracker
 		<ServletContextHelper, AtomicReference<ContextController>>
 			_serviceTracker;
+	private final ServletTracker _servletTracker;
 
 	private class ServletContextHelperServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer

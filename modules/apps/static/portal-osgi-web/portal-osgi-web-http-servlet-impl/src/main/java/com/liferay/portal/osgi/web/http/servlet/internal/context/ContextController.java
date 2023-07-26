@@ -21,7 +21,6 @@ import com.liferay.portal.osgi.web.http.servlet.internal.constants.HttpServiceCo
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextFilterTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextListenerTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextResourceTrackerCustomizer;
-import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextServletTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextNameException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextPathException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.RegisteredFilterException;
@@ -212,13 +211,6 @@ public class ContextController {
 				_bundleContext, httpServiceRuntimeController, this));
 
 		_filterServiceTracker.open();
-
-		_servletServiceTracker = new ServiceTracker<>(
-			_bundleContext, Servlet.class,
-			new ContextServletTrackerCustomizer(
-				_bundleContext, httpServiceRuntimeController, this));
-
-		_servletServiceTracker.open();
 
 		_resourceServiceTracker = new ServiceTracker<>(
 			_bundleContext, Object.class,
@@ -422,7 +414,6 @@ public class ContextController {
 	public void destroy() {
 		_flushActiveSessions();
 		_resourceServiceTracker.close();
-		_servletServiceTracker.close();
 		_filterServiceTracker.close();
 
 		if (_httpSessionIdListenerServiceTracker != null) {
@@ -1547,8 +1538,6 @@ public class ContextController {
 	private final ServiceTracker
 		<EventListener, AtomicReference<ListenerRegistration>>
 			_servletRequestListenerServiceTracker;
-	private final ServiceTracker<Servlet, AtomicReference<ServletRegistration>>
-		_servletServiceTracker;
 	private boolean _shutdown;
 	private String _string;
 
