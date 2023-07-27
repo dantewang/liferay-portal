@@ -18,7 +18,9 @@ import com.liferay.portal.osgi.web.http.servlet.internal.registration.ServletReg
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.Servlet;
@@ -93,9 +95,19 @@ public class ServletTracker {
 		ServiceReference<Servlet> serviceReference) {
 
 		try {
-			_servletRegistrationsMap.put(
-				serviceReference,
-				contextController.addServletRegistration(serviceReference));
+			ServletRegistration servletRegistration =
+				contextController.addServletRegistration(serviceReference);
+
+			if (servletRegistration == null) {
+				return;
+			}
+
+			Set<ServletRegistration> servletRegistrations =
+				_servletRegistrationsMap.computeIfAbsent(
+					serviceReference,
+					key -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+
+			servletRegistrations.add(servletRegistration);
 		}
 		catch (HttpWhiteboardFailureException httpWhiteboardFailureException) {
 			_log.error(httpWhiteboardFailureException);
@@ -119,11 +131,9 @@ public class ServletTracker {
 
 	private final ContextControllerListener _contextControllerListener =
 		new ServletTrackerContextControllerListener();
-	private final Map<ServiceReference<Servlet>, String> _contextSelectorsMap =
-		new ConcurrentHashMap<>();
 	private final HttpServiceRuntimeController _httpServiceRuntimeController;
 	private final ServiceTracker<Servlet, String> _serviceTracker;
-	private final Map<ServiceReference<Servlet>, ServletRegistration>
+	private final Map<ServiceReference<Servlet>, Set<ServletRegistration>>
 		_servletRegistrationsMap = new ConcurrentHashMap<>();
 
 	private class ServletServiceTrackerCustomizer
@@ -172,33 +182,27 @@ public class ServletTracker {
 				_register(contextController, serviceReference);
 			}
 
-			_contextSelectorsMap.put(serviceReference, contextSelector);
-
 			return contextSelector;
 		}
 
 		@Override
 		public void modifiedService(
-			ServiceReference<Servlet> serviceReference,
-			String contextSelector) {
+			ServiceReference<Servlet> serviceReference, String servlet) {
 
-			removedService(serviceReference, contextSelector);
+			removedService(serviceReference, servlet);
 
 			addingService(serviceReference);
 		}
 
 		@Override
 		public void removedService(
-			ServiceReference<Servlet> serviceReference,
-			String contextSelector) {
+			ServiceReference<Servlet> serviceReference, String servlet) {
 
-			_contextSelectorsMap.remove(serviceReference);
-
-			ServletRegistration servletRegistration =
+			Set<ServletRegistration> servletRegistrations =
 				_servletRegistrationsMap.remove(serviceReference);
 
-			if (servletRegistration != null) {
-				servletRegistration.destroy();
+			if (servletRegistrations != null) {
+				servletRegistrations.forEach(ServletRegistration::destroy);
 			}
 
 			_httpServiceRuntimeController.removeDTO(
@@ -214,7 +218,10 @@ public class ServletTracker {
 		public void contextControllerAdded(
 			ContextController contextController) {
 
-			_contextSelectorsMap.forEach(
+			Map<ServiceReference<Servlet>, String> trackedMap =
+				_serviceTracker.getTracked();
+
+			trackedMap.forEach(
 				(serviceReference, contextSelector) -> {
 					if (contextController.matches(contextSelector)) {
 						_register(contextController, serviceReference);
