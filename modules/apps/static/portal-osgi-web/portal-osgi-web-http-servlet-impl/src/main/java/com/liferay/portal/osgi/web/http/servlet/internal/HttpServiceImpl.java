@@ -141,23 +141,23 @@ public class HttpServiceImpl implements HttpService {
 					"The bundle did not register the alias: " + alias);
 			}
 
-			HttpServiceObjectRegistration httpServiceObjectRegistration =
+			HttpServiceRegistrationBag httpServiceRegistrationBag =
 				_legacyMappingsMap.get(aliasCustomization);
 
-			if (httpServiceObjectRegistration == null) {
+			if (httpServiceRegistrationBag == null) {
 				throw new IllegalArgumentException(
 					"No registration found for alias: " + alias);
 			}
 
-			if (!_httpServiceObjectRegistrations.remove(
-					httpServiceObjectRegistration)) {
+			if (!_httpServiceRegistrationBags.remove(
+					httpServiceRegistrationBag)) {
 
 				throw new IllegalArgumentException(
 					"The bundle did not register the alias: " + alias);
 			}
 
 			try {
-				httpServiceObjectRegistration.serviceRegistration.unregister();
+				httpServiceRegistrationBag._serviceRegistration.unregister();
 			}
 			catch (IllegalStateException illegalStateException) {
 				if (_log.isDebugEnabled()) {
@@ -165,7 +165,7 @@ public class HttpServiceImpl implements HttpService {
 				}
 			}
 
-			_decrementFactoryUseCount(httpServiceObjectRegistration.factory);
+			_decrementFactoryUseCount(httpServiceRegistrationBag._factory);
 			_legacyMappingsMap.remove(aliasCustomization);
 		}
 	}
@@ -174,11 +174,11 @@ public class HttpServiceImpl implements HttpService {
 		synchronized (_legacyMappingsMap) {
 			_aliasCustomizationsMap.clear();
 
-			for (HttpServiceObjectRegistration httpServiceObjectRegistration :
-					_httpServiceObjectRegistrations) {
+			for (HttpServiceRegistrationBag httpServiceRegistrationBag :
+					_httpServiceRegistrationBags) {
 
 				try {
-					httpServiceObjectRegistration.serviceRegistration.
+					httpServiceRegistrationBag._serviceRegistration.
 						unregister();
 				}
 				catch (IllegalStateException illegalStateException) {
@@ -187,10 +187,9 @@ public class HttpServiceImpl implements HttpService {
 					}
 				}
 
-				_decrementFactoryUseCount(
-					httpServiceObjectRegistration.factory);
+				_decrementFactoryUseCount(httpServiceRegistrationBag._factory);
 				_legacyMappingsMap.remove(
-					httpServiceObjectRegistration.serviceKey);
+					httpServiceRegistrationBag._serviceKey);
 			}
 		}
 
@@ -334,7 +333,7 @@ public class HttpServiceImpl implements HttpService {
 		ContextController.checkPattern(alias);
 
 		synchronized (_legacyMappingsMap) {
-			HttpServiceObjectRegistration httpServiceObjectRegistration = null;
+			HttpServiceRegistrationBag httpServiceRegistrationBag = null;
 
 			HttpContextHelperFactory httpContextHelperFactory =
 				_getOrRegisterHttpContextHelperFactory(httpContext);
@@ -378,24 +377,21 @@ public class HttpServiceImpl implements HttpService {
 							_targetFilter
 						).build());
 
-				httpServiceObjectRegistration =
-					new HttpServiceObjectRegistration(
-						fullAlias, serviceRegistration,
-						httpContextHelperFactory, _bundle);
+				httpServiceRegistrationBag = new HttpServiceRegistrationBag(
+					fullAlias, serviceRegistration, httpContextHelperFactory);
 
-				_httpServiceObjectRegistrations.add(
-					httpServiceObjectRegistration);
+				_httpServiceRegistrationBags.add(httpServiceRegistrationBag);
 
 				_aliasCustomizationsMap.put(alias, fullAlias);
 
 				_legacyMappingsMap.put(
-					httpServiceObjectRegistration.serviceKey,
-					httpServiceObjectRegistration);
+					httpServiceRegistrationBag._serviceKey,
+					httpServiceRegistrationBag);
 			}
 			finally {
-				if ((httpServiceObjectRegistration == null) ||
+				if ((httpServiceRegistrationBag == null) ||
 					!_legacyMappingsMap.containsKey(
-						httpServiceObjectRegistration.serviceKey)) {
+						httpServiceRegistrationBag._serviceKey)) {
 
 					_decrementFactoryUseCount(httpContextHelperFactory);
 				}
@@ -442,7 +438,7 @@ public class HttpServiceImpl implements HttpService {
 				throw new ServletAlreadyRegisteredException(servlet);
 			}
 
-			HttpServiceObjectRegistration httpServiceObjectRegistration = null;
+			HttpServiceRegistrationBag httpServiceRegistrationBag = null;
 			ServiceRegistration<Servlet> serviceRegistration = null;
 
 			HttpContextHelperFactory httpContextHelperFactory =
@@ -499,24 +495,21 @@ public class HttpServiceImpl implements HttpService {
 
 				legacyServlet.checkForError();
 
-				httpServiceObjectRegistration =
-					new HttpServiceObjectRegistration(
-						fullAlias, serviceRegistration,
-						httpContextHelperFactory, _bundle);
+				httpServiceRegistrationBag = new HttpServiceRegistrationBag(
+					fullAlias, serviceRegistration, httpContextHelperFactory);
 
-				_httpServiceObjectRegistrations.add(
-					httpServiceObjectRegistration);
+				_httpServiceRegistrationBags.add(httpServiceRegistrationBag);
 
 				_aliasCustomizationsMap.put(alias, fullAlias);
 
 				_legacyMappingsMap.put(
-					httpServiceObjectRegistration.serviceKey,
-					httpServiceObjectRegistration);
+					httpServiceRegistrationBag._serviceKey,
+					httpServiceRegistrationBag);
 			}
 			finally {
-				if ((httpServiceObjectRegistration == null) ||
+				if ((httpServiceRegistrationBag == null) ||
 					!_legacyMappingsMap.containsKey(
-						httpServiceObjectRegistration.serviceKey)) {
+						httpServiceRegistrationBag._serviceKey)) {
 
 					_decrementFactoryUseCount(httpContextHelperFactory);
 
@@ -538,15 +531,31 @@ public class HttpServiceImpl implements HttpService {
 	private final Bundle _bundle;
 	private final Map<HttpContext, HttpContextHelperFactory>
 		_httpContextHelperFactoriesMap = new ConcurrentHashMap<>();
-	private final Set<HttpServiceObjectRegistration>
-		_httpServiceObjectRegistrations = Collections.newSetFromMap(
-			new ConcurrentHashMap<>());
+	private final Set<HttpServiceRegistrationBag> _httpServiceRegistrationBags =
+		Collections.newSetFromMap(new ConcurrentHashMap<>());
 	private final HttpServiceRuntimeController _httpServiceRuntimeController;
 	private final AtomicLong _legacyIdGenerator = new AtomicLong(0);
-	private final Map<Object, HttpServiceObjectRegistration>
-		_legacyMappingsMap = Collections.synchronizedMap(new HashMap<>());
+	private final Map<Object, HttpServiceRegistrationBag> _legacyMappingsMap =
+		Collections.synchronizedMap(new HashMap<>());
 	private boolean _shutdown;
 	private final String _targetFilter;
+
+	private static class HttpServiceRegistrationBag {
+
+		public HttpServiceRegistrationBag(
+			Object serviceKey, ServiceRegistration<?> serviceRegistration,
+			HttpContextHelperFactory factory) {
+
+			_serviceKey = serviceKey;
+			_serviceRegistration = serviceRegistration;
+			_factory = factory;
+		}
+
+		private final HttpContextHelperFactory _factory;
+		private final Object _serviceKey;
+		private final ServiceRegistration<?> _serviceRegistration;
+
+	}
 
 	private static class LegacyServiceObject {
 
