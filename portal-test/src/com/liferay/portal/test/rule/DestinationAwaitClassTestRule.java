@@ -11,7 +11,10 @@ import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.test.rule.ClassTestRule;
+import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,11 +22,17 @@ import java.util.concurrent.CountDownLatch;
 
 import org.junit.runner.Description;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+
 /**
  * @author Shuyang Zhou
  */
 public class DestinationAwaitClassTestRule
-	extends ClassTestRule<Set<CountDownLatch>> {
+	extends ClassTestRule
+		<Set
+			<ObjectValuePair
+				<CountDownLatch, ServiceRegistration<MessageListener>>>> {
 
 	public static final DestinationAwaitClassTestRule INSTANCE =
 		new DestinationAwaitClassTestRule(DestinationNames.HOT_DEPLOY);
@@ -34,17 +43,36 @@ public class DestinationAwaitClassTestRule
 
 	@Override
 	public void afterClass(
-			Description description, Set<CountDownLatch> endCountDownLatches)
+			Description description,
+			Set
+				<ObjectValuePair
+					<CountDownLatch, ServiceRegistration<MessageListener>>>
+						endCountDownLatches)
 		throws Throwable {
 
-		endCountDownLatches.forEach(CountDownLatch::countDown);
+		endCountDownLatches.forEach(
+			objectValuePair -> {
+				CountDownLatch countDownLatch = objectValuePair.getKey();
+
+				countDownLatch.countDown();
+
+				ServiceRegistration<MessageListener> serviceRegistration =
+					objectValuePair.getValue();
+
+				serviceRegistration.unregister();
+			});
 	}
 
 	@Override
-	public Set<CountDownLatch> beforeClass(Description description)
-		throws InterruptedException {
+	public Set
+		<ObjectValuePair<CountDownLatch, ServiceRegistration<MessageListener>>>
+				beforeClass(Description description)
+			throws InterruptedException {
 
-		Set<CountDownLatch> endCountdownLatches = new HashSet<>();
+		Set
+			<ObjectValuePair
+				<CountDownLatch, ServiceRegistration<MessageListener>>>
+					endCountdownLatches = new HashSet<>();
 
 		for (String destinationName : _destinationNames) {
 			Destination destination = MessageBusUtil.getDestination(
@@ -65,33 +93,42 @@ public class DestinationAwaitClassTestRule
 
 			final Message countDownMessage = new Message();
 
-			destination.register(
-				new MessageListener() {
+			BundleContext bundleContext = SystemBundleUtil.getBundleContext();
 
-					@Override
-					public void receive(Message message) {
-						if (countDownMessage == message) {
-							startCountDownLatch.countDown();
+			ServiceRegistration<MessageListener> serviceRegistration =
+				bundleContext.registerService(
+					MessageListener.class,
+					new MessageListener() {
 
-							try {
-								endCountDownLatch.await();
+						@Override
+						public void receive(Message message) {
+							if (countDownMessage == message) {
+								startCountDownLatch.countDown();
 
-								destination.unregister(this);
-							}
-							catch (InterruptedException interruptedException) {
-								ReflectionUtil.throwException(
-									interruptedException);
+								try {
+									endCountDownLatch.await();
+
+									destination.unregister(this);
+								}
+								catch (InterruptedException
+											interruptedException) {
+
+									ReflectionUtil.throwException(
+										interruptedException);
+								}
 							}
 						}
-					}
 
-				});
+					},
+					MapUtil.singletonDictionary(
+						"destination.name", destinationName));
 
 			destination.send(countDownMessage);
 
 			startCountDownLatch.await();
 
-			endCountdownLatches.add(endCountDownLatch);
+			endCountdownLatches.add(
+				new ObjectValuePair<>(endCountDownLatch, serviceRegistration));
 		}
 
 		return endCountdownLatches;
