@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationConfiguration;
 import com.liferay.portal.kernel.messaging.DestinationFactory;
 import com.liferay.portal.kernel.messaging.MessageBus;
+import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.scripting.Scripting;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.scripting.executor.internal.constants.ScriptingExecutorMessagingConstants;
@@ -49,11 +50,15 @@ public class ScriptingExecutorMessagingConfigurator {
 		ScriptingExecutorMessageListener scriptingExecutorMessageListener =
 			new ScriptingExecutorMessageListener(_scripting);
 
-		destination.register(scriptingExecutorMessageListener);
+		_messageListenerServiceRegistration = bundleContext.registerService(
+			MessageListener.class, scriptingExecutorMessageListener,
+			properties);
 	}
 
 	@Deactivate
 	protected void deactivate() {
+		_messageListenerServiceRegistration.unregister();
+
 		if (_destinationServiceRegistration != null) {
 			_destinationServiceRegistration.unregister();
 		}
@@ -67,6 +72,9 @@ public class ScriptingExecutorMessagingConfigurator {
 
 	@Reference
 	private MessageBus _messageBus;
+
+	private ServiceRegistration<MessageListener>
+		_messageListenerServiceRegistration;
 
 	@Reference
 	private Scripting _scripting;

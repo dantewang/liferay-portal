@@ -14,9 +14,9 @@ import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.push.notifications.constants.PushNotificationsDestinationNames;
 import com.liferay.push.notifications.service.PushNotificationsDeviceLocalService;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -43,11 +43,14 @@ public class PushNotificationMessagingConfigurator {
 		Destination pushNotificationDestination = _registerDestination(
 			pushNotificationDestinationConfiguration);
 
-		MessageListener pushNotificationsMessageListener =
-			new PushNotificationsMessageListener(
-				_pushNotificationsDeviceLocalService);
-
-		pushNotificationDestination.register(pushNotificationsMessageListener);
+		_serviceRegistrations.add(
+			bundleContext.registerService(
+				MessageListener.class,
+				new PushNotificationsMessageListener(
+					_pushNotificationsDeviceLocalService),
+				HashMapDictionaryBuilder.<String, Object>put(
+					"destination.name", pushNotificationDestination.getName()
+				).build()));
 
 		DestinationConfiguration
 			pushNotificationResponseDestinationConfiguration =
@@ -59,18 +62,21 @@ public class PushNotificationMessagingConfigurator {
 		Destination pushNotificationResponseDestination = _registerDestination(
 			pushNotificationResponseDestinationConfiguration);
 
-		MessageListener pushNotificationsResponseMessageListener =
-			new PushNotificationsResponseMessageListener(_jsonFactory);
-
-		pushNotificationResponseDestination.register(
-			pushNotificationsResponseMessageListener);
+		_serviceRegistrations.add(
+			bundleContext.registerService(
+				MessageListener.class,
+				new PushNotificationsResponseMessageListener(_jsonFactory),
+				HashMapDictionaryBuilder.<String, Object>put(
+					"destination.name",
+					pushNotificationResponseDestination.getName()
+				).build()));
 	}
 
 	@Deactivate
 	protected void deactivate() {
 		if (!_serviceRegistrations.isEmpty()) {
-			for (ServiceRegistration<Destination> serviceRegistration :
-					_serviceRegistrations.values()) {
+			for (ServiceRegistration<?> serviceRegistration :
+					_serviceRegistrations) {
 
 				serviceRegistration.unregister();
 			}
@@ -96,7 +102,7 @@ public class PushNotificationMessagingConfigurator {
 			_bundleContext.registerService(
 				Destination.class, destination, properties);
 
-		_serviceRegistrations.put(destination.getName(), serviceRegistration);
+		_serviceRegistrations.add(serviceRegistration);
 
 		return destination;
 	}
@@ -113,7 +119,7 @@ public class PushNotificationMessagingConfigurator {
 	private PushNotificationsDeviceLocalService
 		_pushNotificationsDeviceLocalService;
 
-	private final Map<String, ServiceRegistration<Destination>>
-		_serviceRegistrations = new HashMap<>();
+	private final List<ServiceRegistration<?>> _serviceRegistrations =
+		new ArrayList<>();
 
 }

@@ -328,8 +328,9 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		ScriptingMessageListener scriptingMessageListener =
 			new ScriptingMessageListener();
 
-		SchedulerJobConfigurationMessageListener
-			schedulerJobConfigurationMessageListener =
+		_serviceRegistrations.add(
+			_bundleContext.registerService(
+				MessageListener.class,
 				new SchedulerJobConfigurationMessageListener(
 					new SchedulerJobConfiguration() {
 
@@ -352,9 +353,10 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 							return null;
 						}
 
-					});
-
-		scriptingDestination.register(schedulerJobConfigurationMessageListener);
+					}),
+				HashMapDictionaryBuilder.<String, Object>put(
+					"destination.name", scriptingDestination.getName()
+				).build()));
 
 		_schedulerJobConfigurationServiceTracker = ServiceTrackerFactory.open(
 			_bundleContext, SchedulerJobConfiguration.class,
@@ -385,8 +387,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			}
 		}
 
-		for (ServiceRegistration<Destination> serviceRegistration :
-				_destinationServiceRegistrations) {
+		for (ServiceRegistration<?> serviceRegistration :
+				_serviceRegistrations) {
 
 			serviceRegistration.unregister();
 		}
@@ -420,7 +422,7 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			bundleContext.registerService(
 				Destination.class, destination, dictionary);
 
-		_destinationServiceRegistrations.add(serviceRegistration);
+		_serviceRegistrations.add(serviceRegistration);
 
 		return destination;
 	}
@@ -436,9 +438,6 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 	@Reference
 	private DestinationFactory _destinationFactory;
-
-	private final Set<ServiceRegistration<Destination>>
-		_destinationServiceRegistrations = new HashSet<>();
 
 	@Reference
 	private JSONFactory _jsonFactory;
@@ -459,6 +458,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		_schedulerEngineHelperConfiguration;
 	private ServiceTracker<SchedulerJobConfiguration, SchedulerJobConfiguration>
 		_schedulerJobConfigurationServiceTracker;
+	private final Set<ServiceRegistration<?>> _serviceRegistrations =
+		new HashSet<>();
 
 	@Reference
 	private TriggerFactory _triggerFactory;
