@@ -13,11 +13,11 @@ import com.liferay.portal.kernel.model.PortletItem;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.service.PortletItemLocalService;
 import com.liferay.portal.kernel.settings.ArchivedSettings;
+import com.liferay.portal.kernel.settings.FallbackKeysSettingsUtil;
 import com.liferay.portal.kernel.settings.Settings;
 import com.liferay.portal.kernel.settings.SettingsException;
 import com.liferay.portal.kernel.settings.SettingsFactory;
 import com.liferay.portal.kernel.settings.SettingsLocator;
-import com.liferay.portal.kernel.settings.SettingsProviderUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,7 @@ public class SettingsFactoryImpl implements SettingsFactory {
 	public Settings getSettings(SettingsLocator settingsLocator)
 		throws SettingsException {
 
-		return SettingsProviderUtil.getSettings(settingsLocator);
+		return FallbackKeysSettingsUtil.getSettings(settingsLocator);
 	}
 
 	private PortletItem _getPortletItem(

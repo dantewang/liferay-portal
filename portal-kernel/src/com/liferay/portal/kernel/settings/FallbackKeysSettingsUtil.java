@@ -14,7 +14,7 @@ import com.liferay.portal.kernel.portlet.PortletIdCodec;
  * @author Raymond Augé
  * @author Jorge Ferrer
  */
-public class SettingsProviderUtil {
+public class FallbackKeysSettingsUtil {
 
 	public static Settings getSettings(SettingsLocator settingsLocator)
 		throws SettingsException {
