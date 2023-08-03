@@ -21,7 +21,7 @@ public class FallbackKeysSettingsUtil {
 
 		Settings settings = settingsLocator.getSettings();
 
-		if (settings instanceof FallbackKeys) {
+		if (settings instanceof FallbackSettings) {
 			return settings;
 		}
 
