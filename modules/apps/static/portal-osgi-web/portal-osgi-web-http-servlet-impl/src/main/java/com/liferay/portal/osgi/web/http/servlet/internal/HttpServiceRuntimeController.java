@@ -18,6 +18,7 @@ import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.DispatchTargets;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ProxyContext;
@@ -35,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -136,21 +136,30 @@ public class HttpServiceRuntimeController {
 
 		Path path = new Path(pathString);
 
-		String queryString = path.getQueryString();
 		String requestURI = path.getRequestURI();
+
+		List<ContextController> contextControllers = _getContextControllers(
+			requestURI);
+
+		if (ListUtil.isEmpty(contextControllers)) {
+			return null;
+		}
+
+		String queryString = path.getQueryString();
 
 		// perfect match
 
 		DispatchTargets dispatchTargets = _getDispatchTargets(
-			requestURI, null, queryString, Match.EXACT, requestInfoDTO);
+			contextControllers, requestURI, null, queryString, Match.EXACT,
+			requestInfoDTO);
 
 		if (dispatchTargets == null) {
 
 			// extension match
 
 			dispatchTargets = _getDispatchTargets(
-				requestURI, path.getExtension(), queryString, Match.EXTENSION,
-				requestInfoDTO);
+				contextControllers, requestURI, path.getExtension(),
+				queryString, Match.EXTENSION, requestInfoDTO);
 		}
 
 		if (dispatchTargets == null) {
@@ -158,7 +167,8 @@ public class HttpServiceRuntimeController {
 			// regex match
 
 			dispatchTargets = _getDispatchTargets(
-				requestURI, null, queryString, Match.REGEX, requestInfoDTO);
+				contextControllers, requestURI, null, queryString, Match.REGEX,
+				requestInfoDTO);
 		}
 
 		if (dispatchTargets == null) {
@@ -166,8 +176,8 @@ public class HttpServiceRuntimeController {
 			// handle '/' aliases
 
 			dispatchTargets = _getDispatchTargets(
-				requestURI, null, queryString, Match.DEFAULT_SERVLET,
-				requestInfoDTO);
+				contextControllers, requestURI, null, queryString,
+				Match.DEFAULT_SERVLET, requestInfoDTO);
 		}
 
 		return dispatchTargets;
@@ -244,9 +254,7 @@ public class HttpServiceRuntimeController {
 		}
 	}
 
-	private Collection<ContextController> _getContextControllers(
-		String requestURI) {
-
+	private List<ContextController> _getContextControllers(String requestURI) {
 		int pos = requestURI.lastIndexOf('/');
 
 		while (true) {
@@ -281,19 +289,11 @@ public class HttpServiceRuntimeController {
 	}
 
 	private DispatchTargets _getDispatchTargets(
-		String requestURI, String extension, String queryString, Match match,
+		List<ContextController> contextControllers, String requestURI,
+		String extension, String queryString, Match match,
 		RequestInfoDTO requestInfoDTO) {
 
-		Collection<ContextController> contextControllers =
-			_getContextControllers(requestURI);
-
-		if ((contextControllers == null) || contextControllers.isEmpty()) {
-			return null;
-		}
-
-		Iterator<ContextController> iterator = contextControllers.iterator();
-
-		ContextController firstContextController = iterator.next();
+		ContextController firstContextController = contextControllers.get(0);
 
 		String contextPath = firstContextController.getContextPath();
 
