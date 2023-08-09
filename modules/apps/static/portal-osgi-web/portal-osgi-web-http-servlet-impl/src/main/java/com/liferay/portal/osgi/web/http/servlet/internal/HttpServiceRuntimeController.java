@@ -15,7 +15,6 @@
 package com.liferay.portal.osgi.web.http.servlet.internal;
 
 import com.liferay.petra.function.transform.TransformUtil;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -25,7 +24,6 @@ import com.liferay.portal.osgi.web.http.servlet.internal.context.ProxyContext;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFailureException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextNameException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextPathException;
-import com.liferay.portal.osgi.web.http.servlet.internal.servlet.Match;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Path;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
@@ -136,51 +134,30 @@ public class HttpServiceRuntimeController {
 
 		Path path = new Path(pathString);
 
-		String requestURI = path.getRequestURI();
-
 		List<ContextController> contextControllers = _getContextControllers(
-			requestURI);
+			path.getRequestURI());
 
 		if (ListUtil.isEmpty(contextControllers)) {
 			return null;
 		}
 
-		String queryString = path.getQueryString();
+		ContextController firstContextController = contextControllers.get(0);
 
-		// perfect match
+		String contextPath = firstContextController.getContextPath();
 
-		DispatchTargets dispatchTargets = _getDispatchTargets(
-			contextControllers, requestURI, null, queryString, Match.EXACT,
-			requestInfoDTO);
+		pathString = pathString.substring(contextPath.length());
 
-		if (dispatchTargets == null) {
+		for (ContextController contextController : contextControllers) {
+			DispatchTargets dispatchTargets =
+				contextController.getDispatchTargets(
+					pathString, requestInfoDTO);
 
-			// extension match
-
-			dispatchTargets = _getDispatchTargets(
-				contextControllers, requestURI, path.getExtension(),
-				queryString, Match.EXTENSION, requestInfoDTO);
+			if (dispatchTargets != null) {
+				return dispatchTargets;
+			}
 		}
 
-		if (dispatchTargets == null) {
-
-			// regex match
-
-			dispatchTargets = _getDispatchTargets(
-				contextControllers, requestURI, null, queryString, Match.REGEX,
-				requestInfoDTO);
-		}
-
-		if (dispatchTargets == null) {
-
-			// handle '/' aliases
-
-			dispatchTargets = _getDispatchTargets(
-				contextControllers, requestURI, null, queryString,
-				Match.DEFAULT_SERVLET, requestInfoDTO);
-		}
-
-		return dispatchTargets;
+		return null;
 	}
 
 	public <T> T[] getDTOs(Class<T> clazz, Function<DTO, T> function) {
@@ -278,60 +255,6 @@ public class HttpServiceRuntimeController {
 				requestURI = requestURI.substring(0, pos);
 
 				pos = requestURI.lastIndexOf('/');
-
-				continue;
-			}
-
-			break;
-		}
-
-		return null;
-	}
-
-	private DispatchTargets _getDispatchTargets(
-		List<ContextController> contextControllers, String requestURI,
-		String extension, String queryString, Match match,
-		RequestInfoDTO requestInfoDTO) {
-
-		ContextController firstContextController = contextControllers.get(0);
-
-		String contextPath = firstContextController.getContextPath();
-
-		requestURI = requestURI.substring(contextPath.length());
-
-		int pos = requestURI.lastIndexOf('/');
-
-		String servletPath = requestURI;
-
-		String pathInfo = null;
-
-		if (match == Match.DEFAULT_SERVLET) {
-			pathInfo = servletPath;
-			servletPath = StringPool.SLASH;
-		}
-
-		while (true) {
-			for (ContextController contextController : contextControllers) {
-				DispatchTargets dispatchTargets =
-					contextController.getDispatchTargets(
-						null, requestURI, servletPath, pathInfo, extension,
-						queryString, match, requestInfoDTO);
-
-				if (dispatchTargets != null) {
-					return dispatchTargets;
-				}
-			}
-
-			if (match == Match.EXACT) {
-				break;
-			}
-
-			if (pos > -1) {
-				servletPath = requestURI.substring(0, pos);
-
-				pathInfo = requestURI.substring(pos);
-
-				pos = servletPath.lastIndexOf('/');
 
 				continue;
 			}
