@@ -28,8 +28,6 @@ import com.liferay.portal.osgi.web.http.servlet.internal.util.Path;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
 
-import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,9 +42,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.dto.DTO;
 import org.osgi.framework.BundleContext;
@@ -101,22 +96,6 @@ public class HttpServiceRuntimeController {
 		_parentServletContext = null;
 		_registeredObjects = null;
 		_serviceTracker = null;
-	}
-
-	public boolean doDispatch(
-			HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse, String path)
-		throws IOException, ServletException {
-
-		DispatchTargets dispatchTargets = getDispatchTargets(path, null);
-
-		if (dispatchTargets == null) {
-			return false;
-		}
-
-		return dispatchTargets.doDispatch(
-			httpServletRequest, httpServletResponse, path,
-			httpServletRequest.getDispatcherType());
 	}
 
 	public ContextController getContextController(
