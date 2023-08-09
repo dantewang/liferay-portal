@@ -11,6 +11,7 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.context;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
@@ -38,7 +39,7 @@ import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletConfigIm
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletContextAdaptor;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.DTOUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.EventListeners;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Path;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.PathUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
 
@@ -502,10 +503,10 @@ public class ContextController {
 	public DispatchTargets getDispatchTargets(
 		String pathString, RequestInfoDTO requestInfoDTO) {
 
-		Path path = new Path(pathString);
+		String[] parts = _toParts(pathString);
 
-		String queryString = path.getQueryString();
-		String requestURI = path.getRequestURI();
+		String requestURI = parts[0];
+		String queryString = parts[2];
 
 		// perfect match
 
@@ -517,7 +518,7 @@ public class ContextController {
 			// extension match
 
 			dispatchTargets = _getDispatchTargets(
-				requestURI, path.getExtension(), queryString, Match.EXTENSION,
+				requestURI, parts[1], queryString, Match.EXTENSION,
 				requestInfoDTO);
 		}
 
@@ -1481,6 +1482,25 @@ public class ContextController {
 		Arrays.sort(values);
 
 		return values;
+	}
+
+	private String[] _toParts(String path) {
+		String requestURI = PathUtil.extractRequestURI(path);
+		String queryString = null;
+
+		if (!requestURI.equals(path) && (path.length() > requestURI.length())) {
+			queryString = path.substring(requestURI.length() + 1);
+		}
+
+		int index = requestURI.lastIndexOf(CharPool.PERIOD);
+
+		String extension = null;
+
+		if ((index != -1) && (index > requestURI.lastIndexOf(CharPool.SLASH))) {
+			extension = requestURI.substring(index + 1);
+		}
+
+		return new String[] {requestURI, extension, queryString};
 	}
 
 	private void _validate(

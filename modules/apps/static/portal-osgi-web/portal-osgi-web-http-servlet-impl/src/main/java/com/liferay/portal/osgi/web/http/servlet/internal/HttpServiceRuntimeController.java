@@ -24,7 +24,7 @@ import com.liferay.portal.osgi.web.http.servlet.internal.context.ProxyContext;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFailureException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextNameException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextPathException;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.Path;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.PathUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
 
@@ -109,12 +109,10 @@ public class HttpServiceRuntimeController {
 	}
 
 	public DispatchTargets getDispatchTargets(
-		String pathString, RequestInfoDTO requestInfoDTO) {
-
-		Path path = new Path(pathString);
+		String path, RequestInfoDTO requestInfoDTO) {
 
 		List<ContextController> contextControllers = _getContextControllers(
-			path.getRequestURI());
+			PathUtil.extractRequestURI(path));
 
 		if (ListUtil.isEmpty(contextControllers)) {
 			return null;
@@ -124,12 +122,11 @@ public class HttpServiceRuntimeController {
 
 		String contextPath = firstContextController.getContextPath();
 
-		pathString = pathString.substring(contextPath.length());
+		path = path.substring(contextPath.length());
 
 		for (ContextController contextController : contextControllers) {
 			DispatchTargets dispatchTargets =
-				contextController.getDispatchTargets(
-					pathString, requestInfoDTO);
+				contextController.getDispatchTargets(path, requestInfoDTO);
 
 			if (dispatchTargets != null) {
 				return dispatchTargets;
