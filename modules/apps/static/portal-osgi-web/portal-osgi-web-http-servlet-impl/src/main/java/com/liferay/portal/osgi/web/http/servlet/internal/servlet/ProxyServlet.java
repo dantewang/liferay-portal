@@ -15,6 +15,7 @@ package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
+import com.liferay.portal.osgi.web.http.servlet.internal.context.DispatchTargets;
 
 import java.io.IOException;
 
@@ -62,8 +63,13 @@ public class ProxyServlet extends HttpServlet {
 			alias = StringPool.SLASH;
 		}
 
-		if (_httpServiceRuntimeController.doDispatch(
-				httpServletRequest, httpServletResponse, alias)) {
+		DispatchTargets dispatchTargets =
+			_httpServiceRuntimeController.getDispatchTargets(alias, null);
+
+		if ((dispatchTargets != null) &&
+			dispatchTargets.doDispatch(
+				httpServletRequest, httpServletResponse, alias,
+				httpServletRequest.getDispatcherType())) {
 
 			return;
 		}
