@@ -291,7 +291,7 @@ public class FilterRegistration
 			return false;
 		}
 
-		if (pattern.endsWith("/*")) {
+		if (pattern.endsWith(Const.SLASH_STAR)) {
 			int pathPatternLength = pattern.length() - 2;
 
 			if (path.regionMatches(0, pattern, 0, pathPatternLength)) {

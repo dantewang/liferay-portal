@@ -26,6 +26,7 @@ import com.liferay.portal.osgi.web.http.servlet.internal.context.HttpContextHelp
 import com.liferay.portal.osgi.web.http.servlet.internal.error.PatternInUseException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.ServletAlreadyRegisteredException;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.Const;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.PatternUtil;
 
 import java.io.IOException;
 
@@ -320,17 +321,17 @@ public class HttpServiceImpl implements HttpService {
 
 		String pattern = alias;
 
-		if (pattern.startsWith("/*.")) {
+		if (pattern.startsWith(Const.SLASH_STAR_DOT)) {
 			pattern = pattern.substring(1);
 		}
-		else if (!pattern.contains("*.") &&
+		else if (!pattern.contains(Const.STAR_DOT) &&
 				 !pattern.endsWith(Const.SLASH_STAR) &&
 				 !pattern.endsWith(StringPool.SLASH)) {
 
 			pattern += Const.SLASH_STAR;
 		}
 
-		ContextController.checkPattern(alias);
+		PatternUtil.checkPattern(alias);
 
 		synchronized (_legacyMappingsMap) {
 			HttpServiceRegistrationBag httpServiceRegistrationBag = null;
@@ -412,7 +413,7 @@ public class HttpServiceImpl implements HttpService {
 			throw new IllegalArgumentException("Servlet cannot be null");
 		}
 
-		ContextController.checkPattern(alias);
+		PatternUtil.checkPattern(alias);
 
 		Object pattern = alias;
 
