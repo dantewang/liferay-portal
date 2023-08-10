@@ -1366,7 +1366,7 @@ public class ContextController {
 		String requestURI, String extension, String queryString, Match match,
 		RequestInfoDTO requestInfoDTO) {
 
-		int pos = requestURI.lastIndexOf('/');
+		int index = requestURI.lastIndexOf('/');
 
 		String servletPath = requestURI;
 		String pathInfo = null;
@@ -1385,21 +1385,15 @@ public class ContextController {
 				return dispatchTargets;
 			}
 
-			if (match == Match.EXACT) {
+			if ((match == Match.EXACT) || (index == -1)) {
 				break;
 			}
 
-			if (pos > -1) {
-				servletPath = requestURI.substring(0, pos);
+			servletPath = requestURI.substring(0, index);
 
-				pathInfo = requestURI.substring(pos);
+			pathInfo = requestURI.substring(index);
 
-				pos = servletPath.lastIndexOf('/');
-
-				continue;
-			}
-
-			break;
+			index = servletPath.lastIndexOf('/');
 		}
 
 		return null;

@@ -208,7 +208,7 @@ public class HttpServiceRuntimeController {
 	}
 
 	private List<ContextController> _getContextControllers(String requestURI) {
-		int pos = requestURI.lastIndexOf('/');
+		int index = requestURI.lastIndexOf('/');
 
 		while (true) {
 			List<ContextController> contextControllers = new ArrayList<>();
@@ -227,15 +227,13 @@ public class HttpServiceRuntimeController {
 				return contextControllers;
 			}
 
-			if (pos > -1) {
-				requestURI = requestURI.substring(0, pos);
-
-				pos = requestURI.lastIndexOf('/');
-
-				continue;
+			if (index == -1) {
+				break;
 			}
 
-			break;
+			requestURI = requestURI.substring(0, index);
+
+			index = requestURI.lastIndexOf('/');
 		}
 
 		return null;
