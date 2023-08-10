@@ -40,6 +40,7 @@ import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletContextA
 import com.liferay.portal.osgi.web.http.servlet.internal.util.DTOUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.EventListeners;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.PathUtil;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.PatternUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
 
@@ -108,24 +109,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Raymond Augé
  */
 public class ContextController {
-
-	public static void checkPattern(String pattern) {
-		if (pattern == null) {
-			throw new IllegalArgumentException("Pattern cannot be null");
-		}
-
-		if (pattern.indexOf("*.") == 0) {
-			return;
-		}
-
-		if (!pattern.startsWith(StringPool.SLASH) ||
-			(pattern.endsWith(StringPool.SLASH) &&
-			 !pattern.equals(StringPool.SLASH))) {
-
-			throw new IllegalArgumentException(
-				"Invalid pattern '" + pattern + "'");
-		}
-	}
 
 	public ContextController(
 		BundleContext bundleContext,
@@ -330,7 +313,7 @@ public class ContextController {
 		}
 
 		for (String pattern : patterns) {
-			checkPattern(pattern);
+			PatternUtil.checkPattern(pattern);
 		}
 
 		Long serviceId = (Long)serviceReference.getProperty(
@@ -906,7 +889,7 @@ public class ContextController {
 		}
 
 		for (String pattern : patterns) {
-			checkPattern(pattern);
+			PatternUtil.checkPattern(pattern);
 		}
 
 		Filter filter = serviceHolder.get();
@@ -1096,7 +1079,7 @@ public class ContextController {
 		}
 
 		for (String pattern : patterns) {
-			checkPattern(pattern);
+			PatternUtil.checkPattern(pattern);
 		}
 
 		boolean asyncSupported = GetterUtil.getBoolean(
