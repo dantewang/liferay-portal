@@ -18,31 +18,24 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
-import com.liferay.portal.osgi.web.http.servlet.internal.constants.HttpServiceConstants;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.EventListenerServiceTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.FilterServiceTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ResourceServiceTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ServletServiceTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextNameException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextPathException;
-import com.liferay.portal.osgi.web.http.servlet.internal.error.RegisteredFilterException;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.EndpointRegistration;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.FilterRegistration;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.ListenerRegistration;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.ResourceRegistration;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.ServletRegistration;
-import com.liferay.portal.osgi.web.http.servlet.internal.servlet.FilterConfigImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpSessionAdaptor;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.Match;
-import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ResourceServlet;
-import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletConfigImpl;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletContextAdaptor;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.DTOUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.EventListeners;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.PathUtil;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.PatternUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.ServiceProperties;
-import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -50,7 +43,6 @@ import java.net.URISyntaxException;
 import java.security.AccessController;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -58,7 +50,6 @@ import java.util.EventListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -70,14 +61,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeListener;
-import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpSession;
@@ -222,195 +210,24 @@ public class ContextController {
 		_resourceServiceTracker.open();
 	}
 
-	public FilterRegistration addFilterRegistration(
-			ServiceReference<Filter> serviceReference)
-		throws ServletException {
-
-		_checkShutdown();
-
-		ServiceHolder<Filter> filterHolder = new ServiceHolder<>(
-			_bundleContext.getServiceObjects(serviceReference));
-
-		Filter filter = filterHolder.get();
-
-		FilterRegistration registration = null;
-		boolean addedRegisteredObject = false;
-
-		Set<Object> registeredObjects =
-			_httpServiceRuntimeController.getRegisteredObjects();
-
-		try {
-			if (filter == null) {
-				throw new IllegalArgumentException("Filter cannot be null");
-			}
-
-			addedRegisteredObject = registeredObjects.add(filter);
-
-			if (addedRegisteredObject) {
-				registration = _addFilterRegistration(
-					filterHolder, serviceReference);
-			}
+	public void checkShutdown() {
+		if (_shutdown) {
+			throw new IllegalStateException("Context is already shutdown");
 		}
-		finally {
-			if (registration == null) {
-				filterHolder.release();
-
-				if (addedRegisteredObject) {
-					registeredObjects.remove(filter);
-				}
-			}
-		}
-
-		return registration;
-	}
-
-	public ListenerRegistration addListenerRegistration(
-		ServiceReference<EventListener> serviceReference) {
-
-		_checkShutdown();
-
-		ServiceHolder<EventListener> listenerHolder = new ServiceHolder<>(
-			_bundleContext.getServiceObjects(serviceReference));
-
-		EventListener listener = listenerHolder.get();
-
-		ListenerRegistration registration = null;
-
-		try {
-			if (listener == null) {
-				throw new IllegalArgumentException(
-					"EventListener cannot be null");
-			}
-
-			registration = _addListenerRegistration(
-				listenerHolder, serviceReference);
-		}
-		finally {
-			if (registration == null) {
-				listenerHolder.release();
-			}
-		}
-
-		return registration;
-	}
-
-	public ResourceRegistration addResourceRegistration(
-		ServiceReference<?> serviceReference) {
-
-		_checkShutdown();
-
-		String prefix = (String)serviceReference.getProperty(
-			HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX);
-
-		_checkPrefix(prefix);
-
-		String[] patterns = StringPlus.from(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN));
-
-		if (patterns.length < 1) {
-			throw new IllegalArgumentException("Patterns must contain a value");
-		}
-
-		for (String pattern : patterns) {
-			PatternUtil.checkPattern(pattern);
-		}
-
-		Long serviceId = (Long)serviceReference.getProperty(
-			Constants.SERVICE_ID);
-
-		ClassLoader legacyTCCL = (ClassLoader)serviceReference.getProperty(
-			HttpServiceConstants.CONTEXT_CLASSLOADER);
-
-		if (legacyTCCL != null) {
-			serviceId = -serviceId;
-		}
-
-		Bundle bundle = serviceReference.getBundle();
-
-		ServletContextHelper curServletContextHelper = _getServletContextHelper(
-			bundle);
-
-		ResourceDTO resourceDTO = new ResourceDTO();
-
-		resourceDTO.patterns = _sort(patterns);
-		resourceDTO.prefix = prefix;
-		resourceDTO.serviceId = serviceId;
-		resourceDTO.servletContextId = _contextServiceId;
-
-		ResourceRegistration resourceRegistration = new ResourceRegistration(
-			new ServiceHolder<>(
-				new ResourceServlet(
-					prefix, curServletContextHelper,
-					AccessController.getContext()),
-				bundle, serviceId,
-				GetterUtil.getInteger(
-					serviceReference.getProperty(Constants.SERVICE_RANKING))),
-			resourceDTO, curServletContextHelper, this, legacyTCCL);
-
-		try {
-			resourceRegistration.init(
-				new ServletConfigImpl(
-					resourceRegistration.getName(), new HashMap<>(),
-					_createServletContext(bundle, curServletContextHelper)));
-		}
-		catch (ServletException servletException) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(servletException);
-			}
-
-			return null;
-		}
-
-		_endpointRegistrations.add(resourceRegistration);
-
-		return resourceRegistration;
-	}
-
-	public ServletRegistration addServletRegistration(
-			ServiceReference<Servlet> serviceReference)
-		throws ServletException {
-
-		_checkShutdown();
-
-		ServiceHolder<Servlet> serviceHolder = new ServiceHolder<>(
-			_bundleContext.getServiceObjects(serviceReference));
-
-		Servlet servlet = serviceHolder.get();
-
-		ServletRegistration registration = null;
-		boolean addedRegisteredObject = false;
-
-		Set<Object> registeredObjects =
-			_httpServiceRuntimeController.getRegisteredObjects();
-
-		try {
-			if (servlet == null) {
-				throw new IllegalArgumentException("Servlet cannot be null");
-			}
-
-			addedRegisteredObject = registeredObjects.add(servlet);
-
-			if (addedRegisteredObject) {
-				registration = _addServletRegistration(
-					serviceHolder, serviceReference);
-			}
-		}
-		finally {
-			if (registration == null) {
-				serviceHolder.release();
-
-				if (addedRegisteredObject) {
-					registeredObjects.remove(servlet);
-				}
-			}
-		}
-
-		return registration;
 	}
 
 	public void createContextAttributes() {
 		getProxyContext().createContextAttributes(this);
+	}
+
+	public ServletContext createServletContextAdaptor(
+		Bundle curBundle, ServletContextHelper curServletContextHelper) {
+
+		ServletContextAdaptor adaptor = new ServletContextAdaptor(
+			this, curBundle, curServletContextHelper, _eventListeners,
+			AccessController.getContext());
+
+		return adaptor.createServletContext();
 	}
 
 	public void destroy() {
@@ -530,7 +347,7 @@ public class ContextController {
 		String pathInfo, String extension, String queryString, Match match,
 		RequestInfoDTO requestInfoDTO) {
 
-		_checkShutdown();
+		checkShutdown();
 
 		EndpointRegistration<?> endpointRegistration = null;
 
@@ -656,6 +473,12 @@ public class ContextController {
 		_collectListenerDTOs(servletContextDTO);
 
 		return servletContextDTO;
+	}
+
+	public ServletContextHelper getServletContextHelper(Bundle curBundle) {
+		BundleContext bundleContext = curBundle.getBundleContext();
+
+		return bundleContext.getService(_servletContextHelperServiceReference);
 	}
 
 	public HttpSessionAdaptor getSessionAdaptor(
@@ -864,115 +687,6 @@ public class ContextController {
 		}
 	}
 
-	private FilterRegistration _addFilterRegistration(
-			ServiceHolder<Filter> serviceHolder,
-			ServiceReference<Filter> serviceReference)
-		throws ServletException {
-
-		String[] patterns = StringPlus.from(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN));
-
-		String[] regexes = StringPlus.from(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX));
-
-		String[] servletNames = StringPlus.from(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET));
-
-		if ((patterns.length == 0) && (regexes.length == 0) &&
-			(servletNames.length == 0)) {
-
-			throw new IllegalArgumentException(
-				"Patterns, regex or servletNames must contain a value");
-		}
-
-		for (String pattern : patterns) {
-			PatternUtil.checkPattern(pattern);
-		}
-
-		Filter filter = serviceHolder.get();
-
-		if (filter == null) {
-			throw new IllegalArgumentException("Filter cannot be null");
-		}
-
-		String name = ServiceProperties.parseName(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME),
-			serviceHolder.get());
-
-		if (name == null) {
-			Class<?> clazz = filter.getClass();
-
-			name = clazz.getName();
-		}
-
-		for (FilterRegistration filterRegistration : _filterRegistrations) {
-			if (Objects.equals(filter, filterRegistration.getT())) {
-				throw new RegisteredFilterException(filter);
-			}
-		}
-
-		Long serviceId = (Long)serviceReference.getProperty(
-			Constants.SERVICE_ID);
-
-		ClassLoader legacyTCCL = (ClassLoader)serviceReference.getProperty(
-			HttpServiceConstants.CONTEXT_CLASSLOADER);
-
-		if (legacyTCCL != null) {
-			serviceId = -serviceId;
-		}
-
-		Map<String, String> filterInitParamsMap =
-			ServiceProperties.parseInitParams(
-				serviceReference,
-				HttpWhiteboardConstants.
-					HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX);
-
-		FilterDTO filterDTO = new FilterDTO();
-
-		filterDTO.asyncSupported = GetterUtil.getBoolean(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.
-					HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED));
-		filterDTO.dispatcher = _sort(
-			_checkDispatcher(
-				StringPlus.from(
-					serviceReference.getProperty(
-						HttpWhiteboardConstants.
-							HTTP_WHITEBOARD_FILTER_DISPATCHER))));
-		filterDTO.initParams = filterInitParamsMap;
-		filterDTO.name = name;
-		filterDTO.patterns = _sort(patterns);
-		filterDTO.regexs = regexes;
-		filterDTO.serviceId = serviceId;
-		filterDTO.servletContextId = _contextServiceId;
-		filterDTO.servletNames = _sort(servletNames);
-
-		Integer filterPriority = (Integer)serviceReference.getProperty(
-			Constants.SERVICE_RANKING);
-
-		if (filterPriority == null) {
-			filterPriority = 0;
-		}
-
-		FilterRegistration newFilterRegistration = new FilterRegistration(
-			serviceHolder, filterDTO, filterPriority, this, legacyTCCL);
-
-		newFilterRegistration.init(
-			new FilterConfigImpl(
-				name, filterInitParamsMap,
-				_createServletContext(
-					serviceHolder.getBundle(),
-					_getServletContextHelper(serviceHolder.getBundle()))));
-
-		_filterRegistrations.add(newFilterRegistration);
-
-		return newFilterRegistration;
-	}
-
 	private void _addFilterRegistrationsToRequestInfo(
 		List<FilterRegistration> matchedFilterRegistrations,
 		RequestInfoDTO requestInfoDTO) {
@@ -992,260 +706,6 @@ public class ContextController {
 		}
 
 		requestInfoDTO.filterDTOs = filterDTOs;
-	}
-
-	private ListenerRegistration _addListenerRegistration(
-		ServiceHolder<EventListener> serviceHolder,
-		ServiceReference<EventListener> serviceReference) {
-
-		List<Class<? extends EventListener>> classes = _getListenerClasses(
-			serviceReference);
-
-		if (classes.isEmpty()) {
-			throw new IllegalArgumentException(
-				"EventListener does not implement a supported type");
-		}
-
-		EventListener eventListener = serviceHolder.get();
-
-		for (ListenerRegistration listenerRegistration :
-				_listenerRegistrations) {
-
-			if (Objects.equals(eventListener, listenerRegistration.getT())) {
-				return null;
-			}
-		}
-
-		ListenerDTO listenerDTO = new ListenerDTO();
-
-		listenerDTO.serviceId = (Long)serviceReference.getProperty(
-			Constants.SERVICE_ID);
-		listenerDTO.servletContextId = _contextServiceId;
-		listenerDTO.types = _asStringArray(classes);
-
-		ServletContext servletContext = _createServletContext(
-			serviceHolder.getBundle(),
-			_getServletContextHelper(serviceHolder.getBundle()));
-
-		ListenerRegistration listenerRegistration = new ListenerRegistration(
-			serviceHolder, classes, listenerDTO, servletContext, this);
-
-		if (classes.contains(ServletContextListener.class)) {
-			ServletContextListener servletContextListener =
-				(ServletContextListener)listenerRegistration.getT();
-
-			servletContextListener.contextInitialized(
-				new ServletContextEvent(servletContext));
-		}
-
-		_listenerRegistrations.add(listenerRegistration);
-
-		_eventListeners.put(classes, listenerRegistration);
-
-		return listenerRegistration;
-	}
-
-	private ServletRegistration _addServletRegistration(
-			ServiceHolder<Servlet> serviceHolder,
-			ServiceReference<Servlet> serviceReference)
-		throws ServletException {
-
-		String[] errorPages = StringPlus.from(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE));
-
-		String[] patterns = StringPlus.from(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN));
-
-		String servletNameFromProperties = (String)serviceReference.getProperty(
-			HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME);
-
-		if ((patterns.length == 0) && (errorPages.length == 0) &&
-			(servletNameFromProperties == null)) {
-
-			StringBundler sb = new StringBundler(7);
-
-			sb.append("One of the service properties ");
-			sb.append(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE);
-			sb.append(", ");
-			sb.append(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME);
-			sb.append(", ");
-			sb.append(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN);
-			sb.append(" must contain a value.");
-
-			throw new IllegalArgumentException(sb.toString());
-		}
-
-		for (String pattern : patterns) {
-			PatternUtil.checkPattern(pattern);
-		}
-
-		boolean asyncSupported = GetterUtil.getBoolean(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.
-					HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED));
-
-		Long serviceId = (Long)serviceReference.getProperty(
-			Constants.SERVICE_ID);
-
-		ClassLoader legacyTCCL = (ClassLoader)serviceReference.getProperty(
-			HttpServiceConstants.CONTEXT_CLASSLOADER);
-
-		if (legacyTCCL != null) {
-			serviceId = -serviceId;
-		}
-
-		Map<String, String> servletInitParamsMap =
-			ServiceProperties.parseInitParams(
-				serviceReference,
-				HttpWhiteboardConstants.
-					HTTP_WHITEBOARD_SERVLET_INIT_PARAM_PREFIX);
-
-		Servlet servlet = serviceHolder.get();
-
-		String generatedServletName = ServiceProperties.parseName(
-			serviceReference.getProperty(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME),
-			servlet);
-
-		ServletDTO servletDTO = new ServletDTO();
-
-		servletDTO.asyncSupported = asyncSupported;
-		servletDTO.initParams = servletInitParamsMap;
-		servletDTO.name = generatedServletName;
-		servletDTO.patterns = _sort(patterns);
-		servletDTO.serviceId = serviceId;
-		servletDTO.servletContextId = _contextServiceId;
-		servletDTO.servletInfo = servlet.getServletInfo();
-
-		ErrorPageDTO errorPageDTO = null;
-
-		if (errorPages.length > 0) {
-			List<String> exceptions = new ArrayList<>();
-
-			Set<Long> errorCodeSet = new LinkedHashSet<>();
-
-			for (String errorPage : errorPages) {
-				try {
-					if (Objects.equals(errorPage, "4xx")) {
-						for (long code = 400; code < 500; code++) {
-							errorCodeSet.add(code);
-						}
-					}
-					else if (Objects.equals(errorPage, "5xx")) {
-						for (long code = 500; code < 600; code++) {
-							errorCodeSet.add(code);
-						}
-					}
-					else {
-						long code = Long.parseLong(errorPage);
-
-						errorCodeSet.add(code);
-					}
-				}
-				catch (NumberFormatException numberFormatException) {
-					if (_log.isDebugEnabled()) {
-						_log.debug(numberFormatException);
-					}
-
-					exceptions.add(errorPage);
-				}
-			}
-
-			long[] errorCodes = new long[errorCodeSet.size()];
-			int i = 0;
-
-			for (Long code : errorCodeSet) {
-				errorCodes[i] = code;
-				i++;
-			}
-
-			errorPageDTO = new ErrorPageDTO();
-
-			errorPageDTO.asyncSupported = asyncSupported;
-			errorPageDTO.errorCodes = errorCodes;
-			errorPageDTO.exceptions = exceptions.toArray(new String[0]);
-			errorPageDTO.initParams = servletInitParamsMap;
-			errorPageDTO.name = generatedServletName;
-			errorPageDTO.serviceId = serviceId;
-			errorPageDTO.servletContextId = _contextServiceId;
-			errorPageDTO.servletInfo = servlet.getServletInfo();
-		}
-
-		ServletContextHelper curServletContextHelper = _getServletContextHelper(
-			serviceHolder.getBundle());
-
-		ServletRegistration servletRegistration = new ServletRegistration(
-			serviceHolder, servletDTO, errorPageDTO, curServletContextHelper,
-			this, legacyTCCL);
-
-		servletRegistration.init(
-			new ServletConfigImpl(
-				generatedServletName, servletInitParamsMap,
-				_createServletContext(
-					serviceHolder.getBundle(), curServletContextHelper)));
-
-		_endpointRegistrations.add(servletRegistration);
-
-		return servletRegistration;
-	}
-
-	private String[] _asStringArray(
-		List<Class<? extends EventListener>> classes) {
-
-		String[] classesArray = new String[classes.size()];
-
-		for (int i = 0; i < classesArray.length; i++) {
-			Class<?> clazz = classes.get(i);
-
-			classesArray[i] = clazz.getName();
-		}
-
-		Arrays.sort(classesArray);
-
-		return classesArray;
-	}
-
-	private String[] _checkDispatcher(String[] dispatchers) {
-		if ((dispatchers == null) || (dispatchers.length == 0)) {
-			return _DISPATCHER;
-		}
-
-		for (String dispatcher : dispatchers) {
-			try {
-				DispatcherType.valueOf(dispatcher);
-			}
-			catch (IllegalArgumentException illegalArgumentException) {
-				throw new IllegalArgumentException(
-					"Invalid dispatcher '" + dispatcher + "'",
-					illegalArgumentException);
-			}
-		}
-
-		Arrays.sort(dispatchers);
-
-		return dispatchers;
-	}
-
-	private void _checkPrefix(String prefix) {
-		if (prefix == null) {
-			throw new IllegalArgumentException("Prefix cannot be null");
-		}
-
-		if (prefix.endsWith(StringPool.SLASH) &&
-			!prefix.equals(StringPool.SLASH)) {
-
-			throw new IllegalArgumentException(
-				"Invalid prefix '" + prefix + "'");
-		}
-	}
-
-	private void _checkShutdown() {
-		if (_shutdown) {
-			throw new IllegalStateException("Context is already shutdown");
-		}
 	}
 
 	private void _collectEndpointDTOs(ServletContextDTO servletContextDTO) {
@@ -1320,16 +780,6 @@ public class ContextController {
 			new ListenerDTO[0]);
 	}
 
-	private ServletContext _createServletContext(
-		Bundle curBundle, ServletContextHelper curServletContextHelper) {
-
-		ServletContextAdaptor adaptor = new ServletContextAdaptor(
-			this, curBundle, curServletContextHelper, _eventListeners,
-			AccessController.getContext());
-
-		return adaptor.createServletContext();
-	}
-
 	private void _flushActiveSessions() {
 		Collection<HttpSessionAdaptor> httpSessionAdaptors =
 			_activeSessionsMap.values();
@@ -1399,68 +849,6 @@ public class ContextController {
 		return Collections.unmodifiableMap(map);
 	}
 
-	private List<Class<? extends EventListener>> _getListenerClasses(
-		ServiceReference<EventListener> serviceReference) {
-
-		List<String> objectClassList = Arrays.asList(
-			StringPlus.from(
-				serviceReference.getProperty(Constants.OBJECTCLASS)));
-
-		List<Class<? extends EventListener>> classes = new ArrayList<>();
-
-		if (objectClassList.contains(ServletContextListener.class.getName())) {
-			classes.add(ServletContextListener.class);
-		}
-
-		if (objectClassList.contains(
-				ServletContextAttributeListener.class.getName())) {
-
-			classes.add(ServletContextAttributeListener.class);
-		}
-
-		if (objectClassList.contains(ServletRequestListener.class.getName())) {
-			classes.add(ServletRequestListener.class);
-		}
-
-		if (objectClassList.contains(
-				ServletRequestAttributeListener.class.getName())) {
-
-			classes.add(ServletRequestAttributeListener.class);
-		}
-
-		if (objectClassList.contains(HttpSessionListener.class.getName())) {
-			classes.add(HttpSessionListener.class);
-		}
-
-		if (objectClassList.contains(
-				HttpSessionAttributeListener.class.getName())) {
-
-			classes.add(HttpSessionAttributeListener.class);
-		}
-
-		if (objectClassList.contains(HttpSessionIdListener.class.getName())) {
-			classes.add(HttpSessionIdListener.class);
-		}
-
-		return classes;
-	}
-
-	private ServletContextHelper _getServletContextHelper(Bundle curBundle) {
-		BundleContext bundleContext = curBundle.getBundleContext();
-
-		return bundleContext.getService(_servletContextHelperServiceReference);
-	}
-
-	private String[] _sort(String[] values) {
-		if (values == null) {
-			return null;
-		}
-
-		Arrays.sort(values);
-
-		return values;
-	}
-
 	private String[] _toParts(String path) {
 		String requestURI = PathUtil.extractRequestURI(path);
 		String queryString = null;
@@ -1507,10 +895,6 @@ public class ContextController {
 			throw illegalContextPathException;
 		}
 	}
-
-	private static final String[] _DISPATCHER = {
-		DispatcherType.REQUEST.toString()
-	};
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ContextController.class.getName());

@@ -14,6 +14,8 @@ package com.liferay.portal.osgi.web.http.servlet.internal.customizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 
+import java.util.Arrays;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -30,6 +32,16 @@ public abstract class BaseServiceTrackerCustomizer<S, T>
 		this.bundleContext = bundleContext;
 		this.contextController = contextController;
 		this.httpServiceRuntimeController = httpServiceRuntimeController;
+	}
+
+	protected String[] sort(String[] values) {
+		if (values == null) {
+			return null;
+		}
+
+		Arrays.sort(values);
+
+		return values;
 	}
 
 	protected BundleContext bundleContext;

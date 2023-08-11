@@ -11,21 +11,37 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.customizer;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
+import com.liferay.portal.osgi.web.http.servlet.internal.constants.HttpServiceConstants;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.HttpWhiteboardFailureException;
+import com.liferay.portal.osgi.web.http.servlet.internal.registration.EndpointRegistration;
 import com.liferay.portal.osgi.web.http.servlet.internal.registration.ResourceRegistration;
+import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ResourceServlet;
+import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletConfigImpl;
+import com.liferay.portal.osgi.web.http.servlet.internal.util.PatternUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.util.StringPlus;
 
+import java.security.AccessController;
+
+import java.util.HashMap;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.servlet.ServletException;
+
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.runtime.dto.DTOConstants;
 import org.osgi.service.http.runtime.dto.FailedResourceDTO;
+import org.osgi.service.http.runtime.dto.ResourceDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
 /**
@@ -65,8 +81,7 @@ public class ResourceServiceTrackerCustomizer
 		AtomicReference<ResourceRegistration> result = new AtomicReference<>();
 
 		try {
-			result.set(
-				contextController.addResourceRegistration(serviceReference));
+			result.set(_addResourceRegistration(serviceReference));
 		}
 		catch (HttpWhiteboardFailureException httpWhiteboardFailureException) {
 			_log.error(httpWhiteboardFailureException);
@@ -112,6 +127,93 @@ public class ResourceServiceTrackerCustomizer
 
 		httpServiceRuntimeController.removeDTO(
 			FailedResourceDTO.class, serviceReference);
+	}
+
+	private ResourceRegistration _addResourceRegistration(
+		ServiceReference<?> serviceReference) {
+
+		contextController.checkShutdown();
+
+		String prefix = (String)serviceReference.getProperty(
+			HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX);
+
+		if (prefix == null) {
+			throw new IllegalArgumentException("Prefix cannot be null");
+		}
+
+		if (prefix.endsWith(StringPool.SLASH) &&
+			!prefix.equals(StringPool.SLASH)) {
+
+			throw new IllegalArgumentException(
+				"Invalid prefix '" + prefix + "'");
+		}
+
+		String[] patterns = StringPlus.from(
+			serviceReference.getProperty(
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN));
+
+		if (patterns.length < 1) {
+			throw new IllegalArgumentException("Patterns must contain a value");
+		}
+
+		for (String pattern : patterns) {
+			PatternUtil.checkPattern(pattern);
+		}
+
+		Long serviceId = (Long)serviceReference.getProperty(
+			Constants.SERVICE_ID);
+
+		ClassLoader legacyTCCL = (ClassLoader)serviceReference.getProperty(
+			HttpServiceConstants.CONTEXT_CLASSLOADER);
+
+		if (legacyTCCL != null) {
+			serviceId = -serviceId;
+		}
+
+		Bundle bundle = serviceReference.getBundle();
+
+		ServletContextHelper curServletContextHelper =
+			contextController.getServletContextHelper(bundle);
+
+		ResourceDTO resourceDTO = new ResourceDTO();
+
+		resourceDTO.patterns = sort(patterns);
+		resourceDTO.prefix = prefix;
+		resourceDTO.serviceId = serviceId;
+		resourceDTO.servletContextId = contextController.getServiceId();
+
+		ResourceRegistration resourceRegistration = new ResourceRegistration(
+			new ContextController.ServiceHolder<>(
+				new ResourceServlet(
+					prefix, curServletContextHelper,
+					AccessController.getContext()),
+				bundle, serviceId,
+				GetterUtil.getInteger(
+					serviceReference.getProperty(Constants.SERVICE_RANKING))),
+			resourceDTO, curServletContextHelper, contextController,
+			legacyTCCL);
+
+		try {
+			resourceRegistration.init(
+				new ServletConfigImpl(
+					resourceRegistration.getName(), new HashMap<>(),
+					contextController.createServletContextAdaptor(
+						bundle, curServletContextHelper)));
+		}
+		catch (ServletException servletException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(servletException);
+			}
+
+			return null;
+		}
+
+		Set<EndpointRegistration<?>> endpointRegistrations =
+			contextController.getEndpointRegistrations();
+
+		endpointRegistrations.add(resourceRegistration);
+
+		return resourceRegistration;
 	}
 
 	private void _recordFailedResourceDTO(
