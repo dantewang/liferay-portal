@@ -33,18 +33,15 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 /**
  * @author Raymond Augé
  */
-public class ContextListenerTrackerCustomizer
-	extends RegistrationServiceTrackerCustomizer
+public class EventListenerServiceTrackerCustomizer
+	extends BaseServiceTrackerCustomizer
 		<EventListener, AtomicReference<ListenerRegistration>> {
 
-	public ContextListenerTrackerCustomizer(
-		BundleContext bundleContext,
-		HttpServiceRuntimeController httpServiceRuntimeController,
-		ContextController contextController) {
+	public EventListenerServiceTrackerCustomizer(
+		BundleContext bundleContext, ContextController contextController,
+		HttpServiceRuntimeController httpServiceRuntimeController) {
 
-		super(bundleContext, httpServiceRuntimeController);
-
-		_contextController = contextController;
+		super(bundleContext, contextController, httpServiceRuntimeController);
 	}
 
 	@Override
@@ -55,7 +52,7 @@ public class ContextListenerTrackerCustomizer
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER);
 
 		if ((listenerObject == null) ||
-			!_contextController.matches(serviceReference) ||
+			!contextController.matches(serviceReference) ||
 			!httpServiceRuntimeController.matches(serviceReference)) {
 
 			return null;
@@ -79,7 +76,7 @@ public class ContextListenerTrackerCustomizer
 			}
 
 			result.set(
-				_contextController.addListenerRegistration(serviceReference));
+				contextController.addListenerRegistration(serviceReference));
 		}
 		catch (HttpWhiteboardFailureException httpWhiteboardFailureException) {
 			_log.error(httpWhiteboardFailureException);
@@ -132,7 +129,7 @@ public class ContextListenerTrackerCustomizer
 		failedListenerDTO.failureReason = failureReason;
 		failedListenerDTO.serviceId = (Long)serviceReference.getProperty(
 			Constants.SERVICE_ID);
-		failedListenerDTO.servletContextId = _contextController.getServiceId();
+		failedListenerDTO.servletContextId = contextController.getServiceId();
 		failedListenerDTO.types = StringPlus.from(
 			serviceReference.getProperty(Constants.OBJECTCLASS));
 
@@ -141,8 +138,6 @@ public class ContextListenerTrackerCustomizer
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		ContextListenerTrackerCustomizer.class.getName());
-
-	private final ContextController _contextController;
+		EventListenerServiceTrackerCustomizer.class.getName());
 
 }

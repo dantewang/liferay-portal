@@ -31,18 +31,15 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 /**
  * @author Raymond Augé
  */
-public class ContextResourceTrackerCustomizer
-	extends RegistrationServiceTrackerCustomizer
+public class ResourceServiceTrackerCustomizer
+	extends BaseServiceTrackerCustomizer
 		<Object, AtomicReference<ResourceRegistration>> {
 
-	public ContextResourceTrackerCustomizer(
-		BundleContext bundleContext,
-		HttpServiceRuntimeController httpServiceRuntimeController,
-		ContextController contextController) {
+	public ResourceServiceTrackerCustomizer(
+		BundleContext bundleContext, ContextController contextController,
+		HttpServiceRuntimeController httpServiceRuntimeController) {
 
-		super(bundleContext, httpServiceRuntimeController);
-
-		_contextController = contextController;
+		super(bundleContext, contextController, httpServiceRuntimeController);
 	}
 
 	@Override
@@ -56,7 +53,7 @@ public class ContextResourceTrackerCustomizer
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN);
 
 		if (((resourcePrefix == null) && (resourcePattern == null)) ||
-			!_contextController.matches(serviceReference)) {
+			!contextController.matches(serviceReference)) {
 
 			return null;
 		}
@@ -69,7 +66,7 @@ public class ContextResourceTrackerCustomizer
 
 		try {
 			result.set(
-				_contextController.addResourceRegistration(serviceReference));
+				contextController.addResourceRegistration(serviceReference));
 		}
 		catch (HttpWhiteboardFailureException httpWhiteboardFailureException) {
 			_log.error(httpWhiteboardFailureException);
@@ -130,15 +127,13 @@ public class ContextResourceTrackerCustomizer
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX);
 		failedResourceDTO.serviceId = (Long)serviceReference.getProperty(
 			Constants.SERVICE_ID);
-		failedResourceDTO.servletContextId = _contextController.getServiceId();
+		failedResourceDTO.servletContextId = contextController.getServiceId();
 
 		httpServiceRuntimeController.recordDTO(
 			serviceReference, failedResourceDTO);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		ContextResourceTrackerCustomizer.class.getName());
-
-	private final ContextController _contextController;
+		ResourceServiceTrackerCustomizer.class.getName());
 
 }

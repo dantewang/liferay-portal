@@ -19,10 +19,10 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
 import com.liferay.portal.osgi.web.http.servlet.internal.constants.HttpServiceConstants;
-import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextFilterTrackerCustomizer;
-import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextListenerTrackerCustomizer;
-import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextResourceTrackerCustomizer;
-import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ContextServletTrackerCustomizer;
+import com.liferay.portal.osgi.web.http.servlet.internal.customizer.EventListenerServiceTrackerCustomizer;
+import com.liferay.portal.osgi.web.http.servlet.internal.customizer.FilterServiceTrackerCustomizer;
+import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ResourceServiceTrackerCustomizer;
+import com.liferay.portal.osgi.web.http.servlet.internal.customizer.ServletServiceTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextNameException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.IllegalContextPathException;
 import com.liferay.portal.osgi.web.http.servlet.internal.error.RegisteredFilterException;
@@ -143,43 +143,43 @@ public class ContextController {
 
 		_servletContextListenerServiceTracker = new ServiceTracker<>(
 			_bundleContext, ServletContextListener.class.getName(),
-			new ContextListenerTrackerCustomizer(
-				_bundleContext, httpServiceRuntimeController, this));
+			new EventListenerServiceTrackerCustomizer(
+				_bundleContext, this, httpServiceRuntimeController));
 
 		_servletContextListenerServiceTracker.open();
 
 		_servletContextAttributeListenerServiceTracker = new ServiceTracker<>(
 			_bundleContext, ServletContextAttributeListener.class.getName(),
-			new ContextListenerTrackerCustomizer(
-				_bundleContext, httpServiceRuntimeController, this));
+			new EventListenerServiceTrackerCustomizer(
+				_bundleContext, this, httpServiceRuntimeController));
 
 		_servletContextAttributeListenerServiceTracker.open();
 
 		_servletRequestListenerServiceTracker = new ServiceTracker<>(
 			_bundleContext, ServletRequestListener.class.getName(),
-			new ContextListenerTrackerCustomizer(
-				_bundleContext, httpServiceRuntimeController, this));
+			new EventListenerServiceTrackerCustomizer(
+				_bundleContext, this, httpServiceRuntimeController));
 
 		_servletRequestListenerServiceTracker.open();
 
 		_servletRequestAttributeListenerServiceTracker = new ServiceTracker<>(
 			_bundleContext, ServletRequestAttributeListener.class.getName(),
-			new ContextListenerTrackerCustomizer(
-				_bundleContext, httpServiceRuntimeController, this));
+			new EventListenerServiceTrackerCustomizer(
+				_bundleContext, this, httpServiceRuntimeController));
 
 		_servletRequestAttributeListenerServiceTracker.open();
 
 		_httpSessionListenerServiceTracker = new ServiceTracker<>(
 			_bundleContext, HttpSessionListener.class.getName(),
-			new ContextListenerTrackerCustomizer(
-				_bundleContext, httpServiceRuntimeController, this));
+			new EventListenerServiceTrackerCustomizer(
+				_bundleContext, this, httpServiceRuntimeController));
 
 		_httpSessionListenerServiceTracker.open();
 
 		_httpSessionAttributeListenerServiceTracker = new ServiceTracker<>(
 			_bundleContext, HttpSessionAttributeListener.class.getName(),
-			new ContextListenerTrackerCustomizer(
-				_bundleContext, httpServiceRuntimeController, this));
+			new EventListenerServiceTrackerCustomizer(
+				_bundleContext, this, httpServiceRuntimeController));
 
 		_httpSessionAttributeListenerServiceTracker.open();
 
@@ -191,8 +191,8 @@ public class ContextController {
 
 			_httpSessionIdListenerServiceTracker = new ServiceTracker<>(
 				_bundleContext, HttpSessionIdListener.class.getName(),
-				new ContextListenerTrackerCustomizer(
-					_bundleContext, httpServiceRuntimeController, this));
+				new EventListenerServiceTrackerCustomizer(
+					_bundleContext, this, httpServiceRuntimeController));
 
 			_httpSessionIdListenerServiceTracker.open();
 		}
@@ -202,22 +202,22 @@ public class ContextController {
 
 		_filterServiceTracker = new ServiceTracker<>(
 			_bundleContext, Filter.class,
-			new ContextFilterTrackerCustomizer(
-				_bundleContext, httpServiceRuntimeController, this));
+			new FilterServiceTrackerCustomizer(
+				_bundleContext, this, httpServiceRuntimeController));
 
 		_filterServiceTracker.open();
 
 		_servletServiceTracker = new ServiceTracker<>(
 			_bundleContext, Servlet.class,
-			new ContextServletTrackerCustomizer(
-				_bundleContext, httpServiceRuntimeController, this));
+			new ServletServiceTrackerCustomizer(
+				_bundleContext, this, httpServiceRuntimeController));
 
 		_servletServiceTracker.open();
 
 		_resourceServiceTracker = new ServiceTracker<>(
 			_bundleContext, Object.class,
-			new ContextResourceTrackerCustomizer(
-				_bundleContext, httpServiceRuntimeController, this));
+			new ResourceServiceTrackerCustomizer(
+				_bundleContext, this, httpServiceRuntimeController));
 
 		_resourceServiceTracker.open();
 	}

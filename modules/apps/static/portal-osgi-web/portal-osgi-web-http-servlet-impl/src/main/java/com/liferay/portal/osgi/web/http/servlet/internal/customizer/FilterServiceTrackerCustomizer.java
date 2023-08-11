@@ -35,18 +35,15 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 /**
  * @author Raymond Augé
  */
-public class ContextFilterTrackerCustomizer
-	extends RegistrationServiceTrackerCustomizer
+public class FilterServiceTrackerCustomizer
+	extends BaseServiceTrackerCustomizer
 		<Filter, AtomicReference<FilterRegistration>> {
 
-	public ContextFilterTrackerCustomizer(
-		BundleContext bundleContext,
-		HttpServiceRuntimeController httpServiceRuntimeController,
-		ContextController contextController) {
+	public FilterServiceTrackerCustomizer(
+		BundleContext bundleContext, ContextController contextController,
+		HttpServiceRuntimeController httpServiceRuntimeController) {
 
-		super(bundleContext, httpServiceRuntimeController);
-
-		_contextController = contextController;
+		super(bundleContext, contextController, httpServiceRuntimeController);
 	}
 
 	@Override
@@ -68,7 +65,7 @@ public class ContextFilterTrackerCustomizer
 			return null;
 		}
 
-		if (!_contextController.matches(serviceReference) ||
+		if (!contextController.matches(serviceReference) ||
 			!httpServiceRuntimeController.matches(serviceReference)) {
 
 			return null;
@@ -78,7 +75,7 @@ public class ContextFilterTrackerCustomizer
 
 		try {
 			result.set(
-				_contextController.addFilterRegistration(serviceReference));
+				contextController.addFilterRegistration(serviceReference));
 		}
 		catch (HttpWhiteboardFailureException httpWhiteboardFailureException) {
 			_log.error(httpWhiteboardFailureException);
@@ -156,7 +153,7 @@ public class ContextFilterTrackerCustomizer
 		failedFilterDTO.serviceId = (Long)serviceReference.getProperty(
 			Constants.SERVICE_ID);
 
-		failedFilterDTO.servletContextId = _contextController.getServiceId();
+		failedFilterDTO.servletContextId = contextController.getServiceId();
 
 		failedFilterDTO.servletNames = StringPlus.from(
 			serviceReference.getProperty(
@@ -167,8 +164,6 @@ public class ContextFilterTrackerCustomizer
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		ContextFilterTrackerCustomizer.class.getName());
-
-	private final ContextController _contextController;
+		FilterServiceTrackerCustomizer.class.getName());
 
 }

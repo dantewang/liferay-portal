@@ -12,6 +12,7 @@
 package com.liferay.portal.osgi.web.http.servlet.internal.customizer;
 
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServiceRuntimeController;
+import com.liferay.portal.osgi.web.http.servlet.internal.context.ContextController;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -19,18 +20,20 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 /**
  * @author Raymond Augé
  */
-public abstract class RegistrationServiceTrackerCustomizer<S, T>
+public abstract class BaseServiceTrackerCustomizer<S, T>
 	implements ServiceTrackerCustomizer<S, T> {
 
-	public RegistrationServiceTrackerCustomizer(
-		BundleContext bundleContext,
+	public BaseServiceTrackerCustomizer(
+		BundleContext bundleContext, ContextController contextController,
 		HttpServiceRuntimeController httpServiceRuntimeController) {
 
 		this.bundleContext = bundleContext;
+		this.contextController = contextController;
 		this.httpServiceRuntimeController = httpServiceRuntimeController;
 	}
 
 	protected BundleContext bundleContext;
+	protected ContextController contextController;
 	protected HttpServiceRuntimeController httpServiceRuntimeController;
 
 }

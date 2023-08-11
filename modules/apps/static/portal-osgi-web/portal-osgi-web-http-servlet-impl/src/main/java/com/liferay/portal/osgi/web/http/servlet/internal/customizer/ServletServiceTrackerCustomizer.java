@@ -36,18 +36,15 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 /**
  * @author Raymond Augé
  */
-public class ContextServletTrackerCustomizer
-	extends RegistrationServiceTrackerCustomizer
+public class ServletServiceTrackerCustomizer
+	extends BaseServiceTrackerCustomizer
 		<Servlet, AtomicReference<ServletRegistration>> {
 
-	public ContextServletTrackerCustomizer(
-		BundleContext bundleContext,
-		HttpServiceRuntimeController httpServiceRuntimeController,
-		ContextController contextController) {
+	public ServletServiceTrackerCustomizer(
+		BundleContext bundleContext, ContextController contextController,
+		HttpServiceRuntimeController httpServiceRuntimeController) {
 
-		super(bundleContext, httpServiceRuntimeController);
-
-		_contextController = contextController;
+		super(bundleContext, contextController, httpServiceRuntimeController);
 	}
 
 	@Override
@@ -69,7 +66,7 @@ public class ContextServletTrackerCustomizer
 			return null;
 		}
 
-		if (!_contextController.matches(serviceReference) ||
+		if (!contextController.matches(serviceReference) ||
 			!httpServiceRuntimeController.matches(serviceReference)) {
 
 			return null;
@@ -79,7 +76,7 @@ public class ContextServletTrackerCustomizer
 
 		try {
 			result.set(
-				_contextController.addServletRegistration(serviceReference));
+				contextController.addServletRegistration(serviceReference));
 		}
 		catch (HttpWhiteboardFailureException httpWhiteboardFailureException) {
 			_log.error(httpWhiteboardFailureException);
@@ -147,7 +144,7 @@ public class ContextServletTrackerCustomizer
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN));
 		failedServletDTO.serviceId = (Long)serviceReference.getProperty(
 			Constants.SERVICE_ID);
-		failedServletDTO.servletContextId = _contextController.getServiceId();
+		failedServletDTO.servletContextId = contextController.getServiceId();
 		failedServletDTO.servletInfo = StringPool.BLANK;
 
 		httpServiceRuntimeController.recordDTO(
@@ -155,8 +152,6 @@ public class ContextServletTrackerCustomizer
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		ContextServletTrackerCustomizer.class.getName());
-
-	private final ContextController _contextController;
+		ServletServiceTrackerCustomizer.class.getName());
 
 }
