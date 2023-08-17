@@ -50,9 +50,8 @@ public class DLAppServiceWhenDeletingAFileEntryTest
 
 	@Test
 	public void testShouldFireSyncEvent() throws Exception {
-		AtomicInteger counter =
-			DLAppServiceTestUtil.registerDLSyncEventProcessorMessageListener(
-				DLSyncConstants.EVENT_DELETE);
+		AtomicInteger counter = registerDLSyncEventProcessorMessageListener(
+			DLSyncConstants.EVENT_DELETE);
 
 		FileEntry fileEntry = DLAppServiceTestUtil.addFileEntry(
 			group.getGroupId(), parentFolder.getFolderId());

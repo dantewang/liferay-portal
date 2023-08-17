@@ -55,9 +55,8 @@ public class DLAppServiceWhenAddingAFolderTest
 
 	@Test
 	public void testShouldFireSyncEvent() throws Exception {
-		AtomicInteger counter =
-			DLAppServiceTestUtil.registerDLSyncEventProcessorMessageListener(
-				DLSyncConstants.EVENT_ADD);
+		AtomicInteger counter = registerDLSyncEventProcessorMessageListener(
+			DLSyncConstants.EVENT_ADD);
 
 		DLAppServiceUtil.addFolder(
 			null, group.getGroupId(), parentFolder.getFolderId(),

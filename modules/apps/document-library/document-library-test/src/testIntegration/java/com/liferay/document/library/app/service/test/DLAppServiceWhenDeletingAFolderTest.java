@@ -69,9 +69,8 @@ public class DLAppServiceWhenDeletingAFolderTest
 
 	@Test
 	public void testShouldFireSyncEvent() throws Exception {
-		AtomicInteger counter =
-			DLAppServiceTestUtil.registerDLSyncEventProcessorMessageListener(
-				DLSyncConstants.EVENT_DELETE);
+		AtomicInteger counter = registerDLSyncEventProcessorMessageListener(
+			DLSyncConstants.EVENT_DELETE);
 
 		Folder folder = DLAppServiceUtil.addFolder(
 			null, group.getGroupId(), parentFolder.getFolderId(),

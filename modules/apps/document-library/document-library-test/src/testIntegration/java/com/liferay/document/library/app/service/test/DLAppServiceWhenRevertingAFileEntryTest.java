@@ -78,7 +78,7 @@ public class DLAppServiceWhenRevertingAFileEntryTest
 	@Test
 	public void testShouldFireSyncEvent() throws Exception {
 		AtomicInteger updateCounter =
-			DLAppServiceTestUtil.registerDLSyncEventProcessorMessageListener(
+			registerDLSyncEventProcessorMessageListener(
 				DLSyncConstants.EVENT_UPDATE);
 
 		FileEntry fileEntry = DLAppServiceTestUtil.addFileEntry(

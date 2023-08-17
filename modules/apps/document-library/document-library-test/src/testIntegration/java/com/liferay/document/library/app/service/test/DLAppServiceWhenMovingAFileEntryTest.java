@@ -38,9 +38,8 @@ public class DLAppServiceWhenMovingAFileEntryTest
 
 	@Test
 	public void testShouldFireSyncEvent() throws Exception {
-		AtomicInteger moveCounter =
-			DLAppServiceTestUtil.registerDLSyncEventProcessorMessageListener(
-				DLSyncConstants.EVENT_MOVE);
+		AtomicInteger moveCounter = registerDLSyncEventProcessorMessageListener(
+			DLSyncConstants.EVENT_MOVE);
 
 		FileEntry fileEntry = DLAppServiceTestUtil.addFileEntry(
 			group.getGroupId(), parentFolder.getFolderId(),
