@@ -16,7 +16,7 @@ import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.kernel.service.DLFileEntryTypeLocalServiceUtil;
 import com.liferay.document.library.sync.constants.DLSyncConstants;
-import com.liferay.document.library.test.util.BaseDLAppTestCase;
+import com.liferay.document.library.test.util.BaseDLAppWithRegisteringMessageListenerTestCase;
 import com.liferay.document.library.workflow.WorkflowHandlerInvocationCounter;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -45,7 +45,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 public class DLAppServiceWhenCheckingInAFileEntryTest
-	extends BaseDLAppTestCase {
+	extends BaseDLAppWithRegisteringMessageListenerTestCase {
 
 	@ClassRule
 	@Rule

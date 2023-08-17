@@ -9,7 +9,7 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.model.DLFileEntryConstants;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.sync.constants.DLSyncConstants;
-import com.liferay.document.library.test.util.BaseDLAppTestCase;
+import com.liferay.document.library.test.util.BaseDLAppWithRegisteringMessageListenerTestCase;
 import com.liferay.portal.kernel.comment.CommentManagerUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -27,7 +27,8 @@ import org.junit.runner.RunWith;
  * @author Alexander Chow
  */
 @RunWith(Arquillian.class)
-public class DLAppServiceWhenDeletingAFileEntryTest extends BaseDLAppTestCase {
+public class DLAppServiceWhenDeletingAFileEntryTest
+	extends BaseDLAppWithRegisteringMessageListenerTestCase {
 
 	@ClassRule
 	@Rule

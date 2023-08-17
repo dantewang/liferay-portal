@@ -11,7 +11,7 @@ import com.liferay.asset.kernel.service.AssetEntryLocalServiceUtil;
 import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.document.library.sync.constants.DLSyncConstants;
-import com.liferay.document.library.test.util.BaseDLAppTestCase;
+import com.liferay.document.library.test.util.BaseDLAppWithRegisteringMessageListenerTestCase;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.Folder;
@@ -32,7 +32,8 @@ import org.junit.runner.RunWith;
  * @author Alexander Chow
  */
 @RunWith(Arquillian.class)
-public class DLAppServiceWhenAddingAFolderTest extends BaseDLAppTestCase {
+public class DLAppServiceWhenAddingAFolderTest
+	extends BaseDLAppWithRegisteringMessageListenerTestCase {
 
 	@ClassRule
 	@Rule
