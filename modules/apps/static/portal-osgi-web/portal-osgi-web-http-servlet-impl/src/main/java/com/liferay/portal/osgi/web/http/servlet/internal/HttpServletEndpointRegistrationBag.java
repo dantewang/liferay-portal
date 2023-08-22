@@ -5,6 +5,8 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal;
 
+import org.eclipse.equinox.http.servlet.internal.HttpServiceRuntimeImpl;
+
 import org.osgi.framework.ServiceRegistration;
 
 /**
@@ -13,8 +15,10 @@ import org.osgi.framework.ServiceRegistration;
 public class HttpServletEndpointRegistrationBag {
 
 	public HttpServletEndpointRegistrationBag(
+		HttpServiceRuntimeImpl httpServiceRuntimeImpl,
 		ServiceRegistration<?>... serviceRegistrations) {
 
+		_httpServiceRuntimeImpl = httpServiceRuntimeImpl;
 		_serviceRegistrations = serviceRegistrations;
 	}
 
@@ -24,8 +28,11 @@ public class HttpServletEndpointRegistrationBag {
 
 			serviceRegistration.unregister();
 		}
+
+		_httpServiceRuntimeImpl.destroy();
 	}
 
+	private final HttpServiceRuntimeImpl _httpServiceRuntimeImpl;
 	private final ServiceRegistration<?>[] _serviceRegistrations;
 
 }
