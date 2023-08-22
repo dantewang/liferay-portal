@@ -118,17 +118,15 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 
 			try {
 				proxyServlet.init(httpServletEndpoint.getServletConfig());
-
-				return new HttpServletEndpointRegistrationBag(
-					_bundleContext.registerService(
-						HttpServlet.class, proxyServlet,
-						httpServletEndpoint.getProperties()));
 			}
 			catch (Exception exception) {
 				_log.error(exception);
-
-				return null;
 			}
+
+			return new HttpServletEndpointRegistrationBag(
+				_bundleContext.registerService(
+					HttpServlet.class, proxyServlet,
+					httpServletEndpoint.getProperties()));
 		}
 
 		@Override
