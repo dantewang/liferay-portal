@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
 import com.liferay.portal.osgi.web.http.servlet.HttpServletEndpoint;
+import com.liferay.portal.osgi.web.http.servlet.internal.HttpServletEndpointRegistrationBag;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +24,6 @@ import org.eclipse.equinox.http.servlet.internal.servlet.ProxyServlet;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -80,11 +80,12 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 
 	private Activator _activator;
 	private ServiceTracker
-		<HttpServletEndpoint, ServiceRegistration<HttpServlet>> _serviceTracker;
+		<HttpServletEndpoint, HttpServletEndpointRegistrationBag>
+			_serviceTracker;
 
 	private static class HttpServletServiceServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer
-			<HttpServletEndpoint, ServiceRegistration<HttpServlet>> {
+			<HttpServletEndpoint, HttpServletEndpointRegistrationBag> {
 
 		public HttpServletServiceServiceTrackerCustomizer(
 			BundleContext bundleContext) {
@@ -93,7 +94,7 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 		}
 
 		@Override
-		public ServiceRegistration<HttpServlet> addingService(
+		public HttpServletEndpointRegistrationBag addingService(
 			ServiceReference<HttpServletEndpoint> serviceReference) {
 
 			HttpServletEndpoint httpServletEndpoint = _bundleContext.getService(
@@ -118,9 +119,10 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 			try {
 				proxyServlet.init(httpServletEndpoint.getServletConfig());
 
-				return _bundleContext.registerService(
-					HttpServlet.class, proxyServlet,
-					httpServletEndpoint.getProperties());
+				return new HttpServletEndpointRegistrationBag(
+					_bundleContext.registerService(
+						HttpServlet.class, proxyServlet,
+						httpServletEndpoint.getProperties()));
 			}
 			catch (Exception exception) {
 				_log.error(exception);
@@ -132,9 +134,11 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 		@Override
 		public void modifiedService(
 			ServiceReference<HttpServletEndpoint> serviceReference,
-			ServiceRegistration<HttpServlet> serviceRegistration) {
+			HttpServletEndpointRegistrationBag
+				httpServletEndpointRegistrationBag) {
 
-			removedService(serviceReference, serviceRegistration);
+			removedService(
+				serviceReference, httpServletEndpointRegistrationBag);
 
 			addingService(serviceReference);
 		}
@@ -142,9 +146,10 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 		@Override
 		public void removedService(
 			ServiceReference<HttpServletEndpoint> serviceReference,
-			ServiceRegistration<HttpServlet> serviceRegistration) {
+			HttpServletEndpointRegistrationBag
+				httpServletEndpointRegistrationBag) {
 
-			serviceRegistration.unregister();
+			httpServletEndpointRegistrationBag.close();
 
 			_bundleContext.ungetService(serviceReference);
 		}
