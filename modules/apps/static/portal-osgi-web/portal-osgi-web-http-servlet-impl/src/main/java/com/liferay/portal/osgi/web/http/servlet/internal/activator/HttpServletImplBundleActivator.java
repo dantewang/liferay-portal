@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.osgi.web.http.servlet.HttpServletEndpoint;
 import com.liferay.portal.osgi.web.http.servlet.internal.HttpServletEndpointRegistrationBag;
+import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpServletEndpointServlet;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +36,6 @@ import org.eclipse.equinox.http.servlet.internal.Activator;
 import org.eclipse.equinox.http.servlet.internal.HttpServiceFactory;
 import org.eclipse.equinox.http.servlet.internal.HttpServiceRuntimeImpl;
 import org.eclipse.equinox.http.servlet.internal.servlet.HttpSessionTracker;
-import org.eclipse.equinox.http.servlet.internal.servlet.ProxyServlet;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -120,31 +120,8 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 			HttpServletEndpoint httpServletEndpoint = _bundleContext.getService(
 				serviceReference);
 
-			ProxyServlet proxyServlet = new ProxyServlet() {
-
-				@Override
-				public ServletConfig getServletConfig() {
-					return _servletConfig;
-				}
-
-				@Override
-				public void init(ServletConfig servletConfig) {
-					_servletConfig = servletConfig;
-				}
-
-				private ServletConfig _servletConfig;
-
-			};
-
 			ServletConfig servletConfig =
 				httpServletEndpoint.getServletConfig();
-
-			try {
-				proxyServlet.init(servletConfig);
-			}
-			catch (Exception exception) {
-				_log.error(exception);
-			}
 
 			ServletContext servletContext = servletConfig.getServletContext();
 
@@ -177,12 +154,12 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 					_bundleContext, _bundleContext, servletContext,
 					Collections.unmodifiableMap(attributesMap));
 
-			proxyServlet.setHttpServiceRuntimeImpl(httpServiceRuntimeImpl);
-
 			return new HttpServletEndpointRegistrationBag(
 				httpServiceRuntimeImpl,
 				_bundleContext.registerService(
-					HttpServlet.class, proxyServlet,
+					HttpServlet.class,
+					new HttpServletEndpointServlet(
+						httpServiceRuntimeImpl, servletConfig),
 					httpServletEndpoint.getProperties()),
 				_bundleContext.registerService(
 					HttpService.class,
