@@ -38,6 +38,9 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 
 		_activator.start(bundleContext);
 
+		PortletSessionListenerManager.addHttpSessionListener(
+			_INVALIDATEHTTPSESSION_LISTENER);
+
 		_serviceTracker = new ServiceTracker<>(
 			bundleContext, HttpServletEndpoint.class,
 			new HttpServletServiceServiceTrackerCustomizer(bundleContext));
@@ -48,6 +51,9 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 	@Override
 	public void stop(BundleContext bundleContext) throws Exception {
 		_serviceTracker.close();
+
+		PortletSessionListenerManager.removeHttpSessionListener(
+			_INVALIDATEHTTPSESSION_LISTENER);
 
 		_activator.stop(bundleContext);
 	}
@@ -112,15 +118,9 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 			try {
 				proxyServlet.init(httpServletEndpoint.getServletConfig());
 
-				ServiceRegistration<HttpServlet> serviceRegistration =
-					_bundleContext.registerService(
-						HttpServlet.class, proxyServlet,
-						httpServletEndpoint.getProperties());
-
-				PortletSessionListenerManager.addHttpSessionListener(
-					_INVALIDATEHTTPSESSION_LISTENER);
-
-				return serviceRegistration;
+				return _bundleContext.registerService(
+					HttpServlet.class, proxyServlet,
+					httpServletEndpoint.getProperties());
 			}
 			catch (Exception exception) {
 				_log.error(exception);
@@ -143,9 +143,6 @@ public class HttpServletImplBundleActivator implements BundleActivator {
 		public void removedService(
 			ServiceReference<HttpServletEndpoint> serviceReference,
 			ServiceRegistration<HttpServlet> serviceRegistration) {
-
-			PortletSessionListenerManager.removeHttpSessionListener(
-				_INVALIDATEHTTPSESSION_LISTENER);
 
 			serviceRegistration.unregister();
 
