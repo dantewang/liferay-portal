@@ -7,16 +7,26 @@ package com.liferay.headless.admin.user.resource.v1_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.headless.admin.user.client.http.HttpInvoker;
+import com.liferay.mail.messaging.MailMessageListener;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringUtil;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.PwdGenerator;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LoggerTestUtil;
+
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import org.junit.Assume;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,83 +36,124 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class AddUsersByVIIAPITest {
 
-	@Test
-	public void testAddUsersByVIIAPI() throws Exception {
-		String jsonTemplate = new String(
-			FileUtil.getBytes(getClass(), "/test.json"));
+	@BeforeClass
+	public static void setUpClass() throws IOException {
+		Assume.assumeTrue(Validator.isNull(System.getenv("JENKINS_HOME")));
 
+		_jsonTemplate = StringUtil.read(
+			AddUsersByVIIAPITest.class.getClassLoader(), "/test.json");
+	}
+
+	@Test
+	public void testMultipleThreadsAddUsers() throws Exception {
+		int threadCount = 10;
 		int userCount = 10;
 
-		_alternateNames = _generateString(10);
+		List<List<String>> jsonsList = new ArrayList<>();
 
-		long totalDelats = 0;
-
-		System.out.println("##########Starting add users");
-
-		for (String alternateName : _alternateNames) {
-			String json = jsonTemplate;
-
-			json = StringUtil.replace(json, _ALTER_NAME_TOKEN, alternateName);
-
-			json = StringUtil.replace(
-				json, _EMAILADDRESS_TOKEN, alternateName + _EMAIL_PREFIX);
-
-			long before = System.currentTimeMillis();
-
-			_invoke(JSONFactoryUtil.createJSONObject(json));
-
-			long after = System.currentTimeMillis();
-
-			long delta = after - before;
-
-			totalDelats += delta;
+		for (int i = 0; i < threadCount; i++) {
+			jsonsList.add(_createJSONs(userCount));
 		}
 
-		System.out.println(
-			StringBundler.concat(
-				"##########Finishe adding ", userCount, " users with ",
-				totalDelats, " ms"));
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				MailMessageListener.class.getName(), LoggerTestUtil.OFF)) {
+
+			ExecutorService executorService = Executors.newFixedThreadPool(
+				threadCount);
+
+			List<Future<?>> futures = new ArrayList<>();
+
+			long startTime = System.currentTimeMillis();
+
+			for (List<String> jsons : jsonsList) {
+				futures.add(executorService.submit(() -> _addUsers(jsons)));
+			}
+
+			for (Future<?> future : futures) {
+				future.get();
+			}
+
+			long duration = System.currentTimeMillis() - startTime;
+
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					StringBundler.concat(
+						threadCount, " threads each added ", userCount,
+						" users, used ", duration, "ms"));
+
+				double tps = (double)userCount * threadCount / duration * 1000;
+
+				_log.info(
+					"Average speed : " + String.format("%.2f", tps) + " tps");
+			}
+		}
 	}
 
-	private List<String> _generateString(int size) {
-		List<String> strings = new ArrayList<>();
+	@Test
+	public void testSingleThreadAddUsers() {
+		int userCount = 100;
 
-		for (int i = 0; i < size; i++) {
-			strings.add(_getRandomString());
+		List<String> jsons = _createJSONs(userCount);
+
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				MailMessageListener.class.getName(), LoggerTestUtil.OFF)) {
+
+			long startTime = System.currentTimeMillis();
+
+			_addUsers(jsons);
+
+			long duration = System.currentTimeMillis() - startTime;
+
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					StringBundler.concat(
+						"Single thread added ", userCount, " users, used ",
+						duration, "ms"));
+
+				double tps = (double)userCount / duration * 1000;
+
+				_log.info(
+					"Average speed : " + String.format("%.2f", tps) + " tps");
+			}
+		}
+	}
+
+	private void _addUsers(List<String> jsons) {
+		try {
+			for (String json : jsons) {
+				HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+				httpInvoker.body(json, "application/json");
+				httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
+				httpInvoker.path(
+					"http://localhost:8080/o/headless-admin-user/v1.0" +
+						"/user-accounts");
+
+				httpInvoker.userNameAndPassword("test@liferay.com:test");
+
+				httpInvoker.invoke();
+			}
+		}
+		catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+
+	private List<String> _createJSONs(int userCount) {
+		List<String> jsons = new ArrayList<>(userCount);
+
+		for (int i = 0; i < userCount; i++) {
+			String alternateName = PwdGenerator.getPassword(8);
+
+			String json = StringUtil.replace(
+				_jsonTemplate, _ALTER_NAME_TOKEN, alternateName);
+
+			jsons.add(
+				StringUtil.replace(
+					json, _EMAILADDRESS_TOKEN, alternateName + _EMAIL_PREFIX));
 		}
 
-		return strings;
-	}
-
-	private String _getRandomString() {
-		String str =
-			"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-		Random random = new Random();
-
-		StringBundler sb = new StringBundler();
-
-		for (int i = 0; i < 8; i++) {
-			int number = random.nextInt(62);
-
-			sb.append(str.charAt(number));
-		}
-
-		return sb.toString();
-	}
-
-	private String _invoke(JSONObject jsonObject) throws Exception {
-		HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-		httpInvoker.body(jsonObject.toString(), "application/json");
-		httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
-		httpInvoker.path(
-			"http://localhost:8080/o/headless-admin-user/v1.0/user-accounts");
-		httpInvoker.userNameAndPassword("test@liferay.com:test");
-
-		HttpInvoker.HttpResponse httpResponse = httpInvoker.invoke();
-
-		return httpResponse.getContent();
+		return jsons;
 	}
 
 	private static final String _ALTER_NAME_TOKEN = "@alternateName@";
@@ -111,6 +162,9 @@ public class AddUsersByVIIAPITest {
 
 	private static final String _EMAILADDRESS_TOKEN = "@emailAddress@";
 
-	private List<String> _alternateNames = new ArrayList<>();
+	private static final Log _log = LogFactoryUtil.getLog(
+		AddUsersByVIIAPITest.class);
+
+	private static String _jsonTemplate;
 
 }
