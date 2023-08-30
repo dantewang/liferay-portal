@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.PwdGenerator;
 import com.liferay.portal.kernel.util.Validator;
@@ -52,6 +53,7 @@ import org.junit.runner.RunWith;
 /**
  * @author Lily Chi
  */
+@DataGuard(scope = DataGuard.Scope.NONE)
 @RunWith(Arquillian.class)
 public class AddUsersByVIIAPITest {
 
