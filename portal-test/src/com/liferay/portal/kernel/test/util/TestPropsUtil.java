@@ -52,6 +52,10 @@ public class TestPropsUtil {
 
 		ClassLoader classLoader = PortalClassLoaderUtil.getClassLoader();
 
+		if (classLoader == null) {
+			classLoader = TestPropsUtil.class.getClassLoader();
+		}
+
 		try (InputStream inputStream = classLoader.getResourceAsStream(
 				"/test-portal-impl-ext.properties")) {
 
