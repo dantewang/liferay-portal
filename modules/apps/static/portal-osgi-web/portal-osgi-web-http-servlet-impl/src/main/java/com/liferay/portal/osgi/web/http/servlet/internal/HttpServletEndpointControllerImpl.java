@@ -114,11 +114,6 @@ public class HttpServletEndpointControllerImpl
 	}
 
 	@Override
-	public Collection<ContextController> getContextControllers() {
-		return _contextControllers.toList();
-	}
-
-	@Override
 	public DispatchTargets getDispatchTargets(String pathString) {
 		Path path = new Path(pathString);
 
@@ -257,7 +252,7 @@ public class HttpServletEndpointControllerImpl
 				DispatchTargets dispatchTargets =
 					contextController.getDispatchTargets(
 						null, requestURI, servletPath, pathInfo, extension,
-						queryString, match, null);
+						queryString, match);
 
 				if (dispatchTargets != null) {
 					return dispatchTargets;
