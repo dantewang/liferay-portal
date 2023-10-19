@@ -466,7 +466,7 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection" where="categoryId != -1">
+		<finder name="GroupId" return-type="Collection" where="categoryId != -1" db-index="false">
 			<finder-column name="groupId" />
 		</finder>
 		<finder name="RootMessageId" return-type="MBMessage">
@@ -480,7 +480,7 @@
 			<finder-column name="groupId" />
 			<finder-column comparator="!=" name="categoryId" />
 		</finder>
-		<finder name="G_S" return-type="Collection" where="categoryId != -1">
+		<finder name="G_S" return-type="Collection" where="categoryId != -1" db-index="false">
 			<finder-column name="groupId" />
 			<finder-column name="status" />
 		</finder>

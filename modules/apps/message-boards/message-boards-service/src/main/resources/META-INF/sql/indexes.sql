@@ -74,8 +74,6 @@ create index IX_93724410 on MBThread (groupId, categoryId, ctCollectionId);
 create index IX_C25692A8 on MBThread (groupId, categoryId, lastPostDate, ctCollectionId);
 create index IX_AD425B8E on MBThread (groupId, categoryId, lastPostDate, status, ctCollectionId);
 create index IX_BFEA24F6 on MBThread (groupId, categoryId, status, ctCollectionId);
-create index IX_ADE096A3 on MBThread (groupId, ctCollectionId);
-create index IX_9B323489 on MBThread (groupId, status, ctCollectionId);
 create index IX_75AA6913 on MBThread (lastPostDate, priority, ctCollectionId);
 create index IX_2A7B1F29 on MBThread (rootMessageId, ctCollectionId);
 create index IX_E3626F17 on MBThread (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
