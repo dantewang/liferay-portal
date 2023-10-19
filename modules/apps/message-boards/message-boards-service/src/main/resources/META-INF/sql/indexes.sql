@@ -72,6 +72,7 @@ create unique index IX_A3E15B5B on MBSuspiciousActivity (uuid_[$COLUMN_LENGTH:75
 create index IX_A1BB5EE8 on MBThread (categoryId, priority, ctCollectionId);
 create index IX_93724410 on MBThread (groupId, categoryId, ctCollectionId);
 create index IX_C25692A8 on MBThread (groupId, categoryId, lastPostDate, ctCollectionId);
+create index IX_AD425B8E on MBThread (groupId, categoryId, lastPostDate, status, ctCollectionId);
 create index IX_BFEA24F6 on MBThread (groupId, categoryId, status, ctCollectionId);
 create index IX_ADE096A3 on MBThread (groupId, ctCollectionId);
 create index IX_9B323489 on MBThread (groupId, status, ctCollectionId);

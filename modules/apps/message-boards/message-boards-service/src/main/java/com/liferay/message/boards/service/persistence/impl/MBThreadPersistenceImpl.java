@@ -8164,6 +8164,1148 @@ public class MBThreadPersistenceImpl
 	private static final String _FINDER_COLUMN_G_C_L_LASTPOSTDATE_2 =
 		"mbThread.lastPostDate = ?";
 
+	private FinderPath _finderPathWithPaginationFindByG_C_L_S;
+	private FinderPath _finderPathWithoutPaginationFindByG_C_L_S;
+	private FinderPath _finderPathCountByG_C_L_S;
+
+	/**
+	 * Returns all the message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @return the matching message boards threads
+	 */
+	@Override
+	public List<MBThread> findByG_C_L_S(
+		long groupId, long categoryId, Date lastPostDate, int status) {
+
+		return findByG_C_L_S(
+			groupId, categoryId, lastPostDate, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBThreadModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param start the lower bound of the range of message boards threads
+	 * @param end the upper bound of the range of message boards threads (not inclusive)
+	 * @return the range of matching message boards threads
+	 */
+	@Override
+	public List<MBThread> findByG_C_L_S(
+		long groupId, long categoryId, Date lastPostDate, int status, int start,
+		int end) {
+
+		return findByG_C_L_S(
+			groupId, categoryId, lastPostDate, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBThreadModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param start the lower bound of the range of message boards threads
+	 * @param end the upper bound of the range of message boards threads (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message boards threads
+	 */
+	@Override
+	public List<MBThread> findByG_C_L_S(
+		long groupId, long categoryId, Date lastPostDate, int status, int start,
+		int end, OrderByComparator<MBThread> orderByComparator) {
+
+		return findByG_C_L_S(
+			groupId, categoryId, lastPostDate, status, start, end,
+			orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBThreadModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param start the lower bound of the range of message boards threads
+	 * @param end the upper bound of the range of message boards threads (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching message boards threads
+	 */
+	@Override
+	public List<MBThread> findByG_C_L_S(
+		long groupId, long categoryId, Date lastPostDate, int status, int start,
+		int end, OrderByComparator<MBThread> orderByComparator,
+		boolean useFinderCache) {
+
+		boolean productionMode = ctPersistenceHelper.isProductionMode(
+			MBThread.class);
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache && productionMode) {
+				finderPath = _finderPathWithoutPaginationFindByG_C_L_S;
+				finderArgs = new Object[] {
+					groupId, categoryId, _getTime(lastPostDate), status
+				};
+			}
+		}
+		else if (useFinderCache && productionMode) {
+			finderPath = _finderPathWithPaginationFindByG_C_L_S;
+			finderArgs = new Object[] {
+				groupId, categoryId, _getTime(lastPostDate), status, start, end,
+				orderByComparator
+			};
+		}
+
+		List<MBThread> list = null;
+
+		if (useFinderCache && productionMode) {
+			list = (List<MBThread>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (MBThread mbThread : list) {
+					if ((groupId != mbThread.getGroupId()) ||
+						(categoryId != mbThread.getCategoryId()) ||
+						!Objects.equals(
+							lastPostDate, mbThread.getLastPostDate()) ||
+						(status != mbThread.getStatus())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					6 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(6);
+			}
+
+			sb.append(_SQL_SELECT_MBTHREAD_WHERE);
+
+			sb.append(_FINDER_COLUMN_G_C_L_S_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_G_C_L_S_CATEGORYID_2);
+
+			boolean bindLastPostDate = false;
+
+			if (lastPostDate == null) {
+				sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_1);
+			}
+			else {
+				bindLastPostDate = true;
+
+				sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_2);
+			}
+
+			sb.append(_FINDER_COLUMN_G_C_L_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(MBThreadModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(groupId);
+
+				queryPos.add(categoryId);
+
+				if (bindLastPostDate) {
+					queryPos.add(new Timestamp(lastPostDate.getTime()));
+				}
+
+				queryPos.add(status);
+
+				list = (List<MBThread>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache && productionMode) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first message boards thread in the ordered set where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards thread
+	 * @throws NoSuchThreadException if a matching message boards thread could not be found
+	 */
+	@Override
+	public MBThread findByG_C_L_S_First(
+			long groupId, long categoryId, Date lastPostDate, int status,
+			OrderByComparator<MBThread> orderByComparator)
+		throws NoSuchThreadException {
+
+		MBThread mbThread = fetchByG_C_L_S_First(
+			groupId, categoryId, lastPostDate, status, orderByComparator);
+
+		if (mbThread != null) {
+			return mbThread;
+		}
+
+		StringBundler sb = new StringBundler(10);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("groupId=");
+		sb.append(groupId);
+
+		sb.append(", categoryId=");
+		sb.append(categoryId);
+
+		sb.append(", lastPostDate=");
+		sb.append(lastPostDate);
+
+		sb.append(", status=");
+		sb.append(status);
+
+		sb.append("}");
+
+		throw new NoSuchThreadException(sb.toString());
+	}
+
+	/**
+	 * Returns the first message boards thread in the ordered set where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards thread, or <code>null</code> if a matching message boards thread could not be found
+	 */
+	@Override
+	public MBThread fetchByG_C_L_S_First(
+		long groupId, long categoryId, Date lastPostDate, int status,
+		OrderByComparator<MBThread> orderByComparator) {
+
+		List<MBThread> list = findByG_C_L_S(
+			groupId, categoryId, lastPostDate, status, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last message boards thread in the ordered set where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards thread
+	 * @throws NoSuchThreadException if a matching message boards thread could not be found
+	 */
+	@Override
+	public MBThread findByG_C_L_S_Last(
+			long groupId, long categoryId, Date lastPostDate, int status,
+			OrderByComparator<MBThread> orderByComparator)
+		throws NoSuchThreadException {
+
+		MBThread mbThread = fetchByG_C_L_S_Last(
+			groupId, categoryId, lastPostDate, status, orderByComparator);
+
+		if (mbThread != null) {
+			return mbThread;
+		}
+
+		StringBundler sb = new StringBundler(10);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("groupId=");
+		sb.append(groupId);
+
+		sb.append(", categoryId=");
+		sb.append(categoryId);
+
+		sb.append(", lastPostDate=");
+		sb.append(lastPostDate);
+
+		sb.append(", status=");
+		sb.append(status);
+
+		sb.append("}");
+
+		throw new NoSuchThreadException(sb.toString());
+	}
+
+	/**
+	 * Returns the last message boards thread in the ordered set where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards thread, or <code>null</code> if a matching message boards thread could not be found
+	 */
+	@Override
+	public MBThread fetchByG_C_L_S_Last(
+		long groupId, long categoryId, Date lastPostDate, int status,
+		OrderByComparator<MBThread> orderByComparator) {
+
+		int count = countByG_C_L_S(groupId, categoryId, lastPostDate, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<MBThread> list = findByG_C_L_S(
+			groupId, categoryId, lastPostDate, status, count - 1, count,
+			orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the message boards threads before and after the current message boards thread in the ordered set where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * @param threadId the primary key of the current message boards thread
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next message boards thread
+	 * @throws NoSuchThreadException if a message boards thread with the primary key could not be found
+	 */
+	@Override
+	public MBThread[] findByG_C_L_S_PrevAndNext(
+			long threadId, long groupId, long categoryId, Date lastPostDate,
+			int status, OrderByComparator<MBThread> orderByComparator)
+		throws NoSuchThreadException {
+
+		MBThread mbThread = findByPrimaryKey(threadId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			MBThread[] array = new MBThreadImpl[3];
+
+			array[0] = getByG_C_L_S_PrevAndNext(
+				session, mbThread, groupId, categoryId, lastPostDate, status,
+				orderByComparator, true);
+
+			array[1] = mbThread;
+
+			array[2] = getByG_C_L_S_PrevAndNext(
+				session, mbThread, groupId, categoryId, lastPostDate, status,
+				orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected MBThread getByG_C_L_S_PrevAndNext(
+		Session session, MBThread mbThread, long groupId, long categoryId,
+		Date lastPostDate, int status,
+		OrderByComparator<MBThread> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				7 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(6);
+		}
+
+		sb.append(_SQL_SELECT_MBTHREAD_WHERE);
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_GROUPID_2);
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_CATEGORYID_2);
+
+		boolean bindLastPostDate = false;
+
+		if (lastPostDate == null) {
+			sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_1);
+		}
+		else {
+			bindLastPostDate = true;
+
+			sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_2);
+		}
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(MBThreadModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(groupId);
+
+		queryPos.add(categoryId);
+
+		if (bindLastPostDate) {
+			queryPos.add(new Timestamp(lastPostDate.getTime()));
+		}
+
+		queryPos.add(status);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(mbThread)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<MBThread> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @return the matching message boards threads that the user has permission to view
+	 */
+	@Override
+	public List<MBThread> filterFindByG_C_L_S(
+		long groupId, long categoryId, Date lastPostDate, int status) {
+
+		return filterFindByG_C_L_S(
+			groupId, categoryId, lastPostDate, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBThreadModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param start the lower bound of the range of message boards threads
+	 * @param end the upper bound of the range of message boards threads (not inclusive)
+	 * @return the range of matching message boards threads that the user has permission to view
+	 */
+	@Override
+	public List<MBThread> filterFindByG_C_L_S(
+		long groupId, long categoryId, Date lastPostDate, int status, int start,
+		int end) {
+
+		return filterFindByG_C_L_S(
+			groupId, categoryId, lastPostDate, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the message boards threads that the user has permissions to view where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBThreadModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param start the lower bound of the range of message boards threads
+	 * @param end the upper bound of the range of message boards threads (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message boards threads that the user has permission to view
+	 */
+	@Override
+	public List<MBThread> filterFindByG_C_L_S(
+		long groupId, long categoryId, Date lastPostDate, int status, int start,
+		int end, OrderByComparator<MBThread> orderByComparator) {
+
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_C_L_S(
+				groupId, categoryId, lastPostDate, status, start, end,
+				orderByComparator);
+		}
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				6 + (orderByComparator.getOrderByFields().length * 2));
+		}
+		else {
+			sb = new StringBundler(7);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			sb.append(_FILTER_SQL_SELECT_MBTHREAD_WHERE);
+		}
+		else {
+			sb.append(_FILTER_SQL_SELECT_MBTHREAD_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_GROUPID_2);
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_CATEGORYID_2);
+
+		boolean bindLastPostDate = false;
+
+		if (lastPostDate == null) {
+			sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_1);
+		}
+		else {
+			bindLastPostDate = true;
+
+			sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_2);
+		}
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			sb.append(_FILTER_SQL_SELECT_MBTHREAD_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			if (getDB().isSupportsInlineDistinct()) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator, true);
+			}
+			else {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_TABLE, orderByComparator, true);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				sb.append(MBThreadModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				sb.append(MBThreadModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(
+			sb.toString(), MBThread.class.getName(),
+			_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
+
+			if (getDB().isSupportsInlineDistinct()) {
+				sqlQuery.addEntity(_FILTER_ENTITY_ALIAS, MBThreadImpl.class);
+			}
+			else {
+				sqlQuery.addEntity(_FILTER_ENTITY_TABLE, MBThreadImpl.class);
+			}
+
+			QueryPos queryPos = QueryPos.getInstance(sqlQuery);
+
+			queryPos.add(groupId);
+
+			queryPos.add(categoryId);
+
+			if (bindLastPostDate) {
+				queryPos.add(new Timestamp(lastPostDate.getTime()));
+			}
+
+			queryPos.add(status);
+
+			return (List<MBThread>)QueryUtil.list(
+				sqlQuery, getDialect(), start, end);
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the message boards threads before and after the current message boards thread in the ordered set of message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * @param threadId the primary key of the current message boards thread
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next message boards thread
+	 * @throws NoSuchThreadException if a message boards thread with the primary key could not be found
+	 */
+	@Override
+	public MBThread[] filterFindByG_C_L_S_PrevAndNext(
+			long threadId, long groupId, long categoryId, Date lastPostDate,
+			int status, OrderByComparator<MBThread> orderByComparator)
+		throws NoSuchThreadException {
+
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_C_L_S_PrevAndNext(
+				threadId, groupId, categoryId, lastPostDate, status,
+				orderByComparator);
+		}
+
+		MBThread mbThread = findByPrimaryKey(threadId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			MBThread[] array = new MBThreadImpl[3];
+
+			array[0] = filterGetByG_C_L_S_PrevAndNext(
+				session, mbThread, groupId, categoryId, lastPostDate, status,
+				orderByComparator, true);
+
+			array[1] = mbThread;
+
+			array[2] = filterGetByG_C_L_S_PrevAndNext(
+				session, mbThread, groupId, categoryId, lastPostDate, status,
+				orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected MBThread filterGetByG_C_L_S_PrevAndNext(
+		Session session, MBThread mbThread, long groupId, long categoryId,
+		Date lastPostDate, int status,
+		OrderByComparator<MBThread> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				8 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(7);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			sb.append(_FILTER_SQL_SELECT_MBTHREAD_WHERE);
+		}
+		else {
+			sb.append(_FILTER_SQL_SELECT_MBTHREAD_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_GROUPID_2);
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_CATEGORYID_2);
+
+		boolean bindLastPostDate = false;
+
+		if (lastPostDate == null) {
+			sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_1);
+		}
+		else {
+			bindLastPostDate = true;
+
+			sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_2);
+		}
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_STATUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			sb.append(_FILTER_SQL_SELECT_MBTHREAD_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					sb.append(
+						getColumnName(
+							_ORDER_BY_ENTITY_ALIAS, orderByConditionFields[i],
+							true));
+				}
+				else {
+					sb.append(
+						getColumnName(
+							_ORDER_BY_ENTITY_TABLE, orderByConditionFields[i],
+							true));
+				}
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					sb.append(
+						getColumnName(
+							_ORDER_BY_ENTITY_ALIAS, orderByFields[i], true));
+				}
+				else {
+					sb.append(
+						getColumnName(
+							_ORDER_BY_ENTITY_TABLE, orderByFields[i], true));
+				}
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				sb.append(MBThreadModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				sb.append(MBThreadModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(
+			sb.toString(), MBThread.class.getName(),
+			_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
+
+		sqlQuery.setFirstResult(0);
+		sqlQuery.setMaxResults(2);
+
+		if (getDB().isSupportsInlineDistinct()) {
+			sqlQuery.addEntity(_FILTER_ENTITY_ALIAS, MBThreadImpl.class);
+		}
+		else {
+			sqlQuery.addEntity(_FILTER_ENTITY_TABLE, MBThreadImpl.class);
+		}
+
+		QueryPos queryPos = QueryPos.getInstance(sqlQuery);
+
+		queryPos.add(groupId);
+
+		queryPos.add(categoryId);
+
+		if (bindLastPostDate) {
+			queryPos.add(new Timestamp(lastPostDate.getTime()));
+		}
+
+		queryPos.add(status);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(mbThread)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<MBThread> list = sqlQuery.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 */
+	@Override
+	public void removeByG_C_L_S(
+		long groupId, long categoryId, Date lastPostDate, int status) {
+
+		for (MBThread mbThread :
+				findByG_C_L_S(
+					groupId, categoryId, lastPostDate, status,
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(mbThread);
+		}
+	}
+
+	/**
+	 * Returns the number of message boards threads where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @return the number of matching message boards threads
+	 */
+	@Override
+	public int countByG_C_L_S(
+		long groupId, long categoryId, Date lastPostDate, int status) {
+
+		boolean productionMode = ctPersistenceHelper.isProductionMode(
+			MBThread.class);
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		Long count = null;
+
+		if (productionMode) {
+			finderPath = _finderPathCountByG_C_L_S;
+
+			finderArgs = new Object[] {
+				groupId, categoryId, _getTime(lastPostDate), status
+			};
+
+			count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+		}
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(5);
+
+			sb.append(_SQL_COUNT_MBTHREAD_WHERE);
+
+			sb.append(_FINDER_COLUMN_G_C_L_S_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_G_C_L_S_CATEGORYID_2);
+
+			boolean bindLastPostDate = false;
+
+			if (lastPostDate == null) {
+				sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_1);
+			}
+			else {
+				bindLastPostDate = true;
+
+				sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_2);
+			}
+
+			sb.append(_FINDER_COLUMN_G_C_L_S_STATUS_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(groupId);
+
+				queryPos.add(categoryId);
+
+				if (bindLastPostDate) {
+					queryPos.add(new Timestamp(lastPostDate.getTime()));
+				}
+
+				queryPos.add(status);
+
+				count = (Long)query.uniqueResult();
+
+				if (productionMode) {
+					finderCache.putResult(finderPath, finderArgs, count);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of message boards threads that the user has permission to view where groupId = &#63; and categoryId = &#63; and lastPostDate = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param categoryId the category ID
+	 * @param lastPostDate the last post date
+	 * @param status the status
+	 * @return the number of matching message boards threads that the user has permission to view
+	 */
+	@Override
+	public int filterCountByG_C_L_S(
+		long groupId, long categoryId, Date lastPostDate, int status) {
+
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_C_L_S(groupId, categoryId, lastPostDate, status);
+		}
+
+		StringBundler sb = new StringBundler(5);
+
+		sb.append(_FILTER_SQL_COUNT_MBTHREAD_WHERE);
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_GROUPID_2);
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_CATEGORYID_2);
+
+		boolean bindLastPostDate = false;
+
+		if (lastPostDate == null) {
+			sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_1);
+		}
+		else {
+			bindLastPostDate = true;
+
+			sb.append(_FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_2);
+		}
+
+		sb.append(_FINDER_COLUMN_G_C_L_S_STATUS_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(
+			sb.toString(), MBThread.class.getName(),
+			_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
+
+			sqlQuery.addScalar(
+				COUNT_COLUMN_NAME, com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos queryPos = QueryPos.getInstance(sqlQuery);
+
+			queryPos.add(groupId);
+
+			queryPos.add(categoryId);
+
+			if (bindLastPostDate) {
+				queryPos.add(new Timestamp(lastPostDate.getTime()));
+			}
+
+			queryPos.add(status);
+
+			Long count = (Long)sqlQuery.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_C_L_S_GROUPID_2 =
+		"mbThread.groupId = ? AND ";
+
+	private static final String _FINDER_COLUMN_G_C_L_S_CATEGORYID_2 =
+		"mbThread.categoryId = ? AND ";
+
+	private static final String _FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_1 =
+		"mbThread.lastPostDate IS NULL AND ";
+
+	private static final String _FINDER_COLUMN_G_C_L_S_LASTPOSTDATE_2 =
+		"mbThread.lastPostDate = ? AND ";
+
+	private static final String _FINDER_COLUMN_G_C_L_S_STATUS_2 =
+		"mbThread.status = ?";
+
 	private FinderPath _finderPathWithPaginationFindByG_C_S;
 	private FinderPath _finderPathWithoutPaginationFindByG_C_S;
 	private FinderPath _finderPathCountByG_C_S;
@@ -14272,6 +15414,35 @@ public class MBThreadPersistenceImpl
 				Long.class.getName(), Long.class.getName(), Date.class.getName()
 			},
 			new String[] {"groupId", "categoryId", "lastPostDate"}, false);
+
+		_finderPathWithPaginationFindByG_C_L_S = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_C_L_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Date.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			},
+			new String[] {"groupId", "categoryId", "lastPostDate", "status"},
+			true);
+
+		_finderPathWithoutPaginationFindByG_C_L_S = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_C_L_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Date.class.getName(), Integer.class.getName()
+			},
+			new String[] {"groupId", "categoryId", "lastPostDate", "status"},
+			true);
+
+		_finderPathCountByG_C_L_S = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_C_L_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Date.class.getName(), Integer.class.getName()
+			},
+			new String[] {"groupId", "categoryId", "lastPostDate", "status"},
+			false);
 
 		_finderPathWithPaginationFindByG_C_S = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_C_S",
