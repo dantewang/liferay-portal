@@ -4162,6 +4162,8 @@ public class ServiceBuilder {
 				if (entity.isChangeTrackingEnabled() &&
 					!dbNames.contains("ctCollectionId")) {
 
+					dbNames.add(0, "ctCollectionId");
+
 					if (indexMetadatas != null) {
 						Iterator<IndexMetadata> iterator =
 							indexMetadatas.iterator();
@@ -4180,8 +4182,6 @@ public class ServiceBuilder {
 							}
 						}
 					}
-
-					dbNames.add("ctCollectionId");
 				}
 
 				IndexMetadata indexMetadata =
