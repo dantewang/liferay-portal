@@ -10,6 +10,8 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.Arrays;
+
 /**
  * @author James Lefeu
  * @author Peter Shin
@@ -23,6 +25,8 @@ public class IndexMetadataFactoryUtil {
 		if (columnNames == null) {
 			throw new NullPointerException("Column names are missing");
 		}
+
+		Arrays.sort(columnNames);
 
 		StringBundler sb = new StringBundler(4 + (columnNames.length * 2));
 

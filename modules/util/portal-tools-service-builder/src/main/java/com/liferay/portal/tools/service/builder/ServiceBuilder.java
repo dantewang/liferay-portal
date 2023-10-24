@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ClearThreadLocalUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -4206,6 +4207,8 @@ public class ServiceBuilder {
 		StringBundler sb = new StringBundler();
 
 		for (List<IndexMetadata> indexMetadatas : indexMetadatasMap.values()) {
+			indexMetadatas = _optimizeForBTreeIndexes(indexMetadatas);
+
 			Collections.sort(indexMetadatas);
 
 			for (IndexMetadata indexMetadata : indexMetadatas) {
@@ -6104,6 +6107,58 @@ public class ServiceBuilder {
 	private String _normalize(String fileName) {
 		return StringUtil.replace(
 			fileName, CharPool.BACK_SLASH, CharPool.SLASH);
+	}
+
+	private List<IndexMetadata> _optimizeForBTreeIndexes(
+		List<IndexMetadata> indexMetadatas) {
+
+		Map<String, IntegerWrapper> frequencyMap = new HashMap<>();
+
+		for (IndexMetadata indexMetadata : indexMetadatas) {
+			for (String columnName : indexMetadata.getColumnNames()) {
+				IntegerWrapper count = frequencyMap.computeIfAbsent(
+					columnName, key -> new IntegerWrapper());
+
+				count.increment();
+			}
+		}
+
+		for (IndexMetadata indexMetadata : indexMetadatas) {
+			indexMetadata.optimizeColumns(frequencyMap);
+		}
+
+		List<IndexMetadata> optimizedIndexMetadatas = new ArrayList<>();
+
+		for (IndexMetadata indexMetadata : indexMetadatas) {
+			Iterator<IndexMetadata> iterator =
+				optimizedIndexMetadatas.iterator();
+
+			while (iterator.hasNext()) {
+				IndexMetadata currentIndexMetadata = iterator.next();
+
+				Boolean redundant = currentIndexMetadata.redundantTo(
+					indexMetadata);
+
+				if (redundant == null) {
+					continue;
+				}
+
+				if (redundant) {
+					iterator.remove();
+				}
+				else {
+					indexMetadata = null;
+
+					break;
+				}
+			}
+
+			if (indexMetadata != null) {
+				optimizedIndexMetadatas.add(indexMetadata);
+			}
+		}
+
+		return optimizedIndexMetadatas;
 	}
 
 	private Entity _parseEntity(Element entityElement) throws Exception {
