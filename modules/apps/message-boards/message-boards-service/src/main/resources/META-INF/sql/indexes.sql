@@ -45,6 +45,7 @@ create unique index IX_7BEA05A9 on MBMessage (groupId, externalReferenceCode[$CO
 create index IX_F6A852F6 on MBMessage (groupId, status, ctCollectionId);
 create unique index IX_8813E901 on MBMessage (groupId, urlSubject[$COLUMN_LENGTH:255$], ctCollectionId);
 create index IX_C892444A on MBMessage (groupId, userId, ctCollectionId);
+create index IX_F5AB1D1C on MBMessage (groupId, userId, status, categoryId, anonymous, ctCollectionId);
 create index IX_6C8B4B30 on MBMessage (groupId, userId, status, ctCollectionId);
 create index IX_D6EAC68E on MBMessage (parentMessageId, ctCollectionId);
 create index IX_C56F4974 on MBMessage (parentMessageId, status, ctCollectionId);

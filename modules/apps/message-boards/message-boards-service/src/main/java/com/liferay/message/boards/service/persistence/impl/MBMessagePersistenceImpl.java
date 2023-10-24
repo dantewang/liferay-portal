@@ -14271,6 +14271,1141 @@ public class MBMessagePersistenceImpl
 	private static final String _FINDER_COLUMN_G_U_S_STATUS_2 =
 		"mbMessage.status = ? AND (mbMessage.categoryId != -1) AND (mbMessage.anonymous = [$FALSE$])";
 
+	private FinderPath _finderPathWithPaginationFindByG_U_S_C_A;
+	private FinderPath _finderPathWithoutPaginationFindByG_U_S_C_A;
+	private FinderPath _finderPathCountByG_U_S_C_A;
+
+	/**
+	 * Returns all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @return the matching message-boards messages
+	 */
+	@Override
+	public List<MBMessage> findByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous) {
+
+		return findByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBMessageModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @return the range of matching message-boards messages
+	 */
+	@Override
+	public List<MBMessage> findByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, int start, int end) {
+
+		return findByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBMessageModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message-boards messages
+	 */
+	@Override
+	public List<MBMessage> findByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, int start, int end,
+		OrderByComparator<MBMessage> orderByComparator) {
+
+		return findByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, start, end,
+			orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBMessageModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching message-boards messages
+	 */
+	@Override
+	public List<MBMessage> findByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, int start, int end,
+		OrderByComparator<MBMessage> orderByComparator,
+		boolean useFinderCache) {
+
+		boolean productionMode = ctPersistenceHelper.isProductionMode(
+			MBMessage.class);
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache && productionMode) {
+				finderPath = _finderPathWithoutPaginationFindByG_U_S_C_A;
+				finderArgs = new Object[] {
+					groupId, userId, status, categoryId, anonymous
+				};
+			}
+		}
+		else if (useFinderCache && productionMode) {
+			finderPath = _finderPathWithPaginationFindByG_U_S_C_A;
+			finderArgs = new Object[] {
+				groupId, userId, status, categoryId, anonymous, start, end,
+				orderByComparator
+			};
+		}
+
+		List<MBMessage> list = null;
+
+		if (useFinderCache && productionMode) {
+			list = (List<MBMessage>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (MBMessage mbMessage : list) {
+					if ((groupId != mbMessage.getGroupId()) ||
+						(userId != mbMessage.getUserId()) ||
+						(status != mbMessage.getStatus()) ||
+						(categoryId != mbMessage.getCategoryId()) ||
+						(anonymous != mbMessage.isAnonymous())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					7 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(7);
+			}
+
+			sb.append(_SQL_SELECT_MBMESSAGE_WHERE);
+
+			sb.append(_FINDER_COLUMN_G_U_S_C_A_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_G_U_S_C_A_USERID_2);
+
+			sb.append(_FINDER_COLUMN_G_U_S_C_A_STATUS_2);
+
+			sb.append(_FINDER_COLUMN_G_U_S_C_A_CATEGORYID_2);
+
+			sb.append(_FINDER_COLUMN_G_U_S_C_A_ANONYMOUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(MBMessageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(groupId);
+
+				queryPos.add(userId);
+
+				queryPos.add(status);
+
+				queryPos.add(categoryId);
+
+				queryPos.add(anonymous);
+
+				list = (List<MBMessage>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache && productionMode) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first message-boards message in the ordered set where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message-boards message
+	 * @throws NoSuchMessageException if a matching message-boards message could not be found
+	 */
+	@Override
+	public MBMessage findByG_U_S_C_A_First(
+			long groupId, long userId, int status, long categoryId,
+			boolean anonymous, OrderByComparator<MBMessage> orderByComparator)
+		throws NoSuchMessageException {
+
+		MBMessage mbMessage = fetchByG_U_S_C_A_First(
+			groupId, userId, status, categoryId, anonymous, orderByComparator);
+
+		if (mbMessage != null) {
+			return mbMessage;
+		}
+
+		StringBundler sb = new StringBundler(12);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("groupId=");
+		sb.append(groupId);
+
+		sb.append(", userId=");
+		sb.append(userId);
+
+		sb.append(", status=");
+		sb.append(status);
+
+		sb.append(", categoryId=");
+		sb.append(categoryId);
+
+		sb.append(", anonymous=");
+		sb.append(anonymous);
+
+		sb.append("}");
+
+		throw new NoSuchMessageException(sb.toString());
+	}
+
+	/**
+	 * Returns the first message-boards message in the ordered set where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message-boards message, or <code>null</code> if a matching message-boards message could not be found
+	 */
+	@Override
+	public MBMessage fetchByG_U_S_C_A_First(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, OrderByComparator<MBMessage> orderByComparator) {
+
+		List<MBMessage> list = findByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, 0, 1,
+			orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last message-boards message in the ordered set where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message-boards message
+	 * @throws NoSuchMessageException if a matching message-boards message could not be found
+	 */
+	@Override
+	public MBMessage findByG_U_S_C_A_Last(
+			long groupId, long userId, int status, long categoryId,
+			boolean anonymous, OrderByComparator<MBMessage> orderByComparator)
+		throws NoSuchMessageException {
+
+		MBMessage mbMessage = fetchByG_U_S_C_A_Last(
+			groupId, userId, status, categoryId, anonymous, orderByComparator);
+
+		if (mbMessage != null) {
+			return mbMessage;
+		}
+
+		StringBundler sb = new StringBundler(12);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("groupId=");
+		sb.append(groupId);
+
+		sb.append(", userId=");
+		sb.append(userId);
+
+		sb.append(", status=");
+		sb.append(status);
+
+		sb.append(", categoryId=");
+		sb.append(categoryId);
+
+		sb.append(", anonymous=");
+		sb.append(anonymous);
+
+		sb.append("}");
+
+		throw new NoSuchMessageException(sb.toString());
+	}
+
+	/**
+	 * Returns the last message-boards message in the ordered set where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message-boards message, or <code>null</code> if a matching message-boards message could not be found
+	 */
+	@Override
+	public MBMessage fetchByG_U_S_C_A_Last(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, OrderByComparator<MBMessage> orderByComparator) {
+
+		int count = countByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<MBMessage> list = findByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, count - 1, count,
+			orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the message-boards messages before and after the current message-boards message in the ordered set where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param messageId the primary key of the current message-boards message
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next message-boards message
+	 * @throws NoSuchMessageException if a message-boards message with the primary key could not be found
+	 */
+	@Override
+	public MBMessage[] findByG_U_S_C_A_PrevAndNext(
+			long messageId, long groupId, long userId, int status,
+			long categoryId, boolean anonymous,
+			OrderByComparator<MBMessage> orderByComparator)
+		throws NoSuchMessageException {
+
+		MBMessage mbMessage = findByPrimaryKey(messageId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			MBMessage[] array = new MBMessageImpl[3];
+
+			array[0] = getByG_U_S_C_A_PrevAndNext(
+				session, mbMessage, groupId, userId, status, categoryId,
+				anonymous, orderByComparator, true);
+
+			array[1] = mbMessage;
+
+			array[2] = getByG_U_S_C_A_PrevAndNext(
+				session, mbMessage, groupId, userId, status, categoryId,
+				anonymous, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected MBMessage getByG_U_S_C_A_PrevAndNext(
+		Session session, MBMessage mbMessage, long groupId, long userId,
+		int status, long categoryId, boolean anonymous,
+		OrderByComparator<MBMessage> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				8 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(7);
+		}
+
+		sb.append(_SQL_SELECT_MBMESSAGE_WHERE);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_GROUPID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_USERID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_STATUS_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_CATEGORYID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_ANONYMOUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(MBMessageModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		queryPos.add(groupId);
+
+		queryPos.add(userId);
+
+		queryPos.add(status);
+
+		queryPos.add(categoryId);
+
+		queryPos.add(anonymous);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(mbMessage)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<MBMessage> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the message-boards messages that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @return the matching message-boards messages that the user has permission to view
+	 */
+	@Override
+	public List<MBMessage> filterFindByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous) {
+
+		return filterFindByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the message-boards messages that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBMessageModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @return the range of matching message-boards messages that the user has permission to view
+	 */
+	@Override
+	public List<MBMessage> filterFindByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, int start, int end) {
+
+		return filterFindByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the message-boards messages that the user has permissions to view where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBMessageModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message-boards messages that the user has permission to view
+	 */
+	@Override
+	public List<MBMessage> filterFindByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, int start, int end,
+		OrderByComparator<MBMessage> orderByComparator) {
+
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_U_S_C_A(
+				groupId, userId, status, categoryId, anonymous, start, end,
+				orderByComparator);
+		}
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				7 + (orderByComparator.getOrderByFields().length * 2));
+		}
+		else {
+			sb = new StringBundler(8);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			sb.append(_FILTER_SQL_SELECT_MBMESSAGE_WHERE);
+		}
+		else {
+			sb.append(_FILTER_SQL_SELECT_MBMESSAGE_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_GROUPID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_USERID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_STATUS_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_CATEGORYID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_ANONYMOUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			sb.append(_FILTER_SQL_SELECT_MBMESSAGE_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			if (getDB().isSupportsInlineDistinct()) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator, true);
+			}
+			else {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_TABLE, orderByComparator, true);
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				sb.append(MBMessageModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				sb.append(MBMessageModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(
+			sb.toString(), MBMessage.class.getName(),
+			_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
+
+			if (getDB().isSupportsInlineDistinct()) {
+				sqlQuery.addEntity(_FILTER_ENTITY_ALIAS, MBMessageImpl.class);
+			}
+			else {
+				sqlQuery.addEntity(_FILTER_ENTITY_TABLE, MBMessageImpl.class);
+			}
+
+			QueryPos queryPos = QueryPos.getInstance(sqlQuery);
+
+			queryPos.add(groupId);
+
+			queryPos.add(userId);
+
+			queryPos.add(status);
+
+			queryPos.add(categoryId);
+
+			queryPos.add(anonymous);
+
+			return (List<MBMessage>)QueryUtil.list(
+				sqlQuery, getDialect(), start, end);
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the message-boards messages before and after the current message-boards message in the ordered set of message-boards messages that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param messageId the primary key of the current message-boards message
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next message-boards message
+	 * @throws NoSuchMessageException if a message-boards message with the primary key could not be found
+	 */
+	@Override
+	public MBMessage[] filterFindByG_U_S_C_A_PrevAndNext(
+			long messageId, long groupId, long userId, int status,
+			long categoryId, boolean anonymous,
+			OrderByComparator<MBMessage> orderByComparator)
+		throws NoSuchMessageException {
+
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return findByG_U_S_C_A_PrevAndNext(
+				messageId, groupId, userId, status, categoryId, anonymous,
+				orderByComparator);
+		}
+
+		MBMessage mbMessage = findByPrimaryKey(messageId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			MBMessage[] array = new MBMessageImpl[3];
+
+			array[0] = filterGetByG_U_S_C_A_PrevAndNext(
+				session, mbMessage, groupId, userId, status, categoryId,
+				anonymous, orderByComparator, true);
+
+			array[1] = mbMessage;
+
+			array[2] = filterGetByG_U_S_C_A_PrevAndNext(
+				session, mbMessage, groupId, userId, status, categoryId,
+				anonymous, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected MBMessage filterGetByG_U_S_C_A_PrevAndNext(
+		Session session, MBMessage mbMessage, long groupId, long userId,
+		int status, long categoryId, boolean anonymous,
+		OrderByComparator<MBMessage> orderByComparator, boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				9 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(8);
+		}
+
+		if (getDB().isSupportsInlineDistinct()) {
+			sb.append(_FILTER_SQL_SELECT_MBMESSAGE_WHERE);
+		}
+		else {
+			sb.append(_FILTER_SQL_SELECT_MBMESSAGE_NO_INLINE_DISTINCT_WHERE_1);
+		}
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_GROUPID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_USERID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_STATUS_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_CATEGORYID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_ANONYMOUS_2);
+
+		if (!getDB().isSupportsInlineDistinct()) {
+			sb.append(_FILTER_SQL_SELECT_MBMESSAGE_NO_INLINE_DISTINCT_WHERE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					sb.append(
+						getColumnName(
+							_ORDER_BY_ENTITY_ALIAS, orderByConditionFields[i],
+							true));
+				}
+				else {
+					sb.append(
+						getColumnName(
+							_ORDER_BY_ENTITY_TABLE, orderByConditionFields[i],
+							true));
+				}
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				if (getDB().isSupportsInlineDistinct()) {
+					sb.append(
+						getColumnName(
+							_ORDER_BY_ENTITY_ALIAS, orderByFields[i], true));
+				}
+				else {
+					sb.append(
+						getColumnName(
+							_ORDER_BY_ENTITY_TABLE, orderByFields[i], true));
+				}
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			if (getDB().isSupportsInlineDistinct()) {
+				sb.append(MBMessageModelImpl.ORDER_BY_JPQL);
+			}
+			else {
+				sb.append(MBMessageModelImpl.ORDER_BY_SQL);
+			}
+		}
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(
+			sb.toString(), MBMessage.class.getName(),
+			_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
+
+		sqlQuery.setFirstResult(0);
+		sqlQuery.setMaxResults(2);
+
+		if (getDB().isSupportsInlineDistinct()) {
+			sqlQuery.addEntity(_FILTER_ENTITY_ALIAS, MBMessageImpl.class);
+		}
+		else {
+			sqlQuery.addEntity(_FILTER_ENTITY_TABLE, MBMessageImpl.class);
+		}
+
+		QueryPos queryPos = QueryPos.getInstance(sqlQuery);
+
+		queryPos.add(groupId);
+
+		queryPos.add(userId);
+
+		queryPos.add(status);
+
+		queryPos.add(categoryId);
+
+		queryPos.add(anonymous);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(mbMessage)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<MBMessage> list = sqlQuery.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 */
+	@Override
+	public void removeByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous) {
+
+		for (MBMessage mbMessage :
+				findByG_U_S_C_A(
+					groupId, userId, status, categoryId, anonymous,
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
+			remove(mbMessage);
+		}
+	}
+
+	/**
+	 * Returns the number of message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @return the number of matching message-boards messages
+	 */
+	@Override
+	public int countByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous) {
+
+		boolean productionMode = ctPersistenceHelper.isProductionMode(
+			MBMessage.class);
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		Long count = null;
+
+		if (productionMode) {
+			finderPath = _finderPathCountByG_U_S_C_A;
+
+			finderArgs = new Object[] {
+				groupId, userId, status, categoryId, anonymous
+			};
+
+			count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+		}
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(_SQL_COUNT_MBMESSAGE_WHERE);
+
+			sb.append(_FINDER_COLUMN_G_U_S_C_A_GROUPID_2);
+
+			sb.append(_FINDER_COLUMN_G_U_S_C_A_USERID_2);
+
+			sb.append(_FINDER_COLUMN_G_U_S_C_A_STATUS_2);
+
+			sb.append(_FINDER_COLUMN_G_U_S_C_A_CATEGORYID_2);
+
+			sb.append(_FINDER_COLUMN_G_U_S_C_A_ANONYMOUS_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(groupId);
+
+				queryPos.add(userId);
+
+				queryPos.add(status);
+
+				queryPos.add(categoryId);
+
+				queryPos.add(anonymous);
+
+				count = (Long)query.uniqueResult();
+
+				if (productionMode) {
+					finderCache.putResult(finderPath, finderArgs, count);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of message-boards messages that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @return the number of matching message-boards messages that the user has permission to view
+	 */
+	@Override
+	public int filterCountByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous) {
+
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_U_S_C_A(
+				groupId, userId, status, categoryId, anonymous);
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_FILTER_SQL_COUNT_MBMESSAGE_WHERE);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_GROUPID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_USERID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_STATUS_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_CATEGORYID_2);
+
+		sb.append(_FINDER_COLUMN_G_U_S_C_A_ANONYMOUS_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(
+			sb.toString(), MBMessage.class.getName(),
+			_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
+
+			sqlQuery.addScalar(
+				COUNT_COLUMN_NAME, com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos queryPos = QueryPos.getInstance(sqlQuery);
+
+			queryPos.add(groupId);
+
+			queryPos.add(userId);
+
+			queryPos.add(status);
+
+			queryPos.add(categoryId);
+
+			queryPos.add(anonymous);
+
+			Long count = (Long)sqlQuery.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_U_S_C_A_GROUPID_2 =
+		"mbMessage.groupId = ? AND ";
+
+	private static final String _FINDER_COLUMN_G_U_S_C_A_USERID_2 =
+		"mbMessage.userId = ? AND ";
+
+	private static final String _FINDER_COLUMN_G_U_S_C_A_STATUS_2 =
+		"mbMessage.status = ? AND ";
+
+	private static final String _FINDER_COLUMN_G_U_S_C_A_CATEGORYID_2 =
+		"mbMessage.categoryId = ? AND ";
+
+	private static final String _FINDER_COLUMN_G_U_S_C_A_ANONYMOUS_2 =
+		"mbMessage.anonymous = ?";
+
 	private FinderPath _finderPathWithPaginationFindByG_C_T;
 	private FinderPath _finderPathWithoutPaginationFindByG_C_T;
 	private FinderPath _finderPathCountByG_C_T;
@@ -22722,6 +23857,43 @@ public class MBMessagePersistenceImpl
 				Integer.class.getName()
 			},
 			new String[] {"groupId", "userId", "status"}, false);
+
+		_finderPathWithPaginationFindByG_U_S_C_A = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_U_S_C_A",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Long.class.getName(),
+				Boolean.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {
+				"groupId", "userId", "status", "categoryId", "anonymous"
+			},
+			true);
+
+		_finderPathWithoutPaginationFindByG_U_S_C_A = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_U_S_C_A",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			new String[] {
+				"groupId", "userId", "status", "categoryId", "anonymous"
+			},
+			true);
+
+		_finderPathCountByG_U_S_C_A = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_U_S_C_A",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			new String[] {
+				"groupId", "userId", "status", "categoryId", "anonymous"
+			},
+			false);
 
 		_finderPathWithPaginationFindByG_C_T = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_C_T",

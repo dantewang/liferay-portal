@@ -468,6 +468,17 @@ public class MBMessagePersistenceTest {
 	}
 
 	@Test
+	public void testCountByG_U_S_C_A() throws Exception {
+		_persistence.countByG_U_S_C_A(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),
+			RandomTestUtil.nextInt(), RandomTestUtil.nextLong(),
+			RandomTestUtil.randomBoolean());
+
+		_persistence.countByG_U_S_C_A(
+			0L, 0L, 0, 0L, RandomTestUtil.randomBoolean());
+	}
+
+	@Test
 	public void testCountByG_C_T() throws Exception {
 		_persistence.countByG_C_T(
 			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),

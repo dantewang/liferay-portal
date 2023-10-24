@@ -4517,6 +4517,354 @@ public class MBMessageUtil {
 	}
 
 	/**
+	 * Returns all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @return the matching message-boards messages
+	 */
+	public static List<MBMessage> findByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous) {
+
+		return getPersistence().findByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous);
+	}
+
+	/**
+	 * Returns a range of all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBMessageModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @return the range of matching message-boards messages
+	 */
+	public static List<MBMessage> findByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, int start, int end) {
+
+		return getPersistence().findByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBMessageModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message-boards messages
+	 */
+	public static List<MBMessage> findByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, int start, int end,
+		OrderByComparator<MBMessage> orderByComparator) {
+
+		return getPersistence().findByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, start, end,
+			orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBMessageModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching message-boards messages
+	 */
+	public static List<MBMessage> findByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, int start, int end,
+		OrderByComparator<MBMessage> orderByComparator,
+		boolean useFinderCache) {
+
+		return getPersistence().findByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, start, end,
+			orderByComparator, useFinderCache);
+	}
+
+	/**
+	 * Returns the first message-boards message in the ordered set where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message-boards message
+	 * @throws NoSuchMessageException if a matching message-boards message could not be found
+	 */
+	public static MBMessage findByG_U_S_C_A_First(
+			long groupId, long userId, int status, long categoryId,
+			boolean anonymous, OrderByComparator<MBMessage> orderByComparator)
+		throws com.liferay.message.boards.exception.NoSuchMessageException {
+
+		return getPersistence().findByG_U_S_C_A_First(
+			groupId, userId, status, categoryId, anonymous, orderByComparator);
+	}
+
+	/**
+	 * Returns the first message-boards message in the ordered set where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message-boards message, or <code>null</code> if a matching message-boards message could not be found
+	 */
+	public static MBMessage fetchByG_U_S_C_A_First(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, OrderByComparator<MBMessage> orderByComparator) {
+
+		return getPersistence().fetchByG_U_S_C_A_First(
+			groupId, userId, status, categoryId, anonymous, orderByComparator);
+	}
+
+	/**
+	 * Returns the last message-boards message in the ordered set where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message-boards message
+	 * @throws NoSuchMessageException if a matching message-boards message could not be found
+	 */
+	public static MBMessage findByG_U_S_C_A_Last(
+			long groupId, long userId, int status, long categoryId,
+			boolean anonymous, OrderByComparator<MBMessage> orderByComparator)
+		throws com.liferay.message.boards.exception.NoSuchMessageException {
+
+		return getPersistence().findByG_U_S_C_A_Last(
+			groupId, userId, status, categoryId, anonymous, orderByComparator);
+	}
+
+	/**
+	 * Returns the last message-boards message in the ordered set where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message-boards message, or <code>null</code> if a matching message-boards message could not be found
+	 */
+	public static MBMessage fetchByG_U_S_C_A_Last(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, OrderByComparator<MBMessage> orderByComparator) {
+
+		return getPersistence().fetchByG_U_S_C_A_Last(
+			groupId, userId, status, categoryId, anonymous, orderByComparator);
+	}
+
+	/**
+	 * Returns the message-boards messages before and after the current message-boards message in the ordered set where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param messageId the primary key of the current message-boards message
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next message-boards message
+	 * @throws NoSuchMessageException if a message-boards message with the primary key could not be found
+	 */
+	public static MBMessage[] findByG_U_S_C_A_PrevAndNext(
+			long messageId, long groupId, long userId, int status,
+			long categoryId, boolean anonymous,
+			OrderByComparator<MBMessage> orderByComparator)
+		throws com.liferay.message.boards.exception.NoSuchMessageException {
+
+		return getPersistence().findByG_U_S_C_A_PrevAndNext(
+			messageId, groupId, userId, status, categoryId, anonymous,
+			orderByComparator);
+	}
+
+	/**
+	 * Returns all the message-boards messages that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @return the matching message-boards messages that the user has permission to view
+	 */
+	public static List<MBMessage> filterFindByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous) {
+
+		return getPersistence().filterFindByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous);
+	}
+
+	/**
+	 * Returns a range of all the message-boards messages that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBMessageModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @return the range of matching message-boards messages that the user has permission to view
+	 */
+	public static List<MBMessage> filterFindByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, int start, int end) {
+
+		return getPersistence().filterFindByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the message-boards messages that the user has permissions to view where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>MBMessageModelImpl</code>.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message-boards messages that the user has permission to view
+	 */
+	public static List<MBMessage> filterFindByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous, int start, int end,
+		OrderByComparator<MBMessage> orderByComparator) {
+
+		return getPersistence().filterFindByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous, start, end,
+			orderByComparator);
+	}
+
+	/**
+	 * Returns the message-boards messages before and after the current message-boards message in the ordered set of message-boards messages that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param messageId the primary key of the current message-boards message
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next message-boards message
+	 * @throws NoSuchMessageException if a message-boards message with the primary key could not be found
+	 */
+	public static MBMessage[] filterFindByG_U_S_C_A_PrevAndNext(
+			long messageId, long groupId, long userId, int status,
+			long categoryId, boolean anonymous,
+			OrderByComparator<MBMessage> orderByComparator)
+		throws com.liferay.message.boards.exception.NoSuchMessageException {
+
+		return getPersistence().filterFindByG_U_S_C_A_PrevAndNext(
+			messageId, groupId, userId, status, categoryId, anonymous,
+			orderByComparator);
+	}
+
+	/**
+	 * Removes all the message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 */
+	public static void removeByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous) {
+
+		getPersistence().removeByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous);
+	}
+
+	/**
+	 * Returns the number of message-boards messages where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @return the number of matching message-boards messages
+	 */
+	public static int countByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous) {
+
+		return getPersistence().countByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous);
+	}
+
+	/**
+	 * Returns the number of message-boards messages that the user has permission to view where groupId = &#63; and userId = &#63; and status = &#63; and categoryId = &#63; and anonymous = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param userId the user ID
+	 * @param status the status
+	 * @param categoryId the category ID
+	 * @param anonymous the anonymous
+	 * @return the number of matching message-boards messages that the user has permission to view
+	 */
+	public static int filterCountByG_U_S_C_A(
+		long groupId, long userId, int status, long categoryId,
+		boolean anonymous) {
+
+		return getPersistence().filterCountByG_U_S_C_A(
+			groupId, userId, status, categoryId, anonymous);
+	}
+
+	/**
 	 * Returns all the message-boards messages where groupId = &#63; and categoryId = &#63; and threadId = &#63;.
 	 *
 	 * @param groupId the group ID
