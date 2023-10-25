@@ -1,1 +1,1 @@
-create index IX_C257DE32 on Contacts_Entry (userId, emailAddress[$COLUMN_LENGTH:254$]);
+create index IX_5E1A5FB2 on Contacts_Entry (userId, emailAddress[$COLUMN_LENGTH:254$]);

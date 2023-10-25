@@ -1,8 +1,6 @@
-create unique index IX_93D96C8F on LayoutSEOEntry (groupId, privateLayout, layoutId, ctCollectionId);
-create index IX_EA626297 on LayoutSEOEntry (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
-create index IX_45265EED on LayoutSEOEntry (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
-create unique index IX_63195F59 on LayoutSEOEntry (uuid_[$COLUMN_LENGTH:75$], groupId, ctCollectionId);
+create unique index IX_3E1C50FD on LayoutSEOEntry (ctCollectionId, groupId, layoutId, privateLayout);
+create index IX_8FE24EB3 on LayoutSEOEntry (ctCollectionId, uuid_[$COLUMN_LENGTH:75$], companyId);
+create unique index IX_FF039BAD on LayoutSEOEntry (ctCollectionId, uuid_[$COLUMN_LENGTH:75$], groupId);
 
-create unique index IX_E4DFAF28 on LayoutSEOSite (groupId, ctCollectionId);
-create index IX_E8061C32 on LayoutSEOSite (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
-create index IX_9E369832 on LayoutSEOSite (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
+create unique index IX_696CE02C on LayoutSEOSite (ctCollectionId, groupId);
+create index IX_8D86084E on LayoutSEOSite (ctCollectionId, uuid_[$COLUMN_LENGTH:75$], companyId);

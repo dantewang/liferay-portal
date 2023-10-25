@@ -1,9 +1,8 @@
-create unique index IX_16DA0033 on TrashEntry (classNameId, classPK, ctCollectionId);
-create index IX_D7357906 on TrashEntry (companyId, ctCollectionId);
-create index IX_FD0078C2 on TrashEntry (groupId, classNameId, ctCollectionId);
-create index IX_7E02E946 on TrashEntry (groupId, createDate, ctCollectionId);
-create index IX_D4D4588 on TrashEntry (groupId, ctCollectionId);
+create unique index IX_16DA0033 on TrashEntry (ctCollectionId, classNameId, classPK);
+create index IX_D7357906 on TrashEntry (ctCollectionId, companyId);
+create index IX_4A5F63FE on TrashEntry (ctCollectionId, groupId, classNameId);
+create index IX_5E29D98E on TrashEntry (ctCollectionId, groupId, createDate);
 
-create unique index IX_96536499 on TrashVersion (classNameId, classPK, ctCollectionId);
-create index IX_A2051595 on TrashVersion (entryId, classNameId, ctCollectionId);
-create index IX_B0B4DD5 on TrashVersion (entryId, ctCollectionId);
+create unique index IX_96536499 on TrashVersion (ctCollectionId, classNameId, classPK);
+create index IX_5AAA8D7 on TrashVersion (ctCollectionId, classNameId, entryId);
+create index IX_7309C4D9 on TrashVersion (ctCollectionId, entryId);

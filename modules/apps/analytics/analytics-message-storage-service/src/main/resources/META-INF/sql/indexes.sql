@@ -1,8 +1,6 @@
-create index IX_2CD455A1 on AnalyticsAssociation (companyId, associationClassName[$COLUMN_LENGTH:75$], associationClassPK, ctCollectionId);
-create index IX_FCC5D87B on AnalyticsAssociation (companyId, associationClassName[$COLUMN_LENGTH:75$], ctCollectionId);
-create index IX_DAE34A46 on AnalyticsAssociation (companyId, modifiedDate, associationClassName[$COLUMN_LENGTH:75$], ctCollectionId);
+create index IX_7248F4A9 on AnalyticsAssociation (associationClassName[$COLUMN_LENGTH:75$], companyId, ctCollectionId, associationClassPK);
+create index IX_B37A589A on AnalyticsAssociation (associationClassName[$COLUMN_LENGTH:75$], companyId, ctCollectionId, modifiedDate);
 
-create index IX_ECACC4AA on AnalyticsDeleteMessage (companyId, ctCollectionId);
-create index IX_85DAF3F5 on AnalyticsDeleteMessage (companyId, modifiedDate, ctCollectionId);
+create index IX_116D6D75 on AnalyticsDeleteMessage (companyId, ctCollectionId, modifiedDate);
 
 create index IX_E05580DF on AnalyticsMessage (companyId, ctCollectionId);

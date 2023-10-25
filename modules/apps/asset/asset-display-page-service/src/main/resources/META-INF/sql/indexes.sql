@@ -1,7 +1,4 @@
-create index IX_31FA120C on AssetDisplayPageEntry (classNameId, classPK);
-create unique index IX_68525006 on AssetDisplayPageEntry (groupId, classNameId, classPK, ctCollectionId);
-create index IX_185EE7F1 on AssetDisplayPageEntry (groupId, ctCollectionId);
-create index IX_54CF971 on AssetDisplayPageEntry (layoutPageTemplateEntryId, ctCollectionId);
-create index IX_11CFB589 on AssetDisplayPageEntry (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
-create index IX_48F6F3B on AssetDisplayPageEntry (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
-create unique index IX_EF42C6CB on AssetDisplayPageEntry (uuid_[$COLUMN_LENGTH:75$], groupId, ctCollectionId);
+create unique index IX_1530FB80 on AssetDisplayPageEntry (ctCollectionId, groupId, classNameId, classPK);
+create index IX_B0A855F5 on AssetDisplayPageEntry (ctCollectionId, layoutPageTemplateEntryId);
+create index IX_B74FA1A5 on AssetDisplayPageEntry (ctCollectionId, uuid_[$COLUMN_LENGTH:75$], companyId);
+create unique index IX_8B2D031F on AssetDisplayPageEntry (ctCollectionId, uuid_[$COLUMN_LENGTH:75$], groupId);

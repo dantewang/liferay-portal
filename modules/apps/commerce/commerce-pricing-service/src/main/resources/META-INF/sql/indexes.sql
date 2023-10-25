@@ -1,24 +1,19 @@
-create index IX_92D439B7 on CPricingClassCPDefinitionRel (CPDefinitionId, ctCollectionId);
-create unique index IX_DA09B6F3 on CPricingClassCPDefinitionRel (commercePricingClassId, CPDefinitionId, ctCollectionId);
-create index IX_CD543364 on CPricingClassCPDefinitionRel (commercePricingClassId, ctCollectionId);
+create unique index IX_7CBDB1F3 on CPricingClassCPDefinitionRel (ctCollectionId, CPDefinitionId, commercePricingClassId);
+create index IX_CD543364 on CPricingClassCPDefinitionRel (ctCollectionId, commercePricingClassId);
 
-create index IX_2D86244A on CommercePriceModifier (commercePriceListId, ctCollectionId);
-create index IX_A545A51B on CommercePriceModifier (companyId, ctCollectionId);
-create unique index IX_8C8A963E on CommercePriceModifier (companyId, externalReferenceCode[$COLUMN_LENGTH:75$], ctCollectionId);
-create index IX_B4BA62E0 on CommercePriceModifier (companyId, target[$COLUMN_LENGTH:75$], ctCollectionId);
-create index IX_73519559 on CommercePriceModifier (displayDate, status, ctCollectionId);
-create index IX_C466FB00 on CommercePriceModifier (expirationDate, status, ctCollectionId);
-create index IX_5267D28D on CommercePriceModifier (groupId, companyId, status, ctCollectionId);
-create index IX_72AB41D on CommercePriceModifier (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
-create index IX_63A1C527 on CommercePriceModifier (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
-create unique index IX_FAB45A5F on CommercePriceModifier (uuid_[$COLUMN_LENGTH:75$], groupId, ctCollectionId);
+create index IX_2D86244A on CommercePriceModifier (ctCollectionId, commercePriceListId);
+create unique index IX_DB76B9C2 on CommercePriceModifier (ctCollectionId, companyId, externalReferenceCode[$COLUMN_LENGTH:75$]);
+create index IX_FCFD3DD5 on CommercePriceModifier (ctCollectionId, companyId, status, groupId);
+create index IX_6E554EE0 on CommercePriceModifier (ctCollectionId, companyId, target[$COLUMN_LENGTH:75$]);
+create index IX_ACAAA039 on CommercePriceModifier (ctCollectionId, companyId, uuid_[$COLUMN_LENGTH:75$]);
+create index IX_EBE3B5D on CommercePriceModifier (ctCollectionId, status, displayDate);
+create index IX_23044F00 on CommercePriceModifier (ctCollectionId, status, expirationDate);
+create unique index IX_969E96B3 on CommercePriceModifier (ctCollectionId, uuid_[$COLUMN_LENGTH:75$], groupId);
 
-create index IX_6B47904D on CommercePriceModifierRel (classNameId, classPK, ctCollectionId);
-create unique index IX_510AD1A9 on CommercePriceModifierRel (commercePriceModifierId, classNameId, classPK, ctCollectionId);
-create index IX_2BD553F6 on CommercePriceModifierRel (commercePriceModifierId, classNameId, ctCollectionId);
-create index IX_153045D4 on CommercePriceModifierRel (commercePriceModifierId, ctCollectionId);
+create index IX_6B47904D on CommercePriceModifierRel (ctCollectionId, classNameId, classPK);
+create unique index IX_65CB769F on CommercePriceModifierRel (ctCollectionId, classNameId, commercePriceModifierId, classPK);
+create index IX_153045D4 on CommercePriceModifierRel (ctCollectionId, commercePriceModifierId);
 
-create index IX_1D109633 on CommercePricingClass (companyId, ctCollectionId);
-create unique index IX_925EA26 on CommercePricingClass (companyId, externalReferenceCode[$COLUMN_LENGTH:75$], ctCollectionId);
-create index IX_D07AD805 on CommercePricingClass (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
-create index IX_C601023F on CommercePricingClass (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
+create unique index IX_58120DAA on CommercePricingClass (ctCollectionId, companyId, externalReferenceCode[$COLUMN_LENGTH:75$]);
+create index IX_75FAC421 on CommercePricingClass (ctCollectionId, companyId, uuid_[$COLUMN_LENGTH:75$]);
+create index IX_4C1EF7C3 on CommercePricingClass (ctCollectionId, uuid_[$COLUMN_LENGTH:75$]);

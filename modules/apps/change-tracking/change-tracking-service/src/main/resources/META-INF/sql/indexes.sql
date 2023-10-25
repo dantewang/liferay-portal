@@ -1,18 +1,20 @@
 create index IX_F925260 on CTAutoResolutionInfo (ctCollectionId, modelClassNameId, sourceModelClassPK);
 
+create unique index IX_30F5BCCA on CTCollection (companyId, externalReferenceCode[$COLUMN_LENGTH:75$]);
 create index IX_8D52E6F9 on CTCollection (companyId, status);
-create unique index IX_19065F80 on CTCollection (externalReferenceCode[$COLUMN_LENGTH:75$], companyId);
+create index IX_D60B341 on CTCollection (companyId, uuid_[$COLUMN_LENGTH:75$]);
 create index IX_CCDD86CD on CTCollection (schemaVersionId);
-create index IX_A5CE8CA9 on CTCollection (uuid_[$COLUMN_LENGTH:75$], companyId);
+create index IX_DA0BBE1F on CTCollection (uuid_[$COLUMN_LENGTH:75$]);
 
 create index IX_489283B9 on CTCollectionTemplate (companyId);
 
 create index IX_FE644B52 on CTComment (ctCollectionId);
 create index IX_C5E592B8 on CTComment (ctEntryId);
 
+create unique index IX_97AA905C on CTEntry (companyId, externalReferenceCode[$COLUMN_LENGTH:75$]);
+create index IX_7882EAD3 on CTEntry (companyId, uuid_[$COLUMN_LENGTH:75$]);
 create unique index IX_295C418C on CTEntry (ctCollectionId, modelClassNameId, modelClassPK);
-create unique index IX_7FBB3312 on CTEntry (externalReferenceCode[$COLUMN_LENGTH:75$], companyId);
-create index IX_10F0C43B on CTEntry (uuid_[$COLUMN_LENGTH:75$], companyId);
+create index IX_E1E08DCD on CTEntry (uuid_[$COLUMN_LENGTH:75$]);
 
 create index IX_9FB742FA on CTMessage (ctCollectionId);
 
@@ -22,7 +24,6 @@ create index IX_D9EA7A42 on CTPreferences (previousCtCollectionId);
 
 create index IX_7523B0A4 on CTProcess (companyId);
 create index IX_46BA2033 on CTProcess (ctCollectionId, type_);
-create index IX_5F9B5D3E on CTProcess (userId);
 
 create index IX_9B9391EB on CTRemote (companyId);
 

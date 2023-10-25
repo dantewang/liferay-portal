@@ -1,7 +1,4 @@
-create index IX_F001812 on TemplateEntry (ddmTemplateId, ctCollectionId);
-create index IX_9126EB0A on TemplateEntry (groupId, ctCollectionId);
-create index IX_240F43A4 on TemplateEntry (groupId, infoItemClassName[$COLUMN_LENGTH:75$], ctCollectionId);
-create index IX_BB9EE09 on TemplateEntry (groupId, infoItemClassName[$COLUMN_LENGTH:75$], infoItemFormVariationKey[$COLUMN_LENGTH:75$], ctCollectionId);
-create index IX_B1871E90 on TemplateEntry (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
-create index IX_F97F6494 on TemplateEntry (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
-create unique index IX_4DFEC592 on TemplateEntry (uuid_[$COLUMN_LENGTH:75$], groupId, ctCollectionId);
+create index IX_8C9BC796 on TemplateEntry (ctCollectionId, ddmTemplateId);
+create index IX_C7B53589 on TemplateEntry (ctCollectionId, groupId, infoItemClassName[$COLUMN_LENGTH:75$], infoItemFormVariationKey[$COLUMN_LENGTH:75$]);
+create index IX_57070AAC on TemplateEntry (ctCollectionId, uuid_[$COLUMN_LENGTH:75$], companyId);
+create unique index IX_E9E901E6 on TemplateEntry (ctCollectionId, uuid_[$COLUMN_LENGTH:75$], groupId);
