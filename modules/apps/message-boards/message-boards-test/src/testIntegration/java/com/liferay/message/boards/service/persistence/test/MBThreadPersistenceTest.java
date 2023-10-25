@@ -321,6 +321,15 @@ public class MBThreadPersistenceTest {
 	}
 
 	@Test
+	public void testCountByG_C_L_S() throws Exception {
+		_persistence.countByG_C_L_S(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),
+			RandomTestUtil.nextDate(), RandomTestUtil.nextInt());
+
+		_persistence.countByG_C_L_S(0L, 0L, RandomTestUtil.nextDate(), 0);
+	}
+
+	@Test
 	public void testCountByG_C_S() throws Exception {
 		_persistence.countByG_C_S(
 			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),

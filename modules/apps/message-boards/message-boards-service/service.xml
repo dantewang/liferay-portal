@@ -497,6 +497,12 @@
 			<finder-column name="categoryId" />
 			<finder-column name="lastPostDate" />
 		</finder>
+		<finder name="G_C_L_S" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="categoryId" />
+			<finder-column name="lastPostDate" />
+			<finder-column name="status" />
+		</finder>
 		<finder name="G_C_S" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column arrayable-operator="OR" name="categoryId" />
