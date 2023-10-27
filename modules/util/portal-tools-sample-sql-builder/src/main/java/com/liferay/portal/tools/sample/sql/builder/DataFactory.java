@@ -4886,7 +4886,9 @@ public class DataFactory {
 			subject = "N/A";
 			body = "This is test comment " + index + ".";
 			urlSubject = "test-comment-" + index;
-			userModel = _userModels.get((index - 1) % _userModels.size());
+			userModel = _userModels.get(
+				_mbMessageUserIndex % _userModels.size());
+			_mbMessageUserIndex++;
 		}
 
 		return newMBMessageModel(
