@@ -5577,17 +5577,20 @@ public class DataFactory {
 		BlogsEntryModel blogsEntryModel) {
 
 		return newSubscriptionModel(
-			getClassNameId(BlogsEntry.class), blogsEntryModel.getEntryId());
+			getClassNameId(BlogsEntry.class), blogsEntryModel.getEntryId(),
+			_blogsEntryUsers.get(blogsEntryModel.getEntryId()));
 	}
 
-	public SubscriptionModel newSubscriptionModel(MBThreadModel mBThreadModel) {
+	public SubscriptionModel newSubscriptionModel(MBThreadModel mbThreadModel) {
 		return newSubscriptionModel(
-			getClassNameId(MBThread.class), mBThreadModel.getThreadId());
+			getClassNameId(MBThread.class), mbThreadModel.getThreadId(),
+			_mbThreadUsers.get(mbThreadModel.getThreadId()));
 	}
 
 	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel) {
 		return newSubscriptionModel(
-			getClassNameId(WikiPage.class), wikiPageModel.getResourcePrimKey());
+			getClassNameId(WikiPage.class), wikiPageModel.getResourcePrimKey(),
+			_wikiPageUsers.get(wikiPageModel.getResourcePrimKey()));
 	}
 
 	public List<UserModel> newUserModels() {
@@ -6040,6 +6043,8 @@ public class DataFactory {
 
 		blogsEntryModel.setUuid(uuid);
 		blogsEntryModel.setExternalReferenceCode(uuid);
+
+		_blogsEntryUsers.put(blogsEntryModel.getEntryId(), userModel);
 
 		return blogsEntryModel;
 	}
@@ -6769,6 +6774,9 @@ public class DataFactory {
 
 		mbThreadModel.setUuid(SequentialUUID.generate());
 
+		_mbThreadUsers.put(
+			mbThreadModel.getThreadId(), _currentMBThreadUserModel);
+
 		return mbThreadModel;
 	}
 
@@ -6922,7 +6930,7 @@ public class DataFactory {
 	}
 
 	protected SubscriptionModel newSubscriptionModel(
-		long classNameId, long classPK) {
+		long classNameId, long classPK, UserModel userModel) {
 
 		SubscriptionModel subscriptionModel = new SubscriptionModelImpl();
 
@@ -6933,8 +6941,8 @@ public class DataFactory {
 		// Audit fields
 
 		subscriptionModel.setCompanyId(_companyId);
-		subscriptionModel.setUserId(_sampleUserId);
-		subscriptionModel.setUserName(_SAMPLE_USER_NAME);
+		subscriptionModel.setUserId(userModel.getUserId());
+		subscriptionModel.setUserName(userModel.getScreenName());
 		subscriptionModel.setCreateDate(new Date());
 		subscriptionModel.setModifiedDate(new Date());
 
@@ -7085,6 +7093,8 @@ public class DataFactory {
 
 		wikiPageModel.setUuid(uuid);
 		wikiPageModel.setExternalReferenceCode(uuid);
+
+		_wikiPageUsers.put(wikiPageModel.getResourcePrimKey(), userModel);
 
 		return wikiPageModel;
 	}
@@ -7528,6 +7538,7 @@ public class DataFactory {
 		(Map<Long, List<AssetTagModel>>[])new HashMap<?, ?>
 			[(BenchmarksPropsValues.MAX_COMPANY_COUNT + 1) *
 				BenchmarksPropsValues.MAX_GROUP_COUNT];
+	private final Map<Long, UserModel> _blogsEntryUsers = new HashMap<>();
 	private final Map<String, ClassNameModel> _classNameModels =
 		new HashMap<>();
 	private long _companyId;
@@ -7566,6 +7577,7 @@ public class DataFactory {
 	private final SimpleCounter _layoutPlidCounter;
 	private final SimpleCounter _layoutSetIdCounter;
 	private final Map<Long, UserModel> _mbCategoryUsers = new HashMap<>();
+	private final Map<Long, UserModel> _mbThreadUsers = new HashMap<>();
 	private RoleModel _ownerRoleModel;
 	private final SimpleCounter _portletPreferenceValueIdCounter;
 	private RoleModel _powerUserRoleModel;
@@ -7583,5 +7595,6 @@ public class DataFactory {
 	private final SimpleCounter _userScreenNameCounter;
 	private String _webId;
 	private int _wikiPageUserIndex;
+	private final Map<Long, UserModel> _wikiPageUsers = new HashMap<>();
 
 }
