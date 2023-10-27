@@ -4828,7 +4828,8 @@ public class DataFactory {
 				mbThreadModel.getThreadId(), mbThreadModel.getRootMessageId(),
 				mbThreadModel.getRootMessageId(),
 				MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID, "Test Message 1",
-				"test-message-1", "This is test message 1."));
+				"test-message-1", "This is test message 1.",
+				_mbThreadUsers.get(mbThreadModel.getThreadId())));
 
 		for (int i = 2; i <= BenchmarksPropsValues.MAX_MB_MESSAGE_COUNT; i++) {
 			mbMessageModels.add(
@@ -6694,6 +6695,17 @@ public class DataFactory {
 		long threadId, long messageId, long rootMessageId, long parentMessageId,
 		String subject, String urlSubject, String body) {
 
+		return newMBMessageModel(
+			groupId, classNameId, classPK, categoryId, threadId, messageId,
+			rootMessageId, parentMessageId, subject, urlSubject, body,
+			_sampleUserModel);
+	}
+
+	protected MBMessageModel newMBMessageModel(
+		long groupId, long classNameId, long classPK, long categoryId,
+		long threadId, long messageId, long rootMessageId, long parentMessageId,
+		String subject, String urlSubject, String body, UserModel userModel) {
+
 		MBMessageModel mBMessageModel = new MBMessageModelImpl();
 
 		// PK fields
@@ -6707,8 +6719,8 @@ public class DataFactory {
 		// Audit fields
 
 		mBMessageModel.setCompanyId(_companyId);
-		mBMessageModel.setUserId(_sampleUserId);
-		mBMessageModel.setUserName(_SAMPLE_USER_NAME);
+		mBMessageModel.setUserId(userModel.getUserId());
+		mBMessageModel.setUserName(userModel.getScreenName());
 		mBMessageModel.setCreateDate(new Date());
 		mBMessageModel.setModifiedDate(new Date());
 
