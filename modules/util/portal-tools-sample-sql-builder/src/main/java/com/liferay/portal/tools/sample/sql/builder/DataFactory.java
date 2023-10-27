@@ -3787,8 +3787,12 @@ public class DataFactory {
 
 			_dlFileEntryUserIndex++;
 
-			dlFileEntryModels.add(
-				newDlFileEntryModel(dlFolderModel, i, userModel));
+			DLFileEntryModel dlFileEntryModel = newDlFileEntryModel(
+				dlFolderModel, i, userModel);
+
+			_dlFileEntryUsers.put(dlFileEntryModel.getFileEntryId(), userModel);
+
+			dlFileEntryModels.add(dlFileEntryModel);
 		}
 
 		return dlFileEntryModels;
@@ -7617,6 +7621,7 @@ public class DataFactory {
 	private final String _dlDDMStructureLayoutContent;
 	private final SimpleCounter _dlFileEntryIdCounter;
 	private int _dlFileEntryUserIndex;
+	private final Map<Long, UserModel> _dlFileEntryUsers = new HashMap<>();
 	private int _dlFolderUserIndex;
 	private AddressModel _firstAddressModel;
 	private final List<String> _firstNames;
