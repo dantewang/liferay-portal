@@ -4738,7 +4738,10 @@ public class DataFactory {
 	}
 
 	public MBMailingListModel newMBMailingListModel(
-		MBCategoryModel mbCategoryModel, UserModel sampleUserModel) {
+		MBCategoryModel mbCategoryModel) {
+
+		UserModel userModel = _mbCategoryUsers.get(
+			mbCategoryModel.getCategoryId());
 
 		MBMailingListModel mbMailingListModel = new MBMailingListModelImpl();
 
@@ -4753,8 +4756,8 @@ public class DataFactory {
 		// Audit fields
 
 		mbMailingListModel.setCompanyId(_companyId);
-		mbMailingListModel.setUserId(_sampleUserId);
-		mbMailingListModel.setUserName(_SAMPLE_USER_NAME);
+		mbMailingListModel.setUserId(userModel.getUserId());
+		mbMailingListModel.setUserName(userModel.getScreenName());
 		mbMailingListModel.setCreateDate(new Date());
 		mbMailingListModel.setModifiedDate(new Date());
 
@@ -4763,8 +4766,8 @@ public class DataFactory {
 		mbMailingListModel.setCategoryId(mbCategoryModel.getCategoryId());
 		mbMailingListModel.setInProtocol("pop3");
 		mbMailingListModel.setInServerPort(110);
-		mbMailingListModel.setInUserName(sampleUserModel.getEmailAddress());
-		mbMailingListModel.setInPassword(sampleUserModel.getPassword());
+		mbMailingListModel.setInUserName(userModel.getEmailAddress());
+		mbMailingListModel.setInPassword(userModel.getPassword());
 		mbMailingListModel.setInReadInterval(5);
 		mbMailingListModel.setOutServerPort(25);
 
@@ -6659,6 +6662,8 @@ public class DataFactory {
 
 		mbCategoryModel.setUuid(SequentialUUID.generate());
 
+		_mbCategoryUsers.put(mbCategoryModel.getCategoryId(), userModel);
+
 		return mbCategoryModel;
 	}
 
@@ -7534,6 +7539,7 @@ public class DataFactory {
 	private final SimpleCounter _layoutPlidCounter;
 	private final SimpleCounter _layoutSetIdCounter;
 	private int _mbCategoryUserIndex;
+	private final Map<Long, UserModel> _mbCategoryUsers = new HashMap<>();
 	private RoleModel _ownerRoleModel;
 	private final SimpleCounter _portletPreferenceValueIdCounter;
 	private RoleModel _powerUserRoleModel;
