@@ -98,32 +98,32 @@
 		</finder>
 		<finder name="G_S" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="C_S" return-type="Collection">
 			<finder-column name="companyId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="NotC_G_P" return-type="Collection">
-			<finder-column arrayable-operator="AND" comparator="!=" name="categoryId" />
+			<finder-column arrayable-operator="AND" comparator="!=" name="categoryId" indexable="false" />
 			<finder-column name="groupId" />
 			<finder-column arrayable-operator="OR" name="parentCategoryId" />
 		</finder>
 		<finder name="G_P_S" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column arrayable-operator="OR" name="parentCategoryId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="G_P_NotS" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column arrayable-operator="OR" name="parentCategoryId" />
-			<finder-column comparator="!=" name="status" />
+			<finder-column comparator="!=" indexable="false" name="status" />
 		</finder>
 		<finder name="NotC_G_P_S" return-type="Collection">
-			<finder-column arrayable-operator="AND" comparator="!=" name="categoryId" />
+			<finder-column arrayable-operator="AND" comparator="!=" name="categoryId" indexable="false" />
 			<finder-column name="groupId" />
 			<finder-column arrayable-operator="OR" name="parentCategoryId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 	</entity>
 	<entity human-name="message boards discussion" local-service="true" name="MBDiscussion" remote-service="false" uuid="true">
@@ -203,7 +203,7 @@
 		<!-- Finder methods -->
 
 		<finder name="Active" return-type="Collection">
-			<finder-column name="active" />
+			<finder-column indexable="false" name="active" />
 		</finder>
 		<finder name="G_C" return-type="MBMailingList" unique="true">
 			<finder-column name="groupId" />
@@ -292,11 +292,11 @@
 		</finder>
 		<finder name="G_S" return-type="Collection" where="categoryId != -1">
 			<finder-column name="groupId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="C_S" return-type="Collection" where="categoryId != -1">
 			<finder-column name="companyId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="U_C" return-type="Collection">
 			<finder-column name="userId" />
@@ -312,28 +312,28 @@
 		</finder>
 		<finder name="T_A" return-type="Collection">
 			<finder-column name="threadId" />
-			<finder-column name="answer" />
+			<finder-column indexable="false" name="answer" />
 		</finder>
 		<finder name="T_S" return-type="Collection">
 			<finder-column name="threadId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="T_NotS" return-type="Collection">
 			<finder-column name="threadId" />
-			<finder-column comparator="!=" name="status" />
+			<finder-column comparator="!=" indexable="false" name="status" />
 		</finder>
 		<finder db-index="false" name="TR_S" return-type="Collection" where="parentMessageId != 0">
 			<finder-column name="threadId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="P_S" return-type="Collection">
 			<finder-column name="parentMessageId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="G_U_S" return-type="Collection" where="(categoryId != -1) AND (anonymous = [$FALSE$])">
 			<finder-column name="groupId" />
 			<finder-column name="userId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="G_C_T" return-type="Collection">
 			<finder-column name="groupId" />
@@ -343,7 +343,7 @@
 		<finder name="G_C_S" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="categoryId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="U_C_C" return-type="Collection">
 			<finder-column name="userId" />
@@ -353,30 +353,30 @@
 		<finder name="U_C_S" return-type="Collection">
 			<finder-column name="userId" />
 			<finder-column arrayable-operator="OR" name="classNameId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="C_C_S" return-type="Collection">
 			<finder-column name="classNameId" />
 			<finder-column name="classPK" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="G_C_T_A" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="categoryId" />
 			<finder-column name="threadId" />
-			<finder-column name="answer" />
+			<finder-column indexable="false" name="answer" />
 		</finder>
 		<finder name="G_C_T_S" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="categoryId" />
 			<finder-column name="threadId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="U_C_C_S" return-type="Collection">
 			<finder-column name="userId" />
 			<finder-column name="classNameId" />
 			<finder-column name="classPK" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 	</entity>
 	<entity human-name="message boards stats user" local-service="true" name="MBStatsUser" remote-service="false">
@@ -478,11 +478,11 @@
 		</finder>
 		<finder name="G_NotC" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column comparator="!=" name="categoryId" />
+			<finder-column comparator="!=" indexable="false" name="categoryId" />
 		</finder>
 		<finder name="G_S" return-type="Collection" where="categoryId != -1">
 			<finder-column name="groupId" />
-			<finder-column name="status" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="C_P" return-type="Collection">
 			<finder-column name="categoryId" />
@@ -505,17 +505,17 @@
 		<finder name="G_C_NotS" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column arrayable-operator="OR" name="categoryId" />
-			<finder-column comparator="!=" name="status" />
+			<finder-column comparator="!=" indexable="false" name="status" />
 		</finder>
 		<finder name="G_NotC_S" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column comparator="!=" name="categoryId" />
-			<finder-column name="status" />
+			<finder-column comparator="!=" indexable="false" name="categoryId" />
+			<finder-column indexable="false" name="status" />
 		</finder>
 		<finder name="G_NotC_NotS" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column comparator="!=" name="categoryId" />
-			<finder-column comparator="!=" name="status" />
+			<finder-column comparator="!=" indexable="false" name="categoryId" />
+			<finder-column comparator="!=" indexable="false" name="status" />
 		</finder>
 	</entity>
 	<entity human-name="message boards thread flag" local-service="true" name="MBThreadFlag" remote-service="false" uuid="true">
