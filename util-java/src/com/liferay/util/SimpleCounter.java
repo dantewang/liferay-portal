@@ -22,6 +22,12 @@ public class SimpleCounter {
 		return _counter++;
 	}
 
+	public synchronized long get(long increment) {
+		_counter += increment;
+
+		return _counter;
+	}
+
 	public String getString() {
 		return String.valueOf(get());
 	}
