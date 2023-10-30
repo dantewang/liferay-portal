@@ -480,6 +480,10 @@
 			<finder-column name="groupId" />
 			<finder-column comparator="!=" indexable="false" name="categoryId" />
 		</finder>
+		<finder name="G_L" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="lastPostDate" />
+		</finder>
 		<finder name="G_S" return-type="Collection" where="categoryId != -1">
 			<finder-column name="groupId" />
 			<finder-column indexable="false" name="status" />
