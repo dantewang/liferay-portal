@@ -288,6 +288,14 @@ public class MBThreadPersistenceTest {
 	}
 
 	@Test
+	public void testCountByG_L() throws Exception {
+		_persistence.countByG_L(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextDate());
+
+		_persistence.countByG_L(0L, RandomTestUtil.nextDate());
+	}
+
+	@Test
 	public void testCountByG_S() throws Exception {
 		_persistence.countByG_S(
 			RandomTestUtil.nextLong(), RandomTestUtil.nextInt());
