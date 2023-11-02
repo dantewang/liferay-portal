@@ -7447,7 +7447,7 @@ public class DataFactory {
 	}
 
 	private long _getNextDateTime() {
-		return _CURRENT_TIME + _timeCounter.get(1000);
+		return _CURRENT_TIME + _timeCounter.get(1);
 	}
 
 	private String _getResourcePermissionModelName(String... classNames) {
@@ -7601,7 +7601,7 @@ public class DataFactory {
 	}
 
 	private static final long _CURRENT_TIME =
-		System.currentTimeMillis() - Time.WEEK;
+		System.currentTimeMillis() - (Time.WEEK * 3);
 
 	private static final long _DEFAULT_DL_FILE_ENTRY_TYPE_ID =
 		DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT;
