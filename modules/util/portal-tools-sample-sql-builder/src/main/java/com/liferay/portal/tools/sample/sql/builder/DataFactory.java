@@ -5686,9 +5686,15 @@ public class DataFactory {
 	}
 
 	public SubscriptionModel newSubscriptionModel(MBThreadModel mbThreadModel) {
-		return newSubscriptionModel(
+		SubscriptionModel subscriptionModel = newSubscriptionModel(
 			getClassNameId(MBThread.class), mbThreadModel.getThreadId(),
 			_mbThreadUsers.get(mbThreadModel.getThreadId()));
+
+		subscriptionModel.setCreateDate(mbThreadModel.getLastPostDate());
+
+		subscriptionModel.setModifiedDate(mbThreadModel.getLastPostDate());
+
+		return subscriptionModel;
 	}
 
 	public SubscriptionModel newSubscriptionModel(WikiPageModel wikiPageModel) {
