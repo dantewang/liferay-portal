@@ -5,8 +5,6 @@
 	${csvFileWriter.write("mbCategory", virtualHostModel.hostname + "," + mbCategoryModel.categoryId + "," + mbCategoryModel.name + "\n")}
 
 	<#list dataFactory.newMBThreadModels(mbCategoryModel) as mbThreadModel>
-		${dataFactory.toInsertSQL(mbThreadModel)}
-
 		${dataFactory.toInsertSQL(dataFactory.newSubscriptionModel(mbThreadModel))}
 
 		<@insertAssetEntry _entry=mbThreadModel />
@@ -18,6 +16,8 @@
 
 			${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel, dataFactory.getMBMessageUser(mbMessageModel.messageId)))}
 		</#list>
+
+		${dataFactory.toInsertSQL(mbThreadModel)}
 
 		${csvFileWriter.write("mbThread", virtualHostModel.hostname + "," + mbCategoryModel.categoryId + "," + mbThreadModel.threadId + "," + mbThreadModel.rootMessageId + "\n")}
 	</#list>

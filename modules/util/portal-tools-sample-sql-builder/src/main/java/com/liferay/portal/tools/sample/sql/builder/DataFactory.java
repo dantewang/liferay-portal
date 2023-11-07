@@ -4898,14 +4898,29 @@ public class DataFactory {
 		List<MBMessageModel> mbMessageModels = new ArrayList<>(
 			BenchmarksPropsValues.MAX_MB_MESSAGE_COUNT);
 
-		mbMessageModels.add(
-			newMBMessageModel(
-				mbThreadModel.getGroupId(), 0, 0, mbThreadModel.getCategoryId(),
-				mbThreadModel.getThreadId(), mbThreadModel.getRootMessageId(),
-				mbThreadModel.getRootMessageId(),
-				MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID, "Test Message 1",
-				"test-message-1", "This is test message 1.",
-				_mbThreadUsers.get(mbThreadModel.getThreadId())));
+		MBMessageModel mbMessageModel = newMBMessageModel(
+			mbThreadModel.getGroupId(), 0, 0, mbThreadModel.getCategoryId(),
+			mbThreadModel.getThreadId(), mbThreadModel.getRootMessageId(),
+			mbThreadModel.getRootMessageId(),
+			MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID, "Test Message 1",
+			"test-message-1", "This is test message 1.",
+			_mbThreadUsers.get(mbThreadModel.getThreadId()));
+
+		Date mbMessageCreateDate = mbMessageModel.getCreateDate();
+
+		mbThreadModel.setCreateDate(
+			new Date(
+				mbMessageCreateDate.getTime() -
+					(_MB_MESSAGE_TIME_INTERVAL / 4)));
+
+		mbThreadModel.setLastPostDate(mbMessageCreateDate);
+
+		mbThreadModel.setModifiedDate(
+			new Date(
+				mbMessageCreateDate.getTime() +
+					(_MB_MESSAGE_TIME_INTERVAL / 4)));
+
+		mbMessageModels.add(mbMessageModel);
 
 		for (int i = 2; i <= BenchmarksPropsValues.MAX_MB_MESSAGE_COUNT; i++) {
 			UserModel userModel = _userModels.get(
