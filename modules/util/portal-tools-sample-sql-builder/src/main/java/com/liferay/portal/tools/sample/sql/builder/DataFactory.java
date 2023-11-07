@@ -5672,9 +5672,15 @@ public class DataFactory {
 			type = SocialActivityConstants.TYPE_ADD_COMMENT;
 		}
 
-		return newSocialActivityModel(
+		SocialActivityModel socialActivityModel = newSocialActivityModel(
 			mbMessageModel.getGroupId(), classNameId, classPK, type, extraData,
 			userModel);
+
+		socialActivityModel.setCreateDate(
+			mbMessageModel.getCreateDate(
+			).getTime());
+
+		return socialActivityModel;
 	}
 
 	public SubscriptionModel newSubscriptionModel(
