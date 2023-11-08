@@ -158,12 +158,22 @@ public class LiferayContextController extends ContextController {
 
 		_httpSessionAttributeListenerServiceTracker.open();
 
-		_httpSessionIdListenerServiceTracker = new ServiceTracker<>(
-			bundleContext, HttpSessionIdListener.class.getName(),
-			new ContextListenerTrackerCustomizer(
-				bundleContext, httpServletEndpointController, this));
+		ServletContext servletContext =
+			httpServletEndpointController.getParentServletContext();
 
-		_httpSessionIdListenerServiceTracker.open();
+		if ((servletContext.getMajorVersion() >= 3) &&
+			(servletContext.getMinorVersion() > 0)) {
+
+			_httpSessionIdListenerServiceTracker = new ServiceTracker<>(
+				bundleContext, HttpSessionIdListener.class.getName(),
+				new ContextListenerTrackerCustomizer(
+					bundleContext, httpServletEndpointController, this));
+
+			_httpSessionIdListenerServiceTracker.open();
+		}
+		else {
+			_httpSessionIdListenerServiceTracker = null;
+		}
 
 		_httpSessionListenerServiceTracker = new ServiceTracker<>(
 			bundleContext, HttpSessionListener.class.getName(),
@@ -515,7 +525,11 @@ public class LiferayContextController extends ContextController {
 
 		_filterServiceTracker.close();
 		_httpSessionAttributeListenerServiceTracker.close();
-		_httpSessionIdListenerServiceTracker.close();
+
+		if (_httpSessionIdListenerServiceTracker != null) {
+			_httpSessionIdListenerServiceTracker.close();
+		}
+
 		_httpSessionListenerServiceTracker.close();
 		_resourceServiceTracker.close();
 		_servletContextAttributeListenerServiceTracker.close();
