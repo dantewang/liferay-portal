@@ -1212,9 +1212,11 @@ public class DataFactory {
 
 			// Audit fields
 
+			UserModel userModel = _userModels.get(j % _userModels.size());
+
 			assetTagModel.setCompanyId(_companyId);
-			assetTagModel.setUserId(_sampleUserId);
-			assetTagModel.setUserName(_SAMPLE_USER_NAME);
+			assetTagModel.setUserId(userModel.getUserId());
+			assetTagModel.setUserName(userModel.getScreenName());
 			assetTagModel.setCreateDate(new Date());
 			assetTagModel.setModifiedDate(new Date());
 
