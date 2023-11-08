@@ -3894,10 +3894,16 @@ public class DataFactory {
 
 			treePaths.put(folderId, sb.toString());
 
+			UserModel userModel = _userModels.get(
+				_dlFolderUserIndex % _userModels.size());
+
+			_dlFolderUserIndex++;
+
 			dlFolderModels.add(
 				newDLFolderModel(
 					folderId, groupId, parentFolderId, sb.toString(),
-					"Test Folder " + i, _sampleUserId, _SAMPLE_USER_NAME));
+					"Test Folder " + i, userModel.getUserId(),
+					userModel.getScreenName()));
 		}
 
 		return dlFolderModels;
@@ -7593,6 +7599,7 @@ public class DataFactory {
 	private final String _dlDDMStructureContent;
 	private final String _dlDDMStructureLayoutContent;
 	private final SimpleCounter _dlFileEntryIdCounter;
+	private int _dlFolderUserIndex;
 	private AddressModel _firstAddressModel;
 	private final List<String> _firstNames;
 	private final FriendlyURLNormalizer _friendlyURLNormalizer;
