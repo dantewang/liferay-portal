@@ -4745,7 +4745,8 @@ public class DataFactory {
 	public MBMailingListModel newMBMailingListModel(
 		MBCategoryModel mbCategoryModel) {
 
-		UserModel userModel = _mbCategoryUsers.get(mbCategoryModel.getCategoryId());
+		UserModel userModel = _mbCategoryUsers.get(
+			mbCategoryModel.getCategoryId());
 
 		MBMailingListModel mbMailingListModel = new MBMailingListModelImpl();
 
@@ -7054,9 +7055,14 @@ public class DataFactory {
 
 		// Audit fields
 
+		UserModel userModel = _userModels.get(
+			_wikiPageUserIndex % _userModels.size());
+
+		_wikiPageUserIndex++;
+
 		wikiPageModel.setCompanyId(_companyId);
-		wikiPageModel.setUserId(_sampleUserId);
-		wikiPageModel.setUserName(_SAMPLE_USER_NAME);
+		wikiPageModel.setUserId(userModel.getUserId());
+		wikiPageModel.setUserName(userModel.getScreenName());
 		wikiPageModel.setCreateDate(new Date());
 		wikiPageModel.setModifiedDate(new Date());
 
@@ -7576,5 +7582,6 @@ public class DataFactory {
 	private RoleModel _userRoleModel;
 	private final SimpleCounter _userScreenNameCounter;
 	private String _webId;
+	private int _wikiPageUserIndex;
 
 }
