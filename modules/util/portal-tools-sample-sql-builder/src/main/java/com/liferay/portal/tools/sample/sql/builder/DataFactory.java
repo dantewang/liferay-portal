@@ -1262,8 +1262,10 @@ public class DataFactory {
 		for (int j = 0; j < BenchmarksPropsValues.MAX_ASSET_VUCABULARY_COUNT;
 			 j++) {
 
+			UserModel userModel = _userModels.get(j % _userModels.size());
+
 			AssetVocabularyModel assetVocabularyModel = newAssetVocabularyModel(
-				groupId, _sampleUserId, _SAMPLE_USER_NAME,
+				groupId, userModel.getUserId(), userModel.getScreenName(),
 				StringBundler.concat(
 					"TestVocabulary_", groupId, StringPool.UNDERLINE, j));
 
