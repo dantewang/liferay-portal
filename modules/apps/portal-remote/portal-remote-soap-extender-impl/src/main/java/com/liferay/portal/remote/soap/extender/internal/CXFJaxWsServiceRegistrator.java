@@ -7,6 +7,7 @@ package com.liferay.portal.remote.soap.extender.internal;
 
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.lang.ThreadContextClassLoaderUtil;
+import com.liferay.portal.kernel.util.AggregateClassLoader;
 import com.liferay.portal.remote.soap.extender.SoapDescriptorBuilder;
 
 import java.util.ArrayList;
@@ -45,7 +46,8 @@ public class CXFJaxWsServiceRegistrator {
 		Class<?> clazz = service.getClass();
 
 		try (SafeCloseable safeCloseable = ThreadContextClassLoaderUtil.swap(
-				clazz.getClassLoader())) {
+				AggregateClassLoader.getAggregateClassLoader(
+					clazz.getClassLoader(), getClass().getClassLoader()))) {
 
 			_addService(properties, service);
 		}
