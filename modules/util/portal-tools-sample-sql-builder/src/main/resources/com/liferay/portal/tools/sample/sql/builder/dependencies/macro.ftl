@@ -157,6 +157,7 @@
 				<@insertMBDiscussion
 					_classNameId=dataFactory.DLFileEntryClassNameId
 					_classPK=dlFileEntryModel.fileEntryId
+					_entry=dlFileEntryModel
 					_groupId=dlFileEntryModel.groupId
 					_maxCommentCount=0
 					_mbRootMessageId=dataFactory.getCounterNext()
@@ -245,6 +246,7 @@
 <#macro insertMBDiscussion
 	_classNameId
 	_classPK
+	_entry
 	_groupId
 	_maxCommentCount
 	_mbRootMessageId
@@ -266,7 +268,7 @@
 		${dataFactory.toInsertSQL(dataFactory.newSocialActivityModel(mbMessageModel))}
 	</#list>
 
-	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionModel(_groupId, _classNameId, _classPK, _mbThreadId))}
+	${dataFactory.toInsertSQL(dataFactory.newMBDiscussionModel(_groupId, _classNameId, _classPK, _mbThreadId, _entry))}
 </#macro>
 
 <#macro insertMBMessage
