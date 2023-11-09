@@ -6628,9 +6628,14 @@ public class DataFactory {
 
 		// Audit fields
 
+		UserModel userModel = _userModels.get(
+			_mbCategoryUserIndex % _userModels.size());
+
+		_mbCategoryUserIndex++;
+
 		mbCategoryModel.setCompanyId(_companyId);
-		mbCategoryModel.setUserId(_sampleUserId);
-		mbCategoryModel.setUserName(_SAMPLE_USER_NAME);
+		mbCategoryModel.setUserId(userModel.getUserId());
+		mbCategoryModel.setUserName(userModel.getScreenName());
 		mbCategoryModel.setCreateDate(new Date());
 		mbCategoryModel.setModifiedDate(new Date());
 
@@ -7528,6 +7533,7 @@ public class DataFactory {
 	private final String _layoutPageTemplateStructureRelData;
 	private final SimpleCounter _layoutPlidCounter;
 	private final SimpleCounter _layoutSetIdCounter;
+	private int _mbCategoryUserIndex;
 	private RoleModel _ownerRoleModel;
 	private final SimpleCounter _portletPreferenceValueIdCounter;
 	private RoleModel _powerUserRoleModel;
