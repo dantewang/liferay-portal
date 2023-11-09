@@ -978,7 +978,8 @@ public class DataFactory {
 			blogsEntryModel.getGroupId(), blogsEntryModel.getCreateDate(),
 			blogsEntryModel.getModifiedDate(), getClassNameId(BlogsEntry.class),
 			blogsEntryModel.getEntryId(), blogsEntryModel.getUuid(), 0, true,
-			true, ContentTypes.TEXT_HTML, blogsEntryModel.getTitle());
+			true, ContentTypes.TEXT_HTML, blogsEntryModel.getTitle(),
+			blogsEntryModel.getUserId(), blogsEntryModel.getUserName());
 	}
 
 	public AssetEntryModel newAssetEntryModel(
@@ -990,7 +991,8 @@ public class DataFactory {
 			getClassNameId(DLFileEntry.class),
 			dlFileEntryModel.getFileEntryId(), dlFileEntryModel.getUuid(),
 			dlFileEntryModel.getFileEntryTypeId(), true, true,
-			dlFileEntryModel.getMimeType(), dlFileEntryModel.getTitle());
+			dlFileEntryModel.getMimeType(), dlFileEntryModel.getTitle(),
+			dlFileEntryModel.getUserId(), dlFileEntryModel.getUserName());
 	}
 
 	public AssetEntryModel newAssetEntryModel(DLFolderModel dlFolderModel) {
@@ -998,7 +1000,8 @@ public class DataFactory {
 			dlFolderModel.getGroupId(), dlFolderModel.getCreateDate(),
 			dlFolderModel.getModifiedDate(), getClassNameId(DLFolder.class),
 			dlFolderModel.getFolderId(), dlFolderModel.getUuid(), 0, true, true,
-			null, dlFolderModel.getName());
+			null, dlFolderModel.getName(), dlFolderModel.getUserId(),
+			dlFolderModel.getUserName());
 	}
 
 	public AssetEntryModel newAssetEntryModel(MBMessageModel mbMessageModel) {
@@ -1019,7 +1022,8 @@ public class DataFactory {
 			mbMessageModel.getGroupId(), mbMessageModel.getCreateDate(),
 			mbMessageModel.getModifiedDate(), classNameId,
 			mbMessageModel.getMessageId(), mbMessageModel.getUuid(), 0, true,
-			visible, ContentTypes.TEXT_HTML, mbMessageModel.getSubject());
+			visible, ContentTypes.TEXT_HTML, mbMessageModel.getSubject(),
+			mbMessageModel.getUserId(), mbMessageModel.getUserName());
 	}
 
 	public AssetEntryModel newAssetEntryModel(MBThreadModel mbThreadModel) {
@@ -1028,7 +1032,8 @@ public class DataFactory {
 			mbThreadModel.getModifiedDate(), getClassNameId(MBThread.class),
 			mbThreadModel.getThreadId(), mbThreadModel.getUuid(), 0, true,
 			false, StringPool.BLANK,
-			String.valueOf(mbThreadModel.getRootMessageId()));
+			String.valueOf(mbThreadModel.getRootMessageId()),
+			mbThreadModel.getUserId(), mbThreadModel.getUserName());
 	}
 
 	public AssetEntryModel newAssetEntryModel(
@@ -1050,7 +1055,8 @@ public class DataFactory {
 			getClassNameId(JournalArticle.class), resourcePrimKey, resourceUUID,
 			_defaultJournalDDMStructureId, journalArticleModel.isIndexable(),
 			true, ContentTypes.TEXT_HTML,
-			journalArticleLocalizationModel.getTitle());
+			journalArticleLocalizationModel.getTitle(),
+			journalArticleModel.getUserId(), journalArticleModel.getUserName());
 	}
 
 	public AssetEntryModel newAssetEntryModel(WikiPageModel wikiPageModel) {
@@ -1058,7 +1064,8 @@ public class DataFactory {
 			wikiPageModel.getGroupId(), wikiPageModel.getCreateDate(),
 			wikiPageModel.getModifiedDate(), getClassNameId(WikiPage.class),
 			wikiPageModel.getResourcePrimKey(), wikiPageModel.getUuid(), 0,
-			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle());
+			true, true, ContentTypes.TEXT_HTML, wikiPageModel.getTitle(),
+			wikiPageModel.getUserId(), wikiPageModel.getUserName());
 	}
 
 	public List<PortletPreferencesModel>
@@ -2639,7 +2646,8 @@ public class DataFactory {
 			groupId, new Date(), new Date(), getClassNameId(CPDefinition.class),
 			cpDefinitionModel.getCPDefinitionId(), SequentialUUID.generate(), 0,
 			true, true, "text/plain",
-			"Definition " + cpDefinitionModel.getCPDefinitionId());
+			"Definition " + cpDefinitionModel.getCPDefinitionId(),
+			_sampleUserId, _SAMPLE_USER_NAME);
 	}
 
 	public List<CPDefinitionModel> newCPDefinitionModels(
@@ -5934,7 +5942,8 @@ public class DataFactory {
 	protected AssetEntryModel newAssetEntryModel(
 		long groupId, Date createDate, Date modifiedDate, long classNameId,
 		long classPK, String uuid, long classTypeId, boolean listable,
-		boolean visible, String mimeType, String title) {
+		boolean visible, String mimeType, String title, long userId,
+		String userName) {
 
 		AssetEntryModel assetEntryModel = new AssetEntryModelImpl();
 
@@ -5949,8 +5958,8 @@ public class DataFactory {
 		// Audit fields
 
 		assetEntryModel.setCompanyId(_companyId);
-		assetEntryModel.setUserId(_sampleUserId);
-		assetEntryModel.setUserName(_SAMPLE_USER_NAME);
+		assetEntryModel.setUserId(userId);
+		assetEntryModel.setUserName(userName);
 		assetEntryModel.setCreateDate(createDate);
 		assetEntryModel.setModifiedDate(modifiedDate);
 
