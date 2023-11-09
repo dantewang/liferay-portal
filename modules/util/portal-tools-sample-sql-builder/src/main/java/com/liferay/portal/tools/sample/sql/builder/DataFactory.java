@@ -7006,9 +7006,14 @@ public class DataFactory {
 
 		// Audit fields
 
+		UserModel userModel = _userModels.get(
+			_wikiNodeUserIndex % _userModels.size());
+
+		_wikiNodeUserIndex++;
+
 		wikiNodeModel.setCompanyId(_companyId);
-		wikiNodeModel.setUserId(_sampleUserId);
-		wikiNodeModel.setUserName(_SAMPLE_USER_NAME);
+		wikiNodeModel.setUserId(userModel.getUserId());
+		wikiNodeModel.setUserName(userModel.getScreenName());
 		wikiNodeModel.setCreateDate(new Date());
 		wikiNodeModel.setModifiedDate(new Date());
 
@@ -7571,5 +7576,6 @@ public class DataFactory {
 	private RoleModel _userRoleModel;
 	private final SimpleCounter _userScreenNameCounter;
 	private String _webId;
+	private int _wikiNodeUserIndex;
 
 }
