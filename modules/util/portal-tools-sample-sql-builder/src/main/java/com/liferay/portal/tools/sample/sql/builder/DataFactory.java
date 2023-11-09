@@ -6684,9 +6684,14 @@ public class DataFactory {
 
 		// Audit fields
 
+		UserModel userModel = _userModels.get(
+			_mbMessageUserIndex % _userModels.size());
+
+		_mbMessageUserIndex++;
+
 		mBMessageModel.setCompanyId(_companyId);
-		mBMessageModel.setUserId(_sampleUserId);
-		mBMessageModel.setUserName(_SAMPLE_USER_NAME);
+		mBMessageModel.setUserId(userModel.getUserId());
+		mBMessageModel.setUserName(userModel.getScreenName());
 		mBMessageModel.setCreateDate(new Date());
 		mBMessageModel.setModifiedDate(new Date());
 
@@ -7540,6 +7545,7 @@ public class DataFactory {
 	private final SimpleCounter _layoutSetIdCounter;
 	private int _mbCategoryUserIndex;
 	private final Map<Long, UserModel> _mbCategoryUsers = new HashMap<>();
+	private int _mbMessageUserIndex;
 	private RoleModel _ownerRoleModel;
 	private final SimpleCounter _portletPreferenceValueIdCounter;
 	private RoleModel _powerUserRoleModel;
