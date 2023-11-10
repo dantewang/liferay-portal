@@ -1,0 +1,502 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2023 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
+
+import com.liferay.petra.string.StringPool;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.net.URL;
+
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.EventListener;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextAttributeEvent;
+import javax.servlet.ServletContextAttributeListener;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import javax.servlet.SessionCookieConfig;
+import javax.servlet.SessionTrackingMode;
+import javax.servlet.descriptor.JspConfigDescriptor;
+
+import org.eclipse.equinox.http.servlet.internal.context.ContextController;
+import org.eclipse.equinox.http.servlet.internal.context.DispatchTargets;
+import org.eclipse.equinox.http.servlet.internal.context.ServletContextHelperDataContext;
+import org.eclipse.equinox.http.servlet.internal.servlet.Match;
+import org.eclipse.equinox.http.servlet.internal.servlet.RequestDispatcherAdaptor;
+import org.eclipse.equinox.http.servlet.internal.util.EventListeners;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.service.http.context.ServletContextHelper;
+
+/**
+ * @author Dante Wang
+ */
+public class ServletContextWrapper implements ServletContext {
+
+	public ServletContextWrapper(
+		Bundle bundle, ContextController contextController,
+		ServletContextHelper servletContextHelper,
+		ServletContextHelperDataContext servletContextHelperDataContext) {
+
+		_bundle = bundle;
+
+		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
+
+		_classLoader = bundleWiring.getClassLoader();
+
+		_contextController = contextController;
+		_servletContextHelper = servletContextHelper;
+		_servletContextHelperDataContext = servletContextHelperDataContext;
+
+		_servletContext = servletContextHelperDataContext.getServletContext();
+	}
+
+	@Override
+	public FilterRegistration.Dynamic addFilter(
+		String filterName, Class<? extends Filter> filterClass) {
+
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public FilterRegistration.Dynamic addFilter(
+		String filterName, Filter filter) {
+
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public FilterRegistration.Dynamic addFilter(
+		String filterName, String className) {
+
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void addListener(Class<? extends EventListener> listenerClass) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void addListener(String className) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T extends EventListener> void addListener(T t) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ServletRegistration.Dynamic addServlet(
+		String servletName, Class<? extends Servlet> servletClass) {
+
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ServletRegistration.Dynamic addServlet(
+		String servletName, Servlet servlet) {
+
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ServletRegistration.Dynamic addServlet(
+		String servletName, String className) {
+
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T extends Filter> T createFilter(Class<T> filterClass) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T extends EventListener> T createListener(Class<T> listenerClass) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public <T extends Servlet> T createServlet(Class<T> servletClass) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void declareRoles(String... roleNames) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof ServletContextWrapper)) {
+			return false;
+		}
+
+		ServletContextWrapper otherServletContextWrapper =
+			(ServletContextWrapper)other;
+
+		return _contextController.equals(
+			otherServletContextWrapper._contextController);
+	}
+
+	@Override
+	public Object getAttribute(String name) {
+		if (name.equals("osgi-bundlecontext")) {
+			return _bundle.getBundleContext();
+		}
+
+		Dictionary<String, Object> attributes =
+			_servletContextHelperDataContext.getContextAttributes();
+
+		return attributes.get(name);
+	}
+
+	@Override
+	public Enumeration<String> getAttributeNames() {
+		Dictionary<String, Object> attributes =
+			_servletContextHelperDataContext.getContextAttributes();
+
+		return attributes.keys();
+	}
+
+	@Override
+	public ClassLoader getClassLoader() {
+		return _classLoader;
+	}
+
+	@Override
+	public ServletContext getContext(String path) {
+		return _servletContext.getContext(path);
+	}
+
+	@Override
+	public String getContextPath() {
+		return _contextController.getFullContextPath();
+	}
+
+	@Override
+	public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
+		return _servletContext.getDefaultSessionTrackingModes();
+	}
+
+	@Override
+	public int getEffectiveMajorVersion() {
+		return _servletContext.getEffectiveMajorVersion();
+	}
+
+	@Override
+	public int getEffectiveMinorVersion() {
+		return _servletContext.getEffectiveMinorVersion();
+	}
+
+	@Override
+	public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
+		return _servletContext.getEffectiveSessionTrackingModes();
+	}
+
+	@Override
+	public FilterRegistration getFilterRegistration(String filterName) {
+		return _servletContext.getFilterRegistration(filterName);
+	}
+
+	@Override
+	public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
+		return _servletContext.getFilterRegistrations();
+	}
+
+	@Override
+	public String getInitParameter(String name) {
+		Map<String, String> initParams = _contextController.getInitParams();
+
+		return initParams.get(name);
+	}
+
+	@Override
+	public Enumeration<String> getInitParameterNames() {
+		Map<String, String> initParams = _contextController.getInitParams();
+
+		return Collections.enumeration(initParams.keySet());
+	}
+
+	@Override
+	public JspConfigDescriptor getJspConfigDescriptor() {
+		return _servletContext.getJspConfigDescriptor();
+	}
+
+	@Override
+	public int getMajorVersion() {
+		return _servletContext.getMajorVersion();
+	}
+
+	@Override
+	public String getMimeType(String file) {
+		String mimeType = _servletContextHelper.getMimeType(file);
+
+		if (mimeType != null) {
+			return mimeType;
+		}
+
+		return _servletContext.getMimeType(file);
+	}
+
+	@Override
+	public int getMinorVersion() {
+		return _servletContext.getMinorVersion();
+	}
+
+	@Override
+	public RequestDispatcher getNamedDispatcher(String servletName) {
+		DispatchTargets dispatchTargets = _contextController.getDispatchTargets(
+			servletName, null, null, null, null, null, Match.EXACT);
+
+		if (dispatchTargets == null) {
+			return null;
+		}
+
+		return new RequestDispatcherAdaptor(dispatchTargets, servletName);
+	}
+
+	@Override
+	public String getRealPath(String path) {
+		return _servletContextHelper.getRealPath(path);
+	}
+
+	@Override
+	public RequestDispatcher getRequestDispatcher(String path) {
+		if (!path.startsWith(StringPool.SLASH)) {
+			return null;
+		}
+
+		String fullContextPath = _contextController.getFullContextPath();
+
+		if (path.startsWith(fullContextPath)) {
+			path = path.substring(fullContextPath.length());
+		}
+
+		DispatchTargets dispatchTargets = _contextController.getDispatchTargets(
+			path);
+
+		if (dispatchTargets == null) {
+			return null;
+		}
+
+		return new RequestDispatcherAdaptor(dispatchTargets, path);
+	}
+
+	@Override
+	public URL getResource(String path) {
+		return _servletContextHelper.getResource(path);
+	}
+
+	@Override
+	public InputStream getResourceAsStream(String path) {
+		URL url = getResource(path);
+
+		if (url == null) {
+			return null;
+		}
+
+		try {
+			return url.openStream();
+		}
+		catch (IOException ioException) {
+			_servletContext.log(ioException.getMessage(), ioException);
+		}
+
+		return null;
+	}
+
+	@Override
+	public Set<String> getResourcePaths(String path) {
+		if ((path == null) || !path.startsWith(StringPool.SLASH)) {
+			return null;
+		}
+
+		return _servletContextHelper.getResourcePaths(path);
+	}
+
+	@Override
+	public String getServerInfo() {
+		return _servletContext.getServerInfo();
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), servlet API 2.1, with no replacement
+	 */
+	@Deprecated
+	@Override
+	public Servlet getServlet(String servletName) throws ServletException {
+		return _servletContext.getServlet(servletName);
+	}
+
+	@Override
+	public String getServletContextName() {
+		return _contextController.getContextName();
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), servlet API 2.1, with no replacement
+	 */
+	@Deprecated
+	@Override
+	public Enumeration<String> getServletNames() {
+		return _servletContext.getServletNames();
+	}
+
+	@Override
+	public ServletRegistration getServletRegistration(String servletName) {
+		return _servletContext.getServletRegistration(servletName);
+	}
+
+	@Override
+	public Map<String, ? extends ServletRegistration>
+		getServletRegistrations() {
+
+		return _servletContext.getServletRegistrations();
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), servlet API 2.0, with no replacement
+	 */
+	@Deprecated
+	@Override
+	public Enumeration<Servlet> getServlets() {
+		return _servletContext.getServlets();
+	}
+
+	@Override
+	public SessionCookieConfig getSessionCookieConfig() {
+		return _servletContext.getSessionCookieConfig();
+	}
+
+	@Override
+	public String getVirtualServerName() {
+		return _servletContext.getVirtualServerName();
+	}
+
+	@Override
+	public int hashCode() {
+		return _contextController.hashCode();
+	}
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x), Servlet API 2.1, replaced by
+	 * 			{@link #log(String message, Throwable throwable)}
+	 */
+	@Deprecated
+	@Override
+	public void log(Exception exception, String message) {
+		_servletContext.log(exception, message);
+	}
+
+	@Override
+	public void log(String message) {
+		_servletContext.log(message);
+	}
+
+	@Override
+	public void log(String message, Throwable throwable) {
+		_servletContext.log(message, throwable);
+	}
+
+	@Override
+	public void removeAttribute(String name) {
+		Dictionary<String, Object> attributes =
+			_servletContextHelperDataContext.getContextAttributes();
+
+		Object value = attributes.remove(name);
+
+		_fireServletContextAttributeEvent(
+			name, value, ServletContextAttributeListener::attributeRemoved);
+	}
+
+	@Override
+	public void setAttribute(String name, Object value) {
+		if (value == null) {
+			removeAttribute(name);
+
+			return;
+		}
+
+		Dictionary<String, Object> attributes =
+			_servletContextHelperDataContext.getContextAttributes();
+
+		Object oldValue = attributes.put(name, value);
+
+		if (oldValue == null) {
+			_fireServletContextAttributeEvent(
+				name, value, ServletContextAttributeListener::attributeAdded);
+		}
+		else {
+			_fireServletContextAttributeEvent(
+				name, value,
+				ServletContextAttributeListener::attributeReplaced);
+		}
+	}
+
+	@Override
+	public boolean setInitParameter(String name, String value) {
+		return _servletContext.setInitParameter(name, value);
+	}
+
+	@Override
+	public void setSessionTrackingModes(
+		Set<SessionTrackingMode> sessionTrackingModes) {
+
+		_servletContext.setSessionTrackingModes(sessionTrackingModes);
+	}
+
+	private void _fireServletContextAttributeEvent(
+		String name, Object value,
+		BiConsumer
+			<ServletContextAttributeListener, ServletContextAttributeEvent>
+				biConsumer) {
+
+		EventListeners eventListeners = _contextController.getEventListeners();
+
+		List<ServletContextAttributeListener> servletContextAttributeListeners =
+			eventListeners.get(ServletContextAttributeListener.class);
+
+		if (servletContextAttributeListeners.isEmpty()) {
+			return;
+		}
+
+		ServletContextAttributeEvent servletContextAttributeEvent =
+			new ServletContextAttributeEvent(this, name, value);
+
+		for (ServletContextAttributeListener servletContextAttributeListener :
+				servletContextAttributeListeners) {
+
+			biConsumer.accept(
+				servletContextAttributeListener, servletContextAttributeEvent);
+		}
+	}
+
+	private final Bundle _bundle;
+	private final ClassLoader _classLoader;
+	private final ContextController _contextController;
+	private final ServletContext _servletContext;
+	private final ServletContextHelper _servletContextHelper;
+	private final ServletContextHelperDataContext
+		_servletContextHelperDataContext;
+
+}
