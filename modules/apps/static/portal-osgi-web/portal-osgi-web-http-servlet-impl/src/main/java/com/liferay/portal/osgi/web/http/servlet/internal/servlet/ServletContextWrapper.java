@@ -12,11 +12,6 @@ import java.io.InputStream;
 
 import java.net.URL;
 
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -58,8 +53,7 @@ public class ServletContextWrapper implements ServletContext {
 	public ServletContextWrapper(
 		Bundle bundle, ContextController contextController,
 		ServletContextHelper servletContextHelper,
-		ServletContextHelperDataContext servletContextHelperDataContext,
-		AccessControlContext accessControlContext) {
+		ServletContextHelperDataContext servletContextHelperDataContext) {
 
 		_bundle = bundle;
 
@@ -70,7 +64,6 @@ public class ServletContextWrapper implements ServletContext {
 		_contextController = contextController;
 		_servletContextHelper = servletContextHelper;
 		_servletContextHelperDataContext = servletContextHelperDataContext;
-		_accessControlContext = accessControlContext;
 
 		_servletContext = servletContextHelperDataContext.getServletContext();
 	}
@@ -256,19 +249,7 @@ public class ServletContextWrapper implements ServletContext {
 
 	@Override
 	public String getMimeType(String file) {
-		String mimeType = null;
-
-		try {
-			mimeType = AccessController.doPrivileged(
-				(PrivilegedExceptionAction<String>)
-					() -> _servletContextHelper.getMimeType(file),
-				_accessControlContext);
-		}
-		catch (PrivilegedActionException privilegedActionException) {
-			Exception exception = privilegedActionException.getException();
-
-			_servletContext.log(exception.getMessage(), exception);
-		}
+		String mimeType = _servletContextHelper.getMimeType(file);
 
 		if (mimeType != null) {
 			return mimeType;
@@ -296,20 +277,7 @@ public class ServletContextWrapper implements ServletContext {
 
 	@Override
 	public String getRealPath(String path) {
-		try {
-			return AccessController.doPrivileged(
-				(PrivilegedExceptionAction<String>)
-					() -> _servletContextHelper.getRealPath(path),
-				_accessControlContext);
-		}
-		catch (PrivilegedActionException privilegedActionException) {
-			_servletContext.log(
-				privilegedActionException.getException(
-				).getMessage(),
-				privilegedActionException.getException());
-		}
-
-		return null;
+		return _servletContextHelper.getRealPath(path);
 	}
 
 	@Override
@@ -336,20 +304,7 @@ public class ServletContextWrapper implements ServletContext {
 
 	@Override
 	public URL getResource(String path) {
-		try {
-			return AccessController.doPrivileged(
-				(PrivilegedExceptionAction<URL>)
-					() -> _servletContextHelper.getResource(path),
-				_accessControlContext);
-		}
-		catch (PrivilegedActionException privilegedActionException) {
-			_servletContext.log(
-				privilegedActionException.getException(
-				).getMessage(),
-				privilegedActionException.getException());
-		}
-
-		return null;
+		return _servletContextHelper.getResource(path);
 	}
 
 	@Override
@@ -376,20 +331,7 @@ public class ServletContextWrapper implements ServletContext {
 			return null;
 		}
 
-		try {
-			return AccessController.doPrivileged(
-				(PrivilegedExceptionAction<Set<String>>)
-					() -> _servletContextHelper.getResourcePaths(path),
-				_accessControlContext);
-		}
-		catch (PrivilegedActionException privilegedActionException) {
-			_servletContext.log(
-				privilegedActionException.getException(
-				).getMessage(),
-				privilegedActionException.getException());
-		}
-
-		return null;
+		return _servletContextHelper.getResourcePaths(path);
 	}
 
 	@Override
@@ -549,7 +491,6 @@ public class ServletContextWrapper implements ServletContext {
 		}
 	}
 
-	private final AccessControlContext _accessControlContext;
 	private final Bundle _bundle;
 	private final ClassLoader _classLoader;
 	private final ContextController _contextController;
