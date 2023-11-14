@@ -75,6 +75,9 @@ public class ResourceServiceTrackerCustomizer
 		ServiceReference<Object> serviceReference,
 		AtomicReference<ResourceRegistration> resourceReference) {
 
+		httpServletEndpointController.log(
+			"Resource: modified service!!!!!!", new Exception());
+
 		removedService(serviceReference, resourceReference);
 
 		AtomicReference<ResourceRegistration> added = addingService(

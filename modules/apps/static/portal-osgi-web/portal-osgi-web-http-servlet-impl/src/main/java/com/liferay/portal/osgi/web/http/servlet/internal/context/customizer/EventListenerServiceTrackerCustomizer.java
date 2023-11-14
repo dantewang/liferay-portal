@@ -86,6 +86,9 @@ public class EventListenerServiceTrackerCustomizer
 		ServiceReference<EventListener> serviceReference,
 		AtomicReference<ListenerRegistration> listenerRegistration) {
 
+		httpServletEndpointController.log(
+			"EventListener: modified service!!!!!!", new Exception());
+
 		removedService(serviceReference, listenerRegistration);
 
 		addingService(serviceReference);

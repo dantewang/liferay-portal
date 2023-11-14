@@ -80,6 +80,9 @@ public class ServletServiceTrackerCustomizer
 		ServiceReference<Servlet> serviceReference,
 		AtomicReference<ServletRegistration> servletReference) {
 
+		httpServletEndpointController.log(
+			"Servlet: modified service!!!!!!", new Exception());
+
 		removedService(serviceReference, servletReference);
 
 		AtomicReference<ServletRegistration> added = addingService(

@@ -79,6 +79,9 @@ public class FilterServiceTrackerCustomizer
 		ServiceReference<Filter> serviceReference,
 		AtomicReference<FilterRegistration> filterReference) {
 
+		httpServletEndpointController.log(
+			"Filter: modified service!!!!!!", new Exception());
+
 		removedService(serviceReference, filterReference);
 
 		AtomicReference<FilterRegistration> added = addingService(
