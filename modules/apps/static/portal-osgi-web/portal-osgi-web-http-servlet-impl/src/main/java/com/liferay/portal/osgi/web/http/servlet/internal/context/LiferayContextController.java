@@ -6,6 +6,7 @@
 package com.liferay.portal.osgi.web.http.servlet.internal.context;
 
 import com.liferay.osgi.util.StringPlus;
+import com.liferay.petra.concurrent.DCLSingleton;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
@@ -148,28 +149,20 @@ public class LiferayContextController extends ContextController {
 			new ContextFilterTrackerCustomizer(
 				bundleContext, httpServletEndpointController, this));
 
-		_filterServiceTracker.open(true);
-
 		_httpSessionAttributeListenerServiceTracker = new ServiceTracker<>(
 			bundleContext, HttpSessionAttributeListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
 				bundleContext, httpServletEndpointController, this));
-
-		_httpSessionAttributeListenerServiceTracker.open(true);
 
 		_httpSessionListenerServiceTracker = new ServiceTracker<>(
 			bundleContext, HttpSessionListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
 				bundleContext, httpServletEndpointController, this));
 
-		_httpSessionListenerServiceTracker.open(true);
-
 		_resourceServiceTracker = new ServiceTracker<>(
 			bundleContext, Object.class,
 			new ContextResourceTrackerCustomizer(
 				bundleContext, httpServletEndpointController, this));
-
-		_resourceServiceTracker.open(true);
 
 		_servletContextAttributeListenerServiceTracker = new ServiceTracker<>(
 			bundleContext, ServletContextAttributeListener.class.getName(),
@@ -190,28 +183,20 @@ public class LiferayContextController extends ContextController {
 			new ContextListenerTrackerCustomizer(
 				bundleContext, httpServletEndpointController, this));
 
-		_servletContextListenerServiceTracker.open(true);
-
 		_servletRequestAttributeListenerServiceTracker = new ServiceTracker<>(
 			bundleContext, ServletRequestAttributeListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
 				bundleContext, httpServletEndpointController, this));
-
-		_servletRequestAttributeListenerServiceTracker.open(true);
 
 		_servletRequestListenerServiceTracker = new ServiceTracker<>(
 			bundleContext, ServletRequestListener.class.getName(),
 			new ContextListenerTrackerCustomizer(
 				bundleContext, httpServletEndpointController, this));
 
-		_servletRequestListenerServiceTracker.open(true);
-
 		_servletServiceTracker = new ServiceTracker<>(
 			bundleContext, Servlet.class,
 			new ContextServletTrackerCustomizer(
 				bundleContext, httpServletEndpointController, this));
-
-		_servletServiceTracker.open(true);
 	}
 
 	@Override
@@ -243,7 +228,7 @@ public class LiferayContextController extends ContextController {
 
 			if (addedRegisteredObject) {
 				for (FilterRegistration curFilterRegistration :
-						_filterRegistrations) {
+						getFilterRegistrations()) {
 
 					if (Objects.equals(curFilterRegistration.getT(), filter)) {
 						throw new RegisteredFilterException(filter);
@@ -268,7 +253,10 @@ public class LiferayContextController extends ContextController {
 							_getServletContextHelper(
 								serviceHolder.getBundle()))));
 
-				_filterRegistrations.add(filterRegistration);
+				Set<FilterRegistration> filterRegistrations =
+					getFilterRegistrations();
+
+				filterRegistrations.add(filterRegistration);
 			}
 		}
 		finally {
@@ -340,7 +328,9 @@ public class LiferayContextController extends ContextController {
 
 			_listenerRegistrations.add(listenerRegistration);
 
-			_eventListeners.put(eventListenerClasses, listenerRegistration);
+			EventListeners eventListeners = getEventListeners();
+
+			eventListeners.put(eventListenerClasses, listenerRegistration);
 		}
 		finally {
 			if (listenerRegistration == null) {
@@ -422,7 +412,10 @@ public class LiferayContextController extends ContextController {
 			return null;
 		}
 
-		_endpointRegistrations.add(resourceRegistration);
+		Set<EndpointRegistration<?>> endpointRegistrations =
+			getEndpointRegistrations();
+
+		endpointRegistrations.add(resourceRegistration);
 
 		return resourceRegistration;
 	}
@@ -474,7 +467,10 @@ public class LiferayContextController extends ContextController {
 							serviceHolder.getBundle(),
 							curServletContextHelper)));
 
-				_endpointRegistrations.add(servletRegistration);
+				Set<EndpointRegistration<?>> endpointRegistrations =
+					getEndpointRegistrations();
+
+				endpointRegistrations.add(servletRegistration);
 			}
 		}
 		finally {
@@ -515,9 +511,9 @@ public class LiferayContextController extends ContextController {
 		_servletRequestListenerServiceTracker.close();
 		_servletServiceTracker.close();
 
-		_endpointRegistrations.clear();
-		_eventListeners.clear();
-		_filterRegistrations.clear();
+		_endpointRegistrationsDCLSingleton.destroy(null);
+		_eventListenersDCLSingleton.destroy(null);
+		_filterRegistrationsDCLSingleton.destroy(null);
 		_listenerRegistrations.clear();
 		_servletContextHelperDataContext.destroy();
 
@@ -577,7 +573,7 @@ public class LiferayContextController extends ContextController {
 		EndpointRegistration<?> endpointRegistration = null;
 
 		for (EndpointRegistration<?> curEndpointRegistration :
-				_endpointRegistrations) {
+				getEndpointRegistrations()) {
 
 			if (Objects.nonNull(
 					curEndpointRegistration.match(
@@ -600,7 +596,9 @@ public class LiferayContextController extends ContextController {
 			pathInfo = null;
 		}
 
-		if (_filterRegistrations.isEmpty()) {
+		Set<FilterRegistration> filterRegistrations = getFilterRegistrations();
+
+		if (filterRegistrations.isEmpty()) {
 			return new DispatchTargets(
 				this, endpointRegistration, servletName, requestURI,
 				servletPath, pathInfo, queryString);
@@ -619,7 +617,7 @@ public class LiferayContextController extends ContextController {
 
 		String endpointRegistrationName = endpointRegistration.getName();
 
-		for (FilterRegistration filterRegistration : _filterRegistrations) {
+		for (FilterRegistration filterRegistration : filterRegistrations) {
 			if (Objects.nonNull(
 					filterRegistration.match(
 						endpointRegistrationName, requestURI, extension,
@@ -637,17 +635,20 @@ public class LiferayContextController extends ContextController {
 
 	@Override
 	public Set<EndpointRegistration<?>> getEndpointRegistrations() {
-		return _endpointRegistrations;
+		return _endpointRegistrationsDCLSingleton.getSingleton(
+			this::_createEndpointRegistrationSet);
 	}
 
 	@Override
 	public EventListeners getEventListeners() {
-		return _eventListeners;
+		return _eventListenersDCLSingleton.getSingleton(
+			this::_createEventListeners);
 	}
 
 	@Override
 	public Set<FilterRegistration> getFilterRegistrations() {
-		return _filterRegistrations;
+		return _filterRegistrationsDCLSingleton.getSingleton(
+			this::_createFilterRegistrationSet);
 	}
 
 	@Override
@@ -708,7 +709,9 @@ public class LiferayContextController extends ContextController {
 			return previousHttpSessionAdaptor;
 		}
 
-		List<HttpSessionListener> httpSessionListeners = _eventListeners.get(
+		EventListeners eventListeners = getEventListeners();
+
+		List<HttpSessionListener> httpSessionListeners = eventListeners.get(
 			HttpSessionListener.class);
 
 		if (httpSessionListeners.isEmpty()) {
@@ -776,6 +779,24 @@ public class LiferayContextController extends ContextController {
 		if (_shutdown) {
 			throw new IllegalStateException("Context is shutdown");
 		}
+	}
+
+	private Set<EndpointRegistration<?>> _createEndpointRegistrationSet() {
+		_servletServiceTracker.open(true);
+		_resourceServiceTracker.open(true);
+
+		return new ConcurrentSkipListSet<>();
+	}
+
+	private EventListeners _createEventListeners() {
+		_httpSessionAttributeListenerServiceTracker.open(true);
+		_httpSessionListenerServiceTracker.open(true);
+		_servletContextAttributeListenerServiceTracker.open(true);
+		_servletContextListenerServiceTracker.open(true);
+		_servletRequestAttributeListenerServiceTracker.open(true);
+		_servletRequestListenerServiceTracker.open(true);
+
+		return new EventListeners();
 	}
 
 	private FilterDTO _createFilterDTO(
@@ -855,6 +876,12 @@ public class LiferayContextController extends ContextController {
 		return filterDTO;
 	}
 
+	private Set<FilterRegistration> _createFilterRegistrationSet() {
+		_filterServiceTracker.open(true);
+
+		return new ConcurrentSkipListSet<>();
+	}
+
 	private ListenerDTO _createListenerDTO(
 		ServiceReference<EventListener> serviceReference,
 		List<Class<? extends EventListener>> eventListenerClasses) {
@@ -875,7 +902,7 @@ public class LiferayContextController extends ContextController {
 
 		ServletContextAdaptor servletContextAdaptor = new ServletContextAdaptor(
 			this, bundle, servletContextHelper,
-			_servletContextHelperDataContext, _eventListeners,
+			_servletContextHelperDataContext, getEventListeners(),
 			AccessController.getContext());
 
 		return servletContextAdaptor.createServletContext();
@@ -1092,11 +1119,12 @@ public class LiferayContextController extends ContextController {
 	private final BundleContext _bundleContext;
 	private final String _contextName;
 	private final String _contextPath;
-	private final Set<EndpointRegistration<?>> _endpointRegistrations =
-		new ConcurrentSkipListSet<>();
-	private final EventListeners _eventListeners = new EventListeners();
-	private final Set<FilterRegistration> _filterRegistrations =
-		new ConcurrentSkipListSet<>();
+	private final DCLSingleton<Set<EndpointRegistration<?>>>
+		_endpointRegistrationsDCLSingleton = new DCLSingleton<>();
+	private final DCLSingleton<EventListeners> _eventListenersDCLSingleton =
+		new DCLSingleton<>();
+	private final DCLSingleton<Set<FilterRegistration>>
+		_filterRegistrationsDCLSingleton = new DCLSingleton<>();
 	private final ServiceTracker<Filter, AtomicReference<FilterRegistration>>
 		_filterServiceTracker;
 	private final HttpServletEndpointController _httpServletEndpointController;
