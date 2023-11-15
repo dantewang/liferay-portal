@@ -8,7 +8,6 @@ package com.liferay.portal.osgi.web.http.servlet.internal.context.customizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.equinox.http.servlet.internal.HttpServletEndpointController;
 import org.eclipse.equinox.http.servlet.internal.registration.ResourceRegistration;
@@ -21,8 +20,7 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * @author Dante Wang
  */
 public class ResourceServiceTrackerCustomizer
-	extends BaseServiceTrackerCustomizer
-		<Object, AtomicReference<ResourceRegistration>> {
+	extends BaseServiceTrackerCustomizer<Object, ResourceRegistration> {
 
 	public ResourceServiceTrackerCustomizer(
 		BundleContext bundleContext,
@@ -35,7 +33,7 @@ public class ResourceServiceTrackerCustomizer
 	}
 
 	@Override
-	public AtomicReference<ResourceRegistration> addingService(
+	public ResourceRegistration addingService(
 		ServiceReference<Object> serviceReference) {
 
 		if (Objects.isNull(
@@ -55,44 +53,30 @@ public class ResourceServiceTrackerCustomizer
 			return null;
 		}
 
-		AtomicReference<ResourceRegistration> result = new AtomicReference<>();
-
 		try {
-			result.set(
-				liferayContextController.addResourceRegistration(
-					serviceReference));
+			return liferayContextController.addResourceRegistration(
+				serviceReference);
 		}
 		catch (Exception exception) {
 			httpServletEndpointController.log(
 				exception.getMessage(), exception);
 		}
 
-		return result;
+		return null;
 	}
 
 	@Override
 	public void modifiedService(
 		ServiceReference<Object> serviceReference,
-		AtomicReference<ResourceRegistration> resourceReference) {
-
-		removedService(serviceReference, resourceReference);
-
-		AtomicReference<ResourceRegistration> added = addingService(
-			serviceReference);
-
-		resourceReference.set(added.get());
+		ResourceRegistration resourceRegistration) {
 	}
 
 	@Override
 	public void removedService(
 		ServiceReference<Object> serviceReference,
-		AtomicReference<ResourceRegistration> resourceReference) {
+		ResourceRegistration resourceRegistration) {
 
-		ResourceRegistration registration = resourceReference.get();
-
-		if (registration != null) {
-			registration.destroy();
-		}
+		resourceRegistration.destroy();
 	}
 
 }
