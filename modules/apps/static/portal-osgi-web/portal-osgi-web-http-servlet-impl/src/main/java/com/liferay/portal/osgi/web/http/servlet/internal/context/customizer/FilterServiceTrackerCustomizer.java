@@ -8,7 +8,6 @@ package com.liferay.portal.osgi.web.http.servlet.internal.context.customizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.servlet.Filter;
 
@@ -23,8 +22,7 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * @author Raymond Augé
  */
 public class FilterServiceTrackerCustomizer
-	extends BaseServiceTrackerCustomizer
-		<Filter, AtomicReference<FilterRegistration>> {
+	extends BaseServiceTrackerCustomizer<Filter, FilterRegistration> {
 
 	public FilterServiceTrackerCustomizer(
 		BundleContext bundleContext,
@@ -37,7 +35,7 @@ public class FilterServiceTrackerCustomizer
 	}
 
 	@Override
-	public AtomicReference<FilterRegistration> addingService(
+	public FilterRegistration addingService(
 		ServiceReference<Filter> serviceReference) {
 
 		if (Objects.isNull(
@@ -59,44 +57,30 @@ public class FilterServiceTrackerCustomizer
 			return null;
 		}
 
-		AtomicReference<FilterRegistration> result = new AtomicReference<>();
-
 		try {
-			result.set(
-				liferayContextController.addFilterRegistration(
-					serviceReference));
+			return liferayContextController.addFilterRegistration(
+				serviceReference);
 		}
 		catch (Exception exception) {
 			httpServletEndpointController.log(
 				exception.getMessage(), exception);
 		}
 
-		return result;
+		return null;
 	}
 
 	@Override
 	public void modifiedService(
 		ServiceReference<Filter> serviceReference,
-		AtomicReference<FilterRegistration> filterReference) {
-
-		removedService(serviceReference, filterReference);
-
-		AtomicReference<FilterRegistration> added = addingService(
-			serviceReference);
-
-		filterReference.set(added.get());
+		FilterRegistration filterRegistration) {
 	}
 
 	@Override
 	public void removedService(
 		ServiceReference<Filter> serviceReference,
-		AtomicReference<FilterRegistration> filterReference) {
+		FilterRegistration filterRegistration) {
 
-		FilterRegistration filterRegistration = filterReference.get();
-
-		if (filterRegistration != null) {
-			filterRegistration.destroy();
-		}
+		filterRegistration.destroy();
 	}
 
 }

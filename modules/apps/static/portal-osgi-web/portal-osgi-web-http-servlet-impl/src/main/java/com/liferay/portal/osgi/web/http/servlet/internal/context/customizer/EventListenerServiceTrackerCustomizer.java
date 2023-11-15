@@ -10,7 +10,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
 
 import java.util.EventListener;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.equinox.http.servlet.internal.HttpServletEndpointController;
 import org.eclipse.equinox.http.servlet.internal.error.HttpWhiteboardFailureException;
@@ -25,8 +24,7 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * @author Dante Wang
  */
 public class EventListenerServiceTrackerCustomizer
-	extends BaseServiceTrackerCustomizer
-		<EventListener, AtomicReference<ListenerRegistration>> {
+	extends BaseServiceTrackerCustomizer<EventListener, ListenerRegistration> {
 
 	public EventListenerServiceTrackerCustomizer(
 		BundleContext bundleContext,
@@ -39,7 +37,7 @@ public class EventListenerServiceTrackerCustomizer
 	}
 
 	@Override
-	public AtomicReference<ListenerRegistration> addingService(
+	public ListenerRegistration addingService(
 		ServiceReference<EventListener> serviceReference) {
 
 		Object listenerObject = serviceReference.getProperty(
@@ -51,8 +49,6 @@ public class EventListenerServiceTrackerCustomizer
 
 			return null;
 		}
-
-		AtomicReference<ListenerRegistration> result = new AtomicReference<>();
 
 		try {
 			if (!(listenerObject instanceof Boolean) &&
@@ -66,41 +62,32 @@ public class EventListenerServiceTrackerCustomizer
 			}
 
 			if (!GetterUtil.getBoolean(listenerObject)) {
-				return result;
+				return null;
 			}
 
-			result.set(
-				liferayContextController.addListenerRegistration(
-					serviceReference));
+			return liferayContextController.addListenerRegistration(
+				serviceReference);
 		}
 		catch (Exception exception) {
 			httpServletEndpointController.log(
 				exception.getMessage(), exception);
 		}
 
-		return result;
+		return null;
 	}
 
 	@Override
 	public void modifiedService(
 		ServiceReference<EventListener> serviceReference,
-		AtomicReference<ListenerRegistration> listenerRegistration) {
-
-		removedService(serviceReference, listenerRegistration);
-
-		addingService(serviceReference);
+		ListenerRegistration listenerRegistration) {
 	}
 
 	@Override
 	public void removedService(
 		ServiceReference<EventListener> serviceReference,
-		AtomicReference<ListenerRegistration> listenerReference) {
+		ListenerRegistration listenerRegistration) {
 
-		ListenerRegistration listenerRegistration = listenerReference.get();
-
-		if (listenerRegistration != null) {
-			listenerRegistration.destroy();
-		}
+		listenerRegistration.destroy();
 	}
 
 }

@@ -39,7 +39,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1089,37 +1088,31 @@ public class LiferayContextController extends ContextController {
 	private final EventListeners _eventListeners = new EventListeners();
 	private final Set<FilterRegistration> _filterRegistrations =
 		new ConcurrentSkipListSet<>();
-	private final ServiceTracker<Filter, AtomicReference<FilterRegistration>>
+	private final ServiceTracker<Filter, FilterRegistration>
 		_filterServiceTracker;
 	private final HttpServletEndpointController _httpServletEndpointController;
-	private final ServiceTracker
-		<EventListener, AtomicReference<ListenerRegistration>>
-			_httpSessionAttributeListenerServiceTracker;
-	private final ServiceTracker
-		<EventListener, AtomicReference<ListenerRegistration>>
-			_httpSessionListenerServiceTracker;
+	private final ServiceTracker<EventListener, ListenerRegistration>
+		_httpSessionAttributeListenerServiceTracker;
+	private final ServiceTracker<EventListener, ListenerRegistration>
+		_httpSessionListenerServiceTracker;
 	private final Set<ListenerRegistration> _listenerRegistrations =
 		new HashSet<>();
-	private final ServiceTracker<Object, AtomicReference<ResourceRegistration>>
+	private final ServiceTracker<Object, ResourceRegistration>
 		_resourceServiceTracker;
 	private final ServiceReference<ServletContextHelper> _serviceReference;
-	private final ServiceTracker
-		<EventListener, AtomicReference<ListenerRegistration>>
-			_servletContextAttributeListenerServiceTracker;
+	private final ServiceTracker<EventListener, ListenerRegistration>
+		_servletContextAttributeListenerServiceTracker;
 	private final ServletContextHelperDataContext
 		_servletContextHelperDataContext;
 	private final long _servletContextHelperServiceId;
 	private final Map<String, String> _servletContextInitParams;
-	private final ServiceTracker
-		<EventListener, AtomicReference<ListenerRegistration>>
-			_servletContextListenerServiceTracker;
-	private final ServiceTracker
-		<EventListener, AtomicReference<ListenerRegistration>>
-			_servletRequestAttributeListenerServiceTracker;
-	private final ServiceTracker
-		<EventListener, AtomicReference<ListenerRegistration>>
-			_servletRequestListenerServiceTracker;
-	private final ServiceTracker<Servlet, AtomicReference<ServletRegistration>>
+	private final ServiceTracker<EventListener, ListenerRegistration>
+		_servletContextListenerServiceTracker;
+	private final ServiceTracker<EventListener, ListenerRegistration>
+		_servletRequestAttributeListenerServiceTracker;
+	private final ServiceTracker<EventListener, ListenerRegistration>
+		_servletRequestListenerServiceTracker;
+	private final ServiceTracker<Servlet, ServletRegistration>
 		_servletServiceTracker;
 	private boolean _shutdown;
 
