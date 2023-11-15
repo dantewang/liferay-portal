@@ -8,7 +8,6 @@ package com.liferay.portal.osgi.web.http.servlet.internal.context.customizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.servlet.Servlet;
 
@@ -23,8 +22,7 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * @author Dante Wang
  */
 public class ServletServiceTrackerCustomizer
-	extends BaseServiceTrackerCustomizer
-		<Servlet, AtomicReference<ServletRegistration>> {
+	extends BaseServiceTrackerCustomizer<Servlet, ServletRegistration> {
 
 	public ServletServiceTrackerCustomizer(
 		BundleContext bundleContext,
@@ -37,7 +35,7 @@ public class ServletServiceTrackerCustomizer
 	}
 
 	@Override
-	public AtomicReference<ServletRegistration> addingService(
+	public ServletRegistration addingService(
 		ServiceReference<Servlet> serviceReference) {
 
 		if (Objects.isNull(
@@ -60,44 +58,30 @@ public class ServletServiceTrackerCustomizer
 			return null;
 		}
 
-		AtomicReference<ServletRegistration> result = new AtomicReference<>();
-
 		try {
-			result.set(
-				liferayContextController.addServletRegistration(
-					serviceReference));
+			return liferayContextController.addServletRegistration(
+				serviceReference);
 		}
 		catch (Exception exception) {
 			httpServletEndpointController.log(
 				exception.getMessage(), exception);
 		}
 
-		return result;
+		return null;
 	}
 
 	@Override
 	public void modifiedService(
 		ServiceReference<Servlet> serviceReference,
-		AtomicReference<ServletRegistration> servletReference) {
-
-		removedService(serviceReference, servletReference);
-
-		AtomicReference<ServletRegistration> added = addingService(
-			serviceReference);
-
-		servletReference.set(added.get());
+		ServletRegistration servletRegistration) {
 	}
 
 	@Override
 	public void removedService(
 		ServiceReference<Servlet> serviceReference,
-		AtomicReference<ServletRegistration> servletReference) {
+		ServletRegistration servletRegistration) {
 
-		ServletRegistration registration = servletReference.get();
-
-		if (registration != null) {
-			registration.destroy();
-		}
+		servletRegistration.destroy();
 	}
 
 }
