@@ -10,7 +10,7 @@ import com.liferay.expando.kernel.model.ExpandoTable;
 import com.liferay.expando.manager.ExpandoManager;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.util.ServiceProxyFactory;
+import com.liferay.portal.kernel.module.service.Snapshot;
 
 /**
  * @author Lily Chi
@@ -18,58 +18,76 @@ import com.liferay.portal.kernel.util.ServiceProxyFactory;
 public class ExpandoManagerUtil {
 
 	public static void deleteColumn(Object object) throws PortalException {
-		_expandoManager.deleteColumn(object);
+		ExpandoManager expandoManager = _expandoManagerSnapshot.get();
+
+		expandoManager.deleteColumn(object);
 	}
 
 	public static void deleteExpandoTable(Object object)
 		throws PortalException {
 
-		_expandoManager.deleteExpandoTable(object);
+		ExpandoManager expandoManager = _expandoManagerSnapshot.get();
+
+		expandoManager.deleteExpandoTable(object);
 	}
 
 	public static void deleteRows(long classPK) {
-		_expandoManager.deleteRows(classPK);
+		ExpandoManager expandoManager = _expandoManagerSnapshot.get();
+
+		expandoManager.deleteRows(classPK);
 	}
 
 	public static void deleteRows(
 		long companyId, long classNameId, long classPK) {
 
-		_expandoManager.deleteRows(companyId, classNameId, classPK);
+		ExpandoManager expandoManager = _expandoManagerSnapshot.get();
+
+		expandoManager.deleteRows(companyId, classNameId, classPK);
 	}
 
 	public static void deleteValues(String className, long classPK) {
-		_expandoManager.deleteValues(className, classPK);
+		ExpandoManager expandoManager = _expandoManagerSnapshot.get();
+
+		expandoManager.deleteValues(className, classPK);
 	}
 
 	public static ExpandoTable fetchDefaultTable(
 		long companyId, String className) {
 
-		return _expandoManager.fetchDefaultTable(companyId, className);
+		ExpandoManager expandoManager = _expandoManagerSnapshot.get();
+
+		return expandoManager.fetchDefaultTable(companyId, className);
 	}
 
 	public static ExpandoRow fetchRow(long tableId, long classPK) {
-		return _expandoManager.fetchRow(tableId, classPK);
+		ExpandoManager expandoManager = _expandoManagerSnapshot.get();
+
+		return expandoManager.fetchRow(tableId, classPK);
 	}
 
 	public static ActionableDynamicQuery
 		getExpandColumnActionableDynamicQuery() {
 
-		return _expandoManager.getExpandColumnActionableDynamicQuery();
+		ExpandoManager expandoManager = _expandoManagerSnapshot.get();
+
+		return expandoManager.getExpandColumnActionableDynamicQuery();
 	}
 
 	public static ActionableDynamicQuery
 		getExpandoTableActionableDynamicQuery() {
 
-		return _expandoManager.getExpandoTableActionableDynamicQuery();
+		ExpandoManager expandoManager = _expandoManagerSnapshot.get();
+
+		return expandoManager.getExpandoTableActionableDynamicQuery();
 	}
 
 	public static void updateExpandoRow(ExpandoRow expandoRow) {
-		_expandoManager.updateExpandoRow(expandoRow);
+		ExpandoManager expandoManager = _expandoManagerSnapshot.get();
+
+		expandoManager.updateExpandoRow(expandoRow);
 	}
 
-	private static volatile ExpandoManager _expandoManager =
-		ServiceProxyFactory.newServiceTrackedInstance(
-			ExpandoManager.class, ExpandoManagerUtil.class, "_expandoManager",
-			false);
+	private static final Snapshot<ExpandoManager> _expandoManagerSnapshot =
+		new Snapshot<>(ExpandoManagerUtil.class, ExpandoManager.class);
 
 }
