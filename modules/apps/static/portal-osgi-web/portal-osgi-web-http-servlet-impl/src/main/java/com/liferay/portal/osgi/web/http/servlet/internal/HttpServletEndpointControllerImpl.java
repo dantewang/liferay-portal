@@ -170,7 +170,7 @@ public class HttpServletEndpointControllerImpl
 
 	@Override
 	public void log(String message, Throwable throwable) {
-		_log.error(message, throwable);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
