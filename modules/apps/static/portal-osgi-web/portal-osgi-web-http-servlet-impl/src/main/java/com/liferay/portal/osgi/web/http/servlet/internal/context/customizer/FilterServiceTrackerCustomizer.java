@@ -69,18 +69,4 @@ public class FilterServiceTrackerCustomizer
 		return null;
 	}
 
-	@Override
-	public void modifiedService(
-		ServiceReference<Filter> serviceReference,
-		FilterRegistration filterRegistration) {
-	}
-
-	@Override
-	public void removedService(
-		ServiceReference<Filter> serviceReference,
-		FilterRegistration filterRegistration) {
-
-		filterRegistration.destroy();
-	}
-
 }
