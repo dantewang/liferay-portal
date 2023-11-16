@@ -136,22 +136,12 @@ public class ResourceServiceTrackerCustomizer
 					resourceDTO, servletContextHelper, liferayContextController,
 					null);
 
-			try {
-				resourceRegistration.init(
-					new ServletConfigImpl(
-						resourceRegistration.getName(), new HashMap<>(),
-						new ServletContextWrapper(
-							bundle, liferayContextController,
-							servletContextHelper,
-							servletContextHelperDataContext)));
-			}
-			catch (ServletException servletException) {
-				if (_log.isDebugEnabled()) {
-					_log.debug(servletException);
-				}
-
-				return null;
-			}
+			resourceRegistration.init(
+				new ServletConfigImpl(
+					resourceRegistration.getName(), new HashMap<>(),
+					new ServletContextWrapper(
+						bundle, liferayContextController, servletContextHelper,
+						servletContextHelperDataContext)));
 
 			Set<EndpointRegistration<?>> endpointRegistrations =
 				liferayContextController.getEndpointRegistrations();
@@ -159,6 +149,11 @@ public class ResourceServiceTrackerCustomizer
 			endpointRegistrations.add(resourceRegistration);
 
 			return resourceRegistration;
+		}
+		catch (ServletException servletException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(servletException);
+			}
 		}
 		catch (Exception exception) {
 			_log.error(exception);
