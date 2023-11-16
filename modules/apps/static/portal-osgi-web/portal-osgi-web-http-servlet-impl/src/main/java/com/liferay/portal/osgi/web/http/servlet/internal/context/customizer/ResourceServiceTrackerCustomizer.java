@@ -161,14 +161,13 @@ public class ResourceServiceTrackerCustomizer
 			return resourceRegistration;
 		}
 		catch (Exception exception) {
-			httpServletEndpointController.log(
-				exception.getMessage(), exception);
+			_log.error(exception);
 		}
 
 		return null;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		ResourceServiceTrackerCustomizer.class);
+		EventListenerServiceTrackerCustomizer.class.getName());
 
 }

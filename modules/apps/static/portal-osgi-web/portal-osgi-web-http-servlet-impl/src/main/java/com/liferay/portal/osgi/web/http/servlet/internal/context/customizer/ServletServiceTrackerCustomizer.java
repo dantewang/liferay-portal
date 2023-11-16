@@ -146,8 +146,7 @@ public class ServletServiceTrackerCustomizer
 			return servletRegistration;
 		}
 		catch (Exception exception) {
-			httpServletEndpointController.log(
-				exception.getMessage(), exception);
+			_log.error(exception);
 		}
 
 		return null;
@@ -251,6 +250,6 @@ public class ServletServiceTrackerCustomizer
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		ServletServiceTrackerCustomizer.class);
+		EventListenerServiceTrackerCustomizer.class.getName());
 
 }

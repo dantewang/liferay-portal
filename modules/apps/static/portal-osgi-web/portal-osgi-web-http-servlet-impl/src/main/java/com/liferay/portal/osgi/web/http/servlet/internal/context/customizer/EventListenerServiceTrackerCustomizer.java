@@ -8,6 +8,8 @@ package com.liferay.portal.osgi.web.http.servlet.internal.context.customizer;
 import com.liferay.osgi.util.StringPlus;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletContextWrapper;
@@ -164,8 +166,7 @@ public class EventListenerServiceTrackerCustomizer
 			return listenerRegistration;
 		}
 		catch (Exception exception) {
-			httpServletEndpointController.log(
-				exception.getMessage(), exception);
+			_log.error(exception);
 		}
 
 		return null;
@@ -227,5 +228,8 @@ public class EventListenerServiceTrackerCustomizer
 
 		return eventListenerClasses;
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		EventListenerServiceTrackerCustomizer.class.getName());
 
 }
