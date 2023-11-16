@@ -70,18 +70,4 @@ public class ServletServiceTrackerCustomizer
 		return null;
 	}
 
-	@Override
-	public void modifiedService(
-		ServiceReference<Servlet> serviceReference,
-		ServletRegistration servletRegistration) {
-	}
-
-	@Override
-	public void removedService(
-		ServiceReference<Servlet> serviceReference,
-		ServletRegistration servletRegistration) {
-
-		servletRegistration.destroy();
-	}
-
 }

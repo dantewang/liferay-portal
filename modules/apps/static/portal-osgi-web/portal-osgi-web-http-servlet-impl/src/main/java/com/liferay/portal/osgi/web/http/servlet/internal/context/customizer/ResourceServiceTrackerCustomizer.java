@@ -65,18 +65,4 @@ public class ResourceServiceTrackerCustomizer
 		return null;
 	}
 
-	@Override
-	public void modifiedService(
-		ServiceReference<Object> serviceReference,
-		ResourceRegistration resourceRegistration) {
-	}
-
-	@Override
-	public void removedService(
-		ServiceReference<Object> serviceReference,
-		ResourceRegistration resourceRegistration) {
-
-		resourceRegistration.destroy();
-	}
-
 }

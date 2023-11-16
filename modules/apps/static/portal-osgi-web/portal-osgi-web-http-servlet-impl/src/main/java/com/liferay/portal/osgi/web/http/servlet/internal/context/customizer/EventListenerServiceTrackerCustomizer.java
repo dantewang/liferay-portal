@@ -76,18 +76,4 @@ public class EventListenerServiceTrackerCustomizer
 		return null;
 	}
 
-	@Override
-	public void modifiedService(
-		ServiceReference<EventListener> serviceReference,
-		ListenerRegistration listenerRegistration) {
-	}
-
-	@Override
-	public void removedService(
-		ServiceReference<EventListener> serviceReference,
-		ListenerRegistration listenerRegistration) {
-
-		listenerRegistration.destroy();
-	}
-
 }
