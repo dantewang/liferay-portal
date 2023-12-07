@@ -45,7 +45,6 @@ import com.liferay.portal.kernel.lock.LockManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.ResourceConstants;
-import com.liferay.portal.kernel.module.service.Snapshot;
 import com.liferay.portal.kernel.repository.InvalidRepositoryIdException;
 import com.liferay.portal.kernel.repository.Repository;
 import com.liferay.portal.kernel.repository.RepositoryException;
@@ -2625,7 +2624,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException {
 
 		PortletResourcePermission portletResourcePermission =
-			_portletResourcePermissionSnapshot.get();
+			DLPortletResourcePermissionUtil.getDLPortletResourcePermission();
 
 		portletResourcePermission.check(
 			getPermissionChecker(), groupId, ActionKeys.SUBSCRIBE);
@@ -2703,7 +2702,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException {
 
 		PortletResourcePermission portletResourcePermission =
-			_portletResourcePermissionSnapshot.get();
+			DLPortletResourcePermissionUtil.getDLPortletResourcePermission();
 
 		portletResourcePermission.check(
 			getPermissionChecker(), groupId, ActionKeys.SUBSCRIBE);
@@ -3692,9 +3691,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		_folderModelResourcePermission =
 			ModelResourcePermissionFactory.getModelResourcePermission(
 				Folder.class);
-	private static final Snapshot<PortletResourcePermission>
-		_portletResourcePermissionSnapshot =
-			DLPortletResourcePermissionUtil.getSnapshot();
 
 	@BeanReference(type = AssetCategoryLocalService.class)
 	private AssetCategoryLocalService _assetCategoryLocalService;

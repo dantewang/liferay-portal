@@ -14,7 +14,6 @@ import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.FromStep;
 import com.liferay.petra.sql.dsl.query.GroupByStep;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.module.service.Snapshot;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
@@ -49,7 +48,7 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 		throws PortalException {
 
 		PortletResourcePermission portletResourcePermission =
-			_portletResourcePermissionSnapshot.get();
+			DLPortletResourcePermissionUtil.getDLPortletResourcePermission();
 
 		portletResourcePermission.check(
 			getPermissionChecker(), groupId, ActionKeys.ADD_DOCUMENT_TYPE);
@@ -317,8 +316,5 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 		_dlFileEntryTypeModelResourcePermission =
 			ModelResourcePermissionFactory.getModelResourcePermission(
 				DLFileEntryType.class);
-	private static final Snapshot<PortletResourcePermission>
-		_portletResourcePermissionSnapshot =
-			DLPortletResourcePermissionUtil.getSnapshot();
 
 }

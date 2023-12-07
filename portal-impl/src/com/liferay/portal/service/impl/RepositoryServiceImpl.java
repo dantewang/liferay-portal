@@ -16,7 +16,6 @@ import com.liferay.portal.kernel.exception.NoSuchRepositoryException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Repository;
-import com.liferay.portal.kernel.module.service.Snapshot;
 import com.liferay.portal.kernel.repository.InvalidRepositoryIdException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
@@ -47,7 +46,7 @@ public class RepositoryServiceImpl extends RepositoryServiceBaseImpl {
 		throws PortalException {
 
 		PortletResourcePermission portletResourcePermission =
-			_portletResourcePermissionSnapshot.get();
+			DLPortletResourcePermissionUtil.getDLPortletResourcePermission();
 
 		portletResourcePermission.check(
 			getPermissionChecker(), groupId, ActionKeys.ADD_REPOSITORY);
@@ -201,9 +200,6 @@ public class RepositoryServiceImpl extends RepositoryServiceBaseImpl {
 		_folderModelResourcePermission =
 			ModelResourcePermissionFactory.getModelResourcePermission(
 				Folder.class);
-	private static final Snapshot<PortletResourcePermission>
-		_portletResourcePermissionSnapshot =
-			DLPortletResourcePermissionUtil.getSnapshot();
 
 	@BeanReference(type = DLFileEntryLocalService.class)
 	private DLFileEntryLocalService _dlFileEntryLocalService;

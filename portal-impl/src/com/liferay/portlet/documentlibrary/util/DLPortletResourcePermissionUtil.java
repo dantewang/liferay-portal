@@ -14,8 +14,8 @@ import com.liferay.portlet.documentlibrary.constants.DLConstants;
  */
 public class DLPortletResourcePermissionUtil {
 
-	public static Snapshot<PortletResourcePermission> getSnapshot() {
-		return _portletResourcePermissionSnapshot;
+	public static PortletResourcePermission getDLPortletResourcePermission() {
+		return _portletResourcePermissionSnapshot.get();
 	}
 
 	private static final Snapshot<PortletResourcePermission>
