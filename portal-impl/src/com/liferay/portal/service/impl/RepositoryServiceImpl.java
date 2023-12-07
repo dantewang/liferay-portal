@@ -192,15 +192,6 @@ public class RepositoryServiceImpl extends RepositoryServiceBaseImpl {
 		}
 	}
 
-	private static volatile ModelResourcePermission<FileEntry>
-		_fileEntryModelResourcePermission =
-			ModelResourcePermissionFactory.getModelResourcePermission(
-				FileEntry.class);
-	private static volatile ModelResourcePermission<Folder>
-		_folderModelResourcePermission =
-			ModelResourcePermissionFactory.getModelResourcePermission(
-				Folder.class);
-
 	@BeanReference(type = DLFileEntryLocalService.class)
 	private DLFileEntryLocalService _dlFileEntryLocalService;
 
@@ -209,6 +200,15 @@ public class RepositoryServiceImpl extends RepositoryServiceBaseImpl {
 
 	@BeanReference(type = DLFolderLocalService.class)
 	private DLFolderLocalService _dlFolderLocalService;
+
+	private final ModelResourcePermission<FileEntry>
+		_fileEntryModelResourcePermission =
+			ModelResourcePermissionFactory.getModelResourcePermission(
+				FileEntry.class);
+	private final ModelResourcePermission<Folder>
+		_folderModelResourcePermission =
+			ModelResourcePermissionFactory.getModelResourcePermission(
+				Folder.class);
 
 	@BeanReference(type = GroupPersistence.class)
 	private GroupPersistence _groupPersistence;

@@ -743,12 +743,12 @@ public class DLFolderServiceImpl extends DLFolderServiceBaseImpl {
 		return dlFolderLocalService.verifyInheritableLock(folderId, lockUuid);
 	}
 
-	private static volatile ModelResourcePermission<DLFolder>
+	@BeanReference(type = ClassNameLocalService.class)
+	private ClassNameLocalService _classNameLocalService;
+
+	private final ModelResourcePermission<DLFolder>
 		_dlFolderModelResourcePermission =
 			ModelResourcePermissionFactory.getModelResourcePermission(
 				DLFolder.class);
-
-	@BeanReference(type = ClassNameLocalService.class)
-	private ClassNameLocalService _classNameLocalService;
 
 }

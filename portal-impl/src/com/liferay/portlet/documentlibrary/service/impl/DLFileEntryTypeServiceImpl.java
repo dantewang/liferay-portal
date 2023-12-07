@@ -312,7 +312,7 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 		);
 	}
 
-	private static volatile ModelResourcePermission<DLFileEntryType>
+	private final ModelResourcePermission<DLFileEntryType>
 		_dlFileEntryTypeModelResourcePermission =
 			ModelResourcePermissionFactory.getModelResourcePermission(
 				DLFileEntryType.class);

@@ -3687,11 +3687,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	private static final Log _log = LogFactoryUtil.getLog(
 		DLAppServiceImpl.class);
 
-	private static volatile ModelResourcePermission<Folder>
-		_folderModelResourcePermission =
-			ModelResourcePermissionFactory.getModelResourcePermission(
-				Folder.class);
-
 	@BeanReference(type = AssetCategoryLocalService.class)
 	private AssetCategoryLocalService _assetCategoryLocalService;
 
@@ -3703,6 +3698,11 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 	@BeanReference(type = DLAppHelperLocalService.class)
 	private DLAppHelperLocalService _dlAppHelperLocalService;
+
+	private final ModelResourcePermission<Folder>
+		_folderModelResourcePermission =
+			ModelResourcePermissionFactory.getModelResourcePermission(
+				Folder.class);
 
 	@BeanReference(type = RatingsEntryLocalService.class)
 	private RatingsEntryLocalService _ratingsEntryLocalService;

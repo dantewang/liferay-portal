@@ -266,15 +266,15 @@ public class DLTrashServiceImpl extends DLTrashServiceBaseImpl {
 		trashCapability.restoreFolderFromTrash(getUserId(), folder);
 	}
 
-	private static volatile ModelResourcePermission<FileEntry>
+	private final ModelResourcePermission<FileEntry>
 		_fileEntryModelResourcePermission =
 			ModelResourcePermissionFactory.getModelResourcePermission(
 				FileEntry.class);
-	private static volatile ModelResourcePermission<FileShortcut>
+	private final ModelResourcePermission<FileShortcut>
 		_fileShortcutModelResourcePermission =
 			ModelResourcePermissionFactory.getModelResourcePermission(
 				FileShortcut.class);
-	private static volatile ModelResourcePermission<Folder>
+	private final ModelResourcePermission<Folder>
 		_folderModelResourcePermission =
 			ModelResourcePermissionFactory.getModelResourcePermission(
 				Folder.class);

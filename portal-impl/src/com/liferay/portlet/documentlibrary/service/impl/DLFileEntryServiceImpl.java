@@ -857,26 +857,27 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 	private static final Log _log = LogFactoryUtil.getLog(
 		DLFileEntryServiceImpl.class);
 
-	private static volatile ModelResourcePermission<DLFileEntry>
+	@BeanReference(type = ClassNameLocalService.class)
+	private ClassNameLocalService _classNameLocalService;
+
+	private final ModelResourcePermission<DLFileEntry>
 		_dlFileEntryModelResourcePermission =
 			ModelResourcePermissionFactory.getModelResourcePermission(
 				DLFileEntry.class);
-	private static volatile ModelResourcePermission<FileEntry>
-		_fileEntryModelResourcePermission =
-			ModelResourcePermissionFactory.getModelResourcePermission(
-				FileEntry.class);
-	private static volatile ModelResourcePermission<Folder>
-		_folderModelResourcePermission =
-			ModelResourcePermissionFactory.getModelResourcePermission(
-				Folder.class);
-
-	@BeanReference(type = ClassNameLocalService.class)
-	private ClassNameLocalService _classNameLocalService;
 
 	@BeanReference(type = DLFileVersionLocalService.class)
 	private DLFileVersionLocalService _dlFileVersionLocalService;
 
 	@BeanReference(type = DLFolderService.class)
 	private DLFolderService _dlFolderService;
+
+	private final ModelResourcePermission<FileEntry>
+		_fileEntryModelResourcePermission =
+			ModelResourcePermissionFactory.getModelResourcePermission(
+				FileEntry.class);
+	private final ModelResourcePermission<Folder>
+		_folderModelResourcePermission =
+			ModelResourcePermissionFactory.getModelResourcePermission(
+				Folder.class);
 
 }

@@ -77,7 +77,7 @@ public class DLFileVersionServiceImpl extends DLFileVersionServiceBaseImpl {
 			fileEntryId, excludeWorkingCopy);
 	}
 
-	private static volatile ModelResourcePermission<FileEntry>
+	private final ModelResourcePermission<FileEntry>
 		_fileEntryModelResourcePermission =
 			ModelResourcePermissionFactory.getModelResourcePermission(
 				FileEntry.class);
