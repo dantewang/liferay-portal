@@ -32,7 +32,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionRegistryUtil;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionUtil;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -862,8 +862,8 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 
 	private final ModelResourcePermission<DLFileEntry>
 		_dlFileEntryModelResourcePermission =
-			ModelResourcePermissionFactory.getModelResourcePermission(
-				DLFileEntry.class);
+			ModelResourcePermissionRegistryUtil.getModelResourcePermission(
+				DLFileEntry.class.getName());
 
 	@BeanReference(type = DLFileVersionLocalService.class)
 	private DLFileVersionLocalService _dlFileVersionLocalService;
@@ -873,11 +873,11 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 
 	private final ModelResourcePermission<FileEntry>
 		_fileEntryModelResourcePermission =
-			ModelResourcePermissionFactory.getModelResourcePermission(
-				FileEntry.class);
+			ModelResourcePermissionRegistryUtil.getModelResourcePermission(
+				FileEntry.class.getName());
 	private final ModelResourcePermission<Folder>
 		_folderModelResourcePermission =
-			ModelResourcePermissionFactory.getModelResourcePermission(
-				Folder.class);
+			ModelResourcePermissionRegistryUtil.getModelResourcePermission(
+				Folder.class.getName());
 
 }

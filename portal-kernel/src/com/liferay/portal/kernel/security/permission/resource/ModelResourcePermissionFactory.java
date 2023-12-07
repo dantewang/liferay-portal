@@ -8,7 +8,6 @@ package com.liferay.portal.kernel.security.permission.resource;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.internal.security.permission.resource.PermissionCacheKey;
-import com.liferay.portal.kernel.model.ClassedModel;
 import com.liferay.portal.kernel.model.GroupedModel;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -63,13 +62,6 @@ public class ModelResourcePermissionFactory {
 				modelResourcePermission, modelResourcePermissionLogics::add);
 
 		return modelResourcePermission;
-	}
-
-	public static <T extends ClassedModel> ModelResourcePermission<T>
-		getModelResourcePermission(Class<T> modelClass) {
-
-		return ModelResourcePermissionRegistryUtil.getModelResourcePermission(
-			modelClass.getName());
 	}
 
 	@FunctionalInterface

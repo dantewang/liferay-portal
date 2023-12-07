@@ -61,7 +61,7 @@ import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionRegistryUtil;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionUtil;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
@@ -3701,8 +3701,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 	private final ModelResourcePermission<Folder>
 		_folderModelResourcePermission =
-			ModelResourcePermissionFactory.getModelResourcePermission(
-				Folder.class);
+			ModelResourcePermissionRegistryUtil.getModelResourcePermission(
+				Folder.class.getName());
 
 	@BeanReference(type = RatingsEntryLocalService.class)
 	private RatingsEntryLocalService _ratingsEntryLocalService;

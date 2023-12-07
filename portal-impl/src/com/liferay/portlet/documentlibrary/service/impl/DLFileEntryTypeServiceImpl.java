@@ -17,7 +17,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionRegistryUtil;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -314,7 +314,7 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 
 	private final ModelResourcePermission<DLFileEntryType>
 		_dlFileEntryTypeModelResourcePermission =
-			ModelResourcePermissionFactory.getModelResourcePermission(
-				DLFileEntryType.class);
+			ModelResourcePermissionRegistryUtil.getModelResourcePermission(
+				DLFileEntryType.class.getName());
 
 }
