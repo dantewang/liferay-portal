@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionRegistryUtil;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionUtil;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
@@ -75,8 +74,9 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		throws PortalException {
 
 		ModelResourcePermissionUtil.check(
-			_folderModelResourcePermission, getPermissionChecker(), groupId,
-			folderId, ActionKeys.ADD_DOCUMENT);
+			ModelResourcePermissionRegistryUtil.
+				<Folder>getModelResourcePermission(Folder.class.getName()),
+			getPermissionChecker(), groupId, folderId, ActionKeys.ADD_DOCUMENT);
 
 		return dlFileEntryLocalService.addFileEntry(
 			externalReferenceCode, getUserId(), groupId, repositoryId, folderId,
@@ -153,8 +153,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		_fileEntryModelResourcePermission.check(
-			getPermissionChecker(), fileEntryId, ActionKeys.UPDATE);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				getPermissionChecker(), fileEntryId, ActionKeys.UPDATE
+			);
 
 		return dlFileEntryLocalService.checkOutFileEntry(
 			getUserId(), fileEntryId, owner, expirationTime, serviceContext);
@@ -166,12 +170,18 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			long targetFolderId, ServiceContext serviceContext)
 		throws PortalException {
 
-		_fileEntryModelResourcePermission.check(
-			getPermissionChecker(), sourceFileEntryId, ActionKeys.VIEW);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				getPermissionChecker(), sourceFileEntryId, ActionKeys.VIEW
+			);
 
 		ModelResourcePermissionUtil.check(
-			_folderModelResourcePermission, getPermissionChecker(), groupId,
-			targetFolderId, ActionKeys.ADD_DOCUMENT);
+			ModelResourcePermissionRegistryUtil.
+				<Folder>getModelResourcePermission(Folder.class.getName()),
+			getPermissionChecker(), groupId, targetFolderId,
+			ActionKeys.ADD_DOCUMENT);
 
 		return dlFileEntryLocalService.copyFileEntry(
 			getUserId(), groupId, repositoryId, sourceFileEntryId,
@@ -180,8 +190,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 
 	@Override
 	public void deleteFileEntry(long fileEntryId) throws PortalException {
-		_fileEntryModelResourcePermission.check(
-			getPermissionChecker(), fileEntryId, ActionKeys.DELETE);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				getPermissionChecker(), fileEntryId, ActionKeys.DELETE
+			);
 
 		dlFileEntryLocalService.deleteFileEntry(getUserId(), fileEntryId);
 	}
@@ -199,8 +213,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 	public void deleteFileVersion(long fileEntryId, String version)
 		throws PortalException {
 
-		_fileEntryModelResourcePermission.check(
-			getPermissionChecker(), fileEntryId, ActionKeys.DELETE);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				getPermissionChecker(), fileEntryId, ActionKeys.DELETE
+			);
 
 		dlFileEntryLocalService.deleteFileVersion(
 			getUserId(), fileEntryId, version);
@@ -214,8 +232,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			groupId, folderId, title);
 
 		if (dlFileEntry != null) {
-			_dlFileEntryModelResourcePermission.check(
-				getPermissionChecker(), dlFileEntry, ActionKeys.VIEW);
+			ModelResourcePermissionRegistryUtil.
+				<DLFileEntry>getModelResourcePermission(
+					DLFileEntry.class.getName()
+				).check(
+					getPermissionChecker(), dlFileEntry, ActionKeys.VIEW
+				);
 		}
 
 		return dlFileEntry;
@@ -231,8 +253,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 				groupId, externalReferenceCode);
 
 		if (dlFileEntry != null) {
-			_dlFileEntryModelResourcePermission.check(
-				getPermissionChecker(), dlFileEntry, ActionKeys.VIEW);
+			ModelResourcePermissionRegistryUtil.
+				<DLFileEntry>getModelResourcePermission(
+					DLFileEntry.class.getName()
+				).check(
+					getPermissionChecker(), dlFileEntry, ActionKeys.VIEW
+				);
 		}
 
 		return dlFileEntry;
@@ -246,8 +272,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			dlFileEntryLocalService.fetchFileEntryByAnyImageId(imageId);
 
 		if (dlFileEntry != null) {
-			_dlFileEntryModelResourcePermission.check(
-				getPermissionChecker(), dlFileEntry, ActionKeys.VIEW);
+			ModelResourcePermissionRegistryUtil.
+				<DLFileEntry>getModelResourcePermission(
+					DLFileEntry.class.getName()
+				).check(
+					getPermissionChecker(), dlFileEntry, ActionKeys.VIEW
+				);
 		}
 
 		return dlFileEntry;
@@ -257,8 +287,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 	public InputStream getFileAsStream(long fileEntryId, String version)
 		throws PortalException {
 
-		_fileEntryModelResourcePermission.check(
-			getPermissionChecker(), fileEntryId, ActionKeys.DOWNLOAD);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				getPermissionChecker(), fileEntryId, ActionKeys.DOWNLOAD
+			);
 
 		return dlFileEntryLocalService.getFileAsStream(fileEntryId, version);
 	}
@@ -268,8 +302,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			long fileEntryId, String version, boolean incrementCounter)
 		throws PortalException {
 
-		_fileEntryModelResourcePermission.check(
-			getPermissionChecker(), fileEntryId, ActionKeys.DOWNLOAD);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				getPermissionChecker(), fileEntryId, ActionKeys.DOWNLOAD
+			);
 
 		return dlFileEntryLocalService.getFileAsStream(
 			fileEntryId, version, incrementCounter);
@@ -320,8 +358,9 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		throws PortalException {
 
 		ModelResourcePermissionUtil.check(
-			_folderModelResourcePermission, getPermissionChecker(), groupId,
-			folderId, ActionKeys.VIEW);
+			ModelResourcePermissionRegistryUtil.
+				<Folder>getModelResourcePermission(Folder.class.getName()),
+			getPermissionChecker(), groupId, folderId, ActionKeys.VIEW);
 
 		List<Long> folderIds = new ArrayList<>();
 
@@ -352,8 +391,9 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		throws PortalException {
 
 		ModelResourcePermissionUtil.check(
-			_folderModelResourcePermission, getPermissionChecker(), groupId,
-			folderId, ActionKeys.VIEW);
+			ModelResourcePermissionRegistryUtil.
+				<Folder>getModelResourcePermission(Folder.class.getName()),
+			getPermissionChecker(), groupId, folderId, ActionKeys.VIEW);
 
 		return dlFileEntryPersistence.filterFindByG_F_F(
 			groupId, folderId, fileEntryTypeId, start, end, orderByComparator);
@@ -367,8 +407,9 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		throws PortalException {
 
 		ModelResourcePermissionUtil.check(
-			_folderModelResourcePermission, getPermissionChecker(), groupId,
-			folderId, ActionKeys.VIEW);
+			ModelResourcePermissionRegistryUtil.
+				<Folder>getModelResourcePermission(Folder.class.getName()),
+			getPermissionChecker(), groupId, folderId, ActionKeys.VIEW);
 
 		List<Long> folderIds = new ArrayList<>();
 
@@ -388,8 +429,9 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		throws PortalException {
 
 		ModelResourcePermissionUtil.check(
-			_folderModelResourcePermission, getPermissionChecker(), groupId,
-			folderId, ActionKeys.VIEW);
+			ModelResourcePermissionRegistryUtil.
+				<Folder>getModelResourcePermission(Folder.class.getName()),
+			getPermissionChecker(), groupId, folderId, ActionKeys.VIEW);
 
 		List<Long> folderIds = new ArrayList<>();
 
@@ -476,8 +518,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 
 	@Override
 	public DLFileEntry getFileEntry(long fileEntryId) throws PortalException {
-		_fileEntryModelResourcePermission.check(
-			getPermissionChecker(), fileEntryId, ActionKeys.VIEW);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				getPermissionChecker(), fileEntryId, ActionKeys.VIEW
+			);
 
 		return dlFileEntryLocalService.getFileEntry(fileEntryId);
 	}
@@ -489,8 +535,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		DLFileEntry dlFileEntry = dlFileEntryLocalService.getFileEntry(
 			groupId, folderId, title);
 
-		_dlFileEntryModelResourcePermission.check(
-			getPermissionChecker(), dlFileEntry, ActionKeys.VIEW);
+		ModelResourcePermissionRegistryUtil.
+			<DLFileEntry>getModelResourcePermission(
+				DLFileEntry.class.getName()
+			).check(
+				getPermissionChecker(), dlFileEntry, ActionKeys.VIEW
+			);
 
 		return dlFileEntry;
 	}
@@ -503,8 +553,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByERC_G(
 			externalReferenceCode, groupId);
 
-		_dlFileEntryModelResourcePermission.check(
-			getPermissionChecker(), dlFileEntry, ActionKeys.VIEW);
+		ModelResourcePermissionRegistryUtil.
+			<DLFileEntry>getModelResourcePermission(
+				DLFileEntry.class.getName()
+			).check(
+				getPermissionChecker(), dlFileEntry, ActionKeys.VIEW
+			);
 
 		return dlFileEntry;
 	}
@@ -518,8 +572,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			dlFileEntryLocalService.getFileEntryByFileName(
 				groupId, folderId, fileName);
 
-		_dlFileEntryModelResourcePermission.check(
-			getPermissionChecker(), dlFileEntry, ActionKeys.VIEW);
+		ModelResourcePermissionRegistryUtil.
+			<DLFileEntry>getModelResourcePermission(
+				DLFileEntry.class.getName()
+			).check(
+				getPermissionChecker(), dlFileEntry, ActionKeys.VIEW
+			);
 
 		return dlFileEntry;
 	}
@@ -531,8 +589,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByUUID_G(
 			uuid, groupId);
 
-		_dlFileEntryModelResourcePermission.check(
-			getPermissionChecker(), dlFileEntry, ActionKeys.VIEW);
+		ModelResourcePermissionRegistryUtil.
+			<DLFileEntry>getModelResourcePermission(
+				DLFileEntry.class.getName()
+			).check(
+				getPermissionChecker(), dlFileEntry, ActionKeys.VIEW
+			);
 
 		return dlFileEntry;
 	}
@@ -730,12 +792,17 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 
 		PermissionChecker permissionChecker = getPermissionChecker();
 
-		_fileEntryModelResourcePermission.check(
-			permissionChecker, fileEntryId, ActionKeys.UPDATE);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				permissionChecker, fileEntryId, ActionKeys.UPDATE
+			);
 
 		ModelResourcePermissionUtil.check(
-			_folderModelResourcePermission, permissionChecker,
-			serviceContext.getScopeGroupId(), newFolderId,
+			ModelResourcePermissionRegistryUtil.
+				<Folder>getModelResourcePermission(Folder.class.getName()),
+			permissionChecker, serviceContext.getScopeGroupId(), newFolderId,
 			ActionKeys.ADD_DOCUMENT);
 
 		return dlFileEntryLocalService.moveFileEntry(
@@ -755,8 +822,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			long fileEntryId, String version, ServiceContext serviceContext)
 		throws PortalException {
 
-		_fileEntryModelResourcePermission.check(
-			getPermissionChecker(), fileEntryId, ActionKeys.UPDATE);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				getPermissionChecker(), fileEntryId, ActionKeys.UPDATE
+			);
 
 		dlFileEntryLocalService.revertFileEntry(
 			getUserId(), fileEntryId, version, serviceContext);
@@ -792,8 +863,12 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			Date reviewDate, ServiceContext serviceContext)
 		throws PortalException {
 
-		_fileEntryModelResourcePermission.check(
-			getPermissionChecker(), fileEntryId, ActionKeys.UPDATE);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				getPermissionChecker(), fileEntryId, ActionKeys.UPDATE
+			);
 
 		if (LockManagerUtil.isLocked(
 				DLFileEntryConstants.getClassName(), fileEntryId)) {
@@ -823,9 +898,13 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		DLFileVersion dlFileVersion = _dlFileVersionLocalService.getFileVersion(
 			fileVersionId);
 
-		_fileEntryModelResourcePermission.check(
-			getPermissionChecker(), dlFileVersion.getFileEntryId(),
-			ActionKeys.UPDATE);
+		ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).check(
+				getPermissionChecker(), dlFileVersion.getFileEntryId(),
+				ActionKeys.UPDATE
+			);
 
 		return dlFileEntryLocalService.updateStatus(
 			userId, fileVersionId, status, serviceContext, workflowContext);
@@ -850,8 +929,13 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 	private boolean _hasOverrideCheckoutPermission(long fileEntryId)
 		throws PortalException {
 
-		return _fileEntryModelResourcePermission.contains(
-			getPermissionChecker(), fileEntryId, ActionKeys.OVERRIDE_CHECKOUT);
+		return ModelResourcePermissionRegistryUtil.
+			<FileEntry>getModelResourcePermission(
+				FileEntry.class.getName()
+			).contains(
+				getPermissionChecker(), fileEntryId,
+				ActionKeys.OVERRIDE_CHECKOUT
+			);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -860,24 +944,10 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 	@BeanReference(type = ClassNameLocalService.class)
 	private ClassNameLocalService _classNameLocalService;
 
-	private final ModelResourcePermission<DLFileEntry>
-		_dlFileEntryModelResourcePermission =
-			ModelResourcePermissionRegistryUtil.getModelResourcePermission(
-				DLFileEntry.class.getName());
-
 	@BeanReference(type = DLFileVersionLocalService.class)
 	private DLFileVersionLocalService _dlFileVersionLocalService;
 
 	@BeanReference(type = DLFolderService.class)
 	private DLFolderService _dlFolderService;
-
-	private final ModelResourcePermission<FileEntry>
-		_fileEntryModelResourcePermission =
-			ModelResourcePermissionRegistryUtil.getModelResourcePermission(
-				FileEntry.class.getName());
-	private final ModelResourcePermission<Folder>
-		_folderModelResourcePermission =
-			ModelResourcePermissionRegistryUtil.getModelResourcePermission(
-				Folder.class.getName());
 
 }
