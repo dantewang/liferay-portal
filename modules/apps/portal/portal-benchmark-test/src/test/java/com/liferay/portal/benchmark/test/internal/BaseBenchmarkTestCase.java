@@ -1,0 +1,110 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+package com.liferay.portal.benchmark.test.internal;
+
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
+
+import org.junit.Assert;
+
+/**
+ * @author Tina Tian
+ */
+public abstract class BaseBenchmarkTestCase {
+
+	protected void homePage() throws Exception {
+		_assertResult(HttpUtil.doGet("/"), _KEY_HOME_PAGE);
+	}
+
+	protected void login() throws Exception {
+		String[][] parameters = {
+			{
+				_P_P_ID_PREFIX + "_formDate",
+				String.valueOf(System.currentTimeMillis())
+			},
+			{_P_P_ID_PREFIX + "_saveLastPath", "false"},
+			{_P_P_ID_PREFIX + "_redirect", ""},
+			{_P_P_ID_PREFIX + "_doActionAfterLogin", "false"},
+			{_P_P_ID_PREFIX + "_login", "test@liferay.com"},
+			{_P_P_ID_PREFIX + "_password", "test"},
+			{_P_P_ID_PREFIX + "_checkboxNames", "rememberMe"}
+		};
+
+		_assertRedirect(
+			HttpUtil.doPost(_URL_LOGIN_POST, parameters), _URL_REDIRECT);
+
+		_assertRedirect(HttpUtil.doGet(_URL_REDIRECT), _URL_LOGIN_REDIRECT);
+
+		_assertResult(HttpUtil.doGet(_URL_LOGIN_REDIRECT), _KEY_LOGIN);
+	}
+
+	protected void logout() throws Exception {
+		_assertResult(HttpUtil.doGet(_URL_LOGOUT), null);
+	}
+
+	protected void viewLoginPage() throws Exception {
+		_assertRedirect(
+			HttpUtil.doGet(_URL_LOGIN_POPUP), _URL_LOGIN_POPUP_REDIRECT);
+
+		_assertResult(
+			HttpUtil.doGet(_URL_LOGIN_POPUP_REDIRECT), _KEY_LOGIN_POPUP);
+	}
+
+	private void _assertRedirect(
+			HttpUtil.HttpResponse httpResponse, String expectedRedirect)
+		throws Exception {
+
+		Assert.assertEquals(302, httpResponse.getStatusCode());
+
+		Assert.assertEquals(
+			"http://localhost:8080" + expectedRedirect,
+			httpResponse.getRedirect());
+	}
+
+	private void _assertResult(HttpUtil.HttpResponse httpResponse, String key) {
+		Assert.assertEquals(200, httpResponse.getStatusCode());
+
+		if (key != null) {
+			String httpResponseString = httpResponse.toString();
+
+			Assert.assertTrue(httpResponseString.contains(key));
+		}
+	}
+
+	private static final String _KEY_HOME_PAGE = "Liferay.currentURL";
+
+	private static final String _KEY_LOGIN =
+		"ProductNavigationUserPersonalBarPortlet";
+
+	private static final String _KEY_LOGIN_POPUP = "Remember Me";
+
+	private static final String _P_P_ID =
+		"com_liferay_login_web_portlet_LoginPortlet";
+
+	private static final String _P_P_ID_PREFIX = "_" + _P_P_ID;
+
+	private static final String _URL_LOGIN_POPUP =
+		"/c/portal/login?windowState=exclusive";
+
+	private static final String _URL_LOGIN_POPUP_REDIRECT =
+		StringBundler.concat(
+			"/web/guest/welcome?p_p_id=", _P_P_ID, "&p_p_lifecycle=0&",
+			"p_p_state=exclusive&p_p_mode=view&", _P_P_ID_PREFIX,
+			"_mvcRenderCommandName=/login/login&saveLastPath=false");
+
+	private static final String _URL_LOGIN_POST = StringBundler.concat(
+		"/web/guest/welcome?p_p_id=", _P_P_ID, "&p_p_lifecycle=1&",
+		"p_p_state=normal&p_p_mode=view&", _P_P_ID_PREFIX,
+		"_javax.portlet.action=/login/login&", _P_P_ID_PREFIX,
+		"_mvcRenderCommandName=/login/login");
+
+	private static final String _URL_LOGIN_REDIRECT = StringPool.SLASH;
+
+	private static final String _URL_LOGOUT = "/c/portal/logout";
+
+	private static final String _URL_REDIRECT = "/c";
+
+}
