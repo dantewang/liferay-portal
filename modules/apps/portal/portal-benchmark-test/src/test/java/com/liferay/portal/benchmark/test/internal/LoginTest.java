@@ -5,8 +5,10 @@
 
 package com.liferay.portal.benchmark.test.internal;
 
+import com.liferay.portal.benchmark.test.internal.data.DatabaseDataUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +22,11 @@ public class LoginTest extends BaseBenchmarkTestCase {
 	@Rule
 	public static final LiferayUnitTestRule liferayUnitTestRule =
 		LiferayUnitTestRule.INSTANCE;
+
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		_userData = DatabaseDataUtil.getUsersMap("", "root", "liferay");
+	}
 
 	@Test
 	public void testLogin() throws Exception {
@@ -39,5 +46,12 @@ public class LoginTest extends BaseBenchmarkTestCase {
 	protected int getThreadPoolSize() {
 		return 1;
 	}
+
+	@Override
+	protected String[][] getUserData() throws Exception {
+		return _userData;
+	}
+
+	private static String[][] _userData;
 
 }

@@ -17,6 +17,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,6 +44,8 @@ public abstract class BaseBenchmarkTestCase {
 
 	protected abstract int getThreadPoolSize();
 
+	protected abstract String[][] getUserData() throws Exception;
+
 	protected void homePage() throws Exception {
 		HttpUtil.HttpResponse httpResponse = HttpUtil.doGet("/");
 
@@ -56,6 +59,8 @@ public abstract class BaseBenchmarkTestCase {
 	}
 
 	protected void login() throws Exception {
+		String[] user = _getNextUser();
+
 		String[][] parameters = {
 			{
 				_P_P_ID_PREFIX + "_formDate",
@@ -64,7 +69,7 @@ public abstract class BaseBenchmarkTestCase {
 			{_P_P_ID_PREFIX + "_saveLastPath", "false"},
 			{_P_P_ID_PREFIX + "_redirect", ""},
 			{_P_P_ID_PREFIX + "_doActionAfterLogin", "false"},
-			{_P_P_ID_PREFIX + "_login", "test@liferay.com"},
+			{_P_P_ID_PREFIX + "_login", user[1]},
 			{_P_P_ID_PREFIX + "_password", "test"},
 			{_P_P_ID_PREFIX + "_checkboxNames", "rememberMe"}
 		};
@@ -133,6 +138,20 @@ public abstract class BaseBenchmarkTestCase {
 		}
 	}
 
+	private String[] _getNextUser() throws Exception {
+		String[][] userData = getUserData();
+
+		return userData
+			[_userCounter.getAndUpdate(
+				current -> {
+					if (current == (userData.length - 1)) {
+						return 0;
+					}
+
+					return current + 1;
+				})];
+	}
+
 	private static final String _KEY_HOME_PAGE = "Liferay.currentURL";
 
 	private static final String _KEY_LOGIN =
@@ -172,5 +191,6 @@ public abstract class BaseBenchmarkTestCase {
 		"Liferay\\.authToken = '(.*)';");
 
 	private ExecutorService _executorService;
+	private final AtomicInteger _userCounter = new AtomicInteger(0);
 
 }
