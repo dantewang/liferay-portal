@@ -8,10 +8,6 @@ package com.liferay.portal.benchmark.test.internal;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -20,6 +16,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 
 /**
  * @author Tina Tian
@@ -37,6 +37,8 @@ public abstract class BaseBenchmarkTestCase {
 	public void tearDown() {
 		_executorService.shutdownNow();
 	}
+
+	protected abstract int getThreadPoolSize();
 
 	protected void homePage() throws Exception {
 		_assertResult(HttpUtil.doGet("/"), _KEY_HOME_PAGE);
@@ -81,8 +83,6 @@ public abstract class BaseBenchmarkTestCase {
 			future.get();
 		}
 	}
-
-	protected abstract int getThreadPoolSize();
 
 	protected void viewLoginPage() throws Exception {
 		_assertRedirect(
