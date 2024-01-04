@@ -8,12 +8,35 @@ package com.liferay.portal.benchmark.test.internal;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Tina Tian
  */
 public abstract class BaseBenchmarkTestCase {
+
+	@Before
+	public void setUp() {
+		_executorService = new ThreadPoolExecutor(
+			getThreadPoolSize(), getThreadPoolSize(), 0, TimeUnit.SECONDS,
+			new LinkedBlockingQueue<>());
+	}
+
+	@After
+	public void tearDown() {
+		_executorService.shutdownNow();
+	}
 
 	protected void homePage() throws Exception {
 		_assertResult(HttpUtil.doGet("/"), _KEY_HOME_PAGE);
@@ -44,6 +67,22 @@ public abstract class BaseBenchmarkTestCase {
 	protected void logout() throws Exception {
 		_assertResult(HttpUtil.doGet(_URL_LOGOUT), null);
 	}
+
+	protected void runParallel(Callable<Void> callable, int runCount)
+		throws Exception {
+
+		List<Future<Void>> futures = new ArrayList<>();
+
+		for (int i = 0; i < runCount; i++) {
+			futures.add(_executorService.submit(callable));
+		}
+
+		for (Future<Void> future : futures) {
+			future.get();
+		}
+	}
+
+	protected abstract int getThreadPoolSize();
 
 	protected void viewLoginPage() throws Exception {
 		_assertRedirect(
@@ -106,5 +145,7 @@ public abstract class BaseBenchmarkTestCase {
 	private static final String _URL_LOGOUT = "/c/portal/logout";
 
 	private static final String _URL_REDIRECT = "/c";
+
+	private ExecutorService _executorService;
 
 }

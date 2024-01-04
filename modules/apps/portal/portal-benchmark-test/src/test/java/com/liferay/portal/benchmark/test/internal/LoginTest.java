@@ -22,11 +22,22 @@ public class LoginTest extends BaseBenchmarkTestCase {
 		LiferayUnitTestRule.INSTANCE;
 
 	@Test
-	public void test1() throws Exception {
-		homePage();
-		viewLoginPage();
-		login();
-		logout();
+	public void testLogin() throws Exception {
+		runParallel(
+			() -> {
+				homePage();
+				viewLoginPage();
+				login();
+				logout();
+
+				return null;
+			},
+			1);
+	}
+
+	@Override
+	protected int getThreadPoolSize() {
+		return 1;
 	}
 
 }
