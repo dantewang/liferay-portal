@@ -130,12 +130,12 @@ public abstract class BaseBenchmarkTestCase {
 
 	private static final String _URL_LOGIN_POPUP_REDIRECT =
 		StringBundler.concat(
-			"/web/guest/welcome?p_p_id=", _P_P_ID, "&p_p_lifecycle=0&",
+			"/home?p_p_id=", _P_P_ID, "&p_p_lifecycle=0&",
 			"p_p_state=exclusive&p_p_mode=view&", _P_P_ID_PREFIX,
 			"_mvcRenderCommandName=/login/login&saveLastPath=false");
 
 	private static final String _URL_LOGIN_POST = StringBundler.concat(
-		"/web/guest/welcome?p_p_id=", _P_P_ID, "&p_p_lifecycle=1&",
+		"/home?p_p_id=", _P_P_ID, "&p_p_lifecycle=1&",
 		"p_p_state=normal&p_p_mode=view&", _P_P_ID_PREFIX,
 		"_javax.portlet.action=/login/login&", _P_P_ID_PREFIX,
 		"_mvcRenderCommandName=/login/login");
