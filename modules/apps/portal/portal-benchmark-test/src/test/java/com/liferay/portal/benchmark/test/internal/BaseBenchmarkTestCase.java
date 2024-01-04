@@ -54,12 +54,14 @@ public abstract class BaseBenchmarkTestCase {
 		Matcher matcher = _csrfTokenPattern.matcher(httpResponse.getText());
 
 		if (matcher.find()) {
-			_csrfToken.set(matcher.group(1));
+			ContextUtil.Context context = ContextUtil.getContext();
+
+			context.setCSRFToken(matcher.group(1));
 		}
 	}
 
 	protected void login() throws Exception {
-		String[] user = _getNextUser();
+		ContextUtil.Context context = ContextUtil.getContext();
 
 		String[][] parameters = {
 			{
@@ -69,16 +71,13 @@ public abstract class BaseBenchmarkTestCase {
 			{_P_P_ID_PREFIX + "_saveLastPath", "false"},
 			{_P_P_ID_PREFIX + "_redirect", ""},
 			{_P_P_ID_PREFIX + "_doActionAfterLogin", "false"},
-			{_P_P_ID_PREFIX + "_login", user[1]},
+			{_P_P_ID_PREFIX + "_login", context.getUserEmail()},
 			{_P_P_ID_PREFIX + "_password", "test"},
 			{_P_P_ID_PREFIX + "_checkboxNames", "rememberMe"}
 		};
 
-		String[][] headers = {{"X-Csrf-Token", _csrfToken.get()}};
-
 		_assertRedirect(
-			HttpUtil.doPost(_URL_LOGIN_POST, headers, parameters, null),
-			_URL_REDIRECT);
+			HttpUtil.doPost(_URL_LOGIN_POST, parameters), _URL_REDIRECT);
 
 		_assertRedirect(HttpUtil.doGet(_URL_REDIRECT), _URL_LOGIN_REDIRECT);
 
@@ -97,7 +96,18 @@ public abstract class BaseBenchmarkTestCase {
 		List<Future<Void>> futures = new ArrayList<>();
 
 		for (int i = 0; i < runCount; i++) {
-			futures.add(_executorService.submit(callable));
+			futures.add(
+				_executorService.submit(
+					() -> {
+						ContextUtil.setContext(
+							new ContextUtil.Context(_getNextUser()));
+
+						callable.call();
+
+						ContextUtil.setContext(null);
+
+						return null;
+					}));
 		}
 
 		for (Future<Void> future : futures) {
@@ -105,16 +115,24 @@ public abstract class BaseBenchmarkTestCase {
 		}
 	}
 
-	protected void viewLoginPage() throws Exception {
-		String[][] headers = {{"X-Csrf-Token", _csrfToken.get()}};
+	protected void runSequential(Callable<Void> callable, int runCount)
+		throws Exception {
 
+		for (int i = 0; i < runCount; i++) {
+			ContextUtil.setContext(new ContextUtil.Context(_getNextUser()));
+
+			callable.call();
+
+			ContextUtil.setContext(null);
+		}
+	}
+
+	protected void viewLoginPage() throws Exception {
 		_assertRedirect(
-			HttpUtil.doGet(_URL_LOGIN_POPUP, headers),
-			_URL_LOGIN_POPUP_REDIRECT);
+			HttpUtil.doGet(_URL_LOGIN_POPUP), _URL_LOGIN_POPUP_REDIRECT);
 
 		_assertResult(
-			HttpUtil.doGet(_URL_LOGIN_POPUP_REDIRECT, headers),
-			_KEY_LOGIN_POPUP);
+			HttpUtil.doGet(_URL_LOGIN_POPUP_REDIRECT), _KEY_LOGIN_POPUP);
 	}
 
 	private void _assertRedirect(

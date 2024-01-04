@@ -53,6 +53,8 @@ public class HttpUtil {
 				}
 			}
 
+			_setCSRFToken(httpURLConnection);
+
 			httpURLConnection.setRequestMethod("GET");
 
 			return _readConnection(httpURLConnection);
@@ -102,6 +104,8 @@ public class HttpUtil {
 					httpURLConnection.addRequestProperty(header[0], header[1]);
 				}
 			}
+
+			_setCSRFToken(httpURLConnection);
 
 			httpURLConnection.setRequestMethod("POST");
 			httpURLConnection.setDoOutput(true);
@@ -313,7 +317,9 @@ public class HttpUtil {
 	private static HttpURLConnection _openConnection(String uri)
 		throws IOException {
 
-		URL url = new URL("http", "localhost", 8080, uri);
+		ContextUtil.Context context = ContextUtil.getContext();
+
+		URL url = new URL("http", context.getHostName(), 8080, uri);
 
 		HttpURLConnection httpURLConnection =
 			(HttpURLConnection)url.openConnection();
@@ -348,6 +354,16 @@ public class HttpUtil {
 
 		return new HttpResponse(
 			statusCode, statusLine, responseHeaders, text, duration);
+	}
+
+	private static void _setCSRFToken(HttpURLConnection httpURLConnection) {
+		ContextUtil.Context context = ContextUtil.getContext();
+
+		String csrfToken = context.getCSRFToken();
+
+		if (csrfToken != null) {
+			httpURLConnection.addRequestProperty("X-Csrf-Token", csrfToken);
+		}
 	}
 
 	private static final ThreadLocal<byte[]> _byteBuffer =
