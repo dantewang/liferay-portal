@@ -34,12 +34,24 @@ import java.util.Map;
 public class HttpUtil {
 
 	public static HttpResponse doGet(String uri) throws Exception {
+		return doGet(uri, null);
+	}
+
+	public static HttpResponse doGet(String uri, String[][] headers)
+		throws Exception {
+
 		HttpURLConnection httpURLConnection = null;
 
 		long startTime = System.currentTimeMillis();
 
 		try {
 			httpURLConnection = _openConnection(uri);
+
+			if (headers != null) {
+				for (String[] header : headers) {
+					httpURLConnection.addRequestProperty(header[0], header[1]);
+				}
+			}
 
 			httpURLConnection.setRequestMethod("GET");
 

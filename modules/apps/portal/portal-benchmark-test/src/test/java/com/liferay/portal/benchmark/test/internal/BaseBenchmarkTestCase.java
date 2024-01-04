@@ -5,6 +5,7 @@
 
 package com.liferay.portal.benchmark.test.internal;
 
+import com.liferay.petra.lang.CentralizedThreadLocal;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 
@@ -16,6 +17,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -41,7 +44,15 @@ public abstract class BaseBenchmarkTestCase {
 	protected abstract int getThreadPoolSize();
 
 	protected void homePage() throws Exception {
-		_assertResult(HttpUtil.doGet("/"), _KEY_HOME_PAGE);
+		HttpUtil.HttpResponse httpResponse = HttpUtil.doGet("/");
+
+		_assertResult(httpResponse, _KEY_HOME_PAGE);
+
+		Matcher matcher = _csrfTokenPattern.matcher(httpResponse.getText());
+
+		if (matcher.find()) {
+			_csrfToken.set(matcher.group(1));
+		}
 	}
 
 	protected void login() throws Exception {
@@ -58,8 +69,11 @@ public abstract class BaseBenchmarkTestCase {
 			{_P_P_ID_PREFIX + "_checkboxNames", "rememberMe"}
 		};
 
+		String[][] headers = {{"X-Csrf-Token", _csrfToken.get()}};
+
 		_assertRedirect(
-			HttpUtil.doPost(_URL_LOGIN_POST, parameters), _URL_REDIRECT);
+			HttpUtil.doPost(_URL_LOGIN_POST, headers, parameters, null),
+			_URL_REDIRECT);
 
 		_assertRedirect(HttpUtil.doGet(_URL_REDIRECT), _URL_LOGIN_REDIRECT);
 
@@ -68,6 +82,8 @@ public abstract class BaseBenchmarkTestCase {
 
 	protected void logout() throws Exception {
 		_assertResult(HttpUtil.doGet(_URL_LOGOUT), null);
+
+		_csrfToken.remove();
 	}
 
 	protected void runParallel(Callable<Void> callable, int runCount)
@@ -85,11 +101,15 @@ public abstract class BaseBenchmarkTestCase {
 	}
 
 	protected void viewLoginPage() throws Exception {
+		String[][] headers = {{"X-Csrf-Token", _csrfToken.get()}};
+
 		_assertRedirect(
-			HttpUtil.doGet(_URL_LOGIN_POPUP), _URL_LOGIN_POPUP_REDIRECT);
+			HttpUtil.doGet(_URL_LOGIN_POPUP, headers),
+			_URL_LOGIN_POPUP_REDIRECT);
 
 		_assertResult(
-			HttpUtil.doGet(_URL_LOGIN_POPUP_REDIRECT), _KEY_LOGIN_POPUP);
+			HttpUtil.doGet(_URL_LOGIN_POPUP_REDIRECT, headers),
+			_KEY_LOGIN_POPUP);
 	}
 
 	private void _assertRedirect(
@@ -145,6 +165,11 @@ public abstract class BaseBenchmarkTestCase {
 	private static final String _URL_LOGOUT = "/c/portal/logout";
 
 	private static final String _URL_REDIRECT = "/c";
+
+	private static final ThreadLocal<String> _csrfToken =
+		CentralizedThreadLocal.withInitial(() -> null);
+	private static final Pattern _csrfTokenPattern = Pattern.compile(
+		"Liferay\\.authToken = '(.*)';");
 
 	private ExecutorService _executorService;
 
