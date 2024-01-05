@@ -39,9 +39,8 @@ public class LoginBenchmarkTest {
 	@Test
 	public void testLogin() throws Exception {
 		int threadCount = GetterUtil.getInteger(
-			System.getProperty("threadCount"), 1);
-		int runCount = GetterUtil.getInteger(
-			System.getProperty("runCount"), 1);
+			System.getProperty("threadCount"));
+		int runCount = GetterUtil.getInteger(System.getProperty("runCount"));
 
 		ExecutorService executorService = new ThreadPoolExecutor(
 			threadCount, threadCount, 0, TimeUnit.SECONDS,
@@ -50,10 +49,10 @@ public class LoginBenchmarkTest {
 		List<Future<Void>> futures = new ArrayList<>();
 
 		String[][] userData = _getUserData(
-			GetterUtil.get(System.getProperty("databaseHost"), "localhost"),
-			GetterUtil.get(System.getProperty("databaseName"), "lportal"),
-			GetterUtil.get(System.getProperty("databaseUser"), "root"),
-			GetterUtil.get(System.getProperty("databasePassword"), "liferay"));
+			System.getProperty("databaseHost"),
+			System.getProperty("databaseName"),
+			System.getProperty("databaseUser"),
+			System.getProperty("databasePassword"));
 
 		for (int i = 0; i < runCount; i++) {
 			String[] user = userData[i % userData.length];
