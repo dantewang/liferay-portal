@@ -95,25 +95,17 @@ public class LoginBenchmarkTest {
 		try (Connection connection = DriverManager.getConnection(
 				url, user, password);
 			PreparedStatement preparedStatement1 = connection.prepareStatement(
-				"select companyId, emailAddress from User_ where " +
-					"emailAddress like 'test%'");
-			PreparedStatement preparedStatement2 = connection.prepareStatement(
-				"select hostname from VirtualHost where companyId = ?");
-			ResultSet resultSet1 = preparedStatement1.executeQuery()) {
+				"select hostname, emailAddress from VirtualHost as vh, User_ " +
+					"as u where u.emailAddress like 'test%' and u.companyId " +
+						"= vh.companyId;");
+			ResultSet resultSet = preparedStatement1.executeQuery()) {
 
-			while (resultSet1.next()) {
-				long companyId = resultSet1.getLong("companyId");
-				String emailAddress = resultSet1.getString("emailAddress");
-
-				preparedStatement2.setLong(1, companyId);
-
-				try (ResultSet resultSet2 = preparedStatement2.executeQuery()) {
-					resultSet2.next();
-
-					String hostname = resultSet2.getString(1);
-
-					users.add(new String[] {hostname, emailAddress});
-				}
+			while (resultSet.next()) {
+				users.add(
+					new String[] {
+						resultSet.getString("hostname"),
+						resultSet.getString("emailAddress")
+					});
 			}
 		}
 
