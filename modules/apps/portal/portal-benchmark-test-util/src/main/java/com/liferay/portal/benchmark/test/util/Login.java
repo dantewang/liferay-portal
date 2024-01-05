@@ -5,6 +5,9 @@
 
 package com.liferay.portal.benchmark.test.util;
 
+import com.liferay.portal.benchmark.test.util.http.SimpleCookieStore;
+import com.liferay.portal.benchmark.test.util.http.ThreadLocalCookieStore;
+
 /**
  * @author Tina Tian
  */
@@ -15,6 +18,8 @@ public class Login extends BaseBenchmark {
 	}
 
 	public void execute(String userEmail, String password) throws Exception {
+		ThreadLocalCookieStore.setCookieStore(new SimpleCookieStore());
+
 		String csrfToken = homePage();
 
 		viewLoginPage(csrfToken);
@@ -22,6 +27,8 @@ public class Login extends BaseBenchmark {
 		login(userEmail, password, csrfToken);
 
 		logout();
+
+		ThreadLocalCookieStore.removeCookieStore();
 	}
 
 }
