@@ -5,8 +5,14 @@
 
 package com.liferay.portal.benchmark.test.util;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +48,23 @@ public class LoginBenchmarkTest {
 
 		List<Future<Void>> futures = new ArrayList<>();
 
+		String[][] userData = _getUserData(
+			GetterUtil.get(System.getProperty("databaseHost"), "localhost"),
+			GetterUtil.get(System.getProperty("databaseName"), "lportal"),
+			GetterUtil.get(System.getProperty("databaseUser"), "root"),
+			GetterUtil.get(System.getProperty("databasePassword"), "liferay"));
+
 		for (int i = 1; i <= runCount; i++) {
+			int finalI = i;
+
 			futures.add(
 				executorService.submit(
 					() -> {
-						Login login = new Login("localhost", 8080);
+						String[] user = userData[userData.length % finalI];
 
-						login.execute("test@liferay.com", "test");
+						Login login = new Login(user[0], 8080);
+
+						login.execute(user[1], "test");
 
 						return null;
 					}));
@@ -57,6 +73,51 @@ public class LoginBenchmarkTest {
 		for (Future<Void> future : futures) {
 			future.get();
 		}
+	}
+
+	private String[][] _getUserData(
+			String databaseHost, String databaseName, String user,
+			String password)
+		throws Exception {
+
+		Class.forName(
+			"com.mysql.cj.jdbc.Driver"
+		).newInstance();
+
+		List<String[]> users = new ArrayList<>();
+
+		String url = StringBundler.concat(
+			"jdbc:mysql://", databaseHost, "/", databaseName,
+			"?characterEncoding=UTF-8&dontTrackOpenResources=true&",
+			"holdResultsOpenOverStatementClose=true&",
+			"useFastDateParsing=false&useUnicode=true&");
+
+		try (Connection connection = DriverManager.getConnection(
+				url, user, password);
+			PreparedStatement preparedStatement1 = connection.prepareStatement(
+				"select companyId, emailAddress from User_ where " +
+					"emailAddress like 'test%'");
+			PreparedStatement preparedStatement2 = connection.prepareStatement(
+				"select hostname from VirtualHost where companyId = ?");
+			ResultSet resultSet1 = preparedStatement1.executeQuery()) {
+
+			while (resultSet1.next()) {
+				long companyId = resultSet1.getLong("companyId");
+				String emailAddress = resultSet1.getString("emailAddress");
+
+				preparedStatement2.setLong(1, companyId);
+
+				try (ResultSet resultSet2 = preparedStatement2.executeQuery()) {
+					resultSet2.next();
+
+					String hostname = resultSet2.getString(1);
+
+					users.add(new String[] {hostname, emailAddress});
+				}
+			}
+		}
+
+		return users.toArray(new String[0][0]);
 	}
 
 }
