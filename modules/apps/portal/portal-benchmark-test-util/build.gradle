@@ -8,3 +8,12 @@ dependencies {
 liferay {
 	deployDir = file("${liferayHome}/osgi/test")
 }
+
+test {
+	systemProperty "databaseHost", System.getProperty("databaseHost", "localhost")
+	systemProperty "databaseName", System.getProperty("databaseName", "lportal")
+	systemProperty "databasePassword", System.getProperty("databasePassword", "root")
+	systemProperty "databaseUser", System.getProperty("databaseUser", "root")
+	systemProperty "runCount", System.getProperty("runCount", "1")
+	systemProperty "threadCount", System.getProperty("threadCount", "1")
+}
