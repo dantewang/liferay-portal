@@ -212,7 +212,8 @@ public class HttpUtil {
 		HttpURLConnection.setFollowRedirects(false);
 
 		CookieHandler.setDefault(
-			new CookieManager(null, CookiePolicy.ACCEPT_ALL));
+			new CookieManager(
+				new ThreadLocalCookieStore(), CookiePolicy.ACCEPT_ALL));
 	}
 
 }
