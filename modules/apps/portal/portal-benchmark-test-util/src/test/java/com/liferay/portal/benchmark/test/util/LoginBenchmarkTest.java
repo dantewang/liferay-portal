@@ -40,7 +40,8 @@ public class LoginBenchmarkTest {
 	public void testLogin() throws Exception {
 		int threadCount = GetterUtil.getInteger(
 			System.getProperty("threadCount"), 1);
-		int runCount = GetterUtil.getInteger(System.getProperty("runCount"), 1);
+		int runCount = GetterUtil.getInteger(
+			System.getProperty("runCount"), 1);
 
 		ExecutorService executorService = new ThreadPoolExecutor(
 			threadCount, threadCount, 0, TimeUnit.SECONDS,
@@ -54,14 +55,12 @@ public class LoginBenchmarkTest {
 			GetterUtil.get(System.getProperty("databaseUser"), "root"),
 			GetterUtil.get(System.getProperty("databasePassword"), "liferay"));
 
-		for (int i = 1; i <= runCount; i++) {
-			int finalI = i;
+		for (int i = 0; i < runCount; i++) {
+			String[] user = userData[i % userData.length];
 
 			futures.add(
 				executorService.submit(
 					() -> {
-						String[] user = userData[userData.length % finalI];
-
 						Login login = new Login(user[0], 8080);
 
 						login.execute(user[1], "test");
