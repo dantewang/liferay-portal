@@ -5,14 +5,14 @@
 
 package com.liferay.portal.benchmark.test.util;
 
+import com.liferay.petra.io.unsync.UnsyncBufferedReader;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.io.File;
+import java.io.FileReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,33 +37,47 @@ public class LoginBenchmarkTest {
 	public static final LiferayUnitTestRule liferayUnitTestRule =
 		LiferayUnitTestRule.INSTANCE;
 
+	@Before
+	public void setUp() throws Exception {
+		_benchmarksDir = new File(System.getProperty("benchmarksDir"));
+		_threadCount = GetterUtil.getInteger(System.getProperty("threadCount"));
+		_runCount = GetterUtil.getInteger(System.getProperty("runCount"));
+
+		System.out.println(
+			StringBundler.concat(
+				"\nBenchmarks directory: ", _benchmarksDir.getCanonicalPath(),
+				"\nRun count: ", _runCount, "\nThread count: ", _threadCount));
+
+		File userCSVFile = new File(_benchmarksDir, "user.csv");
+
+		if (userCSVFile.exists()) {
+			System.out.println(
+				"Loading test data from " + userCSVFile.getCanonicalPath());
+
+			_userData = _parseCSVFile(userCSVFile);
+		}
+		else {
+			_userData = new String[][] {new String[] {"localhost", "", "test"}};
+		}
+	}
+
 	@Test
 	public void testLogin() throws Exception {
-		int threadCount = GetterUtil.getInteger(
-			System.getProperty("threadCount"));
-		int runCount = GetterUtil.getInteger(System.getProperty("runCount"));
-
 		ExecutorService executorService = new ThreadPoolExecutor(
-			threadCount, threadCount, 0, TimeUnit.SECONDS,
+			_threadCount, _threadCount, 0, TimeUnit.SECONDS,
 			new LinkedBlockingDeque<>());
 
 		List<Future<Void>> futures = new ArrayList<>();
 
-		String[][] userData = _getUserData(
-			System.getProperty("databaseHost"),
-			System.getProperty("databaseName"),
-			System.getProperty("databaseUser"),
-			System.getProperty("databasePassword"));
-
-		for (int i = 0; i < runCount; i++) {
-			String[] user = userData[i % userData.length];
+		for (int i = 0; i < _runCount; i++) {
+			String[] user = _userData[i % _userData.length];
 
 			futures.add(
 				executorService.submit(
 					() -> {
 						Login login = new Login(user[0], 8080);
 
-						login.execute(user[1], "test");
+						login.execute(user[2] + "@liferay.com", "test");
 
 						return null;
 					}));
@@ -73,41 +88,43 @@ public class LoginBenchmarkTest {
 		}
 	}
 
-	private String[][] _getUserData(
-			String databaseHost, String databaseName, String user,
-			String password)
-		throws Exception {
+	private String[][] _parseCSVFile(File csvFile) {
+		try (UnsyncBufferedReader unsyncBufferedReader =
+				new UnsyncBufferedReader(new FileReader(csvFile))) {
 
-		Class.forName(
-			"com.mysql.cj.jdbc.Driver"
-		).newInstance();
+			List<String[]> entries = new ArrayList<>();
 
-		List<String[]> users = new ArrayList<>();
+			String line = unsyncBufferedReader.readLine();
 
-		String url = StringBundler.concat(
-			"jdbc:mysql://", databaseHost, "/", databaseName,
-			"?characterEncoding=UTF-8&dontTrackOpenResources=true&",
-			"holdResultsOpenOverStatementClose=true&",
-			"useFastDateParsing=false&useUnicode=true&");
+			int columnCount = 0;
 
-		try (Connection connection = DriverManager.getConnection(
-				url, user, password);
-			PreparedStatement preparedStatement1 = connection.prepareStatement(
-				"select hostname, emailAddress from VirtualHost as vh, User_ " +
-					"as u where u.emailAddress like 'test%' and u.companyId " +
-						"= vh.companyId;");
-			ResultSet resultSet = preparedStatement1.executeQuery()) {
+			while ((line != null) && (line.length() > 0)) {
+				List<String> entry = StringUtil.split(line);
 
-			while (resultSet.next()) {
-				users.add(
-					new String[] {
-						resultSet.getString("hostname"),
-						resultSet.getString("emailAddress")
-					});
+				if (columnCount == 0) {
+					columnCount = entry.size();
+				}
+				else if (columnCount != entry.size()) {
+					throw new Exception(
+						"Bad csv file format, line " + (entries.size() + 1) +
+							" missing \",\".");
+				}
+
+				entries.add(entry.toArray(new String[columnCount]));
+
+				line = unsyncBufferedReader.readLine();
 			}
-		}
 
-		return users.toArray(new String[0][0]);
+			return entries.toArray(new String[0][]);
+		}
+		catch (Exception exception) {
+			throw new ExceptionInInitializerError(exception);
+		}
 	}
+
+	private File _benchmarksDir;
+	private int _runCount;
+	private int _threadCount;
+	private String[][] _userData;
 
 }
