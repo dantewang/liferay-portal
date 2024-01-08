@@ -9,7 +9,6 @@ import com.liferay.petra.string.StringBundler;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
@@ -61,15 +60,7 @@ public class Statistics {
 		}
 	}
 
-	public <T> T record(String testName, Callable<T> callable)
-		throws Exception {
-
-		long startTime = System.currentTimeMillis();
-
-		T result = callable.call();
-
-		long duration = System.currentTimeMillis() - startTime;
-
+	public void record(String testName, long duration) {
 		AtomicLong sum = _getOrCreate(testName, _sumsMap, AtomicLong::new);
 
 		sum.addAndGet(duration);
@@ -78,8 +69,6 @@ public class Statistics {
 			testName, _durationsMap, LinkedBlockingQueue::new);
 
 		durations.offer(duration);
-
-		return result;
 	}
 
 	public void start() {

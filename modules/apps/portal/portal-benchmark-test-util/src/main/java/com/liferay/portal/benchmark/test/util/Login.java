@@ -5,6 +5,7 @@
 
 package com.liferay.portal.benchmark.test.util;
 
+import com.liferay.portal.benchmark.test.util.http.HttpResponse;
 import com.liferay.portal.benchmark.test.util.http.SimpleCookieStore;
 import com.liferay.portal.benchmark.test.util.http.ThreadLocalCookieStore;
 
@@ -23,31 +24,17 @@ public class Login extends BaseBenchmark {
 
 		ThreadLocalCookieStore.setCookieStore(new SimpleCookieStore());
 
-		String csrfToken = statistics.record("homePage", this::homePage);
+		HttpResponse httpResponse = homePage();
+
+		statistics.record("homePage", httpResponse.getDuration());
 
 		statistics.record(
-			"viewLoginPage",
-			() -> {
-				viewLoginPage(csrfToken);
-
-				return null;
-			});
+			"viewLoginPage", viewLoginPage(httpResponse.getCSRFToken()));
 
 		statistics.record(
-			"login",
-			() -> {
-				login(userEmail, password, csrfToken);
+			"login", login(userEmail, password, httpResponse.getCSRFToken()));
 
-				return null;
-			});
-
-		statistics.record(
-			"logout",
-			() -> {
-				logout();
-
-				return null;
-			});
+		statistics.record("logout", logout());
 
 		ThreadLocalCookieStore.removeCookieStore();
 	}
