@@ -79,10 +79,11 @@ public class LoginBenchmarkTest {
 			futures.add(
 				executorService.submit(
 					() -> {
-						Login login = new Login(user[0], 8080);
+						Login login = new Login(
+							user[0], 8080, user[2] + "@liferay.com", "test",
+							statistics);
 
-						login.execute(
-							user[2] + "@liferay.com", "test", statistics);
+						login.execute();
 
 						return null;
 					}));
@@ -105,7 +106,7 @@ public class LoginBenchmarkTest {
 
 			int columnCount = 0;
 
-			while ((line != null) && (!line.isEmpty())) {
+			while ((line != null) && !line.isEmpty()) {
 				List<String> entry = StringUtil.split(line);
 
 				if (columnCount == 0) {
