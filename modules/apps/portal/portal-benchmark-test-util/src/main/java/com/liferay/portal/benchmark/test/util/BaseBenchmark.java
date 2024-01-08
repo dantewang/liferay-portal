@@ -24,56 +24,66 @@ public abstract class BaseBenchmark {
 		_port = port;
 	}
 
-	public String homePage() throws Exception {
+	public HttpResponse homePage() throws Exception {
 		HttpResponse httpResponse = HttpUtil.doGet(_newURL("/"), null);
 
 		_assertResult(httpResponse, _KEY_HOME_PAGE);
 
-		return httpResponse.getCSRFToken();
+		return httpResponse;
 	}
 
-	public void login(String userEmail, String password, String csrfToken)
+	public long login(String userEmail, String password, String csrfToken)
 		throws Exception {
 
-		_assertRedirect(
-			HttpUtil.doPost(
-				_newURL(_URL_LOGIN_POST),
-				new String[][] {
-					{
-						_P_P_ID_PREFIX + "_formDate",
-						String.valueOf(System.currentTimeMillis())
-					},
-					{_P_P_ID_PREFIX + "_saveLastPath", "false"},
-					{_P_P_ID_PREFIX + "_redirect", ""},
-					{_P_P_ID_PREFIX + "_doActionAfterLogin", "false"},
-					{_P_P_ID_PREFIX + "_login", userEmail},
-					{_P_P_ID_PREFIX + "_password", password},
-					{_P_P_ID_PREFIX + "_checkboxNames", "rememberMe"}
+		HttpResponse httpResponse1 = HttpUtil.doPost(
+			_newURL(_URL_LOGIN_POST),
+			new String[][] {
+				{
+					_P_P_ID_PREFIX + "_formDate",
+					String.valueOf(System.currentTimeMillis())
 				},
-				csrfToken, null),
-			_URL_REDIRECT);
+				{_P_P_ID_PREFIX + "_saveLastPath", "false"},
+				{_P_P_ID_PREFIX + "_redirect", ""},
+				{_P_P_ID_PREFIX + "_doActionAfterLogin", "false"},
+				{_P_P_ID_PREFIX + "_login", userEmail},
+				{_P_P_ID_PREFIX + "_password", password},
+				{_P_P_ID_PREFIX + "_checkboxNames", "rememberMe"}
+			},
+			csrfToken, null);
 
-		_assertRedirect(
-			HttpUtil.doGet(_newURL(_URL_REDIRECT), csrfToken),
-			_URL_LOGIN_REDIRECT);
+		_assertRedirect(httpResponse1, _URL_REDIRECT);
 
-		_assertResult(
-			HttpUtil.doGet(_newURL(_URL_LOGIN_REDIRECT), csrfToken),
-			_KEY_LOGIN);
+		HttpResponse httpResponse2 = HttpUtil.doGet(
+			_newURL(_URL_REDIRECT), csrfToken);
+
+		_assertRedirect(httpResponse2, _URL_LOGIN_REDIRECT);
+
+		HttpResponse httpResponse3 = HttpUtil.doGet(
+			_newURL(_URL_LOGIN_REDIRECT), csrfToken);
+
+		_assertResult(httpResponse3, _KEY_LOGIN);
+
+		return _getTotalDuration(httpResponse1, httpResponse2, httpResponse3);
 	}
 
-	public void logout() throws Exception {
-		HttpUtil.doGet(_newURL(_URL_LOGOUT), null);
+	public long logout() throws Exception {
+		HttpResponse httpResponse = HttpUtil.doGet(_newURL(_URL_LOGOUT), null);
+
+		return httpResponse.getDuration();
 	}
 
-	public void viewLoginPage(String csrfToken) throws Exception {
-		_assertRedirect(
-			HttpUtil.doGet(_newURL(_URL_LOGIN_POPUP), csrfToken),
-			_URL_LOGIN_POPUP_REDIRECT);
+	public long viewLoginPage(String csrfToken) throws Exception {
+		HttpResponse httpResponse1 = HttpUtil.doGet(
+			_newURL(_URL_LOGIN_POPUP), csrfToken);
 
-		_assertResult(
-			HttpUtil.doGet(_newURL(_URL_LOGIN_POPUP_REDIRECT), csrfToken),
-			_KEY_LOGIN_POPUP);
+		_assertRedirect(httpResponse1, _URL_LOGIN_POPUP_REDIRECT);
+
+		HttpResponse httpResponse2 = HttpUtil.doGet(
+			_newURL(_URL_LOGIN_POPUP_REDIRECT), csrfToken);
+
+		_assertResult(httpResponse2, _KEY_LOGIN_POPUP);
+
+		return _getTotalDuration(httpResponse1, httpResponse2);
 	}
 
 	private void _assertRedirect(
@@ -95,6 +105,16 @@ public abstract class BaseBenchmark {
 
 			Assert.assertTrue(httpResponseString.contains(key));
 		}
+	}
+
+	private long _getTotalDuration(HttpResponse... httpResponses) {
+		long duration = 0;
+
+		for (HttpResponse httpResponse : httpResponses) {
+			duration += httpResponse.getDuration();
+		}
+
+		return duration;
 	}
 
 	private URL _newURL(String path) throws Exception {

@@ -5,6 +5,7 @@
 
 package com.liferay.portal.benchmark.test.util;
 
+import com.liferay.portal.benchmark.test.util.http.HttpResponse;
 import com.liferay.portal.benchmark.test.util.http.SimpleCookieStore;
 import com.liferay.portal.benchmark.test.util.http.ThreadLocalCookieStore;
 
@@ -13,22 +14,37 @@ import com.liferay.portal.benchmark.test.util.http.ThreadLocalCookieStore;
  */
 public class Login extends BaseBenchmark {
 
-	public Login(String hostName, int port) {
+	public Login(
+		String hostName, int port, String userEmail, String password,
+		Statistics statistics) {
+
 		super(hostName, port);
+
+		_userEmail = userEmail;
+		_password = password;
+		_statistics = statistics;
 	}
 
-	public void execute(String userEmail, String password) throws Exception {
+	public void execute() throws Exception {
 		ThreadLocalCookieStore.setCookieStore(new SimpleCookieStore());
 
-		String csrfToken = homePage();
+		HttpResponse httpResponse = homePage();
 
-		viewLoginPage(csrfToken);
+		_statistics.record("homePage", httpResponse.getDuration());
 
-		login(userEmail, password, csrfToken);
+		_statistics.record(
+			"viewLoginPage", viewLoginPage(httpResponse.getCSRFToken()));
 
-		logout();
+		_statistics.record(
+			"login", login(_userEmail, _password, httpResponse.getCSRFToken()));
+
+		_statistics.record("logout", logout());
 
 		ThreadLocalCookieStore.removeCookieStore();
 	}
+
+	private final String _password;
+	private final Statistics _statistics;
+	private final String _userEmail;
 
 }

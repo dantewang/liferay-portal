@@ -39,16 +39,16 @@ public class LoginBenchmarkTest {
 
 	@Before
 	public void setUp() throws Exception {
-		_benchmarksDir = new File(System.getProperty("benchmarksDir"));
+		File benchmarksDir = new File(System.getProperty("benchmarksDir"));
 		_threadCount = GetterUtil.getInteger(System.getProperty("threadCount"));
 		_runCount = GetterUtil.getInteger(System.getProperty("runCount"));
 
 		System.out.println(
 			StringBundler.concat(
-				"\nBenchmarks directory: ", _benchmarksDir.getCanonicalPath(),
+				"\nBenchmarks directory: ", benchmarksDir.getCanonicalPath(),
 				"\nRun count: ", _runCount, "\nThread count: ", _threadCount));
 
-		File userCSVFile = new File(_benchmarksDir, "user.csv");
+		File userCSVFile = new File(benchmarksDir, "user.csv");
 
 		if (userCSVFile.exists()) {
 			System.out.println(
@@ -69,15 +69,21 @@ public class LoginBenchmarkTest {
 
 		List<Future<Void>> futures = new ArrayList<>();
 
+		Statistics statistics = new Statistics(_runCount);
+
+		statistics.start();
+
 		for (int i = 0; i < _runCount; i++) {
 			String[] user = _userData[i % _userData.length];
 
 			futures.add(
 				executorService.submit(
 					() -> {
-						Login login = new Login(user[0], 8080);
+						Login login = new Login(
+							user[0], 8080, user[2] + "@liferay.com", "test",
+							statistics);
 
-						login.execute(user[2] + "@liferay.com", "test");
+						login.execute();
 
 						return null;
 					}));
@@ -86,6 +92,8 @@ public class LoginBenchmarkTest {
 		for (Future<Void> future : futures) {
 			future.get();
 		}
+
+		statistics.finish();
 	}
 
 	private String[][] _parseCSVFile(File csvFile) {
@@ -98,7 +106,7 @@ public class LoginBenchmarkTest {
 
 			int columnCount = 0;
 
-			while ((line != null) && (line.length() > 0)) {
+			while ((line != null) && !line.isEmpty()) {
 				List<String> entry = StringUtil.split(line);
 
 				if (columnCount == 0) {
@@ -122,7 +130,6 @@ public class LoginBenchmarkTest {
 		}
 	}
 
-	private File _benchmarksDir;
 	private int _runCount;
 	private int _threadCount;
 	private String[][] _userData;
