@@ -6,7 +6,6 @@
 package com.liferay.portal.benchmark.test.util;
 
 import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.benchmark.test.util.http.HttpResponse;
 import com.liferay.portal.benchmark.test.util.http.HttpUtil;
 
@@ -25,7 +24,7 @@ public abstract class BaseBenchmark {
 	}
 
 	public String homePage() throws Exception {
-		HttpResponse httpResponse = HttpUtil.doGet(_newURL("/"), null);
+		HttpResponse httpResponse = HttpUtil.doGet(_newURL("/web/guest"), null);
 
 		_assertResult(httpResponse, _KEY_HOME_PAGE);
 
@@ -118,17 +117,17 @@ public abstract class BaseBenchmark {
 
 	private static final String _URL_LOGIN_POPUP_REDIRECT =
 		StringBundler.concat(
-			"/home?p_p_id=", _P_P_ID, "&p_p_lifecycle=0&",
+			"/web/guest/home?p_p_id=", _P_P_ID, "&p_p_lifecycle=0&",
 			"p_p_state=exclusive&p_p_mode=view&", _P_P_ID_PREFIX,
 			"_mvcRenderCommandName=/login/login&saveLastPath=false");
 
 	private static final String _URL_LOGIN_POST = StringBundler.concat(
-		"/home?p_p_id=", _P_P_ID, "&p_p_lifecycle=1&",
+		"/web/guest/home?p_p_id=", _P_P_ID, "&p_p_lifecycle=1&",
 		"p_p_state=normal&p_p_mode=view&", _P_P_ID_PREFIX,
 		"_javax.portlet.action=/login/login&", _P_P_ID_PREFIX,
 		"_mvcRenderCommandName=/login/login");
 
-	private static final String _URL_LOGIN_REDIRECT = StringPool.SLASH;
+	private static final String _URL_LOGIN_REDIRECT = "/web/guest";
 
 	private static final String _URL_LOGOUT = "/c/portal/logout";
 
