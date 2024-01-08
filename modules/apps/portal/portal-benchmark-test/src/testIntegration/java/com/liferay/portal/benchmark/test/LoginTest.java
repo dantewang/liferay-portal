@@ -7,6 +7,7 @@ package com.liferay.portal.benchmark.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.benchmark.test.util.Login;
+import com.liferay.portal.benchmark.test.util.Statistics;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,13 @@ public class LoginTest {
 	public void testExecute() throws Exception {
 		Login login = new Login("localhost", 8080);
 
-		login.execute("test@liferay.com", "test");
+		Statistics statistics = new Statistics(1);
+
+		statistics.start();
+
+		login.execute("test@liferay.com", "test", statistics);
+
+		statistics.finish();
 	}
 
 }

@@ -69,6 +69,10 @@ public class LoginBenchmarkTest {
 
 		List<Future<Void>> futures = new ArrayList<>();
 
+		Statistics statistics = new Statistics(_runCount);
+
+		statistics.start();
+
 		for (int i = 0; i < _runCount; i++) {
 			String[] user = _userData[i % _userData.length];
 
@@ -77,7 +81,8 @@ public class LoginBenchmarkTest {
 					() -> {
 						Login login = new Login(user[0], 8080);
 
-						login.execute(user[2] + "@liferay.com", "test");
+						login.execute(
+							user[2] + "@liferay.com", "test", statistics);
 
 						return null;
 					}));
@@ -86,6 +91,8 @@ public class LoginBenchmarkTest {
 		for (Future<Void> future : futures) {
 			future.get();
 		}
+
+		statistics.finish();
 	}
 
 	private String[][] _parseCSVFile(File csvFile) {

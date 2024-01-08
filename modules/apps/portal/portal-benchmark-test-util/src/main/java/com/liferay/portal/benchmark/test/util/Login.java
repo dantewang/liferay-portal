@@ -17,16 +17,37 @@ public class Login extends BaseBenchmark {
 		super(hostName, port);
 	}
 
-	public void execute(String userEmail, String password) throws Exception {
+	public void execute(
+			String userEmail, String password, Statistics statistics)
+		throws Exception {
+
 		ThreadLocalCookieStore.setCookieStore(new SimpleCookieStore());
 
-		String csrfToken = homePage();
+		String csrfToken = statistics.record("homePage", this::homePage);
 
-		viewLoginPage(csrfToken);
+		statistics.record(
+			"viewLoginPage",
+			() -> {
+				viewLoginPage(csrfToken);
 
-		login(userEmail, password, csrfToken);
+				return null;
+			});
 
-		logout();
+		statistics.record(
+			"login",
+			() -> {
+				login(userEmail, password, csrfToken);
+
+				return null;
+			});
+
+		statistics.record(
+			"logout",
+			() -> {
+				logout();
+
+				return null;
+			});
 
 		ThreadLocalCookieStore.removeCookieStore();
 	}
