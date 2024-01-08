@@ -34,7 +34,7 @@ public class HttpResponse {
 	}
 
 	public String getCSRFToken() {
-		Matcher matcher = _csrfTokenPattern.matcher(getText());
+		Matcher matcher = _csrfTokenPattern.matcher(_text);
 
 		if (matcher.find()) {
 			return matcher.group(1);
@@ -47,31 +47,8 @@ public class HttpResponse {
 		return _duration;
 	}
 
-	public String getHeader(String name) {
-		List<String> headers = _headers.get(name);
-
-		if (ListUtil.isEmpty(headers)) {
-			return StringPool.BLANK;
-		}
-
-		StringBundler sb = new StringBundler(headers.size() * 2);
-
-		for (String header : headers) {
-			sb.append(header);
-			sb.append(StringPool.COMMA);
-		}
-
-		sb.setIndex(sb.index() - 1);
-
-		return sb.toString();
-	}
-
-	public Map<String, List<String>> getHeaders() {
-		return _headers;
-	}
-
 	public String getRedirect() throws Exception {
-		String location = getHeader("Location");
+		String location = _getHeader("Location");
 
 		if (location.contains("%")) {
 			location = URLDecoder.decode(location, "UTF-8");
@@ -82,14 +59,6 @@ public class HttpResponse {
 
 	public int getStatusCode() {
 		return _statusCode;
-	}
-
-	public String getStatusLine() {
-		return _statusLine;
-	}
-
-	public String getText() {
-		return _text;
 	}
 
 	@Override
@@ -118,6 +87,25 @@ public class HttpResponse {
 		}
 
 		sb.append(_text);
+
+		return sb.toString();
+	}
+
+	private String _getHeader(String name) {
+		List<String> headers = _headers.get(name);
+
+		if (ListUtil.isEmpty(headers)) {
+			return StringPool.BLANK;
+		}
+
+		StringBundler sb = new StringBundler(headers.size() * 2);
+
+		for (String header : headers) {
+			sb.append(header);
+			sb.append(StringPool.COMMA);
+		}
+
+		sb.setIndex(sb.index() - 1);
 
 		return sb.toString();
 	}
