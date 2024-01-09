@@ -57,7 +57,7 @@ public class LoginBenchmarkTest {
 			_userData = _parseCSVFile(userCSVFile);
 		}
 		else {
-			_userData = new String[][] {new String[] {"localhost", "", "test"}};
+			_userData = new String[][] {new String[] {"127.0.0.1", "", "test"}};
 		}
 	}
 

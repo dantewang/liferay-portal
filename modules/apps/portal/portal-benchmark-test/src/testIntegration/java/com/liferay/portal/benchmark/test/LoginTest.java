@@ -23,7 +23,7 @@ public class LoginTest {
 		Statistics statistics = new Statistics(1);
 
 		Login login = new Login(
-			"localhost", 8080, "test@liferay.com", "test", statistics);
+			"127.0.0.1", 8080, "test@liferay.com", "test", statistics);
 
 		statistics.start();
 
