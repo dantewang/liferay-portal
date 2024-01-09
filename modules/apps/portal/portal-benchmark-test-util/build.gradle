@@ -9,3 +9,9 @@ dependencies {
 liferay {
 	deployDir = file("${liferayHome}/osgi/test")
 }
+
+test {
+	systemProperty "benchmarksDir", System.getProperty("benchmarksDir", "../../../../benchmarks")
+	systemProperty "runCount", System.getProperty("runCount", "1")
+	systemProperty "threadCount", System.getProperty("threadCount", "1")
+}
