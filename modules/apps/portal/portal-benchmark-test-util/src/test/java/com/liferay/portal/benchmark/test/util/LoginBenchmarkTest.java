@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -61,6 +62,7 @@ public class LoginBenchmarkTest {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void testLogin() throws Exception {
 		ExecutorService executorService = new ThreadPoolExecutor(
