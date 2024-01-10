@@ -6,8 +6,7 @@
 package com.liferay.portal.benchmark.test.util;
 
 import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.sql.Connection;
@@ -108,7 +107,7 @@ public class LoginBenchmarkTest extends BaseBenchmarkTestCase {
 		if (!excludedCompanies.isEmpty()) {
 			sb.append("company.webId not in (");
 
-			for (int i = 0; i < excludedCompanies.size(); i ++) {
+			for (int i = 0; i < excludedCompanies.size(); i++) {
 				sb.append("'");
 				sb.append(excludedCompanies.get(i));
 				sb.append("'");
@@ -134,11 +133,17 @@ public class LoginBenchmarkTest extends BaseBenchmarkTestCase {
 			ResultSet resultSet = preparedStatement.executeQuery()) {
 
 			while (resultSet.next()) {
+				String password = resultSet.getString("password_");
+
+				if (password.startsWith(StringPool.OPEN_CURLY_BRACE)) {
+					password = password.substring(
+						password.indexOf(StringPool.CLOSE_CURLY_BRACE) + 1);
+				}
+
 				data.add(
 					new String[] {
 						resultSet.getString("hostname"),
-						resultSet.getString("emailAddress"),
-						resultSet.getString("password_")
+						resultSet.getString("emailAddress"), password
 					});
 			}
 		}
