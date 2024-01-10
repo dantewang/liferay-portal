@@ -6,6 +6,7 @@
 package com.liferay.portal.benchmark.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.benchmark.test.util.Login;
 
 import com.liferay.portal.benchmark.test.util.Statistics;
@@ -60,8 +61,15 @@ public class LoginTest {
 
 		user = _userLocalService.updateUser(user);
 
+		String password = user.getPassword();
+
+		if (password.startsWith(StringPool.OPEN_CURLY_BRACE)) {
+			password = password.substring(
+				password.indexOf(StringPool.CLOSE_CURLY_BRACE) + 1);
+		}
+
 		Login login = new Login(
-			"127.0.0.1", 8080, user.getEmailAddress(), user.getPassword(),
+			"127.0.0.1", 8080, user.getEmailAddress(), password,
 			new Statistics(1));
 
 		login.execute();
