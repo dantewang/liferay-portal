@@ -13,20 +13,21 @@ import com.liferay.portal.benchmark.test.util.Statistics;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.CompanyLocalService;
-import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.DataGuard;
-import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
-import com.liferay.portal.kernel.test.util.CompanyTestUtil;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.test.rule.SynchronousMailTestRule;
+import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsValues;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author Tina Tian
@@ -42,37 +43,50 @@ public class LoginTest {
 
 	@Test
 	public void testExecute() throws Exception {
-		Company company = CompanyTestUtil.addCompany();
+		Set<String> virtualHostsIgnoredHosts =
+			ReflectionTestUtil.getAndSetFieldValue(
+				PortalInstances.class, "_virtualHostsIgnoreHosts",
+				Collections.singleton("localhost"));
 
-		company.setVirtualHostname("127.0.0.1");
+		try {
+			String name = RandomTestUtil.randomString();
 
-		company = _companyLocalService.updateCompany(company);
+			Company company = _companyLocalService.addCompany(
+				null, name, "127.0.0.1",
+				name + "." + RandomTestUtil.randomString(3), 0, true, null,
+				null, null, null, null, null);
 
-		User user = _userLocalService.getUserByEmailAddress(
-			company.getCompanyId(),
-			PropsValues.DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX + "@" +
-			company.getMx());
+			User user = _userLocalService.getUserByEmailAddress(
+				company.getCompanyId(),
+				PropsValues.DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX + "@" +
+					company.getMx());
 
-		user.setPasswordReset(false);
-		user.setPasswordEncrypted(false);
-		user.setAgreedToTermsOfUse(true);
-		user.setReminderQueryQuestion("test");
-		user.setReminderQueryAnswer("test");
+			user.setPasswordReset(false);
+			user.setPasswordEncrypted(false);
+			user.setAgreedToTermsOfUse(true);
+			user.setReminderQueryQuestion("test");
+			user.setReminderQueryAnswer("test");
 
-		user = _userLocalService.updateUser(user);
+			user = _userLocalService.updateUser(user);
 
-		String password = user.getPassword();
+			String password = user.getPassword();
 
-		if (password.startsWith(StringPool.OPEN_CURLY_BRACE)) {
-			password = password.substring(
-				password.indexOf(StringPool.CLOSE_CURLY_BRACE) + 1);
+			if (password.startsWith(StringPool.OPEN_CURLY_BRACE)) {
+				password = password.substring(
+					password.indexOf(StringPool.CLOSE_CURLY_BRACE) + 1);
+			}
+
+			Login login = new Login(
+				"127.0.0.1", 8080, user.getEmailAddress(), password,
+				new Statistics(1));
+
+			login.execute();
 		}
-
-		Login login = new Login(
-			"127.0.0.1", 8080, user.getEmailAddress(), password,
-			new Statistics(1));
-
-		login.execute();
+		finally {
+			ReflectionTestUtil.setFieldValue(
+				PortalInstances.class, "_virtualHostsIgnoreHosts",
+				virtualHostsIgnoredHosts);
+		}
 	}
 
 	@Inject
