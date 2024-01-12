@@ -62,7 +62,6 @@ public class LoginTest {
 					company.getMx());
 
 			user.setPasswordReset(false);
-			user.setPasswordEncrypted(false);
 			user.setAgreedToTermsOfUse(true);
 			user.setReminderQueryQuestion("test");
 			user.setReminderQueryAnswer("test");
