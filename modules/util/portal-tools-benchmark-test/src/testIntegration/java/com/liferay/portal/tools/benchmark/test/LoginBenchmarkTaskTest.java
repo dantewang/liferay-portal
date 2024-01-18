@@ -6,6 +6,7 @@
 package com.liferay.portal.tools.benchmark.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.VirtualHost;
@@ -26,6 +27,7 @@ import com.liferay.portal.util.PortalInstances;
 import java.util.Collections;
 import java.util.Set;
 
+import com.liferay.portal.util.PropsValues;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -49,6 +51,11 @@ public class LoginBenchmarkTaskTest {
 	public void setUp() {
 		_originalPrincipalName = PrincipalThreadLocal.getName();
 
+		_originalVirtualHostsDefaultSiteName =
+			PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME;
+
+		PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME = StringPool.BLANK;
+
 		_originalVirtualHostsIgnoredHosts =
 			ReflectionTestUtil.getAndSetFieldValue(
 				PortalInstances.class, "_virtualHostsIgnoreHosts",
@@ -58,6 +65,9 @@ public class LoginBenchmarkTaskTest {
 	@After
 	public void tearDown() {
 		PrincipalThreadLocal.setName(_originalPrincipalName);
+
+		PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME =
+			_originalVirtualHostsDefaultSiteName;
 
 		ReflectionTestUtil.setFieldValue(
 			PortalInstances.class, "_virtualHostsIgnoreHosts",
@@ -107,6 +117,8 @@ public class LoginBenchmarkTaskTest {
 
 	@Inject
 	private CompanyLocalService _companyLocalService;
+
+	private String _originalVirtualHostsDefaultSiteName;
 
 	private String _originalPrincipalName;
 	private Set<String> _originalVirtualHostsIgnoredHosts;

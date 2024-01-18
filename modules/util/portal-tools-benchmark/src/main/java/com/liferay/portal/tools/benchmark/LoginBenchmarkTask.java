@@ -108,7 +108,7 @@ public class LoginBenchmarkTask implements BenchmarkTask {
 	}
 
 	private HttpResponse _homePage() throws Exception {
-		HttpResponse httpResponse = HttpUtil.doGet(_newURL("/"), null);
+		HttpResponse httpResponse = HttpUtil.doGet(_newURL("/web/guest"), null);
 
 		_assertResult(httpResponse, _KEY_HOME_PAGE);
 
