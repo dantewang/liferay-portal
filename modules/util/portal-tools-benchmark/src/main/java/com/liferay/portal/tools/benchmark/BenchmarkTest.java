@@ -34,12 +34,6 @@ public class BenchmarkTest {
 
 	public static void main(String[] args) throws Exception {
 		for (String arg : args) {
-			if (!arg.startsWith("-D")) {
-				throw new IllegalArgumentException(
-					"Only support system property, please add '-D' before " +
-						"argument " + arg);
-			}
-
 			int pos = arg.indexOf('=');
 
 			if (pos <= 0) {
@@ -63,21 +57,23 @@ public class BenchmarkTest {
 				"benchmark.test.excluded.companies", "liferay.com"));
 		_driverClassName = System.getProperty(
 			"benchmark.test.jdbc.driverClassName", "com.mysql.cj.jdbc.Driver");
-		_jdbcUrl = System.getProperty(
+		_jdbcURL = System.getProperty(
 			"benchmark.test.jdbc.url",
 			StringBundler.concat(
 				"jdbc:mysql://localhost/lportal?characterEncoding=UTF-8&",
 				"dontTrackOpenResources=true&holdResultsOpenOverStatementClose",
 				"=true&serverTimezone=GMT&useFastDateParsing=false&",
 				"useUnicode=true"));
-		_jdbcUserName = System.getProperty("benchmark.test.jdbc.username", "");
-		_jdbcPassword = System.getProperty("benchmark.test.jdbc.password", "");
+		_jdbcUserName = System.getProperty(
+			"benchmark.test.jdbc.username", StringPool.BLANK);
+		_jdbcPassword = System.getProperty(
+			"benchmark.test.jdbc.password", StringPool.BLANK);
 		_runCount = Integer.valueOf(
-			System.getProperty("benchmark.test.run.count", "1"));
+			System.getProperty("benchmark.test.run.count", 1));
 		_skipWarmUp = Boolean.valueOf(
-			System.getProperty("benchmark.test.skip.warm.up", "false"));
+			System.getProperty("benchmark.test.skip.warm.up", false));
 		_threadCount = Integer.valueOf(
-			System.getProperty("benchmark.test.thread.count", "1"));
+			System.getProperty("benchmark.test.thread.count", 1));
 		_userPassword = System.getProperty(
 			"benchmark.test.user.password", "test");
 
@@ -88,7 +84,7 @@ public class BenchmarkTest {
 		sb.append("\n	JDBC Driver Class Name: ");
 		sb.append(_driverClassName);
 		sb.append("\n	JDBC URL: ");
-		sb.append(_jdbcUrl);
+		sb.append(_jdbcURL);
 		sb.append("\n	JDBC User Name: ");
 		sb.append(_jdbcUserName);
 		sb.append("\n	JDBC Password: ");
@@ -162,10 +158,10 @@ public class BenchmarkTest {
 		properties.put("user", _jdbcUserName);
 
 		try (Connection connection = DriverManager.getConnection(
-				_jdbcUrl, properties);
-			PreparedStatement preparedStatement = connection.prepareStatement(
+			_jdbcURL, properties);
+			 PreparedStatement preparedStatement = connection.prepareStatement(
 				loadDataSQL);
-			ResultSet resultSet = preparedStatement.executeQuery()) {
+			 ResultSet resultSet = preparedStatement.executeQuery()) {
 
 			while (resultSet.next()) {
 				data.add(loadDataUnsafeFunction.apply(resultSet));
@@ -254,7 +250,7 @@ public class BenchmarkTest {
 	private final String _driverClassName;
 	private final List<String> _excludedCompanies;
 	private final String _jdbcPassword;
-	private final String _jdbcUrl;
+	private final String _jdbcURL;
 	private final String _jdbcUserName;
 	private final int _runCount;
 	private final boolean _skipWarmUp;
