@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.osgi.web.http.servlet.internal.servlet.LiferayResponseStateHandler;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -174,7 +175,7 @@ public class LiferayDispatchTargets extends DispatchTargets {
 			httpServletRequestWrapperImpl.push(this);
 
 			ResponseStateHandler responseStateHandler =
-				new ResponseStateHandler(
+				new LiferayResponseStateHandler(
 					httpServletRequest, httpServletResponse, this);
 
 			responseStateHandler.processRequest();
