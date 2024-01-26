@@ -5,15 +5,17 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.context;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.URLCodec;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-
-import java.net.URLDecoder;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,7 +39,6 @@ import org.eclipse.equinox.http.servlet.internal.registration.FilterRegistration
 import org.eclipse.equinox.http.servlet.internal.servlet.HttpServletRequestWrapperImpl;
 import org.eclipse.equinox.http.servlet.internal.servlet.HttpServletResponseWrapperImpl;
 import org.eclipse.equinox.http.servlet.internal.servlet.ResponseStateHandler;
-import org.eclipse.equinox.http.servlet.internal.util.Const;
 import org.eclipse.equinox.http.servlet.internal.util.Params;
 
 /**
@@ -60,7 +61,7 @@ public class LiferayDispatchTargets extends DispatchTargets {
 		_endpointRegistration = endpointRegistration;
 		_servletName = servletName;
 		_requestURI = requestURI;
-		_servletPath = (servletPath == null) ? Const.BLANK : servletPath;
+		_servletPath = GetterUtil.getString(servletPath);
 		_pathInfo = pathInfo;
 		_queryString = queryString;
 
@@ -282,48 +283,42 @@ public class LiferayDispatchTargets extends DispatchTargets {
 	}
 
 	private Map<String, String[]> _parseParameterMap(String queryString) {
-		if ((queryString == null) || (queryString.length() == 0)) {
+		if (Validator.isBlank(queryString)) {
 			return new HashMap<>();
 		}
 
-		try {
-			Map<String, String[]> parameterMap = new LinkedHashMap<>();
+		Map<String, String[]> parameterMap = new LinkedHashMap<>();
 
-			String[] parameters = queryString.split(Const.AMP);
+		String[] parameters = StringUtil.split(
+			queryString, StringPool.AMPERSAND);
 
-			for (String parameter : parameters) {
-				int index = parameter.indexOf('=');
+		for (String parameter : parameters) {
+			int index = parameter.indexOf('=');
 
-				String name = parameter;
+			String name = parameter;
 
-				if (index > 0) {
-					name = URLDecoder.decode(
-						parameter.substring(0, index), Const.UTF8);
-				}
-
-				String[] values = parameterMap.get(name);
-
-				if (values == null) {
-					values = new String[0];
-				}
-
-				String value = null;
-
-				if ((index > 0) && (parameter.length() > (index + 1))) {
-					value = URLDecoder.decode(
-						parameter.substring(index + 1), Const.UTF8);
-				}
-
-				values = Params.append(values, value);
-
-				parameterMap.put(name, values);
+			if (index > 0) {
+				name = URLCodec.decodeURL(parameter.substring(0, index));
 			}
 
-			return parameterMap;
+			String[] values = parameterMap.get(name);
+
+			if (values == null) {
+				values = new String[0];
+			}
+
+			String value = null;
+
+			if ((index > 0) && (parameter.length() > (index + 1))) {
+				value = URLCodec.decodeURL(parameter.substring(index + 1));
+			}
+
+			values = Params.append(values, value);
+
+			parameterMap.put(name, values);
 		}
-		catch (UnsupportedEncodingException unsupportedEncodingException) {
-			throw new RuntimeException(unsupportedEncodingException);
-		}
+
+		return parameterMap;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
