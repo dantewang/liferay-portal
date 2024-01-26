@@ -352,7 +352,7 @@ public class LiferayContextController extends ContextController {
 		}
 
 		if (_filterRegistrations.isEmpty()) {
-			return new DispatchTargets(
+			return new LiferayDispatchTargets(
 				this, endpointRegistration, servletName, requestURI,
 				servletPath, pathInfo, queryString);
 		}
@@ -381,7 +381,7 @@ public class LiferayContextController extends ContextController {
 			}
 		}
 
-		return new DispatchTargets(
+		return new LiferayDispatchTargets(
 			this, endpointRegistration, matchingFilterRegistrations,
 			servletName, requestURI, servletPath, pathInfo, queryString);
 	}
