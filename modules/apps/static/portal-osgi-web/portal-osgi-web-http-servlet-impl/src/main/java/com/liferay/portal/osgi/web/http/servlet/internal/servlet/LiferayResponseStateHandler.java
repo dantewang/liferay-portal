@@ -205,11 +205,9 @@ public class LiferayResponseStateHandler extends ResponseStateHandler {
 
 		Class<? extends Exception> clazz = _exception.getClass();
 
-		final String className = clazz.getName();
-
 		DispatchTargets errorDispatchTargets =
 			contextController.getDispatchTargets(
-				className, null, null, null, null, null, Match.EXACT);
+				clazz.getName(), null, null, null, null, null, Match.EXACT);
 
 		if (errorDispatchTargets == null) {
 			_throwException(_exception);
@@ -239,7 +237,7 @@ public class LiferayResponseStateHandler extends ResponseStateHandler {
 										RequestDispatcher.
 											ERROR_EXCEPTION_TYPE)) {
 
-								return className;
+								return clazz.getName();
 							}
 							else if (attributeName.equals(
 										RequestDispatcher.ERROR_MESSAGE)) {
@@ -275,15 +273,13 @@ public class LiferayResponseStateHandler extends ResponseStateHandler {
 
 				};
 
-			httpServletResponseWrapperImpl = new HttpServletResponseWrapperImpl(
-				httpServletResponse);
-
-			ResponseStateHandler responseStateHandler =
-				new ResponseStateHandler(
-					httpServletRequest, httpServletResponseWrapperImpl,
+			LiferayResponseStateHandler liferayResponseStateHandler =
+				new LiferayResponseStateHandler(
+					httpServletRequest,
+					new HttpServletResponseWrapperImpl(httpServletResponse),
 					errorDispatchTargets);
 
-			responseStateHandler.processRequest();
+			liferayResponseStateHandler.processRequest();
 
 			httpServletResponse.setStatus(
 				HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -383,17 +379,15 @@ public class LiferayResponseStateHandler extends ResponseStateHandler {
 
 				};
 
-			HttpServletResponseWrapper httpServletResponseWrapper =
-				new HttpServletResponseWrapperImpl(httpServletResponse);
-
-			ResponseStateHandler responseStateHandler =
-				new ResponseStateHandler(
-					httpServletRequest, httpServletResponseWrapper,
+			LiferayResponseStateHandler liferayResponseStateHandler =
+				new LiferayResponseStateHandler(
+					httpServletRequest,
+					new HttpServletResponseWrapperImpl(httpServletResponse),
 					errorDispatchTargets);
 
 			httpServletResponse.setStatus(status);
 
-			responseStateHandler.processRequest();
+			liferayResponseStateHandler.processRequest();
 		}
 		finally {
 			httpServletRequestWrapperImpl.pop();
