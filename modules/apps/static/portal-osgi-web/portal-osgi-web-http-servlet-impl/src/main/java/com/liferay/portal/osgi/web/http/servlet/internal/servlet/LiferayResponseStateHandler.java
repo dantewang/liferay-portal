@@ -97,23 +97,24 @@ public class LiferayResponseStateHandler extends ResponseStateHandler {
 			ServletContextHelper servletContextHelper =
 				endpointRegistration.getServletContextHelper();
 
-			if (servletContextHelper.handleSecurity(
+			if (!servletContextHelper.handleSecurity(
 					_httpServletRequest, _httpServletResponse)) {
 
-				if (matchingFilterRegistrations.isEmpty()) {
-					endpointRegistration.service(
-						_httpServletRequest, _httpServletResponse);
-				}
-				else {
-					Collections.sort(matchingFilterRegistrations);
+				return;
+			}
 
-					FilterChain filterChain = new FilterChainImpl(
-						matchingFilterRegistrations, endpointRegistration,
-						_dispatchTargets.getDispatcherType());
+			if (matchingFilterRegistrations.isEmpty()) {
+				endpointRegistration.service(
+					_httpServletRequest, _httpServletResponse);
+			}
+			else {
+				Collections.sort(matchingFilterRegistrations);
 
-					filterChain.doFilter(
-						_httpServletRequest, _httpServletResponse);
-				}
+				FilterChain filterChain = new FilterChainImpl(
+					matchingFilterRegistrations, endpointRegistration,
+					_dispatchTargets.getDispatcherType());
+
+				filterChain.doFilter(_httpServletRequest, _httpServletResponse);
 			}
 		}
 		catch (Exception exception) {
