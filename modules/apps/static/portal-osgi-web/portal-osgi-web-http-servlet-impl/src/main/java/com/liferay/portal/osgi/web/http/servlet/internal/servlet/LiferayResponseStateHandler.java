@@ -165,30 +165,9 @@ public class LiferayResponseStateHandler extends ResponseStateHandler {
 			throw new IllegalStateException("Response is not a wrapper");
 		}
 
-		HttpServletResponseWrapper httpServletResponseWrapper =
-			(HttpServletResponseWrapper)_httpServletResponse;
-
-		HttpServletResponseWrapperImpl httpServletResponseWrapperImpl = null;
-
-		while (true) {
-			if (httpServletResponseWrapper instanceof
-					HttpServletResponseWrapperImpl) {
-
-				httpServletResponseWrapperImpl =
-					(HttpServletResponseWrapperImpl)httpServletResponseWrapper;
-			}
-			else if (httpServletResponseWrapper.getResponse() instanceof
-						HttpServletResponseWrapper) {
-
-				httpServletResponseWrapper =
-					(HttpServletResponseWrapper)
-						httpServletResponseWrapper.getResponse();
-
-				continue;
-			}
-
-			break;
-		}
+		HttpServletResponseWrapperImpl httpServletResponseWrapperImpl =
+			HttpServletResponseWrapperImpl.findHttpRuntimeResponse(
+				_httpServletResponse);
 
 		if (httpServletResponseWrapperImpl == null) {
 			throw new IllegalStateException("Can not locate response");
