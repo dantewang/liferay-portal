@@ -1,3 +1,2 @@
 Bundle-SymbolicName: org.jboss.weld.osgi-bundle
 Bundle-Version: 3.0.5.Final.LIFERAY-PATCHED-1
-Import-Package:

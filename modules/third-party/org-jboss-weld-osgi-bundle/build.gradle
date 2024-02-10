@@ -5,8 +5,9 @@ apply plugin: "com.liferay.patcher"
 task patch(type: PatchTask)
 
 dependencies {
-	compileOnly group: "org.jboss.classfilewriter", name: "jboss-classfilewriter", version: "1.2.4.Final"
 	compileInclude group: "org.jboss.weld", name: "weld-osgi-bundle", version: "3.0.5.Final"
+
+	compileOnly group: "org.jboss.classfilewriter", name: "jboss-classfilewriter", version: "1.2.4.Final"
 }
 
 patch {
