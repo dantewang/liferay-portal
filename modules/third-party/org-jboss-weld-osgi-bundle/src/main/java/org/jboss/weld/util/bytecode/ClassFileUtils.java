@@ -35,6 +35,7 @@ import sun.misc.Unsafe;
  *
  * @author Stuart Douglas
  * @author Matej Novotny
+ * @generated
  */
 public class ClassFileUtils {
 
@@ -50,21 +51,29 @@ public class ClassFileUtils {
                     Class<?> cl = Class.forName("java.lang.ClassLoader");
                     final String name = "defineClass";
 
-                    // get Unsafe singleton instance
-                    Field singleoneInstanceField = Unsafe.class.getDeclaredField("theUnsafe");
-                    singleoneInstanceField.setAccessible(true);
-                    Unsafe theUnsafe = (Unsafe) singleoneInstanceField.get(null);
+                    defineClass1 = cl.getDeclaredMethod(name, String.class, byte[].class, int.class, int.class);
+                    defineClass2 = cl.getDeclaredMethod(name, String.class, byte[].class, int.class, int.class, ProtectionDomain.class);
 
-                    // get the offset of the override field in AccessibleObject
-                    long overrideOffset = theUnsafe.objectFieldOffset(AccessibleObject.class.getDeclaredField("override"));
+                    // First try with Unsafe to avoid illegal access
+                    try {
+                        // get Unsafe singleton instance
+                        Field singleoneInstanceField = Unsafe.class.getDeclaredField("theUnsafe");
+                        singleoneInstanceField.setAccessible(true);
+                        Unsafe theUnsafe = (Unsafe) singleoneInstanceField.get(null);
 
-                    defineClass1 = cl.getDeclaredMethod(name, new Class[] { String.class, byte[].class, int.class, int.class });
-                    defineClass2 = cl.getDeclaredMethod(name, new Class[] { String.class, byte[].class, int.class, int.class, ProtectionDomain.class });
+                        // get the offset of the override field in AccessibleObject
+                        long overrideOffset = theUnsafe.objectFieldOffset(AccessibleObject.class.getDeclaredField("override"));
 
-                    // make both accessible
-                    theUnsafe.putBoolean(defineClass1, overrideOffset, true);
-                    theUnsafe.putBoolean(defineClass2, overrideOffset, true);
-                    return null;
+                        // make both accessible
+                        theUnsafe.putBoolean(defineClass1, overrideOffset, true);
+                        theUnsafe.putBoolean(defineClass2, overrideOffset, true);
+                        return null;
+                    } catch (NoSuchFieldException e) {
+                        // This is JDK 12+, the "override" field isn't there anymore, fallback to setAccessible()
+                        defineClass1.setAccessible(true);
+                        defineClass2.setAccessible(true);
+                        return null;
+                    }
                 }
             });
         } catch (PrivilegedActionException pae) {
