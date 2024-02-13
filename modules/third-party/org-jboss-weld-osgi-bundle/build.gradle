@@ -1,0 +1,20 @@
+import com.liferay.gradle.plugins.patcher.PatchTask
+
+apply plugin: "com.liferay.patcher"
+
+task patch(type: PatchTask)
+
+dependencies {
+	compileOnly group: "org.jboss.classfilewriter", name: "jboss-classfilewriter", version: "1.2.4.Final"
+	compileInclude group: "org.jboss.weld", name: "weld-osgi-bundle", version: "3.0.5.Final"
+}
+
+patch {
+	ext {
+		autoClean = false
+	}
+
+	fileNames "org/jboss/weld/util/bytecode/ClassFileUtils.java"
+
+	originalLibModuleName = "weld-osgi-bundle"
+}
