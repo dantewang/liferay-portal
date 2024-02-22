@@ -1,31 +1,19 @@
 <#assign
-	layoutModel = dataFactory.newLayoutModel(guestGroupModel.groupId, "segments_experience_layout", "", "")
-
-	layoutModelInserted = false
-
-	segmentsExperienceCount = 1
+	segmentEntries = dataFactory.newSegmentsEntries(guestGroupModel.groupId)
 />
 
-<#list dataFactory.getSequence(dataFactory.maxSegmentsEntryCount) as i>
+<#list segmentEntries as segmentEntry>
+	${dataFactory.toInsertSQL(segmentEntry)}
+</#list>
+
+<#list dataFactory.getSequence(dataFactory.maxSegmentsEntrySegmentsExperienceCount) as i>
 	<#assign
-		segmentEntryModel = dataFactory.newSegmentsEntry(guestGroupModel.groupId, i)
+		layoutModel = dataFactory.newLayoutModel(guestGroupModel.groupId, "segments_experience_layout_" + i, "", "")
 	/>
 
-	${dataFactory.toInsertSQL(segmentEntryModel)}
+	${dataFactory.toInsertSQL(layoutModel)}
 
-	<#list dataFactory.getSequence(dataFactory.maxSegmentsEntrySegmentsExperienceCount) as j>
-		<#if layoutModelInserted = false>
-			${dataFactory.toInsertSQL(layoutModel)}
-
-			<#assign
-				layoutModelInserted = true
-			/>
-		</#if>
-
-		${dataFactory.toInsertSQL(dataFactory.newSegmentsExperience(guestGroupModel.groupId, segmentsExperienceCount, layoutModel.plid, segmentEntryModel.segmentsEntryId))}
-
-		<#assign
-			segmentsExperienceCount = segmentsExperienceCount + 1
-		/>
+	<#list segmentEntries as segmentEntry>
+		${dataFactory.toInsertSQL(dataFactory.newSegmentsExperience(guestGroupModel.groupId, layoutModel.plid, segmentEntry.segmentsEntryId))}
 	</#list>
 </#list>
