@@ -36,7 +36,8 @@ public class ConfigurationSynchronousConfigurationListener
 
 	@Override
 	public void configurationEvent(ConfigurationEvent configurationEvent) {
-		if (ConfigurationThreadLocal.isLocalUpdate() ||
+		if (ClusterConfigurationThreadLocal.
+				isProcessingClusterConfigurationEvent() ||
 			InMemoryOnlyConfigurationThreadLocal.isInMemoryOnly()) {
 
 			return;
@@ -83,7 +84,8 @@ public class ConfigurationSynchronousConfigurationListener
 			pid);
 
 		try {
-			ConfigurationThreadLocal.setLocalUpdate(true);
+			ClusterConfigurationThreadLocal.
+				setProcessingClusterConfigurationEvent(true);
 
 			Configuration[] configurations =
 				_configurationAdmin.listConfigurations(
@@ -126,7 +128,8 @@ public class ConfigurationSynchronousConfigurationListener
 			}
 		}
 		finally {
-			ConfigurationThreadLocal.setLocalUpdate(false);
+			ClusterConfigurationThreadLocal.
+				setProcessingClusterConfigurationEvent(false);
 		}
 	}
 
