@@ -6,8 +6,10 @@
 package com.liferay.segments.context.vocabulary.internal.configuration.persistence.listener;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.aop.AopService;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListenerException;
+import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -24,8 +26,14 @@ import org.osgi.service.component.annotations.Reference;
  * @author Janis Zhang
  */
 public abstract class BaseConfigurationModelListener
-	implements ConfigurationModelListener {
+	implements AopService, ConfigurationModelListener {
 
+	@Override
+	public Class<?>[] getAopInterfaces() {
+		return new Class<?>[] {ConfigurationModelListener.class};
+	}
+
+	@Clusterable
 	@Override
 	public void onBeforeSave(String pid, Dictionary<String, Object> properties)
 		throws ConfigurationModelListenerException {

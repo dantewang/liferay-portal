@@ -7,8 +7,10 @@ package com.liferay.document.library.asset.auto.tagger.tensorflow.internal.confi
 
 import com.liferay.document.library.asset.auto.tagger.tensorflow.internal.configuration.TensorFlowImageAssetAutoTagProviderCompanyConfiguration;
 import com.liferay.document.library.asset.auto.tagger.tensorflow.internal.constants.TensorFlowDestinationNames;
+import com.liferay.portal.aop.AopService;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
+import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 
@@ -22,12 +24,18 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	property = "model.class.name=com.liferay.document.library.asset.auto.tagger.tensorflow.internal.configuration.TensorFlowImageAssetAutoTagProviderCompanyConfiguration",
-	service = ConfigurationModelListener.class
+	service = AopService.class
 )
 public class
 	TensorFlowImageAssetAutoTagProviderCompanyConfigurationModelListener
-		implements ConfigurationModelListener {
+		implements AopService, ConfigurationModelListener {
 
+	@Override
+	public Class<?>[] getAopInterfaces() {
+		return new Class<?>[] {ConfigurationModelListener.class};
+	}
+
+	@Clusterable
 	@Override
 	public void onAfterSave(String pid, Dictionary<String, Object> properties) {
 		TensorFlowImageAssetAutoTagProviderCompanyConfiguration

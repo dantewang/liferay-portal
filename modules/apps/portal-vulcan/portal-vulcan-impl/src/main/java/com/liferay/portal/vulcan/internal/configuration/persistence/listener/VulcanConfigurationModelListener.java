@@ -5,7 +5,7 @@
 
 package com.liferay.portal.vulcan.internal.configuration.persistence.listener;
 
-import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
+import com.liferay.portal.aop.AopService;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -19,7 +19,7 @@ import org.osgi.service.component.runtime.ServiceComponentRuntime;
  */
 @Component(
 	property = "model.class.name=com.liferay.portal.vulcan.internal.configuration.VulcanConfiguration",
-	service = ConfigurationModelListener.class
+	service = AopService.class
 )
 public class VulcanConfigurationModelListener
 	extends BaseConfigurationModelListener {

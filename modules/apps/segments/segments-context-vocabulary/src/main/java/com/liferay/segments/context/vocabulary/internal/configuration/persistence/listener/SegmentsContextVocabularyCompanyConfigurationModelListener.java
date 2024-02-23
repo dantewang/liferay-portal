@@ -5,7 +5,7 @@
 
 package com.liferay.segments.context.vocabulary.internal.configuration.persistence.listener;
 
-import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
+import com.liferay.portal.aop.AopService;
 import com.liferay.segments.context.vocabulary.internal.configuration.SegmentsContextVocabularyCompanyConfiguration;
 
 import org.osgi.service.component.annotations.Component;
@@ -15,7 +15,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = "model.class.name=com.liferay.segments.context.vocabulary.internal.configuration.SegmentsContextVocabularyCompanyConfiguration",
-	service = ConfigurationModelListener.class
+	service = AopService.class
 )
 public class SegmentsContextVocabularyCompanyConfigurationModelListener
 	extends BaseConfigurationModelListener {
