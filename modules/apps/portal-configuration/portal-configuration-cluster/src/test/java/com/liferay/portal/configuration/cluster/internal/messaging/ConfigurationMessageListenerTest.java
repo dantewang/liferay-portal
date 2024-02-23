@@ -6,8 +6,8 @@
 package com.liferay.portal.configuration.cluster.internal.messaging;
 
 import com.liferay.petra.function.UnsafeConsumer;
+import com.liferay.portal.configuration.cluster.internal.ConfigurationSynchronousConfigurationListener;
 import com.liferay.portal.configuration.persistence.ReloadablePersistenceManager;
-import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
@@ -27,7 +27,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import org.osgi.framework.Constants;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
@@ -46,14 +45,15 @@ public class ConfigurationMessageListenerTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
 
-		_configurationMessageListener = new ConfigurationMessageListener();
+		_configurationSynchronousConfigurationListener =
+			new ConfigurationSynchronousConfigurationListener();
 
 		ReflectionTestUtil.setFieldValue(
-			_configurationMessageListener, "_configurationAdmin",
-			_configurationAdmin);
+			_configurationSynchronousConfigurationListener,
+			"_configurationAdmin", _configurationAdmin);
 		ReflectionTestUtil.setFieldValue(
-			_configurationMessageListener, "_reloadablePersistenceManager",
-			_reloadablePersistenceManager);
+			_configurationSynchronousConfigurationListener,
+			"_reloadablePersistenceManager", _reloadablePersistenceManager);
 	}
 
 	@Test
@@ -197,12 +197,10 @@ public class ConfigurationMessageListenerTest {
 			new Configuration[] {configuration}
 		);
 
-		Message message = new Message();
-
-		message.put(Constants.SERVICE_PID, "test");
-		message.put("configuration.event.type", configuratonEventType);
-
-		_configurationMessageListener.doReceive(message);
+		ReflectionTestUtil.invoke(
+			_configurationSynchronousConfigurationListener,
+			"_reloadConfiguration", new Class<?>[] {String.class, int.class},
+			"test", configuratonEventType);
 
 		unsafeConsumer.accept(configuration);
 	}
@@ -210,7 +208,8 @@ public class ConfigurationMessageListenerTest {
 	@Mock
 	private ConfigurationAdmin _configurationAdmin;
 
-	private ConfigurationMessageListener _configurationMessageListener;
+	private ConfigurationSynchronousConfigurationListener
+		_configurationSynchronousConfigurationListener;
 
 	@Mock
 	private ReloadablePersistenceManager _reloadablePersistenceManager;
