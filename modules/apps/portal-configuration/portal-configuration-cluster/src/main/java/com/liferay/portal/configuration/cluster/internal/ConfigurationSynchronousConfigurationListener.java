@@ -6,6 +6,7 @@
 package com.liferay.portal.configuration.cluster.internal;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.configuration.persistence.ClusterConfigurationThreadLocal;
 import com.liferay.portal.configuration.persistence.InMemoryOnlyConfigurationThreadLocal;
 import com.liferay.portal.configuration.persistence.ReloadablePersistenceManager;
 import com.liferay.portal.kernel.cluster.ClusterExecutor;

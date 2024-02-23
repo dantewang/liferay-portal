@@ -10,6 +10,7 @@ import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.configuration.persistence.ClusterConfigurationThreadLocal;
 import com.liferay.portal.configuration.persistence.ConfigurationOverridePropertiesUtil;
 import com.liferay.portal.configuration.persistence.InMemoryOnlyConfigurationThreadLocal;
 import com.liferay.portal.configuration.persistence.ReloadablePersistenceManager;
@@ -80,6 +81,12 @@ public class ConfigurationPersistenceManager
 
 	@Override
 	public void delete(String pid) throws IOException {
+		if (ClusterConfigurationThreadLocal.
+				isProcessingClusterConfigurationEvent()) {
+
+			return;
+		}
+
 		String pidKey = null;
 
 		if (!pid.endsWith("factory")) {
@@ -239,6 +246,12 @@ public class ConfigurationPersistenceManager
 	public void store(
 			String pid, @SuppressWarnings("rawtypes") Dictionary dictionary)
 		throws IOException {
+
+		if (ClusterConfigurationThreadLocal.
+				isProcessingClusterConfigurationEvent()) {
+
+			return;
+		}
 
 		String pidKey = null;
 
