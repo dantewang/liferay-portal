@@ -6,8 +6,10 @@
 package com.liferay.portal.security.ldap.internal.scheduler;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.aop.AopService;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
-import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
+import com.liferay.portal.configuration.persistence.listener.AopConfigurationModelListener;
+import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
@@ -37,8 +39,7 @@ public class UserImportSchedulerComponentFactory {
 	@Activate
 	protected void activate(BundleContext bundleContext) throws Exception {
 		_serviceRegistration = bundleContext.registerService(
-			ConfigurationModelListener.class,
-			new LDAPImportConfigurationModelListener(),
+			AopService.class, new LDAPImportConfigurationModelListener(),
 			HashMapDictionaryBuilder.<String, Object>put(
 				"model.class.name", _PID
 			).build());
@@ -98,12 +99,12 @@ public class UserImportSchedulerComponentFactory {
 	@Reference
 	private ConfigurationAdmin _configurationAdmin;
 
-	private ServiceRegistration<ConfigurationModelListener>
-		_serviceRegistration;
+	private ServiceRegistration<AopService> _serviceRegistration;
 
 	private class LDAPImportConfigurationModelListener
-		implements ConfigurationModelListener {
+		implements AopConfigurationModelListener {
 
+		@Clusterable
 		@Override
 		public void onAfterDelete(String pid) {
 			if (!StringUtil.equals(pid, _PID)) {
@@ -113,6 +114,7 @@ public class UserImportSchedulerComponentFactory {
 			_updateComponentInstance(_EMPTY_PROPERTIES);
 		}
 
+		@Clusterable
 		@Override
 		public void onAfterSave(
 			String pid, Dictionary<String, Object> properties) {

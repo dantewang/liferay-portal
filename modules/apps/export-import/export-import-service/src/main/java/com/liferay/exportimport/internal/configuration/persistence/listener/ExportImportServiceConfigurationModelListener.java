@@ -9,9 +9,11 @@ import com.liferay.exportimport.configuration.ExportImportServiceConfiguration;
 import com.liferay.exportimport.configuration.ExportImportServiceConfigurationWhitelistedURLPatternsHelper;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.aop.AopService;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
-import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
+import com.liferay.portal.configuration.persistence.listener.AopConfigurationModelListener;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListenerException;
+import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.service.Snapshot;
@@ -30,11 +32,12 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	property = "model.class.name=com.liferay.exportimport.configuration.ExportImportServiceConfiguration",
-	service = ConfigurationModelListener.class
+	service = AopService.class
 )
 public class ExportImportServiceConfigurationModelListener
-	implements ConfigurationModelListener {
+	implements AopConfigurationModelListener {
 
+	@Clusterable
 	@Override
 	public void onAfterDelete(String pid) {
 		ExportImportServiceConfigurationWhitelistedURLPatternsHelper
@@ -46,6 +49,7 @@ public class ExportImportServiceConfigurationModelListener
 			removeURLPatternMappers();
 	}
 
+	@Clusterable
 	@Override
 	public void onAfterSave(String pid, Dictionary<String, Object> properties)
 		throws ConfigurationModelListenerException {
@@ -67,6 +71,7 @@ public class ExportImportServiceConfigurationModelListener
 		}
 	}
 
+	@Clusterable
 	@Override
 	public void onBeforeSave(String pid, Dictionary<String, Object> properties)
 		throws ConfigurationModelListenerException {

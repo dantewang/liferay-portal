@@ -8,10 +8,12 @@ package com.liferay.portal.search.elasticsearch.cross.cluster.replication.intern
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
-import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
+import com.liferay.portal.aop.AopService;
+import com.liferay.portal.configuration.persistence.listener.AopConfigurationModelListener;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListenerException;
 import com.liferay.portal.kernel.cluster.ClusterExecutor;
 import com.liferay.portal.kernel.cluster.ClusterNode;
+import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -41,11 +43,12 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	enabled = false,
 	property = "model.class.name=com.liferay.portal.search.elasticsearch.cross.cluster.replication.internal.configuration.CrossClusterReplicationConfiguration",
-	service = ConfigurationModelListener.class
+	service = AopService.class
 )
 public class CrossClusterReplicationConfigurationModelListener
-	implements ConfigurationModelListener {
+	implements AopConfigurationModelListener {
 
+	@Clusterable
 	@Override
 	public void onAfterSave(String pid, Dictionary<String, Object> properties)
 		throws ConfigurationModelListenerException {
@@ -71,6 +74,7 @@ public class CrossClusterReplicationConfigurationModelListener
 		}
 	}
 
+	@Clusterable
 	@Override
 	public void onBeforeSave(String pid, Dictionary<String, Object> properties)
 		throws ConfigurationModelListenerException {

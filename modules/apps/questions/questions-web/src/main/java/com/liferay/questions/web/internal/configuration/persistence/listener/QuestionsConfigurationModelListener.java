@@ -11,7 +11,9 @@ import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.service.MBCategoryLocalService;
 import com.liferay.message.boards.service.MBMessageLocalService;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
+import com.liferay.portal.aop.AopService;
+import com.liferay.portal.configuration.persistence.listener.AopConfigurationModelListener;
+import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.comment.DiscussionPermission;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
@@ -48,11 +50,12 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	property = "model.class.name=com.liferay.questions.web.internal.configuration.QuestionsConfiguration",
-	service = ConfigurationModelListener.class
+	service = AopService.class
 )
 public class QuestionsConfigurationModelListener
-	implements ConfigurationModelListener {
+	implements AopConfigurationModelListener {
 
+	@Clusterable
 	@Override
 	public void onAfterSave(String pid, Dictionary<String, Object> properties) {
 		try {

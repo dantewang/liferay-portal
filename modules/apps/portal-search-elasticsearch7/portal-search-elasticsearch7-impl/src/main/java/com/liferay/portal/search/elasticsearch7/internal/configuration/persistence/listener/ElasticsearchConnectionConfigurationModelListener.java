@@ -6,8 +6,10 @@
 package com.liferay.portal.search.elasticsearch7.internal.configuration.persistence.listener;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
+import com.liferay.portal.aop.AopService;
+import com.liferay.portal.configuration.persistence.listener.AopConfigurationModelListener;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListenerException;
+import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -32,11 +34,12 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	property = "model.class.name=com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConnectionConfiguration",
-	service = ConfigurationModelListener.class
+	service = AopService.class
 )
 public class ElasticsearchConnectionConfigurationModelListener
-	implements ConfigurationModelListener {
+	implements AopConfigurationModelListener {
 
+	@Clusterable
 	@Override
 	public void onBeforeDelete(String pid)
 		throws ConfigurationModelListenerException {
@@ -52,6 +55,7 @@ public class ElasticsearchConnectionConfigurationModelListener
 		}
 	}
 
+	@Clusterable
 	@Override
 	public void onBeforeSave(String pid, Dictionary<String, Object> properties)
 		throws ConfigurationModelListenerException {

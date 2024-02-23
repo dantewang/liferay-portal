@@ -6,8 +6,9 @@
 package com.liferay.portal.vulcan.internal.configuration.persistence.listener;
 
 import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
-import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
+import com.liferay.portal.configuration.persistence.listener.AopConfigurationModelListener;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListenerException;
+import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
@@ -30,8 +31,9 @@ import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
  * @author Carlos Correa
  */
 public class BaseConfigurationModelListener
-	implements ConfigurationModelListener {
+	implements AopConfigurationModelListener {
 
+	@Clusterable
 	@Override
 	public void onAfterSave(String pid, Dictionary<String, Object> dictionary) {
 		Collection<ComponentDescriptionDTO> componentDescriptionDTOs =
@@ -70,6 +72,7 @@ public class BaseConfigurationModelListener
 		}
 	}
 
+	@Clusterable
 	@Override
 	public void onBeforeSave(String pid, Dictionary<String, Object> dictionary)
 		throws ConfigurationModelListenerException {
