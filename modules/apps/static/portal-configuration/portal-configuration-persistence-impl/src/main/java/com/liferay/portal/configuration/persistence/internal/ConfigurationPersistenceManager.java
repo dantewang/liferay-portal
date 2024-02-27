@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
+import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
@@ -271,14 +272,19 @@ public class ConfigurationPersistenceManager
 			}
 		}
 
+		Dictionary<String, Object> oldDictionary =
+			HashMapDictionaryBuilder.<String, Object>putAll(
+				dictionary
+			).build();
+
 		_visitConfigurationModelListeners(
 			"*",
 			configurationModelListener ->
-				configurationModelListener.onBeforeSave(pid, dictionary));
+				configurationModelListener.onBeforeSave(pid, oldDictionary));
 		_visitConfigurationModelListeners(
 			pidKey,
 			configurationModelListener ->
-				configurationModelListener.onBeforeSave(pid, dictionary));
+				configurationModelListener.onBeforeSave(pid, oldDictionary));
 
 		Dictionary<Object, Object> newDictionary = _copyDictionary(dictionary);
 
@@ -300,11 +306,11 @@ public class ConfigurationPersistenceManager
 		_visitConfigurationModelListeners(
 			"*",
 			configurationModelListener ->
-				configurationModelListener.onAfterSave(pid, dictionary));
+				configurationModelListener.onAfterSave(pid, oldDictionary));
 		_visitConfigurationModelListeners(
 			pidKey,
 			configurationModelListener ->
-				configurationModelListener.onAfterSave(pid, dictionary));
+				configurationModelListener.onAfterSave(pid, oldDictionary));
 	}
 
 	protected void store(ResultSet resultSet, Dictionary<?, ?> dictionary)

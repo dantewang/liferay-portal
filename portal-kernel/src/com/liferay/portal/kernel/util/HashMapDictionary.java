@@ -5,6 +5,8 @@
 
 package com.liferay.portal.kernel.util;
 
+import java.io.Serializable;
+
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -14,7 +16,8 @@ import java.util.Map;
 /**
  * @author Shuyang Zhou
  */
-public class HashMapDictionary<K, V> extends Dictionary<K, V> {
+public class HashMapDictionary<K, V>
+	extends Dictionary<K, V> implements Serializable {
 
 	public HashMapDictionary() {
 	}
