@@ -31,7 +31,9 @@ public abstract class BaseConfigurationModelListener
 
 	@Override
 	public Class<?>[] getAopInterfaces() {
-		return new Class<?>[] {ConfigurationModelListener.class};
+		return new Class<?>[] {
+			ConfigurationModelListener.class, IdentifiableOSGiService.class
+		};
 	}
 
 	@Override

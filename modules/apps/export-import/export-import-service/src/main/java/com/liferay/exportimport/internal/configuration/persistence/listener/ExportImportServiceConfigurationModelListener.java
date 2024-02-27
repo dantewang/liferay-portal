@@ -39,11 +39,6 @@ public class ExportImportServiceConfigurationModelListener
 	implements AopService, ConfigurationModelListener, IdentifiableOSGiService {
 
 	@Override
-	public Class<?>[] getAopInterfaces() {
-		return new Class<?>[] {ConfigurationModelListener.class};
-	}
-
-	@Override
 	public String getOSGiServiceIdentifier() {
 		return ExportImportServiceConfigurationModelListener.class.getName();
 	}

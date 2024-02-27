@@ -107,11 +107,6 @@ public class UserImportSchedulerComponentFactory {
 				   IdentifiableOSGiService {
 
 		@Override
-		public Class<?>[] getAopInterfaces() {
-			return new Class<?>[] {ConfigurationModelListener.class};
-		}
-
-		@Override
 		public String getOSGiServiceIdentifier() {
 			return LDAPImportConfigurationModelListener.class.getName();
 		}

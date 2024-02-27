@@ -33,11 +33,6 @@ public class
 				   IdentifiableOSGiService {
 
 	@Override
-	public Class<?>[] getAopInterfaces() {
-		return new Class<?>[] {ConfigurationModelListener.class};
-	}
-
-	@Override
 	public String getOSGiServiceIdentifier() {
 		return TensorFlowImageAssetAutoTagProviderCompanyConfigurationModelListener.class.
 			getName();
