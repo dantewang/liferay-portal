@@ -10,6 +10,7 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListenerException;
 import com.liferay.portal.kernel.cluster.Clusterable;
+import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -26,11 +27,16 @@ import org.osgi.service.component.annotations.Reference;
  * @author Janis Zhang
  */
 public abstract class BaseConfigurationModelListener
-	implements AopService, ConfigurationModelListener {
+	implements AopService, ConfigurationModelListener, IdentifiableOSGiService {
 
 	@Override
 	public Class<?>[] getAopInterfaces() {
 		return new Class<?>[] {ConfigurationModelListener.class};
+	}
+
+	@Override
+	public String getOSGiServiceIdentifier() {
+		return getClass().getName();
 	}
 
 	@Clusterable

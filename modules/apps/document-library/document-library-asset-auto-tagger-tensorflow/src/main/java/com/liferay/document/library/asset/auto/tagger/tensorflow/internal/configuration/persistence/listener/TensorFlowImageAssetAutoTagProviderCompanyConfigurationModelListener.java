@@ -13,6 +13,7 @@ import com.liferay.portal.configuration.persistence.listener.ConfigurationModelL
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
+import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 
 import java.util.Dictionary;
 
@@ -28,11 +29,18 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class
 	TensorFlowImageAssetAutoTagProviderCompanyConfigurationModelListener
-		implements AopService, ConfigurationModelListener {
+		implements AopService, ConfigurationModelListener,
+				   IdentifiableOSGiService {
 
 	@Override
 	public Class<?>[] getAopInterfaces() {
 		return new Class<?>[] {ConfigurationModelListener.class};
+	}
+
+	@Override
+	public String getOSGiServiceIdentifier() {
+		return TensorFlowImageAssetAutoTagProviderCompanyConfigurationModelListener.class.
+			getName();
 	}
 
 	@Clusterable

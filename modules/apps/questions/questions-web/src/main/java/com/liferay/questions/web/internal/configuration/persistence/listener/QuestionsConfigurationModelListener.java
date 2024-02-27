@@ -15,6 +15,7 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.comment.DiscussionPermission;
+import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.service.CompanyLocalService;
@@ -53,11 +54,16 @@ import org.osgi.service.component.annotations.Reference;
 	service = AopService.class
 )
 public class QuestionsConfigurationModelListener
-	implements AopService, ConfigurationModelListener {
+	implements AopService, ConfigurationModelListener, IdentifiableOSGiService {
 
 	@Override
 	public Class<?>[] getAopInterfaces() {
 		return new Class<?>[] {ConfigurationModelListener.class};
+	}
+
+	@Override
+	public String getOSGiServiceIdentifier() {
+		return QuestionsConfigurationModelListener.class.getName();
 	}
 
 	@Clusterable

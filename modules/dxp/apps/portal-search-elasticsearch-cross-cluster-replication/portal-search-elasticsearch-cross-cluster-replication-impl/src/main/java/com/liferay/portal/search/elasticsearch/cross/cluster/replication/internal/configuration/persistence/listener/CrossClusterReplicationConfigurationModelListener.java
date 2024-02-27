@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.cluster.ClusterNode;
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
@@ -46,11 +47,17 @@ import org.osgi.service.component.annotations.Reference;
 	service = AopService.class
 )
 public class CrossClusterReplicationConfigurationModelListener
-	implements AopService, ConfigurationModelListener {
+	implements AopService, ConfigurationModelListener, IdentifiableOSGiService {
 
 	@Override
 	public Class<?>[] getAopInterfaces() {
 		return new Class<?>[] {ConfigurationModelListener.class};
+	}
+
+	@Override
+	public String getOSGiServiceIdentifier() {
+		return CrossClusterReplicationConfigurationModelListener.class.
+			getName();
 	}
 
 	@Clusterable

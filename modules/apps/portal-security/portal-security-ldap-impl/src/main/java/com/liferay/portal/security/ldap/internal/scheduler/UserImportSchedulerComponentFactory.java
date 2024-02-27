@@ -11,6 +11,7 @@ import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.model.CompanyConstants;
+import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -102,11 +103,17 @@ public class UserImportSchedulerComponentFactory {
 	private ServiceRegistration<AopService> _serviceRegistration;
 
 	private class LDAPImportConfigurationModelListener
-		implements AopService, ConfigurationModelListener {
+		implements AopService, ConfigurationModelListener,
+				   IdentifiableOSGiService {
 
 		@Override
 		public Class<?>[] getAopInterfaces() {
 			return new Class<?>[] {ConfigurationModelListener.class};
+		}
+
+		@Override
+		public String getOSGiServiceIdentifier() {
+			return LDAPImportConfigurationModelListener.class.getName();
 		}
 
 		@Clusterable

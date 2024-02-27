@@ -16,6 +16,7 @@ import com.liferay.portal.configuration.persistence.listener.ConfigurationModelL
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.module.service.Snapshot;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
@@ -35,11 +36,16 @@ import org.osgi.service.component.annotations.Component;
 	service = AopService.class
 )
 public class ExportImportServiceConfigurationModelListener
-	implements AopService, ConfigurationModelListener {
+	implements AopService, ConfigurationModelListener, IdentifiableOSGiService {
 
 	@Override
 	public Class<?>[] getAopInterfaces() {
 		return new Class<?>[] {ConfigurationModelListener.class};
+	}
+
+	@Override
+	public String getOSGiServiceIdentifier() {
+		return ExportImportServiceConfigurationModelListener.class.getName();
 	}
 
 	@Clusterable
