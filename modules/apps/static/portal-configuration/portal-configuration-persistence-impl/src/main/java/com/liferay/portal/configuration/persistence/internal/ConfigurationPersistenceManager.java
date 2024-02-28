@@ -286,7 +286,8 @@ public class ConfigurationPersistenceManager
 			configurationModelListener ->
 				configurationModelListener.onBeforeSave(pid, oldDictionary));
 
-		Dictionary<Object, Object> newDictionary = _copyDictionary(dictionary);
+		Dictionary<Object, Object> newDictionary = _copyDictionary(
+			oldDictionary);
 
 		Lock lock = _readWriteLock.writeLock();
 
