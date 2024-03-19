@@ -34,11 +34,11 @@ public class MembershipPolicyUtil {
 		OrganizationMembershipPolicy organizationMembershipPolicy =
 			_organizationMembershipPolicySnapshot.get();
 
-		if (organizationMembershipPolicy != null) {
-			return organizationMembershipPolicy;
+		if (organizationMembershipPolicy == null) {
+			return _dummyOrganizationMembershipPolicy;
 		}
 
-		return _dummyOrganizationMembershipPolicy;
+		return organizationMembershipPolicy;
 	}
 
 	public static RoleMembershipPolicy getRoleMembershipPolicy() {
@@ -50,11 +50,11 @@ public class MembershipPolicyUtil {
 
 		RoleMembershipPolicy roleMembershipPolicy = serviceTracker.getService();
 
-		if (roleMembershipPolicy != null) {
-			return roleMembershipPolicy;
+		if (roleMembershipPolicy == null) {
+			return _dummyRoleMembershipPolicy;
 		}
 
-		return _dummyRoleMembershipPolicy;
+		return roleMembershipPolicy;
 	}
 
 	public static SiteMembershipPolicy getSiteMembershipPolicy() {
@@ -78,11 +78,11 @@ public class MembershipPolicyUtil {
 		UserGroupMembershipPolicy userGroupMembershipPolicy =
 			serviceTracker.getService();
 
-		if (userGroupMembershipPolicy != null) {
-			return userGroupMembershipPolicy;
+		if (userGroupMembershipPolicy == null) {
+			return _dummyUserGroupMembershipPolicy;
 		}
 
-		return _dummyUserGroupMembershipPolicy;
+		return userGroupMembershipPolicy;
 	}
 
 	private static ServiceTracker<RoleMembershipPolicy, RoleMembershipPolicy>
