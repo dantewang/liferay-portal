@@ -58,7 +58,14 @@ public class MembershipPolicyUtil {
 	}
 
 	public static SiteMembershipPolicy getSiteMembershipPolicy() {
-		return _siteMembershipPolicySnapshot.get();
+		SiteMembershipPolicy siteMembershipPolicy =
+			_siteMembershipPolicySnapshot.get();
+
+		if (siteMembershipPolicy == null) {
+			return _dummySiteMembershipPolicy;
+		}
+
+		return siteMembershipPolicy;
 	}
 
 	public static UserGroupMembershipPolicy getUserGroupMembershipPolicy() {
@@ -115,6 +122,8 @@ public class MembershipPolicyUtil {
 			OrganizationMembershipPolicy.class);
 	private static final RoleMembershipPolicy _dummyRoleMembershipPolicy =
 		ProxyFactory.newDummyInstance(RoleMembershipPolicy.class);
+	private static final SiteMembershipPolicy _dummySiteMembershipPolicy =
+		ProxyFactory.newDummyInstance(SiteMembershipPolicy.class);
 	private static final UserGroupMembershipPolicy
 		_dummyUserGroupMembershipPolicy = ProxyFactory.newDummyInstance(
 			UserGroupMembershipPolicy.class);
