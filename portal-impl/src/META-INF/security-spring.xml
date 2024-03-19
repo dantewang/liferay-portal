@@ -21,7 +21,7 @@
 	<bean class="com.liferay.portal.kernel.security.auth.DefaultScreenNameValidator" id="com.liferay.portal.kernel.security.auth.DefaultScreenNameValidator" />
 	<bean class="com.liferay.portal.kernel.security.auth.tunnel.TunnelAuthenticationManagerUtil" id="com.liferay.portal.kernel.security.auth.tunnel.TunnelAuthenticationManagerUtil">
 		<property name="tunnelAuthenticationManager" ref="com.liferay.portal.security.auth.tunnel.TunnelAuthenticationManagerImpl" />
-	</bean>k
+	</bean>
 	<bean class="com.liferay.portal.security.permission.PermissionCheckerFactoryImpl" id="com.liferay.portal.kernel.security.permission.PermissionCheckerFactory" />
 	<bean class="com.liferay.portal.security.permission.ResourceActionsImpl" id="com.liferay.portal.kernel.security.permission.ResourceActions" />
 	<bean class="com.liferay.portal.kernel.security.permission.ResourceActionsUtil" id="com.liferay.portal.kernel.security.permission.ResourceActionsUtil">
