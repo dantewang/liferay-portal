@@ -468,7 +468,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 		}
 
-		_initModelResourcePermissions(modelResourceNames);
+		_initResourcePermissions(modelResourceNames, false);
 	}
 
 	@Override
@@ -496,7 +496,7 @@ public class ResourceActionsImpl implements ResourceActions {
 				getModelResourceActions(modelResourceName), modelResourceName);
 		}
 
-		_initModelResourcePermissions(modelResourceNames);
+		_initResourcePermissions(modelResourceNames, false);
 	}
 
 	@Override
@@ -516,6 +516,9 @@ public class ResourceActionsImpl implements ResourceActions {
 		_checkResourceActions(
 			_getPortletResourceActions(portletResourceName, portlet),
 			portletResourceName);
+
+		_initResourcePermissions(
+			Collections.singleton(portletResourceName), true);
 	}
 
 	@Override
@@ -543,6 +546,9 @@ public class ResourceActionsImpl implements ResourceActions {
 		_checkResourceActions(
 			_getPortletResourceActions(portletResourceName, portlet),
 			portletResourceName);
+
+		_initResourcePermissions(
+			Collections.singleton(portletResourceName), true);
 	}
 
 	@Override
@@ -581,6 +587,8 @@ public class ResourceActionsImpl implements ResourceActions {
 					portletResourceName);
 			}
 		}
+
+		_initResourcePermissions(portletResourceNames, true);
 	}
 
 	public void readModelResources(ClassLoader classLoader, String source)
@@ -922,7 +930,9 @@ public class ResourceActionsImpl implements ResourceActions {
 		return types;
 	}
 
-	private void _initModelResourcePermissions(Set<String> modelResourceNames) {
+	private void _initResourcePermissions(
+		Set<String> resourceNames, boolean portletResource) {
+
 		try {
 			DBPartitionUtil.forEachCompanyId(
 				companyId -> {
@@ -930,8 +940,14 @@ public class ResourceActionsImpl implements ResourceActions {
 						return;
 					}
 
+					if (portletResource) {
+						resourcePermissionLocalService.
+							initDefaultPortletPermissions(
+								companyId, resourceNames);
+					}
+
 					resourcePermissionLocalService.initDefaultModelPermissions(
-						companyId, modelResourceNames);
+						companyId, resourceNames);
 				});
 		}
 		catch (Exception exception) {
