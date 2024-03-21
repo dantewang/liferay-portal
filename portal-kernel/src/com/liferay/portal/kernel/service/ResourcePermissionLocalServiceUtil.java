@@ -831,13 +831,6 @@ public class ResourcePermissionLocalServiceUtil {
 			companyId, portletResourceNames);
 	}
 
-	public static void initPortletDefaultPermissions(
-			com.liferay.portal.kernel.model.Portlet portlet)
-		throws PortalException {
-
-		getService().initPortletDefaultPermissions(portlet);
-	}
-
 	/**
 	 * Reassigns all the resource permissions from the source role to the
 	 * destination role, and deletes the source role.

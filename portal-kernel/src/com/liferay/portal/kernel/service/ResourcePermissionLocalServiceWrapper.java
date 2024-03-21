@@ -910,14 +910,6 @@ public class ResourcePermissionLocalServiceWrapper
 			companyId, portletResourceNames);
 	}
 
-	@Override
-	public void initPortletDefaultPermissions(
-			com.liferay.portal.kernel.model.Portlet portlet)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		_resourcePermissionLocalService.initPortletDefaultPermissions(portlet);
-	}
-
 	/**
 	 * Reassigns all the resource permissions from the source role to the
 	 * destination role, and deletes the source role.

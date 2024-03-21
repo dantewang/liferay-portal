@@ -16,7 +16,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.AuditedModel;
 import com.liferay.portal.kernel.model.PersistedModel;
-import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.Resource;
 import com.liferay.portal.kernel.model.ResourceAction;
 import com.liferay.portal.kernel.model.ResourcePermission;
@@ -726,9 +725,6 @@ public interface ResourcePermissionLocalService
 
 	public void initDefaultPortletPermissions(
 			long companyId, Collection<String> portletResourceNames)
-		throws PortalException;
-
-	public void initPortletDefaultPermissions(Portlet portlet)
 		throws PortalException;
 
 	/**
