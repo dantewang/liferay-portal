@@ -721,8 +721,11 @@ public interface ResourcePermissionLocalService
 		throws PortalException;
 
 	public void initDefaultModelPermissions(
-			long companyId, Collection<String> modelResourceNames,
-			Role guestRole, Role ownerRole, Role siteMemberRole)
+			long companyId, Collection<String> modelResourceNames)
+		throws PortalException;
+
+	public void initDefaultPortletPermissions(
+			long companyId, Collection<String> portletResourceNames)
 		throws PortalException;
 
 	public void initPortletDefaultPermissions(Portlet portlet)
