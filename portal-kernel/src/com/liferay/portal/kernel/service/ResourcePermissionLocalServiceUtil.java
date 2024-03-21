@@ -816,6 +816,18 @@ public class ResourcePermissionLocalServiceUtil {
 			companyId, name, scope, roleId, actionId);
 	}
 
+	public static void initDefaultModelPermissions(
+			long companyId, List<String> modelResourceNames,
+			com.liferay.portal.kernel.model.Role guestRole,
+			com.liferay.portal.kernel.model.Role ownerRole,
+			com.liferay.portal.kernel.model.Role siteMemberRole)
+		throws PortalException {
+
+		getService().initDefaultModelPermissions(
+			companyId, modelResourceNames, guestRole, ownerRole,
+			siteMemberRole);
+	}
+
 	public static void initPortletDefaultPermissions(
 			com.liferay.portal.kernel.model.Portlet portlet)
 		throws PortalException {
