@@ -817,7 +817,7 @@ public class ResourcePermissionLocalServiceUtil {
 	}
 
 	public static void initDefaultModelPermissions(
-			long companyId, List<String> modelResourceNames,
+			long companyId, java.util.Collection<String> modelResourceNames,
 			com.liferay.portal.kernel.model.Role guestRole,
 			com.liferay.portal.kernel.model.Role ownerRole,
 			com.liferay.portal.kernel.model.Role siteMemberRole)
