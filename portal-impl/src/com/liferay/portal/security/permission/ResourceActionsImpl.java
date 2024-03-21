@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.service.GroupServiceUtil;
 import com.liferay.portal.kernel.service.PortletLocalService;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
 import com.liferay.portal.kernel.service.ResourceActionLocalServiceUtil;
+import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -461,6 +462,8 @@ public class ResourceActionsImpl implements ResourceActions {
 					modelResourceName);
 			}
 		}
+
+		_initModelResourcePermissions(modelResourceNames);
 	}
 
 	@Override
@@ -487,6 +490,8 @@ public class ResourceActionsImpl implements ResourceActions {
 			_checkResourceActions(
 				getModelResourceActions(modelResourceName), modelResourceName);
 		}
+
+		_initModelResourcePermissions(modelResourceNames);
 	}
 
 	@Override
@@ -606,6 +611,9 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@BeanReference(type = ResourceActionLocalService.class)
 	protected ResourceActionLocalService resourceActionLocalService;
+
+	@BeanReference(type = ResourcePermissionLocalService.class)
+	protected ResourcePermissionLocalService resourcePermissionLocalService;
 
 	@BeanReference(type = RoleLocalService.class)
 	protected RoleLocalService roleLocalService;
@@ -907,6 +915,24 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		return types;
+	}
+
+	private void _initModelResourcePermissions(Set<String> modelResourceNames) {
+		try {
+			DBPartitionUtil.forEachCompanyId(
+				companyId ->
+					resourcePermissionLocalService.initDefaultModelPermissions(
+						companyId, modelResourceNames,
+						roleLocalService.getRole(
+							companyId, RoleConstants.GUEST),
+						roleLocalService.getRole(
+							companyId, RoleConstants.OWNER),
+						roleLocalService.getRole(
+							companyId, RoleConstants.SITE_MEMBER)));
+		}
+		catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
 	}
 
 	private void _read(
