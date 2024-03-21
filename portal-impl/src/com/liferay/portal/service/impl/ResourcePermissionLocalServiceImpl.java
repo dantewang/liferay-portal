@@ -1176,9 +1176,15 @@ public class ResourcePermissionLocalServiceImpl
 	}
 
 	public void initDefaultModelPermissions(
-			long companyId, Collection<String> modelResourceNames,
-			Role guestRole, Role ownerRole, Role siteMemberRole)
+			long companyId, Collection<String> modelResourceNames)
 		throws PortalException {
+
+		Role guestRole = _roleLocalService.getRole(
+			companyId, RoleConstants.GUEST);
+		Role ownerRole = _roleLocalService.getRole(
+			companyId, RoleConstants.OWNER);
+		Role siteMemberRole = _roleLocalService.getRole(
+			companyId, RoleConstants.SITE_MEMBER);
 
 		for (String modelResourceName : modelResourceNames) {
 			if (Validator.isBlank(modelResourceName)) {
