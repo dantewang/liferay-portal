@@ -1176,8 +1176,8 @@ public class ResourcePermissionLocalServiceImpl
 	}
 
 	public void initDefaultModelPermissions(
-			long companyId, List<String> modelResourceNames, Role guestRole,
-			Role ownerRole, Role siteMemberRole)
+			long companyId, Collection<String> modelResourceNames,
+			Role guestRole, Role ownerRole, Role siteMemberRole)
 		throws PortalException {
 
 		for (String modelResourceName : modelResourceNames) {
