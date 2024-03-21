@@ -920,7 +920,11 @@ public class ResourceActionsImpl implements ResourceActions {
 	private void _initModelResourcePermissions(Set<String> modelResourceNames) {
 		try {
 			DBPartitionUtil.forEachCompanyId(
-				companyId ->
+				companyId ->{
+					if (companyId == null) {
+						return;
+					}
+
 					resourcePermissionLocalService.initDefaultModelPermissions(
 						companyId, modelResourceNames,
 						roleLocalService.getRole(
@@ -928,7 +932,8 @@ public class ResourceActionsImpl implements ResourceActions {
 						roleLocalService.getRole(
 							companyId, RoleConstants.OWNER),
 						roleLocalService.getRole(
-							companyId, RoleConstants.SITE_MEMBER)));
+							companyId, RoleConstants.SITE_MEMBER));
+				});
 		}
 		catch (Exception exception) {
 			throw new RuntimeException(exception);
