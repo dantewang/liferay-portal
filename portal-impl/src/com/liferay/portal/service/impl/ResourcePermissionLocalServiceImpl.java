@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.AuditedModel;
 import com.liferay.portal.kernel.model.GroupedModel;
-import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.Resource;
 import com.liferay.portal.kernel.model.ResourceAction;
 import com.liferay.portal.kernel.model.ResourceConstants;
@@ -1246,11 +1245,6 @@ public class ResourcePermissionLocalServiceImpl
 				siteMemberRole, guestPortletActions, ownerPortletActionIds,
 				groupPortletActionIds);
 		}
-	}
-
-	@Override
-	public void initPortletDefaultPermissions(Portlet portlet)
-		throws PortalException {
 	}
 
 	/**
