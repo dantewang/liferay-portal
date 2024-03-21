@@ -893,6 +893,19 @@ public class ResourcePermissionLocalServiceWrapper
 	}
 
 	@Override
+	public void initDefaultModelPermissions(
+			long companyId, java.util.List<String> modelResourceNames,
+			com.liferay.portal.kernel.model.Role guestRole,
+			com.liferay.portal.kernel.model.Role ownerRole,
+			com.liferay.portal.kernel.model.Role siteMemberRole)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_resourcePermissionLocalService.initDefaultModelPermissions(
+			companyId, modelResourceNames, guestRole, ownerRole,
+			siteMemberRole);
+	}
+
+	@Override
 	public void initPortletDefaultPermissions(
 			com.liferay.portal.kernel.model.Portlet portlet)
 		throws com.liferay.portal.kernel.exception.PortalException {
