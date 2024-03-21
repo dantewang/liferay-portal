@@ -920,7 +920,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	private void _initModelResourcePermissions(Set<String> modelResourceNames) {
 		try {
 			DBPartitionUtil.forEachCompanyId(
-				companyId ->{
+				companyId -> {
 					if (companyId == null) {
 						return;
 					}
