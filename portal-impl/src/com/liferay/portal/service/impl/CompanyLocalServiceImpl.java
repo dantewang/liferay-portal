@@ -2181,13 +2181,7 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 
 			_resourcePermissionLocalService.initDefaultModelPermissions(
 				company.getCompanyId(),
-				ResourceActionsUtil.getPopulatedModelNames(),
-				_roleLocalService.getRole(
-					company.getCompanyId(), RoleConstants.GUEST),
-				_roleLocalService.getRole(
-					company.getCompanyId(), RoleConstants.OWNER),
-				_roleLocalService.getRole(
-					company.getCompanyId(), RoleConstants.SITE_MEMBER));
+				ResourceActionsUtil.getPopulatedModelNames());
 
 			// Portlets
 

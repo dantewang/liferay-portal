@@ -931,13 +931,7 @@ public class ResourceActionsImpl implements ResourceActions {
 					}
 
 					resourcePermissionLocalService.initDefaultModelPermissions(
-						companyId, modelResourceNames,
-						roleLocalService.getRole(
-							companyId, RoleConstants.GUEST),
-						roleLocalService.getRole(
-							companyId, RoleConstants.OWNER),
-						roleLocalService.getRole(
-							companyId, RoleConstants.SITE_MEMBER));
+						companyId, modelResourceNames);
 				});
 		}
 		catch (Exception exception) {
