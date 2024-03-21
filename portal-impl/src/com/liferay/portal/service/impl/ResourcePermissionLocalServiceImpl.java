@@ -1211,33 +1211,40 @@ public class ResourcePermissionLocalServiceImpl
 		}
 	}
 
-	@Override
-	public void initPortletDefaultPermissions(Portlet portlet)
+	public void initDefaultPortletPermissions(
+			long companyId, Collection<String> portletResourceNames)
 		throws PortalException {
 
 		Role guestRole = _roleLocalService.getRole(
-			portlet.getCompanyId(), RoleConstants.GUEST);
+			companyId, RoleConstants.GUEST);
 		Role ownerRole = _roleLocalService.getRole(
-			portlet.getCompanyId(), RoleConstants.OWNER);
+			companyId, RoleConstants.OWNER);
 		Role siteMemberRole = _roleLocalService.getRole(
-			portlet.getCompanyId(), RoleConstants.SITE_MEMBER);
+			companyId, RoleConstants.SITE_MEMBER);
 
-		List<String> guestPortletActions =
-			ResourceActionsUtil.getPortletResourceGuestDefaultActions(
-				portlet.getRootPortletId());
+		for (String portletResourceName : portletResourceNames) {
+			List<String> guestPortletActions =
+				ResourceActionsUtil.getPortletResourceGuestDefaultActions(
+					portletResourceName);
 
-		List<String> ownerPortletActionIds =
-			ResourceActionsUtil.getPortletResourceActions(
-				portlet.getRootPortletId());
+			List<String> ownerPortletActionIds =
+				ResourceActionsUtil.getPortletResourceActions(
+					portletResourceName);
 
-		List<String> groupPortletActionIds =
-			ResourceActionsUtil.getPortletResourceGroupDefaultActions(
-				portlet.getRootPortletId());
+			List<String> groupPortletActionIds =
+				ResourceActionsUtil.getPortletResourceGroupDefaultActions(
+					portletResourceName);
 
-		_initPortletDefaultPermissions(
-			portlet.getCompanyId(), portlet.getRootPortletId(), guestRole,
-			ownerRole, siteMemberRole, guestPortletActions,
-			ownerPortletActionIds, groupPortletActionIds);
+			_initPortletDefaultPermissions(
+				companyId, portletResourceName, guestRole, ownerRole,
+				siteMemberRole, guestPortletActions, ownerPortletActionIds,
+				groupPortletActionIds);
+		}
+	}
+
+	@Override
+	public void initPortletDefaultPermissions(Portlet portlet)
+		throws PortalException {
 	}
 
 	/**
