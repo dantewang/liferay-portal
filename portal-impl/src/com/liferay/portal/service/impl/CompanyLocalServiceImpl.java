@@ -2183,6 +2183,10 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 				company.getCompanyId(),
 				ResourceActionsUtil.getPopulatedModelNames());
 
+			_resourcePermissionLocalService.initDefaultPortletPermissions(
+				company.getCompanyId(),
+				ResourceActionsUtil.getPortletNames());
+
 			// Portlets
 
 			_portletLocalService.checkPortlets(company.getCompanyId());
