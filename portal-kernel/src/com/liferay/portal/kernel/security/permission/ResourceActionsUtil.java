@@ -98,6 +98,10 @@ public class ResourceActionsUtil {
 		return _resourceActions.getModelResourceWeight(name);
 	}
 
+	public static List<String> getPopulatedModelNames() {
+		return _resourceActions.getPopulatedModelNames();
+	}
+
 	public static List<String> getPortletModelResources(String portletName) {
 		return _resourceActions.getPortletModelResources(portletName);
 	}

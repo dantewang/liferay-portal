@@ -2180,7 +2180,8 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 			// Default Permissions
 
 			_resourcePermissionLocalService.initDefaultModelPermissions(
-				company.getCompanyId(), ResourceActionsUtil.getModelNames(),
+				company.getCompanyId(),
+				ResourceActionsUtil.getPopulatedModelNames(),
 				_roleLocalService.getRole(
 					company.getCompanyId(), RoleConstants.GUEST),
 				_roleLocalService.getRole(

@@ -59,6 +59,8 @@ public interface ResourceActions {
 
 	public Double getModelResourceWeight(String name);
 
+	public List<String> getPopulatedModelNames();
+
 	public List<String> getPortletModelResources(String portletName);
 
 	public List<String> getPortletNames();

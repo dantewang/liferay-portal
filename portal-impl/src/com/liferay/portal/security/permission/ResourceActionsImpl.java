@@ -259,6 +259,11 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
+	public List<String> getPopulatedModelNames() {
+		return new ArrayList<>(_modelResourceWeights.keySet());
+	}
+
+	@Override
 	public List<String> getPortletModelResources(String portletName) {
 		portletName = PortletIdCodec.decodePortletName(portletName);
 
