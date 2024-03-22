@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.resource.bundle.ResourceBundleLoader;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
+import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.GroupServiceUtil;
 import com.liferay.portal.kernel.service.PortletLocalService;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
@@ -619,6 +620,9 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 	}
 
+	@BeanReference(type = CompanyLocalService.class)
+	protected CompanyLocalService companyLocalService;
+
 	@BeanReference(type = PortletLocalService.class)
 	protected PortletLocalService portletLocalService;
 
@@ -934,7 +938,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		Set<String> resourceNames, boolean portletResource) {
 
 		try {
-			DBPartitionUtil.forEachCompanyId(
+			companyLocalService.forEachCompanyId(
 				companyId -> {
 					if (companyId == null) {
 						return;
