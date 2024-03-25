@@ -13,11 +13,14 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.db.partition.util.DBPartitionUtil;
 import com.liferay.portal.kernel.bean.BeanReference;
+import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.exception.ResourceActionsException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.BaseModelListener;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.ResourceAction;
@@ -39,6 +42,7 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -72,6 +76,9 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Daeyoung Song
@@ -79,9 +86,21 @@ import javax.servlet.http.HttpSession;
  */
 public class ResourceActionsImpl implements ResourceActions {
 
+	public void afterPropertiesSet() {
+		BundleContext bundleContext = SystemBundleUtil.getBundleContext();
+
+		_serviceRegistration = bundleContext.registerService(
+			ModelListener.class, new ResourceActionModelListener(),
+			new HashMapDictionary<>());
+	}
+
 	@Override
 	public void check(String portletName) {
 		_check(portletName, getPortletResourceActions(portletName));
+	}
+
+	public void destroy() {
+		_serviceRegistration.unregister();
 	}
 
 	@Override
@@ -1294,6 +1313,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		new HashMap<>();
 	private final Map<String, Set<String>> _resourceReferences =
 		new HashMap<>();
+	private ServiceRegistration<?> _serviceRegistration;
 
 	private static class ResourceActionsBag {
 
@@ -1336,6 +1356,45 @@ public class ResourceActionsImpl implements ResourceActions {
 			_resourceBundleLoaders = ServiceTrackerListFactory.open(
 				SystemBundleUtil.getBundleContext(),
 				ResourceBundleLoader.class);
+
+	}
+
+	private class ResourceActionModelListener
+		extends BaseModelListener<ResourceAction> {
+
+		@Override
+		public void onAfterRemove(ResourceAction resourceAction)
+			throws ModelListenerException {
+
+			ResourceActionsBag resourceActionsBag = _resourceActionsBags.get(
+				resourceAction.getName());
+
+			if (resourceActionsBag == null) {
+				return;
+			}
+
+			Set<String> resourceActions =
+				resourceActionsBag.getSupportsActions();
+
+			resourceActions.remove(resourceAction.getActionId());
+
+			if (resourceActions.isEmpty()) {
+				synchronized (this) {
+					_modelResourceWeights.remove(resourceAction.getName());
+
+					_organizationModelResources.remove(
+						resourceAction.getName());
+
+					_portalModelResources.remove(resourceAction.getName());
+
+					_portletRootModelResources.remove(resourceAction.getName());
+
+					_resourceActionsBags.remove(resourceAction.getName());
+
+					_resourceReferences.remove(resourceAction.getName());
+				}
+			}
+		}
 
 	}
 
