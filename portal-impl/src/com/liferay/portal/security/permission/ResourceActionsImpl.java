@@ -1373,6 +1373,10 @@ public class ResourceActionsImpl implements ResourceActions {
 			ResourceActionsBag resourceActionsBag = _resourceActionsBags.get(
 				resourceAction.getName());
 
+			if (resourceActionsBag == null) {
+				return;
+			}
+
 			Set<String> resourceActions =
 				resourceActionsBag.getSupportsActions();
 
