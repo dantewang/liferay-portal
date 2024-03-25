@@ -467,9 +467,9 @@ public class ResourceActionsImpl implements ResourceActions {
 					getModelResourceActions(modelResourceName),
 					modelResourceName);
 			}
-		}
 
-		_initModelResourcePermissions(modelResourceNames);
+			_initModelResourcePermissions(modelResourceNames);
+		}
 	}
 
 	@Override
