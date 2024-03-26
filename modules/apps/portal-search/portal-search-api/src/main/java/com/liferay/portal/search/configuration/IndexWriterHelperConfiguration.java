@@ -24,7 +24,7 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface IndexWriterHelperConfiguration {
 
 	@Meta.AD(
-		deflt = "true", description = "index-commit-immediately-help",
+		deflt = "false", description = "index-commit-immediately-help",
 		name = "index-commit-immediately", required = false
 	)
 	public boolean indexCommitImmediately();
