@@ -914,6 +914,15 @@ public class ResourcePermissionLocalServiceWrapper
 		_resourcePermissionLocalService.mergePermissions(fromRoleId, toRoleId);
 	}
 
+	@Override
+	public void populateDefaultModelResourcePermissions(
+			long companyId, java.util.Collection<String> modelResourceNames)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		_resourcePermissionLocalService.populateDefaultModelResourcePermissions(
+			companyId, modelResourceNames);
+	}
+
 	/**
 	 * Grants the role default permissions to all the resources of the type and
 	 * at the scope stored in the resource permission, deletes the resource
