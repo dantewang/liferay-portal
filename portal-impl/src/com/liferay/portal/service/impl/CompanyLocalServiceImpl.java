@@ -16,6 +16,7 @@ import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.db.partition.util.DBPartitionUtil;
+import com.liferay.portal.events.StartupHelperUtil;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
@@ -2179,10 +2180,12 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 
 			// Default Permissions
 
-			_resourcePermissionLocalService.
-				populateDefaultModelResourcePermissions(
-					company.getCompanyId(),
-					ResourceActionsUtil.getModelNames());
+			if (!StartupHelperUtil.isUpgrading()) {
+				_resourcePermissionLocalService.
+					populateDefaultModelResourcePermissions(
+						company.getCompanyId(),
+						ResourceActionsUtil.getModelNames());
+			}
 
 			// Portlets
 
