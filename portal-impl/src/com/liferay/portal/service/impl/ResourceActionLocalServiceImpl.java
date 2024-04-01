@@ -30,13 +30,13 @@ import com.liferay.portal.kernel.service.persistence.ResourcePermissionPersisten
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
+import com.liferay.portal.security.permission.ResourceActionsCache;
 import com.liferay.portal.service.base.ResourceActionLocalServiceBaseImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Brian Wing Shun Chan
@@ -353,7 +353,7 @@ public class ResourceActionLocalServiceImpl
 		ResourceActionLocalServiceImpl.class);
 
 	private static final Map<String, ResourceAction> _resourceActions =
-		new ConcurrentHashMap<>();
+		ResourceActionsCache.getResourceActionsMap();
 
 	@BeanReference(type = CompanyLocalService.class)
 	private CompanyLocalService _companyLocalService;
