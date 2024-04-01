@@ -56,7 +56,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -205,16 +204,16 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name, false);
+		ResourceActionsCache.ResourceActionsBag modelResourceActionsBag =
+			_getResourceActionsBag(name, false);
 
 		return new ArrayList<>(modelResourceActionsBag.getSupportsActions());
 	}
 
 	@Override
 	public List<String> getModelResourceGroupDefaultActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name, false);
+		ResourceActionsCache.ResourceActionsBag modelResourceActionsBag =
+			_getResourceActionsBag(name, false);
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGroupDefaultActions());
@@ -222,8 +221,8 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceGuestDefaultActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name, false);
+		ResourceActionsCache.ResourceActionsBag modelResourceActionsBag =
+			_getResourceActionsBag(name, false);
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGuestDefaultActions());
@@ -231,8 +230,8 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceGuestUnsupportedActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name, false);
+		ResourceActionsCache.ResourceActionsBag modelResourceActionsBag =
+			_getResourceActionsBag(name, false);
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getGuestUnsupportedActions());
@@ -245,8 +244,8 @@ public class ResourceActionsImpl implements ResourceActions {
 
 	@Override
 	public List<String> getModelResourceOwnerDefaultActions(String name) {
-		ResourceActionsBag modelResourceActionsBag = _getResourceActionsBag(
-			name, false);
+		ResourceActionsCache.ResourceActionsBag modelResourceActionsBag =
+			_getResourceActionsBag(name, false);
 
 		return new ArrayList<>(
 			modelResourceActionsBag.getOwnerDefaultActions());
@@ -304,8 +303,8 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name, false);
+		ResourceActionsCache.ResourceActionsBag portletResourceActionsBag =
+			_getResourceActionsBag(name, false);
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGroupDefaultActions());
@@ -315,8 +314,8 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceGuestDefaultActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name, false);
+		ResourceActionsCache.ResourceActionsBag portletResourceActionsBag =
+			_getResourceActionsBag(name, false);
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGuestDefaultActions());
@@ -326,8 +325,8 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceGuestUnsupportedActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name, false);
+		ResourceActionsCache.ResourceActionsBag portletResourceActionsBag =
+			_getResourceActionsBag(name, false);
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getGuestUnsupportedActions());
@@ -337,8 +336,8 @@ public class ResourceActionsImpl implements ResourceActions {
 	public List<String> getPortletResourceLayoutManagerActions(String name) {
 		name = PortletIdCodec.decodePortletName(name);
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name, false);
+		ResourceActionsCache.ResourceActionsBag portletResourceActionsBag =
+			_getResourceActionsBag(name, false);
 
 		return new ArrayList<>(
 			portletResourceActionsBag.getLayoutManagerActions());
@@ -587,8 +586,8 @@ public class ResourceActionsImpl implements ResourceActions {
 			return;
 		}
 
-		ResourceActionsBag resourceActionsBag = _getResourceActionsBag(
-			name, false);
+		ResourceActionsCache.ResourceActionsBag resourceActionsBag =
+			_getResourceActionsBag(name, false);
 
 		Set<String> resourceActions = resourceActionsBag.getSupportsActions();
 
@@ -766,8 +765,8 @@ public class ResourceActionsImpl implements ResourceActions {
 	private List<String> _getPortletResourceActions(
 		String name, Portlet portlet) {
 
-		ResourceActionsBag portletResourceActionsBag = _getResourceActionsBag(
-			name, true);
+		ResourceActionsCache.ResourceActionsBag portletResourceActionsBag =
+			_getResourceActionsBag(name, true);
 
 		Set<String> portletActions =
 			portletResourceActionsBag.getSupportsActions();
@@ -805,10 +804,11 @@ public class ResourceActionsImpl implements ResourceActions {
 		return new ArrayList<>(portletActions);
 	}
 
-	private ResourceActionsBag _getResourceActionsBag(
+	private ResourceActionsCache.ResourceActionsBag _getResourceActionsBag(
 		String name, boolean create) {
 
-		ResourceActionsBag resourceActionsBag = _resourceActionsBags.get(name);
+		ResourceActionsCache.ResourceActionsBag resourceActionsBag =
+			_resourceActionsBags.get(name);
 
 		if (resourceActionsBag != null) {
 			return resourceActionsBag;
@@ -825,7 +825,7 @@ public class ResourceActionsImpl implements ResourceActions {
 				return resourceActionsBag;
 			}
 
-			resourceActionsBag = new ResourceActionsBag();
+			resourceActionsBag = new ResourceActionsCache.ResourceActionsBag();
 
 			_resourceActionsBags.put(name, resourceActionsBag);
 		}
@@ -1148,8 +1148,8 @@ public class ResourceActionsImpl implements ResourceActions {
 			Set<String> defaultResourceActions)
 		throws ResourceActionsException {
 
-		ResourceActionsBag resourceActionsBag = _getResourceActionsBag(
-			name, true);
+		ResourceActionsCache.ResourceActionsBag resourceActionsBag =
+			_getResourceActionsBag(name, true);
 
 		Set<String> resourceActions = resourceActionsBag.getSupportsActions();
 
@@ -1257,53 +1257,22 @@ public class ResourceActionsImpl implements ResourceActions {
 	private static final Log _log = LogFactoryUtil.getLog(
 		ResourceActionsImpl.class);
 
-	private static final ResourceActionsBag _dummyResourceActionsBag =
-		new ResourceActionsBag();
+	private static final ResourceActionsCache.ResourceActionsBag
+		_dummyResourceActionsBag =
+			new ResourceActionsCache.ResourceActionsBag();
 
-	private final Map<String, Double> _modelResourceWeights = new HashMap<>();
-	private final Set<String> _organizationModelResources = new HashSet<>();
-	private final Set<String> _portalModelResources = new HashSet<>();
+	private final Map<String, Double> _modelResourceWeights =
+		ResourceActionsCache.getModelResourceWeightsMap();
+	private final Set<String> _organizationModelResources =
+		ResourceActionsCache.getOrganizationModelResources();
+	private final Set<String> _portalModelResources =
+		ResourceActionsCache.getPortalModelResources();
 	private final Map<String, String> _portletRootModelResources =
-		new HashMap<>();
-	private final Map<String, ResourceActionsBag> _resourceActionsBags =
-		new HashMap<>();
+		ResourceActionsCache.getPortletRootModelResourcesMap();
+	private final Map<String, ResourceActionsCache.ResourceActionsBag>
+		_resourceActionsBags = ResourceActionsCache.getResourceActionsBagMap();
 	private final Map<String, Set<String>> _resourceReferences =
-		new HashMap<>();
-
-	private static class ResourceActionsBag {
-
-		public Set<String> getGroupDefaultActions() {
-			return _groupDefaultActions;
-		}
-
-		public Set<String> getGuestDefaultActions() {
-			return _guestDefaultActions;
-		}
-
-		public Set<String> getGuestUnsupportedActions() {
-			return _guestUnsupportedActions;
-		}
-
-		public Set<String> getLayoutManagerActions() {
-			return _layoutManagerActions;
-		}
-
-		public Set<String> getOwnerDefaultActions() {
-			return _ownerDefaultActions;
-		}
-
-		public Set<String> getSupportsActions() {
-			return _supportsActions;
-		}
-
-		private final Set<String> _groupDefaultActions = new HashSet<>();
-		private final Set<String> _guestDefaultActions = new HashSet<>();
-		private final Set<String> _guestUnsupportedActions = new HashSet<>();
-		private final Set<String> _layoutManagerActions = new HashSet<>();
-		private final Set<String> _ownerDefaultActions = new HashSet<>();
-		private final Set<String> _supportsActions = new HashSet<>();
-
-	}
+		ResourceActionsCache.getResourceReferencesMap();
 
 	private static class ResourceBundleLoaderListHolder {
 
