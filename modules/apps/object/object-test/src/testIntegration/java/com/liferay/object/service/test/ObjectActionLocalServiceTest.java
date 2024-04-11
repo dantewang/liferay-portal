@@ -788,11 +788,14 @@ public class ObjectActionLocalServiceTest {
 				objectDefinitionA.getObjectDefinitionId());
 
 			_objectDefinitionLocalService.deleteObjectDefinition(
-				objectDefinitionA);
+				_objectDefinitionLocalService.getObjectDefinition(
+					objectDefinitionA.getObjectDefinitionId()));
 			_objectDefinitionLocalService.deleteObjectDefinition(
-				objectDefinitionAA);
+				_objectDefinitionLocalService.getObjectDefinition(
+					objectDefinitionAA.getObjectDefinitionId()));
 			_objectDefinitionLocalService.deleteObjectDefinition(
-				objectDefinitionAAA);
+				_objectDefinitionLocalService.getObjectDefinition(
+					objectDefinitionAAA.getObjectDefinitionId()));
 		}
 		finally {
 			PermissionThreadLocal.setPermissionChecker(
@@ -812,7 +815,7 @@ public class ObjectActionLocalServiceTest {
 
 	@Test
 	public void testAddObjectActionWithCircularReference() throws Exception {
-		_publishCustomObjectDefinition();
+		_objectDefinition = _publishCustomObjectDefinition();
 
 		UnicodeProperties unicodeProperties = UnicodePropertiesBuilder.put(
 			"objectDefinitionId", _objectDefinition.getObjectDefinitionId()
@@ -886,7 +889,7 @@ public class ObjectActionLocalServiceTest {
 
 	@Test
 	public void testAddObjectActionWithConditionExpression() throws Exception {
-		_publishCustomObjectDefinition();
+		_objectDefinition = _publishCustomObjectDefinition();
 
 		ObjectAction objectAction1 = _addObjectAction(
 			"equals(firstName, \"João\")", RandomTestUtil.randomString(),
@@ -998,7 +1001,7 @@ public class ObjectActionLocalServiceTest {
 
 		// On after add
 
-		_publishCustomObjectDefinition();
+		_objectDefinition = _publishCustomObjectDefinition();
 
 		ObjectAction objectAction1 = _objectActionLocalService.addObjectAction(
 			RandomTestUtil.randomString(), TestPropsValues.getUserId(),
@@ -1457,7 +1460,7 @@ public class ObjectActionLocalServiceTest {
 			).build(),
 			false);
 
-		_publishCustomObjectDefinition();
+		_objectDefinition = _publishCustomObjectDefinition();
 
 		try {
 			PrincipalThreadLocal.setName(_user.getUserId());
@@ -1889,7 +1892,7 @@ public class ObjectActionLocalServiceTest {
 			).build(),
 			ObjectActionConstants.STATUS_NEVER_RAN);
 
-		_publishCustomObjectDefinition();
+		_objectDefinition = _publishCustomObjectDefinition();
 
 		objectAction = _objectActionLocalService.updateObjectAction(
 			externalReferenceCode1, objectAction.getObjectActionId(), true,
