@@ -14,7 +14,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.model.Release;
-import com.liferay.portal.kernel.module.service.Snapshot;
 import com.liferay.portal.kernel.scheduler.JobState;
 import com.liferay.portal.kernel.scheduler.JobStateSerializeUtil;
 import com.liferay.portal.kernel.scheduler.SchedulerEngine;
@@ -39,10 +38,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 import org.quartz.Calendar;
 import org.quartz.JobBuilder;
@@ -430,7 +433,7 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 	}
 
 	@Activate
-	protected void activate() {
+	protected void activate(BundleContext bundleContext) {
 		_descriptionMaxLength = GetterUtil.getInteger(
 			_props.get(PropsKeys.SCHEDULER_DESCRIPTION_MAX_LENGTH), 120);
 		_groupNameMaxLength = GetterUtil.getInteger(
@@ -454,10 +457,45 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 		catch (Exception exception) {
 			_log.error("Unable to initialize engine", exception);
 		}
+
+		_serviceTracker = new ServiceTracker<>(
+			bundleContext, SchedulerEngineHelper.class,
+			new ServiceTrackerCustomizer
+				<SchedulerEngineHelper, SchedulerEngineHelper>() {
+
+				@Override
+				public SchedulerEngineHelper addingService(
+					ServiceReference<SchedulerEngineHelper> serviceReference) {
+
+					_schedulerEngineHelper = bundleContext.getService(
+						serviceReference);
+
+					return _schedulerEngineHelper;
+				}
+
+				@Override
+				public void modifiedService(
+					ServiceReference<SchedulerEngineHelper> serviceReference,
+					SchedulerEngineHelper schedulerEngineHelper) {
+				}
+
+				@Override
+				public void removedService(
+					ServiceReference<SchedulerEngineHelper> serviceReference,
+					SchedulerEngineHelper schedulerEngineHelper) {
+				}
+
+			});
+
+		_serviceTracker.open();
 	}
 
 	@Deactivate
 	protected void deactivate() {
+		_serviceTracker.close();
+
+		_schedulerEngineHelper = null;
+
 		if (!_schedulerEngineEnabled) {
 			return;
 		}
@@ -765,11 +803,6 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 	private static final Log _log = LogFactoryUtil.getLog(
 		QuartzSchedulerEngine.class);
 
-	private static final Snapshot<SchedulerEngineHelper>
-		_schedulerEngineHelperSnapshot = new Snapshot<>(
-			QuartzSchedulerEngine.class, SchedulerEngineHelper.class, null,
-			true);
-
 	private int _descriptionMaxLength;
 	private int _groupNameMaxLength;
 	private int _jobNameMaxLength;
@@ -793,6 +826,9 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 	private Release _release;
 
 	private volatile boolean _schedulerEngineEnabled;
+	private volatile SchedulerEngineHelper _schedulerEngineHelper;
+	private volatile ServiceTracker
+		<SchedulerEngineHelper, SchedulerEngineHelper> _serviceTracker;
 
 	private class SchedulerListenerImpl extends SchedulerListenerSupport {
 
@@ -818,10 +854,7 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 
 				JobDataMap jobDataMap = jobDetail.getJobDataMap();
 
-				SchedulerEngineHelper schedulerEngineHelper =
-					_schedulerEngineHelperSnapshot.get();
-
-				schedulerEngineHelper.delete(
+				_schedulerEngineHelper.delete(
 					jobKey.getName(), jobKey.getGroup(),
 					StorageType.valueOf(
 						jobDataMap.getString(SchedulerEngine.STORAGE_TYPE)));
@@ -836,10 +869,7 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 		}
 
 		private void _audit(JobKey jobKey, TriggerState triggerState) {
-			SchedulerEngineHelper schedulerEngineHelper =
-				_schedulerEngineHelperSnapshot.get();
-
-			if (schedulerEngineHelper == null) {
+			if (_schedulerEngineHelper == null) {
 				return;
 			}
 
@@ -852,7 +882,8 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 
 				message.setValues(new HashMap<>(jobDataMap.getWrappedMap()));
 
-				schedulerEngineHelper.auditSchedulerJobs(message, triggerState);
+				_schedulerEngineHelper.auditSchedulerJobs(
+					message, triggerState);
 			}
 			catch (Exception exception) {
 				_log.error(
