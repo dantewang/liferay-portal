@@ -1,12 +1,19 @@
 <?xml version="1.0"?>
 
-<project basedir="." default="run" name="benchmarks">
+<project basedir="." default="run" name="benchmarks" xmlns:if="ant:if">
 	<import file="../build-common.xml" />
 
 	<target depends="clean" name="build-sample-sql">
 		<gradle-execute dir="../modules/util/portal-tools-sample-sql-builder" task="jar" />
 
 		<echoproperties destfile="benchmarks-actual.properties" prefix="sample.sql." />
+
+		<if>
+			<isset property="junit.java.add.opens[${java.specification.version}]" />
+			<then>
+				<propertycopy from="junit.java.add.opens[${java.specification.version}]" name="java.add.opens" override="true" />
+			</then>
+		</if>
 
 		<java
 			classname="com.liferay.portal.tools.sample.sql.builder.SampleSQLBuilderLauncher"
@@ -22,6 +29,7 @@
 			</classpath>
 			<sysproperty key="external-properties" value="com/liferay/portal/tools/dependencies/portal-tools.properties" />
 			<sysproperty key="sample-sql-properties" value="${basedir}/benchmarks-actual.properties" />
+			<jvmarg if:set="java.add.opens" line="${java.add.opens}" />
 		</java>
 
 		<if>
