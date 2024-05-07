@@ -15,6 +15,7 @@ import com.liferay.portal.db.partition.util.DBPartitionUtil;
 import com.liferay.portal.events.StartupHelperUtil;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dependency.manager.DependencyManagerSyncUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.ResourceActionsException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -23,6 +24,7 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.ResourceAction;
+import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.role.RoleConstants;
@@ -601,7 +603,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	}
 
 	@Override
-	public void removeModelResources(Document document) {
+	public void removeModelResources(Document document) throws PortalException {
 		Element rootElement = document.getRootElement();
 
 		for (Element modelResourceElement :
@@ -662,6 +664,14 @@ public class ResourceActionsImpl implements ResourceActions {
 			_modelResourceWeights.remove(modelName);
 
 			_portalModelResources.remove(modelName);
+
+			String permissionName = modelName;
+
+			companyLocalService.forEachCompanyId(
+				companyId ->
+					resourcePermissionLocalService.deleteResourcePermissions(
+						companyId, permissionName,
+						ResourceConstants.SCOPE_INDIVIDUAL, permissionName));
 		}
 	}
 
