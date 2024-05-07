@@ -12,7 +12,9 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.db.partition.util.DBPartitionUtil;
+import com.liferay.portal.events.StartupHelperUtil;
 import com.liferay.portal.kernel.bean.BeanReference;
+import com.liferay.portal.kernel.dependency.manager.DependencyManagerSyncUtil;
 import com.liferay.portal.kernel.exception.ResourceActionsException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -68,6 +70,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -751,11 +754,23 @@ public class ResourceActionsImpl implements ResourceActions {
 					}
 				});
 
-			companyLocalService.forEachCompanyId(
-				companyId ->
-					resourcePermissionLocalService.
-						populateDefaultModelResourcePermissions(
-							companyId, modelResourceNames));
+			Callable<?> callable = () -> {
+				companyLocalService.forEachCompanyId(
+					companyId ->
+						resourcePermissionLocalService.
+							populateDefaultModelResourcePermissions(
+								companyId, modelResourceNames));
+
+				return null;
+			};
+
+			if (StartupHelperUtil.isUpgrading()) {
+				DependencyManagerSyncUtil.registerSyncCallable(callable);
+
+				return;
+			}
+
+			callable.call();
 		}
 		catch (Exception exception) {
 			throw new RuntimeException(exception);
