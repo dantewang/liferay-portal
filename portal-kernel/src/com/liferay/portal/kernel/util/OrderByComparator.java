@@ -11,7 +11,9 @@ import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 
 import java.io.Serializable;
 
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * @author Brian Wing Shun Chan
@@ -19,6 +21,37 @@ import java.util.Comparator;
  */
 public abstract class OrderByComparator<T>
 	implements Comparator<T>, OrderByInfo, Serializable {
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+
+		if (!(object instanceof OrderByComparator)) {
+			return false;
+		}
+
+		OrderByComparator<T> orderByComparator = (OrderByComparator<T>)object;
+
+		if (Objects.equals(getOrderBy(), orderByComparator.getOrderBy()) &&
+			Arrays.equals(
+				getOrderByFields(), orderByComparator.getOrderByFields()) &&
+			(isAscending() == orderByComparator.isAscending())) {
+
+			for (String field : getOrderByFields()) {
+				if (isAscending(field) != orderByComparator.isAscending(
+						field)) {
+
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
 
 	public String getOrderBy() {
 		return null;
@@ -67,6 +100,11 @@ public abstract class OrderByComparator<T>
 		}
 
 		return fields;
+	}
+
+	@Override
+	public int hashCode() {
+		return getOrderBy().hashCode() + Arrays.hashCode(getOrderByFields());
 	}
 
 	public boolean isAscending() {
