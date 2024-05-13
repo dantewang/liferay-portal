@@ -39,11 +39,13 @@ public abstract class OrderByComparator<T>
 				getOrderByFields(), orderByComparator.getOrderByFields()) &&
 			(isAscending() == orderByComparator.isAscending())) {
 
-			for (String field : getOrderByFields()) {
-				if (isAscending(field) != orderByComparator.isAscending(
+			if (getOrderByFields() != null) {
+				for (String field : getOrderByFields()) {
+					if (isAscending(field) != orderByComparator.isAscending(
 						field)) {
 
-					return false;
+						return false;
+					}
 				}
 			}
 
@@ -104,7 +106,16 @@ public abstract class OrderByComparator<T>
 
 	@Override
 	public int hashCode() {
-		return getOrderBy().hashCode() + Arrays.hashCode(getOrderByFields());
+		int hashCode = 0;
+
+		String orderBy = getOrderBy();
+
+		if (orderBy == null) {
+			hashCode = orderBy.hashCode();
+		}
+
+		return hashCode + Arrays.hashCode(getOrderByFields()) +
+			Boolean.hashCode(isAscending());
 	}
 
 	public boolean isAscending() {
