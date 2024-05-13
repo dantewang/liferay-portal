@@ -963,25 +963,28 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			try (InputStream inputStream = new FileInputStream(file);
 				JarFile jarFile = new JarFile(file)) {
 
-				Manifest manifest = jarFile.getManifest();
+				if (!blacklistBundleSymbolicNames.isEmpty()) {
+					Manifest manifest = jarFile.getManifest();
 
-				Attributes attributes = manifest.getMainAttributes();
+					Attributes attributes = manifest.getMainAttributes();
 
-				String bundleSymbolicName = attributes.getValue(
-					"Bundle-SymbolicName");
+					String bundleSymbolicName = attributes.getValue(
+						"Bundle-SymbolicName");
 
-				if (bundleSymbolicName != null) {
-					int index = bundleSymbolicName.indexOf(CharPool.SEMICOLON);
+					if (bundleSymbolicName != null) {
+						int index = bundleSymbolicName.indexOf(
+							CharPool.SEMICOLON);
 
-					if (index != -1) {
-						bundleSymbolicName = bundleSymbolicName.substring(
-							0, index);
-					}
+						if (index != -1) {
+							bundleSymbolicName = bundleSymbolicName.substring(
+								0, index);
+						}
 
-					if (blacklistBundleSymbolicNames.contains(
-							bundleSymbolicName)) {
+						if (blacklistBundleSymbolicNames.contains(
+								bundleSymbolicName)) {
 
-						continue;
+							continue;
+						}
 					}
 				}
 
@@ -1106,8 +1109,12 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			(Dictionary<String, Object>)getPropertiesMethod.invoke(
 				configuration);
 
-		Set<String> blacklistBundleSymbolicNames = SetUtil.fromArray(
-			(String[])dictionary.get("blacklistBundleSymbolicNames"));
+		Set<String> blacklistBundleSymbolicNames = Collections.emptySet();
+
+		if (dictionary != null) {
+			blacklistBundleSymbolicNames = SetUtil.fromArray(
+				(String[])dictionary.get("blacklistBundleSymbolicNames"));
+		}
 
 		_installBundlesFromDir(
 			PropsValues.MODULE_FRAMEWORK_PORTAL_DIR, checksums,

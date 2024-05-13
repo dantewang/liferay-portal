@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -42,9 +43,12 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 
 			Dictionary<String, ?> dictionary = configuration.getProperties();
 
-			_atomicReference.set(
-				SetUtil.fromArray(
-					(String[])dictionary.get("blacklistBundleSymbolicNames")));
+			if (dictionary != null) {
+				_atomicReference.set(
+					SetUtil.fromArray(
+						(String[])dictionary.get(
+							"blacklistBundleSymbolicNames")));
+			}
 		}
 		catch (IOException ioException) {
 			ReflectionUtil.throwException(ioException);
@@ -57,6 +61,12 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 
 		if (!name.endsWith(".jar")) {
 			return false;
+		}
+
+		Set<String> blacklistBundleSymbolicNames = _atomicReference.get();
+
+		if (blacklistBundleSymbolicNames.isEmpty()) {
+			return true;
 		}
 
 		try (JarFile jarFile = new JarFile(artifact)) {
@@ -73,9 +83,6 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 				if (index != -1) {
 					bundleSymbolicName = bundleSymbolicName.substring(0, index);
 				}
-
-				Set<String> blacklistBundleSymbolicNames =
-					_atomicReference.get();
 
 				if (blacklistBundleSymbolicNames.contains(bundleSymbolicName)) {
 					return false;
@@ -102,12 +109,14 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 
 	@Override
 	public void updated(Dictionary<String, ?> dictionary) {
-		_atomicReference.set(
-			SetUtil.fromArray(
-				(String[])dictionary.get("blacklistBundleSymbolicNames")));
+		if (dictionary != null) {
+			_atomicReference.set(
+				SetUtil.fromArray(
+					(String[])dictionary.get("blacklistBundleSymbolicNames")));
+		}
 	}
 
 	private final AtomicReference<Set<String>> _atomicReference =
-		new AtomicReference<>();
+		new AtomicReference<>(Collections.emptySet());
 
 }
