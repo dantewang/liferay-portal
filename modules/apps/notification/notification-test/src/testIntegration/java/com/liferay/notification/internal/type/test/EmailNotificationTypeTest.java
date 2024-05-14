@@ -1252,7 +1252,8 @@ public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 		notificationQueueEntryLocalService.deleteNotificationQueueEntry(
 			notificationQueueEntries.get(0));
 
-		objectDefinitionLocalService.deleteObjectDefinition(objectDefinition);
+		objectDefinitionLocalService.deleteObjectDefinition(
+			objectDefinition.getObjectDefinitionId());
 	}
 
 	private static Map<String, Object> _freeMarkerTermValues;
