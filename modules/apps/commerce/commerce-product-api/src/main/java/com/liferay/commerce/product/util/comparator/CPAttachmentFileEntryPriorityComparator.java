@@ -28,10 +28,6 @@ public class CPAttachmentFileEntryPriorityComparator
 
 	public static final String[] ORDER_BY_FIELDS = {"priority"};
 
-	public CPAttachmentFileEntryPriorityComparator() {
-		this(false);
-	}
-
 	@Override
 	public int compare(
 		CPAttachmentFileEntry cpAttachmentFileEntry1,
