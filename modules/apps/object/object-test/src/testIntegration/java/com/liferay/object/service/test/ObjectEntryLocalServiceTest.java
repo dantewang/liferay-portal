@@ -437,7 +437,8 @@ public class ObjectEntryLocalServiceTest {
 		// reference a required list type entry cannot be deleted before it is
 		// unreferenced
 
-		_objectDefinitionLocalService.deleteObjectDefinition(_objectDefinition);
+		_objectDefinitionLocalService.deleteObjectDefinition(
+			_objectDefinition.getObjectDefinitionId());
 	}
 
 	@Test
@@ -822,7 +823,8 @@ public class ObjectEntryLocalServiceTest {
 					).build()
 				).build()));
 
-		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition);
+		_objectDefinitionLocalService.deleteObjectDefinition(
+			objectDefinition.getObjectDefinitionId());
 	}
 
 	@Test
@@ -2309,9 +2311,9 @@ public class ObjectEntryLocalServiceTest {
 		_assertCount(0);
 
 		_objectDefinitionLocalService.deleteObjectDefinition(
-			draftObjectDefinition);
+			draftObjectDefinition.getObjectDefinitionId());
 		_objectDefinitionLocalService.deleteObjectDefinition(
-			publishedObjectDefinition);
+			publishedObjectDefinition.getObjectDefinitionId());
 	}
 
 	@Test
@@ -3830,7 +3832,8 @@ public class ObjectEntryLocalServiceTest {
 			Assert.assertEquals(1, baseModelSearchResult.getLength());
 		}
 
-		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition);
+		_objectDefinitionLocalService.deleteObjectDefinition(
+			objectDefinition.getObjectDefinitionId());
 	}
 
 	private void _testUpdateObjectEntryExternalReferenceCode()
