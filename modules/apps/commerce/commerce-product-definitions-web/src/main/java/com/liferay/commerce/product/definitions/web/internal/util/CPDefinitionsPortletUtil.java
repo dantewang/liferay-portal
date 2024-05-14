@@ -61,8 +61,14 @@ public class CPDefinitionsPortletUtil {
 				orderByAsc);
 		}
 		else if (orderByCol.equals("priority")) {
-			orderByComparator = new CPAttachmentFileEntryPriorityComparator(
-				orderByAsc);
+			if (orderByAsc) {
+				orderByComparator =
+					CPAttachmentFileEntryPriorityComparator.ASCENDING;
+			}
+			else {
+				orderByComparator =
+					CPAttachmentFileEntryPriorityComparator.DESCENDING;
+			}
 		}
 
 		return orderByComparator;

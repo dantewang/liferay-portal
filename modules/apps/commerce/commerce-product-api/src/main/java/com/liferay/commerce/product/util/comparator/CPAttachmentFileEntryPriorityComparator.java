@@ -14,6 +14,12 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 public class CPAttachmentFileEntryPriorityComparator
 	extends OrderByComparator<CPAttachmentFileEntry> {
 
+	public static final CPAttachmentFileEntryPriorityComparator ASCENDING =
+		new CPAttachmentFileEntryPriorityComparator(true);
+
+	public static final CPAttachmentFileEntryPriorityComparator DESCENDING =
+		new CPAttachmentFileEntryPriorityComparator(false);
+
 	public static final String ORDER_BY_ASC =
 		"CPAttachmentFileEntry.priority ASC";
 
@@ -24,10 +30,6 @@ public class CPAttachmentFileEntryPriorityComparator
 
 	public CPAttachmentFileEntryPriorityComparator() {
 		this(false);
-	}
-
-	public CPAttachmentFileEntryPriorityComparator(boolean ascending) {
-		_ascending = ascending;
 	}
 
 	@Override
@@ -63,6 +65,10 @@ public class CPAttachmentFileEntryPriorityComparator
 	@Override
 	public boolean isAscending() {
 		return _ascending;
+	}
+
+	private CPAttachmentFileEntryPriorityComparator(boolean ascending) {
+		_ascending = ascending;
 	}
 
 	private final boolean _ascending;
