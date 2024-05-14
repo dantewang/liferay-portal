@@ -215,7 +215,7 @@ public class KaleoProcessUpgradeProcess extends UpgradeProcess {
 
 		_resourceActions.populateModelResources(
 			KaleoProcessUpgradeProcess.class.getClassLoader(),
-			"/resource-actions/default.xml");
+			new String[] {"/resource-actions/default.xml"}, false);
 	}
 
 	private void _updateDDLRecordSet(

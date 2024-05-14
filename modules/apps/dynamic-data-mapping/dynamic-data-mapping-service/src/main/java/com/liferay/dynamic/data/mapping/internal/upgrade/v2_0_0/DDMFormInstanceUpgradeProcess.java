@@ -59,7 +59,7 @@ public class DDMFormInstanceUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		_readAndCheckResourceActions();
+		_readResourceActions();
 
 		_duplicateResourcePermission(
 			_CLASS_NAME_RECORD_SET, _CLASS_NAME_FORM_INSTANCE);
@@ -261,11 +261,12 @@ public class DDMFormInstanceUpgradeProcess extends UpgradeProcess {
 		actionableDynamicQuery.performActions();
 	}
 
-	private void _readAndCheckResourceActions() throws Exception {
+	private void _readResourceActions() throws Exception {
 		Class<?> clazz = getClass();
 
 		_resourceActions.populateModelResources(
-			clazz.getClassLoader(), "/resource-actions/default.xml");
+			clazz.getClassLoader(),
+			new String[] {"/resource-actions/default.xml"}, false);
 	}
 
 	private void _updateDDMStructure(long ddmStructureId) throws Exception {

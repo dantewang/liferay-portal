@@ -508,7 +508,8 @@ public class JournalUpgradeProcess extends UpgradeProcess {
 
 		_resourceActions.populateModelResources(
 			JournalUpgradeProcess.class.getClassLoader(),
-			"/resource-actions/journal_ddm_composite_models.xml");
+			new String[] {"/resource-actions/journal_ddm_composite_models.xml"},
+			false);
 	}
 
 	private void _transformDateFieldValue(Element dynamicContentElement) {
