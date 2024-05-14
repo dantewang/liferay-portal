@@ -9,6 +9,8 @@ import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.file.install.FileInstaller;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 
 import java.io.File;
@@ -85,6 +87,12 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 				}
 
 				if (blacklistBundleSymbolicNames.contains(bundleSymbolicName)) {
+					if (_log.isInfoEnabled()) {
+						_log.info(
+							"Skipping blacklisted bundle " +
+								bundleSymbolicName);
+					}
+
 					return false;
 				}
 			}
@@ -115,6 +123,9 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 					(String[])dictionary.get("blacklistBundleSymbolicNames")));
 		}
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		DefaultJarInstaller.class);
 
 	private final AtomicReference<Set<String>> _atomicReference =
 		new AtomicReference<>(Collections.emptySet());

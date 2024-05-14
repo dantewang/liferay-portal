@@ -983,6 +983,12 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 						if (blacklistBundleSymbolicNames.contains(
 								bundleSymbolicName)) {
 
+							if (_log.isInfoEnabled()) {
+								_log.info(
+									"Skipping blacklisted bundle " +
+										bundleSymbolicName);
+							}
+
 							continue;
 						}
 					}
