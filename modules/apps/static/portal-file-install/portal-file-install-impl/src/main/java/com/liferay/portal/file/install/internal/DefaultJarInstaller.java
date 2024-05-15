@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -61,7 +62,7 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 	public boolean canTransformURL(File artifact) {
 		String name = artifact.getName();
 
-		if (!name.endsWith(".jar")) {
+		if (!name.endsWith(".jar") || _blacklistedFiles.contains(artifact)) {
 			return false;
 		}
 
@@ -93,6 +94,8 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 								bundleSymbolicName);
 					}
 
+					_blacklistedFiles.add(artifact);
+
 					return false;
 				}
 			}
@@ -122,6 +125,8 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 				SetUtil.fromArray(
 					(String[])dictionary.get("blacklistBundleSymbolicNames")));
 		}
+
+		_blacklistedFiles.clear();
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -129,5 +134,7 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 
 	private final AtomicReference<Set<String>> _atomicReference =
 		new AtomicReference<>(Collections.emptySet());
+	private final Set<File> _blacklistedFiles = Collections.newSetFromMap(
+		new ConcurrentHashMap<>());
 
 }
