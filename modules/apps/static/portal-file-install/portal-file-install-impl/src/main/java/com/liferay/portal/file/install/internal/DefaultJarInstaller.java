@@ -120,13 +120,17 @@ public class DefaultJarInstaller implements FileInstaller, ManagedService {
 
 	@Override
 	public void updated(Dictionary<String, ?> dictionary) {
-		if (dictionary != null) {
-			_atomicReference.set(
-				SetUtil.fromArray(
-					(String[])dictionary.get("blacklistBundleSymbolicNames")));
+		_blacklistedFiles.clear();
+
+		if (dictionary == null) {
+			_atomicReference.set(Collections.emptySet());
+
+			return;
 		}
 
-		_blacklistedFiles.clear();
+		_atomicReference.set(
+			SetUtil.fromArray(
+				(String[])dictionary.get("blacklistBundleSymbolicNames")));
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
