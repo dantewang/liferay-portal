@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
@@ -117,12 +118,14 @@ public class IPGeocoderImpl implements IPGeocoder {
 				_databaseReaderDCLSingleton.getSingleton(
 					this::_createDatabaseReader);
 
-			CountryResponse countryResponse = databaseReader.country(
-				inetAddress);
+			Optional<CountryResponse> countryResponseOptional =
+				databaseReader.tryCountry(inetAddress);
 
-			if (countryResponse == null) {
+			if (!countryResponseOptional.isPresent()) {
 				return StringPool.BLANK;
 			}
+
+			CountryResponse countryResponse = countryResponseOptional.get();
 
 			Country country = countryResponse.getCountry();
 
