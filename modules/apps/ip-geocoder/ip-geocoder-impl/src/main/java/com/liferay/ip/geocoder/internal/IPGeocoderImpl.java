@@ -107,7 +107,8 @@ public class IPGeocoderImpl implements IPGeocoder {
 			InetAddress inetAddress = InetAddress.getByName(ipAddress);
 
 			if (inetAddress.isAnyLocalAddress() ||
-				inetAddress.isLoopbackAddress()) {
+				inetAddress.isLoopbackAddress() ||
+				inetAddress.isSiteLocalAddress()) {
 
 				return StringPool.BLANK;
 			}
