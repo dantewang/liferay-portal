@@ -68,12 +68,12 @@ public class BenchmarkTest {
 			"benchmark.test.jdbc.username", StringPool.BLANK);
 		_jdbcPassword = System.getProperty(
 			"benchmark.test.jdbc.password", StringPool.BLANK);
-		_runCount = Integer.valueOf(
-			System.getProperty("benchmark.test.run.count", 1));
-		_skipWarmUp = Boolean.valueOf(
-			System.getProperty("benchmark.test.skip.warm.up", false));
-		_threadCount = Integer.valueOf(
-			System.getProperty("benchmark.test.thread.count", 1));
+		_runCount = Integer.parseInt(
+			System.getProperty("benchmark.test.run.count", "1"));
+		_skipWarmUp = Boolean.parseBoolean(
+			System.getProperty("benchmark.test.skip.warm.up", "false"));
+		_threadCount = Integer.parseInt(
+			System.getProperty("benchmark.test.thread.count", "1"));
 		_userPassword = System.getProperty(
 			"benchmark.test.user.password", "test");
 
