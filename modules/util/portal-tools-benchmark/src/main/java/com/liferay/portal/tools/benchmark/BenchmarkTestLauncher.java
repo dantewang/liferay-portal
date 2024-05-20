@@ -5,6 +5,9 @@
 
 package com.liferay.portal.tools.benchmark;
 
+import com.liferay.petra.lang.SafeCloseable;
+import com.liferay.petra.lang.ThreadContextClassLoaderUtil;
+
 import java.io.File;
 
 import java.lang.reflect.Method;
@@ -37,18 +40,15 @@ public class BenchmarkTestLauncher {
 		ClassLoader classLoader = new URLClassLoader(
 			_getClassPathURLs(contextClassLoader), null);
 
-		currentThread.setContextClassLoader(classLoader);
-
 		Class<?> clazz = classLoader.loadClass(
 			"com.liferay.portal.tools.benchmark.BenchmarkTest");
 
 		Method method = clazz.getMethod("main", String[].class);
 
-		try {
+		try (SafeCloseable safeCloseable = ThreadContextClassLoaderUtil.swap(
+				classLoader)) {
+
 			method.invoke(null, new Object[] {args});
-		}
-		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
 		}
 	}
 

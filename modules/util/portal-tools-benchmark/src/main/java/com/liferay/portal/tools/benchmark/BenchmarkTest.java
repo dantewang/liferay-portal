@@ -9,6 +9,7 @@ import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.tools.benchmark.task.BenchmarkTask;
 import com.liferay.portal.tools.benchmark.task.LoginBenchmarkTask;
 
@@ -68,11 +69,11 @@ public class BenchmarkTest {
 			"benchmark.test.jdbc.username", StringPool.BLANK);
 		_jdbcPassword = System.getProperty(
 			"benchmark.test.jdbc.password", StringPool.BLANK);
-		_runCount = Integer.parseInt(
+		_runCount = GetterUtil.getInteger(
 			System.getProperty("benchmark.test.run.count", "1"));
 		_skipWarmUp = Boolean.parseBoolean(
 			System.getProperty("benchmark.test.skip.warm.up", "false"));
-		_threadCount = Integer.parseInt(
+		_threadCount = GetterUtil.getInteger(
 			System.getProperty("benchmark.test.thread.count", "1"));
 		_userPassword = System.getProperty(
 			"benchmark.test.user.password", "test");
@@ -158,10 +159,10 @@ public class BenchmarkTest {
 		properties.put("user", _jdbcUserName);
 
 		try (Connection connection = DriverManager.getConnection(
-			_jdbcURL, properties);
-			 PreparedStatement preparedStatement = connection.prepareStatement(
+				_jdbcURL, properties);
+			PreparedStatement preparedStatement = connection.prepareStatement(
 				loadDataSQL);
-			 ResultSet resultSet = preparedStatement.executeQuery()) {
+			ResultSet resultSet = preparedStatement.executeQuery()) {
 
 			while (resultSet.next()) {
 				data.add(loadDataUnsafeFunction.apply(resultSet));
