@@ -5,6 +5,7 @@
 
 package com.liferay.portal.tools.benchmark;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import org.junit.ClassRule;
@@ -23,6 +24,10 @@ public class BenchmarkTestTest {
 
 	@Test
 	public void testLogin() throws Exception {
+		if (Validator.isNull(System.getenv("JENKINS_HOME"))) {
+			return;
+		}
+
 		BenchmarkTest benchmarkTest = new BenchmarkTest();
 
 		benchmarkTest.login();
