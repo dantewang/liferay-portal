@@ -7,6 +7,9 @@ package com.liferay.translation.internal.security.permission;
 
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
+import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.TransactionConfig;
+import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
@@ -24,7 +27,7 @@ import org.osgi.service.component.annotations.Reference;
 public class TranslationResourceActionsActivator {
 
 	@Activate
-	protected void activate(BundleContext bundleContext) throws Exception {
+	protected void activate(BundleContext bundleContext) throws Throwable {
 		String xml = StringUtil.read(
 			TranslationResourceActionsActivator.class.getClassLoader(),
 			"/com/liferay/translation/internal/security/permission" +
@@ -32,15 +35,25 @@ public class TranslationResourceActionsActivator {
 
 		String[] languageIds = ArrayUtil.sortedUnique(PropsValues.LOCALES);
 
-		for (int i = 0; i < languageIds.length; i++) {
-			_resourceActions.populateModelResources(
-				SAXReaderUtil.read(
-					StringUtil.replace(
-						StringUtil.replace(
-							xml, "[$LANGUAGE_ID$]", languageIds[i]),
-						"[$WEIGHT$]", String.valueOf(i))));
-		}
+		TransactionInvokerUtil.invoke(
+			_transactionConfig,
+			() -> {
+				for (int i = 0; i < languageIds.length; i++) {
+					_resourceActions.populateModelResources(
+						SAXReaderUtil.read(
+							StringUtil.replace(
+								StringUtil.replace(
+									xml, "[$LANGUAGE_ID$]", languageIds[i]),
+								"[$WEIGHT$]", String.valueOf(i))));
+				}
+
+				return null;
+			});
 	}
+
+	private static final TransactionConfig _transactionConfig =
+		TransactionConfig.Factory.create(
+			Propagation.REQUIRED, new Class<?>[] {Exception.class});
 
 	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED, unbind = "-")
 	private ModuleServiceLifecycle _moduleServiceLifecycle;
