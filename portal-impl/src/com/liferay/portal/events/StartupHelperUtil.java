@@ -11,7 +11,6 @@ import com.liferay.petra.io.Serializer;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
-import com.liferay.portal.kernel.exception.ResourceActionsException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogContext;
@@ -20,6 +19,9 @@ import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.patcher.PatcherValues;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.ResourceActionLocalServiceUtil;
+import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.TransactionConfig;
+import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.upgrade.util.UpgradeProcessUtil;
@@ -66,10 +68,25 @@ public class StartupHelperUtil {
 		try {
 			ResourceActionsUtil.populateModelResources(
 				StartupHelperUtil.class.getClassLoader(),
-				PropsValues.RESOURCE_ACTIONS_CONFIGS);
+				PropsValues.RESOURCE_ACTIONS_CONFIGS, false);
+
+			TransactionInvokerUtil.invoke(
+				_transactionConfig,
+				() -> {
+					for (String modelName :
+							ResourceActionsUtil.getModelNames()) {
+
+						ResourceActionLocalServiceUtil.checkResourceActions(
+							modelName,
+							ResourceActionsUtil.getModelResourceActions(
+								modelName));
+					}
+
+					return null;
+				});
 		}
-		catch (ResourceActionsException resourceActionsException) {
-			ReflectionUtil.throwException(resourceActionsException);
+		catch (Throwable throwable) {
+			ReflectionUtil.throwException(throwable);
 		}
 	}
 
@@ -265,6 +282,9 @@ public class StartupHelperUtil {
 		new DCLSingleton<>();
 	private static boolean _newRelease;
 	private static volatile ServiceRegistration<?> _serviceRegistration;
+	private static final TransactionConfig _transactionConfig =
+		TransactionConfig.Factory.create(
+			Propagation.REQUIRED, new Class<?>[] {Exception.class});
 	private static volatile boolean _upgrading;
 
 }
