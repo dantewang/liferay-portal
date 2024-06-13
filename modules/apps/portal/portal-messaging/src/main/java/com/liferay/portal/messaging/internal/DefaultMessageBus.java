@@ -64,10 +64,10 @@ public class DefaultMessageBus implements MessageBus {
 			destinationName);
 
 		if (destination == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
+			//if (_log.isWarnEnabled()) {
+				_log.error(
 					"Destination " + destinationName + " is not configured");
-			}
+			//}
 
 			return;
 		}
