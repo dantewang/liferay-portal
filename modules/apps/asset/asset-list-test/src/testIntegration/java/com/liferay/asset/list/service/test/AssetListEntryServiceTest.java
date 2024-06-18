@@ -309,7 +309,8 @@ public class AssetListEntryServiceTest {
 
 		Assert.assertEquals(assetListEntry, firstAssetListEntry);
 
-		orderByComparator = AssetListEntryCreateDateComparator.getInstance(false);
+		orderByComparator = AssetListEntryCreateDateComparator.getInstance(
+			false);
 
 		assetListEntries = _assetListEntryService.getAssetListEntries(
 			_group.getGroupId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS,
