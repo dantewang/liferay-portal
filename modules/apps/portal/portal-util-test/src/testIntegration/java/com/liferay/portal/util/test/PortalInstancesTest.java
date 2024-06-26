@@ -100,16 +100,16 @@ public class PortalInstancesTest {
 			_defaultGroupPublicLayout, StringPool.BLANK);
 
 		_testGetCompanyId(
-			_company.getVirtualHostname(),
-			_defaultGroupPublicLayout.getLayoutSet());
+			_defaultGroupPublicLayout.getLayoutSet(),
+			_company.getVirtualHostname());
 		_testGetCompanyId(
+			_defaultGroupPublicLayout.getLayoutSet(),
 			_company.getVirtualHostname(),
 			RandomTestUtil.randomString(6) + "." +
-				RandomTestUtil.randomString(3),
-			_defaultGroupPublicLayout.getLayoutSet());
+				RandomTestUtil.randomString(3));
 		_testGetCompanyId(
-			_nondefaultGroupPublicLayoutHostname,
-			_nondefaultGroupPublicLayout.getLayoutSet());
+			_nondefaultGroupPublicLayout.getLayoutSet(),
+			_nondefaultGroupPublicLayoutHostname);
 
 		String defaultGroupPublicLayoutHostname =
 			RandomTestUtil.randomString(6) + "." +
@@ -119,14 +119,14 @@ public class PortalInstancesTest {
 			_defaultGroupPublicLayout, defaultGroupPublicLayoutHostname);
 
 		_testGetCompanyId(
-			_company.getVirtualHostname(),
-			_defaultGroupPublicLayout.getLayoutSet());
+			_defaultGroupPublicLayout.getLayoutSet(),
+			_company.getVirtualHostname());
 		_testGetCompanyId(
-			defaultGroupPublicLayoutHostname,
-			_defaultGroupPublicLayout.getLayoutSet());
+			_defaultGroupPublicLayout.getLayoutSet(),
+			defaultGroupPublicLayoutHostname);
 		_testGetCompanyId(
-			_nondefaultGroupPublicLayoutHostname,
-			_nondefaultGroupPublicLayout.getLayoutSet());
+			_nondefaultGroupPublicLayout.getLayoutSet(),
+			_nondefaultGroupPublicLayoutHostname);
 	}
 
 	@Test
@@ -166,13 +166,13 @@ public class PortalInstancesTest {
 	}
 
 	private void _testGetCompanyId(
-		String hostname, LayoutSet expectedLayoutSet) {
+		LayoutSet expectedLayoutSet, String hostname) {
 
-		_testGetCompanyId(hostname, hostname, expectedLayoutSet);
+		_testGetCompanyId(expectedLayoutSet, hostname, hostname);
 	}
 
 	private void _testGetCompanyId(
-		String hostname, String serverName, LayoutSet expectedLayoutSet) {
+		LayoutSet expectedLayoutSet, String hostname, String serverName) {
 
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
