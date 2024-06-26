@@ -40,7 +40,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -95,7 +94,6 @@ public class PortalInstancesTest {
 			_virtualHostsDefaultSiteName);
 	}
 
-	@Ignore
 	@Test
 	public void testGetCompanyId() {
 		_updateLayoutSetVirtualHostname(
@@ -103,6 +101,11 @@ public class PortalInstancesTest {
 
 		_testGetCompanyId(
 			_company.getVirtualHostname(),
+			_defaultGroupPublicLayout.getLayoutSet());
+		_testGetCompanyId(
+			_company.getVirtualHostname(),
+			RandomTestUtil.randomString(6) + "." +
+				RandomTestUtil.randomString(3),
 			_defaultGroupPublicLayout.getLayoutSet());
 		_testGetCompanyId(
 			_nondefaultGroupPublicLayoutHostname,
@@ -165,10 +168,16 @@ public class PortalInstancesTest {
 	private void _testGetCompanyId(
 		String hostname, LayoutSet expectedLayoutSet) {
 
+		_testGetCompanyId(hostname, hostname, expectedLayoutSet);
+	}
+
+	private void _testGetCompanyId(
+		String hostname, String serverName, LayoutSet expectedLayoutSet) {
+
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
 
-		mockHttpServletRequest.setServerName(hostname);
+		mockHttpServletRequest.setServerName(serverName);
 
 		mockHttpServletRequest.addHeader("Host", hostname);
 
