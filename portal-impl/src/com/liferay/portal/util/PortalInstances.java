@@ -411,8 +411,24 @@ public class PortalInstances {
 
 		long companyId = _getCompanyIdByHost(host, httpServletRequest);
 
+		if (companyId > 0) {
+			return companyId;
+		}
+
+		String fallbackHost = httpServletRequest.getHeader("Host");
+
+		if (!Objects.equals(host, fallbackHost)) {
+			if (isVirtualHostsIgnoreHost(fallbackHost)) {
+				return 0;
+			}
+
+			companyId = _getCompanyIdByHost(fallbackHost, httpServletRequest);
+		}
+
 		if (strict && (companyId == 0)) {
-			throw new NoSuchVirtualHostException(host);
+			throw new NoSuchVirtualHostException(
+				"Unable to find company by host " + host + " and " +
+					fallbackHost);
 		}
 
 		return companyId;
