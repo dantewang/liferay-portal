@@ -1048,6 +1048,8 @@ public interface Portal {
 
 	public boolean isValidResourceId(String resourceId);
 
+	public String parseHost(String host);
+
 	public void resetCDNHosts();
 
 	public void sendError(

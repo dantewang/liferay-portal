@@ -1720,6 +1720,10 @@ public class PortalUtil {
 		return _portal.isValidResourceId(resourceId);
 	}
 
+	public static String parseHost(String host) {
+		return _portal.parseHost(host);
+	}
+
 	public static void resetCDNHosts() {
 		_portal.resetCDNHosts();
 	}
