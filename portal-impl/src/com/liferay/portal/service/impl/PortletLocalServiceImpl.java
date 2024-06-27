@@ -335,7 +335,9 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		portletBagFactory.create(portlet, true);
 
-		_portletsMap.put(portlet.getRootPortletId(), portlet);
+		synchronized (_portletsMap) {
+			_portletsMap.put(portlet.getRootPortletId(), portlet);
+		}
 
 		clearCache();
 	}
@@ -348,7 +350,9 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		portlet.setCategoryNames(SetUtil.fromArray(categoryNames));
 
-		_portletsMap.put(portlet.getRootPortletId(), portlet);
+		synchronized (_portletsMap) {
+			_portletsMap.put(portlet.getRootPortletId(), portlet);
+		}
 
 		if (eagerDestroy) {
 			PortletInstanceFactoryUtil.clear(portlet, false);
@@ -767,8 +771,12 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 					StringPool.BLANK, servletContext, xmls[1],
 					servletURLPatterns, pluginPackage));
 
-			for (Map.Entry<String, Portlet> entry : portletsMap.entrySet()) {
-				_portletsMap.put(entry.getKey(), entry.getValue());
+			synchronized (_portletsMap) {
+				for (Map.Entry<String, Portlet> entry :
+						portletsMap.entrySet()) {
+
+					_portletsMap.put(entry.getKey(), entry.getValue());
+				}
 			}
 
 			Map<String, String> portletIdsByStrutsPath =
@@ -941,7 +949,9 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 				portletBagFactory.create(portlet, true);
 
-				_portletsMap.put(entry.getKey(), portlet);
+				synchronized (_portletsMap) {
+					_portletsMap.put(entry.getKey(), portlet);
+				}
 			}
 
 			return ListUtil.fromMapValues(portletsMap);
@@ -1178,9 +1188,11 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		Map<String, Portlet> portletsMap = _portletsMaps.get(companyId);
 
 		if (portletsMap == null) {
-			portletsMap = portletLocalService.loadGetPortletsMap(companyId);
+			synchronized (_portletsMap) {
+				portletsMap = portletLocalService.loadGetPortletsMap(companyId);
 
-			_portletsMaps.put(companyId, portletsMap);
+				_portletsMaps.put(companyId, portletsMap);
+			}
 		}
 
 		return portletsMap;
