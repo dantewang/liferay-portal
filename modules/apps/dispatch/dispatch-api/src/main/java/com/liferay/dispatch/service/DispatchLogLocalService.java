@@ -18,7 +18,10 @@ import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
+import com.liferay.portal.kernel.service.ExceptionRetryAcceptor;
 import com.liferay.portal.kernel.service.PersistedModelLocalService;
+import com.liferay.portal.kernel.spring.aop.Property;
+import com.liferay.portal.kernel.spring.aop.Retry;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -68,6 +71,19 @@ public interface DispatchLogLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public DispatchLog addDispatchLog(DispatchLog dispatchLog);
 
+	@Retry(
+		acceptor = ExceptionRetryAcceptor.class,
+		properties = {
+			@Property(
+				name = ExceptionRetryAcceptor.EXCEPTION_NAME,
+				value = "javax.persistence.OptimisticLockException"
+			),
+			@Property(
+				name = ExceptionRetryAcceptor.EXCEPTION_NAME,
+				value = "org.hibernate.exception.LockAcquisitionException"
+			)
+		}
+	)
 	public DispatchLog addDispatchLog(
 			long userId, long dispatchTriggerId, Date endDate, String error,
 			String output, Date startDate,
@@ -114,9 +130,35 @@ public interface DispatchLogLocalService
 	 * @throws PortalException if a dispatch log with the primary key could not be found
 	 */
 	@Indexable(type = IndexableType.DELETE)
+	@Retry(
+		acceptor = ExceptionRetryAcceptor.class,
+		properties = {
+			@Property(
+				name = ExceptionRetryAcceptor.EXCEPTION_NAME,
+				value = "javax.persistence.OptimisticLockException"
+			),
+			@Property(
+				name = ExceptionRetryAcceptor.EXCEPTION_NAME,
+				value = "org.hibernate.exception.LockAcquisitionException"
+			)
+		}
+	)
 	public DispatchLog deleteDispatchLog(long dispatchLogId)
 		throws PortalException;
 
+	@Retry(
+		acceptor = ExceptionRetryAcceptor.class,
+		properties = {
+			@Property(
+				name = ExceptionRetryAcceptor.EXCEPTION_NAME,
+				value = "javax.persistence.OptimisticLockException"
+			),
+			@Property(
+				name = ExceptionRetryAcceptor.EXCEPTION_NAME,
+				value = "org.hibernate.exception.LockAcquisitionException"
+			)
+		}
+	)
 	public void deleteDispatchLogs(long dispatchTriggerId);
 
 	/**
@@ -287,6 +329,19 @@ public interface DispatchLogLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public DispatchLog updateDispatchLog(DispatchLog dispatchLog);
 
+	@Retry(
+		acceptor = ExceptionRetryAcceptor.class,
+		properties = {
+			@Property(
+				name = ExceptionRetryAcceptor.EXCEPTION_NAME,
+				value = "javax.persistence.OptimisticLockException"
+			),
+			@Property(
+				name = ExceptionRetryAcceptor.EXCEPTION_NAME,
+				value = "org.hibernate.exception.LockAcquisitionException"
+			)
+		}
+	)
 	public DispatchLog updateDispatchLog(
 			long dispatchLogId, Date endDate, String error, String output,
 			DispatchTaskStatus dispatchTaskStatus)
