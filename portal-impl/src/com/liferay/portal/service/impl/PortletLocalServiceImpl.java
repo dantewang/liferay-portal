@@ -431,7 +431,6 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	}
 
 	@Override
-	@Transactional(enabled = false)
 	public Portlet fetchPortletById(long companyId, String portletId) {
 		portletId = PortalUtil.getJsSafePortletId(portletId);
 
@@ -553,7 +552,8 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	@Override
 	@Transactional(enabled = false)
 	public Portlet getPortletById(long companyId, String portletId) {
-		Portlet portlet = fetchPortletById(companyId, portletId);
+		Portlet portlet = portletLocalService.fetchPortletById(
+			companyId, portletId);
 
 		if ((portlet != null) || portletId.equals(PortletKeys.LIFERAY_PORTAL)) {
 			return portlet;
@@ -711,18 +711,8 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	@Override
 	@Transactional(enabled = false)
 	public boolean hasPortlet(long companyId, String portletId) {
-		portletId = PortalUtil.getJsSafePortletId(portletId);
-
-		Portlet portlet = null;
-
-		String rootPortletId = PortletIdCodec.decodePortletName(portletId);
-
-		if (portletId.equals(rootPortletId)) {
-			portlet = _fetchPortletById(companyId, portletId);
-		}
-		else {
-			portlet = _fetchPortletById(companyId, rootPortletId);
-		}
+		Portlet portlet = portletLocalService.fetchPortletById(
+			companyId, portletId);
 
 		if (portlet == null) {
 			return false;
