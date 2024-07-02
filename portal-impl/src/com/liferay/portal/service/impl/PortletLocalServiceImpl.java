@@ -238,7 +238,6 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	@Override
 	@Transactional(enabled = false)
 	public void clearPortletsMap() {
-		_portletsMaps.clear();
 	}
 
 	@Override
@@ -436,15 +435,13 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	public Portlet fetchPortletById(long companyId, String portletId) {
 		portletId = PortalUtil.getJsSafePortletId(portletId);
 
-		Map<String, Portlet> companyPortletsMap = getPortletsMap(companyId);
-
 		String rootPortletId = PortletIdCodec.decodePortletName(portletId);
 
 		if (portletId.equals(rootPortletId)) {
-			return companyPortletsMap.get(portletId);
+			return _fetchPortletById(companyId, portletId);
 		}
 
-		Portlet portlet = companyPortletsMap.get(rootPortletId);
+		Portlet portlet = _fetchPortletById(companyId, rootPortletId);
 
 		if (portlet != null) {
 			portlet = portlet.getClonedInstance(portletId);
@@ -718,15 +715,13 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		Portlet portlet = null;
 
-		Map<String, Portlet> companyPortletsMap = getPortletsMap(companyId);
-
 		String rootPortletId = PortletIdCodec.decodePortletName(portletId);
 
 		if (portletId.equals(rootPortletId)) {
-			portlet = companyPortletsMap.get(portletId);
+			portlet = _fetchPortletById(companyId, portletId);
 		}
 		else {
-			portlet = companyPortletsMap.get(rootPortletId);
+			portlet = _fetchPortletById(companyId, rootPortletId);
 		}
 
 		if (portlet == null) {
@@ -969,6 +964,41 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		}
 	}
 
+	private Portlet _fetchPortletById(long companyId, String portletId) {
+		Portlet portlet = _portletsMap.get(portletId);
+
+		if (portlet == null) {
+			return null;
+		}
+
+		if ((portlet.getCompanyId() != CompanyConstants.SYSTEM) &&
+			(portlet.getCompanyId() != companyId)) {
+
+			return null;
+		}
+
+		portlet = (Portlet)portlet.clone();
+
+		portlet.setCompanyId(companyId);
+
+		if (companyId == CompanyConstants.SYSTEM) {
+			return portlet;
+		}
+
+		Portlet portletModel = portletPersistence.fetchByC_P(
+			companyId, portletId);
+
+		if (portletModel != null) {
+			portlet.setRoles(portletModel.getRoles());
+			portlet.setActive(portletModel.getActive());
+			portlet.setPluginPackage(portletModel.getPluginPackage());
+			portlet.setDefaultPluginSetting(
+				portletModel.getDefaultPluginSetting());
+		}
+
+		return portlet;
+	}
+
 	@Override
 	public Map<String, Portlet> loadGetPortletsMap(long companyId) {
 		Map<String, Portlet> portletsMap = new ConcurrentHashMap<>();
@@ -1015,7 +1045,6 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	@Override
 	@Transactional(enabled = false)
 	public void removeCompanyPortletsPool(long companyId) {
-		_portletsMaps.remove(companyId);
 	}
 
 	@Override
@@ -1175,15 +1204,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	}
 
 	protected Map<String, Portlet> getPortletsMap(long companyId) {
-		Map<String, Portlet> portletsMap = _portletsMaps.get(companyId);
-
-		if (portletsMap == null) {
-			portletsMap = portletLocalService.loadGetPortletsMap(companyId);
-
-			_portletsMaps.put(companyId, portletsMap);
-		}
-
-		return portletsMap;
+		return portletLocalService.loadGetPortletsMap(companyId);
 	}
 
 	protected void initPortletAddToPagePermissions(Portlet portlet)
@@ -2807,8 +2828,6 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		new ConcurrentHashMap<>();
 	private static volatile Map<String, String> _portletIdsByStrutsPath;
 	private static final Map<String, Portlet> _portletsMap =
-		new ConcurrentHashMap<>();
-	private static final Map<Long, Map<String, Portlet>> _portletsMaps =
 		new ConcurrentHashMap<>();
 
 	@BeanReference(type = CompanyLocalService.class)
