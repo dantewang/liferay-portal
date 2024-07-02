@@ -252,7 +252,7 @@ public interface PortletLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Portlet fetchPortlet(long id);
 
-	@Transactional(enabled = false)
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Portlet fetchPortletById(long companyId, String portletId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
