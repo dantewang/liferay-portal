@@ -108,6 +108,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -121,6 +122,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PreferencesValidator;
@@ -238,7 +241,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	@Override
 	@Transactional(enabled = false)
 	public void clearPortletsMap() {
-		_portletsMaps.clear();
+		PortletPool.clearCompanyCache();
 	}
 
 	@Override
@@ -335,7 +338,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		portletBagFactory.create(portlet, true);
 
-		_portletsMap.put(portlet.getRootPortletId(), portlet);
+		PortletPool.put(portlet.getRootPortletId(), portlet);
 
 		clearCache();
 	}
@@ -348,7 +351,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		portlet.setCategoryNames(SetUtil.fromArray(categoryNames));
 
-		_portletsMap.put(portlet.getRootPortletId(), portlet);
+		PortletPool.put(portlet.getRootPortletId(), portlet);
 
 		if (eagerDestroy) {
 			PortletInstanceFactoryUtil.clear(portlet, false);
@@ -409,7 +412,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	@Override
 	@Transactional(enabled = false)
 	public void destroyPortlet(Portlet portlet) {
-		_portletsMap.remove(portlet.getRootPortletId());
+		PortletPool.remove(portlet.getRootPortletId());
 
 		PortletApp portletApp = portlet.getPortletApp();
 
@@ -501,7 +504,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			friendlyURLMapperRootPortletIds.length);
 
 		for (String rootPortletId : friendlyURLMapperRootPortletIds) {
-			Portlet portlet = _portletsMap.get(rootPortletId);
+			Portlet portlet = PortletPool.get(rootPortletId);
 
 			if ((portlet == null) || !portlet.isActive() ||
 				!portlet.isInclude() || !portlet.isReady() ||
@@ -562,7 +565,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			return portlet;
 		}
 
-		if (_portletsMap.isEmpty()) {
+		if (PortletPool.isEmpty()) {
 			if (_log.isDebugEnabled()) {
 				_log.debug("No portlets are installed");
 			}
@@ -616,7 +619,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	@Override
 	@Transactional(enabled = false)
 	public Portlet getPortletById(String portletId) {
-		return _portletsMap.get(PortletIdCodec.decodePortletName(portletId));
+		return PortletPool.get(PortletIdCodec.decodePortletName(portletId));
 	}
 
 	@Override
@@ -634,7 +637,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	@Override
 	@Transactional(enabled = false)
 	public List<Portlet> getPortlets() {
-		return ListUtil.fromMapValues(_portletsMap);
+		return ListUtil.fromCollection(PortletPool.values());
 	}
 
 	@Override
@@ -683,17 +686,9 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	@Override
 	@Transactional(enabled = false)
 	public List<Portlet> getScopablePortlets() {
-		List<Portlet> portlets = ListUtil.fromMapValues(_portletsMap);
+		List<Portlet> portlets = ListUtil.fromCollection(PortletPool.values());
 
-		Iterator<Portlet> iterator = portlets.iterator();
-
-		while (iterator.hasNext()) {
-			Portlet portlet = iterator.next();
-
-			if (!portlet.isScopeable()) {
-				iterator.remove();
-			}
-		}
+		portlets.removeIf(portlet -> !portlet.isScopeable());
 
 		return portlets;
 	}
@@ -747,7 +742,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		portletLocalService.clearPortletsMap();
 
 		_portletApps.clear();
-		_portletsMap.clear();
+		PortletPool.clear();
 
 		try {
 			PortletApp portletApp = getPortletApp(StringPool.BLANK);
@@ -767,9 +762,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 					StringPool.BLANK, servletContext, xmls[1],
 					servletURLPatterns, pluginPackage));
 
-			for (Map.Entry<String, Portlet> entry : portletsMap.entrySet()) {
-				_portletsMap.put(entry.getKey(), entry.getValue());
-			}
+			PortletPool.putAll(portletsMap);
 
 			Map<String, String> portletIdsByStrutsPath =
 				new ConcurrentHashMap<>();
@@ -817,28 +810,16 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 			// Remove portlets that should not be included
 
-			Set<Map.Entry<String, Portlet>> entrySet = _portletsMap.entrySet();
-
-			Iterator<Map.Entry<String, Portlet>> iterator = entrySet.iterator();
-
-			while (iterator.hasNext()) {
-				Map.Entry<String, Portlet> entry = iterator.next();
-
-				Portlet portletModel = entry.getValue();
-
-				if (!Objects.equals(
-						portletModel.getPortletId(),
-						PortletKeys.SERVER_ADMIN) &&
-					!portletModel.isInclude() &&
+			PortletPool.removeIf(
+				portlet ->
 					!Objects.equals(
-						portletModel.getPortletId(),
+						portlet.getPortletId(), PortletKeys.SERVER_ADMIN) &&
+					!portlet.isInclude() &&
+					!Objects.equals(
+						portlet.getPortletId(),
 						PortletProviderUtil.getPortletId(
 							PortalMyAccountApplicationType.MyAccount.CLASS_NAME,
-							PortletProvider.Action.VIEW))) {
-
-					iterator.remove();
-				}
-			}
+							PortletProvider.Action.VIEW)));
 		}
 		catch (Exception exception) {
 			_log.error(exception);
@@ -928,7 +909,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		try {
 			for (Map.Entry<String, Portlet> entry : portletsMap.entrySet()) {
-				Portlet portlet = _portletsMap.remove(entry.getKey());
+				Portlet portlet = PortletPool.remove(entry.getKey());
 
 				if (portlet != null) {
 					PortletInstanceFactoryUtil.clear(portlet);
@@ -941,7 +922,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 				portletBagFactory.create(portlet, true);
 
-				_portletsMap.put(entry.getKey(), portlet);
+				PortletPool.put(entry.getKey(), portlet);
 			}
 
 			return ListUtil.fromMapValues(portletsMap);
@@ -952,7 +933,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			// Clean up portlets added prior to error
 
 			for (Map.Entry<String, Portlet> entry : portletsMap.entrySet()) {
-				Portlet portlet = _portletsMap.remove(entry.getKey());
+				Portlet portlet = PortletPool.remove(entry.getKey());
 
 				if (portlet != null) {
 					PortletInstanceFactoryUtil.clear(portlet);
@@ -973,7 +954,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	public Map<String, Portlet> loadGetPortletsMap(long companyId) {
 		Map<String, Portlet> portletsMap = new ConcurrentHashMap<>();
 
-		for (Portlet portlet : _portletsMap.values()) {
+		for (Portlet portlet : PortletPool.values()) {
 			if ((portlet.getCompanyId() != CompanyConstants.SYSTEM) &&
 				(portlet.getCompanyId() != companyId)) {
 
@@ -1015,7 +996,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	@Override
 	@Transactional(enabled = false)
 	public void removeCompanyPortletsPool(long companyId) {
-		_portletsMaps.remove(companyId);
+		PortletPool.removeCompanyCache(companyId);
 	}
 
 	@Override
@@ -1061,14 +1042,14 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		if (portletIdsByStrutsPath == null) {
 			portletIdsByStrutsPath = new ConcurrentHashMap<>();
 
-			for (Portlet portlet : _portletsMap.values()) {
+			for (Portlet portlet : PortletPool.values()) {
 				String strutsPath = portlet.getStrutsPath();
 
 				String oldPortletId = portletIdsByStrutsPath.put(
 					strutsPath, portlet.getPortletId());
 
 				if ((oldPortletId != null) && _log.isWarnEnabled()) {
-					Portlet oldPortlet = _portletsMap.get(oldPortletId);
+					Portlet oldPortlet = PortletPool.get(oldPortletId);
 
 					String oldPortletContextName = oldPortlet.getContextName();
 
@@ -1175,15 +1156,8 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	}
 
 	protected Map<String, Portlet> getPortletsMap(long companyId) {
-		Map<String, Portlet> portletsMap = _portletsMaps.get(companyId);
-
-		if (portletsMap == null) {
-			portletsMap = portletLocalService.loadGetPortletsMap(companyId);
-
-			_portletsMaps.put(companyId, portletsMap);
-		}
-
-		return portletsMap;
+		return PortletPool.getCompanyCache(
+			companyId, portletLocalService::loadGetPortletsMap);
 	}
 
 	protected void initPortletAddToPagePermissions(Portlet portlet)
@@ -1324,7 +1298,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		Set<String> undefinedPortletIds = new HashSet<>();
 
-		for (Portlet portlet : _portletsMap.values()) {
+		for (Portlet portlet : PortletPool.values()) {
 			String portletId = portlet.getPortletId();
 
 			PortletApp portletApp = portlet.getPortletApp();
@@ -2053,7 +2027,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			_log.debug("Reading portlet " + portletId);
 		}
 
-		Portlet portletModel = _portletsMap.get(portletId);
+		Portlet portletModel = PortletPool.get(portletId);
 
 		if (portletModel == null) {
 			portletModel = new PortletImpl(CompanyConstants.SYSTEM, portletId);
@@ -2806,10 +2780,6 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	private static final Map<String, PortletApp> _portletApps =
 		new ConcurrentHashMap<>();
 	private static volatile Map<String, String> _portletIdsByStrutsPath;
-	private static final Map<String, Portlet> _portletsMap =
-		new ConcurrentHashMap<>();
-	private static final Map<Long, Map<String, Portlet>> _portletsMaps =
-		new ConcurrentHashMap<>();
 
 	@BeanReference(type = CompanyLocalService.class)
 	private CompanyLocalService _companyLocalService;
@@ -2833,6 +2803,95 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	private RoleLocalService _roleLocalService;
 
 	private ServiceTracker<FriendlyURLMapper, String[]> _serviceTracker;
+
+	private static class PortletPool {
+
+		public static void clear() {
+			synchronized (_portletsMap) {
+				_portletsMap.clear();
+			}
+		}
+
+		public static void clearCompanyCache() {
+			_portletsMaps.clear();
+		}
+
+		public static Portlet get(String portletId) {
+			return _portletsMap.get(portletId);
+		}
+
+		public static Map<String, Portlet> getCompanyCache(
+			long companyId, Function<Long, Map<String, Portlet>> function) {
+
+			Map<String, Portlet> portletsMap = _portletsMaps.get(companyId);
+
+			if (portletsMap == null) {
+				synchronized (_portletsMap) {
+					portletsMap = function.apply(companyId);
+
+					_portletsMaps.put(companyId, portletsMap);
+				}
+			}
+
+			return portletsMap;
+		}
+
+		public static boolean isEmpty() {
+			return _portletsMap.isEmpty();
+		}
+
+		public static void put(String portletId, Portlet portlet) {
+			synchronized (_portletsMap) {
+				_portletsMap.put(portletId, portlet);
+			}
+		}
+
+		public static void putAll(Map<String, Portlet> portletsMap) {
+			synchronized (_portletsMap) {
+				_portletsMap.putAll(portletsMap);
+			}
+		}
+
+		public static Portlet remove(String portletId) {
+			synchronized (_portletsMap) {
+				return _portletsMap.remove(portletId);
+			}
+		}
+
+		public static void removeCompanyCache(long companyId) {
+			_portletsMaps.remove(companyId);
+		}
+
+		public static void removeIf(Predicate<Portlet> predicate) {
+			synchronized (_portletsMap) {
+				Set<Map.Entry<String, Portlet>> entrySet =
+					_portletsMap.entrySet();
+
+				Iterator<Map.Entry<String, Portlet>> iterator =
+					entrySet.iterator();
+
+				while (iterator.hasNext()) {
+					Map.Entry<String, Portlet> entry = iterator.next();
+
+					Portlet portlet = entry.getValue();
+
+					if (predicate.test(portlet)) {
+						iterator.remove();
+					}
+				}
+			}
+		}
+
+		public static Collection<Portlet> values() {
+			return Collections.unmodifiableCollection(_portletsMap.values());
+		}
+
+		private static final Map<String, Portlet> _portletsMap =
+			new ConcurrentHashMap<>();
+		private static final Map<Long, Map<String, Portlet>> _portletsMaps =
+			new ConcurrentHashMap<>();
+
+	}
 
 	private class FriendlyURLMapperServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer<FriendlyURLMapper, String[]> {
