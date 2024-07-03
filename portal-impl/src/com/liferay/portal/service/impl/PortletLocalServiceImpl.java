@@ -121,6 +121,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -2807,8 +2809,13 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	private static class PortletPool {
 
 		public static void clear() {
-			synchronized (_portletsMap) {
+			_lock.lock();
+
+			try {
 				_portletsMap.clear();
+			}
+			finally {
+				_lock.unlock();
 			}
 		}
 
@@ -2826,10 +2833,15 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			Map<String, Portlet> portletsMap = _portletsMaps.get(companyId);
 
 			if (portletsMap == null) {
-				synchronized (_portletsMap) {
+				_lock.lock();
+
+				try {
 					portletsMap = function.apply(companyId);
 
 					_portletsMaps.put(companyId, portletsMap);
+				}
+				finally {
+					_lock.unlock();
 				}
 			}
 
@@ -2841,20 +2853,35 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		}
 
 		public static void put(String portletId, Portlet portlet) {
-			synchronized (_portletsMap) {
+			_lock.lock();
+
+			try {
 				_portletsMap.put(portletId, portlet);
+			}
+			finally {
+				_lock.unlock();
 			}
 		}
 
 		public static void putAll(Map<String, Portlet> portletsMap) {
-			synchronized (_portletsMap) {
+			_lock.lock();
+
+			try {
 				_portletsMap.putAll(portletsMap);
+			}
+			finally {
+				_lock.unlock();
 			}
 		}
 
 		public static Portlet remove(String portletId) {
-			synchronized (_portletsMap) {
+			_lock.lock();
+
+			try {
 				return _portletsMap.remove(portletId);
+			}
+			finally {
+				_lock.unlock();
 			}
 		}
 
@@ -2863,7 +2890,9 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		}
 
 		public static void removeIf(Predicate<Portlet> predicate) {
-			synchronized (_portletsMap) {
+			_lock.lock();
+
+			try {
 				Set<Map.Entry<String, Portlet>> entrySet =
 					_portletsMap.entrySet();
 
@@ -2880,12 +2909,16 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 					}
 				}
 			}
+			finally {
+				_lock.unlock();
+			}
 		}
 
 		public static Collection<Portlet> values() {
 			return Collections.unmodifiableCollection(_portletsMap.values());
 		}
 
+		private static final Lock _lock = new ReentrantLock();
 		private static final Map<String, Portlet> _portletsMap =
 			new ConcurrentHashMap<>();
 		private static final Map<Long, Map<String, Portlet>> _portletsMaps =
