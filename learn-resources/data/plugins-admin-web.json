@@ -1,8 +1,53 @@
 {
 	"general": {
+		"ar_SA": {
+			"message": "How can I configure permissions?"
+		},
+		"ca_ES": {
+			"message": "How can I configure permissions?"
+		},
+		"de_DE": {
+			"message": "How can I configure permissions?"
+		},
 		"en_US": {
 			"message": "How can I configure permissions?",
 			"url": "https://learn.liferay.com/w/dxp/system-administration/installing-and-managing-apps/managing-apps/configuring-portlets-themes-and-layout-templates"
+		},
+		"es_ES": {
+			"message": "How can I configure permissions?"
+		},
+		"fi_FI": {
+			"message": "How can I configure permissions?"
+		},
+		"fr_CA": {
+			"message": "How can I configure permissions?"
+		},
+		"fr_FR": {
+			"message": "How can I configure permissions?"
+		},
+		"gl_ES": {
+			"message": "How can I configure permissions?"
+		},
+		"hu_HU": {
+			"message": "How can I configure permissions?"
+		},
+		"ja_JP": {
+			"message": "How can I configure permissions?"
+		},
+		"nl_NL": {
+			"message": "How can I configure permissions?"
+		},
+		"pt_BR": {
+			"message": "How can I configure permissions?"
+		},
+		"sv_SE": {
+			"message": "How can I configure permissions?"
+		},
+		"zh_CN": {
+			"message": "How can I configure permissions?"
+		},
+		"zh_TW": {
+			"message": "How can I configure permissions?"
 		}
 	}
 }

@@ -1,14 +1,104 @@
 {
 	"basic-configuration": {
+		"ar_SA": {
+			"message": "Want some tips?"
+		},
+		"ca_ES": {
+			"message": "Want some tips?"
+		},
+		"de_DE": {
+			"message": "Want some tips?"
+		},
 		"en_US": {
 			"message": "Want some tips?",
 			"url": "https://learn.liferay.com/w/dxp/installation-and-upgrades/installing-liferay/running-liferay-for-the-first-time"
+		},
+		"es_ES": {
+			"message": "Want some tips?"
+		},
+		"fi_FI": {
+			"message": "Want some tips?"
+		},
+		"fr_CA": {
+			"message": "Want some tips?"
+		},
+		"fr_FR": {
+			"message": "Want some tips?"
+		},
+		"gl_ES": {
+			"message": "Want some tips?"
+		},
+		"hu_HU": {
+			"message": "Want some tips?"
+		},
+		"ja_JP": {
+			"message": "Want some tips?"
+		},
+		"nl_NL": {
+			"message": "Want some tips?"
+		},
+		"pt_BR": {
+			"message": "Want some tips?"
+		},
+		"sv_SE": {
+			"message": "Want some tips?"
+		},
+		"zh_CN": {
+			"message": "Want some tips?"
+		},
+		"zh_TW": {
+			"message": "Want some tips?"
 		}
 	},
 	"database-configuration": {
+		"ar_SA": {
+			"message": "Need to set up a database?"
+		},
+		"ca_ES": {
+			"message": "Need to set up a database?"
+		},
+		"de_DE": {
+			"message": "Need to set up a database?"
+		},
 		"en_US": {
 			"message": "Need to set up a database?",
 			"url": "https://learn.liferay.com/w/dxp/installation-and-upgrades/reference/database-configurations"
+		},
+		"es_ES": {
+			"message": "Need to set up a database?"
+		},
+		"fi_FI": {
+			"message": "Need to set up a database?"
+		},
+		"fr_CA": {
+			"message": "Need to set up a database?"
+		},
+		"fr_FR": {
+			"message": "Need to set up a database?"
+		},
+		"gl_ES": {
+			"message": "Need to set up a database?"
+		},
+		"hu_HU": {
+			"message": "Need to set up a database?"
+		},
+		"ja_JP": {
+			"message": "Need to set up a database?"
+		},
+		"nl_NL": {
+			"message": "Need to set up a database?"
+		},
+		"pt_BR": {
+			"message": "Need to set up a database?"
+		},
+		"sv_SE": {
+			"message": "Need to set up a database?"
+		},
+		"zh_CN": {
+			"message": "Need to set up a database?"
+		},
+		"zh_TW": {
+			"message": "Need to set up a database?"
 		}
 	}
 }

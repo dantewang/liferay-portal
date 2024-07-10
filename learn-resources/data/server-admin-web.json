@@ -1,14 +1,104 @@
 {
 	"mail": {
+		"ar_SA": {
+			"message": "Help me connect to a mail server."
+		},
+		"ca_ES": {
+			"message": "Help me connect to a mail server."
+		},
+		"de_DE": {
+			"message": "Help me connect to a mail server."
+		},
 		"en_US": {
 			"message": "Help me connect to a mail server.",
 			"url": "https://learn.liferay.com/w/dxp/installation-and-upgrades/setting-up-liferay/configuring-mail/alternative-email-configuration-methods"
+		},
+		"es_ES": {
+			"message": "Help me connect to a mail server."
+		},
+		"fi_FI": {
+			"message": "Help me connect to a mail server."
+		},
+		"fr_CA": {
+			"message": "Help me connect to a mail server."
+		},
+		"fr_FR": {
+			"message": "Help me connect to a mail server."
+		},
+		"gl_ES": {
+			"message": "Help me connect to a mail server."
+		},
+		"hu_HU": {
+			"message": "Help me connect to a mail server."
+		},
+		"ja_JP": {
+			"message": "Help me connect to a mail server."
+		},
+		"nl_NL": {
+			"message": "Help me connect to a mail server."
+		},
+		"pt_BR": {
+			"message": "Help me connect to a mail server."
+		},
+		"sv_SE": {
+			"message": "Help me connect to a mail server."
+		},
+		"zh_CN": {
+			"message": "Help me connect to a mail server."
+		},
+		"zh_TW": {
+			"message": "Help me connect to a mail server."
 		}
 	},
 	"script-console": {
+		"ar_SA": {
+			"message": "What can I do in the Script Console?"
+		},
+		"ca_ES": {
+			"message": "What can I do in the Script Console?"
+		},
+		"de_DE": {
+			"message": "What can I do in the Script Console?"
+		},
 		"en_US": {
 			"message": "What can I do in the Script Console?",
 			"url": "https://learn.liferay.com/w/dxp/system-administration/using-the-script-engine"
+		},
+		"es_ES": {
+			"message": "What can I do in the Script Console?"
+		},
+		"fi_FI": {
+			"message": "What can I do in the Script Console?"
+		},
+		"fr_CA": {
+			"message": "What can I do in the Script Console?"
+		},
+		"fr_FR": {
+			"message": "What can I do in the Script Console?"
+		},
+		"gl_ES": {
+			"message": "What can I do in the Script Console?"
+		},
+		"hu_HU": {
+			"message": "What can I do in the Script Console?"
+		},
+		"ja_JP": {
+			"message": "What can I do in the Script Console?"
+		},
+		"nl_NL": {
+			"message": "What can I do in the Script Console?"
+		},
+		"pt_BR": {
+			"message": "What can I do in the Script Console?"
+		},
+		"sv_SE": {
+			"message": "What can I do in the Script Console?"
+		},
+		"zh_CN": {
+			"message": "What can I do in the Script Console?"
+		},
+		"zh_TW": {
+			"message": "What can I do in the Script Console?"
 		}
 	}
 }

@@ -1,8 +1,53 @@
 {
 	"general": {
+		"ar_SA": {
+			"message": "Help me configure a CDN."
+		},
+		"ca_ES": {
+			"message": "Help me configure a CDN."
+		},
+		"de_DE": {
+			"message": "Help me configure a CDN."
+		},
 		"en_US": {
 			"message": "Help me configure a CDN.",
 			"url": "https://learn.liferay.com/w/dxp/installation-and-upgrades/setting-up-liferay/using-a-cdn"
+		},
+		"es_ES": {
+			"message": "Help me configure a CDN."
+		},
+		"fi_FI": {
+			"message": "Help me configure a CDN."
+		},
+		"fr_CA": {
+			"message": "Help me configure a CDN."
+		},
+		"fr_FR": {
+			"message": "Help me configure a CDN."
+		},
+		"gl_ES": {
+			"message": "Help me configure a CDN."
+		},
+		"hu_HU": {
+			"message": "Help me configure a CDN."
+		},
+		"ja_JP": {
+			"message": "Help me configure a CDN."
+		},
+		"nl_NL": {
+			"message": "Help me configure a CDN."
+		},
+		"pt_BR": {
+			"message": "Help me configure a CDN."
+		},
+		"sv_SE": {
+			"message": "Help me configure a CDN."
+		},
+		"zh_CN": {
+			"message": "Help me configure a CDN."
+		},
+		"zh_TW": {
+			"message": "Help me configure a CDN."
 		}
 	}
 }

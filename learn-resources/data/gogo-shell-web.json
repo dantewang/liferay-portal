@@ -1,8 +1,53 @@
 {
 	"general": {
+		"ar_SA": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"ca_ES": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"de_DE": {
+			"message": "What can I do in the Gogo Shell?"
+		},
 		"en_US": {
 			"message": "What can I do in the Gogo Shell?",
 			"url": "https://learn.liferay.com/w/dxp/liferay-internals/fundamentals/using-the-gogo-shell"
+		},
+		"es_ES": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"fi_FI": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"fr_CA": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"fr_FR": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"gl_ES": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"hu_HU": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"ja_JP": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"nl_NL": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"pt_BR": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"sv_SE": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"zh_CN": {
+			"message": "What can I do in the Gogo Shell?"
+		},
+		"zh_TW": {
+			"message": "What can I do in the Gogo Shell?"
 		}
 	}
 }
