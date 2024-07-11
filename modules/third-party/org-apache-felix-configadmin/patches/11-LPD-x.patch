@@ -1,0 +1,41 @@
+diff --git a/org/apache/felix/cm/impl/UpdateThread.java b/org/apache/felix/cm/impl/UpdateThread.java
+index 5f9edd5b4ae14..06d145a81a5a4 100644
+--- a/org/apache/felix/cm/impl/UpdateThread.java
++++ b/org/apache/felix/cm/impl/UpdateThread.java
+@@ -159,20 +159,20 @@ public class UpdateThread implements Runnable
+ 
+             StackTraceElement[] stackTraceElements = workerThread.getStackTrace();
+ 
+-            String stackTraceString = null;
++            StringBuilder sb = null;
+ 
+-            if (stackTraceElements != null) {
+-                stackTraceString = "#######Start of stack trace for thread " + workerThread.getName();
++            if (stackTraceElements.length != 0) {
++                sb = new StringBuilder("#######Start of stack trace for thread " + workerThread.getName());
+                 for (StackTraceElement stackTraceElement : stackTraceElements) {
+-                    stackTraceString +="\tat " + stackTraceElement;
++                    sb.append("\tat ").append(stackTraceElement);
+                 }
+-                stackTraceString += "#######End of stack trace for thread " + workerThread.getName();
++                sb.append("#######End of stack trace for thread ").append(workerThread.getName());
+             }
+             else {
+-                stackTraceString = "#######Thread " + workerThread.getName() + " not found.";
++                sb = new StringBuilder("#######Thread " + workerThread.getName() + " not found.");
+             }
+ 
+-            updateTasks.offerFirst( this );
++            boolean offered = updateTasks.offerFirst( this );
+ 
+             // wait for all updates to terminate (<= 10 seconds !)
+             try
+@@ -187,7 +187,7 @@ public class UpdateThread implements Runnable
+             if ( workerThread.isAlive() )
+             {
+                 Log.logger.log( LogService.LOG_ERROR,
+-                    "Worker thread {0} did not terminate within 5 seconds; trying to kill\n " + stackTraceString, new Object[]
++                    "Worker thread {0} did not terminate within 5 seconds; trying to kill\n " + offered + "\n" + sb, new Object[]
+                         { workerBaseName } );
+ 
+                 workerThread.interrupt();
