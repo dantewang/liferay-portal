@@ -22,6 +22,7 @@ import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+import java.util.Map;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -156,6 +157,21 @@ public class UpdateThread implements Runnable
             Thread workerThread = this.worker;
             this.worker = null;
 
+            StackTraceElement[] stackTraceElements = workerThread.getStackTrace();
+
+            String stackTraceString = null;
+
+            if (stackTraceElements != null) {
+                stackTraceString = "#######Start of stack trace for thread " + workerThread.getName();
+                for (StackTraceElement stackTraceElement : stackTraceElements) {
+                    stackTraceString +="\tat " + stackTraceElement;
+                }
+                stackTraceString += "#######End of stack trace for thread " + workerThread.getName();
+            }
+            else {
+                stackTraceString = "#######Thread " + workerThread.getName() + " not found.";
+            }
+
             updateTasks.offerFirst( this );
 
             // wait for all updates to terminate (<= 10 seconds !)
@@ -171,8 +187,9 @@ public class UpdateThread implements Runnable
             if ( workerThread.isAlive() )
             {
                 Log.logger.log( LogService.LOG_ERROR,
-                    "Worker thread {0} did not terminate within 5 seconds; trying to kill", new Object[]
+                    "Worker thread {0} did not terminate within 5 seconds; trying to kill\n " + stackTraceString, new Object[]
                         { workerBaseName } );
+
                 workerThread.interrupt();
             }
         }
