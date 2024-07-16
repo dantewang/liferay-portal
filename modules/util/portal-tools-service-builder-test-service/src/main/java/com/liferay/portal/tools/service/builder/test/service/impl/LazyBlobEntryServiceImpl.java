@@ -11,4 +11,9 @@ import com.liferay.portal.tools.service.builder.test.service.base.LazyBlobEntryS
  * @author Brian Wing Shun Chan
  */
 public class LazyBlobEntryServiceImpl extends LazyBlobEntryServiceBaseImpl {
+
+	public int getLazyBlobEntriesCount() {
+		return lazyBlobEntryLocalService.getLazyBlobEntriesCount();
+	}
+
 }
