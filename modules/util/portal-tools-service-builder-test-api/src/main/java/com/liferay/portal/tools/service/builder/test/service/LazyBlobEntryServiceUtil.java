@@ -24,6 +24,9 @@ public class LazyBlobEntryServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.portal.tools.service.builder.test.service.impl.LazyBlobEntryServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static int getLazyBlobEntriesCount() {
+		return getService().getLazyBlobEntriesCount();
+	}
 
 	/**
 	 * Returns the OSGi service identifier.

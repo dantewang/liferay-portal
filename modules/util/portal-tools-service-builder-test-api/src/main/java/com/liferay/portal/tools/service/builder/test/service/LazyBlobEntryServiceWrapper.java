@@ -27,6 +27,11 @@ public class LazyBlobEntryServiceWrapper
 		_lazyBlobEntryService = lazyBlobEntryService;
 	}
 
+	@Override
+	public int getLazyBlobEntriesCount() {
+		return _lazyBlobEntryService.getLazyBlobEntriesCount();
+	}
+
 	/**
 	 * Returns the OSGi service identifier.
 	 *
