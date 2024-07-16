@@ -7,8 +7,13 @@ package com.liferay.portal.tools.service.builder.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.reflect.AnnotationLocator;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.remote.json.web.service.JSONWebServiceActionsManager;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.tools.service.builder.test.service.LazyBlobEntryService;
 
@@ -63,6 +68,16 @@ public class JSONWebServiceContextTest {
 		Assert.assertEquals(
 			contextPath,
 			serviceReference.getProperty("json.web.service.context.path"));
+
+		Assert.assertNotNull(
+			_jsonWebServiceActionsManager.getJSONWebServiceActionMapping(
+				StringBundler.concat(
+					StringPool.SLASH, StringUtil.toLowerCase(contextPath),
+					StringPool.PERIOD, StringUtil.toLowerCase(contextPath),
+					"/get-lazy-blob-entries-count-0")));
 	}
+
+	@Inject
+	private JSONWebServiceActionsManager _jsonWebServiceActionsManager;
 
 }
