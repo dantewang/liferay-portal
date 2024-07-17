@@ -8,6 +8,7 @@ package com.liferay.learn;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author Brian Wing Shun Chan
@@ -41,7 +42,16 @@ public class LearnMessage {
 		}
 
 		_message = languageIdJSONObject.getString("message");
+
 		_url = languageIdJSONObject.getString("url");
+
+		if (Validator.isBlank(_url) && !languageId.equals("en_US")) {
+			JSONObject enUSJSONObject = keyJSONObject.getJSONObject("en_US");
+
+			if (enUSJSONObject != null) {
+				_url = enUSJSONObject.getString("url");
+			}
+		}
 
 		_html = StringBundler.concat(
 			"<a class=\"text-underline\" href=\"", _url,
