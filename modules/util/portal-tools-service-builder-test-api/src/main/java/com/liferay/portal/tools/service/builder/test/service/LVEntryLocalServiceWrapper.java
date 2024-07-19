@@ -82,6 +82,16 @@ public class LVEntryLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.tools.service.builder.test.model.LVEntry
+			addLVEntryManuallyIndex(
+				com.liferay.portal.tools.service.builder.test.model.LVEntry
+					lvEntry)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _lvEntryLocalService.addLVEntryManuallyIndex(lvEntry);
+	}
+
+	@Override
 	public com.liferay.portal.tools.service.builder.test.model.LVEntry checkout(
 			com.liferay.portal.tools.service.builder.test.model.LVEntry
 				publishedLVEntry,
