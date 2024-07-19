@@ -78,6 +78,12 @@ public class LVEntryLocalServiceUtil {
 		return getService().addLVEntry(lvEntry);
 	}
 
+	public static LVEntry addLVEntryManuallyIndex(LVEntry lvEntry)
+		throws PortalException {
+
+		return getService().addLVEntryManuallyIndex(lvEntry);
+	}
+
 	public static LVEntry checkout(LVEntry publishedLVEntry, int version)
 		throws PortalException {
 
