@@ -12,7 +12,10 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
+import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.search.spi.model.index.contributor.ModelDocumentContributor;
+import com.liferay.portal.search.spi.model.index.contributor.ModelIndexerWriterContributor;
+import com.liferay.portal.search.spi.model.registrar.ModelSearchConfigurator;
 import com.liferay.portal.spring.hibernate.SpringHibernateThreadLocalUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -54,6 +57,12 @@ public class IndexingTransactionTest {
 
 		ServiceRegistration<?> serviceRegistration1 =
 			bundleContext.registerService(
+				ModelSearchConfigurator.class,
+				new TestLVEntryModelSearchConfigurator(),
+				new HashMapDictionary<>());
+
+		ServiceRegistration<?> serviceRegistration2 =
+			bundleContext.registerService(
 				ModelDocumentContributor.class,
 				(ModelDocumentContributor<LVEntry>)(document, lvEntry) ->
 					_lvEntryLocalService.getBigDecimalEntryPrimaryKeys(
@@ -64,7 +73,7 @@ public class IndexingTransactionTest {
 						"LVEntry"
 				).build());
 
-		ServiceRegistration<?> serviceRegistration2 =
+		ServiceRegistration<?> serviceRegistration3 =
 			bundleContext.registerService(
 				ServiceWrapper.class,
 				new TestLVEntryLocalServiceWrapper(atomicInteger),
@@ -82,10 +91,33 @@ public class IndexingTransactionTest {
 			Assert.assertEquals(2, atomicInteger.get());
 		}
 		finally {
+			serviceRegistration3.unregister();
+
 			serviceRegistration2.unregister();
 
 			serviceRegistration1.unregister();
 		}
+	}
+
+	public static class TestLVEntryModelSearchConfigurator
+		implements ModelSearchConfigurator<LVEntry> {
+
+		@Override
+		public String getClassName() {
+			return LVEntry.class.getName();
+		}
+
+		@Override
+		public ModelIndexerWriterContributor<LVEntry>
+			getModelIndexerWriterContributor() {
+
+			return _modelIndexWriterContributor;
+		}
+
+		private final ModelIndexerWriterContributor<LVEntry>
+			_modelIndexWriterContributor = ProxyFactory.newDummyInstance(
+				ModelIndexerWriterContributor.class);
+
 	}
 
 	@Inject
