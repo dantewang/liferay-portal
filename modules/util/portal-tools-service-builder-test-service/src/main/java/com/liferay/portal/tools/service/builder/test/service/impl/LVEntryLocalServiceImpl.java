@@ -6,9 +6,6 @@
 package com.liferay.portal.tools.service.builder.test.service.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.search.Indexer;
-import com.liferay.portal.kernel.search.IndexerRegistryUtil;
-import com.liferay.portal.tools.service.builder.test.model.LVEntry;
 import com.liferay.portal.tools.service.builder.test.model.LVEntryLocalizationVersion;
 import com.liferay.portal.tools.service.builder.test.service.base.LVEntryLocalServiceBaseImpl;
 
@@ -18,24 +15,6 @@ import java.util.List;
  * @author Brian Wing Shun Chan
  */
 public class LVEntryLocalServiceImpl extends LVEntryLocalServiceBaseImpl {
-
-	@Override
-	public LVEntry addLVEntryManuallyIndex(LVEntry lvEntry)
-		throws PortalException {
-
-		lvEntry.setNew(true);
-
-		lvEntry = lvEntryPersistence.update(lvEntry);
-
-		Indexer<LVEntry> indexer = IndexerRegistryUtil.getIndexer(
-			LVEntry.class);
-
-		if (indexer != null) {
-			indexer.reindex(lvEntry);
-		}
-
-		return lvEntry;
-	}
 
 	@Override
 	public LVEntryLocalizationVersion fetchLVEntryLocalizationVersion(
