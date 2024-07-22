@@ -91,9 +91,6 @@ public interface LVEntryLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public LVEntry addLVEntry(LVEntry lvEntry);
 
-	public LVEntry addLVEntryManuallyIndex(LVEntry lvEntry)
-		throws PortalException;
-
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public LVEntry checkout(LVEntry publishedLVEntry, int version)
