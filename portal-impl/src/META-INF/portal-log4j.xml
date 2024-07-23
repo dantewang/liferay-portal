@@ -31,6 +31,10 @@
 				<Layout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t][%c{1}:%L] %m%n" type="PatternLayout" />
 			</FilePattern>
 		</Appender>
+
+		<Appender name="COMPANY_WEBID_CONSOLE" target="SYSTEM_OUT" type="CompanyWebIdConsole">
+			<Layout pattern="%X{company.webId} %d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t][%c{1}:%L] %m%n" type="PatternLayout" />
+		</Appender>
 	</Appenders>
 
 	<Loggers>
@@ -233,6 +237,7 @@
 		<Logger level="WARN" name="portal-web.docroot.errors.404.jsp" />
 
 		<Root level="INFO">
+			<AppenderRef ref="COMPANY_WEBID_CONSOLE" />
 			<AppenderRef ref="COMPANY_LOG_ROUTING_TEXT_FILE" />
 			<AppenderRef ref="CONSOLE" />
 			<AppenderRef ref="TEXT_FILE" />
