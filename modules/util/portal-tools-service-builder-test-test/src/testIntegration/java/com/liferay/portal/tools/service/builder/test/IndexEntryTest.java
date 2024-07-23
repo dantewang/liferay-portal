@@ -6,6 +6,7 @@
 package com.liferay.portal.tools.service.builder.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.portal.configuration.test.util.ConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.search.IndexWriterHelper;
 import com.liferay.portal.kernel.search.SearchEngineHelper;
@@ -40,6 +41,7 @@ import com.liferay.portal.tools.service.builder.test.service.IndexEntryLocalServ
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -129,6 +131,16 @@ public class IndexEntryTest {
 	}
 
 	private void _testReindex() throws Throwable {
+		_testReindex(
+			callable -> TransactionInvokerUtil.invoke(
+				_transactionConfig, callable));
+		_testReindex(Callable::call);
+	}
+
+	private void _testReindex(
+			UnsafeConsumer<Callable<Object>, Throwable> unsafeConsumer)
+		throws Throwable {
+
 		long companyId = RandomTestUtil.nextLong();
 
 		_searchEngineHelper.initialize(companyId);
@@ -154,8 +166,7 @@ public class IndexEntryTest {
 
 			Assert.assertTrue(booleans.isEmpty());
 
-			TransactionInvokerUtil.invoke(
-				_transactionConfig,
+			unsafeConsumer.accept(
 				() -> {
 					_indexEntry = _indexEntryLocalService.addIndexEntry(
 						companyId, RandomTestUtil.randomString());
@@ -191,6 +202,14 @@ public class IndexEntryTest {
 
 			TransactionInvokerUtil.invoke(
 				_transactionConfig,
+				() -> {
+					_indexEntryLocalService.addKeywordsEntry(
+						keywordsEntryId, _indexEntry);
+
+					return null;
+				});
+
+			unsafeConsumer.accept(
 				() -> {
 					_indexEntryLocalService.addKeywordsEntry(
 						keywordsEntryId, _indexEntry);
