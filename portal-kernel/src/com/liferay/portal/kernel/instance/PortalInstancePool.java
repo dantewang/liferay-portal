@@ -5,11 +5,13 @@
 
 package com.liferay.portal.kernel.instance;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 
@@ -117,6 +119,11 @@ public class PortalInstancePool {
 
 			throw new RuntimeException(sqlException);
 		}
+	}
+
+	public static String getWebIdFromCache(long companyId) {
+		return GetterUtil.get(
+			_portalInstances.get(companyId), StringPool.BLANK);
 	}
 
 	public static String[] getWebIds() {

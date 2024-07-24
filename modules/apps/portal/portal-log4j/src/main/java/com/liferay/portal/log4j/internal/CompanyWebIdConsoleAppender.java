@@ -77,7 +77,7 @@ public final class CompanyWebIdConsoleAppender extends AbstractAppender {
 		}
 
 		contextData.putValue(
-			"company.webId", PortalInstancePool.getWebId(companyId));
+			"company.webId", PortalInstancePool.getWebIdFromCache(companyId));
 
 		_appender.append(mutableLogEvent);
 	}
