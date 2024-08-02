@@ -189,15 +189,16 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 	 * @param  maxUsers the max number of company users (optionally
 	 *         <code>0</code>)
 	 * @param  active whether the company is active
+	 * @param  createDefaultAdmin whether to create the default admin user
 	 * @return the company
 	 */
 	@Override
 	public Company addCompany(
 			Long companyId, String webId, String virtualHostname, String mx,
-			int maxUsers, boolean active, String defaultAdminPassword,
-			String defaultAdminScreenName, String defaultAdminEmailAddress,
-			String defaultAdminFirstName, String defaultAdminMiddleName,
-			String defaultAdminLastName)
+			int maxUsers, boolean active, boolean createDefaultAdmin,
+			String defaultAdminPassword, String defaultAdminScreenName,
+			String defaultAdminEmailAddress, String defaultAdminFirstName,
+			String defaultAdminMiddleName, String defaultAdminLastName)
 		throws PortalException {
 
 		// Company
@@ -283,28 +284,30 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 
 					updatedCompany = _checkCompany(updatedCompany);
 
-					_userLocalService.addDefaultAdminUser(
-						updatedCompany.getCompanyId(),
-						GetterUtil.getString(
-							defaultAdminPassword,
-							PropsValues.DEFAULT_ADMIN_PASSWORD),
-						GetterUtil.getString(
-							defaultAdminScreenName,
-							PropsValues.DEFAULT_ADMIN_SCREEN_NAME),
-						GetterUtil.getString(
-							defaultAdminEmailAddress,
-							PropsValues.DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX +
-								"@" + mx),
-						guestUser.getLocale(),
-						GetterUtil.getString(
-							defaultAdminFirstName,
-							PropsValues.DEFAULT_ADMIN_FIRST_NAME),
-						GetterUtil.getString(
-							defaultAdminMiddleName,
-							PropsValues.DEFAULT_ADMIN_MIDDLE_NAME),
-						GetterUtil.getString(
-							defaultAdminLastName,
-							PropsValues.DEFAULT_ADMIN_LAST_NAME));
+					if (createDefaultAdmin) {
+						_userLocalService.addDefaultAdminUser(
+							updatedCompany.getCompanyId(),
+							GetterUtil.getString(
+								defaultAdminPassword,
+								PropsValues.DEFAULT_ADMIN_PASSWORD),
+							GetterUtil.getString(
+								defaultAdminScreenName,
+								PropsValues.DEFAULT_ADMIN_SCREEN_NAME),
+							GetterUtil.getString(
+								defaultAdminEmailAddress,
+								PropsValues.DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX +
+									"@" + mx),
+							guestUser.getLocale(),
+							GetterUtil.getString(
+								defaultAdminFirstName,
+								PropsValues.DEFAULT_ADMIN_FIRST_NAME),
+							GetterUtil.getString(
+								defaultAdminMiddleName,
+								PropsValues.DEFAULT_ADMIN_MIDDLE_NAME),
+							GetterUtil.getString(
+								defaultAdminLastName,
+								PropsValues.DEFAULT_ADMIN_LAST_NAME));
+					}
 
 					// Guest user must have the Guest role
 
@@ -345,6 +348,35 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 					return null;
 				});
 		}
+	}
+
+	/**
+	 * Adds a company with the primary key.
+	 *
+	 * @param  companyId the primary key of the company (optionally <code>null</code> or
+	 *         <code>0</code> to generate a key automatically)
+	 * @param  webId the the company's web domain
+	 * @param  virtualHostname the company's virtual host name
+	 * @param  mx the company's mail domain
+	 * @param  maxUsers the max number of company users (optionally
+	 *         <code>0</code>)
+	 * @param  active whether the company is active
+	 * @return the company
+	 */
+	@Override
+	public Company addCompany(
+			Long companyId, String webId, String virtualHostname, String mx,
+			int maxUsers, boolean active, String defaultAdminPassword,
+			String defaultAdminScreenName, String defaultAdminEmailAddress,
+			String defaultAdminFirstName, String defaultAdminMiddleName,
+			String defaultAdminLastName)
+		throws PortalException {
+
+		return addCompany(
+			companyId, webId, virtualHostname, mx, maxUsers, active, true,
+			defaultAdminPassword, defaultAdminScreenName,
+			defaultAdminEmailAddress, defaultAdminFirstName,
+			defaultAdminMiddleName, defaultAdminLastName);
 	}
 
 	@Override
