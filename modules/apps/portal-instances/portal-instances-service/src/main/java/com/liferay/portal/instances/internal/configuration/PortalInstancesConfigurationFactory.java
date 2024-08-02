@@ -62,7 +62,8 @@ public class PortalInstancesConfigurationFactory {
 
 		if (company == null) {
 			company = _companyLocalService.addCompany(
-				null, webId, virtualHostname, mx, maxUsers, active, null, null,
+				null, webId, virtualHostname, mx, maxUsers, active,
+				portalInstancesConfiguration.createDefaultAdmin(), null, null,
 				null, null, null, null);
 
 			try (SafeCloseable safeCloseable =
