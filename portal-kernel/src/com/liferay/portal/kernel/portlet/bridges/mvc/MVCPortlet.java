@@ -5,6 +5,7 @@
 
 package com.liferay.portal.kernel.portlet.bridges.mvc;
 
+import com.liferay.petra.concurrent.DCLSingleton;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -17,8 +18,11 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.bridges.mvc.constants.MVCRenderConstants;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.transaction.TransactionConfig;
+import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.InfrastructureUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -58,6 +62,8 @@ import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
 
 import javax.servlet.http.HttpServletRequest;
+
+import javax.sql.DataSource;
 
 /**
  * @author Brian Wing Shun Chan
@@ -390,8 +396,8 @@ public class MVCPortlet extends LiferayPortlet {
 					}
 				}
 
-				return mvcActionCommand.processAction(
-					actionRequest, actionResponse);
+				return _callActionMethod(
+					actionRequest, actionResponse, mvcActionCommand);
 			}
 		}
 		else {
@@ -416,8 +422,8 @@ public class MVCPortlet extends LiferayPortlet {
 				}
 
 				for (MVCActionCommand mvcActionCommand : mvcActionCommands) {
-					if (!mvcActionCommand.processAction(
-							actionRequest, actionResponse)) {
+					if (!_callActionMethod(
+							actionRequest, actionResponse, mvcActionCommand)) {
 
 						return false;
 					}
@@ -662,6 +668,43 @@ public class MVCPortlet extends LiferayPortlet {
 	protected String templatePath;
 	protected String viewTemplate;
 
+	private boolean _callActionMethod(
+			ActionRequest actionRequest, ActionResponse actionResponse,
+			MVCActionCommand mvcActionCommand)
+		throws PortletException {
+
+		if ((mvcActionCommand instanceof BaseTransactionalMVCActionCommand) ||
+			!_isRWSplit(InfrastructureUtil.getDataSource())) {
+
+			return mvcActionCommand.processAction(
+				actionRequest, actionResponse);
+		}
+
+		try {
+			return TransactionInvokerUtil.invoke(
+				_transactionConfigDCLSingleton.getSingleton(
+					() -> {
+						TransactionConfig.Builder builder =
+							new TransactionConfig.Builder();
+
+						return builder.setReadOnly(
+							false
+						).setRollbackForClasses(
+							Exception.class
+						).build();
+					}),
+				() -> mvcActionCommand.processAction(
+					actionRequest, actionResponse));
+		}
+		catch (Throwable throwable) {
+			if (throwable instanceof PortletException) {
+				throw (PortletException)throwable;
+			}
+
+			throw new PortletException(throwable);
+		}
+	}
+
 	private String _getInitParameter(String name) {
 		String value = getInitParameter(name);
 
@@ -792,6 +835,14 @@ public class MVCPortlet extends LiferayPortlet {
 			});
 	}
 
+	private boolean _isRWSplit(DataSource dataSource) {
+		return dataSource.getClass(
+		).getName(
+		).contains(
+			"Dynamic"
+		);
+	}
+
 	private Set<String> _visitResources(
 		PortletContext portletContext, String path, String pattern) {
 
@@ -819,6 +870,8 @@ public class MVCPortlet extends LiferayPortlet {
 
 	private static final Log _log = LogFactoryUtil.getLog(MVCPortlet.class);
 
+	private static final DCLSingleton<TransactionConfig>
+		_transactionConfigDCLSingleton = new DCLSingleton<>();
 	private static final Map<String, Map<String, Set<String>>> _validPathsMaps =
 		new ConcurrentHashMap<>();
 
