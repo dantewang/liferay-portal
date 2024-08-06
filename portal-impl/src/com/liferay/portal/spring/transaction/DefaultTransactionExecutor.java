@@ -155,6 +155,22 @@ public class DefaultTransactionExecutor implements TransactionExecutor {
 		if (!transactionAttributeAdapter.isReadOnly()) {
 			TransactionDataSourceTypeThreadLocal.setUseWriteDataSource(true);
 		}
+		else if (TransactionDataSourceTypeThreadLocal.useWriteDataSource()) {
+			transactionAttributeAdapter = new TransactionAttributeAdapter(
+				transactionAttributeAdapter) {
+
+				@Override
+				public boolean isReadOnly() {
+					return false;
+				}
+
+				@Override
+				public boolean isStrictReadOnly() {
+					return false;
+				}
+
+			};
+		}
 
 		TransactionStatusAdapter transactionStatusAdapter =
 			new TransactionStatusAdapter(
