@@ -48,7 +48,14 @@ public class TransactionAttributeBuilder {
 
 		ruleBasedTransactionAttribute.setPropagationBehavior(
 			propagation.value());
-		ruleBasedTransactionAttribute.setReadOnly(readOnly);
+
+		if (TransactionDataSourceTypeThreadLocal.useWriteDataSource()) {
+			ruleBasedTransactionAttribute.setReadOnly(false);
+		}
+		else {
+			ruleBasedTransactionAttribute.setReadOnly(readOnly);
+		}
+
 		ruleBasedTransactionAttribute.setTimeout(timeout);
 
 		List<RollbackRuleAttribute> rollbackRuleAttributes = new ArrayList<>();

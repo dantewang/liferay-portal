@@ -151,6 +151,10 @@ public class DefaultTransactionExecutor implements TransactionExecutor {
 	public TransactionStatusAdapter start(
 		TransactionAttributeAdapter transactionAttributeAdapter) {
 
+		if (!transactionAttributeAdapter.isReadOnly()) {
+			TransactionDataSourceTypeThreadLocal.setUseWriteDataSource(true);
+		}
+
 		TransactionStatusAdapter transactionStatusAdapter =
 			new TransactionStatusAdapter(
 				_platformTransactionManager.getTransaction(
