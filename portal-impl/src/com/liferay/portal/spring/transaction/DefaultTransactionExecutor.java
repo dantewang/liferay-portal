@@ -6,6 +6,7 @@
 package com.liferay.portal.spring.transaction;
 
 import com.liferay.petra.function.UnsafeSupplier;
+import com.liferay.portal.kernel.transaction.TransactionDataSourceTypeThreadLocal;
 import com.liferay.portal.kernel.transaction.TransactionLifecycleManager;
 
 import org.springframework.transaction.PlatformTransactionManager;

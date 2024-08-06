@@ -7,6 +7,7 @@ package com.liferay.portal.spring.transaction;
 
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.TransactionDataSourceTypeThreadLocal;
 import com.liferay.portal.kernel.transaction.TransactionDefinition;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.util.PropsValues;
