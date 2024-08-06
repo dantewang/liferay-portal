@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.spring.hibernate.DialectDetector;
+import com.liferay.portal.spring.transaction.TransactionDataSourceTypeThreadLocal;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 import com.liferay.portal.util.PropsUtil;
 
@@ -52,6 +53,8 @@ public class DBInitUtil {
 		if ((_readDataSource != null) && (_writeDataSource != null)) {
 			_dataSource = new DynamicDataSource(
 				_readDataSource, _writeDataSource);
+
+			TransactionDataSourceTypeThreadLocal.setEnabled(true);
 		}
 		else {
 			_dataSource = _initDataSource("jdbc.default.");
