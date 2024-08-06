@@ -16,6 +16,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.HttpOnlyCookieServletResponse;
 import com.liferay.portal.kernel.servlet.NonSerializableObjectRequestWrapper;
 import com.liferay.portal.kernel.servlet.SanitizedServletResponse;
+import com.liferay.portal.kernel.transaction.TransactionDataSourceTypeThreadLocal;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
@@ -116,6 +117,11 @@ public class InvokerFilter implements Filter {
 		}
 		finally {
 			httpServletRequest.removeAttribute(WebKeys.INVOKER_FILTER_URI);
+
+			if (_dispatcher == Dispatcher.REQUEST) {
+				TransactionDataSourceTypeThreadLocal.setUseWriteDataSource(
+					false);
+			}
 		}
 	}
 
