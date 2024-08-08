@@ -9,6 +9,7 @@ import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.lang.ThreadContextClassLoaderUtil;
 import com.liferay.portal.cluster.multiple.internal.ClusterReceiver;
 import com.liferay.portal.kernel.cluster.Address;
+import com.liferay.portal.kernel.dependency.manager.DependencyManagerSyncUtil;
 import com.liferay.portal.kernel.io.Deserializer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -19,6 +20,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
@@ -39,10 +41,25 @@ public class JGroupsReceiver extends ReceiverAdapter {
 
 		_clusterReceiver = clusterReceiver;
 		_classLoaders = classLoaders;
+
+		DependencyManagerSyncUtil.registerSyncCallable(
+			() -> {
+				_receiveMessage.set(true);
+
+				return null;
+			});
 	}
 
 	@Override
 	public void receive(Message message) {
+		if (!_receiveMessage.get()) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Skip processing message");
+			}
+
+			return;
+		}
+
 		byte[] rawBuffer = message.getRawBuffer();
 
 		if (rawBuffer == null) {
@@ -113,5 +130,6 @@ public class JGroupsReceiver extends ReceiverAdapter {
 
 	private final Map<ClassLoader, ClassLoader> _classLoaders;
 	private final ClusterReceiver _clusterReceiver;
+	private final AtomicBoolean _receiveMessage = new AtomicBoolean(false);
 
 }
