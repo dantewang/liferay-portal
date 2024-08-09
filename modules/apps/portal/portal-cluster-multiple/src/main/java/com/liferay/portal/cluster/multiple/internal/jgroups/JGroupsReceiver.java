@@ -44,7 +44,7 @@ public class JGroupsReceiver extends ReceiverAdapter {
 
 		DependencyManagerSyncUtil.registerSyncCallable(
 			() -> {
-				_receiveMessage.set(true);
+				_started.set(true);
 
 				return null;
 			});
@@ -83,7 +83,7 @@ public class JGroupsReceiver extends ReceiverAdapter {
 				deserializer.readObject(), new AddressImpl(message.getSrc()));
 		}
 		catch (ClassNotFoundException classNotFoundException) {
-			if (!_receiveMessage.get()) {
+			if (!_started.get()) {
 				if (_log.isDebugEnabled()) {
 					_log.debug(
 						"Unable to deserialize message payload during startup",
@@ -132,6 +132,6 @@ public class JGroupsReceiver extends ReceiverAdapter {
 
 	private final Map<ClassLoader, ClassLoader> _classLoaders;
 	private final ClusterReceiver _clusterReceiver;
-	private final AtomicBoolean _receiveMessage = new AtomicBoolean(false);
+	private final AtomicBoolean _started = new AtomicBoolean(false);
 
 }
