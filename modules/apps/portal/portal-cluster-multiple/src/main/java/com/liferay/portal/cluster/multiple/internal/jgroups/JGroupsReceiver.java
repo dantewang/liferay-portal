@@ -52,14 +52,6 @@ public class JGroupsReceiver extends ReceiverAdapter {
 
 	@Override
 	public void receive(Message message) {
-		if (!_receiveMessage.get()) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Skip processing message");
-			}
-
-			return;
-		}
-
 		byte[] rawBuffer = message.getRawBuffer();
 
 		if (rawBuffer == null) {
@@ -91,6 +83,16 @@ public class JGroupsReceiver extends ReceiverAdapter {
 				deserializer.readObject(), new AddressImpl(message.getSrc()));
 		}
 		catch (ClassNotFoundException classNotFoundException) {
+			if (!_receiveMessage.get()) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(
+						"Unable to deserialize message payload during startup",
+						classNotFoundException);
+				}
+
+				return;
+			}
+
 			if (_log.isWarnEnabled()) {
 				_log.warn(
 					"Unable to deserialize message payload",
