@@ -8,6 +8,7 @@ package com.liferay.petra.lang;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.lang.reflect.Constructor;
@@ -224,6 +225,18 @@ public class ClassLoaderPoolTest {
 			_contextClassLoader, ClassLoaderPool.getClassLoader(null));
 		Assert.assertSame(
 			_contextClassLoader, ClassLoaderPool.getClassLoader("null"));
+
+		// Strict
+
+		Assert.assertSame(
+			classLoader1,
+			ClassLoaderPool.getClassLoader(_CONTEXT_NAME_1, true));
+		Assert.assertEquals(
+			_contextClassLoader,
+			ClassLoaderPool.getClassLoader(RandomTestUtil.randomString()));
+		Assert.assertNull(
+			ClassLoaderPool.getClassLoader(
+				RandomTestUtil.randomString(), true));
 	}
 
 	@Test

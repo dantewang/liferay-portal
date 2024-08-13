@@ -10,8 +10,10 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.constants.SerializationConstants;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 
@@ -607,6 +609,45 @@ public class DeserializerTest {
 		catch (IllegalStateException illegalStateException) {
 			Assert.assertEquals(
 				"Unkown TC code 12", illegalStateException.getMessage());
+		}
+	}
+
+	@Test
+	public void testReadObjectWithInvalidContextName() throws Exception {
+		UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
+			new UnsyncByteArrayOutputStream();
+
+		unsyncByteArrayOutputStream.write(SerializationConstants.TC_OBJECT);
+
+		String contextName = RandomTestUtil.randomString();
+
+		ObjectOutputStream objectOutputStream = new AnnotatedObjectOutputStream(
+			unsyncByteArrayOutputStream) {
+
+			@Override
+			protected void annotateClass(Class<?> clazz) throws IOException {
+				writeUTF(contextName);
+			}
+
+		};
+
+		Date date = new Date(123456);
+
+		objectOutputStream.writeObject(date);
+
+		ByteBuffer byteBuffer =
+			unsyncByteArrayOutputStream.unsafeGetByteBuffer();
+
+		Deserializer deserializer = new Deserializer(byteBuffer);
+
+		try {
+			deserializer.readObject();
+
+			Assert.fail();
+		}
+		catch (ClassLoaderNotFoundException classLoaderNotFoundException) {
+			Assert.assertEquals(
+				contextName, classLoaderNotFoundException.getMessage());
 		}
 	}
 
