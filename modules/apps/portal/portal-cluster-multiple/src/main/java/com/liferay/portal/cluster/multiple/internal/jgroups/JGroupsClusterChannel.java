@@ -81,7 +81,9 @@ public class JGroupsClusterChannel extends BaseClusterChannel {
 			}
 
 			_jChannel.setReceiver(
-				new JGroupsReceiver(clusterReceiver, classLoaders));
+				new JGroupsReceiver(
+					clusterReceiver, classLoaders,
+					clusterExecutorConfiguration.debugEnabled()));
 
 			_jChannel.connect(_clusterName);
 

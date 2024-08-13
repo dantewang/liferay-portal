@@ -9,6 +9,7 @@ import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.lang.ThreadContextClassLoaderUtil;
 import com.liferay.portal.cluster.multiple.internal.ClusterReceiver;
 import com.liferay.portal.kernel.cluster.Address;
+import com.liferay.portal.kernel.io.ClassLoaderNotFoundException;
 import com.liferay.portal.kernel.io.Deserializer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -31,7 +32,7 @@ public class JGroupsReceiver extends ReceiverAdapter {
 
 	public JGroupsReceiver(
 		ClusterReceiver clusterReceiver,
-		Map<ClassLoader, ClassLoader> classLoaders) {
+		Map<ClassLoader, ClassLoader> classLoaders, boolean debugEnabled) {
 
 		if (clusterReceiver == null) {
 			throw new NullPointerException("Cluster receiver is null");
@@ -39,6 +40,7 @@ public class JGroupsReceiver extends ReceiverAdapter {
 
 		_clusterReceiver = clusterReceiver;
 		_classLoaders = classLoaders;
+		_debugEnabled = debugEnabled;
 	}
 
 	@Override
@@ -72,6 +74,13 @@ public class JGroupsReceiver extends ReceiverAdapter {
 
 			_clusterReceiver.receive(
 				deserializer.readObject(), new AddressImpl(message.getSrc()));
+		}
+		catch (ClassLoaderNotFoundException classLoaderNotFoundException) {
+			if (_debugEnabled && _log.isWarnEnabled()) {
+				_log.warn(
+					"Unable to deserialize message payload",
+					classLoaderNotFoundException);
+			}
 		}
 		catch (ClassNotFoundException classNotFoundException) {
 			if (_log.isWarnEnabled()) {
@@ -113,5 +122,6 @@ public class JGroupsReceiver extends ReceiverAdapter {
 
 	private final Map<ClassLoader, ClassLoader> _classLoaders;
 	private final ClusterReceiver _clusterReceiver;
+	private final boolean _debugEnabled;
 
 }
