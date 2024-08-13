@@ -74,9 +74,13 @@ public class ClassLoaderPool {
 					}
 				}
 			}
+
+			if (strict && (classLoader == null)) {
+				return null;
+			}
 		}
 
-		if (!strict && (classLoader == null)) {
+		if (classLoader == null) {
 			Thread currentThread = Thread.currentThread();
 
 			classLoader = currentThread.getContextClassLoader();
