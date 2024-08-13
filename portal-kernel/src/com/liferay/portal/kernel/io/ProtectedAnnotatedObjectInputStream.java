@@ -30,6 +30,13 @@ public class ProtectedAnnotatedObjectInputStream
 
 		String contextName = readUTF();
 
+		ClassLoader classLoader = ClassLoaderPool.getClassLoader(
+			contextName, true);
+
+		if (classLoader == null) {
+			throw new ClassLoaderNotFoundException(contextName);
+		}
+
 		String className = objectStreamClass.getName();
 
 		return ClassResolverUtil.resolve(
