@@ -32,6 +32,25 @@ public class ClassLoaderPool {
 	 * @return the class loader associated with the context name
 	 */
 	public static ClassLoader getClassLoader(String contextName) {
+		return getClassLoader(contextName, false);
+	}
+
+	/**
+	 * Returns the class loader associated with the context name.
+	 *
+	 * <p>
+	 * If no class loader is found for the context name, and strict is false,
+	 * the thread's context class loader is returned as a fallback. Otherwise,
+	 * null is returned.
+	 * </p>
+	 *
+	 * @param  contextName the servlet context's name
+	 * @param  strict whether to fall back to the context class loader
+	 * @return the class loader associated with the context name, or null
+	 */
+	public static ClassLoader getClassLoader(
+		String contextName, boolean strict) {
+
 		ClassLoader classLoader = null;
 
 		if ((contextName != null) && !contextName.equals("null")) {
@@ -57,7 +76,7 @@ public class ClassLoaderPool {
 			}
 		}
 
-		if (classLoader == null) {
+		if (!strict && (classLoader == null)) {
 			Thread currentThread = Thread.currentThread();
 
 			classLoader = currentThread.getContextClassLoader();
