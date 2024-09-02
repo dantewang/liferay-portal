@@ -1835,7 +1835,8 @@ public class ObjectEntryLocalServiceTest {
 		Assert.assertEquals(
 			expectedValues.get("richText"), actualValues.get("richText"));
 
-		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition);
+		_objectDefinitionLocalService.deleteObjectDefinition(
+			objectDefinition.getObjectDefinitionId());
 	}
 
 	@Test

@@ -983,7 +983,8 @@ public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 
 		_objectEntryLocalService.deleteObjectEntry(objectEntry.getId());
 
-		objectDefinitionLocalService.deleteObjectDefinition(objectDefinition);
+		objectDefinitionLocalService.deleteObjectDefinition(
+			objectDefinition.getObjectDefinitionId());
 
 		PermissionThreadLocal.setPermissionChecker(originalPermissionChecker);
 

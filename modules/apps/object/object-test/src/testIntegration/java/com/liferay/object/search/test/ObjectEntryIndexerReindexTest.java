@@ -168,7 +168,7 @@ public class ObjectEntryIndexerReindexTest {
 				PrincipalThreadLocal.setName(originalName);
 
 				_objectDefinitionLocalService.deleteObjectDefinition(
-					objectDefinition);
+					objectDefinition.getObjectDefinitionId());
 			}
 		}
 	}

@@ -1569,7 +1569,7 @@ public class DefaultObjectEntryManagerImplTest
 		}
 		finally {
 			objectDefinitionLocalService.deleteObjectDefinition(
-				objectDefinition);
+				objectDefinition.getObjectDefinitionId());
 		}
 	}
 
@@ -1664,7 +1664,7 @@ public class DefaultObjectEntryManagerImplTest
 		}
 		finally {
 			objectDefinitionLocalService.deleteObjectDefinition(
-				objectDefinition);
+				objectDefinition.getObjectDefinitionId());
 		}
 	}
 
@@ -3626,7 +3626,8 @@ public class DefaultObjectEntryManagerImplTest
 
 		Assert.assertEquals(expectedFileEntryId, _getFileEntryId(objectEntry));
 
-		objectDefinitionLocalService.deleteObjectDefinition(objectDefinition);
+		objectDefinitionLocalService.deleteObjectDefinition(
+			objectDefinition.getObjectDefinitionId());
 	}
 
 	@Test

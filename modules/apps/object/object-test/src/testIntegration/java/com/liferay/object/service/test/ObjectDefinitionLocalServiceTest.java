@@ -159,11 +159,17 @@ public class ObjectDefinitionLocalServiceTest {
 
 		// Name
 
+		ObjectDefinition objectDefinition = _addCustomObjectDefinition(
+			" Test ");
+
 		_objectDefinitionLocalService.deleteObjectDefinition(
-			_addCustomObjectDefinition(" Test "));
+			objectDefinition.getObjectDefinitionId());
+
+		objectDefinition = _addCustomObjectDefinition(
+			"A123456789a123456789a123456789a1234567891");
+
 		_objectDefinitionLocalService.deleteObjectDefinition(
-			_addCustomObjectDefinition(
-				"A123456789a123456789a123456789a1234567891"));
+			objectDefinition.getObjectDefinitionId());
 
 		AssertUtils.assertFailure(
 			ObjectDefinitionNameException.MustBeLessThan41Characters.class,
@@ -175,7 +181,7 @@ public class ObjectDefinitionLocalServiceTest {
 			"The first character of a name must be an upper case letter",
 			() -> _addCustomObjectDefinition("test"));
 
-		ObjectDefinition objectDefinition = _addCustomObjectDefinition("Test");
+		objectDefinition = _addCustomObjectDefinition("Test");
 
 		objectDefinition =
 			_objectDefinitionLocalService.publishCustomObjectDefinition(
@@ -994,11 +1000,17 @@ public class ObjectDefinitionLocalServiceTest {
 
 		// Name
 
+		ObjectDefinition objectDefinition =
+			_addUnmodifiableSystemObjectDefinition(" Test ");
+
 		_objectDefinitionLocalService.deleteObjectDefinition(
-			_addUnmodifiableSystemObjectDefinition(" Test "));
+			objectDefinition.getObjectDefinitionId());
+
+		objectDefinition = _addUnmodifiableSystemObjectDefinition(
+			"A123456789a123456789a123456789a1234567891");
+
 		_objectDefinitionLocalService.deleteObjectDefinition(
-			_addUnmodifiableSystemObjectDefinition(
-				"A123456789a123456789a123456789a1234567891"));
+			objectDefinition.getObjectDefinitionId());
 
 		AssertUtils.assertFailure(
 			ObjectDefinitionNameException.
@@ -1026,8 +1038,7 @@ public class ObjectDefinitionLocalServiceTest {
 			"The first character of a name must be an upper case letter",
 			() -> _addUnmodifiableSystemObjectDefinition("test"));
 
-		ObjectDefinition objectDefinition =
-			_addUnmodifiableSystemObjectDefinition("Test");
+		objectDefinition = _addUnmodifiableSystemObjectDefinition("Test");
 
 		AssertUtils.assertFailure(
 			ObjectDefinitionNameException.MustNotBeDuplicate.class,

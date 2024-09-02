@@ -113,7 +113,8 @@ public class ObjectDDMStorageAdapterTest {
 
 	@After
 	public void tearDown() throws Exception {
-		_objectDefinitionLocalService.deleteObjectDefinition(_objectDefinition);
+		_objectDefinitionLocalService.deleteObjectDefinition(
+			_objectDefinition.getObjectDefinitionId());
 
 		_listTypeDefinitionLocalService.deleteListTypeDefinition(
 			_listTypeDefinition);

@@ -134,8 +134,9 @@ public class ObjectValidationRuleLocalServiceTest {
 	@After
 	public void tearDown() throws Exception {
 		_objectDefinitionLocalService.deleteObjectDefinition(
-			_modifiableSystemObjectDefinition);
-		_objectDefinitionLocalService.deleteObjectDefinition(_objectDefinition);
+			_modifiableSystemObjectDefinition.getObjectDefinitionId());
+		_objectDefinitionLocalService.deleteObjectDefinition(
+			_objectDefinition.getObjectDefinitionId());
 	}
 
 	@Test
