@@ -454,7 +454,7 @@ public class ObjectDefinitionLocalServiceImpl
 
 		for (ObjectDefinition objectDefinition : objectDefinitions) {
 			objectDefinitionLocalService.deleteObjectDefinition(
-				objectDefinition);
+				objectDefinition.getObjectDefinitionId());
 		}
 	}
 
