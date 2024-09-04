@@ -37,6 +37,8 @@ public interface ResourceActions {
 
 	public String getCompositeModelNameSeparator();
 
+	public List<String> getGlobalModelNames();
+
 	public List<String> getModelNames();
 
 	public List<String> getModelPortletResources(String name);

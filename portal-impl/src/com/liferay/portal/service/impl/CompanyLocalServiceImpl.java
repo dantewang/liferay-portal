@@ -290,7 +290,7 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 					_resourcePermissionLocalService.
 						populateDefaultModelResourcePermissions(
 							updatedCompany.getCompanyId(),
-							ResourceActionsUtil.getModelNames());
+							ResourceActionsUtil.getGlobalModelNames());
 
 					if (addDefaultAdminUser) {
 						_userLocalService.addDefaultAdminUser(
@@ -2158,10 +2158,8 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 
 		// Default Permissions
 
-		_resourcePermissionLocalService.
-			populateDefaultModelResourcePermissions(
-				company.getCompanyId(),
-				ResourceActionsUtil.getModelNames());
+		_resourcePermissionLocalService.populateDefaultModelResourcePermissions(
+			company.getCompanyId(), ResourceActionsUtil.getGlobalModelNames());
 
 		_portletLocalService.checkPortlets(company.getCompanyId());
 

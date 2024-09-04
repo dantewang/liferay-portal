@@ -78,6 +78,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -175,6 +176,21 @@ public class ResourceActionsImpl implements ResourceActions {
 	@Override
 	public String getCompositeModelNameSeparator() {
 		return _COMPOSITE_MODEL_NAME_SEPARATOR;
+	}
+
+	@Override
+	public List<String> getGlobalModelNames() {
+		List<String> modelNames = new ArrayList<>();
+
+		for (String name : _resourceActionsBags.keySet()) {
+			if ((name.indexOf(CharPool.PERIOD) != -1) &&
+				!_companyModelResources.containsKey(name)) {
+
+				modelNames.add(name);
+			}
+		}
+
+		return modelNames;
 	}
 
 	@Override
@@ -1167,6 +1183,8 @@ public class ResourceActionsImpl implements ResourceActions {
 			Element rootElement, Set<String> resourceNames)
 		throws ResourceActionsException {
 
+		String companyId = rootElement.attributeValue("companyId");
+
 		for (Element modelResourceElement :
 				rootElement.elements("model-resource")) {
 
@@ -1188,6 +1206,13 @@ public class ResourceActionsImpl implements ResourceActions {
 					modelResourceElement.attributeValue("portal"))) {
 
 				_portalModelResources.add(modelName);
+			}
+
+			if (companyId != null) {
+				Set<Long> companyIds = _companyModelResources.computeIfAbsent(
+					modelName, key -> new ConcurrentSkipListSet<>());
+
+				companyIds.add(GetterUtil.getLong(companyId));
 			}
 
 			Element portletRefElement = modelResourceElement.element(
@@ -1430,6 +1455,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		TransactionConfig.Factory.create(
 			Propagation.REQUIRED, new Class<?>[] {Exception.class});
 
+	private final Map<String, Set<Long>> _companyModelResources =
+		new ConcurrentHashMap<>();
 	private final Map<String, Double> _modelResourceWeights =
 		new ConcurrentHashMap<>();
 	private final Set<String> _organizationModelResources =
