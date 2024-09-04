@@ -655,6 +655,8 @@ public class ResourceActionsImpl implements ResourceActions {
 	public void removeModelResources(Document document) throws PortalException {
 		Element rootElement = document.getRootElement();
 
+		String companyId = rootElement.attributeValue("companyId");
+
 		for (Element modelResourceElement :
 				rootElement.elements("model-resource")) {
 
@@ -714,13 +716,28 @@ public class ResourceActionsImpl implements ResourceActions {
 
 			_portalModelResources.remove(modelName);
 
-			String permissionName = modelName;
+			if (companyId == null) {
+				String permissionName = modelName;
 
-			companyLocalService.forEachCompanyId(
-				companyId ->
-					resourcePermissionLocalService.deleteResourcePermissions(
-						companyId, permissionName,
-						ResourceConstants.SCOPE_INDIVIDUAL, permissionName));
+				companyLocalService.forEachCompanyId(
+					curCompanyId ->
+						resourcePermissionLocalService.
+							deleteResourcePermissions(
+								curCompanyId, permissionName,
+								ResourceConstants.SCOPE_INDIVIDUAL,
+								permissionName));
+			}
+			else {
+				Set<Long> companyIds = _companyModelResources.get(modelName);
+
+				if (companyIds != null) {
+					companyIds.remove(GetterUtil.getLong(companyId));
+				}
+
+				resourcePermissionLocalService.deleteResourcePermissions(
+					GetterUtil.getLong(companyId), modelName,
+					ResourceConstants.SCOPE_INDIVIDUAL, modelName);
+			}
 		}
 	}
 
