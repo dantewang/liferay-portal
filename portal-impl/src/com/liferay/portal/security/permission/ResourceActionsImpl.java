@@ -14,6 +14,7 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.db.partition.util.DBPartitionUtil;
+import com.liferay.portal.events.StartupHelperUtil;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.exception.ResourceActionsException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -58,6 +59,7 @@ import com.liferay.portal.kernel.xml.DocumentType;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import com.liferay.portal.service.impl.ResourcePermissionLocalServiceImpl.IndividualPortletResourcePermissionProvider;
+import com.liferay.portal.tools.DBUpgrader;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.InputStream;
@@ -93,6 +95,12 @@ import org.osgi.framework.ServiceRegistration;
 public class ResourceActionsImpl implements ResourceActions {
 
 	public void afterPropertiesSet() {
+		if (StartupHelperUtil.isUpgrading() ||
+			DBUpgrader.isUpgradeDatabaseAutoRunEnabled()) {
+
+			return;
+		}
+
 		BundleContext bundleContext = SystemBundleUtil.getBundleContext();
 
 		ServiceRegistration<IndividualPortletResourcePermissionProvider>
