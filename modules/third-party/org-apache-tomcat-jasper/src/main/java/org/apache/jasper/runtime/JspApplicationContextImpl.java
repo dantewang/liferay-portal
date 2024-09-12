@@ -19,7 +19,10 @@ package org.apache.jasper.runtime;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELContext;
@@ -44,6 +47,10 @@ import org.apache.jasper.el.JasperELResolver;
 public class JspApplicationContextImpl implements JspApplicationContext {
 
     private static final String KEY = JspApplicationContextImpl.class.getName();
+
+    private static Map<ServletContext, JspApplicationContextImpl> map =
+        Collections.synchronizedMap(
+            new HashMap<ServletContext, JspApplicationContextImpl>());
 
     private final ExpressionFactory expressionFactory =
             ExpressionFactory.newInstance();
@@ -72,13 +79,24 @@ public class JspApplicationContextImpl implements JspApplicationContext {
         if (context == null) {
             throw new IllegalArgumentException(Localizer.getMessage("jsp.error.nullArgument"));
         }
-        JspApplicationContextImpl impl = (JspApplicationContextImpl) context
-                .getAttribute(KEY);
+        JspApplicationContextImpl impl = map.get(context);
         if (impl == null) {
-            impl = new JspApplicationContextImpl();
-            context.setAttribute(KEY, impl);
+            Thread currentThread = Thread.currentThread();
+            ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+            try {
+                currentThread.setContextClassLoader(JspApplicationContextImpl.class.getClassLoader());
+                impl = new JspApplicationContextImpl();
+            }
+            finally {
+                currentThread.setContextClassLoader(contextClassLoader);
+            }
+            map.put(context, impl);
         }
         return impl;
+    }
+
+    public static void removeJspApplicationContext(ServletContext context) {
+        map.remove(context);
     }
 
     public ELContextImpl createELContext(JspContext context) {
@@ -136,3 +154,4 @@ public class JspApplicationContextImpl implements JspApplicationContext {
     }
 
 }
+/* @generated */

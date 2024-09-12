@@ -38,6 +38,7 @@ import org.apache.jasper.Options;
 import org.apache.jasper.compiler.JspRuntimeContext;
 import org.apache.jasper.compiler.Localizer;
 import org.apache.jasper.runtime.ExceptionUtils;
+import org.apache.jasper.runtime.JspApplicationContextImpl;
 import org.apache.jasper.security.SecurityUtil;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
@@ -337,6 +338,7 @@ public class JspServlet extends HttpServlet implements PeriodicEventListener {
             log.trace("JspServlet.destroy()");
         }
 
+        JspApplicationContextImpl.removeJspApplicationContext(context);
         rctxt.destroy();
     }
 
@@ -406,3 +408,4 @@ public class JspServlet extends HttpServlet implements PeriodicEventListener {
 
 
 }
+/* @generated */
