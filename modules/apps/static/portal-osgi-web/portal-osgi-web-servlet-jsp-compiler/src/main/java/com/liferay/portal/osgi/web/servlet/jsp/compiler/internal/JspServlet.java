@@ -55,6 +55,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspFactory;
 
+import org.apache.jasper.runtime.JspApplicationContextImpl;
 import org.apache.jasper.runtime.JspFactoryImpl;
 import org.apache.jasper.runtime.TagHandlerPool;
 import org.apache.tomcat.InstanceManager;
@@ -357,6 +358,9 @@ public class JspServlet extends HttpServlet {
 
 	private static final String _INIT_PARAMETER_NAME_SCRATCH_DIR = "scratchdir";
 
+	private static final String _KEY =
+		JspApplicationContextImpl.class.getName();
+
 	private static final String _WORK_DIR = StringBundler.concat(
 		PropsValues.LIFERAY_HOME, File.separator, "work", File.separator);
 
@@ -368,6 +372,7 @@ public class JspServlet extends HttpServlet {
 		JspServlet.class);
 	private static final Pattern _originalJspPattern = Pattern.compile(
 		"^(?<file>.*)(\\.(portal|original))(?<extension>\\.(jsp|jspf))$");
+	private static volatile String _prefixedKey;
 	private static final Bundle _utilTaglibBundle = FrameworkUtil.getBundle(
 		JspFactorySwapper.class);
 
@@ -486,6 +491,10 @@ public class JspServlet extends HttpServlet {
 
 		@Override
 		public Object getAttribute(String name) {
+			if (Objects.equals(_KEY, name)) {
+				return _servletContext.getAttribute(_getPrefixedKey());
+			}
+
 			return _servletContext.getAttribute(name);
 		}
 
@@ -772,6 +781,12 @@ public class JspServlet extends HttpServlet {
 
 		@Override
 		public void setAttribute(String name, Object value) {
+			if (Objects.equals(_KEY, name)) {
+				_servletContext.setAttribute(_getPrefixedKey(), value);
+
+				return;
+			}
+
 			_servletContext.setAttribute(name, value);
 		}
 
@@ -818,6 +833,16 @@ public class JspServlet extends HttpServlet {
 			List<URL> urls = Collections.list(enumeration);
 
 			return urls.get(urls.size() - 1);
+		}
+
+		private String _getPrefixedKey() {
+			if (_prefixedKey == null) {
+				_prefixedKey = StringBundler.concat(
+					_bundle.getSymbolicName(), StringPool.DASH,
+					_bundle.getVersion(), StringPool.DASH, _KEY);
+			}
+
+			return _prefixedKey;
 		}
 
 		private final String _contextPath;
