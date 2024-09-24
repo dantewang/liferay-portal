@@ -32,40 +32,6 @@ public class MessageBusThreadLocalUtil {
 		if (!ClusterInvokeThreadLocal.isEnabled()) {
 			message.put("clusterInvoke", Boolean.FALSE);
 		}
-
-		if (!message.contains("defaultLocale")) {
-			message.put("defaultLocale", LocaleThreadLocal.getDefaultLocale());
-		}
-
-		if (!message.contains("groupId")) {
-			message.put("groupId", GroupThreadLocal.getGroupId());
-		}
-
-		if (!message.contains("permissionChecker")) {
-			message.put(
-				"permissionChecker",
-				PermissionThreadLocal.getPermissionChecker());
-		}
-
-		if (!message.contains("principalName")) {
-			message.put("principalName", PrincipalThreadLocal.getName());
-		}
-
-		if (!message.contains("principalPassword")) {
-			message.put(
-				"principalPassword", PrincipalThreadLocal.getPassword());
-		}
-
-		if (!message.contains("siteDefaultLocale")) {
-			message.put(
-				"siteDefaultLocale", LocaleThreadLocal.getSiteDefaultLocale());
-		}
-
-		if (!message.contains("themeDisplayLocale")) {
-			message.put(
-				"themeDisplayLocale",
-				LocaleThreadLocal.getThemeDisplayLocale());
-		}
 	}
 
 	public static void populateThreadLocalsFromMessage(
