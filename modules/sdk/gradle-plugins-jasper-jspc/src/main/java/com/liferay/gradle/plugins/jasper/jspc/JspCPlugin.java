@@ -79,13 +79,38 @@ public class JspCPlugin implements Plugin<Project> {
 	}
 
 	private void _addDependenciesJspC(Project project) {
-		ModuleDependency moduleDependency =
-			(ModuleDependency)GradleUtil.addDependency(
-				project, CONFIGURATION_NAME, "com.liferay",
-				"com.liferay.portal.servlet.jsp.compiler", "latest.release");
-
-		moduleDependency.exclude(
-			Collections.singletonMap("group", "com.liferay.portal"));
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "com.liferay",
+			"org.apache.tomcat.jasper", "9.0.90.LIFERAY-PATCHED-1");
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "javax.servlet.jsp",
+			"javax.servlet.jsp-api", "2.3.2-b01");
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "javax.servlet.jsp.jstl",
+			"javax.servlet.jsp.jstl-api", "1.2.1");
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "org.apache.tomcat", "tomcat-api",
+			"9.0.90");
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "org.apache.tomcat", "tomcat-juli",
+			"9.0.90");
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "org.apache.tomcat", "tomcat-util",
+			"9.0.90");
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "org.apache.tomcat",
+			"tomcat-util-scan", "9.0.90");
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "org.glassfish", "javax.el",
+			"3.0.1-b05");
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "org.glassfish", "javax.servlet",
+			"3.2-b06");
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "org.glassfish.web",
+			"javax.servlet.jsp.jstl", "1.2.3");
+		GradleUtil.addDependency(
+			project, CONFIGURATION_NAME, "org.osgi", "osgi.core", "6.0.0");
 
 		DependencyHandler dependencyHandler = project.getDependencies();
 
