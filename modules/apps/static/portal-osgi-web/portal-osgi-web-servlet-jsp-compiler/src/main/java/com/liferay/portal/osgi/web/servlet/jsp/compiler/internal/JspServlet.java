@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.taglib.servlet.JspFactorySwapper;
 
@@ -34,6 +35,8 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,9 +58,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspFactory;
 
+import org.apache.jasper.EmbeddedServletOptions;
 import org.apache.jasper.runtime.JspApplicationContextImpl;
 import org.apache.jasper.runtime.JspFactoryImpl;
 import org.apache.jasper.runtime.TagHandlerPool;
+import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.InstanceManager;
 import org.apache.tomcat.SimpleInstanceManager;
 
@@ -375,6 +380,15 @@ public class JspServlet extends HttpServlet {
 	private static volatile String _prefixedKey;
 	private static final Bundle _utilTaglibBundle = FrameworkUtil.getBundle(
 		JspFactorySwapper.class);
+
+	static {
+		if (!ServerDetector.isTomcat()) {
+			Logger logger = Logger.getLogger(
+				EmbeddedServletOptions.class.getName());
+
+			logger.setLevel(Level.OFF);
+		}
+	}
 
 	private Bundle[] _allParticipatingBundles;
 	private Bundle _bundle;
