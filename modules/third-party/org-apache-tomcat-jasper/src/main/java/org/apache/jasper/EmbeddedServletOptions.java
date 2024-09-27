@@ -604,7 +604,7 @@ public final class EmbeddedServletOptions implements Options {
             return;
         }
 
-        if (!(scratchDir.exists() && scratchDir.canRead() &&
+        if (scratchDir.exists() && !(scratchDir.canRead() &&
                 scratchDir.canWrite() && scratchDir.isDirectory())) {
             log.fatal(Localizer.getMessage("jsp.error.bad.scratch.dir",
                     scratchDir.getAbsolutePath()));
@@ -732,3 +732,4 @@ public final class EmbeddedServletOptions implements Options {
 
 }
 
+/* @generated */
