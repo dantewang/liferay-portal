@@ -1,0 +1,19 @@
+diff --git a/org/apache/jasper/EmbeddedServletOptions.java b/org/apache/jasper/EmbeddedServletOptions.java
+index 814a21b92dd5f..fcd01dd0b6ae7 100644
+--- a/org/apache/jasper/EmbeddedServletOptions.java
++++ b/org/apache/jasper/EmbeddedServletOptions.java
+@@ -604,7 +604,7 @@ public final class EmbeddedServletOptions implements Options {
+             return;
+         }
+ 
+-        if (!(scratchDir.exists() && scratchDir.canRead() &&
++        if (scratchDir.exists() && !(scratchDir.canRead() &&
+                 scratchDir.canWrite() && scratchDir.isDirectory())) {
+             log.fatal(Localizer.getMessage("jsp.error.bad.scratch.dir",
+                     scratchDir.getAbsolutePath()));
+@@ -732,3 +732,4 @@ public final class EmbeddedServletOptions implements Options {
+ 
+ }
+ 
++/* @generated */
+\ No newline at end of file
