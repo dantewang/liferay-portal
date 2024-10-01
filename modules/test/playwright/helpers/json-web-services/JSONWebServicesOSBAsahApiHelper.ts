@@ -19,7 +19,7 @@ type BlogDaily = {
 	ratingsScore: number;
 	readTime: number;
 	sessions: number;
-	userId: string;
+	userId: string | null;
 	views: number;
 };
 

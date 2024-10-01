@@ -6,6 +6,7 @@
 import {defineConfig, devices} from '@playwright/test';
 
 import {config as accountAdminWebConfig} from './tests/account-admin-web/config';
+import {config as analyticsReportsJsComponentsWeb} from './tests/analytics-reports-js-components-web/config';
 import {config as analyticsSettingsWebConfig} from './tests/analytics-settings-web/config';
 import {config as analyticsWebConfig} from './tests/analytics-web/config';
 import {config as announcementsWebConfig} from './tests/announcements-web/config';
@@ -95,6 +96,7 @@ export default defineConfig({
 	forbidOnly: !!process.env.CI,
 	projects: [
 		accountAdminWebConfig,
+		analyticsReportsJsComponentsWeb,
 		analyticsSettingsWebConfig,
 		analyticsWebConfig,
 		depotWebConfig,

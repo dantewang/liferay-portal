@@ -9,6 +9,7 @@
 
 <%
 String oAuth2AccessToken = GetterUtil.getString(request.getAttribute(ScimWebKeys.SCIM_OAUTH2_ACCESS_TOKEN));
+long oAuth2AccessTokenExpirationDays = GetterUtil.getLong(request.getAttribute(ScimWebKeys.SCIM_OAUTH2_ACCESS_TOKEN_EXPIRATION_DAYS));
 String oAuth2ApplicationName = GetterUtil.getString(request.getAttribute(ScimWebKeys.SCIM_OAUTH2_APPLICATION_NAME));
 %>
 
@@ -51,6 +52,21 @@ String oAuth2ApplicationName = GetterUtil.getString(request.getAttribute(ScimWeb
 			</span>
 		</div>
 	</div>
+
+	<c:if test="<%= Validator.isNotNull(oAuth2AccessToken) %>">
+		<c:choose>
+			<c:when test="<%= (oAuth2AccessTokenExpirationDays < 30) && (oAuth2AccessTokenExpirationDays > 0) %>">
+				<div class="alert alert-warning">
+					<liferay-ui:message arguments="<%= GetterUtil.getString(request.getAttribute(ScimWebKeys.SCIM_OAUTH2_ACCESS_TOKEN_EXPIRATION_DATE)) %>" key="the-access-token-for-the-scim-client-will-expire-at-x" translateArguments="<%= false %>" />
+				</div>
+			</c:when>
+			<c:when test="<%= oAuth2AccessTokenExpirationDays < 0 %>">
+				<div class="alert alert-danger">
+					<liferay-ui:message arguments="<%= GetterUtil.getString(request.getAttribute(ScimWebKeys.SCIM_OAUTH2_ACCESS_TOKEN_EXPIRATION_DATE)) %>" key="the-access-token-for-the-scim-client-expired-at-x" translateArguments="<%= false %>" />
+				</div>
+			</c:when>
+		</c:choose>
+	</c:if>
 
 	<label for="<portlet:namespace />generateAccessToken">
 		<liferay-ui:message key="scim-generate-access-token" />

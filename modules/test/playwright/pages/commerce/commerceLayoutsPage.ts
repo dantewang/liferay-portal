@@ -43,6 +43,7 @@ export class CommerceLayoutsPage {
 	readonly inputTextbox: (name: string) => Locator;
 	readonly markAsDefaultMenuItem: Locator;
 	readonly moreActionsButton: Locator;
+	readonly orderActionsButton: (orderActionName: string) => Locator;
 	readonly openProductMenuButton: Locator;
 	readonly page: Page;
 	readonly pagesMenuItem: Locator;
@@ -156,6 +157,8 @@ export class CommerceLayoutsPage {
 			name: 'Mark as Default',
 		});
 		this.moreActionsButton = page.getByLabel('More actions');
+		this.orderActionsButton = (orderActionName: string) =>
+			page.getByRole('button', {name: orderActionName});
 		this.openProductMenuButton = page.getByRole('tab', {
 			exact: true,
 			name: 'Open Product Menu',
@@ -241,10 +244,45 @@ export class CommerceLayoutsPage {
 			.click();
 	}
 
+	async addWidget(itemName: string, menuName: string = '') {
+		await this.page
+			.getByRole('tab', {
+				exact: true,
+				name: 'Widgets',
+			})
+			.click();
+
+		const source = await this.page.getByRole('menuitem', {
+			name: itemName,
+		});
+
+		if ((await source.isHidden()) && menuName) {
+			await this.page
+				.getByRole('menuitem', {
+					exact: true,
+					name: menuName,
+				})
+				.click();
+		}
+
+		await source.focus();
+		await source.press('Enter');
+		await source.press('Enter');
+	}
+
 	async addWidgetToPage(widgetName: string) {
 		await this.addWidgetButton.click();
 		await this.searchFormInput.fill(widgetName);
 		await this.addWidgetLabel(widgetName).click();
+	}
+
+	async checkValueOrderSummary(nameValue: string, value: string) {
+		await expect(
+			this.page.getByText(nameValue, {exact: true})
+		).toBeVisible();
+		await expect(
+			this.page.locator('span').filter({hasText: value})
+		).toBeVisible();
 	}
 
 	async cleanupSiteInitializerData(
@@ -379,6 +417,34 @@ export class CommerceLayoutsPage {
 						)
 			),
 		]);
+	}
+
+	async expectOrderActionButtons({
+		approveCount = 0,
+		checkoutCount = 0,
+		rejectCount = 0,
+		reorderCount = 0,
+		requestQuoteCount = 0,
+		submitCount = 0,
+	}) {
+		await expect(this.orderActionsButton('Approve')).toHaveCount(
+			approveCount
+		);
+		await expect(this.orderActionsButton('Checkout')).toHaveCount(
+			checkoutCount
+		);
+		await expect(this.orderActionsButton('Reject')).toHaveCount(
+			rejectCount
+		);
+		await expect(this.orderActionsButton('Reorder')).toHaveCount(
+			reorderCount
+		);
+		await expect(this.orderActionsButton('Request Quote')).toHaveCount(
+			requestQuoteCount
+		);
+		await expect(this.orderActionsButton('Submit')).toHaveCount(
+			submitCount
+		);
 	}
 
 	async goto() {

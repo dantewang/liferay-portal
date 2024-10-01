@@ -110,32 +110,6 @@ async function goToAssetLibraries(page: Page) {
 	await page.getByRole('menuitem', {name: 'Asset Libraries'}).click();
 }
 
-async function goToContentPerformanceTab(page: Page) {
-	const dropDownButton = await page
-		.locator('.lfr-entry-action-column .dropdown-action button')
-		.first();
-
-	await dropDownButton.click();
-
-	const showInfoButton = await page.locator('[data-action=showInfo]').first();
-
-	await showInfoButton.click();
-
-	const activeTab = await page.locator('.nav-tabs .active');
-
-	expect(await activeTab.textContent()).toBe('Details');
-
-	await page.getByRole('tab', {name: 'Performance'}).click();
-}
-
-async function searchForContent({page, title}: {page: Page; title: string}) {
-	const searchBar = await page.getByPlaceholder('Search for');
-
-	await searchBar.fill(title);
-
-	await page.keyboard.press('Enter');
-}
-
 export const test = mergeTests(
 	blogsPagesTest,
 	contentDashboardPagesTest,
@@ -169,15 +143,11 @@ test('Displays empty state when Analytics Cloud is not connected', async ({
 		title,
 	});
 
-	await contentDashboardPage.goto(site.friendlyUrlPath);
-
-	const searchBar = await page.getByPlaceholder('Search for');
-
-	await searchBar.fill(title);
-
-	await page.keyboard.press('Enter');
-
-	await goToContentPerformanceTab(page);
+	await contentDashboardPage.goToCurrentTab({
+		assetTitle: title,
+		siteUrl: site.friendlyUrlPath,
+		tabName: 'Performance',
+	});
 
 	await expect(
 		page.getByText(
@@ -214,11 +184,11 @@ test('Displays empty state when asset belongs to an asset library with no site c
 		page,
 	});
 
-	await contentDashboardPage.goto(site.friendlyUrlPath);
-
-	await searchForContent({page, title: articleTitle});
-
-	await goToContentPerformanceTab(page);
+	await contentDashboardPage.goToCurrentTab({
+		assetTitle: articleTitle,
+		siteUrl: site.friendlyUrlPath,
+		tabName: 'Performance',
+	});
 
 	await expect(
 		page.getByText(
@@ -250,11 +220,11 @@ test('Displays empty state when site is not synced to Analytics Cloud', async ({
 
 	await connectToAnalyticsCloudWithNoSiteSynced(page);
 
-	await contentDashboardPage.goto(site.friendlyUrlPath);
-
-	await searchForContent({page, title: blogTitle});
-
-	await goToContentPerformanceTab(page);
+	await contentDashboardPage.goToCurrentTab({
+		assetTitle: blogTitle,
+		siteUrl: site.friendlyUrlPath,
+		tabName: 'Performance',
+	});
 
 	await expect(
 		page.getByText(

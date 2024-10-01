@@ -75,12 +75,15 @@ const FrontendDataSet = ({
 	onActionDropdownItemClick,
 	onBulkActionItemClick,
 	onSelect,
+	onSelectedItemsChange,
 	overrideEmptyResultView,
 	pagination,
 	portletId,
 	selectedItems: initialSelectedItemsValues,
 	selectedItemsKey,
 	selectionType,
+	showBulkActionsManagementBar,
+	showBulkActionsManagementBarActions,
 	showManagementBar,
 	showPagination,
 	showSearch,
@@ -431,9 +434,11 @@ const FrontendDataSet = ({
 				}
 			});
 
+			onSelectedItemsChange(newSelectedItems);
+
 			return newSelectedItems;
 		});
-	}, [selectedItemsValue, items, selectedItemsKey]);
+	}, [selectedItemsValue, items, onSelectedItemsChange, selectedItemsKey]);
 
 	useEffect(() => {
 		if (View || !contentRendererModuleURL) {
@@ -897,6 +902,8 @@ const FrontendDataSet = ({
 				selectedItemsKey,
 				selectedItemsValue,
 				selectionType,
+				showBulkActionsManagementBar,
+				showBulkActionsManagementBarActions,
 				sidePanelId: dataSetSupportSidePanelId,
 				sorts,
 				style,
@@ -967,8 +974,11 @@ FrontendDataSet.defaultProps = {
 	inlineEditingSettings: null,
 	items: null,
 	itemsActions: null,
+	onSelectedItemsChange: () => {},
 	selectedItemsKey: 'id',
 	selectionType: 'multiple',
+	showBulkActionsManagementBar: true,
+	showBulkActionsManagementBarActions: true,
 	showManagementBar: true,
 	showPagination: true,
 	showSearch: true,

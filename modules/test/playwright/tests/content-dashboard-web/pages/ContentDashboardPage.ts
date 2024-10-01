@@ -27,4 +27,34 @@ export class ContentDashboardPage {
 
 		await this.page.getByText('Filter By', {exact: true}).waitFor();
 	}
+
+	async goToCurrentTab({assetTitle, siteUrl, tabName}) {
+		await this.goto(siteUrl);
+
+		if (assetTitle) {
+			const searchBar = this.page.getByPlaceholder('Search for');
+
+			await searchBar.fill(assetTitle);
+
+			await this.page.keyboard.press('Enter');
+		}
+
+		const dropDownButton = this.page
+			.locator('.lfr-entry-action-column .dropdown-action button')
+			.first();
+
+		await dropDownButton.click();
+
+		const showInfoButton = this.page
+			.locator('[data-action=showInfo]')
+			.first();
+
+		await showInfoButton.click();
+
+		await this.page.waitForTimeout(1000);
+
+		await this.page.getByRole('tab', {name: tabName}).click();
+
+		await this.page.waitForTimeout(1000);
+	}
 }

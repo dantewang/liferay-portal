@@ -10,10 +10,19 @@ package com.liferay.scim.configuration.web.internal.constants;
  */
 public class ScimWebKeys {
 
+	public static final String SCIM_CONFIGURATION =
+		"com_liferay_scim_configuration_web_internal_portlet_ScimPortlet";
+
 	public static final String SCIM_MATCHER_FIELD = "SCIM_MATCHER_FIELD";
 
 	public static final String SCIM_OAUTH2_ACCESS_TOKEN =
 		"SCIM_OAUTH2_ACCESS_TOKEN";
+
+	public static final String SCIM_OAUTH2_ACCESS_TOKEN_EXPIRATION_DATE =
+		"SCIM_OAUTH2_ACCESS_TOKEN_EXPIRATION_DATE";
+
+	public static final String SCIM_OAUTH2_ACCESS_TOKEN_EXPIRATION_DAYS =
+		"SCIM_OAUTH2_ACCESS_TOKEN_EXPIRATION_DAYS";
 
 	public static final String SCIM_OAUTH2_APPLICATION_NAME =
 		"SCIM_OAUTH2_APPLICATION_NAME";

@@ -1,8 +1,8 @@
 liferay-customer-site-initializer-code:
     name: Liferay Customer Site Initializer Code
     oAuthApplicationHeadlessServer: liferay-customer-site-initializer-code-oahs
-    siteExternalReferenceCode: LIFERAY_CUSTOMER
-    siteName: Liferay Customer
+    siteExternalReferenceCode: CUSTOMER_PORTAL
+    siteName: Customer Portal
     type: siteInitializer
 liferay-customer-site-initializer-code-oahs:
     .serviceAddress: localhost:8080

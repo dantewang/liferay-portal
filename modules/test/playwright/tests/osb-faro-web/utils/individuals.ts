@@ -8,18 +8,20 @@ import getRandomString from '../../../utils/getRandomString';
 
 const modifiedDate = new Date().toISOString();
 
+export type Individual = {
+	birthDate?: string;
+	dataSourceId?: number;
+	familyName?: string;
+	id: string;
+	name: string;
+};
+
 export async function createIndividuals({
 	apiHelpers,
 	individuals,
 }: {
 	apiHelpers: ApiHelpers;
-	individuals: {
-		birthDate?: string;
-		dataSourceId?: number;
-		familyName?: string;
-		id: string;
-		name: string;
-	}[];
+	individuals: Individual[];
 }) {
 	const formattedIndividuals = individuals.map(
 		({
@@ -63,7 +65,7 @@ export async function createIndividuals({
 	);
 }
 
-export function generateIndividual({name}: {name: any}) {
+export function generateIndividual({name}: {name: string}): Individual {
 	const id = getRandomString();
 
 	return {
