@@ -15,7 +15,6 @@ dependencies {
 	compileInclude group: "org.apache.tomcat", name: "tomcat-util", version: "9.0.90"
 	compileInclude group: "org.apache.tomcat", name: "tomcat-util-scan", version: "9.0.90"
 
-	compileOnly group: "com.liferay", name: "com.sun.el.javax.el", version: "3.0.1.LIFERAY-PATCHED-3"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.util.taglib", version: "default"
