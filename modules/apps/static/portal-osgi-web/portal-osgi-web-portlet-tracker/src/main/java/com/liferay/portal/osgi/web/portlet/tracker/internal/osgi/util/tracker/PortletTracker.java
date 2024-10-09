@@ -297,7 +297,7 @@ public class PortletTracker
 					if (portletCategory == null) {
 						_log.error(
 							"Unable to get portlet category for " +
-								curCompanyId);
+								curCompanyId + " ## " + portletModel.getPortletId() + " OSGi property companyId null", new Exception());
 					}
 					else {
 						portletCategory.separate(
@@ -310,7 +310,7 @@ public class PortletTracker
 				companyId, WebKeys.PORTLET_CATEGORY);
 
 			if (portletCategory == null) {
-				_log.error("Unable to get portlet category for " + companyId);
+				_log.error("Unable to get portlet category for " + companyId + " ## " + portletModel.getPortletId(), new Exception());
 			}
 			else {
 				portletCategory.separate(portletModel.getRootPortletId());
