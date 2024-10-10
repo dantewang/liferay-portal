@@ -67,6 +67,7 @@ import com.liferay.portal.kernel.model.ModelWrapper;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -215,7 +216,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 
 		FinderPath finderPath = new FinderPath(
 			FinderPath.encodeDSLQueryCacheName(tableNames), "dslQuery",
-			sb.getStrings(), new String[0],
+			_getParams(sb.getStrings(), defaultASTNodeListener), new String[0],
 			projectionType == ProjectionType.MODELS);
 
 		Object[] arguments = _getArguments(defaultASTNodeListener);
@@ -1068,6 +1069,19 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 		}
 
 		return arguments.toArray(new Object[0]);
+	}
+
+	private String[] _getParams(
+		String[] params, DefaultASTNodeListener defaultASTNodeListener) {
+
+		List<String> aliasTypes = defaultASTNodeListener.getAliasTypes();
+
+		if (aliasTypes.isEmpty()) {
+			return params;
+		}
+
+		return ArrayUtil.append(
+			params, "alias_types_".concat(aliasTypes.toString()));
 	}
 
 	private ProjectionType _getProjectionType(

@@ -8,6 +8,7 @@ package com.liferay.petra.sql.dsl.spi.ast;
 import com.liferay.petra.sql.dsl.Table;
 import com.liferay.petra.sql.dsl.ast.ASTNode;
 import com.liferay.petra.sql.dsl.ast.ASTNodeListener;
+import com.liferay.petra.sql.dsl.expression.TypeAlias;
 import com.liferay.petra.sql.dsl.spi.expression.Scalar;
 import com.liferay.petra.sql.dsl.spi.expression.ScalarList;
 import com.liferay.petra.sql.dsl.spi.query.Limit;
@@ -22,6 +23,10 @@ import java.util.Set;
  * @author Shuyang Zhou
  */
 public class DefaultASTNodeListener implements ASTNodeListener {
+
+	public List<String> getAliasTypes() {
+		return _aliasTypes;
+	}
 
 	public int getEnd() {
 		return _end;
@@ -66,8 +71,16 @@ public class DefaultASTNodeListener implements ASTNodeListener {
 				_tableNames.add(tableName);
 			}
 		}
+		else if (astNode instanceof TypeAlias) {
+			TypeAlias<?> typeAlias = (TypeAlias<?>)astNode;
+
+			Class<?> clazz = typeAlias.getJavaType();
+
+			_aliasTypes.add(clazz.getName());
+		}
 	}
 
+	private final List<String> _aliasTypes = new ArrayList<>();
 	private int _end = -1;
 	private final List<Object> _scalarValues = new ArrayList<>();
 	private int _start = -1;

@@ -5,8 +5,11 @@
 
 package com.liferay.petra.sql.dsl.spi.expression;
 
+import com.liferay.petra.sql.dsl.ast.ASTNodeListener;
 import com.liferay.petra.sql.dsl.expression.Expression;
 import com.liferay.petra.sql.dsl.expression.TypeAlias;
+
+import java.util.function.Consumer;
 
 /**
  * @author Tina Tian
@@ -25,6 +28,15 @@ public class DefaultTypeAlias<T>
 	@Override
 	public Class<?> getJavaType() {
 		return _javaType;
+	}
+
+	@Override
+	protected void doToSQL(
+		Consumer<String> consumer, ASTNodeListener astNodeListener) {
+
+		super.doToSQL(consumer, astNodeListener);
+
+		astNodeListener.process(this);
 	}
 
 	private final Class<?> _javaType;
