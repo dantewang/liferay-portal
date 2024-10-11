@@ -97,11 +97,18 @@ public class TransactionalPortalCacheTest {
 		);
 
 		_companyThreadLocalMockedStatic.when(
+			CompanyThreadLocal::isLocked
+		).thenCallRealMethod();
+
+		_companyThreadLocalMockedStatic.when(
 			() -> CompanyThreadLocal.setCompanyId(Mockito.anyLong())
 		).thenCallRealMethod();
 
 		_companyIdThreadLocal = ReflectionTestUtil.getFieldValue(
 			CompanyThreadLocal.class, "_companyId");
+
+		_lockedThreadLocal = ReflectionTestUtil.getFieldValue(
+			CompanyThreadLocal.class, "_locked");
 
 		_portalCache = new TestPortalCache<>("Test Portal Cache");
 
@@ -367,6 +374,33 @@ public class TransactionalPortalCacheTest {
 		TransactionalPortalCacheUtil.removeAll(transactionalPortalCache, false);
 
 		TransactionalPortalCacheUtil.commit(false);
+
+		try {
+			TransactionalPortalCacheUtil.begin();
+
+			TransactionalPortalCache<String, String>
+				shardedTransactionalPortalCache =
+					new TransactionalPortalCache<>(
+						new TestPortalCache<>(
+							"Test Sharded Portal Cache", true),
+						false);
+
+			shardedTransactionalPortalCache.put(_KEY_1, _VALUE_1);
+
+			_companyIdThreadLocal.set(_COMPANY_ID_1);
+			_lockedThreadLocal.set(true);
+
+			TransactionalPortalCacheUtil.commit(false);
+		}
+		catch (UnsupportedOperationException unsupportedOperationException) {
+			Assert.assertEquals(
+				"CompanyThreadLocal modification is not allowed",
+				unsupportedOperationException.getMessage());
+		}
+		finally {
+			_companyIdThreadLocal.set(0L);
+			_lockedThreadLocal.set(false);
+		}
 
 		TransactionLifecycleListener transactionLifecycleListener =
 			TransactionalPortalCacheUtil.TRANSACTION_LIFECYCLE_LISTENER;
@@ -1515,6 +1549,7 @@ public class TransactionalPortalCacheTest {
 	private static final String _VALUE_SYSTEM = "VALUE_SYSTEM";
 
 	private static ThreadLocal<Long> _companyIdThreadLocal;
+	private static ThreadLocal<Boolean> _lockedThreadLocal;
 
 	private final MockedStatic<CompanyThreadLocal>
 		_companyThreadLocalMockedStatic = Mockito.mockStatic(
