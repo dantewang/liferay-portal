@@ -12,7 +12,9 @@ import com.liferay.portal.cache.TransactionalPortalCache;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.cache.transactional.TransactionalPortalCacheUtil;
+import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.MVCCModel;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -30,11 +32,16 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 
 /**
  * @author Shuyang Zhou
@@ -71,6 +78,31 @@ public class TransactionalPortalCacheTest {
 
 	@Before
 	public void setUp() {
+		_companyThreadLocalMockedStatic.when(
+			CompanyThreadLocal::getCompanyId
+		).thenCallRealMethod();
+
+		_companyThreadLocalMockedStatic.when(
+			CompanyThreadLocal::getNonsystemCompanyId
+		).thenAnswer(
+			(Answer<Long>)invocationOnMock -> {
+				long currentCompanyId = _companyIdThreadLocal.get();
+
+				if (_companyIdThreadLocal.get() == CompanyConstants.SYSTEM) {
+					currentCompanyId = _COMPANY_ID_1;
+				}
+
+				return currentCompanyId;
+			}
+		);
+
+		_companyThreadLocalMockedStatic.when(
+			() -> CompanyThreadLocal.setCompanyId(Mockito.anyLong())
+		).thenCallRealMethod();
+
+		_companyIdThreadLocal = ReflectionTestUtil.getFieldValue(
+			CompanyThreadLocal.class, "_companyId");
+
 		_portalCache = new TestPortalCache<>("Test Portal Cache");
 
 		_testCacheListener = new TestPortalCacheListener<>();
@@ -78,6 +110,11 @@ public class TransactionalPortalCacheTest {
 
 		_portalCache.registerPortalCacheListener(_testCacheListener);
 		_portalCache.registerPortalCacheListener(_testCacheReplicator);
+	}
+
+	@After
+	public void tearDown() {
+		_companyThreadLocalMockedStatic.close();
 	}
 
 	@Test
@@ -376,6 +413,26 @@ public class TransactionalPortalCacheTest {
 
 		_testNoneTransactionalPortalCache(
 			new TransactionalPortalCache<>(_portalCache, false));
+	}
+
+	@Test
+	public void testShardedTransactionalCache() {
+		_portalCache = new TestPortalCache<>("Test Sharded Portal Cache", true);
+
+		_portalCache.registerPortalCacheListener(_testCacheListener);
+		_portalCache.registerPortalCacheListener(_testCacheReplicator);
+
+		testTransactionalCache();
+	}
+
+	@Test
+	public void testShardedTransactionalCacheWithoutTransaction() {
+		_testShardedTransactionalCache(false);
+	}
+
+	@Test
+	public void testShardedTransactionalCacheWithTransaction() {
+		_testShardedTransactionalCache(true);
 	}
 
 	@Test
@@ -851,6 +908,92 @@ public class TransactionalPortalCacheTest {
 
 		_testCacheListener.reset();
 		_testCacheReplicator.reset();
+	}
+
+	private void _testShardedTransactionalCache(boolean transaction) {
+		PortalCache<String, String> portalCache = new TestPortalCache<>(
+			"Test Sharded Portal Cache", true);
+
+		_companyIdThreadLocal.set(CompanyConstants.SYSTEM);
+
+		portalCache.put(_KEY_SYSTEM, _VALUE_SYSTEM);
+
+		_companyIdThreadLocal.set(_COMPANY_ID_1);
+
+		portalCache.put(_KEY_1, _VALUE_1);
+
+		_companyIdThreadLocal.set(_COMPANY_ID_2);
+
+		portalCache.put(_KEY_2, _VALUE_2);
+
+		TestPortalCacheListener<String, String> testPortalCacheListener =
+			new TestPortalCacheListener<>();
+		TestPortalCacheReplicator<String, String> testPortalCacheReplicator =
+			new TestPortalCacheReplicator<>();
+
+		portalCache.registerPortalCacheListener(testPortalCacheListener);
+		portalCache.registerPortalCacheListener(testPortalCacheReplicator);
+
+		_setEnableTransactionalCache(true);
+
+		TransactionalPortalCache<String, String> transactionalPortalCache =
+			new TransactionalPortalCache<>(portalCache, false);
+
+		if (transaction) {
+			TransactionalPortalCacheUtil.begin();
+		}
+
+		_companyIdThreadLocal.set(_COMPANY_ID_1);
+
+		Assert.assertNull(transactionalPortalCache.get(_KEY_2));
+
+		transactionalPortalCache.put(_KEY_2, _VALUE_1);
+
+		Assert.assertEquals(_VALUE_1, transactionalPortalCache.get(_KEY_2));
+
+		if (transaction) {
+			Assert.assertNull(portalCache.get(_KEY_2));
+		}
+		else {
+			Assert.assertEquals(_VALUE_1, portalCache.get(_KEY_2));
+		}
+
+		_companyIdThreadLocal.set(_COMPANY_ID_2);
+
+		Assert.assertEquals(_VALUE_2, portalCache.get(_KEY_2));
+		Assert.assertEquals(_VALUE_2, transactionalPortalCache.get(_KEY_2));
+		Assert.assertNull(transactionalPortalCache.get(_KEY_1));
+
+		if (transaction) {
+			TransactionalPortalCacheUtil.commit(false);
+		}
+
+		testPortalCacheListener.assertActionsCount(1);
+		testPortalCacheListener.assertPut(_KEY_2, _VALUE_1);
+		testPortalCacheReplicator.assertActionsCount(1);
+		testPortalCacheReplicator.assertPut(_KEY_2, _VALUE_1);
+
+		_companyIdThreadLocal.set(_COMPANY_ID_1);
+
+		Assert.assertEquals(_VALUE_1, portalCache.get(_KEY_1));
+		Assert.assertEquals(_VALUE_1, portalCache.get(_KEY_2));
+		Assert.assertEquals(_VALUE_1, transactionalPortalCache.get(_KEY_1));
+		Assert.assertEquals(_VALUE_1, transactionalPortalCache.get(_KEY_2));
+		Assert.assertEquals(_VALUE_SYSTEM, portalCache.get(_KEY_SYSTEM));
+		Assert.assertEquals(
+			_VALUE_SYSTEM, transactionalPortalCache.get(_KEY_SYSTEM));
+
+		_companyIdThreadLocal.set(_COMPANY_ID_2);
+
+		Assert.assertEquals(_VALUE_2, portalCache.get(_KEY_2));
+		Assert.assertEquals(_VALUE_2, transactionalPortalCache.get(_KEY_2));
+		Assert.assertNull(portalCache.get(_KEY_1));
+		Assert.assertNull(portalCache.get(_KEY_SYSTEM));
+		Assert.assertNull(transactionalPortalCache.get(_KEY_1));
+		Assert.assertNull(transactionalPortalCache.get(_KEY_SYSTEM));
+
+		testPortalCacheListener.reset();
+		testPortalCacheReplicator.reset();
 	}
 
 	private void _testTransactionalPortalCache(
@@ -1355,14 +1498,27 @@ public class TransactionalPortalCacheTest {
 		Assert.assertEquals(0, _getTransactionStackSize());
 	}
 
+	private static final long _COMPANY_ID_1 = 1000L;
+
+	private static final long _COMPANY_ID_2 = 2000L;
+
 	private static final String _KEY_1 = "KEY_1";
 
 	private static final String _KEY_2 = "KEY_2";
+
+	private static final String _KEY_SYSTEM = "KEY_SYSTEM";
 
 	private static final String _VALUE_1 = "VALUE_1";
 
 	private static final String _VALUE_2 = "VALUE_2";
 
+	private static final String _VALUE_SYSTEM = "VALUE_SYSTEM";
+
+	private static ThreadLocal<Long> _companyIdThreadLocal;
+
+	private final MockedStatic<CompanyThreadLocal>
+		_companyThreadLocalMockedStatic = Mockito.mockStatic(
+			CompanyThreadLocal.class);
 	private PortalCache<String, String> _portalCache;
 	private TestPortalCacheListener<String, String> _testCacheListener;
 	private TestPortalCacheReplicator<String, String> _testCacheReplicator;
