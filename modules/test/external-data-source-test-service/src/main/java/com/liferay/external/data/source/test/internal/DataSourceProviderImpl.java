@@ -19,8 +19,15 @@ public class DataSourceProviderImpl implements DataSourceProvider {
 	@Override
 	public DataSource getDataSource() {
 		try {
-			return DataSourceFactoryUtil.initDataSource(
+			System.out.println(
+				"######## Creating data source for the e-d-s test service!");
+
+			DataSource dataSource = DataSourceFactoryUtil.initDataSource(
 				PropsUtil.getProperties("jdbc.test.", true));
+
+			System.out.println("######## " + (dataSource == null));
+
+			return dataSource;
 		}
 		catch (Exception exception) {
 			throw new RuntimeException(exception);
