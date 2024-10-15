@@ -61,6 +61,14 @@ definition {
 
 		FileUtil.copyDirectory("${projectDir}/modules/test/external-data-source-test-controller-test/src/testIntegration/resources/META-INF/services", "${projectDir}/${testServiceDir}/src/main/resources/META-INF");
 
+		var lpkgFileExists = FileUtil.exists("${projectDir}/${testServiceDir}/src/main/resources/META-INF/services/com.liferay.portal.kernel.dao.jdbc.DataSourceProvider");
+
+		if (${lpkgFileExists} == "false") {
+			var files = FileUtil.listFiles("${projectDir}/${testServiceDir}/src/main/resources/META-INF/");
+
+			fail("FAIL! Cannot find the copied Java service description file. \n${files}");
+		}
+
 		AntCommands.runCommand("build-test.xml", "build-service -Dgradle.file.path=${testServiceDir}");
 
 		AntCommands.runCommand("build-test.xml", "deploy-osgi-module-to-specific-bundle -DliferayHome=${liferayHome} -Dmodule.base.dir=/modules/test/external-data-source-test-api");
