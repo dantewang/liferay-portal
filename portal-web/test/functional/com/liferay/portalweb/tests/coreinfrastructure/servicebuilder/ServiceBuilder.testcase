@@ -66,7 +66,12 @@ definition {
 		if (${lpkgFileExists} == "false") {
 			var files = FileUtil.listFiles("${projectDir}/${testServiceDir}/src/main/resources/META-INF/");
 
-			fail("FAIL! Cannot find the copied Java service description file. \n${files}");
+			fail("FAIL! Cannot find the copied Java service description file. ${files}");
+		}
+		else {
+			var files = FileUtil.listFiles("${projectDir}/${testServiceDir}/src/main/resources/META-INF/services/");
+
+			echo("COPIED! ${files}");
 		}
 
 		AntCommands.runCommand("build-test.xml", "build-service -Dgradle.file.path=${testServiceDir}");
