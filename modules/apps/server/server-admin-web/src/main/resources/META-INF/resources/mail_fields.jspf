@@ -8,7 +8,9 @@
 <%
 PortletPreferences companyPortletPreferences = PrefsPropsUtil.getPreferences(preferencesCompanyId);
 
-Function<String, String> preferenceFunction = key -> companyPortletPreferences.getValue(key, defaultValueFunction.apply(key));
+PortletPreferences systemPortletPreferences = PrefsPropsUtil.getPreferences(0L);
+
+Function<String, String> preferenceFunction = key -> companyPortletPreferences.getValue(key, systemPortletPreferences.getValue(key, defaultValueFunction.apply(key)));
 %>
 
 <aui:fieldset>
