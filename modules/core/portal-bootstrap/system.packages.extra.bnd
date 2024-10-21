@@ -172,6 +172,10 @@ Export-Package:\
 	org.apache.commons.lang.time;version='2.6',\
 	org.apache.commons.logging;version="1.2",\
 	org.apache.commons.logging.impl;version="1.2",\
+	org.apache.jasper;version="9.0",\
+	org.apache.jasper.compiler;version="9.0",\
+	org.apache.jasper.runtime;version="9.0",\
+	org.apache.jasper.servlet;version="9.0",\
 	org.apache.logging.log4j;version='2.17.1',\
 	org.apache.logging.log4j.core;version='2.17.1',\
 	org.apache.logging.log4j.core.appender;version='2.17.1',\
@@ -186,6 +190,10 @@ Export-Package:\
 	org.apache.logging.log4j.spi;version='2.17.1',\
 	org.apache.naming.java,\
 	org.apache.taglibs.standard.*;version='1.2.3',\
+	org.apache.tomcat;version="9.0",\
+	org.apache.tomcat.util.descriptor;version="9.0",\
+	org.apache.tomcat.util.descriptor.tld;version="9.0",\
+	org.apache.tomcat.util.digester;version="9.0",\
 	org.apache.xerces.*;version='2.11.0',\
 	org.apache.xml.dtm.*;version='2.7.1',\
 	org.apache.xml.res.*;version='2.7.1',\
