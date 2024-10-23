@@ -257,9 +257,15 @@ public class LayoutStructureRenderer {
 			jspWriter.write("\"");
 		}
 
-		jspWriter.write(" id=\"analytics-targetable-collection-");
-		jspWriter.write(collectionStyledLayoutStructureItem.getNamespace());
-		jspWriter.write("\" style=\"");
+		String namespace = collectionStyledLayoutStructureItem.getNamespace();
+
+		if (Validator.isNotNull(namespace)) {
+			jspWriter.write(" id=\"analytics-targetable-collection-");
+			jspWriter.write(namespace);
+			jspWriter.write("\"");
+		}
+
+		jspWriter.write(" style=\"");
 		jspWriter.write(
 			_renderLayoutStructureDisplayContext.getStyle(
 				collectionStyledLayoutStructureItem));
