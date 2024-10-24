@@ -1280,9 +1280,9 @@ definition {
 		PortalSettings.viewEmailNotificationsSenderCP();
 	}
 
-	@description = "This is a use case for LPS-156105. The test assert the value of mail setting for new instance is inherited from server level."
+	@description = "This is a use case for LPD-1655. The test assert the value of mail setting for new instance is not inherited from server level."
 	@priority = 2
-	test ViewInstanceMailSettingsValueIsInheritedFromServerLevel {
+	test ViewInstanceMailSettingsValueIsNotInheritedFromServerLevel {
 		property portal.upstream = "quarantine";
 		property test.liferay.virtual.instance = "false";
 		property test.run.type = "single";
@@ -1327,7 +1327,7 @@ definition {
 			Navigator.openSpecificURL(url = "http://www.able.com:8080");
 		}
 
-		task ("Then assert the value of mail setting for new instance is inherited from server level") {
+		task ("Then assert the value of mail setting for new instance is not inherited from server level") {
 			PortalSettings.gotoConfiguration(
 				baseURL = "http://www.able.com:8080",
 				configurationCategory = "Email",
@@ -1336,7 +1336,7 @@ definition {
 
 			FormFields.viewTextValue(
 				fieldName = "pop3Host",
-				fieldValue = "popserver");
+				fieldValue = "");
 		}
 	}
 
