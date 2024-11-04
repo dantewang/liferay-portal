@@ -9,7 +9,7 @@ import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.Tuple;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 
 import java.io.InputStream;
 
@@ -42,25 +42,27 @@ public class IndexEntryTest {
 	public void testBTreeOptimization() throws Exception {
 		_assertIndexes(
 			Arrays.asList(
-				new Tuple(
+				new ObjectValuePair<>(
 					Arrays.asList(
 						"companyId", "ctCollectionId", "externalReferenceCode"),
 					true),
-				new Tuple(Arrays.asList("ownerId"), false),
-				new Tuple(Arrays.asList("ownerType", "ownerId", "plid"), false),
-				new Tuple(Arrays.asList("plid"), false),
-				new Tuple(
+				new ObjectValuePair<>(Arrays.asList("ownerId"), false),
+				new ObjectValuePair<>(
+					Arrays.asList("ownerType", "ownerId", "plid"), false),
+				new ObjectValuePair<>(Arrays.asList("plid"), false),
+				new ObjectValuePair<>(
 					Arrays.asList(
 						"portletId", "ownerType", "ownerId", "companyId"),
 					false),
-				new Tuple(
+				new ObjectValuePair<>(
 					Arrays.asList(
 						"portletId", "ownerType", "ownerId", "plid",
 						"ctCollectionId"),
 					true),
-				new Tuple(
+				new ObjectValuePair<>(
 					Arrays.asList("portletId", "ownerType", "plid"), false),
-				new Tuple(Arrays.asList("portletId", "plid"), false)),
+				new ObjectValuePair<>(
+					Arrays.asList("portletId", "plid"), false)),
 			_indexSQLs);
 	}
 
@@ -74,11 +76,11 @@ public class IndexEntryTest {
 
 		_assertIndexes(
 			Arrays.asList(
-				new Tuple(
+				new ObjectValuePair<>(
 					Arrays.asList(
 						"companyId", "ctCollectionId", "externalReferenceCode"),
 					true),
-				new Tuple(
+				new ObjectValuePair<>(
 					Arrays.asList(
 						"portletId", "ownerType", "ownerId", "plid",
 						"ctCollectionId"),
@@ -96,23 +98,26 @@ public class IndexEntryTest {
 
 		_assertIndexes(
 			Arrays.asList(
-				new Tuple(
+				new ObjectValuePair<>(
 					Arrays.asList(
 						"companyId", "ctCollectionId", "externalReferenceCode"),
 					true)),
 			indexSQLsWithExternalReferenceCode);
 	}
 
-	private void _assertIndexes(List<Tuple> expectedTuples, List<String> sqls) {
+	private void _assertIndexes(
+		List<ObjectValuePair<List<String>, Boolean>> expectedObjectValuePairs,
+		List<String> sqls) {
+
 		Assert.assertEquals(
-			sqls.toString(), expectedTuples.size(), sqls.size());
+			sqls.toString(), expectedObjectValuePairs.size(), sqls.size());
 
-		for (int i = 0; i < expectedTuples.size(); i++) {
-			Tuple expectedTuple = expectedTuples.get(i);
+		for (int i = 0; i < expectedObjectValuePairs.size(); i++) {
+			ObjectValuePair<List<String>, Boolean> expectedObjectValuePair =
+				expectedObjectValuePairs.get(i);
 
-			List<String> expectedColumnNames =
-				(List<String>)expectedTuple.getObject(0);
-			boolean unique = (boolean)expectedTuple.getObject(1);
+			List<String> expectedColumnNames = expectedObjectValuePair.getKey();
+			boolean unique = expectedObjectValuePair.getValue();
 
 			String sql = sqls.get(i);
 
