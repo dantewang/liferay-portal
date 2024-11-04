@@ -14,10 +14,11 @@ import com.liferay.portal.kernel.util.Tuple;
 import java.io.InputStream;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -25,16 +26,15 @@ import org.junit.Test;
  */
 public class IndexEntryTest {
 
-	@Before
-	public void setUp() throws Exception {
-		Class<?> clazz = getClass();
-
-		try (InputStream inputStream = clazz.getResourceAsStream(
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+		try (InputStream inputStream = IndexEntryTest.class.getResourceAsStream(
 				"/META-INF/sql/indexes.sql")) {
 
-			_indexSQLs = ListUtil.filter(
-				ListUtil.fromString(StringUtil.read(inputStream)),
-				sql -> sql.contains(" on IndexEntry "));
+			_indexSQLs = Collections.unmodifiableList(
+				ListUtil.filter(
+					ListUtil.fromString(StringUtil.read(inputStream)),
+					sql -> sql.contains(" on IndexEntry ")));
 		}
 	}
 
@@ -147,6 +147,6 @@ public class IndexEntryTest {
 			});
 	}
 
-	private List<String> _indexSQLs;
+	private static List<String> _indexSQLs;
 
 }
