@@ -1,0 +1,178 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2024 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
+package com.liferay.portal.cache.ehcache3.internal;
+
+import com.liferay.portal.cache.BasePortalCache;
+import com.liferay.portal.cache.io.SerializableObjectWrapper;
+import com.liferay.portal.kernel.cache.PortalCacheListener;
+import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
+
+import java.io.Serializable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import org.ehcache.Cache;
+
+/**
+ * @author Tina Tian
+ */
+public abstract class BaseEhcachePortalCache<K extends Serializable, V>
+	extends BasePortalCache<K, V> implements EhcacheWrapper {
+
+	public BaseEhcachePortalCache(
+		BaseEhcachePortalCacheManager<K, V> baseEhcachePortalCacheManager,
+		EhcachePortalCacheConfiguration ehcachePortalCacheConfiguration) {
+
+		super(baseEhcachePortalCacheManager);
+
+		_portalCacheName = ehcachePortalCacheConfiguration.getPortalCacheName();
+		_serializable =
+			ehcachePortalCacheConfiguration.isRequireSerialization();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<K> getKeys() {
+		Cache<Object, Object> cache = getEhcache();
+
+		List<K> rawKeys = new ArrayList<>();
+
+		cache.forEach(entry -> rawKeys.add((K)entry.getKey()));
+
+		if (!_serializable) {
+			return rawKeys;
+		}
+
+		if (rawKeys.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<K> keys = new ArrayList<>(rawKeys.size());
+
+		for (Object object : rawKeys) {
+			keys.add(SerializableObjectWrapper.unwrap(object));
+		}
+
+		return keys;
+	}
+
+	@Override
+	public String getPortalCacheName() {
+		return _portalCacheName;
+	}
+
+	public boolean isSerializable() {
+		return _serializable;
+	}
+
+	@Override
+	public void removeAll() {
+		Cache<Object, Object> cache = getEhcache();
+
+		cache.clear();
+	}
+
+	protected abstract void dispose();
+
+	@Override
+	protected V doGet(K key) {
+		Cache<Object, Object> cache = getEhcache();
+
+		return _getValue(cache.get(_wrapKey(key)));
+	}
+
+	@Override
+	protected void doPut(K key, V value, int timeToLive) {
+		Cache<Object, Object> cache = getEhcache();
+
+		cache.put(_wrapKey(key), _wrapValue(value));
+	}
+
+	@Override
+	protected V doPutIfAbsent(K key, V value, int timeToLive) {
+		Cache<Object, Object> cache = getEhcache();
+
+		return _getValue(cache.putIfAbsent(_wrapKey(key), _wrapValue(value)));
+	}
+
+	@Override
+	protected void doRemove(K key) {
+		Cache<Object, Object> cache = getEhcache();
+
+		cache.remove(_wrapKey(key));
+	}
+
+	@Override
+	protected boolean doRemove(K key, V value) {
+		Cache<Object, Object> cache = getEhcache();
+
+		return cache.remove(_wrapKey(key), _wrapValue(value));
+	}
+
+	@Override
+	protected V doReplace(K key, V value, int timeToLive) {
+		Cache<Object, Object> cache = getEhcache();
+
+		return _getValue(
+			cache.replace(_wrapKey(key), _wrapValue(value)));
+	}
+
+	@Override
+	protected boolean doReplace(K key, V oldValue, V newValue, int timeToLive) {
+		Cache<Object, Object> cache = getEhcache();
+
+		return cache.replace(
+			_wrapKey(key), _wrapValue(oldValue), _wrapValue(newValue));
+	}
+
+	protected Map<PortalCacheListener<K, V>, PortalCacheListenerScope>
+		getPortalCacheListeners() {
+
+		return aggregatedPortalCacheListener.getPortalCacheListeners();
+	}
+
+	protected abstract void resetEhcache();
+
+	private Object _wrapKey(K key) {
+		if (!_serializable) {
+			return key;
+		}
+
+		return new SerializableObjectWrapper(key);
+	}
+
+	private Object _wrapValue(V value) {
+		if (!_serializable) {
+			return value;
+		}
+
+		if (value instanceof Serializable) {
+			return new SerializableObjectWrapper((Serializable)value);
+		}
+
+		return value;
+	}
+
+	@SuppressWarnings("unchecked")
+	private V _getValue(Object value) {
+		if (value == null) {
+			return null;
+		}
+
+		if (_serializable) {
+			return SerializableObjectWrapper.unwrap(value);
+		}
+
+		return (V)value;
+	}
+
+	private final String _portalCacheName;
+	private final boolean _serializable;
+
+}
