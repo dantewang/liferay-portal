@@ -39,7 +39,7 @@ public class IndexEntryTest {
 	}
 
 	@Test
-	public void testBTreeOptimization() throws Exception {
+	public void testBTreeOptimization() {
 		_assertIndexes(
 			Arrays.asList(
 				new ObjectValuePair<>(
@@ -67,7 +67,7 @@ public class IndexEntryTest {
 	}
 
 	@Test
-	public void testCtCollectionId() throws Exception {
+	public void testCtCollectionId() {
 		List<String> indexSQLsWithCtCollectionId = ListUtil.filter(
 			_indexSQLs,
 			sql -> ListUtil.exists(
@@ -89,7 +89,7 @@ public class IndexEntryTest {
 	}
 
 	@Test
-	public void testExternalReferenceCode() throws Exception {
+	public void testExternalReferenceCode() {
 		List<String> indexSQLsWithExternalReferenceCode = ListUtil.filter(
 			_indexSQLs,
 			sql -> ListUtil.exists(
