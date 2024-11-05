@@ -182,7 +182,7 @@ public class JspServlet extends HttpServlet {
 			_INIT_PARAMETER_NAME_SCRATCH_DIR,
 			StringBundler.concat(
 				_WORK_DIR, _bundle.getSymbolicName(), StringPool.DASH,
-				_bundle.getVersion())
+				_bundle.getVersion(), StringPool.SLASH)
 		).put(
 			"compilerClassName",
 			"com.liferay.portal.osgi.web.servlet.jsp.compiler.internal." +
