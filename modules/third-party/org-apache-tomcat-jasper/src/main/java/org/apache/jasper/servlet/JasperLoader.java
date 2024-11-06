@@ -16,19 +16,14 @@
  */
 package org.apache.jasper.servlet;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.security.AccessController;
 import java.security.CodeSource;
 import java.security.PermissionCollection;
-import java.security.PrivilegedAction;
-import java.security.ProtectionDomain;
 
 import org.apache.jasper.Constants;
-import org.apache.jasper.security.SecurityUtil;
 
 /**
  * Class loader for loading servlet class files (corresponding to JSP files)
@@ -134,72 +129,16 @@ public class JasperLoader extends URLClassLoader {
             return clazz;
         }
 
-        String path = name.replace('.', '/') + ".class";
-
-        if (findResource(path) == null) {
-            return _loadFromParent(name, path);
-        }
-
-        return findClass(name);
-    }
-
-    private Class<?> _loadFromParent(String className, String path)
-        throws ClassNotFoundException {
-
-        byte[] classBytes;
-
-        InputStream inputStream = null;
-
-        if (SecurityUtil.isPackageProtectionEnabled()){
-            inputStream = AccessController.doPrivileged(
-                (PrivilegedAction<InputStream>)
-                    () -> getParent().getResourceAsStream(path));
-        }
-        else {
-            inputStream = getParent().getResourceAsStream(path);
-        }
-
-        if (inputStream == null) {
-            throw new ClassNotFoundException(className);
-        }
-
         try {
-            try (ByteArrayOutputStream byteArrayOutputStream =
-                     new ByteArrayOutputStream()) {
-
-                byte[] buf = new byte[1024];
-
-                for (int i = 0; (i = inputStream.read(buf)) != -1; ) {
-                    byteArrayOutputStream.write(buf, 0, i);
-                }
-
-                classBytes = byteArrayOutputStream.toByteArray();
+            return findClass(name);
+        }
+        catch (ClassNotFoundException classNotFoundException) {
+            clazz = getParent().loadClass(name);
+            if( resolve ) {
+                resolveClass(clazz);
             }
+            return clazz;
         }
-        catch (Exception e) {
-            throw new ClassNotFoundException(className, e);
-        }
-        finally {
-			try {
-				inputStream.close();
-			} catch (IOException ioe) {
-			}
-		}
-
-        Class<?> clazz;
-
-        if (securityManager != null) {
-            ProtectionDomain pd = new ProtectionDomain(
-                _codeSource, permissionCollection);
-
-            clazz = defineClass(
-                className, classBytes, 0, classBytes.length, pd);
-        }
-        else {
-            clazz = defineClass(className, classBytes, 0, classBytes.length);
-        }
-
-        return clazz;
     }
 
 
