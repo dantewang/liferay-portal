@@ -9,6 +9,7 @@ import com.liferay.portal.kernel.servlet.InitialRequestSyncUtil;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -27,7 +28,7 @@ public class InitFilter extends BasePortalFilter {
 
 		_serviceRegistration = serviceRegistration;
 
-		_countDownLatch.countDown();
+		_serviceRegistrationCountDownLatch.countDown();
 	}
 
 	@Override
@@ -36,27 +37,43 @@ public class InitFilter extends BasePortalFilter {
 			HttpServletResponse httpServletResponse, FilterChain filterChain)
 		throws Exception {
 
-		_countDownLatch.await();
+		_serviceRegistrationCountDownLatch.await();
 
-		synchronized (this) {
-			InitialRequestSyncUtil.sync();
+		Thread currentThread = Thread.currentThread();
 
-			try {
-				processFilter(
-					InitFilter.class.getName(), httpServletRequest,
-					httpServletResponse, filterChain);
+		if (!_isFirst.compareAndSet(true, false) &&
+			(_owningThread != currentThread)) {
+
+			_initialCountDownLatch.await();
+		}
+
+		_owningThread = Thread.currentThread();
+
+		InitialRequestSyncUtil.sync();
+
+		try {
+			processFilter(
+				InitFilter.class.getName(), httpServletRequest,
+				httpServletResponse, filterChain);
+		}
+		finally {
+			if (_serviceRegistration != null) {
+				_serviceRegistration.unregister();
+
+				_serviceRegistration = null;
 			}
-			finally {
-				if (_serviceRegistration != null) {
-					_serviceRegistration.unregister();
 
-					_serviceRegistration = null;
-				}
-			}
+			_initialCountDownLatch.countDown();
+
+			_owningThread = null;
 		}
 	}
 
-	private final CountDownLatch _countDownLatch = new CountDownLatch(1);
+	private final CountDownLatch _initialCountDownLatch = new CountDownLatch(1);
+	private final AtomicBoolean _isFirst = new AtomicBoolean(true);
+	private Thread _owningThread;
 	private ServiceRegistration<Filter> _serviceRegistration;
+	private final CountDownLatch _serviceRegistrationCountDownLatch =
+		new CountDownLatch(1);
 
 }
