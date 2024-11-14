@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.PrefsProps;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.impl.PortalPreferenceValueCacheModel;
 import com.liferay.portlet.PortalPreferencesImpl;
 import com.liferay.portlet.PortalPreferencesWrapper;
 import com.liferay.portlet.PortletPreferencesImpl;
@@ -502,25 +501,20 @@ public class PrefsPropsImpl implements PrefsProps {
 					Map<? extends Serializable, ? extends Serializable> map,
 					Serializable key, Serializable value, int timeToLive) {
 
-					if (!(value instanceof PortalPreferenceValueCacheModel)) {
+					if (!(value instanceof Map)) {
 						return;
 					}
-
-					PortalPreferenceValueCacheModel
-						portalPreferenceValueCacheModel =
-							(PortalPreferenceValueCacheModel)value;
 
 					try {
 						PortalPreferences portalPreferences =
 							_portalPreferencesLocalService.getPortalPreferences(
-								portalPreferenceValueCacheModel.
-									portalPreferencesId);
+								(long)key);
 
 						if (portalPreferences.getOwnerType() ==
 								PortletKeys.PREFS_OWNER_TYPE_COMPANY) {
 
 							_portletPreferences.remove(
-								portalPreferenceValueCacheModel.companyId);
+								portalPreferences.getCompanyId());
 						}
 					}
 					catch (PortalException portalException) {
