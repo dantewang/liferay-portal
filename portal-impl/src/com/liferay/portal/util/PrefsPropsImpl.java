@@ -30,6 +30,7 @@ import com.liferay.portlet.PortletPreferencesImpl;
 import java.io.IOException;
 import java.io.Serializable;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
@@ -50,7 +51,7 @@ public class PrefsPropsImpl implements PrefsProps {
 			PortalCacheHelperUtil.getPortalCache(
 				PortalCacheManagerNames.MULTI_VM,
 				PortalPreferencesCacheUtil.class.getName()),
-			null, _synchronizer);
+			Collections.emptyMap(), _synchronizer);
 	}
 
 	@Override
