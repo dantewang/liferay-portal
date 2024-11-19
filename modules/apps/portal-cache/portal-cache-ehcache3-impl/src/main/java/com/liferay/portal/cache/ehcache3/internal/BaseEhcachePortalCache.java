@@ -6,6 +6,7 @@
 package com.liferay.portal.cache.ehcache3.internal;
 
 import com.liferay.portal.cache.BasePortalCache;
+import com.liferay.portal.cache.ehcache3.internal.configuration.EhcachePortalCacheManagerConfiguration;
 import com.liferay.portal.cache.io.SerializableObjectWrapper;
 import com.liferay.portal.kernel.cache.PortalCacheListener;
 import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
@@ -30,6 +31,8 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 		EhcachePortalCacheConfiguration ehcachePortalCacheConfiguration) {
 
 		super(baseEhcachePortalCacheManager);
+
+		this.ehcachePortalCacheManagerConfiguration = baseEhcachePortalCacheManager.getEhcachePortalCacheManagerConfiguration();
 
 		_portalCacheName = ehcachePortalCacheConfiguration.getPortalCacheName();
 		_serializable =
@@ -172,6 +175,7 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 		return (V)value;
 	}
 
+	protected final EhcachePortalCacheManagerConfiguration ehcachePortalCacheManagerConfiguration;
 	private final String _portalCacheName;
 	private final boolean _serializable;
 

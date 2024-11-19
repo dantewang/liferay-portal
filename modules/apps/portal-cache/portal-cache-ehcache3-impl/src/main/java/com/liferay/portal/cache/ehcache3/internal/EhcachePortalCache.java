@@ -6,6 +6,7 @@
 package com.liferay.portal.cache.ehcache3.internal;
 
 import com.liferay.petra.concurrent.DCLSingleton;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.cache.ehcache3.internal.event.PortalCacheCacheEventListener;
 
 import java.io.Serializable;
@@ -15,8 +16,8 @@ import java.util.function.Supplier;
 
 import org.ehcache.CacheManager;
 import org.ehcache.Cache;
-import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.CacheRuntimeConfiguration;
+import org.ehcache.config.Configuration;
 import org.ehcache.event.EventFiring;
 import org.ehcache.event.EventOrdering;
 import org.ehcache.event.EventType;
@@ -60,10 +61,12 @@ public class EhcachePortalCache<K extends Serializable, V>
 			Cache<Object, Object> cache = _cacheManager.getCache(getPortalCacheName(), Object.class, Object.class);
 
 			if (cache == null) {
-
-				// TODO
-
-				_cacheManager.createCache(getPortalCacheName(), (CacheConfiguration<? extends Object, ? extends Object>) null);
+				try {
+					_cacheManager.createCache(getPortalCacheName(), ehcachePortalCacheManagerConfiguration.newCacheConfigurationBuilder());
+				}
+				catch (Exception exception) {
+					ReflectionUtil.throwException(exception);
+				}
 			}
 		}
 

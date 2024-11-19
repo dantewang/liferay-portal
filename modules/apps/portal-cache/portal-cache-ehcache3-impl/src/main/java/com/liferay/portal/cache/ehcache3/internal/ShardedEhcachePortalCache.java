@@ -5,6 +5,7 @@
 
 package com.liferay.portal.cache.ehcache3.internal;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.cache.ehcache3.internal.event.PortalCacheCacheEventListener;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 
@@ -72,10 +73,12 @@ public class ShardedEhcachePortalCache<K extends Serializable, V>
 							_cacheManager.createCache(shardedPortalCacheName, clonedCacheConfiguration);
 						}
 						else {
-
-							// TODO
-
-							_cacheManager.createCache(shardedPortalCacheName, (CacheConfiguration<? extends Object, ? extends Object>) null);
+							try {
+								_cacheManager.createCache(shardedPortalCacheName, ehcachePortalCacheManagerConfiguration.newCacheConfigurationBuilder());
+							}
+							catch (Exception exception) {
+								ReflectionUtil.throwException(exception);
+							}
 						}
 					}
 				}
