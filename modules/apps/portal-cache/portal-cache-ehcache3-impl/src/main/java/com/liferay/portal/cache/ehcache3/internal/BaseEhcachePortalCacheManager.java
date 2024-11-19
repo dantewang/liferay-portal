@@ -149,7 +149,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 				}
 
 				PortalCacheConfiguration portalCacheConfiguration =
-					_portalCacheManagerConfiguration.
+					_ehcachePortalCacheManagerConfiguration.
 						getPortalCacheConfiguration(portalCacheName);
 
 				EhcachePortalCacheConfiguration
@@ -291,7 +291,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	}
 
 	protected void initialize() {
-		if (_portalCacheManagerConfiguration != null) {
+		if (_ehcachePortalCacheManagerConfiguration != null) {
 			return;
 		}
 
@@ -340,7 +340,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		_cacheManager = CacheManagerBuilder.newCacheManager(
 			configurationObjectValuePair.getKey());
 
-		_portalCacheManagerConfiguration =
+		_ehcachePortalCacheManagerConfiguration =
 			configurationObjectValuePair.getValue();
 
 		InternalCacheManager internalCacheManager = (InternalCacheManager)_cacheManager;
@@ -389,6 +389,10 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			};
 
 		_mBeanServerServiceTracker.open();
+	}
+
+	public EhcachePortalCacheManagerConfiguration getEhcachePortalCacheManagerConfiguration() {
+		return _ehcachePortalCacheManagerConfiguration;
 	}
 
 	protected BundleContext bundleContext;
@@ -554,7 +558,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 				portalCacheManagerConfiguration.getPortalCacheConfiguration(
 					portalCacheName);
 
-			_portalCacheManagerConfiguration.putPortalCacheConfiguration(
+			_ehcachePortalCacheManagerConfiguration.putPortalCacheConfiguration(
 				portalCacheName, portalCacheConfiguration);
 
 			PortalCache<K, V> portalCache = _portalCaches.get(portalCacheName);
@@ -671,7 +675,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		_ehcachePortalCacheManagerConfigurator;
 	private ServiceTracker<MBeanServer, ManagementService>
 		_mBeanServerServiceTracker;
-	private PortalCacheManagerConfiguration _portalCacheManagerConfiguration;
+	private EhcachePortalCacheManagerConfiguration _ehcachePortalCacheManagerConfiguration;
 	private String _portalCacheManagerName;
 	private final ConcurrentMap<String, PortalCache<K, V>> _portalCaches =
 		new ConcurrentHashMap<>();
