@@ -173,16 +173,16 @@ create index IX_47CC6234 on ExportImportConfiguration (groupId, type_, status);
 create index IX_75017452 on Group_ (active_, type_);
 create index IX_8257E37B on Group_ (classNameId, classPK);
 create index IX_DDC91A87 on Group_ (companyId, active_);
+create unique index IX_DBA56EF9 on Group_ (companyId, classNameId, ctCollectionId, classPK);
 create index IX_ABE2D54 on Group_ (companyId, classNameId, parentGroupId);
 create index IX_DF76A247 on Group_ (companyId, classNameId, site);
-create unique index IX_5BDBBB75 on Group_ (companyId, ctCollectionId, classNameId, classPK);
 create unique index IX_23B1C81D on Group_ (companyId, ctCollectionId, externalReferenceCode[$COLUMN_LENGTH:75$]);
 create unique index IX_3551EED4 on Group_ (companyId, ctCollectionId, friendlyURL[$COLUMN_LENGTH:255$]);
 create unique index IX_42E6E774 on Group_ (companyId, ctCollectionId, groupKey[$COLUMN_LENGTH:150$]);
 create index IX_5D75499E on Group_ (companyId, parentGroupId);
 create index IX_B91488EC on Group_ (companyId, site, active_);
 create index IX_7B216735 on Group_ (companyId, site, parentGroupId, inheritContent);
-create unique index IX_639B089A on Group_ (ctCollectionId, liveGroupId);
+create index IX_16218A38 on Group_ (liveGroupId);
 create index IX_F981514E on Group_ (uuid_[$COLUMN_LENGTH:75$]);
 
 create index IX_8BFD4548 on Groups_Orgs (companyId);
