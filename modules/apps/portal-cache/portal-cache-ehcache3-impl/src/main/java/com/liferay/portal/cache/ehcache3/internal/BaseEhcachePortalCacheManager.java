@@ -16,6 +16,7 @@ import com.liferay.portal.cache.PortalCacheManagerListenerFactory;
 import com.liferay.portal.cache.TransactionalPortalCache;
 import com.liferay.portal.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.cache.configuration.PortalCacheManagerConfiguration;
+import com.liferay.portal.cache.ehcache3.internal.configuration.EhcachePortalCacheManagerConfiguration;
 import com.liferay.portal.cache.ehcache3.internal.configurator.EhcachePortalCacheManagerConfigurator;
 import com.liferay.portal.cache.ehcache3.internal.event.ConfigurableEhcachePortalCacheListener;
 import com.liferay.portal.cache.ehcache3.internal.event.PortalCacheManagerEventListener;
@@ -202,7 +203,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	public void reconfigurePortalCaches(
 		URL configurationURL, ClassLoader classLoader) {
 
-		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
+		ObjectValuePair<Configuration, EhcachePortalCacheManagerConfiguration>
 			configurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
 					getConfigurationObjectValuePair(
@@ -327,7 +328,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 				getReplicatorProperties(),
 				getDefaultReplicatorPropertiesString());
 
-		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
+		ObjectValuePair<Configuration, EhcachePortalCacheManagerConfiguration>
 			configurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
 					getConfigurationObjectValuePair(
@@ -436,7 +437,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	}
 
 	private void _overrideConfigurationsByExtFile(
-		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
+		ObjectValuePair<Configuration, EhcachePortalCacheManagerConfiguration>
 			configurationObjectValuePair) {
 
 		String extFile = StringUtil.replace(_configFile, ".xml", "-ext.xml");
@@ -456,7 +457,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			return;
 		}
 
-		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
+		ObjectValuePair<Configuration, EhcachePortalCacheManagerConfiguration>
 			extConfigurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
 					getConfigurationObjectValuePair(
@@ -466,7 +467,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		Configuration extConfiguration =
 			extConfigurationObjectValuePair.getKey();
 
-		PortalCacheManagerConfiguration extPortalCacheManagerConfiguration =
+		EhcachePortalCacheManagerConfiguration extEhcachePortalCacheManagerConfiguration =
 			extConfigurationObjectValuePair.getValue();
 
 		Configuration configuration = configurationObjectValuePair.getKey();
@@ -480,8 +481,11 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		extServiceCreationConfigurations.forEach(
 			fluentConfigurationBuilder::withService);
 
-		PortalCacheManagerConfiguration portalCacheManagerConfiguration =
+		EhcachePortalCacheManagerConfiguration ehcachePortalCacheManagerConfiguration =
 			configurationObjectValuePair.getValue();
+
+		ehcachePortalCacheManagerConfiguration.setDefaultCacheConfigurationBuilderSupplier(
+			extEhcachePortalCacheManagerConfiguration.getDefaultCacheConfigurationBuilderSupplier());
 
 		Map<String, CacheConfiguration<?, ?>> extCacheConfigurationsMap =
 			extConfiguration.getCacheConfigurations();
@@ -489,9 +493,9 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		extCacheConfigurationsMap.forEach(
 			(portalCacheName, cacheConfiguration) -> {
 				fluentConfigurationBuilder.withCache(portalCacheName, cacheConfiguration);
-				portalCacheManagerConfiguration.putPortalCacheConfiguration(
+				ehcachePortalCacheManagerConfiguration.putPortalCacheConfiguration(
 					portalCacheName,
-					extPortalCacheManagerConfiguration.getPortalCacheConfiguration(
+					extEhcachePortalCacheManagerConfiguration.getPortalCacheConfiguration(
 						portalCacheName));
 			}
 		);
