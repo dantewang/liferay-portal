@@ -62,7 +62,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		}
 
 		XmlConfiguration xmlConfiguration = new XmlConfiguration(
-			configurationURL);
+			configurationURL, classLoader);
 
 		EhcachePortalCacheManagerConfiguration ehcachePortalCacheManagerConfiguration =
 			_parseListenerConfigurations(
