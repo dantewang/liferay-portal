@@ -17,17 +17,17 @@ import org.ehcache.core.events.CacheManagerListener;
 /**
  * @author Shuyang Zhou
  */
-public class PortalCacheManagerEventListener
+public class EhcacheCacheManagerListener
 	implements CacheManagerListener {
 
-	public PortalCacheManagerEventListener(
+	public EhcacheCacheManagerListener(
 		PortalCacheManagerListener portalCacheManagerListener,
 		String portalCacheManagerName) {
 
 		_portalCacheManagerListener = portalCacheManagerListener;
 
 		_log = LogFactoryUtil.getLog(
-			PortalCacheManagerEventListener.class.getName() +
+			EhcacheCacheManagerListener.class.getName() +
 				StringPool.PERIOD + portalCacheManagerName);
 	}
 
@@ -37,19 +37,15 @@ public class PortalCacheManagerEventListener
 			return true;
 		}
 
-		if (!(object instanceof PortalCacheManagerEventListener)) {
+		if (!(object instanceof EhcacheCacheManagerListener)) {
 			return false;
 		}
 
-		PortalCacheManagerEventListener portalCacheManagerEventListener =
-			(PortalCacheManagerEventListener)object;
+		EhcacheCacheManagerListener ehcacheCacheManagerListener =
+			(EhcacheCacheManagerListener)object;
 
 		return _portalCacheManagerListener.equals(
-			portalCacheManagerEventListener._portalCacheManagerListener);
-	}
-
-	public PortalCacheManagerListener getCacheManagerListener() {
-		return _portalCacheManagerListener;
+			ehcacheCacheManagerListener._portalCacheManagerListener);
 	}
 
 	@Override
@@ -80,7 +76,12 @@ public class PortalCacheManagerEventListener
 
 	@Override
 	public void stateTransition(Status from, Status to) {
-
+		if (to == Status.AVAILABLE) {
+			_portalCacheManagerListener.init();
+		}
+		else if (to == Status.UNINITIALIZED) {
+			_portalCacheManagerListener.dispose();
+		}
 	}
 
 }

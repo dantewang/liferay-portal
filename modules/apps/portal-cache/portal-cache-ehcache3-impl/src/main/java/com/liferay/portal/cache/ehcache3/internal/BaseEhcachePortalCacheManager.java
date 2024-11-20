@@ -19,7 +19,7 @@ import com.liferay.portal.cache.configuration.PortalCacheManagerConfiguration;
 import com.liferay.portal.cache.ehcache3.internal.configuration.EhcachePortalCacheManagerConfiguration;
 import com.liferay.portal.cache.ehcache3.internal.configurator.EhcachePortalCacheManagerConfigurator;
 import com.liferay.portal.cache.ehcache3.internal.event.ConfigurableEhcachePortalCacheListener;
-import com.liferay.portal.cache.ehcache3.internal.event.PortalCacheManagerEventListener;
+import com.liferay.portal.cache.ehcache3.internal.event.EhcacheCacheManagerListener;
 import com.liferay.portal.cache.ehcache3.internal.management.ManagementService;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.PortalCacheException;
@@ -346,7 +346,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		InternalCacheManager internalCacheManager = (InternalCacheManager)_cacheManager;
 
 		internalCacheManager.registerListener(
-			new PortalCacheManagerEventListener(
+			new EhcacheCacheManagerListener(
 				_aggregatedPortalCacheManagerListener,
 				_portalCacheManagerName));
 
