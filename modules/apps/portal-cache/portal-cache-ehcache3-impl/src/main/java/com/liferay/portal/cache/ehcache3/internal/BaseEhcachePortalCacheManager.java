@@ -340,6 +340,8 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		_cacheManager = CacheManagerBuilder.newCacheManager(
 			configurationObjectValuePair.getKey());
 
+		_cacheManager.init();
+
 		_ehcachePortalCacheManagerConfiguration =
 			configurationObjectValuePair.getValue();
 
