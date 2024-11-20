@@ -43,6 +43,7 @@ import java.io.Serializable;
 import java.net.URL;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -56,7 +57,9 @@ import org.ehcache.CacheManager;
 import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.Configuration;
 import org.ehcache.config.FluentConfigurationBuilder;
-import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.core.EhcacheManager;
+import org.ehcache.core.internal.statistics.DefaultStatisticsService;
+import org.ehcache.core.spi.service.StatisticsService;
 import org.ehcache.core.spi.store.InternalCacheManager;
 
 import org.ehcache.spi.service.ServiceCreationConfiguration;
@@ -337,8 +340,11 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 
 		_overrideConfigurationsByExtFile(configurationObjectValuePair);
 
-		_cacheManager = CacheManagerBuilder.newCacheManager(
-			configurationObjectValuePair.getKey());
+		StatisticsService statisticsService = new DefaultStatisticsService();
+
+		_cacheManager = new EhcacheManager(
+			configurationObjectValuePair.getKey(),
+			Collections.singletonList(statisticsService));
 
 		_cacheManager.init();
 
@@ -371,7 +377,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 						serviceReference);
 
 					ManagementService managementService = new ManagementService(
-						_cacheManager, mBeanServer);
+						_cacheManager, _portalCacheManagerName, mBeanServer, statisticsService);
 
 					managementService.init();
 
