@@ -63,6 +63,7 @@ import org.ehcache.core.spi.service.StatisticsService;
 import org.ehcache.core.spi.store.InternalCacheManager;
 
 import org.ehcache.spi.service.ServiceCreationConfiguration;
+import org.ehcache.xml.XmlConfiguration;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Reference;
@@ -496,8 +497,17 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		EhcachePortalCacheManagerConfiguration ehcachePortalCacheManagerConfiguration =
 			configurationObjectValuePair.getValue();
 
-		ehcachePortalCacheManagerConfiguration.setDefaultCacheConfigurationBuilderSupplier(
-			extEhcachePortalCacheManagerConfiguration.getDefaultCacheConfigurationBuilderSupplier());
+		XmlConfiguration extXMLConfiguration = (XmlConfiguration)extConfiguration;
+
+		try {
+			if (extXMLConfiguration.newCacheConfigurationBuilderFromTemplate("default", Object.class, Object.class) != null) {
+				ehcachePortalCacheManagerConfiguration.setDefaultCacheConfigurationBuilderSupplier(
+					extEhcachePortalCacheManagerConfiguration.getDefaultCacheConfigurationBuilderSupplier());
+			}
+		}
+		catch (Exception exception) {
+			_log.error(exception);
+		}
 
 		Map<String, CacheConfiguration<?, ?>> extCacheConfigurationsMap =
 			extConfiguration.getCacheConfigurations();
