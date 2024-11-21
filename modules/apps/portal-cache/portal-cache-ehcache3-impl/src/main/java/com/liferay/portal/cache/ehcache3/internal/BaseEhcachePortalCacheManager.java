@@ -211,8 +211,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			configurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
 					getConfigurationObjectValuePair(
-						_portalCacheManagerName, configurationURL, classLoader,
-						_usingDefault);
+						configurationURL, classLoader);
 
 		_reconfigEhcache(configurationObjectValuePair.getKey());
 
@@ -325,8 +324,6 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			configFileURL = classLoader.getResource(_configFile);
 		}
 
-		_usingDefault = _configFile.equals(_defaultConfigFile);
-
 		_ehcachePortalCacheManagerConfigurator =
 			new EhcachePortalCacheManagerConfigurator(
 				getReplicatorProperties(),
@@ -336,8 +333,8 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			configurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
 					getConfigurationObjectValuePair(
-						_portalCacheManagerName, configFileURL, classLoader,
-						_usingDefault);
+						configFileURL, classLoader
+					);
 
 		_overrideConfigurationsByExtFile(configurationObjectValuePair);
 
@@ -474,8 +471,8 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			extConfigurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
 					getConfigurationObjectValuePair(
-						_portalCacheManagerName, extFileURL, classLoader,
-						false);
+						extFileURL, classLoader
+					);
 
 		Configuration extConfiguration =
 			extConfigurationObjectValuePair.getKey();
@@ -699,6 +696,5 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		new ConcurrentHashMap<>();
 	private boolean _transactionalPortalCacheEnabled;
 	private String[] _transactionalPortalCacheNames = StringPool.EMPTY_ARRAY;
-	private boolean _usingDefault;
 
 }
