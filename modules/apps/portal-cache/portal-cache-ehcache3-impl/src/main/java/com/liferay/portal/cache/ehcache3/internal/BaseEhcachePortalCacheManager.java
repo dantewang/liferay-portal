@@ -56,7 +56,9 @@ import org.ehcache.Cache;
 import org.ehcache.CacheManager;
 import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.Configuration;
+import org.ehcache.config.FluentCacheConfigurationBuilder;
 import org.ehcache.config.FluentConfigurationBuilder;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.core.EhcacheManager;
 import org.ehcache.core.internal.statistics.DefaultStatisticsService;
 import org.ehcache.core.spi.service.StatisticsService;
@@ -497,13 +499,17 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			ehcachePortalCacheManagerConfiguration =
 				configurationObjectValuePair.getValue();
 
-		XmlConfiguration extXMLConfiguration =
+		XmlConfiguration extXmlConfiguration =
 			(XmlConfiguration)extConfiguration;
 
 		try {
-			if (extXMLConfiguration.newCacheConfigurationBuilderFromTemplate(
-					"default", Object.class, Object.class) != null) {
+			CacheConfigurationBuilder<Object, Object>
+				cacheConfigurationBuilder =
+					extXmlConfiguration.
+						newCacheConfigurationBuilderFromTemplate(
+							"default", Object.class, Object.class);
 
+			if (cacheConfigurationBuilder != null) {
 				ehcachePortalCacheManagerConfiguration.
 					setDefaultCacheConfigurationBuilderSupplier(
 						extEhcachePortalCacheManagerConfiguration.
@@ -541,9 +547,10 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			String portalCacheName = entry.getKey();
 
 			synchronized (_cacheManager) {
-				if (_cacheManager.getCache(
-						portalCacheName, Object.class, Object.class) != null) {
+				Cache<Object, Object> cache = _cacheManager.getCache(
+					portalCacheName, Object.class, Object.class);
 
+				if (cache != null) {
 					if (_log.isInfoEnabled()) {
 						_log.info(
 							"Overriding existing cache " + portalCacheName);

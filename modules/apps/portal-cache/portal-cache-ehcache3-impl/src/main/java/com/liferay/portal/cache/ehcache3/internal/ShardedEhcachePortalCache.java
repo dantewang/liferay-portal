@@ -114,8 +114,8 @@ public class ShardedEhcachePortalCache<K extends Serializable, V>
 	protected void dispose() {
 		_cacheManager.removeCache(getPortalCacheName());
 
-		for (Long companyId : _caches.keySet()) {
-			_cacheManager.removeCache(_getCacheName(companyId));
+		for (Long key : _caches.keySet()) {
+			_cacheManager.removeCache(_getCacheName(key));
 		}
 	}
 

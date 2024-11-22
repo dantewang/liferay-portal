@@ -36,25 +36,25 @@ public class EhcachePortalCacheManagerConfiguration
 	public UnsafeSupplier<CacheConfigurationBuilder<Object, Object>, Exception>
 		getDefaultCacheConfigurationBuilderSupplier() {
 
-		return _defaultCacheConfigurationBuilderSupplier;
+		return _defaultCacheConfigurationBuilderUnsafeSupplier;
 	}
 
 	public CacheConfigurationBuilder<Object, Object>
 			newCacheConfigurationBuilder()
 		throws Exception {
 
-		return _defaultCacheConfigurationBuilderSupplier.get();
+		return _defaultCacheConfigurationBuilderUnsafeSupplier.get();
 	}
 
 	public void setDefaultCacheConfigurationBuilderSupplier(
 		UnsafeSupplier<CacheConfigurationBuilder<Object, Object>, Exception>
-			defaultCacheConfigurationBuilderSupplier) {
+			defaultCacheConfigurationBuilderUnsafeSupplier) {
 
-		_defaultCacheConfigurationBuilderSupplier =
-			defaultCacheConfigurationBuilderSupplier;
+		_defaultCacheConfigurationBuilderUnsafeSupplier =
+			defaultCacheConfigurationBuilderUnsafeSupplier;
 
 		try {
-			if (_defaultCacheConfigurationBuilderSupplier.get() != null) {
+			if (_defaultCacheConfigurationBuilderUnsafeSupplier.get() != null) {
 				return;
 			}
 		}
@@ -64,7 +64,7 @@ public class EhcachePortalCacheManagerConfiguration
 			}
 		}
 
-		_defaultCacheConfigurationBuilderSupplier =
+		_defaultCacheConfigurationBuilderUnsafeSupplier =
 			() -> CacheConfigurationBuilder.newCacheConfigurationBuilder(
 				Object.class, Object.class, ResourcePoolsBuilder.heap(100000));
 	}
@@ -73,6 +73,6 @@ public class EhcachePortalCacheManagerConfiguration
 		EhcachePortalCacheManagerConfiguration.class.getName());
 
 	private UnsafeSupplier<CacheConfigurationBuilder<Object, Object>, Exception>
-		_defaultCacheConfigurationBuilderSupplier;
+		_defaultCacheConfigurationBuilderUnsafeSupplier;
 
 }
