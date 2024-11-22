@@ -51,7 +51,7 @@ public class EhcachePortalCacheListenerFactory
 		}
 
 		throw new UnsupportedOperationException(
-			"Only replicator is now supported.");
+			"Only replicator is now supported");
 	}
 
 	@Reference

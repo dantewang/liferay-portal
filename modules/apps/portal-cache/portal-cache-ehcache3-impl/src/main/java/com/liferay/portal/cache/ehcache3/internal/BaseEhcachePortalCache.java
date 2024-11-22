@@ -32,7 +32,7 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 		super(baseEhcachePortalCacheManager);
 
-		this.ehcachePortalCacheManagerConfiguration =
+		ehcachePortalCacheManagerConfiguration =
 			baseEhcachePortalCacheManager.
 				getEhcachePortalCacheManagerConfiguration();
 
