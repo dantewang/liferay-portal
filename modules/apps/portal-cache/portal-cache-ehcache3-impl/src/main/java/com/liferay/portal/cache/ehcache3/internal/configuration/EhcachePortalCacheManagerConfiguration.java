@@ -8,8 +8,6 @@ package com.liferay.portal.cache.ehcache3.internal.configuration;
 import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.portal.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.cache.configuration.PortalCacheManagerConfiguration;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.util.Properties;
 import java.util.Set;
@@ -34,43 +32,33 @@ public class EhcachePortalCacheManagerConfiguration
 	}
 
 	public UnsafeSupplier<CacheConfigurationBuilder<Object, Object>, Exception>
-		getDefaultCacheConfigurationBuilderSupplier() {
+		getDefaultCacheConfigurationBuilderUnsafeSupplier() {
 
 		return _defaultCacheConfigurationBuilderUnsafeSupplier;
 	}
 
 	public CacheConfigurationBuilder<Object, Object>
-			newCacheConfigurationBuilder()
+			newDefaultCacheConfigurationBuilder()
 		throws Exception {
 
-		return _defaultCacheConfigurationBuilderUnsafeSupplier.get();
+		CacheConfigurationBuilder<Object, Object> cacheConfigurationBuilder =
+			_defaultCacheConfigurationBuilderUnsafeSupplier.get();
+
+		if (cacheConfigurationBuilder != null) {
+			return cacheConfigurationBuilder;
+		}
+
+		return CacheConfigurationBuilder.newCacheConfigurationBuilder(
+			Object.class, Object.class, ResourcePoolsBuilder.heap(100000));
 	}
 
-	public void setDefaultCacheConfigurationBuilderSupplier(
+	public void setDefaultCacheConfigurationBuilderUnsafeSupplier(
 		UnsafeSupplier<CacheConfigurationBuilder<Object, Object>, Exception>
 			defaultCacheConfigurationBuilderUnsafeSupplier) {
 
 		_defaultCacheConfigurationBuilderUnsafeSupplier =
 			defaultCacheConfigurationBuilderUnsafeSupplier;
-
-		try {
-			if (_defaultCacheConfigurationBuilderUnsafeSupplier.get() != null) {
-				return;
-			}
-		}
-		catch (Exception exception) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(exception);
-			}
-		}
-
-		_defaultCacheConfigurationBuilderUnsafeSupplier =
-			() -> CacheConfigurationBuilder.newCacheConfigurationBuilder(
-				Object.class, Object.class, ResourcePoolsBuilder.heap(100000));
 	}
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		EhcachePortalCacheManagerConfiguration.class.getName());
 
 	private UnsafeSupplier<CacheConfigurationBuilder<Object, Object>, Exception>
 		_defaultCacheConfigurationBuilderUnsafeSupplier;

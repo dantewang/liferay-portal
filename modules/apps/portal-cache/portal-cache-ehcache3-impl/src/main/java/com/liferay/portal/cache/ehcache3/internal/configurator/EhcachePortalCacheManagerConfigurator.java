@@ -62,7 +62,7 @@ public class EhcachePortalCacheManagerConfigurator {
 				_createPortalCacheManagerConfiguration(xmlConfiguration);
 
 		ehcachePortalCacheManagerConfiguration.
-			setDefaultCacheConfigurationBuilderSupplier(
+			setDefaultCacheConfigurationBuilderUnsafeSupplier(
 				() -> xmlConfiguration.newCacheConfigurationBuilderFromTemplate(
 					"default", Object.class, Object.class));
 

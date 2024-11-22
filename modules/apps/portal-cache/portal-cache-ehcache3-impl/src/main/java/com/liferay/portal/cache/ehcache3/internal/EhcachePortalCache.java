@@ -65,7 +65,7 @@ public class EhcachePortalCache<K extends Serializable, V>
 					_cacheManager.createCache(
 						getPortalCacheName(),
 						ehcachePortalCacheManagerConfiguration.
-							newCacheConfigurationBuilder());
+							newDefaultCacheConfigurationBuilder());
 				}
 				catch (Exception exception) {
 					ReflectionUtil.throwException(exception);

@@ -5,6 +5,7 @@
 
 package com.liferay.portal.cache.ehcache3.internal;
 
+import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -63,7 +64,6 @@ import org.ehcache.core.internal.statistics.DefaultStatisticsService;
 import org.ehcache.core.spi.service.StatisticsService;
 import org.ehcache.core.spi.store.InternalCacheManager;
 import org.ehcache.spi.service.ServiceCreationConfiguration;
-import org.ehcache.xml.XmlConfiguration;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -498,21 +498,16 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			ehcachePortalCacheManagerConfiguration =
 				configurationObjectValuePair.getValue();
 
-		XmlConfiguration extXmlConfiguration =
-			(XmlConfiguration)extConfiguration;
-
 		try {
-			CacheConfigurationBuilder<Object, Object>
-				cacheConfigurationBuilder =
-					extXmlConfiguration.
-						newCacheConfigurationBuilderFromTemplate(
-							"default", Object.class, Object.class);
+			UnsafeSupplier<CacheConfigurationBuilder<Object, Object>, Exception>
+				unsafeSupplier =
+					ehcachePortalCacheManagerConfiguration.
+						getDefaultCacheConfigurationBuilderUnsafeSupplier();
 
-			if (cacheConfigurationBuilder != null) {
+			if (unsafeSupplier.get() != null) {
 				ehcachePortalCacheManagerConfiguration.
-					setDefaultCacheConfigurationBuilderSupplier(
-						extEhcachePortalCacheManagerConfiguration.
-							getDefaultCacheConfigurationBuilderSupplier());
+					setDefaultCacheConfigurationBuilderUnsafeSupplier(
+						unsafeSupplier);
 			}
 		}
 		catch (Exception exception) {

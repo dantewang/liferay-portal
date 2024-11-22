@@ -80,7 +80,7 @@ public class ShardedEhcachePortalCache<K extends Serializable, V>
 								_cacheManager.createCache(
 									shardedPortalCacheName,
 									ehcachePortalCacheManagerConfiguration.
-										newCacheConfigurationBuilder());
+										newDefaultCacheConfigurationBuilder());
 							}
 							catch (Exception exception) {
 								ReflectionUtil.throwException(exception);

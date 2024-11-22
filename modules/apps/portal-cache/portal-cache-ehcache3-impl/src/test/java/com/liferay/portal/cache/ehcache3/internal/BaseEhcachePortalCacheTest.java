@@ -94,7 +94,7 @@ public class BaseEhcachePortalCacheTest {
 					Collections.emptySet(), null, Collections.emptySet());
 
 		ehcachePortalCacheManagerConfiguration.
-			setDefaultCacheConfigurationBuilderSupplier(
+			setDefaultCacheConfigurationBuilderUnsafeSupplier(
 				() -> _cacheConfigurationBuilder);
 
 		ReflectionTestUtil.setFieldValue(
@@ -648,7 +648,7 @@ public class BaseEhcachePortalCacheTest {
 					Collections.emptySet(), null, Collections.emptySet());
 
 		ehcachePortalCacheManagerConfiguration.
-			setDefaultCacheConfigurationBuilderSupplier(
+			setDefaultCacheConfigurationBuilderUnsafeSupplier(
 				() -> _cacheConfigurationBuilder);
 
 		ReflectionTestUtil.setFieldValue(

@@ -86,7 +86,7 @@ public class ShardedEhcachePortalCacheTest {
 					Collections.emptySet(), null, Collections.emptySet());
 
 		ehcachePortalCacheManagerConfiguration.
-			setDefaultCacheConfigurationBuilderSupplier(
+			setDefaultCacheConfigurationBuilderUnsafeSupplier(
 				() -> CacheConfigurationBuilder.newCacheConfigurationBuilder(
 					Object.class, Object.class,
 					ResourcePoolsBuilder.heap(
