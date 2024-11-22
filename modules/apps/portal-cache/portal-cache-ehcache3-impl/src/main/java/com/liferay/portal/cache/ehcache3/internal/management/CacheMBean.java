@@ -16,11 +16,8 @@ public class CacheMBean {
 	public CacheMBean(String cacheName, Cache<?, ?> cache) {
 		_cacheName = cacheName;
 		_cache = cache;
-		_cacheRuntimeConfiguration = _cache.getRuntimeConfiguration();
-	}
 
-	public String getName() {
-		return _cacheName;
+		_cacheRuntimeConfiguration = cache.getRuntimeConfiguration();
 	}
 
 	public void clear() {
@@ -28,15 +25,21 @@ public class CacheMBean {
 	}
 
 	public String getKeyType() {
-		return _cacheRuntimeConfiguration.getKeyType().getName();
+		return _cacheRuntimeConfiguration.getKeyType(
+		).getName();
+	}
+
+	public String getName() {
+		return _cacheName;
 	}
 
 	public String getValueType() {
-		return _cacheRuntimeConfiguration.getValueType().getName();
+		return _cacheRuntimeConfiguration.getValueType(
+		).getName();
 	}
 
-	private final String _cacheName;
 	private final Cache<?, ?> _cache;
+	private final String _cacheName;
 	private final CacheRuntimeConfiguration<?, ?> _cacheRuntimeConfiguration;
 
 }

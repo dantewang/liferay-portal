@@ -12,7 +12,9 @@ import org.ehcache.CacheManager;
  */
 public class CacheManagerMBean {
 
-	public CacheManagerMBean(String cacheManagerName, CacheManager cacheManager) {
+	public CacheManagerMBean(
+		String cacheManagerName, CacheManager cacheManager) {
+
 		_cacheManagerName = cacheManagerName;
 		_cacheManager = cacheManager;
 	}
@@ -25,7 +27,7 @@ public class CacheManagerMBean {
 		return String.valueOf(_cacheManager.getStatus());
 	}
 
-	private final String _cacheManagerName;
 	private final CacheManager _cacheManager;
+	private final String _cacheManagerName;
 
 }

@@ -32,7 +32,9 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 		super(baseEhcachePortalCacheManager);
 
-		this.ehcachePortalCacheManagerConfiguration = baseEhcachePortalCacheManager.getEhcachePortalCacheManagerConfiguration();
+		this.ehcachePortalCacheManagerConfiguration =
+			baseEhcachePortalCacheManager.
+				getEhcachePortalCacheManagerConfiguration();
 
 		_portalCacheName = ehcachePortalCacheConfiguration.getPortalCacheName();
 		_serializable =
@@ -122,8 +124,7 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 	protected V doReplace(K key, V value, int timeToLive) {
 		Cache<Object, Object> cache = getEhcache();
 
-		return _getValue(
-			cache.replace(_wrapKey(key), _wrapValue(value)));
+		return _getValue(cache.replace(_wrapKey(key), _wrapValue(value)));
 	}
 
 	@Override
@@ -141,6 +142,22 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 	}
 
 	protected abstract void resetEhcache();
+
+	protected final EhcachePortalCacheManagerConfiguration
+		ehcachePortalCacheManagerConfiguration;
+
+	@SuppressWarnings("unchecked")
+	private V _getValue(Object value) {
+		if (value == null) {
+			return null;
+		}
+
+		if (_serializable) {
+			return SerializableObjectWrapper.unwrap(value);
+		}
+
+		return (V)value;
+	}
 
 	private Object _wrapKey(K key) {
 		if (!_serializable) {
@@ -162,20 +179,6 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 		return value;
 	}
 
-	@SuppressWarnings("unchecked")
-	private V _getValue(Object value) {
-		if (value == null) {
-			return null;
-		}
-
-		if (_serializable) {
-			return SerializableObjectWrapper.unwrap(value);
-		}
-
-		return (V)value;
-	}
-
-	protected final EhcachePortalCacheManagerConfiguration ehcachePortalCacheManagerConfiguration;
 	private final String _portalCacheName;
 	private final boolean _serializable;
 

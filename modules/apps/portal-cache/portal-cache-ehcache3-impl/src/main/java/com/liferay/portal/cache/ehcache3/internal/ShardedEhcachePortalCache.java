@@ -53,9 +53,10 @@ public class ShardedEhcachePortalCache<K extends Serializable, V>
 						shardedPortalCacheName, Object.class, Object.class);
 
 					if (cache == null) {
-						Cache<Object, Object> mainCache = _cacheManager.getCache(
-							getPortalCacheName(), Object.class, Object.class
-						);
+						Cache<Object, Object> mainCache =
+							_cacheManager.getCache(
+								getPortalCacheName(), Object.class,
+								Object.class);
 
 						if (mainCache != null) {
 							CacheRuntimeConfiguration<Object, Object>
@@ -66,15 +67,20 @@ public class ShardedEhcachePortalCache<K extends Serializable, V>
 								fluentCacheConfigurationBuilder =
 									cacheRuntimeConfiguration.derive();
 
+							CacheConfiguration<Object, Object>
+								clonedCacheConfiguration =
+									fluentCacheConfigurationBuilder.build();
 
-							CacheConfiguration<Object, Object> clonedCacheConfiguration =
-								fluentCacheConfigurationBuilder.build();
-
-							_cacheManager.createCache(shardedPortalCacheName, clonedCacheConfiguration);
+							_cacheManager.createCache(
+								shardedPortalCacheName,
+								clonedCacheConfiguration);
 						}
 						else {
 							try {
-								_cacheManager.createCache(shardedPortalCacheName, ehcachePortalCacheManagerConfiguration.newCacheConfigurationBuilder());
+								_cacheManager.createCache(
+									shardedPortalCacheName,
+									ehcachePortalCacheManagerConfiguration.
+										newCacheConfigurationBuilder());
 							}
 							catch (Exception exception) {
 								ReflectionUtil.throwException(exception);
@@ -86,13 +92,14 @@ public class ShardedEhcachePortalCache<K extends Serializable, V>
 				Cache<Object, Object> cache = _cacheManager.getCache(
 					shardedPortalCacheName, Object.class, Object.class);
 
-				CacheRuntimeConfiguration<Object, Object> cacheRuntimeConfiguration =
-					cache.getRuntimeConfiguration();
+				CacheRuntimeConfiguration<Object, Object>
+					cacheRuntimeConfiguration = cache.getRuntimeConfiguration();
 
 				cacheRuntimeConfiguration.registerCacheEventListener(
 					new PortalCacheCacheEventListener<>(
 						aggregatedPortalCacheListener, this),
-					EventOrdering.UNORDERED, EventFiring.SYNCHRONOUS, EnumSet.allOf(EventType.class));
+					EventOrdering.UNORDERED, EventFiring.SYNCHRONOUS,
+					EnumSet.allOf(EventType.class));
 
 				return cache;
 			});
@@ -134,6 +141,7 @@ public class ShardedEhcachePortalCache<K extends Serializable, V>
 	private static final String _SHARDED_SEPARATOR = "_SHARDED_SEPARATOR_";
 
 	private final CacheManager _cacheManager;
-	private final Map<Long, Cache<Object, Object>> _caches = new ConcurrentHashMap<>();
+	private final Map<Long, Cache<Object, Object>> _caches =
+		new ConcurrentHashMap<>();
 
 }

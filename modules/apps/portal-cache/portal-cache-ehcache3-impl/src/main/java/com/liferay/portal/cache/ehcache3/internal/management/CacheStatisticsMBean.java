@@ -12,25 +12,35 @@ import org.ehcache.core.statistics.CacheStatistics;
  */
 public class CacheStatisticsMBean {
 
-	public CacheStatisticsMBean(String cacheName, CacheStatistics cacheStatistics) {
+	public CacheStatisticsMBean(
+		String cacheName, CacheStatistics cacheStatistics) {
+
 		_cacheName = cacheName;
 		_cacheStatistics = cacheStatistics;
-	}
-
-	public String getName() {
-		return _cacheName;
 	}
 
 	public void clear() {
 		_cacheStatistics.clear();
 	}
 
-	public long getCacheHits() {
-		return _cacheStatistics.getCacheHits();
+	public long getCacheEvictions() {
+		return _cacheStatistics.getCacheEvictions();
+	}
+
+	public long getCacheExpirations() {
+		return _cacheStatistics.getCacheExpirations();
+	}
+
+	public long getCacheGets() {
+		return _cacheStatistics.getCacheGets();
 	}
 
 	public float getCacheHitPercentage() {
 		return _cacheStatistics.getCacheHitPercentage();
+	}
+
+	public long getCacheHits() {
+		return _cacheStatistics.getCacheHits();
 	}
 
 	public long getCacheMisses() {
@@ -41,10 +51,6 @@ public class CacheStatisticsMBean {
 		return _cacheStatistics.getCacheMissPercentage();
 	}
 
-	public long getCacheGets() {
-		return _cacheStatistics.getCacheGets();
-	}
-
 	public long getCachePuts() {
 		return _cacheStatistics.getCachePuts();
 	}
@@ -53,12 +59,8 @@ public class CacheStatisticsMBean {
 		return _cacheStatistics.getCacheRemovals();
 	}
 
-	public long getCacheEvictions() {
-		return _cacheStatistics.getCacheEvictions();
-	}
-
-	public long getCacheExpirations() {
-		return _cacheStatistics.getCacheExpirations();
+	public String getName() {
+		return _cacheName;
 	}
 
 	private final String _cacheName;

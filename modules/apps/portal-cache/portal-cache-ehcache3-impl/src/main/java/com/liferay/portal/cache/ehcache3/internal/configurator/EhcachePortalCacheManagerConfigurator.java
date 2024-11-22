@@ -45,9 +45,10 @@ public class EhcachePortalCacheManagerConfigurator {
 		_defaultReplicatorPropertiesString = defaultReplicatorPropertiesString;
 	}
 
-	public ObjectValuePair<Configuration, EhcachePortalCacheManagerConfiguration>
-		getConfigurationObjectValuePair(
-			URL configurationURL, ClassLoader classLoader) {
+	public ObjectValuePair
+		<Configuration, EhcachePortalCacheManagerConfiguration>
+			getConfigurationObjectValuePair(
+				URL configurationURL, ClassLoader classLoader) {
 
 		if (configurationURL == null) {
 			throw new NullPointerException("Configuration path is null");
@@ -56,11 +57,14 @@ public class EhcachePortalCacheManagerConfigurator {
 		XmlConfiguration xmlConfiguration = new XmlConfiguration(
 			configurationURL, classLoader);
 
-		EhcachePortalCacheManagerConfiguration ehcachePortalCacheManagerConfiguration =
-			_createPortalCacheManagerConfiguration(xmlConfiguration);
+		EhcachePortalCacheManagerConfiguration
+			ehcachePortalCacheManagerConfiguration =
+				_createPortalCacheManagerConfiguration(xmlConfiguration);
 
-		ehcachePortalCacheManagerConfiguration.setDefaultCacheConfigurationBuilderSupplier(
-			() -> xmlConfiguration.newCacheConfigurationBuilderFromTemplate("default", Object.class, Object.class));
+		ehcachePortalCacheManagerConfiguration.
+			setDefaultCacheConfigurationBuilderSupplier(
+				() -> xmlConfiguration.newCacheConfigurationBuilderFromTemplate(
+					"default", Object.class, Object.class));
 
 		_populateCacheReplicator(ehcachePortalCacheManagerConfiguration);
 
@@ -92,22 +96,8 @@ public class EhcachePortalCacheManagerConfigurator {
 		return properties;
 	}
 
-	private boolean _isRequireSerialization(
-		CacheConfiguration<?, ?> cacheConfiguration) {
-
-		ResourcePools resourcePools = cacheConfiguration.getResourcePools();
-
-		for (ResourceType<?> resourceType : resourcePools.getResourceTypeSet()) {
-			if (resourceType.requiresSerialization()) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private EhcachePortalCacheManagerConfiguration _createPortalCacheManagerConfiguration(
-		Configuration configuration) {
+	private EhcachePortalCacheManagerConfiguration
+		_createPortalCacheManagerConfiguration(Configuration configuration) {
 
 		Set<PortalCacheConfiguration> portalCacheConfigurations =
 			new HashSet<>();
@@ -128,6 +118,22 @@ public class EhcachePortalCacheManagerConfigurator {
 
 		return new EhcachePortalCacheManagerConfiguration(
 			Collections.emptySet(), null, portalCacheConfigurations);
+	}
+
+	private boolean _isRequireSerialization(
+		CacheConfiguration<?, ?> cacheConfiguration) {
+
+		ResourcePools resourcePools = cacheConfiguration.getResourcePools();
+
+		for (ResourceType<?> resourceType :
+				resourcePools.getResourceTypeSet()) {
+
+			if (resourceType.requiresSerialization()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private void _populateCacheReplicator(

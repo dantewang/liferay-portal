@@ -17,13 +17,10 @@
 		</expiry>
 		<heap>10000</heap>
 	</cache-template>
-
 	<cache alias="com.liferay.portal.servlet.ComboServlet" uses-template="default">
 		<heap>1000</heap>
 	</cache>
-
 	<cache alias="com.liferay.portal.servlet.ComboServlet$FileContentBag" uses-template="default">
 		<heap>1000</heap>
 	</cache>
-
 </config>
