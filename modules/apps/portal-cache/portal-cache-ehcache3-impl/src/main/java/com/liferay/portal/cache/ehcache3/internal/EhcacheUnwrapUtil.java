@@ -17,7 +17,9 @@ import org.ehcache.Cache;
  */
 public class EhcacheUnwrapUtil {
 
-	public static Cache<Object, Object> getEhcache(PortalCache<?, ?> portalCache) {
+	public static Cache<Object, Object> getEhcache(
+		PortalCache<?, ?> portalCache) {
+
 		PortalCache<?, ?> wrappedPortalCache = getWrappedPortalCache(
 			portalCache);
 

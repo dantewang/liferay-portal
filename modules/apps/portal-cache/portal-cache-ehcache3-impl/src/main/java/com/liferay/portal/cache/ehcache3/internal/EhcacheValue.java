@@ -17,15 +17,15 @@ public class EhcacheValue {
 		_timeToLive = timeToLive;
 	}
 
-	public Object getValue() {
-		return _value;
-	}
-
 	public Duration getTimeToLive() {
 		return _timeToLive;
 	}
 
-	private final Object _value;
+	public Object getValue() {
+		return _value;
+	}
+
 	private final Duration _timeToLive;
+	private final Object _value;
 
 }

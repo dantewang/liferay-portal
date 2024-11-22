@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
 
-
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
 import org.ehcache.config.CacheConfiguration;
@@ -64,8 +63,7 @@ public class BaseEhcachePortalCacheTest {
 	public static void setUpClass() {
 		_cacheConfigurationBuilder =
 			CacheConfigurationBuilder.newCacheConfigurationBuilder(
-				Object.class, Object.class,
-				ResourcePoolsBuilder.heap(100));
+				Object.class, Object.class, ResourcePoolsBuilder.heap(100));
 
 		CacheManagerBuilder<CacheManager> cacheManagerBuilder =
 			CacheManagerBuilder.newCacheManagerBuilder();
@@ -90,14 +88,18 @@ public class BaseEhcachePortalCacheTest {
 		ReflectionTestUtil.setFieldValue(
 			baseEhcachePortalCacheManager, "_cacheManager", _cacheManager);
 
-		EhcachePortalCacheManagerConfiguration ehcachePortalCacheManagerConfiguration =
-			new EhcachePortalCacheManagerConfiguration(Collections.emptySet(), null, Collections.emptySet());
+		EhcachePortalCacheManagerConfiguration
+			ehcachePortalCacheManagerConfiguration =
+				new EhcachePortalCacheManagerConfiguration(
+					Collections.emptySet(), null, Collections.emptySet());
 
-		ehcachePortalCacheManagerConfiguration.setDefaultCacheConfigurationBuilderSupplier(
-			() -> _cacheConfigurationBuilder);
+		ehcachePortalCacheManagerConfiguration.
+			setDefaultCacheConfigurationBuilderSupplier(
+				() -> _cacheConfigurationBuilder);
 
 		ReflectionTestUtil.setFieldValue(
-			baseEhcachePortalCacheManager, "_ehcachePortalCacheManagerConfiguration",
+			baseEhcachePortalCacheManager,
+			"_ehcachePortalCacheManagerConfiguration",
 			ehcachePortalCacheManagerConfiguration);
 
 		_ehcachePortalCache = new EhcachePortalCache<>(
@@ -122,7 +124,8 @@ public class BaseEhcachePortalCacheTest {
 	public void tearDown() {
 		Configuration configuration = _cacheManager.getRuntimeConfiguration();
 
-		Map<String, CacheConfiguration<?, ?>> cacheConfigurations = configuration.getCacheConfigurations();
+		Map<String, CacheConfiguration<?, ?>> cacheConfigurations =
+			configuration.getCacheConfigurations();
 
 		for (String key : cacheConfigurations.keySet()) {
 			_cacheManager.removeCache(key);
@@ -264,11 +267,15 @@ public class BaseEhcachePortalCacheTest {
 
 	@Test
 	public void testDispose() {
-		Assert.assertNotNull(_cacheManager.getCache(_PORTAL_CACHE_NAME, Object.class, Object.class));
+		Assert.assertNotNull(
+			_cacheManager.getCache(
+				_PORTAL_CACHE_NAME, Object.class, Object.class));
 
 		_ehcachePortalCache.dispose();
 
-		Assert.assertNull(_cacheManager.getCache(_PORTAL_CACHE_NAME, Object.class, Object.class));
+		Assert.assertNull(
+			_cacheManager.getCache(
+				_PORTAL_CACHE_NAME, Object.class, Object.class));
 	}
 
 	@Test
@@ -635,14 +642,18 @@ public class BaseEhcachePortalCacheTest {
 		ReflectionTestUtil.setFieldValue(
 			baseEhcachePortalCacheManager, "_cacheManager", _cacheManager);
 
-		EhcachePortalCacheManagerConfiguration ehcachePortalCacheManagerConfiguration =
-			new EhcachePortalCacheManagerConfiguration(Collections.emptySet(), null, Collections.emptySet());
+		EhcachePortalCacheManagerConfiguration
+			ehcachePortalCacheManagerConfiguration =
+				new EhcachePortalCacheManagerConfiguration(
+					Collections.emptySet(), null, Collections.emptySet());
 
-		ehcachePortalCacheManagerConfiguration.setDefaultCacheConfigurationBuilderSupplier(
-			() -> _cacheConfigurationBuilder);
+		ehcachePortalCacheManagerConfiguration.
+			setDefaultCacheConfigurationBuilderSupplier(
+				() -> _cacheConfigurationBuilder);
 
 		ReflectionTestUtil.setFieldValue(
-			baseEhcachePortalCacheManager, "_ehcachePortalCacheManagerConfiguration",
+			baseEhcachePortalCacheManager,
+			"_ehcachePortalCacheManagerConfiguration",
 			ehcachePortalCacheManagerConfiguration);
 
 		EhcachePortalCache<String, Object> ehcachePortalCache =
@@ -785,14 +796,14 @@ public class BaseEhcachePortalCacheTest {
 
 	private static final String _VALUE_2 = "VALUE_2";
 
-	private static CacheManager _cacheManager;
 	private static CacheConfigurationBuilder<Object, Object>
 		_cacheConfigurationBuilder;
+	private static CacheManager _cacheManager;
 
+	private Cache<Object, Object> _cache;
 	private TestPortalCacheListener<String, String> _defaultPortalCacheListener;
 	private TestPortalCacheReplicator<String, String>
 		_defaultPortalCacheReplicator;
-	private Cache<Object, Object> _cache;
 	private EhcachePortalCache<String, String> _ehcachePortalCache;
 
 }

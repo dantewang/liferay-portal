@@ -64,11 +64,29 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 	}
 
 	@Override
+	public void onCreation(Object key, Object value) {
+		if (_log.isDebugEnabled()) {
+			_log.debug(
+				StringBundler.concat(
+					"Put ", _getKey(key), " into ",
+					_portalCache.getPortalCacheName()));
+		}
+
+		if (_aggregatedPortalCacheListener.isEmpty()) {
+			return;
+		}
+
+		_aggregatedPortalCacheListener.notifyEntryPut(
+			_portalCache, _getKey(key), _getValue(value), 0);
+	}
+
+	@Override
 	public void onEviction(Object key, Object value) {
 		if (_log.isDebugEnabled()) {
 			_log.debug(
 				StringBundler.concat(
-					"Evicted ", _getKey(key), " from ", _portalCache.getPortalCacheName()));
+					"Evicted ", _getKey(key), " from ",
+					_portalCache.getPortalCacheName()));
 		}
 
 		if (_aggregatedPortalCacheListener.isEmpty()) {
@@ -84,7 +102,8 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 		if (_log.isDebugEnabled()) {
 			_log.debug(
 				StringBundler.concat(
-					"Expired ", _getKey(key), " from ", _portalCache.getPortalCacheName()));
+					"Expired ", _getKey(key), " from ",
+					_portalCache.getPortalCacheName()));
 		}
 
 		if (_aggregatedPortalCacheListener.isEmpty()) {
@@ -96,27 +115,12 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 	}
 
 	@Override
-	public void onCreation(Object key, Object value) {
-		if (_log.isDebugEnabled()) {
-			_log.debug(
-				StringBundler.concat(
-					"Put ", _getKey(key), " into ", _portalCache.getPortalCacheName()));
-		}
-
-		if (_aggregatedPortalCacheListener.isEmpty()) {
-			return;
-		}
-
-		_aggregatedPortalCacheListener.notifyEntryPut(
-			_portalCache, _getKey(key), _getValue(value), 0);
-	}
-
-	@Override
 	public void onRemoval(Object key, Object value) {
 		if (_log.isDebugEnabled()) {
 			_log.debug(
 				StringBundler.concat(
-					"Removed ", _getKey(key), " from ", _portalCache.getPortalCacheName()));
+					"Removed ", _getKey(key), " from ",
+					_portalCache.getPortalCacheName()));
 		}
 
 		if (_aggregatedPortalCacheListener.isEmpty()) {
@@ -132,7 +136,8 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 		if (_log.isDebugEnabled()) {
 			_log.debug(
 				StringBundler.concat(
-					"Updated ", _getKey(key), " in ", _portalCache.getPortalCacheName()));
+					"Updated ", _getKey(key), " in ",
+					_portalCache.getPortalCacheName()));
 		}
 
 		if (_aggregatedPortalCacheListener.isEmpty()) {
@@ -140,8 +145,7 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 		}
 
 		_aggregatedPortalCacheListener.notifyEntryUpdated(
-			_portalCache, _getKey(key), _getValue(newValue),
-			0);
+			_portalCache, _getKey(key), _getValue(newValue), 0);
 	}
 
 	@SuppressWarnings("unchecked")

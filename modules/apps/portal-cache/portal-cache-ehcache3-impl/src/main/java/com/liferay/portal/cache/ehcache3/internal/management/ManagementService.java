@@ -46,11 +46,23 @@ public class ManagementService implements CacheManagerListener {
 		_statisticsService = statisticsService;
 	}
 
+	@Override
+	public void cacheAdded(String alias, Cache<?, ?> cache) {
+		_registerCache(alias, cache);
+	}
+
+	@Override
+	public void cacheRemoved(String alias, Cache<?, ?> cache) {
+		_unregisterMBeans(
+			_mBeanServer.queryNames(
+				_getObjectName(StringPool.STAR, _cacheManagerName, alias),
+				null));
+	}
+
 	public void dispose() {
 		_unregisterMBeans(
 			_mBeanServer.queryNames(
-				_getObjectName("CacheManager", null, _cacheManagerName),
-				null));
+				_getObjectName("CacheManager", null, _cacheManagerName), null));
 
 		_unregisterMBeans(
 			_mBeanServer.queryNames(
@@ -69,22 +81,34 @@ public class ManagementService implements CacheManagerListener {
 			ReflectionUtil.throwException(exception);
 		}
 
-		InternalCacheManager internalCacheManager = (InternalCacheManager)_cacheManager;
+		InternalCacheManager internalCacheManager =
+			(InternalCacheManager)_cacheManager;
 
 		internalCacheManager.registerListener(this);
 
 		synchronized (_cacheManager) {
-			Configuration configuration = _cacheManager.getRuntimeConfiguration();
+			Configuration configuration =
+				_cacheManager.getRuntimeConfiguration();
 
-			Map<String, CacheConfiguration<?, ?>> cacheConfigurationsMap = configuration.getCacheConfigurations();
+			Map<String, CacheConfiguration<?, ?>> cacheConfigurationsMap =
+				configuration.getCacheConfigurations();
 
 			cacheConfigurationsMap.forEach(
-				(cacheName, cacheConfiguration) ->
-					_registerCache(
-						cacheName,
-						_cacheManager.getCache(
-							cacheName, cacheConfiguration.getKeyType(),
-							cacheConfiguration.getValueType())));
+				(cacheName, cacheConfiguration) -> _registerCache(
+					cacheName,
+					_cacheManager.getCache(
+						cacheName, cacheConfiguration.getKeyType(),
+						cacheConfiguration.getValueType())));
+		}
+	}
+
+	@Override
+	public void stateTransition(Status from, Status to) {
+		if (to == Status.UNINITIALIZED) {
+			dispose();
+		}
+		else if (to == Status.AVAILABLE) {
+			init();
 		}
 	}
 
@@ -130,12 +154,13 @@ public class ManagementService implements CacheManagerListener {
 		try {
 			_mBeanServer.registerMBean(
 				new CacheMBean(cacheName, cache),
-				_getObjectName(
-					"Cache", _cacheManagerName, cacheName));
+				_getObjectName("Cache", _cacheManagerName, cacheName));
 
-			CacheStatistics cacheStatistics = _statisticsService.getCacheStatistics(cacheName);
+			CacheStatistics cacheStatistics =
+				_statisticsService.getCacheStatistics(cacheName);
 
-			CacheStatisticsMBean cacheStatisticsMBean = new CacheStatisticsMBean(cacheName, cacheStatistics);
+			CacheStatisticsMBean cacheStatisticsMBean =
+				new CacheStatisticsMBean(cacheName, cacheStatistics);
 
 			_mBeanServer.registerMBean(
 				cacheStatisticsMBean,
@@ -177,27 +202,4 @@ public class ManagementService implements CacheManagerListener {
 	private final MBeanServer _mBeanServer;
 	private final StatisticsService _statisticsService;
 
-	@Override
-	public void cacheAdded(String alias, Cache<?, ?> cache) {
-		_registerCache(alias, cache);
-	}
-
-	@Override
-	public void cacheRemoved(String alias, Cache<?, ?> cache) {
-		_unregisterMBeans(
-			_mBeanServer.queryNames(
-				_getObjectName(
-					StringPool.STAR, _cacheManagerName, alias),
-				null));
-	}
-
-	@Override
-	public void stateTransition(Status from, Status to) {
-		if (to == Status.UNINITIALIZED) {
-			dispose();
-		}
-		else if (to == Status.AVAILABLE) {
-			init();
-		}
-	}
 }

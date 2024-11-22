@@ -5,30 +5,20 @@
 
 package com.liferay.portal.cache.ehcache3.internal;
 
-import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.cache.AggregatedPortalCacheListener;
-import com.liferay.portal.cache.ehcache3.internal.BaseEhcachePortalCacheManager;
-import com.liferay.portal.cache.ehcache3.internal.EhcachePortalCacheConfiguration;
-import com.liferay.portal.cache.ehcache3.internal.ShardedEhcachePortalCache;
 import com.liferay.portal.cache.ehcache3.internal.configuration.EhcachePortalCacheManagerConfiguration;
-import com.liferay.portal.kernel.cache.PortalCacheListener;
-import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
-import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
@@ -39,10 +29,9 @@ import org.ehcache.config.ResourceType;
 import org.ehcache.config.SizedResourcePool;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
-
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.config.units.EntryUnit;
-import org.ehcache.core.Ehcache;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -79,8 +68,11 @@ public class ShardedEhcachePortalCacheTest {
 			_getShardedCacheName(_TEST_CACHE_NAME, _TEST_COMPANY_ID_1),
 			CacheConfigurationBuilder.newCacheConfigurationBuilder(
 				Object.class, Object.class,
-				ResourcePoolsBuilder.heap(_MAX_ENTRIES_LOCAL_HEAP_TEST_CACHE_COMPANY_1))
-		).build(true);
+				ResourcePoolsBuilder.heap(
+					_MAX_ENTRIES_LOCAL_HEAP_TEST_CACHE_COMPANY_1))
+		).build(
+			true
+		);
 
 		_baseEhcachePortalCacheManager = new BaseEhcachePortalCacheManager() {
 		};
@@ -88,16 +80,21 @@ public class ShardedEhcachePortalCacheTest {
 		ReflectionTestUtil.setFieldValue(
 			_baseEhcachePortalCacheManager, "_cacheManager", _cacheManager);
 
-		EhcachePortalCacheManagerConfiguration ehcachePortalCacheManagerConfiguration =
-			new EhcachePortalCacheManagerConfiguration(Collections.emptySet(), null, Collections.emptySet());
+		EhcachePortalCacheManagerConfiguration
+			ehcachePortalCacheManagerConfiguration =
+				new EhcachePortalCacheManagerConfiguration(
+					Collections.emptySet(), null, Collections.emptySet());
 
-		ehcachePortalCacheManagerConfiguration.setDefaultCacheConfigurationBuilderSupplier(
-			() -> CacheConfigurationBuilder.newCacheConfigurationBuilder(
-				Object.class, Object.class,
-				ResourcePoolsBuilder.heap(_MAX_ENTRIES_LOCAL_HEAP_DEFAULT)));
+		ehcachePortalCacheManagerConfiguration.
+			setDefaultCacheConfigurationBuilderSupplier(
+				() -> CacheConfigurationBuilder.newCacheConfigurationBuilder(
+					Object.class, Object.class,
+					ResourcePoolsBuilder.heap(
+						_MAX_ENTRIES_LOCAL_HEAP_DEFAULT)));
 
 		ReflectionTestUtil.setFieldValue(
-			_baseEhcachePortalCacheManager, "_ehcachePortalCacheManagerConfiguration",
+			_baseEhcachePortalCacheManager,
+			"_ehcachePortalCacheManagerConfiguration",
 			ehcachePortalCacheManagerConfiguration);
 
 		_companyThreadLocalMockedStatic.when(
@@ -165,15 +162,6 @@ public class ShardedEhcachePortalCacheTest {
 		_assertCacheConfiguration(
 			_getShardedCacheName("test.default.cache", _TEST_COMPANY_ID_1),
 			_MAX_ENTRIES_LOCAL_HEAP_DEFAULT);
-	}
-
-	private List<String> _getCacheNames() {
-		Configuration configuration = _cacheManager.getRuntimeConfiguration();
-
-		Map<String, CacheConfiguration<?, ?>> cacheConfigurationsMap =
-			configuration.getCacheConfigurations();
-
-		return new ArrayList<>(cacheConfigurationsMap.keySet());
 	}
 
 	@Test
@@ -257,8 +245,9 @@ public class ShardedEhcachePortalCacheTest {
 	public void testMisc() {
 		Assert.assertTrue(_shardedEhcachePortalCache.isSharded());
 
-		Map<Long, Cache<Object, Object>> cachesMap = ReflectionTestUtil.getFieldValue(
-			_shardedEhcachePortalCache, "_caches");
+		Map<Long, Cache<Object, Object>> cachesMap =
+			ReflectionTestUtil.getFieldValue(
+				_shardedEhcachePortalCache, "_caches");
 
 		Assert.assertFalse(cachesMap.toString(), cachesMap.isEmpty());
 
@@ -332,6 +321,46 @@ public class ShardedEhcachePortalCacheTest {
 		//_assertTimeToLive(_TEST_COMPANY_ID_2, _TEST_KEY_2, _TEST_VALUE_2, 0);
 	}
 
+	@Test
+	public void testRemove() {
+		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
+
+		Assert.assertSame(
+			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_1));
+
+		_shardedEhcachePortalCache.remove(_TEST_KEY_1);
+
+		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_1));
+
+		_shardedEhcachePortalCache.put(_TEST_KEY_2, _TEST_VALUE_1);
+
+		Assert.assertSame(
+			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
+
+		_companyIdThreadLocal.set(_TEST_COMPANY_ID_2);
+
+		Assert.assertSame(
+			_TEST_VALUE_2, _shardedEhcachePortalCache.get(_TEST_KEY_2));
+
+		_shardedEhcachePortalCache.remove(_TEST_KEY_2);
+
+		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_2));
+
+		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
+
+		Assert.assertSame(
+			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
+
+		_shardedEhcachePortalCache.remove(_TEST_KEY_2, _TEST_VALUE_2);
+
+		Assert.assertSame(
+			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
+
+		_shardedEhcachePortalCache.remove(_TEST_KEY_2, _TEST_VALUE_1);
+
+		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_2));
+	}
+
 	/*
 	@Test
 	public void testRegisterPortalCacheListener() {
@@ -379,46 +408,6 @@ public class ShardedEhcachePortalCacheTest {
 			portalCacheListener2);
 	}
 	*/
-
-	@Test
-	public void testRemove() {
-		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
-
-		Assert.assertSame(
-			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_1));
-
-		_shardedEhcachePortalCache.remove(_TEST_KEY_1);
-
-		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_1));
-
-		_shardedEhcachePortalCache.put(_TEST_KEY_2, _TEST_VALUE_1);
-
-		Assert.assertSame(
-			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
-
-		_companyIdThreadLocal.set(_TEST_COMPANY_ID_2);
-
-		Assert.assertSame(
-			_TEST_VALUE_2, _shardedEhcachePortalCache.get(_TEST_KEY_2));
-
-		_shardedEhcachePortalCache.remove(_TEST_KEY_2);
-
-		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_2));
-
-		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
-
-		Assert.assertSame(
-			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
-
-		_shardedEhcachePortalCache.remove(_TEST_KEY_2, _TEST_VALUE_2);
-
-		Assert.assertSame(
-			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
-
-		_shardedEhcachePortalCache.remove(_TEST_KEY_2, _TEST_VALUE_1);
-
-		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_2));
-	}
 
 	@Test
 	public void testRemoveAll() {
@@ -473,8 +462,7 @@ public class ShardedEhcachePortalCacheTest {
 
 		_shardedEhcachePortalCache.removeEhcache(100L);
 
-		Assert.assertEquals(
-			cacheNames, _getCacheNames());
+		Assert.assertEquals(cacheNames, _getCacheNames());
 	}
 
 	@Test
@@ -512,6 +500,24 @@ public class ShardedEhcachePortalCacheTest {
 
 		Assert.assertSame(
 			_TEST_VALUE_2, _shardedEhcachePortalCache.get(_TEST_KEY_1));
+	}
+
+	private void _assertCacheConfiguration(
+		String cacheName, int maxEntriesLocalHeap) {
+
+		Cache<Object, Object> cache = _cacheManager.getCache(
+			cacheName, Object.class, Object.class);
+
+		CacheConfiguration<Object, Object> cacheConfiguration =
+			cache.getRuntimeConfiguration();
+
+		ResourcePools resourcePools = cacheConfiguration.getResourcePools();
+
+		SizedResourcePool sizedResourcePool = resourcePools.getPoolForResource(
+			ResourceType.Core.HEAP);
+
+		Assert.assertEquals(EntryUnit.ENTRIES, sizedResourcePool.getUnit());
+		Assert.assertEquals(maxEntriesLocalHeap, sizedResourcePool.getSize());
 	}
 
 	/*
@@ -599,23 +605,6 @@ public class ShardedEhcachePortalCacheTest {
 	}
 	*/
 
-	private void _assertCacheConfiguration(
-		String cacheName, int maxEntriesLocalHeap) {
-
-		Cache<Object, Object> cache = _cacheManager.getCache(cacheName, Object.class, Object.class);
-
-		CacheConfiguration<Object, Object> cacheConfiguration = cache.getRuntimeConfiguration();
-
-		ResourcePools resourcePools = cacheConfiguration.getResourcePools();
-
-		SizedResourcePool sizedResourcePool = resourcePools.getPoolForResource(ResourceType.Core.HEAP);
-
-		Assert.assertEquals(
-			EntryUnit.ENTRIES, sizedResourcePool.getUnit());
-		Assert.assertEquals(
-			maxEntriesLocalHeap, sizedResourcePool.getSize());
-	}
-
 	private void _assertEhcacheName(long companyId) {
 		_companyIdThreadLocal.set(companyId);
 
@@ -623,10 +612,19 @@ public class ShardedEhcachePortalCacheTest {
 			_cacheManager.getCache(
 				_getShardedCacheName(
 					_TEST_CACHE_NAME,
-					(companyId == CompanyConstants.SYSTEM) ? _TEST_COMPANY_ID_1 :
-						companyId),
+					(companyId == CompanyConstants.SYSTEM) ?
+						_TEST_COMPANY_ID_1 : companyId),
 				Object.class, Object.class),
 			_shardedEhcachePortalCache.getEhcache());
+	}
+
+	private List<String> _getCacheNames() {
+		Configuration configuration = _cacheManager.getRuntimeConfiguration();
+
+		Map<String, CacheConfiguration<?, ?>> cacheConfigurationsMap =
+			configuration.getCacheConfigurations();
+
+		return new ArrayList<>(cacheConfigurationsMap.keySet());
 	}
 
 	/*
@@ -637,8 +635,6 @@ public class ShardedEhcachePortalCacheTest {
 		Ehcache<Object, Object> ehcache =
 			(Ehcache<Object, Object>)_cacheManager.getCache(
 				cacheName, Object.class, Object.class);
-
-
 
 		RegisteredEventListeners registeredEventListeners =
 			cache.getCacheEventNotificationService();

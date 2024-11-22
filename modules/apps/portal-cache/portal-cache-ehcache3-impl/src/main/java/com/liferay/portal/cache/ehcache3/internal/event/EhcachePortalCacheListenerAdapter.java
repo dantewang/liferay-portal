@@ -10,12 +10,11 @@ import com.liferay.portal.cache.io.SerializableObjectWrapper;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.PortalCacheException;
 import com.liferay.portal.kernel.cache.PortalCacheListener;
-import org.ehcache.core.events.CacheEvents;
-import org.ehcache.event.CacheEventListener;
 
 import java.io.Serializable;
 
-
+import org.ehcache.core.events.CacheEvents;
+import org.ehcache.event.CacheEventListener;
 
 /**
  * @author Tina Tian
@@ -41,7 +40,8 @@ public class EhcachePortalCacheListenerAdapter<K extends Serializable, V>
 
 		cacheEventListener.onEvent(
 			CacheEvents.eviction(
-				_wrapKey(key), _wrapValue(value), EhcacheUnwrapUtil.getEhcache(portalCache)));
+				_wrapKey(key), _wrapValue(value),
+				EhcacheUnwrapUtil.getEhcache(portalCache)));
 	}
 
 	@Override
@@ -51,7 +51,8 @@ public class EhcachePortalCacheListenerAdapter<K extends Serializable, V>
 
 		cacheEventListener.onEvent(
 			CacheEvents.expiry(
-				_wrapKey(key), _wrapValue(value), EhcacheUnwrapUtil.getEhcache(portalCache)));
+				_wrapKey(key), _wrapValue(value),
+				EhcacheUnwrapUtil.getEhcache(portalCache)));
 	}
 
 	@Override
@@ -61,7 +62,8 @@ public class EhcachePortalCacheListenerAdapter<K extends Serializable, V>
 
 		cacheEventListener.onEvent(
 			CacheEvents.creation(
-				_wrapKey(key), _wrapValue(value), EhcacheUnwrapUtil.getEhcache(portalCache)));
+				_wrapKey(key), _wrapValue(value),
+				EhcacheUnwrapUtil.getEhcache(portalCache)));
 	}
 
 	@Override
@@ -71,7 +73,8 @@ public class EhcachePortalCacheListenerAdapter<K extends Serializable, V>
 
 		cacheEventListener.onEvent(
 			CacheEvents.removal(
-				_wrapKey(key), _wrapValue(value), EhcacheUnwrapUtil.getEhcache(portalCache)));
+				_wrapKey(key), _wrapValue(value),
+				EhcacheUnwrapUtil.getEhcache(portalCache)));
 	}
 
 	@Override
@@ -81,7 +84,8 @@ public class EhcachePortalCacheListenerAdapter<K extends Serializable, V>
 
 		cacheEventListener.onEvent(
 			CacheEvents.update(
-				_wrapKey(key), null, _wrapValue(value), EhcacheUnwrapUtil.getEhcache(portalCache)));
+				_wrapKey(key), null, _wrapValue(value),
+				EhcacheUnwrapUtil.getEhcache(portalCache)));
 	}
 
 	@Override
@@ -91,16 +95,16 @@ public class EhcachePortalCacheListenerAdapter<K extends Serializable, V>
 
 	protected final CacheEventListener<Object, Object> cacheEventListener;
 
+	private Object _wrapKey(K key) {
+		return new SerializableObjectWrapper(key);
+	}
+
 	private Object _wrapValue(V value) {
 		if (value instanceof Serializable) {
 			return new SerializableObjectWrapper((Serializable)value);
 		}
 
 		return value;
-	}
-
-	private Object _wrapKey(K key) {
-		return new SerializableObjectWrapper(key);
 	}
 
 }

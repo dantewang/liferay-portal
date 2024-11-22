@@ -5,10 +5,11 @@
 
 package com.liferay.portal.cache.ehcache3.internal;
 
-import org.ehcache.expiry.ExpiryPolicy;
-
 import java.time.Duration;
+
 import java.util.function.Supplier;
+
+import org.ehcache.expiry.ExpiryPolicy;
 
 /**
  * @author Dante Wang
@@ -16,19 +17,23 @@ import java.util.function.Supplier;
 public class EhcacheExpiryPolicy implements ExpiryPolicy<Object, Object> {
 
 	@Override
-	public Duration getExpiryForCreation(Object key, Object value) {
-		EhcacheValue ehcacheValue = (EhcacheValue)value;
-		return ehcacheValue.getTimeToLive();
-	}
-
-	@Override
 	public Duration getExpiryForAccess(Object key, Supplier<?> value) {
 		return null;
 	}
 
 	@Override
-	public Duration getExpiryForUpdate(Object key, Supplier<?> oldValue, Object newValue) {
+	public Duration getExpiryForCreation(Object key, Object value) {
+		EhcacheValue ehcacheValue = (EhcacheValue)value;
+
+		return ehcacheValue.getTimeToLive();
+	}
+
+	@Override
+	public Duration getExpiryForUpdate(
+		Object key, Supplier<?> oldValue, Object newValue) {
+
 		EhcacheValue ehcacheValue = (EhcacheValue)newValue;
+
 		return ehcacheValue.getTimeToLive();
 	}
 

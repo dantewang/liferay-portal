@@ -14,10 +14,9 @@ import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.function.Supplier;
 
-import org.ehcache.CacheManager;
 import org.ehcache.Cache;
+import org.ehcache.CacheManager;
 import org.ehcache.config.CacheRuntimeConfiguration;
-import org.ehcache.config.Configuration;
 import org.ehcache.event.EventFiring;
 import org.ehcache.event.EventOrdering;
 import org.ehcache.event.EventType;
@@ -58,11 +57,15 @@ public class EhcachePortalCache<K extends Serializable, V>
 
 	private Cache<Object, Object> _createEhcache() {
 		synchronized (_cacheManager) {
-			Cache<Object, Object> cache = _cacheManager.getCache(getPortalCacheName(), Object.class, Object.class);
+			Cache<Object, Object> cache = _cacheManager.getCache(
+				getPortalCacheName(), Object.class, Object.class);
 
 			if (cache == null) {
 				try {
-					_cacheManager.createCache(getPortalCacheName(), ehcachePortalCacheManagerConfiguration.newCacheConfigurationBuilder());
+					_cacheManager.createCache(
+						getPortalCacheName(),
+						ehcachePortalCacheManagerConfiguration.
+							newCacheConfigurationBuilder());
 				}
 				catch (Exception exception) {
 					ReflectionUtil.throwException(exception);
@@ -70,15 +73,17 @@ public class EhcachePortalCache<K extends Serializable, V>
 			}
 		}
 
-		Cache<Object, Object> cache = _cacheManager.getCache(getPortalCacheName(), Object.class, Object.class);
+		Cache<Object, Object> cache = _cacheManager.getCache(
+			getPortalCacheName(), Object.class, Object.class);
 
-		CacheRuntimeConfiguration<Object, Object> cacheRuntimeConfiguration = cache.getRuntimeConfiguration();
+		CacheRuntimeConfiguration<Object, Object> cacheRuntimeConfiguration =
+			cache.getRuntimeConfiguration();
 
 		cacheRuntimeConfiguration.registerCacheEventListener(
 			new PortalCacheCacheEventListener<>(
 				aggregatedPortalCacheListener, this),
-			EventOrdering.UNORDERED, EventFiring.SYNCHRONOUS, EnumSet.allOf(EventType.class)
-		);
+			EventOrdering.UNORDERED, EventFiring.SYNCHRONOUS,
+			EnumSet.allOf(EventType.class));
 
 		return cache;
 	}

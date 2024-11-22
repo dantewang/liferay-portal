@@ -9,16 +9,15 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.cache.PortalCacheManagerListener;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+
 import org.ehcache.Cache;
 import org.ehcache.Status;
 import org.ehcache.core.events.CacheManagerListener;
 
-
 /**
  * @author Shuyang Zhou
  */
-public class EhcacheCacheManagerListener
-	implements CacheManagerListener {
+public class EhcacheCacheManagerListener implements CacheManagerListener {
 
 	public EhcacheCacheManagerListener(
 		PortalCacheManagerListener portalCacheManagerListener,
@@ -27,8 +26,26 @@ public class EhcacheCacheManagerListener
 		_portalCacheManagerListener = portalCacheManagerListener;
 
 		_log = LogFactoryUtil.getLog(
-			EhcacheCacheManagerListener.class.getName() +
-				StringPool.PERIOD + portalCacheManagerName);
+			EhcacheCacheManagerListener.class.getName() + StringPool.PERIOD +
+				portalCacheManagerName);
+	}
+
+	@Override
+	public void cacheAdded(String alias, Cache<?, ?> cache) {
+		if (_log.isDebugEnabled()) {
+			_log.debug("Added cache " + alias);
+		}
+
+		_portalCacheManagerListener.notifyPortalCacheAdded(alias);
+	}
+
+	@Override
+	public void cacheRemoved(String alias, Cache<?, ?> cache) {
+		if (_log.isDebugEnabled()) {
+			_log.debug("Removed cache " + alias);
+		}
+
+		_portalCacheManagerListener.notifyPortalCacheRemoved(alias);
 	}
 
 	@Override
@@ -53,27 +70,6 @@ public class EhcacheCacheManagerListener
 		return _portalCacheManagerListener.hashCode();
 	}
 
-	private final Log _log;
-	private final PortalCacheManagerListener _portalCacheManagerListener;
-
-	@Override
-	public void cacheAdded(String alias, Cache<?, ?> cache) {
-		if (_log.isDebugEnabled()) {
-			_log.debug("Added cache " + alias);
-		}
-
-		_portalCacheManagerListener.notifyPortalCacheAdded(alias);
-	}
-
-	@Override
-	public void cacheRemoved(String alias, Cache<?, ?> cache) {
-		if (_log.isDebugEnabled()) {
-			_log.debug("Removed cache " + alias);
-		}
-
-		_portalCacheManagerListener.notifyPortalCacheRemoved(alias);
-	}
-
 	@Override
 	public void stateTransition(Status from, Status to) {
 		if (to == Status.AVAILABLE) {
@@ -83,5 +79,8 @@ public class EhcacheCacheManagerListener
 			_portalCacheManagerListener.dispose();
 		}
 	}
+
+	private final Log _log;
+	private final PortalCacheManagerListener _portalCacheManagerListener;
 
 }
