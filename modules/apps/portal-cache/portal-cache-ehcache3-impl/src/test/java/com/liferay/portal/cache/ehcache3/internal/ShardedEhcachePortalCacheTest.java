@@ -277,6 +277,7 @@ public class ShardedEhcachePortalCacheTest {
 		_shardedEhcachePortalCache.put(_TEST_KEY_1, _TEST_VALUE_2, 1000);
 
 		//_assertTimeToLive(
+
 		// _TEST_COMPANY_ID_2, _TEST_KEY_1, _TEST_VALUE_2, 1000);
 
 		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
@@ -315,6 +316,7 @@ public class ShardedEhcachePortalCacheTest {
 			_TEST_KEY_1, _TEST_VALUE_2, 1000);
 
 		//_assertTimeToLive(
+
 		// _TEST_COMPANY_ID_2, _TEST_KEY_1, _TEST_VALUE_2, 1000);
 
 		_shardedEhcachePortalCache.putIfAbsent(
@@ -492,12 +494,14 @@ public class ShardedEhcachePortalCacheTest {
 		_shardedEhcachePortalCache.replace(_TEST_KEY_1, _TEST_VALUE_2, 1000);
 
 		//_assertTimeToLive(
+
 		// _TEST_COMPANY_ID_1, _TEST_KEY_1, _TEST_VALUE_2, 1000);
 
 		_shardedEhcachePortalCache.replace(
 			_TEST_KEY_1, _TEST_VALUE_2, _TEST_VALUE_1, 1000);
 
 		//_assertTimeToLive(
+
 		// _TEST_COMPANY_ID_1, _TEST_KEY_1, _TEST_VALUE_1, 1000);
 
 		_companyIdThreadLocal.set(_TEST_COMPANY_ID_2);
