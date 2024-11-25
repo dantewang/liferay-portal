@@ -306,6 +306,42 @@ public class ShardedEhcachePortalCacheTest {
 		_shardedEhcachePortalCache.resetEhcache();
 
 		Assert.assertTrue(cachesMap.toString(), cachesMap.isEmpty());
+
+		// Coverage
+
+		EhcachePortalCacheManagerConfiguration
+			ehcachePortalCacheManagerConfiguration =
+				new EhcachePortalCacheManagerConfiguration(
+					Collections.emptySet(), null, Collections.emptySet());
+
+		Exception exception1 = new Exception();
+
+		ehcachePortalCacheManagerConfiguration.
+			setDefaultCacheConfigurationBuilderUnsafeSupplier(
+				() -> {
+					throw exception1;
+				});
+
+		ShardedEhcachePortalCache shardedEhcachePortalCache =
+			new ShardedEhcachePortalCache(
+				_baseEhcachePortalCacheManager,
+				new EhcachePortalCacheConfiguration(
+					_TEST_CACHE_NAME + "_Misc", Collections.emptySet(), false));
+
+		ReflectionTestUtil.setFieldValue(
+			shardedEhcachePortalCache, "ehcachePortalCacheManagerConfiguration",
+			ehcachePortalCacheManagerConfiguration);
+
+		try {
+			_companyIdThreadLocal.set(10000L);
+
+			shardedEhcachePortalCache.put(_TEST_KEY_1, _TEST_VALUE_1);
+
+			Assert.fail();
+		}
+		catch (Exception exception2) {
+			Assert.assertSame(exception1, exception2);
+		}
 	}
 
 	@Test
