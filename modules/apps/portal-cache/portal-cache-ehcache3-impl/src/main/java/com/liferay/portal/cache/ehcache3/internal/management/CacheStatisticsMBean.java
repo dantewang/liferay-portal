@@ -5,65 +5,31 @@
 
 package com.liferay.portal.cache.ehcache3.internal.management;
 
-import org.ehcache.core.statistics.CacheStatistics;
-
 /**
  * @author Dante Wang
  */
-public class CacheStatisticsMBean {
+public interface CacheStatisticsMBean {
 
-	public CacheStatisticsMBean(
-		String cacheName, CacheStatistics cacheStatistics) {
+	public void clear();
 
-		_cacheName = cacheName;
-		_cacheStatistics = cacheStatistics;
-	}
+	public long getCacheEvictions();
 
-	public void clear() {
-		_cacheStatistics.clear();
-	}
+	public long getCacheExpirations();
 
-	public long getCacheEvictions() {
-		return _cacheStatistics.getCacheEvictions();
-	}
+	public long getCacheGets();
 
-	public long getCacheExpirations() {
-		return _cacheStatistics.getCacheExpirations();
-	}
+	public float getCacheHitPercentage();
 
-	public long getCacheGets() {
-		return _cacheStatistics.getCacheGets();
-	}
+	public long getCacheHits();
 
-	public float getCacheHitPercentage() {
-		return _cacheStatistics.getCacheHitPercentage();
-	}
+	public long getCacheMisses();
 
-	public long getCacheHits() {
-		return _cacheStatistics.getCacheHits();
-	}
+	public float getCacheMissPercentage();
 
-	public long getCacheMisses() {
-		return _cacheStatistics.getCacheMisses();
-	}
+	public long getCachePuts();
 
-	public float getCacheMissPercentage() {
-		return _cacheStatistics.getCacheMissPercentage();
-	}
+	public long getCacheRemovals();
 
-	public long getCachePuts() {
-		return _cacheStatistics.getCachePuts();
-	}
-
-	public long getCacheRemovals() {
-		return _cacheStatistics.getCacheRemovals();
-	}
-
-	public String getName() {
-		return _cacheName;
-	}
-
-	private final String _cacheName;
-	private final CacheStatistics _cacheStatistics;
+	public String getName();
 
 }
