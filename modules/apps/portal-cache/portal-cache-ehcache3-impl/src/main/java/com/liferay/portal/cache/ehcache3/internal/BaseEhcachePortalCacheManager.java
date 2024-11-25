@@ -13,7 +13,6 @@ import com.liferay.portal.cache.AggregatedPortalCacheManagerListener;
 import com.liferay.portal.cache.LowLevelCache;
 import com.liferay.portal.cache.MVCCPortalCache;
 import com.liferay.portal.cache.PortalCacheListenerFactory;
-import com.liferay.portal.cache.PortalCacheManagerListenerFactory;
 import com.liferay.portal.cache.TransactionalPortalCache;
 import com.liferay.portal.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.cache.configuration.PortalCacheManagerConfiguration;
@@ -462,10 +461,6 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 
 	@Reference
 	protected PortalCacheListenerFactory portalCacheListenerFactory;
-
-	@Reference
-	protected PortalCacheManagerListenerFactory<PortalCacheManager<K, V>>
-		portalCacheManagerListenerFactory;
 
 	@Reference
 	protected Props props;
