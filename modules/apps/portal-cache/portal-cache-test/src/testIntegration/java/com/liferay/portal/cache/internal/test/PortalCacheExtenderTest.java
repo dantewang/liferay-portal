@@ -42,6 +42,7 @@ import javax.management.ObjectName;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -252,7 +253,7 @@ public class PortalCacheExtenderTest {
 	}
 
 	private void _assertCacheConfig(
-			String cacheManagerName, int maxElementsInMemory, String name,
+			String cacheManagerName, int maxHeapEntries, String name,
 			long timeToIdleSeconds)
 		throws Exception {
 
@@ -260,16 +261,16 @@ public class PortalCacheExtenderTest {
 
 		ObjectName objectName = new ObjectName(
 			StringBundler.concat(
-				"net.sf.ehcache:type=CacheConfiguration,CacheManager=",
-				cacheManagerName, ",name=", name));
+				"org.ehcache:type=Cache,CacheManager=", cacheManagerName,
+				",name=", name));
 
 		Assert.assertEquals(
-			maxElementsInMemory,
-			mBeanServer.getAttribute(objectName, "MaxElementsInMemory"));
+			StringBundler.concat(maxHeapEntries, StringPool.SPACE, "entries"),
+			mBeanServer.getAttribute(objectName, "HeapSize"));
 		Assert.assertEquals(name, mBeanServer.getAttribute(objectName, "Name"));
 		Assert.assertEquals(
 			timeToIdleSeconds,
-			mBeanServer.getAttribute(objectName, "TimeToIdleSeconds"));
+			mBeanServer.getAttribute(objectName, "TimeToIdle"));
 	}
 
 	private InputStream _createBundle(
@@ -307,29 +308,29 @@ public class PortalCacheExtenderTest {
 	}
 
 	private String _generateXMLContent(
-		int cacheEntries, String[] cacheNames, int maxElementsInMemory,
+		int cacheEntries, String[] cacheNames, int maxHeapEntries,
 		int timeToIdleSeconds) {
 
 		StringBundler sb = new StringBundler();
 
-		sb.append("<ehcache dynamicConfig=\"true\" monitoring=\"off\" ");
-		sb.append("updateCheck=\"false\" xmlns:xsi=\"http://www.w3.org/2001");
-		sb.append("/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"");
-		sb.append("http://www.ehcache.org/ehcache.xsd\">");
+		sb.append("<config xmlns=\"http://www.ehcache.org/v3\" ");
+		sb.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
+		sb.append("xsi:schemaLocation=\"http://www.ehcache.org/v3 ");
+		sb.append("https://www.ehcache.org/schema/ehcache-core-3.10.xsd\">");
 
 		for (int i = 1; i <= cacheEntries; i++) {
 			for (String cacheName : cacheNames) {
-				sb.append("<cache maxElementsInMemory=\"");
-				sb.append(maxElementsInMemory);
-				sb.append("\" name=\"");
+				sb.append("<cache alias=\"");
 				sb.append(cacheName + i);
-				sb.append("\" timeToIdleSeconds=\"");
+				sb.append("\"><expiry><tti>");
 				sb.append(timeToIdleSeconds);
-				sb.append("\"> </cache>");
+				sb.append("</tti></expiry><heap>");
+				sb.append(maxHeapEntries);
+				sb.append("</heap></cache>");
 			}
 		}
 
-		sb.append("\" </ehcache>");
+		sb.append("</config>");
 
 		return sb.toString();
 	}
@@ -431,7 +432,7 @@ public class PortalCacheExtenderTest {
 	private com.liferay.portal.kernel.util.File _file;
 
 	@Inject(
-		filter = "component.name=com.liferay.portal.cache.ehcache.internal.MultiVMEhcachePortalCacheManager"
+		filter = "component.name=com.liferay.portal.cache.ehcache3.internal.MultiVMEhcachePortalCacheManager"
 	)
 	private PortalCacheManager<? extends Serializable, ? extends Serializable>
 		_multiVMPortalCacheManager;
