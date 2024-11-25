@@ -98,7 +98,7 @@ public class ShardedEhcachePortalCache<K extends Serializable, V>
 				cacheRuntimeConfiguration.registerCacheEventListener(
 					new PortalCacheCacheEventListener<>(
 						aggregatedPortalCacheListener, this),
-					EventOrdering.UNORDERED, EventFiring.SYNCHRONOUS,
+					EventOrdering.ORDERED, EventFiring.SYNCHRONOUS,
 					EnumSet.allOf(EventType.class));
 
 				return cache;

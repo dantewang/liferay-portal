@@ -43,13 +43,19 @@ import java.io.Serializable;
 
 import java.net.URL;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.AbstractExecutorService;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.management.MBeanServer;
 
@@ -61,8 +67,10 @@ import org.ehcache.config.FluentConfigurationBuilder;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.core.EhcacheManager;
 import org.ehcache.core.internal.statistics.DefaultStatisticsService;
+import org.ehcache.core.spi.service.ExecutionService;
 import org.ehcache.core.spi.service.StatisticsService;
 import org.ehcache.core.spi.store.InternalCacheManager;
+import org.ehcache.impl.internal.executor.OnDemandExecutionService;
 import org.ehcache.spi.service.ServiceCreationConfiguration;
 
 import org.osgi.framework.BundleContext;
@@ -345,9 +353,55 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 
 		StatisticsService statisticsService = new DefaultStatisticsService();
 
+		ExecutorService executorService = new AbstractExecutorService() {
+
+			@Override
+			public boolean awaitTermination(long timeout, TimeUnit unit)
+				throws InterruptedException {
+
+				return false;
+			}
+
+			@Override
+			public void execute(Runnable runnable) {
+				runnable.run();
+			}
+
+			@Override
+			public boolean isShutdown() {
+				return false;
+			}
+
+			@Override
+			public boolean isTerminated() {
+				return false;
+			}
+
+			@Override
+			public void shutdown() {
+			}
+
+			@Override
+			public List<Runnable> shutdownNow() {
+				return Collections.emptyList();
+			}
+
+		};
+
+		ExecutionService executionService = new OnDemandExecutionService() {
+
+			@Override
+			public ExecutorService getOrderedExecutor(
+				String poolAlias, BlockingQueue<Runnable> queue) {
+
+				return executorService;
+			}
+
+		};
+
 		_cacheManager = new EhcacheManager(
 			configurationObjectValuePair.getKey(),
-			Collections.singletonList(statisticsService));
+			Arrays.asList(statisticsService, executionService));
 
 		_cacheManager.init();
 

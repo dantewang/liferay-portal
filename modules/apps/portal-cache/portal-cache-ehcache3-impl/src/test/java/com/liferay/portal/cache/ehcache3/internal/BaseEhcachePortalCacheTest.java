@@ -20,8 +20,12 @@ import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.AbstractExecutorService;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
@@ -30,6 +34,7 @@ import org.ehcache.config.Configuration;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.impl.internal.executor.OnDemandExecutionService;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -68,7 +73,56 @@ public class BaseEhcachePortalCacheTest {
 		CacheManagerBuilder<CacheManager> cacheManagerBuilder =
 			CacheManagerBuilder.newCacheManagerBuilder();
 
-		_cacheManager = cacheManagerBuilder.build(true);
+		ExecutorService executorService = new AbstractExecutorService() {
+
+			@Override
+			public boolean awaitTermination(long timeout, TimeUnit unit)
+				throws InterruptedException {
+
+				return false;
+			}
+
+			@Override
+			public void execute(Runnable runnable) {
+				runnable.run();
+			}
+
+			@Override
+			public boolean isShutdown() {
+				return false;
+			}
+
+			@Override
+			public boolean isTerminated() {
+				return false;
+			}
+
+			@Override
+			public void shutdown() {
+			}
+
+			@Override
+			public List<Runnable> shutdownNow() {
+				return Collections.emptyList();
+			}
+
+		};
+
+		_cacheManager = cacheManagerBuilder.using(
+			new OnDemandExecutionService() {
+
+				@Override
+				public ExecutorService getOrderedExecutor(
+						String poolAlias, BlockingQueue<Runnable> queue)
+					throws IllegalArgumentException {
+
+					return executorService;
+				}
+
+			}
+		).build(
+			true
+		);
 	}
 
 	@AfterClass
