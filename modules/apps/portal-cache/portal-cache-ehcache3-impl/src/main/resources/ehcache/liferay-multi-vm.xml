@@ -27,6 +27,7 @@
 		<expiry>
 			<tti>600</tti>
 		</expiry>
+		<heap>100000</heap>
 	</cache-template>
 
 	<!-- Entity cache -->
