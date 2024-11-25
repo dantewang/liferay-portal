@@ -5,6 +5,7 @@
 
 package com.liferay.portal.cache.ehcache3.internal.configurator;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.cache.PortalCacheReplicator;
 import com.liferay.portal.cache.configuration.PortalCacheConfiguration;
@@ -30,6 +31,7 @@ import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.Configuration;
 import org.ehcache.config.ResourcePools;
 import org.ehcache.config.ResourceType;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.xml.XmlConfiguration;
 
 /**
@@ -97,13 +99,40 @@ public class EhcachePortalCacheManagerConfigurator {
 	}
 
 	private EhcachePortalCacheManagerConfiguration
-		_createPortalCacheManagerConfiguration(Configuration configuration) {
+		_createPortalCacheManagerConfiguration(
+			XmlConfiguration xmlConfiguration) {
+
+		PortalCacheConfiguration defaultPortalCacheConfiguration;
+
+		CacheConfigurationBuilder<Object, Object> cacheConfigurationBuilder =
+			null;
+
+		try {
+			cacheConfigurationBuilder =
+				xmlConfiguration.newCacheConfigurationBuilderFromTemplate(
+					"default", Object.class, Object.class);
+		}
+		catch (Exception exception) {
+			ReflectionUtil.throwException(exception);
+		}
+
+		if (cacheConfigurationBuilder != null) {
+			defaultPortalCacheConfiguration =
+				new EhcachePortalCacheConfiguration(
+					"default", Collections.emptySet(),
+					_isRequireSerialization(cacheConfigurationBuilder.build()));
+		}
+		else {
+			defaultPortalCacheConfiguration =
+				new EhcachePortalCacheConfiguration(
+					"default", Collections.emptySet(), true);
+		}
 
 		Set<PortalCacheConfiguration> portalCacheConfigurations =
 			new HashSet<>();
 
 		Map<String, CacheConfiguration<?, ?>> cacheConfigurations =
-			configuration.getCacheConfigurations();
+			xmlConfiguration.getCacheConfigurations();
 
 		for (Map.Entry<String, CacheConfiguration<?, ?>> entry :
 				cacheConfigurations.entrySet()) {
@@ -117,7 +146,8 @@ public class EhcachePortalCacheManagerConfigurator {
 		}
 
 		return new EhcachePortalCacheManagerConfiguration(
-			Collections.emptySet(), null, portalCacheConfigurations);
+			Collections.emptySet(), defaultPortalCacheConfiguration,
+			portalCacheConfigurations);
 	}
 
 	private boolean _isRequireSerialization(
