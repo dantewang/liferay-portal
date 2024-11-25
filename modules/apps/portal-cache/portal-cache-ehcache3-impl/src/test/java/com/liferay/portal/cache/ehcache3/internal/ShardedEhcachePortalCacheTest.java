@@ -19,6 +19,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.AbstractExecutorService;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
@@ -31,6 +35,7 @@ import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.config.units.EntryUnit;
+import org.ehcache.impl.internal.executor.OnDemandExecutionService;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -56,10 +61,57 @@ public class ShardedEhcachePortalCacheTest {
 
 	@Before
 	public void setUp() {
+		ExecutorService executorService = new AbstractExecutorService() {
+
+			@Override
+			public boolean awaitTermination(long timeout, TimeUnit unit)
+				throws InterruptedException {
+
+				return false;
+			}
+
+			@Override
+			public void execute(Runnable runnable) {
+				runnable.run();
+			}
+
+			@Override
+			public boolean isShutdown() {
+				return false;
+			}
+
+			@Override
+			public boolean isTerminated() {
+				return false;
+			}
+
+			@Override
+			public void shutdown() {
+			}
+
+			@Override
+			public List<Runnable> shutdownNow() {
+				return Collections.emptyList();
+			}
+
+		};
+
 		CacheManagerBuilder<CacheManager> cacheManagerBuilder =
 			CacheManagerBuilder.newCacheManagerBuilder();
 
-		_cacheManager = cacheManagerBuilder.withCache(
+		_cacheManager = cacheManagerBuilder.using(
+			new OnDemandExecutionService() {
+
+				@Override
+				public ExecutorService getOrderedExecutor(
+						String poolAlias, BlockingQueue<Runnable> queue)
+					throws IllegalArgumentException {
+
+					return executorService;
+				}
+
+			}
+		).withCache(
 			_TEST_CACHE_NAME,
 			CacheConfigurationBuilder.newCacheConfigurationBuilder(
 				Object.class, Object.class,
