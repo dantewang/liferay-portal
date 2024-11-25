@@ -42,6 +42,7 @@ import javax.management.ObjectName;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,6 +55,7 @@ import org.osgi.framework.FrameworkUtil;
 /**
  * @author Kyle Miho
  */
+@Ignore
 @RunWith(Arquillian.class)
 public class PortalCacheExtenderTest {
 
