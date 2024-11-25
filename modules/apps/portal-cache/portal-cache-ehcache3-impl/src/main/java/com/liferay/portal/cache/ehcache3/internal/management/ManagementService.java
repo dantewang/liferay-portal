@@ -29,7 +29,6 @@ import org.ehcache.config.Configuration;
 import org.ehcache.core.events.CacheManagerListener;
 import org.ehcache.core.spi.service.StatisticsService;
 import org.ehcache.core.spi.store.InternalCacheManager;
-import org.ehcache.core.statistics.CacheStatistics;
 
 /**
  * @author Preston Crary
@@ -74,7 +73,7 @@ public class ManagementService implements CacheManagerListener {
 	public void init() {
 		try {
 			_mBeanServer.registerMBean(
-				new CacheManagerMBean(_cacheManagerName, _cacheManager),
+				new CacheManagerMBeanImpl(_cacheManagerName, _cacheManager),
 				_getObjectName("CacheManager", null, _cacheManagerName));
 		}
 		catch (Exception exception) {
@@ -153,17 +152,13 @@ public class ManagementService implements CacheManagerListener {
 	private void _registerCache(String cacheName, Cache<?, ?> cache) {
 		try {
 			_mBeanServer.registerMBean(
-				new CacheMBean(cacheName, cache),
+				new CacheMBeanImpl(cacheName, cache),
 				_getObjectName("Cache", _cacheManagerName, cacheName));
 
-			CacheStatistics cacheStatistics =
-				_statisticsService.getCacheStatistics(cacheName);
-
-			CacheStatisticsMBean cacheStatisticsMBean =
-				new CacheStatisticsMBean(cacheName, cacheStatistics);
-
 			_mBeanServer.registerMBean(
-				cacheStatisticsMBean,
+				new CacheStatisticsMBeanImpl(
+					cacheName,
+					_statisticsService.getCacheStatistics(cacheName)),
 				_getObjectName(
 					"CacheStatistics", _cacheManagerName, cacheName));
 		}

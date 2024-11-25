@@ -5,29 +5,13 @@
 
 package com.liferay.portal.cache.ehcache3.internal.management;
 
-import org.ehcache.CacheManager;
-
 /**
  * @author Dante Wang
  */
-public class CacheManagerMBean {
+public interface CacheManagerMBean {
 
-	public CacheManagerMBean(
-		String cacheManagerName, CacheManager cacheManager) {
+	public String getName();
 
-		_cacheManagerName = cacheManagerName;
-		_cacheManager = cacheManager;
-	}
-
-	public String getName() {
-		return _cacheManagerName;
-	}
-
-	public String getStatus() {
-		return String.valueOf(_cacheManager.getStatus());
-	}
-
-	private final CacheManager _cacheManager;
-	private final String _cacheManagerName;
+	public String getStatus();
 
 }
