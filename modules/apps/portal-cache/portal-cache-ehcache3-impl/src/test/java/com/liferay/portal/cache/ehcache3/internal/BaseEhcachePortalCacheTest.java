@@ -742,7 +742,6 @@ public class BaseEhcachePortalCacheTest {
 		Assert.assertNull(ehcachePortalCache.get(_KEY_1));
 	}
 
-	/*
 	@Test
 	public void testTimeToLive() {
 		Assert.assertEquals(_VALUE_1, _ehcachePortalCache.get(_KEY_1));
@@ -750,17 +749,13 @@ public class BaseEhcachePortalCacheTest {
 
 		int timeToLive = 600;
 
-		Ehcache ehcache = _ehcachePortalCache.getEhcache();
+		Cache<Object, Object> cache = _ehcachePortalCache.getEhcache();
 
 		// Put
 
 		_ehcachePortalCache.put(_KEY_2, _VALUE_2, timeToLive);
 
-		Element element = ehcache.get(_KEY_2);
-
-		Assert.assertEquals(_KEY_2, element.getObjectKey());
-		Assert.assertEquals(_VALUE_2, element.getObjectValue());
-		Assert.assertEquals(timeToLive, element.getTimeToLive());
+		Assert.assertEquals(_VALUE_2, _ehcachePortalCache.get(_KEY_2));
 
 		_defaultPortalCacheListener.assertPut(_KEY_2, _VALUE_2, timeToLive);
 
@@ -772,15 +767,11 @@ public class BaseEhcachePortalCacheTest {
 
 		// Put if absent
 
-		ehcache.removeElement(element);
+		cache.remove(_KEY_2);
 
 		_ehcachePortalCache.putIfAbsent(_KEY_2, _VALUE_2, timeToLive);
 
-		element = ehcache.get(_KEY_2);
-
-		Assert.assertEquals(_KEY_2, element.getObjectKey());
-		Assert.assertEquals(_VALUE_2, element.getObjectValue());
-		Assert.assertEquals(timeToLive, element.getTimeToLive());
+		Assert.assertEquals(_VALUE_2, _ehcachePortalCache.get(_KEY_2));
 
 		_defaultPortalCacheListener.assertPut(_KEY_2, _VALUE_2, timeToLive);
 
@@ -792,15 +783,11 @@ public class BaseEhcachePortalCacheTest {
 
 		// Replace 1
 
-		ehcache.removeElement(element);
+		cache.remove(_KEY_2);
 
 		_ehcachePortalCache.replace(_KEY_1, _VALUE_2, timeToLive);
 
-		element = ehcache.get(_KEY_1);
-
-		Assert.assertEquals(_KEY_1, element.getObjectKey());
-		Assert.assertEquals(_VALUE_2, element.getObjectValue());
-		Assert.assertEquals(timeToLive, element.getTimeToLive());
+		Assert.assertEquals(_VALUE_2, _ehcachePortalCache.get(_KEY_1));
 
 		_defaultPortalCacheListener.assertUpdated(_KEY_1, _VALUE_2, timeToLive);
 
@@ -813,17 +800,13 @@ public class BaseEhcachePortalCacheTest {
 
 		// Replace 2
 
-		ehcache.removeElement(element);
+		cache.remove(_KEY_1);
 
 		_ehcachePortalCache.put(_KEY_1, _VALUE_1);
 
 		_ehcachePortalCache.replace(_KEY_1, _VALUE_1, _VALUE_2, timeToLive);
 
-		element = ehcache.get(_KEY_1);
-
-		Assert.assertEquals(_KEY_1, element.getObjectKey());
-		Assert.assertEquals(_VALUE_2, element.getObjectValue());
-		Assert.assertEquals(timeToLive, element.getTimeToLive());
+		Assert.assertEquals(_VALUE_2, _ehcachePortalCache.get(_KEY_1));
 
 		_defaultPortalCacheListener.assertPut(_KEY_1, _VALUE_1);
 		_defaultPortalCacheListener.assertUpdated(_KEY_1, _VALUE_2, timeToLive);
@@ -835,7 +818,7 @@ public class BaseEhcachePortalCacheTest {
 			_KEY_1, _VALUE_2, timeToLive);
 
 		_defaultPortalCacheReplicator.reset();
-	}*/
+	}
 
 	private static final String _KEY_1 = "KEY_1";
 
