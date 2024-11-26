@@ -5,16 +5,31 @@
 
 package com.liferay.portal.cache.ehcache3.internal;
 
+import java.io.Serializable;
+
 import java.time.Duration;
+
+import java.util.Objects;
 
 /**
  * @author Dante Wang
  */
-public class EhcacheValue {
+public class EhcacheValue implements Serializable {
 
 	public EhcacheValue(Object value, Duration timeToLive) {
 		_value = value;
 		_timeToLive = timeToLive;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof EhcacheValue)) {
+			return false;
+		}
+
+		EhcacheValue ehcacheValue = (EhcacheValue)other;
+
+		return Objects.equals(_value, ehcacheValue._value);
 	}
 
 	public Duration getTimeToLive() {
@@ -23,6 +38,11 @@ public class EhcacheValue {
 
 	public Object getValue() {
 		return _value;
+	}
+
+	@Override
+	public int hashCode() {
+		return _value.hashCode();
 	}
 
 	private final Duration _timeToLive;

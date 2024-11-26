@@ -10,6 +10,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.cache.PortalCacheReplicator;
 import com.liferay.portal.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.cache.configuration.PortalCacheManagerConfiguration;
+import com.liferay.portal.cache.ehcache3.internal.EhcacheExpiryPolicy;
 import com.liferay.portal.cache.ehcache3.internal.EhcachePortalCacheConfiguration;
 import com.liferay.portal.cache.ehcache3.internal.configuration.EhcachePortalCacheManagerConfiguration;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
@@ -29,9 +30,11 @@ import java.util.Set;
 
 import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.Configuration;
+import org.ehcache.config.FluentConfigurationBuilder;
 import org.ehcache.config.ResourcePools;
 import org.ehcache.config.ResourceType;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.expiry.ExpiryPolicy;
 import org.ehcache.xml.XmlConfiguration;
 
 /**
@@ -71,7 +74,8 @@ public class EhcachePortalCacheManagerConfigurator {
 		_populateCacheReplicator(ehcachePortalCacheManagerConfiguration);
 
 		return new ObjectValuePair<>(
-			xmlConfiguration, ehcachePortalCacheManagerConfiguration);
+			_replaceExpiryPolicy(xmlConfiguration),
+			ehcachePortalCacheManagerConfiguration);
 	}
 
 	protected Properties parseProperties(
@@ -207,6 +211,33 @@ public class EhcachePortalCacheManagerConfigurator {
 			portalCacheManagerConfiguration.
 				getDefaultPortalCacheConfiguration(),
 			_defaultReplicatorPropertiesString);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Configuration _replaceExpiryPolicy(
+		XmlConfiguration xmlConfiguration) {
+
+		FluentConfigurationBuilder<?> fluentConfigurationBuilder =
+			xmlConfiguration.derive();
+
+		Map<String, CacheConfiguration<?, ?>> cacheConfigurations =
+			xmlConfiguration.getCacheConfigurations();
+
+		for (Map.Entry<String, CacheConfiguration<?, ?>> entry :
+				cacheConfigurations.entrySet()) {
+
+			CacheConfiguration<?, ?> cacheConfiguration = entry.getValue();
+
+			fluentConfigurationBuilder.updateCache(
+				entry.getKey(),
+				fluentCacheConfigurationBuilder ->
+					fluentCacheConfigurationBuilder.withExpiry(
+						new EhcacheExpiryPolicy(
+							(ExpiryPolicy<Object, Object>)
+								cacheConfiguration.getExpiryPolicy())));
+		}
+
+		return fluentConfigurationBuilder.build();
 	}
 
 	private final String _defaultReplicatorPropertiesString;

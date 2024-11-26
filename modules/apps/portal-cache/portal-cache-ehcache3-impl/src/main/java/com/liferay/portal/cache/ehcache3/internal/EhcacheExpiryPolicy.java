@@ -16,9 +16,13 @@ import org.ehcache.expiry.ExpiryPolicy;
  */
 public class EhcacheExpiryPolicy implements ExpiryPolicy<Object, Object> {
 
+	public EhcacheExpiryPolicy(ExpiryPolicy<Object, Object> expiryPolicy) {
+		_expiryPolicy = expiryPolicy;
+	}
+
 	@Override
 	public Duration getExpiryForAccess(Object key, Supplier<?> value) {
-		return null;
+		return _expiryPolicy.getExpiryForAccess(key, value);
 	}
 
 	@Override
@@ -36,5 +40,7 @@ public class EhcacheExpiryPolicy implements ExpiryPolicy<Object, Object> {
 
 		return ehcacheValue.getTimeToLive();
 	}
+
+	private final ExpiryPolicy<Object, Object> _expiryPolicy;
 
 }

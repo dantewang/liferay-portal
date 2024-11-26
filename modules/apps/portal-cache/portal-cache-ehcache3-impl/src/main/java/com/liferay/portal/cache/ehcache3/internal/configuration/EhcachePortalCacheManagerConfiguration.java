@@ -8,10 +8,12 @@ package com.liferay.portal.cache.ehcache3.internal.configuration;
 import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.portal.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.cache.configuration.PortalCacheManagerConfiguration;
+import com.liferay.portal.cache.ehcache3.internal.EhcacheExpiryPolicy;
 
 import java.util.Properties;
 import java.util.Set;
 
+import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 
@@ -37,6 +39,7 @@ public class EhcachePortalCacheManagerConfiguration
 		return _defaultCacheConfigurationBuilderUnsafeSupplier;
 	}
 
+	@SuppressWarnings("unchecked")
 	public CacheConfigurationBuilder<Object, Object>
 			newDefaultCacheConfigurationBuilder()
 		throws Exception {
@@ -44,12 +47,22 @@ public class EhcachePortalCacheManagerConfiguration
 		CacheConfigurationBuilder<Object, Object> cacheConfigurationBuilder =
 			_defaultCacheConfigurationBuilderUnsafeSupplier.get();
 
-		if (cacheConfigurationBuilder != null) {
-			return cacheConfigurationBuilder;
+		if (cacheConfigurationBuilder == null) {
+			cacheConfigurationBuilder =
+				CacheConfigurationBuilder.newCacheConfigurationBuilder(
+					Object.class, Object.class,
+					ResourcePoolsBuilder.heap(100000));
 		}
 
-		return CacheConfigurationBuilder.newCacheConfigurationBuilder(
-			Object.class, Object.class, ResourcePoolsBuilder.heap(100000));
+		CacheConfiguration<Object, Object> tempCacheConfiguration =
+			cacheConfigurationBuilder.build();
+
+		return (CacheConfigurationBuilder<Object, Object>)
+			tempCacheConfiguration.derive(
+			).withExpiry(
+				new EhcacheExpiryPolicy(
+					tempCacheConfiguration.getExpiryPolicy())
+			);
 	}
 
 	public void setDefaultCacheConfigurationBuilderUnsafeSupplier(
