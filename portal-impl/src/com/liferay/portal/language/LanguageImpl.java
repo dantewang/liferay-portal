@@ -8,17 +8,16 @@ package com.liferay.portal.language;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.cache.PortalCache;
-import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
-import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
-import com.liferay.portal.kernel.cache.PortalCacheMapSynchronizeUtil;
-import com.liferay.portal.kernel.cache.PortalCacheMapSynchronizeUtil.Synchronizer;
+import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
+import com.liferay.portal.kernel.cluster.ClusterInvokeThreadLocal;
+import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cookies.CookiesManagerUtil;
 import com.liferay.portal.kernel.cookies.constants.CookiesConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.language.Language;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.language.LanguageWrapper;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -39,6 +38,8 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.MethodHandler;
+import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -104,27 +105,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author Eduardo Lundgren
  */
 public class LanguageImpl implements Language, Serializable {
-
-	public void afterPropertiesSet() {
-		_companyLocalesPortalCache = PortalCacheHelperUtil.getPortalCache(
-			PortalCacheManagerNames.MULTI_VM,
-			_COMPANY_LOCALES_PORTAL_CACHE_NAME);
-
-		PortalCacheMapSynchronizeUtil.synchronize(
-			_companyLocalesPortalCache, _companyLocalesBags,
-			_removeSynchronizer);
-
-		_groupLocalesPortalCache = PortalCacheHelperUtil.getPortalCache(
-			PortalCacheManagerNames.MULTI_VM, _GROUP_LOCALES_PORTAL_CACHE_NAME);
-
-		PortalCacheMapSynchronizeUtil.synchronize(
-			_groupLocalesPortalCache, _groupLanguageCodeLocalesMapMap,
-			_removeSynchronizer);
-
-		PortalCacheMapSynchronizeUtil.synchronize(
-			_groupLocalesPortalCache, _groupLanguageIdLocalesMap,
-			_removeSynchronizer);
-	}
 
 	/**
 	 * Returns the translated pattern using the current request's locale or, if
@@ -1696,11 +1676,17 @@ public class LanguageImpl implements Language, Serializable {
 	@Override
 	public void resetAvailableGroupLocales(long groupId) {
 		_resetAvailableGroupLocales(groupId);
+
+		_sendClearCacheClusterMessage(
+			_resetAvailableGroupLocalesMethodKey, groupId);
 	}
 
 	@Override
 	public void resetAvailableLocales(long companyId) {
 		_resetAvailableLocales(companyId);
+
+		_sendClearCacheClusterMessage(
+			_resetAvailableLocalesMethodKey, companyId);
 	}
 
 	@Override
@@ -2000,26 +1986,38 @@ public class LanguageImpl implements Language, Serializable {
 	}
 
 	private void _resetAvailableGroupLocales(long groupId) {
-		_groupLocalesPortalCache.remove(groupId);
+		_groupLanguageCodeLocalesMapMap.remove(groupId);
+		_groupLanguageIdLocalesMap.remove(groupId);
 
 		_updateLastModified();
 	}
 
 	private void _resetAvailableLocales(long companyId) {
-		_companyLocalesPortalCache.remove(companyId);
+		_companyLocalesBags.remove(companyId);
 
 		_updateLastModified();
+	}
+
+	private void _sendClearCacheClusterMessage(
+		MethodKey methodKey, long argument) {
+
+		if (!ClusterExecutorUtil.isEnabled() ||
+			!ClusterInvokeThreadLocal.isEnabled()) {
+
+			return;
+		}
+
+		ClusterRequest clusterRequest = ClusterRequest.createMulticastRequest(
+			new MethodHandler(methodKey, argument), true);
+
+		clusterRequest.setFireAndForget(true);
+
+		ClusterExecutorUtil.execute(clusterRequest);
 	}
 
 	private void _updateLastModified() {
 		_lastModified = System.currentTimeMillis();
 	}
-
-	private static final String _COMPANY_LOCALES_PORTAL_CACHE_NAME =
-		LanguageImpl.class.getName() + "._companyLocalesPortalCache";
-
-	private static final String _GROUP_LOCALES_PORTAL_CACHE_NAME =
-		LanguageImpl.class.getName() + "._groupLocalesPortalCache";
 
 	private static final String _LIFERAY_LANGUAGE_IMPORT_REGEXP =
 		"await import\\(.@liferay/language/.+?/all\\.js.\\)";
@@ -2030,8 +2028,6 @@ public class LanguageImpl implements Language, Serializable {
 
 	private static final Map<Long, CompanyLocalesBag> _companyLocalesBags =
 		new ConcurrentHashMap<>();
-	private static PortalCache<Long, Serializable> _companyLocalesPortalCache;
-	private static PortalCache<Long, Serializable> _groupLocalesPortalCache;
 	private static volatile long _lastModified = System.currentTimeMillis();
 	private static final Pattern _liferayLanguageImportPattern =
 		Pattern.compile(_LIFERAY_LANGUAGE_IMPORT_REGEXP, Pattern.MULTILINE);
@@ -2039,19 +2035,11 @@ public class LanguageImpl implements Language, Serializable {
 		"Liferay\\s*\\.\\s*Language\\s*\\.\\s*get\\s*" +
 			"\\(\\s*[\"']([^)]+)[\"']\\s*\\)",
 		Pattern.MULTILINE);
-
-	private static final Synchronizer<Long, Serializable> _removeSynchronizer =
-		new Synchronizer<Long, Serializable>() {
-
-			@Override
-			public void onSynchronize(
-				Map<? extends Long, ? extends Serializable> map, Long key,
-				Serializable value, int timeToLive) {
-
-				map.remove(key);
-			}
-
-		};
+	private static final MethodKey _resetAvailableGroupLocalesMethodKey =
+		new MethodKey(
+			LanguageUtil.class, "resetAvailableGroupLocales", long.class);
+	private static final MethodKey _resetAvailableLocalesMethodKey =
+		new MethodKey(LanguageUtil.class, "resetAvailableLocales", long.class);
 
 	private final Map<Long, HashMap<String, Locale>>
 		_groupLanguageCodeLocalesMapMap = new ConcurrentHashMap<>();
