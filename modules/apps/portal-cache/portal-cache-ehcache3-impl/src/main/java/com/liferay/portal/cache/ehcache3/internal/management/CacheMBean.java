@@ -12,9 +12,13 @@ public interface CacheMBean {
 
 	public void clear();
 
+	public String getHeapSize();
+
 	public String getKeyType();
 
 	public String getName();
+
+	public long getTimeToIdle();
 
 	public String getValueType();
 

@@ -5,11 +5,20 @@
 
 package com.liferay.portal.cache.ehcache3.internal.management;
 
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
+
+import java.time.Duration;
+
 import javax.management.NotCompliantMBeanException;
 import javax.management.StandardMBean;
 
 import org.ehcache.Cache;
 import org.ehcache.config.CacheRuntimeConfiguration;
+import org.ehcache.config.ResourcePools;
+import org.ehcache.config.ResourceType;
+import org.ehcache.config.SizedResourcePool;
+import org.ehcache.expiry.ExpiryPolicy;
 
 /**
  * @author Dante Wang
@@ -33,9 +42,27 @@ public class CacheMBeanImpl extends StandardMBean implements CacheMBean {
 	}
 
 	@Override
+	public String getHeapSize() {
+		ResourcePools resourcePools =
+			_cacheRuntimeConfiguration.getResourcePools();
+
+		SizedResourcePool sizedResourcePool = resourcePools.getPoolForResource(
+			ResourceType.Core.HEAP);
+
+		if (sizedResourcePool == null) {
+			return "No heap store for this cache";
+		}
+
+		return StringBundler.concat(
+			sizedResourcePool.getSize(), StringPool.SPACE,
+			sizedResourcePool.getUnit());
+	}
+
+	@Override
 	public String getKeyType() {
-		return _cacheRuntimeConfiguration.getKeyType(
-		).getName();
+		Class<?> clazz = _cacheRuntimeConfiguration.getKeyType();
+
+		return clazz.getName();
 	}
 
 	@Override
@@ -44,9 +71,20 @@ public class CacheMBeanImpl extends StandardMBean implements CacheMBean {
 	}
 
 	@Override
+	public long getTimeToIdle() {
+		ExpiryPolicy<?, ?> expiryPolicy =
+			_cacheRuntimeConfiguration.getExpiryPolicy();
+
+		Duration duration = expiryPolicy.getExpiryForAccess(null, null);
+
+		return duration.getSeconds();
+	}
+
+	@Override
 	public String getValueType() {
-		return _cacheRuntimeConfiguration.getValueType(
-		).getName();
+		Class<?> clazz = _cacheRuntimeConfiguration.getValueType();
+
+		return clazz.getName();
 	}
 
 	private final Cache<?, ?> _cache;
