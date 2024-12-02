@@ -85,6 +85,8 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 		Cache<Object, Object> cache = getEhcache();
 
 		cache.clear();
+
+		aggregatedPortalCacheListener.notifyRemoveAll(this);
 	}
 
 	protected abstract void dispose();

@@ -569,15 +569,17 @@ public class BaseEhcachePortalCacheTest {
 		Assert.assertNull(_ehcachePortalCache.get(_KEY_1));
 		Assert.assertNull(_ehcachePortalCache.get(_KEY_2));
 
-		_defaultPortalCacheListener.assertActionsCount(2);
+		_defaultPortalCacheListener.assertActionsCount(3);
 		_defaultPortalCacheListener.assertPut(_KEY_1, _VALUE_1);
 		_defaultPortalCacheListener.assertPut(_KEY_2, _VALUE_2);
+		_defaultPortalCacheListener.assertRemoveAll();
 
 		_defaultPortalCacheListener.reset();
 
-		_defaultPortalCacheReplicator.assertActionsCount(2);
+		_defaultPortalCacheReplicator.assertActionsCount(3);
 		_defaultPortalCacheReplicator.assertPut(_KEY_1, _VALUE_1);
 		_defaultPortalCacheReplicator.assertPut(_KEY_2, _VALUE_2);
+		_defaultPortalCacheReplicator.assertRemoveAll();
 
 		_defaultPortalCacheReplicator.reset();
 
@@ -591,9 +593,10 @@ public class BaseEhcachePortalCacheTest {
 		Assert.assertNull(_ehcachePortalCache.get(_KEY_1));
 		Assert.assertNull(_ehcachePortalCache.get(_KEY_2));
 
-		_defaultPortalCacheListener.assertActionsCount(2);
+		_defaultPortalCacheListener.assertActionsCount(3);
 		_defaultPortalCacheListener.assertPut(_KEY_1, _VALUE_1);
 		_defaultPortalCacheListener.assertPut(_KEY_2, _VALUE_2);
+		_defaultPortalCacheListener.assertRemoveAll();
 
 		_defaultPortalCacheListener.reset();
 
