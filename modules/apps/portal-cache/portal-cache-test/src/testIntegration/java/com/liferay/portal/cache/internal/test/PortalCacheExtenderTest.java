@@ -55,7 +55,6 @@ import org.osgi.framework.FrameworkUtil;
 /**
  * @author Kyle Miho
  */
-@Ignore
 @RunWith(Arquillian.class)
 public class PortalCacheExtenderTest {
 
@@ -266,7 +265,8 @@ public class PortalCacheExtenderTest {
 				",name=", name));
 
 		Assert.assertEquals(
-			maxHeapEntries, mBeanServer.getAttribute(objectName, "HeapSize"));
+			StringBundler.concat(maxHeapEntries, StringPool.SPACE, "entries"),
+			mBeanServer.getAttribute(objectName, "HeapSize"));
 		Assert.assertEquals(name, mBeanServer.getAttribute(objectName, "Name"));
 		Assert.assertEquals(
 			timeToIdleSeconds,
@@ -432,7 +432,7 @@ public class PortalCacheExtenderTest {
 	private com.liferay.portal.kernel.util.File _file;
 
 	@Inject(
-		filter = "component.name=com.liferay.portal.cache.ehcache.internal.MultiVMEhcachePortalCacheManager"
+		filter = "component.name=com.liferay.portal.cache.ehcache3.internal.MultiVMEhcachePortalCacheManager"
 	)
 	private PortalCacheManager<? extends Serializable, ? extends Serializable>
 		_multiVMPortalCacheManager;
