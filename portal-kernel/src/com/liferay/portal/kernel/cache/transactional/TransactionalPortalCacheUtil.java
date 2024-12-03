@@ -216,7 +216,7 @@ public class TransactionalPortalCacheUtil {
 
 		if (uncommittedBuffer == null) {
 			if (mvcc) {
-				uncommittedBuffer = new UncommittedBuffer(
+				uncommittedBuffer = new DefaultUncommittedBuffer(
 					(PortalCache<Serializable, Object>)portalCache);
 			}
 			else {
@@ -270,65 +270,9 @@ public class TransactionalPortalCacheUtil {
 			ArrayList::new, false);
 	private static volatile Boolean _transactionalCacheEnabled;
 
-	private static class MarkerUncommittedBuffer extends UncommittedBuffer {
+	private static class DefaultUncommittedBuffer implements UncommittedBuffer {
 
 		@Override
-		public void commit(boolean readOnly) {
-			if (skipCommit(readOnly)) {
-				return;
-			}
-
-			_markers.compute(
-				_portalCacheName,
-				(key, placeHolder) -> {
-					if (placeHolder != _marker) {
-						commitByRemove = true;
-					}
-
-					if (!readOnly || !commitByRemove) {
-						doCommit();
-					}
-
-					if (readOnly) {
-						return placeHolder;
-					}
-
-					return null;
-				});
-		}
-
-		@Override
-		public void put(Serializable key, ValueEntry valueEntry) {
-			ValueEntry oldValueEntry = super._uncommittedMap.put(
-				key, valueEntry);
-
-			if (oldValueEntry != null) {
-				oldValueEntry.merge(valueEntry);
-			}
-		}
-
-		private MarkerUncommittedBuffer(
-			PortalCache<Serializable, Object> portalCache) {
-
-			super(portalCache);
-
-			_portalCacheName = portalCache.getPortalCacheName();
-
-			_marker = _markers.computeIfAbsent(
-				_portalCacheName, key -> new Object());
-		}
-
-		private static final Map<String, Object> _markers =
-			new ConcurrentReferenceValueHashMap<>(
-				FinalizeManager.WEAK_REFERENCE_FACTORY);
-
-		private final Object _marker;
-		private final String _portalCacheName;
-
-	}
-
-	private static class UncommittedBuffer {
-
 		public void commit(boolean readOnly) {
 			if (skipCommit(readOnly)) {
 				return;
@@ -337,6 +281,7 @@ public class TransactionalPortalCacheUtil {
 			doCommit();
 		}
 
+		@Override
 		public ValueEntry get(Serializable key) {
 			ValueEntry valueEntry = _uncommittedMap.get(key);
 
@@ -347,6 +292,7 @@ public class TransactionalPortalCacheUtil {
 			return valueEntry;
 		}
 
+		@Override
 		public void put(Serializable key, ValueEntry valueEntry) {
 			ValueEntry oldValueEntry = _uncommittedMap.put(key, valueEntry);
 
@@ -359,6 +305,7 @@ public class TransactionalPortalCacheUtil {
 			}
 		}
 
+		@Override
 		public void removeAll(boolean skipReplicator) {
 			_uncommittedMap.clear();
 
@@ -420,7 +367,7 @@ public class TransactionalPortalCacheUtil {
 
 		protected boolean commitByRemove;
 
-		private UncommittedBuffer(
+		private DefaultUncommittedBuffer(
 			PortalCache<Serializable, Object> portalCache) {
 
 			_portalCache = portalCache;
@@ -431,6 +378,64 @@ public class TransactionalPortalCacheUtil {
 		private boolean _skipReplicator = true;
 		private final Map<Serializable, ValueEntry> _uncommittedMap =
 			new HashMap<>();
+
+	}
+
+	private static class MarkerUncommittedBuffer
+		extends DefaultUncommittedBuffer {
+
+		@Override
+		public void commit(boolean readOnly) {
+			if (skipCommit(readOnly)) {
+				return;
+			}
+
+			_markers.compute(
+				_portalCacheName,
+				(key, placeHolder) -> {
+					if (placeHolder != _marker) {
+						commitByRemove = true;
+					}
+
+					if (!readOnly || !commitByRemove) {
+						doCommit();
+					}
+
+					if (readOnly) {
+						return placeHolder;
+					}
+
+					return null;
+				});
+		}
+
+		@Override
+		public void put(Serializable key, ValueEntry valueEntry) {
+			ValueEntry oldValueEntry = super._uncommittedMap.put(
+				key, valueEntry);
+
+			if (oldValueEntry != null) {
+				oldValueEntry.merge(valueEntry);
+			}
+		}
+
+		private MarkerUncommittedBuffer(
+			PortalCache<Serializable, Object> portalCache) {
+
+			super(portalCache);
+
+			_portalCacheName = portalCache.getPortalCacheName();
+
+			_marker = _markers.computeIfAbsent(
+				_portalCacheName, key -> new Object());
+		}
+
+		private static final Map<String, Object> _markers =
+			new ConcurrentReferenceValueHashMap<>(
+				FinalizeManager.WEAK_REFERENCE_FACTORY);
+
+		private final Object _marker;
+		private final String _portalCacheName;
 
 	}
 
@@ -497,6 +502,18 @@ public class TransactionalPortalCacheUtil {
 		private boolean _skipReplicator;
 		private final int _ttl;
 		private final Object _value;
+
+	}
+
+	private interface UncommittedBuffer {
+
+		public void commit(boolean readOnly);
+
+		public ValueEntry get(Serializable key);
+
+		public void put(Serializable key, ValueEntry valueEntry);
+
+		public void removeAll(boolean skipReplicator);
 
 	}
 
