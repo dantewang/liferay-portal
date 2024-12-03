@@ -6,7 +6,6 @@
 package com.liferay.portal.cache.test.util;
 
 import com.liferay.portal.cache.BasePortalCache;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 
 import java.io.Serializable;
 
@@ -22,23 +21,16 @@ public class TestPortalCache<K extends Serializable, V>
 	extends BasePortalCache<K, V> {
 
 	public TestPortalCache(String portalCacheName) {
-		this(portalCacheName, false);
-	}
-
-	public TestPortalCache(String portalCacheName, boolean sharded) {
 		super(null);
 
 		_portalCacheName = portalCacheName;
-		_sharded = sharded;
 	}
 
 	@Override
 	public List<K> getKeys() {
 		List<K> keys = new ArrayList<>();
 
-		ConcurrentMap<K, V> concurrentMap = _getConcurrentMap();
-
-		for (K key : concurrentMap.keySet()) {
+		for (K key : _concurrentMap.keySet()) {
 			keys.add(key);
 		}
 
@@ -51,29 +43,20 @@ public class TestPortalCache<K extends Serializable, V>
 	}
 
 	@Override
-	public boolean isSharded() {
-		return _sharded;
-	}
-
-	@Override
 	public void removeAll() {
-		_concurrentMaps.clear();
+		_concurrentMap.clear();
 
 		aggregatedPortalCacheListener.notifyRemoveAll(this);
 	}
 
 	@Override
 	protected V doGet(K key) {
-		ConcurrentMap<K, V> concurrentMap = _getConcurrentMap();
-
-		return concurrentMap.get(key);
+		return _concurrentMap.get(key);
 	}
 
 	@Override
 	protected void doPut(K key, V value, int timeToLive) {
-		ConcurrentMap<K, V> concurrentMap = _getConcurrentMap();
-
-		V oldValue = concurrentMap.put(key, value);
+		V oldValue = _concurrentMap.put(key, value);
 
 		if (oldValue != null) {
 			aggregatedPortalCacheListener.notifyEntryUpdated(
@@ -87,9 +70,7 @@ public class TestPortalCache<K extends Serializable, V>
 
 	@Override
 	protected V doPutIfAbsent(K key, V value, int timeToLive) {
-		ConcurrentMap<K, V> concurrentMap = _getConcurrentMap();
-
-		V oldValue = concurrentMap.putIfAbsent(key, value);
+		V oldValue = _concurrentMap.putIfAbsent(key, value);
 
 		if (oldValue == null) {
 			aggregatedPortalCacheListener.notifyEntryPut(
@@ -101,9 +82,7 @@ public class TestPortalCache<K extends Serializable, V>
 
 	@Override
 	protected void doRemove(K key) {
-		ConcurrentMap<K, V> concurrentMap = _getConcurrentMap();
-
-		V value = concurrentMap.remove(key);
+		V value = _concurrentMap.remove(key);
 
 		aggregatedPortalCacheListener.notifyEntryRemoved(
 			this, key, value, DEFAULT_TIME_TO_LIVE);
@@ -111,9 +90,7 @@ public class TestPortalCache<K extends Serializable, V>
 
 	@Override
 	protected boolean doRemove(K key, V value) {
-		ConcurrentMap<K, V> concurrentMap = _getConcurrentMap();
-
-		boolean removed = concurrentMap.remove(key, value);
+		boolean removed = _concurrentMap.remove(key, value);
 
 		aggregatedPortalCacheListener.notifyEntryRemoved(
 			this, key, value, DEFAULT_TIME_TO_LIVE);
@@ -123,9 +100,7 @@ public class TestPortalCache<K extends Serializable, V>
 
 	@Override
 	protected V doReplace(K key, V value, int timeToLive) {
-		ConcurrentMap<K, V> concurrentMap = _getConcurrentMap();
-
-		V oldValue = concurrentMap.replace(key, value);
+		V oldValue = _concurrentMap.replace(key, value);
 
 		if (oldValue != null) {
 			aggregatedPortalCacheListener.notifyEntryUpdated(
@@ -137,9 +112,7 @@ public class TestPortalCache<K extends Serializable, V>
 
 	@Override
 	protected boolean doReplace(K key, V oldValue, V newValue, int timeToLive) {
-		ConcurrentMap<K, V> concurrentMap = _getConcurrentMap();
-
-		boolean replaced = concurrentMap.replace(key, oldValue, newValue);
+		boolean replaced = _concurrentMap.replace(key, oldValue, newValue);
 
 		if (replaced) {
 			aggregatedPortalCacheListener.notifyEntryUpdated(
@@ -149,20 +122,8 @@ public class TestPortalCache<K extends Serializable, V>
 		return replaced;
 	}
 
-	private ConcurrentMap<K, V> _getConcurrentMap() {
-		long companyId = -1L;
-
-		if (_sharded) {
-			companyId = CompanyThreadLocal.getNonsystemCompanyId();
-		}
-
-		return _concurrentMaps.computeIfAbsent(
-			companyId, key -> new ConcurrentHashMap<>());
-	}
-
-	private final ConcurrentMap<Long, ConcurrentMap<K, V>> _concurrentMaps =
+	private final ConcurrentMap<K, V> _concurrentMap =
 		new ConcurrentHashMap<>();
 	private final String _portalCacheName;
-	private final boolean _sharded;
 
 }
