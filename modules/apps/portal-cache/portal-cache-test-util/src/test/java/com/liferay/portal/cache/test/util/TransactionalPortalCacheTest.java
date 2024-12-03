@@ -12,6 +12,7 @@ import com.liferay.portal.cache.TransactionalPortalCache;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.cache.transactional.TransactionalPortalCacheUtil;
+import com.liferay.portal.kernel.db.partition.DBPartition;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
@@ -102,6 +103,16 @@ public class TransactionalPortalCacheTest {
 
 		_companyThreadLocalMockedStatic.when(
 			() -> CompanyThreadLocal.setCompanyId(Mockito.anyLong())
+		).thenCallRealMethod();
+
+		_companyThreadLocalMockedStatic.when(
+			() -> CompanyThreadLocal.setCompanyIdWithSafeCloseable(
+				Mockito.anyLong())
+		).thenCallRealMethod();
+
+		_companyThreadLocalMockedStatic.when(
+			() -> CompanyThreadLocal.setCompanyIdWithSafeCloseable(
+				Mockito.anyLong(), Mockito.anyLong())
 		).thenCallRealMethod();
 
 		_companyIdThreadLocal = ReflectionTestUtil.getFieldValue(
@@ -381,8 +392,8 @@ public class TransactionalPortalCacheTest {
 			TransactionalPortalCache<String, String>
 				shardedTransactionalPortalCache =
 					new TransactionalPortalCache<>(
-						new TestPortalCache<>(
-							"Test Sharded Portal Cache", true),
+						new ShardedTestPortalCache<>(
+							"Test Sharded Portal Cache"),
 						false);
 
 			shardedTransactionalPortalCache.put(_KEY_1, _VALUE_1);
@@ -451,7 +462,7 @@ public class TransactionalPortalCacheTest {
 
 	@Test
 	public void testShardedTransactionalCache() {
-		_portalCache = new TestPortalCache<>("Test Sharded Portal Cache", true);
+		_portalCache = new ShardedTestPortalCache<>("Test Sharded Portal Cache");
 
 		_portalCache.registerPortalCacheListener(_testCacheListener);
 		_portalCache.registerPortalCacheListener(_testCacheReplicator);
@@ -461,12 +472,24 @@ public class TransactionalPortalCacheTest {
 
 	@Test
 	public void testShardedTransactionalCacheWithoutTransaction() {
-		_testShardedTransactionalCache(false);
+		_testShardedTransactionalCache(false, true);
+		_testShardedTransactionalCache(false, false);
 	}
 
 	@Test
 	public void testShardedTransactionalCacheWithTransaction() {
-		_testShardedTransactionalCache(true);
+		try (MockedStatic<DBPartition> mockedStatic = Mockito.mockStatic(
+				DBPartition.class)) {
+
+			mockedStatic.when(
+				DBPartition::isPartitionEnabled
+			).thenReturn(
+				true
+			);
+
+			_testShardedTransactionalCache(true, true);
+			_testShardedTransactionalCache(true, false);
+		}
 	}
 
 	@Test
@@ -944,9 +967,11 @@ public class TransactionalPortalCacheTest {
 		_testCacheReplicator.reset();
 	}
 
-	private void _testShardedTransactionalCache(boolean transaction) {
-		PortalCache<String, String> portalCache = new TestPortalCache<>(
-			"Test Sharded Portal Cache", true);
+	private void _testShardedTransactionalCache(
+		boolean transaction, boolean mvcc) {
+
+		PortalCache<String, String> portalCache = new ShardedTestPortalCache<>(
+			"Test Sharded Portal Cache");
 
 		_companyIdThreadLocal.set(CompanyConstants.SYSTEM);
 
@@ -960,6 +985,10 @@ public class TransactionalPortalCacheTest {
 
 		portalCache.put(_KEY_2, _VALUE_2);
 
+		_companyIdThreadLocal.set(3000L);
+
+		portalCache.put(_KEY_1, _VALUE_1);
+
 		TestPortalCacheListener<String, String> testPortalCacheListener =
 			new TestPortalCacheListener<>();
 		TestPortalCacheReplicator<String, String> testPortalCacheReplicator =
@@ -971,7 +1000,7 @@ public class TransactionalPortalCacheTest {
 		_setEnableTransactionalCache(true);
 
 		TransactionalPortalCache<String, String> transactionalPortalCache =
-			new TransactionalPortalCache<>(portalCache, false);
+			new TransactionalPortalCache<>(portalCache, mvcc);
 
 		if (transaction) {
 			TransactionalPortalCacheUtil.begin();
@@ -983,8 +1012,6 @@ public class TransactionalPortalCacheTest {
 
 		transactionalPortalCache.put(_KEY_2, _VALUE_1);
 
-		Assert.assertEquals(_VALUE_1, transactionalPortalCache.get(_KEY_2));
-
 		if (transaction) {
 			Assert.assertNull(portalCache.get(_KEY_2));
 		}
@@ -992,20 +1019,37 @@ public class TransactionalPortalCacheTest {
 			Assert.assertEquals(_VALUE_1, portalCache.get(_KEY_2));
 		}
 
+		Assert.assertEquals(_VALUE_1, transactionalPortalCache.get(_KEY_2));
+
 		_companyIdThreadLocal.set(_COMPANY_ID_2);
 
 		Assert.assertEquals(_VALUE_2, portalCache.get(_KEY_2));
 		Assert.assertEquals(_VALUE_2, transactionalPortalCache.get(_KEY_2));
 		Assert.assertNull(transactionalPortalCache.get(_KEY_1));
 
+		_companyIdThreadLocal.set(3000L);
+
+		transactionalPortalCache.removeAll();
+
+		if (transaction) {
+			Assert.assertEquals(_VALUE_1, portalCache.get(_KEY_1));
+		}
+		else {
+			Assert.assertNull(portalCache.get(_KEY_1));
+		}
+
+		Assert.assertNull(transactionalPortalCache.get(_KEY_1));
+
 		if (transaction) {
 			TransactionalPortalCacheUtil.commit(false);
 		}
 
-		testPortalCacheListener.assertActionsCount(1);
+		testPortalCacheListener.assertActionsCount(2);
 		testPortalCacheListener.assertPut(_KEY_2, _VALUE_1);
-		testPortalCacheReplicator.assertActionsCount(1);
+		testPortalCacheListener.assertRemoveAll();
+		testPortalCacheReplicator.assertActionsCount(2);
 		testPortalCacheReplicator.assertPut(_KEY_2, _VALUE_1);
+		testPortalCacheListener.assertRemoveAll();
 
 		_companyIdThreadLocal.set(_COMPANY_ID_1);
 
@@ -1025,6 +1069,10 @@ public class TransactionalPortalCacheTest {
 		Assert.assertNull(portalCache.get(_KEY_SYSTEM));
 		Assert.assertNull(transactionalPortalCache.get(_KEY_1));
 		Assert.assertNull(transactionalPortalCache.get(_KEY_SYSTEM));
+
+		_companyIdThreadLocal.set(3000L);
+
+		Assert.assertNull(portalCache.get(_KEY_1));
 
 		testPortalCacheListener.reset();
 		testPortalCacheReplicator.reset();
