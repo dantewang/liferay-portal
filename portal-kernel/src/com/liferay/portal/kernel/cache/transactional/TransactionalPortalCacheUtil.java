@@ -13,7 +13,6 @@ import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.cache.SkipReplicationThreadLocal;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionAttribute;
 import com.liferay.portal.kernel.transaction.TransactionDefinition;
@@ -31,7 +30,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Shuyang Zhou
@@ -135,46 +133,11 @@ public class TransactionalPortalCacheUtil {
 	public static void commit(boolean readOnly) {
 		PortalCacheMap portalCacheMap = _popPortalCacheMap();
 
-		Set<Map.Entry<PortalCache<?, ?>, Map<Long, UncommittedBuffer>>>
-			entrySet = portalCacheMap.entrySet();
-
-		Iterator<Map.Entry<PortalCache<?, ?>, Map<Long, UncommittedBuffer>>>
-			iterator = entrySet.iterator();
-
-		while (iterator.hasNext()) {
-			Map.Entry<PortalCache<?, ?>, Map<Long, UncommittedBuffer>>
-				portalCacheMapEntry = iterator.next();
-
-			PortalCache<?, ?> portalCache = portalCacheMapEntry.getKey();
-
-			Map<Long, UncommittedBuffer> uncommittedBufferMap =
-				portalCacheMapEntry.getValue();
-
-			for (Map.Entry<Long, UncommittedBuffer> uncommittedBufferEntry :
-					uncommittedBufferMap.entrySet()) {
-
-				UncommittedBuffer uncommittedBuffer =
-					uncommittedBufferEntry.getValue();
-
-				long companyId = CompanyThreadLocal.getCompanyId();
-
-				try {
-					if (portalCache.isSharded()) {
-						CompanyThreadLocal.setCompanyId(
-							uncommittedBufferEntry.getKey());
-					}
-
-					uncommittedBuffer.commit(readOnly);
-				}
-				finally {
-					if (portalCache.isSharded()) {
-						CompanyThreadLocal.setCompanyId(companyId);
-					}
-				}
-			}
-
-			iterator.remove();
+		for (UncommittedBuffer uncommittedBuffer : portalCacheMap.values()) {
+			uncommittedBuffer.commit(readOnly);
 		}
+
+		portalCacheMap.clear();
 	}
 
 	public static <K extends Serializable, V> V get(
@@ -182,15 +145,7 @@ public class TransactionalPortalCacheUtil {
 
 		PortalCacheMap portalCacheMap = _peekPortalCacheMap();
 
-		Map<Long, UncommittedBuffer> uncommittedBufferMap = portalCacheMap.get(
-			portalCache);
-
-		if (uncommittedBufferMap == null) {
-			return null;
-		}
-
-		UncommittedBuffer uncommittedBuffer = uncommittedBufferMap.get(
-			_getPortalCacheCompanyId(portalCache));
+		UncommittedBuffer uncommittedBuffer = portalCacheMap.get(portalCache);
 
 		if (uncommittedBuffer == null) {
 			return null;
@@ -225,14 +180,7 @@ public class TransactionalPortalCacheUtil {
 
 		PortalCacheMap portalCacheMap = _peekPortalCacheMap();
 
-		Map<Long, UncommittedBuffer> uncommittedBufferMap =
-			portalCacheMap.computeIfAbsent(
-				portalCache, key2 -> new HashMap<>());
-
-		long companyId = _getPortalCacheCompanyId(portalCache);
-
-		UncommittedBuffer uncommittedBuffer = uncommittedBufferMap.get(
-			companyId);
+		UncommittedBuffer uncommittedBuffer = portalCacheMap.get(portalCache);
 
 		if (uncommittedBuffer == null) {
 			if (mvcc) {
@@ -244,7 +192,7 @@ public class TransactionalPortalCacheUtil {
 					(PortalCache<Serializable, Object>)portalCache);
 			}
 
-			uncommittedBufferMap.put(companyId, uncommittedBuffer);
+			portalCacheMap.put(portalCache, uncommittedBuffer);
 		}
 
 		uncommittedBuffer.put(
@@ -257,13 +205,7 @@ public class TransactionalPortalCacheUtil {
 
 		PortalCacheMap portalCacheMap = _peekPortalCacheMap();
 
-		Map<Long, UncommittedBuffer> uncommittedBufferMap =
-			portalCacheMap.computeIfAbsent(portalCache, key -> new HashMap<>());
-
-		long companyId = _getPortalCacheCompanyId(portalCache);
-
-		UncommittedBuffer uncommittedBuffer = uncommittedBufferMap.get(
-			companyId);
+		UncommittedBuffer uncommittedBuffer = portalCacheMap.get(portalCache);
 
 		if (uncommittedBuffer == null) {
 			if (mvcc) {
@@ -275,7 +217,7 @@ public class TransactionalPortalCacheUtil {
 					(PortalCache<Serializable, Object>)portalCache);
 			}
 
-			uncommittedBufferMap.put(companyId, uncommittedBuffer);
+			portalCacheMap.put(portalCache, uncommittedBuffer);
 		}
 
 		uncommittedBuffer.removeAll(SkipReplicationThreadLocal.isEnabled());
@@ -289,20 +231,7 @@ public class TransactionalPortalCacheUtil {
 
 	protected static class PortalCacheMap
 		extends HashMap
-			<PortalCache<? extends Serializable, ?>,
-			 Map<Long, UncommittedBuffer>> {
-	}
-
-	private static Long _getPortalCacheCompanyId(
-		PortalCache<?, ?> portalCache) {
-
-		long companyId = -1L;
-
-		if (portalCache.isSharded()) {
-			companyId = CompanyThreadLocal.getNonsystemCompanyId();
-		}
-
-		return companyId;
+			<PortalCache<? extends Serializable, ?>, UncommittedBuffer> {
 	}
 
 	private static boolean _isTransactionalCacheEnabled() {
