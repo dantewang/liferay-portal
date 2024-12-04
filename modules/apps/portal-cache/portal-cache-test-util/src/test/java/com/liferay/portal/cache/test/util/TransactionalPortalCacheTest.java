@@ -25,10 +25,14 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionAttribute;
 import com.liferay.portal.kernel.transaction.TransactionLifecycleListener;
 import com.liferay.portal.kernel.transaction.TransactionStatus;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
+
+import java.lang.reflect.UndeclaredThrowableException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
@@ -386,7 +390,15 @@ public class TransactionalPortalCacheTest {
 
 		TransactionalPortalCacheUtil.commit(false);
 
-		try {
+		try (MockedStatic<DBPartition> mockedStatic = Mockito.mockStatic(
+				DBPartition.class)) {
+
+			mockedStatic.when(
+				DBPartition::isPartitionEnabled
+			).thenReturn(
+				true
+			);
+
 			TransactionalPortalCacheUtil.begin();
 
 			TransactionalPortalCache<String, String>
@@ -411,6 +423,70 @@ public class TransactionalPortalCacheTest {
 		finally {
 			_companyIdThreadLocal.set(0L);
 			_lockedThreadLocal.set(false);
+		}
+
+		ThreadLocal<List<Map<PortalCache<?, ?>, ?>>>
+			portalCacheMapsThreadLocal = ReflectionTestUtil.getFieldValue(
+				TransactionalPortalCacheUtil.class,
+				"_portalCacheMapsThreadLocal");
+
+		List<Map<PortalCache<?, ?>, ?>> portalCacheMaps =
+			portalCacheMapsThreadLocal.get();
+
+		Exception exception = new Exception();
+
+		try (MockedStatic<DBPartition> mockedStatic = Mockito.mockStatic(
+				DBPartition.class)) {
+
+			mockedStatic.when(
+				DBPartition::isPartitionEnabled
+			).thenReturn(
+				true
+			);
+
+			TransactionalPortalCacheUtil.begin();
+
+			PortalCache<String, String> portalCache =
+				new ShardedTestPortalCache<>("Sharded Test Portal Cache");
+
+			TransactionalPortalCache<String, String>
+				shardedTransactionalPortalCache =
+					new TransactionalPortalCache<>(portalCache, false);
+
+			_companyIdThreadLocal.set(_COMPANY_ID_1);
+
+			shardedTransactionalPortalCache.put(_KEY_1, _VALUE_1);
+
+			Map<PortalCache<?, ?>, ?> portalCacheMap = portalCacheMaps.get(0);
+
+			Object uncommittedBuffer = portalCacheMap.get(portalCache);
+
+			Class<?> clazz = uncommittedBuffer.getClass();
+
+			Class<?>[] interfaceClass = clazz.getInterfaces();
+
+			Map<Long, Object> shardedUncommittedBuffers =
+				ReflectionTestUtil.getFieldValue(
+					uncommittedBuffer, "_shardedUncommittedBuffers");
+
+			shardedUncommittedBuffers.put(
+				_COMPANY_ID_1,
+				ProxyUtil.newProxyInstance(
+					clazz.getClassLoader(), interfaceClass,
+					(proxy, method, args) -> {
+						throw exception;
+					}));
+
+			TransactionalPortalCacheUtil.commit(false);
+
+			Assert.fail("An exception should be thrown");
+		}
+		catch (UndeclaredThrowableException undeclaredThrowableException) {
+			Assert.assertSame(
+				exception, undeclaredThrowableException.getCause());
+		}
+		finally {
+			_companyIdThreadLocal.set(0L);
 		}
 
 		TransactionLifecycleListener transactionLifecycleListener =
