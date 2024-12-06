@@ -12,12 +12,16 @@ import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
 
 import java.io.Serializable;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.ehcache.Cache;
+import org.ehcache.expiry.ExpiryPolicy;
 
 /**
  * @author Tina Tian
@@ -91,14 +95,15 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 	protected void doPut(K key, V value, int timeToLive) {
 		Cache<Object, Object> cache = getEhcache();
 
-		cache.put(_wrapKey(key), _wrapValue(value));
+		cache.put(_wrapKey(key), _wrapValue(value, timeToLive));
 	}
 
 	@Override
 	protected V doPutIfAbsent(K key, V value, int timeToLive) {
 		Cache<Object, Object> cache = getEhcache();
 
-		return _getValue(cache.putIfAbsent(_wrapKey(key), _wrapValue(value)));
+		return _getValue(
+			cache.putIfAbsent(_wrapKey(key), _wrapValue(value, timeToLive)));
 	}
 
 	@Override
@@ -112,14 +117,16 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 	protected boolean doRemove(K key, V value) {
 		Cache<Object, Object> cache = getEhcache();
 
-		return cache.remove(_wrapKey(key), _wrapValue(value));
+		return cache.remove(
+			_wrapKey(key), _wrapValue(value, DEFAULT_TIME_TO_LIVE));
 	}
 
 	@Override
 	protected V doReplace(K key, V value, int timeToLive) {
 		Cache<Object, Object> cache = getEhcache();
 
-		return _getValue(cache.replace(_wrapKey(key), _wrapValue(value)));
+		return _getValue(
+			cache.replace(_wrapKey(key), _wrapValue(value, timeToLive)));
 	}
 
 	@Override
@@ -127,7 +134,8 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 		Cache<Object, Object> cache = getEhcache();
 
 		return cache.replace(
-			_wrapKey(key), _wrapValue(oldValue), _wrapValue(newValue));
+			_wrapKey(key), _wrapValue(oldValue, DEFAULT_TIME_TO_LIVE),
+			_wrapValue(newValue, timeToLive));
 	}
 
 	protected Map<PortalCacheListener<K, V>, PortalCacheListenerScope>
@@ -144,6 +152,10 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 			return null;
 		}
 
+		EhcacheValue ehcacheValue = (EhcacheValue)value;
+
+		value = ehcacheValue.getValue();
+
 		if (_serializable) {
 			return SerializableObjectWrapper.unwrap(value);
 		}
@@ -159,16 +171,19 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 		return new SerializableObjectWrapper(key);
 	}
 
-	private Object _wrapValue(V value) {
-		if (!_serializable) {
-			return value;
+	private Object _wrapValue(V value, int timeToLive) {
+		Duration duration = ExpiryPolicy.INFINITE;
+
+		if (timeToLive > 0) {
+			duration = Duration.of(timeToLive, ChronoUnit.SECONDS);
 		}
 
-		if (value instanceof Serializable) {
-			return new SerializableObjectWrapper((Serializable)value);
+		if (_serializable && (value instanceof Serializable)) {
+			return new EhcacheValue(
+				new SerializableObjectWrapper((Serializable)value), duration);
 		}
 
-		return value;
+		return new EhcacheValue(value, duration);
 	}
 
 	private final String _portalCacheName;
