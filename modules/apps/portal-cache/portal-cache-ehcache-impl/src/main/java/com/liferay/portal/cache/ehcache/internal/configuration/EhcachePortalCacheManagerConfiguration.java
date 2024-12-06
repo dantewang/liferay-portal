@@ -31,6 +31,10 @@ public class EhcachePortalCacheManagerConfiguration
 		_defaultCacheConfiguration = defaultCacheConfiguration;
 	}
 
+	public CacheConfiguration<Object, Object> getDefaultCacheConfiguration() {
+		return _defaultCacheConfiguration;
+	}
+
 	public FluentCacheConfigurationBuilder<Object, Object, ?> newBuilder() {
 		if (_defaultCacheConfiguration == null) {
 			return CacheConfigurationBuilder.newCacheConfigurationBuilder(
