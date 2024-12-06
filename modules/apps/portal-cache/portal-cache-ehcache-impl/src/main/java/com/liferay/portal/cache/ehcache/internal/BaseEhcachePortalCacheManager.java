@@ -198,7 +198,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			configurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
 					getConfigurationObjectValuePair(
-						_portalCacheManagerName, configurationURL);
+						configurationURL, classLoader);
 
 		_reconfigEhcache(configurationObjectValuePair.getKey());
 
@@ -321,8 +321,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
 			configurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
-					getConfigurationObjectValuePair(
-						_portalCacheManagerName, configFileURL);
+					getConfigurationObjectValuePair(configFileURL, classLoader);
 
 		_overrideConfigurationsByExtFile(configurationObjectValuePair);
 
@@ -446,8 +445,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
 			extConfigurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
-					getConfigurationObjectValuePair(
-						_portalCacheManagerName, extFileURL);
+					getConfigurationObjectValuePair(extFileURL, classLoader);
 
 		Configuration extConfiguration =
 			extConfigurationObjectValuePair.getKey();
