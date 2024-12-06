@@ -15,6 +15,7 @@ import com.liferay.portal.cache.PortalCacheReplicatorFactory;
 import com.liferay.portal.cache.TransactionalPortalCache;
 import com.liferay.portal.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.cache.configuration.PortalCacheManagerConfiguration;
+import com.liferay.portal.cache.ehcache.internal.configuration.EhcachePortalCacheManagerConfiguration;
 import com.liferay.portal.cache.ehcache.internal.configurator.EhcachePortalCacheManagerConfigurator;
 import com.liferay.portal.cache.ehcache.internal.event.ConfigurableEhcachePortalCacheListener;
 import com.liferay.portal.cache.ehcache.internal.event.EhcachePortalCacheReplicatorUtil;
@@ -42,19 +43,35 @@ import java.io.Serializable;
 
 import java.net.URL;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.AbstractExecutorService;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.management.MBeanServer;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.Configuration;
-import net.sf.ehcache.event.CacheManagerEventListenerRegistry;
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
+import org.ehcache.config.CacheConfiguration;
+import org.ehcache.config.Configuration;
+import org.ehcache.config.FluentCacheConfigurationBuilder;
+import org.ehcache.config.FluentConfigurationBuilder;
+import org.ehcache.core.EhcacheManager;
+import org.ehcache.core.internal.statistics.DefaultStatisticsService;
+import org.ehcache.core.spi.service.ExecutionService;
+import org.ehcache.core.spi.service.StatisticsService;
+import org.ehcache.core.spi.store.InternalCacheManager;
+import org.ehcache.impl.internal.executor.OnDemandExecutionService;
+import org.ehcache.spi.service.ServiceCreationConfiguration;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -73,11 +90,17 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 
 	@Override
 	public void clearAll() throws PortalCacheException {
-		for (String cacheName : _cacheManager.getCacheNames()) {
-			Cache cache = _cacheManager.getCache(cacheName);
+		Configuration configuration = _cacheManager.getRuntimeConfiguration();
+
+		Map<String, CacheConfiguration<?, ?>> cacheConfigurationsMap =
+			configuration.getCacheConfigurations();
+
+		for (String cacheName : cacheConfigurationsMap.keySet()) {
+			Cache<Object, Object> cache = _cacheManager.getCache(
+				cacheName, Object.class, Object.class);
 
 			if (cache != null) {
-				cache.removeAll();
+				cache.clear();
 			}
 		}
 	}
@@ -86,7 +109,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	public void destroy() {
 		_portalCaches.clear();
 
-		_cacheManager.shutdown();
+		_cacheManager.close();
 
 		if (_configuratorSettingsServiceTracker != null) {
 			_configuratorSettingsServiceTracker.close();
@@ -140,7 +163,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 				}
 
 				PortalCacheConfiguration portalCacheConfiguration =
-					_portalCacheManagerConfiguration.
+					_ehcachePortalCacheManagerConfiguration.
 						getPortalCacheConfiguration(portalCacheName);
 
 				EhcachePortalCacheConfiguration
@@ -190,11 +213,15 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		return _portalCacheManagerName;
 	}
 
+	public FluentCacheConfigurationBuilder<Object, Object, ?> newBuilder() {
+		return _ehcachePortalCacheManagerConfiguration.newBuilder();
+	}
+
 	@Override
 	public void reconfigurePortalCaches(
 		URL configurationURL, ClassLoader classLoader) {
 
-		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
+		ObjectValuePair<Configuration, EhcachePortalCacheManagerConfiguration>
 			configurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
 					getConfigurationObjectValuePair(
@@ -281,7 +308,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	}
 
 	protected void initialize() {
-		if (_portalCacheManagerConfiguration != null) {
+		if (_ehcachePortalCacheManagerConfiguration != null) {
 			return;
 		}
 
@@ -311,29 +338,44 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			configFileURL = classLoader.getResource(_configFile);
 		}
 
-		_usingDefault = _configFile.equals(_defaultConfigFile);
-
 		_ehcachePortalCacheManagerConfigurator =
 			new EhcachePortalCacheManagerConfigurator(
 				getReplicatorProperties(),
 				getDefaultReplicatorPropertiesString());
 
-		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
+		ObjectValuePair<Configuration, EhcachePortalCacheManagerConfiguration>
 			configurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
 					getConfigurationObjectValuePair(configFileURL, classLoader);
 
 		_overrideConfigurationsByExtFile(configurationObjectValuePair);
 
-		_cacheManager = new CacheManager(configurationObjectValuePair.getKey());
+		StatisticsService statisticsService = new DefaultStatisticsService();
 
-		_portalCacheManagerConfiguration =
+		ExecutionService executionService = new OnDemandExecutionService() {
+
+			@Override
+			public ExecutorService getOrderedExecutor(
+				String poolAlias, BlockingQueue<Runnable> queue) {
+
+				return _executorService;
+			}
+
+		};
+
+		_cacheManager = new EhcacheManager(
+			configurationObjectValuePair.getKey(),
+			Arrays.asList(statisticsService, executionService));
+
+		_cacheManager.init();
+
+		_ehcachePortalCacheManagerConfiguration =
 			configurationObjectValuePair.getValue();
 
-		CacheManagerEventListenerRegistry cacheManagerEventListenerRegistry =
-			_cacheManager.getCacheManagerEventListenerRegistry();
+		InternalCacheManager internalCacheManager =
+			(InternalCacheManager)_cacheManager;
 
-		cacheManagerEventListenerRegistry.registerListener(
+		internalCacheManager.registerListener(
 			new PortalCacheManagerEventListener(
 				_aggregatedPortalCacheManagerListener,
 				_portalCacheManagerName));
@@ -357,7 +399,8 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 						serviceReference);
 
 					ManagementService managementService = new ManagementService(
-						_cacheManager, mBeanServer);
+						_cacheManager, _portalCacheManagerName, mBeanServer,
+						statisticsService);
 
 					managementService.init();
 
@@ -422,7 +465,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	}
 
 	private void _overrideConfigurationsByExtFile(
-		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
+		ObjectValuePair<Configuration, EhcachePortalCacheManagerConfiguration>
 			configurationObjectValuePair) {
 
 		String extFile = StringUtil.replace(_configFile, ".xml", "-ext.xml");
@@ -442,62 +485,74 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			return;
 		}
 
-		ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
+		ObjectValuePair<Configuration, EhcachePortalCacheManagerConfiguration>
 			extConfigurationObjectValuePair =
 				_ehcachePortalCacheManagerConfigurator.
 					getConfigurationObjectValuePair(extFileURL, classLoader);
 
+		Configuration configuration = configurationObjectValuePair.getKey();
+
+		FluentConfigurationBuilder<?> fluentConfigurationBuilder =
+			configuration.derive();
+
 		Configuration extConfiguration =
 			extConfigurationObjectValuePair.getKey();
 
-		PortalCacheManagerConfiguration extPortalCacheManagerConfiguration =
-			extConfigurationObjectValuePair.getValue();
+		Collection<ServiceCreationConfiguration<?, ?>>
+			extServiceCreationConfigurations =
+				extConfiguration.getServiceCreationConfigurations();
 
-		CacheConfiguration extDefaultCacheConfiguration =
-			extConfiguration.getDefaultCacheConfiguration();
+		extServiceCreationConfigurations.forEach(
+			fluentConfigurationBuilder::withService);
 
-		Configuration configuration = configurationObjectValuePair.getKey();
+		EhcachePortalCacheManagerConfiguration
+			ehcachePortalCacheManagerConfiguration =
+				configurationObjectValuePair.getValue();
 
-		PortalCacheManagerConfiguration portalCacheManagerConfiguration =
-			configurationObjectValuePair.getValue();
+		EhcachePortalCacheManagerConfiguration
+			extEhcachePortalCacheManagerConfiguration =
+				extConfigurationObjectValuePair.getValue();
+
+		CacheConfiguration<Object, Object> extDefaultCacheConfiguration =
+			extEhcachePortalCacheManagerConfiguration.
+				getDefaultCacheConfiguration();
 
 		if (extDefaultCacheConfiguration != null) {
-			configuration.setDefaultCacheConfiguration(
+			ehcachePortalCacheManagerConfiguration.setDefaultCacheConfiguration(
 				extDefaultCacheConfiguration);
-
-			portalCacheManagerConfiguration.setDefaultPortalCacheConfiguration(
-				extPortalCacheManagerConfiguration.
-					getDefaultPortalCacheConfiguration());
 		}
 
-		Map<String, CacheConfiguration> cacheConfigurations =
-			configuration.getCacheConfigurations();
-
-		Map<String, CacheConfiguration> extCacheConfigurations =
+		Map<String, CacheConfiguration<?, ?>> extCacheConfigurationsMap =
 			extConfiguration.getCacheConfigurations();
 
-		for (Map.Entry<String, CacheConfiguration> entry :
-				extCacheConfigurations.entrySet()) {
+		extCacheConfigurationsMap.forEach(
+			(portalCacheName, cacheConfiguration) -> {
+				fluentConfigurationBuilder.withCache(
+					portalCacheName, cacheConfiguration);
+				ehcachePortalCacheManagerConfiguration.
+					putPortalCacheConfiguration(
+						portalCacheName,
+						extEhcachePortalCacheManagerConfiguration.
+							getPortalCacheConfiguration(portalCacheName));
+			});
 
-			cacheConfigurations.put(entry.getKey(), entry.getValue());
-			portalCacheManagerConfiguration.putPortalCacheConfiguration(
-				entry.getKey(),
-				extPortalCacheManagerConfiguration.getPortalCacheConfiguration(
-					entry.getKey()));
-		}
+		configurationObjectValuePair.setKey(fluentConfigurationBuilder.build());
 	}
 
 	private void _reconfigEhcache(Configuration configuration) {
-		Map<String, CacheConfiguration> cacheConfigurations =
+		Map<String, CacheConfiguration<?, ?>> cacheConfigurations =
 			configuration.getCacheConfigurations();
 
-		for (CacheConfiguration cacheConfiguration :
-				cacheConfigurations.values()) {
+		for (Map.Entry<String, CacheConfiguration<?, ?>> entry :
+				cacheConfigurations.entrySet()) {
 
-			String portalCacheName = cacheConfiguration.getName();
+			String portalCacheName = entry.getKey();
 
 			synchronized (_cacheManager) {
-				if (_cacheManager.cacheExists(portalCacheName)) {
+				Cache<Object, Object> cache = _cacheManager.getCache(
+					portalCacheName, Object.class, Object.class);
+
+				if (cache != null) {
 					if (_log.isInfoEnabled()) {
 						_log.info(
 							"Overriding existing cache " + portalCacheName);
@@ -524,7 +579,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 					_cacheManager.removeCache(portalCacheName);
 				}
 
-				_cacheManager.addCache(new Cache(cacheConfiguration));
+				_cacheManager.createCache(portalCacheName, entry.getValue());
 			}
 		}
 	}
@@ -539,7 +594,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 				portalCacheManagerConfiguration.getPortalCacheConfiguration(
 					portalCacheName);
 
-			_portalCacheManagerConfiguration.putPortalCacheConfiguration(
+			_ehcachePortalCacheManagerConfiguration.putPortalCacheConfiguration(
 				portalCacheName, portalCacheConfiguration);
 
 			PortalCache<K, V> portalCache = _portalCaches.get(portalCacheName);
@@ -645,6 +700,40 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	private static final Log _log = LogFactoryUtil.getLog(
 		BaseEhcachePortalCacheManager.class);
 
+	private static final ExecutorService _executorService =
+		new AbstractExecutorService() {
+
+			@Override
+			public boolean awaitTermination(long timeout, TimeUnit unit) {
+				return false;
+			}
+
+			@Override
+			public void execute(Runnable runnable) {
+				runnable.run();
+			}
+
+			@Override
+			public boolean isShutdown() {
+				return false;
+			}
+
+			@Override
+			public boolean isTerminated() {
+				return false;
+			}
+
+			@Override
+			public void shutdown() {
+			}
+
+			@Override
+			public List<Runnable> shutdownNow() {
+				return Collections.emptyList();
+			}
+
+		};
+
 	private final AggregatedPortalCacheManagerListener
 		_aggregatedPortalCacheManagerListener =
 			new AggregatedPortalCacheManagerListener();
@@ -652,16 +741,16 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	private String _configFile;
 	private ServiceTracker<?, ?> _configuratorSettingsServiceTracker;
 	private String _defaultConfigFile;
+	private EhcachePortalCacheManagerConfiguration
+		_ehcachePortalCacheManagerConfiguration;
 	private EhcachePortalCacheManagerConfigurator
 		_ehcachePortalCacheManagerConfigurator;
 	private ServiceTracker<MBeanServer, ManagementService>
 		_mBeanServerServiceTracker;
-	private PortalCacheManagerConfiguration _portalCacheManagerConfiguration;
 	private String _portalCacheManagerName;
 	private final ConcurrentMap<String, PortalCache<K, V>> _portalCaches =
 		new ConcurrentHashMap<>();
 	private boolean _transactionalPortalCacheEnabled;
 	private String[] _transactionalPortalCacheNames = StringPool.EMPTY_ARRAY;
-	private boolean _usingDefault;
 
 }
