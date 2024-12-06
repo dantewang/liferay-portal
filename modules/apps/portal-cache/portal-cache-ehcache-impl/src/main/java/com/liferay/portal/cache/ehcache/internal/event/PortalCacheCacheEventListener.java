@@ -9,6 +9,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.cache.AggregatedPortalCacheListener;
 import com.liferay.portal.cache.ehcache.internal.BaseEhcachePortalCache;
+import com.liferay.portal.cache.ehcache.internal.EhcacheValue;
 import com.liferay.portal.cache.io.SerializableObjectWrapper;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.PortalCacheListener;
@@ -17,6 +18,9 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.io.Serializable;
 
+import java.time.Duration;
+
+import org.ehcache.expiry.ExpiryPolicy;
 import org.ehcache.impl.events.CacheEventAdapter;
 
 /**
@@ -77,7 +81,8 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 		}
 
 		_aggregatedPortalCacheListener.notifyEntryPut(
-			_portalCache, _getKey(key), _getValue(value), 0);
+			_portalCache, _getKey(key), _getValue(value),
+			_getTimeToLive(value));
 	}
 
 	@Override
@@ -94,7 +99,8 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 		}
 
 		_aggregatedPortalCacheListener.notifyEntryEvicted(
-			_portalCache, _getKey(key), _getValue(value), 0);
+			_portalCache, _getKey(key), _getValue(value),
+			_getTimeToLive(value));
 	}
 
 	@Override
@@ -111,7 +117,8 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 		}
 
 		_aggregatedPortalCacheListener.notifyEntryExpired(
-			_portalCache, _getKey(key), _getValue(value), 0);
+			_portalCache, _getKey(key), _getValue(value),
+			_getTimeToLive(value));
 	}
 
 	@Override
@@ -128,7 +135,8 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 		}
 
 		_aggregatedPortalCacheListener.notifyEntryRemoved(
-			_portalCache, _getKey(key), _getValue(value), 0);
+			_portalCache, _getKey(key), _getValue(value),
+			_getTimeToLive(value));
 	}
 
 	@Override
@@ -145,7 +153,8 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 		}
 
 		_aggregatedPortalCacheListener.notifyEntryUpdated(
-			_portalCache, _getKey(key), _getValue(newValue), 0);
+			_portalCache, _getKey(key), _getValue(newValue),
+			_getTimeToLive(newValue));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -157,8 +166,24 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 		return (K)key;
 	}
 
+	private int _getTimeToLive(Object value) {
+		EhcacheValue ehcacheValue = (EhcacheValue)value;
+
+		Duration duration = ehcacheValue.getTimeToLive();
+
+		if (duration.equals(ExpiryPolicy.INFINITE)) {
+			return 0;
+		}
+
+		return (int)duration.getSeconds();
+	}
+
 	@SuppressWarnings("unchecked")
 	private V _getValue(Object value) {
+		EhcacheValue ehcacheValue = (EhcacheValue)value;
+
+		value = ehcacheValue.getValue();
+
 		if (_requireSerialization) {
 			return SerializableObjectWrapper.unwrap(value);
 		}
