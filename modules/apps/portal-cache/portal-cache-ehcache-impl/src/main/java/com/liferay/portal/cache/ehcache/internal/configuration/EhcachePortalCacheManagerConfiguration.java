@@ -7,6 +7,7 @@ package com.liferay.portal.cache.ehcache.internal.configuration;
 
 import com.liferay.portal.cache.configuration.PortalCacheConfiguration;
 import com.liferay.portal.cache.configuration.PortalCacheManagerConfiguration;
+import com.liferay.portal.cache.ehcache.internal.EhcacheExpiryPolicy;
 
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.FluentCacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.expiry.ExpiryPolicy;
 
 /**
  * @author Tina Tian
@@ -37,11 +39,23 @@ public class EhcachePortalCacheManagerConfiguration
 
 	public FluentCacheConfigurationBuilder<Object, Object, ?> newBuilder() {
 		if (_defaultCacheConfiguration == null) {
-			return CacheConfigurationBuilder.newCacheConfigurationBuilder(
-				Object.class, Object.class, ResourcePoolsBuilder.heap(100000));
+			CacheConfigurationBuilder<Object, Object>
+				cacheConfigurationBuilder =
+					CacheConfigurationBuilder.newCacheConfigurationBuilder(
+						Object.class, Object.class,
+						ResourcePoolsBuilder.heap(100000));
+
+			return cacheConfigurationBuilder.withExpiry(
+				new EhcacheExpiryPolicy(ExpiryPolicy.NO_EXPIRY));
 		}
 
-		return _defaultCacheConfiguration.derive();
+		FluentCacheConfigurationBuilder<Object, Object, ?>
+			fluentCacheConfigurationBuilder =
+				_defaultCacheConfiguration.derive();
+
+		return fluentCacheConfigurationBuilder.withExpiry(
+			new EhcacheExpiryPolicy(
+				_defaultCacheConfiguration.getExpiryPolicy()));
 	}
 
 	public void setDefaultCacheConfiguration(
