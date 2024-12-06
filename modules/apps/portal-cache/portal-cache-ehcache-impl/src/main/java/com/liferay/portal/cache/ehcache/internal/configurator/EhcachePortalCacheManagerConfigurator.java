@@ -46,9 +46,10 @@ public class EhcachePortalCacheManagerConfigurator {
 		_defaultReplicatorPropertiesString = defaultReplicatorPropertiesString;
 	}
 
-	public ObjectValuePair<Configuration, PortalCacheManagerConfiguration>
-		getConfigurationObjectValuePair(
-			URL configurationURL, ClassLoader classLoader) {
+	public ObjectValuePair
+		<Configuration, EhcachePortalCacheManagerConfiguration>
+			getConfigurationObjectValuePair(
+				URL configurationURL, ClassLoader classLoader) {
 
 		if (configurationURL == null) {
 			throw new NullPointerException("Configuration path is null");
@@ -57,13 +58,14 @@ public class EhcachePortalCacheManagerConfigurator {
 		XmlConfiguration xmlConfiguration = new XmlConfiguration(
 			configurationURL, classLoader);
 
-		PortalCacheManagerConfiguration portalCacheManagerConfiguration =
-			_parseConfiguration(xmlConfiguration);
+		EhcachePortalCacheManagerConfiguration
+			ehcachePortalCacheManagerConfiguration = _parseConfiguration(
+				xmlConfiguration);
 
-		_populateCacheReplicator(portalCacheManagerConfiguration);
+		_populateCacheReplicator(ehcachePortalCacheManagerConfiguration);
 
 		return new ObjectValuePair<>(
-			xmlConfiguration, portalCacheManagerConfiguration);
+			xmlConfiguration, ehcachePortalCacheManagerConfiguration);
 	}
 
 	protected Properties parseProperties(
@@ -106,7 +108,7 @@ public class EhcachePortalCacheManagerConfigurator {
 		return false;
 	}
 
-	private PortalCacheManagerConfiguration _parseConfiguration(
+	private EhcachePortalCacheManagerConfiguration _parseConfiguration(
 		XmlConfiguration xmlConfiguration) {
 
 		PortalCacheConfiguration defaultPortalCacheConfiguration;
