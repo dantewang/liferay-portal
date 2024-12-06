@@ -285,7 +285,7 @@ public class PortalCacheExtenderTest {
 	}
 
 	private void _assertCacheConfig(
-			String cacheManagerName, int maxElementsInMemory, String name,
+			String cacheManagerName, int maxHeapEntries, String name,
 			long timeToIdleSeconds)
 		throws Exception {
 
@@ -293,16 +293,16 @@ public class PortalCacheExtenderTest {
 
 		ObjectName objectName = new ObjectName(
 			StringBundler.concat(
-				"net.sf.ehcache:type=CacheConfiguration,CacheManager=",
-				cacheManagerName, ",name=", name));
+				"org.ehcache:type=Cache,CacheManager=", cacheManagerName,
+				",name=", name));
 
 		Assert.assertEquals(
-			maxElementsInMemory,
-			mBeanServer.getAttribute(objectName, "MaxElementsInMemory"));
+			maxHeapEntries + " entries",
+			mBeanServer.getAttribute(objectName, "HeapSize"));
 		Assert.assertEquals(name, mBeanServer.getAttribute(objectName, "Name"));
 		Assert.assertEquals(
 			timeToIdleSeconds,
-			mBeanServer.getAttribute(objectName, "TimeToIdleSeconds"));
+			mBeanServer.getAttribute(objectName, "TimeToIdle"));
 	}
 
 	private void _assertRequireSerialization(
