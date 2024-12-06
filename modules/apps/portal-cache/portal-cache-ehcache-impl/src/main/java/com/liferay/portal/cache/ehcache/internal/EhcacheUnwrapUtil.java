@@ -10,18 +10,20 @@ import com.liferay.portal.kernel.cache.PortalCache;
 
 import java.io.Serializable;
 
-import net.sf.ehcache.Ehcache;
+import org.ehcache.Cache;
 
 /**
  * @author Shuyang Zhou
  */
 public class EhcacheUnwrapUtil {
 
-	public static Ehcache getEhcache(PortalCache<?, ?> portalCache) {
+	public static Cache<Object, Object> getEhcache(
+		PortalCache<?, ?> portalCache) {
+
 		PortalCache<?, ?> wrappedPortalCache = getWrappedPortalCache(
 			portalCache);
 
-		if (wrappedPortalCache instanceof EhcacheWrapper) {
+		if (wrappedPortalCache != null) {
 			EhcacheWrapper ehcacheWrapper = (EhcacheWrapper)wrappedPortalCache;
 
 			return ehcacheWrapper.getEhcache();
