@@ -66,6 +66,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -466,11 +467,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		if (checkResourceActions) {
-			for (String modelResourceName : modelResourceNames) {
-				_checkResourceActions(
-					getModelResourceActions(modelResourceName),
-					modelResourceName);
-			}
+			_checkResourceActions(
+				this::getModelResourceActions, modelResourceNames);
 		}
 	}
 
@@ -494,10 +492,8 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		_readModelResources(document.getRootElement(), modelResourceNames);
 
-		for (String modelResourceName : modelResourceNames) {
-			_checkResourceActions(
-				getModelResourceActions(modelResourceName), modelResourceName);
-		}
+		_checkResourceActions(
+			this::getModelResourceActions, modelResourceNames);
 	}
 
 	@Override
@@ -511,12 +507,10 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		_readPortletResource(document.getRootElement(), portlet);
 
-		String portletResourceName = PortletIdCodec.decodePortletName(
-			portlet.getPortletId());
-
 		_checkResourceActions(
-			_getPortletResourceActions(portletResourceName, portlet),
-			portletResourceName);
+			name -> _getPortletResourceActions(name, portlet),
+			Collections.singleton(
+				PortletIdCodec.decodePortletName(portlet.getPortletId())));
 	}
 
 	@Override
@@ -538,12 +532,10 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 		}
 
-		String portletResourceName = PortletIdCodec.decodePortletName(
-			portlet.getPortletId());
-
 		_checkResourceActions(
-			_getPortletResourceActions(portletResourceName, portlet),
-			portletResourceName);
+			name -> _getPortletResourceActions(name, portlet),
+			Collections.singleton(
+				PortletIdCodec.decodePortletName(portlet.getPortletId())));
 	}
 
 	@Override
@@ -576,11 +568,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		if (checkResourceActions) {
-			for (String portletResourceName : portletResourceNames) {
-				_checkResourceActions(
-					getPortletResourceActions(portletResourceName),
-					portletResourceName);
-			}
+			_checkResourceActions(
+				this::getPortletResourceActions, portletResourceNames);
 		}
 	}
 
@@ -764,14 +753,19 @@ public class ResourceActionsImpl implements ResourceActions {
 		actions.add(ActionKeys.VIEW);
 	}
 
-	private void _checkResourceActions(List<String> actionIds, String name) {
-		try {
-			DBPartitionUtil.forEachCompanyId(
-				companyId -> resourceActionLocalService.checkResourceActions(
-					name, actionIds));
-		}
-		catch (Exception exception) {
-			throw new RuntimeException(exception);
+	private void _checkResourceActions(
+		Function<String, List<String>> actionIdsFunction, Set<String> names) {
+
+		for (String name : names) {
+			try {
+				DBPartitionUtil.forEachCompanyId(
+					companyId ->
+						resourceActionLocalService.checkResourceActions(
+							name, actionIdsFunction.apply(name)));
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
 		}
 	}
 
