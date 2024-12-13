@@ -66,7 +66,6 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -467,7 +466,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		if (checkResourceActions) {
-			_checkResourceActions(
+			resourceActionLocalService.checkResourceActions(
 				this::getModelResourceActions, modelResourceNames);
 		}
 	}
@@ -492,7 +491,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		_readModelResources(document.getRootElement(), modelResourceNames);
 
-		_checkResourceActions(
+		resourceActionLocalService.checkResourceActions(
 			this::getModelResourceActions, modelResourceNames);
 	}
 
@@ -507,7 +506,7 @@ public class ResourceActionsImpl implements ResourceActions {
 
 		_readPortletResource(document.getRootElement(), portlet);
 
-		_checkResourceActions(
+		resourceActionLocalService.checkResourceActions(
 			name -> _getPortletResourceActions(name, portlet),
 			Collections.singleton(
 				PortletIdCodec.decodePortletName(portlet.getPortletId())));
@@ -532,7 +531,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			}
 		}
 
-		_checkResourceActions(
+		resourceActionLocalService.checkResourceActions(
 			name -> _getPortletResourceActions(name, portlet),
 			Collections.singleton(
 				PortletIdCodec.decodePortletName(portlet.getPortletId())));
@@ -568,7 +567,7 @@ public class ResourceActionsImpl implements ResourceActions {
 		}
 
 		if (checkResourceActions) {
-			_checkResourceActions(
+			resourceActionLocalService.checkResourceActions(
 				this::getPortletResourceActions, portletResourceNames);
 		}
 	}
@@ -751,22 +750,6 @@ public class ResourceActionsImpl implements ResourceActions {
 		actions.add(ActionKeys.PERMISSIONS);
 		actions.add(ActionKeys.PREFERENCES);
 		actions.add(ActionKeys.VIEW);
-	}
-
-	private void _checkResourceActions(
-		Function<String, List<String>> actionIdsFunction, Set<String> names) {
-
-		for (String name : names) {
-			try {
-				DBPartitionUtil.forEachCompanyId(
-					companyId ->
-						resourceActionLocalService.checkResourceActions(
-							name, actionIdsFunction.apply(name)));
-			}
-			catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
-		}
 	}
 
 	private String _getCompositeModelName(Element compositeModelNameElement) {

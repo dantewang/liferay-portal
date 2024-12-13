@@ -7,6 +7,7 @@ package com.liferay.portal.service.impl;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.db.partition.util.DBPartitionUtil;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Property;
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * @author Brian Wing Shun Chan
@@ -84,6 +86,22 @@ public class ResourceActionLocalServiceImpl
 				resourceAction.getName(), resourceAction.getActionId());
 
 			_resourceActions.put(key, resourceAction);
+		}
+	}
+
+	@Override
+	public void checkResourceActions(
+		Function<String, List<String>> actionIdsFunction, Set<String> names) {
+
+		for (String name : names) {
+			try {
+				DBPartitionUtil.forEachCompanyId(
+					companyId -> checkResourceActions(
+						name, actionIdsFunction.apply(name)));
+			}
+			catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
 		}
 	}
 
