@@ -25,6 +25,8 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import java.io.Serializable;
 
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -75,6 +77,9 @@ public interface ResourceActionLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public void checkResourceActions();
+
+	public void checkResourceActions(
+		Function<String, List<String>> actionIdsFunction, Set<String> names);
 
 	public void checkResourceActions(String name, List<String> actionIds);
 

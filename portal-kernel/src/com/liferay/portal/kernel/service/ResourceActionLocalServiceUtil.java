@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import java.io.Serializable;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Provides the local service utility for ResourceAction. This utility wraps
@@ -60,6 +61,13 @@ public class ResourceActionLocalServiceUtil {
 
 	public static void checkResourceActions() {
 		getService().checkResourceActions();
+	}
+
+	public static void checkResourceActions(
+		java.util.function.Function<String, List<String>> actionIdsFunction,
+		Set<String> names) {
+
+		getService().checkResourceActions(actionIdsFunction, names);
 	}
 
 	public static void checkResourceActions(

@@ -60,6 +60,16 @@ public class ResourceActionLocalServiceWrapper
 
 	@Override
 	public void checkResourceActions(
+		java.util.function.Function<String, java.util.List<String>>
+			actionIdsFunction,
+		java.util.Set<String> names) {
+
+		_resourceActionLocalService.checkResourceActions(
+			actionIdsFunction, names);
+	}
+
+	@Override
+	public void checkResourceActions(
 		String name, java.util.List<String> actionIds) {
 
 		_resourceActionLocalService.checkResourceActions(name, actionIds);
