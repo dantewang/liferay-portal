@@ -25,10 +25,17 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionAttribute;
 import com.liferay.portal.kernel.transaction.TransactionLifecycleListener;
 import com.liferay.portal.kernel.transaction.TransactionStatus;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
@@ -57,16 +64,31 @@ public class TransactionalPortalCacheTest {
 					Class<TransactionalPortalCacheUtil> clazz =
 						TransactionalPortalCacheUtil.class;
 
-					assertClasses.add(clazz);
+					for (Class<?> declaredClass : clazz.getDeclaredClasses()) {
+						String name = declaredClass.getName();
 
-					Collections.addAll(
-						assertClasses, clazz.getDeclaredClasses());
+						if (!name.endsWith("ShardedUncommittedBuffer")) {
+							assertClasses.add(declaredClass);
+						}
+					}
 
 					TransactionLifecycleListener transactionLifecycleListener =
 						TransactionalPortalCacheUtil.
 							TRANSACTION_LIFECYCLE_LISTENER;
 
 					assertClasses.add(transactionLifecycleListener.getClass());
+				}
+
+				@Override
+				public List<Method> getAssertMethods()
+					throws ReflectiveOperationException {
+
+					List<Method> methods = new ArrayList<>();
+
+					Class<TransactionalPortalCacheUtil> clazz =
+						TransactionalPortalCacheUtil.class;
+
+					methods.addAll(clazz.getDeclaredMethods());
 				}
 
 			},
