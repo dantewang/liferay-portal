@@ -30,7 +30,6 @@ import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -52,61 +51,7 @@ public class TransactionalPortalCacheTest {
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
 		new AggregateTestRule(
-			new CodeCoverageAssertor() {
-
-				@Override
-				public void appendAssertClasses(List<Class<?>> assertClasses) {
-					assertClasses.add(TransactionalPortalCache.class);
-
-					for (Class<?> declaredClass :
-							TransactionalPortalCacheUtil.class.
-								getDeclaredClasses()) {
-
-						String name = declaredClass.getName();
-
-						if (!name.endsWith("ShardedUncommittedBuffer")) {
-							assertClasses.add(declaredClass);
-						}
-					}
-
-					TransactionLifecycleListener transactionLifecycleListener =
-						TransactionalPortalCacheUtil.
-							TRANSACTION_LIFECYCLE_LISTENER;
-
-					assertClasses.add(transactionLifecycleListener.getClass());
-				}
-
-				@Override
-				public List<Method> getAssertMethods()
-					throws ReflectiveOperationException {
-
-					List<Method> assertMethods = new ArrayList<>(
-						Arrays.asList(
-							TransactionalPortalCacheUtil.class.
-								getDeclaredMethods()));
-
-					for (Class<?> declaredClass :
-							TransactionalPortalCacheUtil.class.
-								getDeclaredClasses()) {
-
-						String name = declaredClass.getName();
-
-						if (name.endsWith("ShardedUncommittedBuffer")) {
-							Collections.addAll(
-								assertMethods,
-								declaredClass.getDeclaredMethods());
-
-							assertMethods.remove(
-								declaredClass.getDeclaredMethod(
-									"commit", boolean.class));
-						}
-					}
-
-					return assertMethods;
-				}
-
-			},
-			LiferayUnitTestRule.INSTANCE);
+			new CustomCodeCoverageAssertor(), LiferayUnitTestRule.INSTANCE);
 
 	@Before
 	public void setUp() {
@@ -1574,6 +1519,60 @@ public class TransactionalPortalCacheTest {
 	private PortalCache<String, String> _portalCache;
 	private TestPortalCacheListener<String, String> _testCacheListener;
 	private TestPortalCacheReplicator<String, String> _testCacheReplicator;
+
+	private static class CustomCodeCoverageAssertor
+		extends CodeCoverageAssertor {
+
+		public CustomCodeCoverageAssertor() {
+			super(null, null, false);
+		}
+
+		@Override
+		public void appendAssertClasses(List<Class<?>> assertClasses) {
+			assertClasses.clear();
+
+			assertClasses.add(TransactionalPortalCache.class);
+			assertClasses.add(TransactionalPortalCacheUtil.class);
+			assertClasses.add(
+				TransactionalPortalCacheUtil.TRANSACTION_LIFECYCLE_LISTENER.
+					getClass());
+
+			for (Class<?> declaredClass :
+					TransactionalPortalCacheUtil.class.getDeclaredClasses()) {
+
+				String name = declaredClass.getName();
+
+				if (!name.endsWith("ShardedUncommittedBuffer")) {
+					assertClasses.add(declaredClass);
+				}
+			}
+		}
+
+		@Override
+		public List<Method> getAssertMethods()
+			throws ReflectiveOperationException {
+
+			List<Method> assertMethods = new ArrayList<>();
+
+			for (Class<?> declaredClass :
+					TransactionalPortalCacheUtil.class.getDeclaredClasses()) {
+
+				String name = declaredClass.getName();
+
+				if (name.endsWith("ShardedUncommittedBuffer")) {
+					Collections.addAll(
+						assertMethods, declaredClass.getDeclaredMethods());
+
+					assertMethods.remove(
+						declaredClass.getDeclaredMethod(
+							"commit", boolean.class));
+				}
+			}
+
+			return assertMethods;
+		}
+
+	}
 
 	private static class TestCallable implements Callable<Void> {
 
