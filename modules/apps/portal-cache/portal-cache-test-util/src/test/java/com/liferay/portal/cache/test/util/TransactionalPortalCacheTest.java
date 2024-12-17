@@ -27,6 +27,10 @@ import com.liferay.portal.kernel.transaction.TransactionLifecycleListener;
 import com.liferay.portal.kernel.transaction.TransactionStatus;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
+import java.lang.reflect.Method;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -54,19 +58,51 @@ public class TransactionalPortalCacheTest {
 				public void appendAssertClasses(List<Class<?>> assertClasses) {
 					assertClasses.add(TransactionalPortalCache.class);
 
-					Class<TransactionalPortalCacheUtil> clazz =
-						TransactionalPortalCacheUtil.class;
+					for (Class<?> declaredClass :
+							TransactionalPortalCacheUtil.class.
+								getDeclaredClasses()) {
 
-					assertClasses.add(clazz);
+						String name = declaredClass.getName();
 
-					Collections.addAll(
-						assertClasses, clazz.getDeclaredClasses());
+						if (!name.endsWith("ShardedUncommittedBuffer")) {
+							assertClasses.add(declaredClass);
+						}
+					}
 
 					TransactionLifecycleListener transactionLifecycleListener =
 						TransactionalPortalCacheUtil.
 							TRANSACTION_LIFECYCLE_LISTENER;
 
 					assertClasses.add(transactionLifecycleListener.getClass());
+				}
+
+				@Override
+				public List<Method> getAssertMethods()
+					throws ReflectiveOperationException {
+
+					List<Method> assertMethods = new ArrayList<>(
+						Arrays.asList(
+							TransactionalPortalCacheUtil.class.
+								getDeclaredMethods()));
+
+					for (Class<?> declaredClass :
+							TransactionalPortalCacheUtil.class.
+								getDeclaredClasses()) {
+
+						String name = declaredClass.getName();
+
+						if (name.endsWith("ShardedUncommittedBuffer")) {
+							Collections.addAll(
+								assertMethods,
+								declaredClass.getDeclaredMethods());
+
+							assertMethods.remove(
+								declaredClass.getDeclaredMethod(
+									"commit", boolean.class));
+						}
+					}
+
+					return assertMethods;
 				}
 
 			},
