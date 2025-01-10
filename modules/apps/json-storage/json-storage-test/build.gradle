@@ -3,7 +3,7 @@ dependencies {
 	testIntegrationImplementation group: "com.liferay", name: "org.springframework.tx", version: "5.3.39.LIFERAY-PATCHED-1"
 	testIntegrationImplementation group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
 	testIntegrationImplementation group: "org.osgi", name: "osgi.core", version: "6.0.0"
-	testIntegrationImplementation group: "org.skyscreamer", name: "jsonassert", version: "1.2.3"
+	testIntegrationImplementation group: "org.skyscreamer", name: "jsonassert", version: "1.5.3"
 	testIntegrationImplementation project(":apps:json-storage:json-storage-api")
 	testIntegrationImplementation project(":test:arquillian-extension-junit-bridge")
 }
