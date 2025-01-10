@@ -69,7 +69,7 @@ dependencies {
 	compileOnly project(":core:petra:petra-string")
 
 	testImplementation group: "org.json", name: "json", version: "20231013"
-	testImplementation group: "org.skyscreamer", name: "jsonassert", version: "1.2.3"
+	testImplementation group: "org.skyscreamer", name: "jsonassert", version: "2.0-rc1"
 	testImplementation project(":apps:dynamic-data-mapping:dynamic-data-mapping-test-util")
 	testImplementation project(":apps:list-type:list-type-api")
 }
