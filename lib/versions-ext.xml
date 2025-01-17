@@ -773,7 +773,7 @@
 			</library>
 			<library>
 				<file-name>lib/development/reflections.jar</file-name>
-				<version>0.9.12</version>
+				<version>0.10.2</version>
 				<project-name>reflections</project-name>
 				<project-url>https://github.com/ronmamo/reflections</project-url>
 				<licenses>
