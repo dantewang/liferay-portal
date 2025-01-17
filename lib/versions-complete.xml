@@ -4280,7 +4280,7 @@
 			</library>
 			<library>
 				<file-name>com.liferay.portal.vulcan.impl.jar!reflections.jar</file-name>
-				<version>0.9.11</version>
+				<version>0.10.2</version>
 				<project-name>Reflections</project-name>
 				<project-url>http://github.com/ronmamo/reflections</project-url>
 				<licenses>
@@ -6360,7 +6360,7 @@
 			</library>
 			<library>
 				<file-name>lib/development/reflections.jar</file-name>
-				<version>0.9.12</version>
+				<version>0.10.2</version>
 				<project-name>reflections</project-name>
 				<project-url>https://github.com/ronmamo/reflections</project-url>
 				<licenses>
