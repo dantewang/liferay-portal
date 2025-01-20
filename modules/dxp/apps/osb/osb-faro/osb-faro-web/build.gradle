@@ -8,7 +8,7 @@ dependencies {
 	compileInclude group: "com.fasterxml.jackson.jaxrs", name: "jackson-jaxrs-base", version: "2.11.4"
 	compileInclude group: "com.fasterxml.jackson.jaxrs", name: "jackson-jaxrs-json-provider", version: "2.11.4"
 	compileInclude group: "com.github.albfernandez", name: "juniversalchardet", version: "2.4.0"
-	compileInclude group: "com.github.scribejava", name: "scribejava-core", version: "6.6.3"
+	compileInclude group: "com.github.scribejava", name: "scribejava-core", version: "8.3.3"
 	compileInclude group: "com.univocity", name: "univocity-parsers", version: "2.9.1"
 	compileInclude group: "commons-codec", name: "commons-codec", version: "1.15"
 	compileInclude group: "fi.solita.clamav", name: "clamav-client", version: "1.0.1"
