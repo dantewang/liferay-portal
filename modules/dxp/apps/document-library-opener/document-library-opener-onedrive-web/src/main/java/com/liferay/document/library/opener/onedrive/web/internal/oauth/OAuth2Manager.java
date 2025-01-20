@@ -110,17 +110,18 @@ public class OAuth2Manager {
 		DLOneDriveCompanyConfiguration dlOneDriveCompanyConfiguration =
 			_getDLOneDriveCompanyConfiguration(companyId);
 
-		ServiceBuilderOAuth20 serviceBuilderOAuth20 = new ServiceBuilder(
-			dlOneDriveCompanyConfiguration.clientId()
-		).apiSecret(
-			dlOneDriveCompanyConfiguration.clientSecret()
-		).callback(
-			redirectURL
-		).withScope(
-			"https://graph.microsoft.com/.default"
-		).apiKey(
-			dlOneDriveCompanyConfiguration.clientId()
-		);
+		ServiceBuilderOAuth20 serviceBuilderOAuth20 =
+			(ServiceBuilderOAuth20)new ServiceBuilder(
+				dlOneDriveCompanyConfiguration.clientId()
+			).apiSecret(
+				dlOneDriveCompanyConfiguration.clientSecret()
+			).callback(
+				redirectURL
+			).withScope(
+				"https://graph.microsoft.com/.default"
+			).apiKey(
+				dlOneDriveCompanyConfiguration.clientId()
+			);
 
 		try (OAuth20Service oAuth20Service = serviceBuilderOAuth20.build(
 				MicrosoftAzureActiveDirectory20Api.custom(

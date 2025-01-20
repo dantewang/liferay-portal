@@ -24,30 +24,31 @@ public class OAuth10aUtil {
 			String requestURL)
 		throws Exception {
 
-		ServiceBuilder serviceBuilder = new ServiceBuilder();
+		ServiceBuilder serviceBuilder = new ServiceBuilder(apiKey);
 
 		serviceBuilder.apiKey(apiKey);
 		serviceBuilder.apiSecret(apiSecret);
 
-		OAuth10aService oAuthService = serviceBuilder.build(
-			new OAuth10aAPIImpl(
-				accessTokenEndpoint, authorizationURL, requestTokenEndpoint));
+		try (OAuth10aService oAuthService = serviceBuilder.build(
+				new OAuth10aAPIImpl(
+					accessTokenEndpoint, authorizationURL,
+					requestTokenEndpoint))) {
 
-		OAuth1AccessToken oAuth1AccessToken = new OAuth1AccessToken(
-			accessTokenString, accessTokenSecret);
+			OAuth1AccessToken oAuth1AccessToken = new OAuth1AccessToken(
+				accessTokenString, accessTokenSecret);
 
-		OAuthRequest oAuthRequest = new OAuthRequest(
-			Verb.GET, requestURL, oAuthService);
+			OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, requestURL);
 
-		oAuthService.signRequest(oAuth1AccessToken, oAuthRequest);
+			oAuthService.signRequest(oAuth1AccessToken, oAuthRequest);
 
-		Response response = oAuthRequest.send();
+			Response response = oAuthService.execute(oAuthRequest);
 
-		if (!response.isSuccessful()) {
-			throw new Exception("Response is not successful");
+			if (!response.isSuccessful()) {
+				throw new Exception("Response is not successful");
+			}
+
+			return response.getBody();
 		}
-
-		return response.getBody();
 	}
 
 	public static byte[] tokenToByteArray(String token) {
