@@ -3,8 +3,6 @@ buildService {
 }
 
 dependencies {
-	compileInclude group: "com.github.stephenc.jcip", name: "jcip-annotations", version: "1.0-1"
-
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
 	compileOnly group: "com.nimbusds", name: "content-type", version: "2.3"
 	compileOnly group: "com.nimbusds", name: "lang-tag", version: "1.7"

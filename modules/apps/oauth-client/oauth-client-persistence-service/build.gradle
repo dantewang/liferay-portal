@@ -4,7 +4,6 @@ buildService {
 }
 
 dependencies {
-	compileInclude group: "com.github.stephenc.jcip", name: "jcip-annotations", version: "1.0-1"
 	compileInclude group: "com.sun.mail", name: "jakarta.mail", version: "1.6.6"
 	compileInclude group: "org.apache.commons", name: "commons-lang3", version: "3.4"
 
