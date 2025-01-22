@@ -198,7 +198,7 @@ public class Log4jLogContextLogWrapper extends LogWrapper {
 			return ServiceTrackerListFactory.open(
 				SystemBundleUtil.getBundleContext(), LogContext.class);
 		}
-		catch (IllegalStateException illegalStateException) {
+		catch (Exception exception) {
 			return null;
 		}
 	}
