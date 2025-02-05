@@ -24,7 +24,7 @@ dependencies {
 	compileInclude group: "com.nimbusds", name: "oauth2-oidc-sdk", version: "11.13"
 	compileInclude group: "io.projectreactor", name: "reactor-core", version: "3.4.38"
 	compileInclude group: "io.projectreactor.netty", name: "reactor-netty-http", version: "1.0.45"
-	compileInclude group: "net.java.dev.jna", name: "jna", version: "5.13.0"
+	compileInclude group: "net.java.dev.jna", name: "jna", version: "5.16.0"
 	compileInclude group: "net.java.dev.jna", name: "jna-platform", version: "5.13.0"
 	compileInclude group: "net.jcip", name: "jcip-annotations", version: "1.0"
 	compileInclude group: "net.minidev", name: "accessors-smart", version: "2.4.9"
