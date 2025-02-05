@@ -155,7 +155,7 @@ public class PortletTCKBridge {
 	@Reference
 	private LayoutLocalService _layoutLocalService;
 
-	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED, unbind = "-")
+	@Reference(target = ModuleServiceLifecycle.LICENSE_INSTALL, unbind = "-")
 	private ModuleServiceLifecycle _moduleServiceLifecycle;
 
 	@Reference
