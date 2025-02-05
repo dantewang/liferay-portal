@@ -63,9 +63,20 @@
 			<arg value="${project.dir}/tools/tck/pluto-patch.diff" />
 		</exec>
 
-		<execute dir="${tck.home}/..">
-			mvn -P all,liferay clean install
-		</execute>
+		<local name="java.jdk.home" />
+		<local name="java.jdk.opts" />
+
+		<get-java-jdk-home architecture="x64" type="oracle" version="8" />
+		<get-java-jdk-opts architecture="x64" type="oracle" version="8" />
+
+		<exec dir="${tck.home}/.." executable="mvn" failonerror="true">
+			<env key="JAVA_HOME" value="${java.jdk.home}"/>
+			<env key="JAVA_OPTS" value="${java.jdk.opts}" />
+			<arg value="-P"/>
+			<arg value="all,liferay"/>
+			<arg value="clean"/>
+			<arg value="install"/>
+		</exec>
 
 		<copy
 			flatten="true"
