@@ -7,7 +7,7 @@ dependencies {
 	compileInclude group: "org.bouncycastle", name: "bcpkix-jdk18on", version: "1.78"
 	compileInclude group: "org.bouncycastle", name: "bcprov-jdk18on", version: "1.78"
 	compileInclude group: "org.bouncycastle", name: "bcutil-jdk18on", version: "1.78"
-	compileInclude group: "org.codehaus.woodstox", name: "stax2-api", version: "3.1.4"
+	compileInclude group: "org.codehaus.woodstox", name: "stax2-api", version: "4.2.2"
 	compileInclude group: "org.cryptacular", name: "cryptacular", version: "1.2.4"
 	compileInclude group: "xml-resolver", name: "xml-resolver", version: "1.2"
 	compileOnly group: "com.fasterxml.woodstox", name: "woodstox-core", version: "6.4.0"
