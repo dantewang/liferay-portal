@@ -9,7 +9,6 @@ dependencies {
 	compileInclude group: "org.apache.solr", name: "solr-solrj", version: luceneVersion
 	compileInclude group: "org.apache.zookeeper", name: "zookeeper", version: "3.9.3"
 	compileInclude group: "org.apache.zookeeper", name: "zookeeper-jute", version: "3.9.3"
-	compileInclude group: "org.codehaus.woodstox", name: "stax2-api", version: "4.2.2"
 	compileInclude group: "org.codehaus.woodstox", name: "woodstox-core-asl", version: "4.4.1"
 	compileInclude group: "org.noggit", name: "noggit", version: "0.8"
 	compileOnly group: "com.liferay", name: "biz.aQute.bnd.annotation", version: "4.2.0.LIFERAY-PATCHED-2"
@@ -22,6 +21,7 @@ dependencies {
 	compileOnly group: "org.apache.httpcomponents", name: "httpmime", version: "4.5.13"
 	compileOnly group: "org.apache.lucene", name: "lucene-misc", version: luceneVersion
 	compileOnly group: "org.apache.lucene", name: "lucene-sandbox", version: luceneVersion
+	compileOnly group: "org.codehaus.woodstox", name: "stax2-api", version: "4.2.2"
 	compileOnly group: "org.osgi", name: "org.osgi.service.component", version: "1.4.0"
 	compileOnly group: "org.osgi", name: "org.osgi.service.component.annotations", version: "1.4.0"
 	compileOnly group: "org.osgi", name: "osgi.core", version: "6.0.0"
