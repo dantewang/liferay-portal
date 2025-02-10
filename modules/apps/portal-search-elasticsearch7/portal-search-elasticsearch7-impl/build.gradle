@@ -111,15 +111,6 @@ deploy {
 	finalizedBy deploySidecar
 }
 
-deployDependencies {
-	from configurations.compileOnly
-
-	include "stax2-api-*.jar"
-
-	rename(/stax2-api-(.+)\.jar/, "org.codehaus.stax2" + renameSuffix)
-
-}
-
 deploySidecar {
 	dependsOn cleanSidecar
 

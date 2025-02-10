@@ -1,0 +1,3 @@
+dependencies {
+	compileInclude group: "org.codehaus.woodstox", name: "stax2-api", version: "4.2.2"
+}
