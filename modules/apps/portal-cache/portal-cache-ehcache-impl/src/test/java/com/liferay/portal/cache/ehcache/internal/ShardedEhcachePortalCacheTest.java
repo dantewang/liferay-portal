@@ -14,6 +14,8 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
+import java.time.Duration;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,6 +35,7 @@ import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.config.units.EntryUnit;
+import org.ehcache.expiry.ExpiryPolicy;
 import org.ehcache.impl.internal.executor.OnDemandExecutionService;
 
 import org.junit.After;
@@ -292,9 +295,7 @@ public class ShardedEhcachePortalCacheTest {
 
 		_shardedEhcachePortalCache.put(_TEST_KEY_1, _TEST_VALUE_2, 1000);
 
-		//_assertTimeToLive(
-
-		// _TEST_COMPANY_ID_2, _TEST_KEY_1, _TEST_VALUE_2, 1000);
+		_assertTimeToLive(_TEST_COMPANY_ID_2, _TEST_KEY_1, _TEST_VALUE_2, 1000);
 
 		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
 
@@ -331,14 +332,12 @@ public class ShardedEhcachePortalCacheTest {
 		_shardedEhcachePortalCache.putIfAbsent(
 			_TEST_KEY_1, _TEST_VALUE_2, 1000);
 
-		//_assertTimeToLive(
-
-		// _TEST_COMPANY_ID_2, _TEST_KEY_1, _TEST_VALUE_2, 1000);
+		_assertTimeToLive(_TEST_COMPANY_ID_2, _TEST_KEY_1, _TEST_VALUE_2, 1000);
 
 		_shardedEhcachePortalCache.putIfAbsent(
 			_TEST_KEY_2, _TEST_VALUE_1, 1000);
 
-		//_assertTimeToLive(_TEST_COMPANY_ID_2, _TEST_KEY_2, _TEST_VALUE_2, 0);
+		_assertTimeToLive(_TEST_COMPANY_ID_2, _TEST_KEY_2, _TEST_VALUE_2, 0);
 	}
 
 	@Test
@@ -509,16 +508,12 @@ public class ShardedEhcachePortalCacheTest {
 
 		_shardedEhcachePortalCache.replace(_TEST_KEY_1, _TEST_VALUE_2, 1000);
 
-		//_assertTimeToLive(
-
-		// _TEST_COMPANY_ID_1, _TEST_KEY_1, _TEST_VALUE_2, 1000);
+		_assertTimeToLive(_TEST_COMPANY_ID_1, _TEST_KEY_1, _TEST_VALUE_2, 1000);
 
 		_shardedEhcachePortalCache.replace(
 			_TEST_KEY_1, _TEST_VALUE_2, _TEST_VALUE_1, 1000);
 
-		//_assertTimeToLive(
-
-		// _TEST_COMPANY_ID_1, _TEST_KEY_1, _TEST_VALUE_1, 1000);
+		_assertTimeToLive(_TEST_COMPANY_ID_1, _TEST_KEY_1, _TEST_VALUE_1, 1000);
 
 		_companyIdThreadLocal.set(_TEST_COMPANY_ID_2);
 
@@ -642,13 +637,26 @@ public class ShardedEhcachePortalCacheTest {
 			_shardedEhcachePortalCache.getEhcache());
 	}
 
-	private List<String> _getCacheNames() {
-		Configuration configuration = _cacheManager.getRuntimeConfiguration();
+	private void _assertTimeToLive(
+		long companyId, String key, String value, int timeToLive) {
 
-		Map<String, CacheConfiguration<?, ?>> cacheConfigurationsMap =
-			configuration.getCacheConfigurations();
+		Cache<Object, Object> cache = _cacheManager.getCache(
+			_getShardedCacheName(_TEST_CACHE_NAME, companyId), Object.class,
+			Object.class);
 
-		return new ArrayList<>(cacheConfigurationsMap.keySet());
+		EhcacheValue ehcacheValue = (EhcacheValue)cache.get(key);
+
+		Assert.assertEquals(value, ehcacheValue.getValue());
+
+		long actualTimeToLive = 0;
+
+		Duration duration = ehcacheValue.getTimeToLive();
+
+		if (!duration.equals(ExpiryPolicy.INFINITE)) {
+			actualTimeToLive = duration.toSeconds();
+		}
+
+		Assert.assertEquals(timeToLive, actualTimeToLive);
 	}
 
 	/*
@@ -693,21 +701,16 @@ public class ShardedEhcachePortalCacheTest {
 						registeredPortalCacheListener));
 			}
 		}
+	}*/
+
+	private List<String> _getCacheNames() {
+		Configuration configuration = _cacheManager.getRuntimeConfiguration();
+
+		Map<String, CacheConfiguration<?, ?>> cacheConfigurationsMap =
+			configuration.getCacheConfigurations();
+
+		return new ArrayList<>(cacheConfigurationsMap.keySet());
 	}
-
-	private void _assertTimeToLive(
-		long companyId, String key, String value, int timeToLive) {
-
-		Cache cache = _cacheManager.getCache(
-			_getShardedCacheName(_TEST_CACHE_NAME, companyId));
-
-		Object cacheValue = cache.get(key);
-
-		Assert.assertEquals(key, element.getObjectKey());
-		Assert.assertEquals(value, element.getObjectValue());
-		Assert.assertEquals(timeToLive, element.getTimeToLive());
-	}
-	*/
 
 	private String _getShardedCacheName(String cacheName, long companyId) {
 		return StringBundler.concat(
