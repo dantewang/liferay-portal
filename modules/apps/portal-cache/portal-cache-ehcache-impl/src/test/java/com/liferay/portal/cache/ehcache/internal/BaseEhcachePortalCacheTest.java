@@ -17,6 +17,8 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
+import java.io.Serializable;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -107,10 +109,15 @@ public class BaseEhcachePortalCacheTest {
 
 		ReflectionTestUtil.setFieldValue(
 			baseEhcachePortalCacheManager, "_cacheManager", _cacheManager);
+		ReflectionTestUtil.setFieldValue(
+			baseEhcachePortalCacheManager, "_keyType", Object.class);
+		ReflectionTestUtil.setFieldValue(
+			baseEhcachePortalCacheManager, "_valueType", Object.class);
 
 		EhcachePortalCacheManagerConfiguration
 			ehcachePortalCacheManagerConfiguration =
 				new EhcachePortalCacheManagerConfiguration(
+					Object.class, Object.class,
 					_cacheConfigurationBuilder.build(), null,
 					Collections.emptySet());
 
@@ -302,7 +309,7 @@ public class BaseEhcachePortalCacheTest {
 
 	@Test
 	public void testGetEhcacheConcurrently() throws Exception {
-		Cache<Object, Object> cache = _ehcachePortalCache.getEhcache();
+		Cache<?, ?> cache = _ehcachePortalCache.getEhcache();
 
 		_ehcachePortalCache.resetEhcache();
 		_cacheManager.removeCache(_PORTAL_CACHE_NAME);
@@ -324,9 +331,9 @@ public class BaseEhcachePortalCacheTest {
 
 		controllerThread.start();
 
-		FutureTask<Cache<Object, Object>> futureTask1 = new FutureTask<>(
+		FutureTask<Cache<?, ?>> futureTask1 = new FutureTask<>(
 			_ehcachePortalCache::getEhcache);
-		FutureTask<Cache<Object, Object>> futureTask2 = new FutureTask<>(
+		FutureTask<Cache<?, ?>> futureTask2 = new FutureTask<>(
 			_ehcachePortalCache::getEhcache);
 
 		Thread thread1 = new Thread(
@@ -658,11 +665,22 @@ public class BaseEhcachePortalCacheTest {
 
 		ReflectionTestUtil.setFieldValue(
 			baseEhcachePortalCacheManager, "_cacheManager", _cacheManager);
+		ReflectionTestUtil.setFieldValue(
+			baseEhcachePortalCacheManager, "_keyType", Serializable.class);
+		ReflectionTestUtil.setFieldValue(
+			baseEhcachePortalCacheManager, "_valueType", Object.class);
+
+		CacheConfigurationBuilder<Serializable, Object>
+			cacheConfigurationBuilder =
+				CacheConfigurationBuilder.newCacheConfigurationBuilder(
+					Serializable.class, Object.class,
+					ResourcePoolsBuilder.heap(100));
 
 		EhcachePortalCacheManagerConfiguration
 			ehcachePortalCacheManagerConfiguration =
 				new EhcachePortalCacheManagerConfiguration(
-					_cacheConfigurationBuilder.build(), null,
+					Serializable.class, Object.class,
+					cacheConfigurationBuilder.build(), null,
 					Collections.emptySet());
 
 		ReflectionTestUtil.setFieldValue(
@@ -712,7 +730,8 @@ public class BaseEhcachePortalCacheTest {
 
 		int timeToLive = 600;
 
-		Cache<Object, Object> cache = _ehcachePortalCache.getEhcache();
+		Cache<Object, Object> cache =
+			(Cache<Object, Object>)_ehcachePortalCache.getEhcache();
 
 		// Put
 

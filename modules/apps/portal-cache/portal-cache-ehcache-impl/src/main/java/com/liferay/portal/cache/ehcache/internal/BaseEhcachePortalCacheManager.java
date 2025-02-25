@@ -96,8 +96,8 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			configuration.getCacheConfigurations();
 
 		for (String cacheName : cacheConfigurationsMap.keySet()) {
-			Cache<Object, Object> cache = _cacheManager.getCache(
-				cacheName, Object.class, Object.class);
+			Cache<?, ?> cache = _cacheManager.getCache(
+				cacheName, _keyType, _valueType);
 
 			if (cache != null) {
 				cache.clear();
@@ -129,6 +129,10 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 
 	public CacheManager getEhcacheManager() {
 		return _cacheManager;
+	}
+
+	public Class<?> getKeyType() {
+		return _keyType;
 	}
 
 	@Override
@@ -213,7 +217,11 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		return _portalCacheManagerName;
 	}
 
-	public FluentCacheConfigurationBuilder<Object, Object, ?> newBuilder() {
+	public Class<?> getValueType() {
+		return _valueType;
+	}
+
+	public FluentCacheConfigurationBuilder<?, ?, ?> newBuilder() {
 		return _ehcachePortalCacheManagerConfiguration.newBuilder();
 	}
 
@@ -307,7 +315,10 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		return null;
 	}
 
-	protected void initialize() {
+	protected void initialize(Class<?> keyType, Class<?> valueType) {
+		_keyType = keyType;
+		_valueType = valueType;
+
 		if (_ehcachePortalCacheManagerConfiguration != null) {
 			return;
 		}
@@ -340,7 +351,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 
 		_ehcachePortalCacheManagerConfigurator =
 			new EhcachePortalCacheManagerConfigurator(
-				getReplicatorProperties(),
+				keyType, valueType, getReplicatorProperties(),
 				getDefaultReplicatorPropertiesString());
 
 		ObjectValuePair<Configuration, EhcachePortalCacheManagerConfiguration>
@@ -513,7 +524,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			extEhcachePortalCacheManagerConfiguration =
 				extConfigurationObjectValuePair.getValue();
 
-		CacheConfiguration<Object, Object> extDefaultCacheConfiguration =
+		CacheConfiguration<?, ?> extDefaultCacheConfiguration =
 			extEhcachePortalCacheManagerConfiguration.
 				getDefaultCacheConfiguration();
 
@@ -549,8 +560,8 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			String portalCacheName = entry.getKey();
 
 			synchronized (_cacheManager) {
-				Cache<Object, Object> cache = _cacheManager.getCache(
-					portalCacheName, Object.class, Object.class);
+				Cache<?, ?> cache = _cacheManager.getCache(
+					portalCacheName, _keyType, _valueType);
 
 				if (cache != null) {
 					if (_log.isInfoEnabled()) {
@@ -745,6 +756,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		_ehcachePortalCacheManagerConfiguration;
 	private EhcachePortalCacheManagerConfigurator
 		_ehcachePortalCacheManagerConfigurator;
+	private Class<?> _keyType;
 	private ServiceTracker<MBeanServer, ManagementService>
 		_mBeanServerServiceTracker;
 	private String _portalCacheManagerName;
@@ -752,5 +764,6 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		new ConcurrentHashMap<>();
 	private boolean _transactionalPortalCacheEnabled;
 	private String[] _transactionalPortalCacheNames = StringPool.EMPTY_ARRAY;
+	private Class<?> _valueType;
 
 }
