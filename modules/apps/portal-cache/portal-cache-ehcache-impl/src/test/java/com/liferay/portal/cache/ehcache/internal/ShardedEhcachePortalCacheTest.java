@@ -6,12 +6,17 @@
 package com.liferay.portal.cache.ehcache.internal;
 
 import com.liferay.petra.string.StringBundler;
+import com.liferay.portal.cache.AggregatedPortalCacheListener;
 import com.liferay.portal.cache.ehcache.internal.configuration.EhcachePortalCacheManagerConfiguration;
+import com.liferay.portal.kernel.cache.PortalCacheListener;
+import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
+import com.liferay.portal.kernel.util.ProxyFactory;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.time.Duration;
@@ -19,6 +24,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -35,8 +41,17 @@ import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.config.units.EntryUnit;
+import org.ehcache.core.CacheConfigurationChangeEvent;
+import org.ehcache.core.CacheConfigurationChangeListener;
+import org.ehcache.core.CacheConfigurationProperty;
+import org.ehcache.core.events.CacheEventDispatcher;
+import org.ehcache.core.events.EventListenerWrapper;
+import org.ehcache.core.spi.store.Store;
+import org.ehcache.event.CacheEventListener;
 import org.ehcache.expiry.ExpiryPolicy;
+import org.ehcache.impl.internal.events.CacheEventDispatcherFactoryImpl;
 import org.ehcache.impl.internal.executor.OnDemandExecutionService;
+import org.ehcache.spi.service.ServiceConfiguration;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -77,6 +92,27 @@ public class ShardedEhcachePortalCacheTest {
 					throws IllegalArgumentException {
 
 					return executorService;
+				}
+
+			}
+		).using(
+			new CacheEventDispatcherFactoryImpl() {
+
+				@Override
+				public <K, V> CacheEventDispatcher<K, V>
+					createCacheEventDispatcher(
+						Store<K, V> store,
+						ServiceConfiguration<?, ?>... serviceConfigs) {
+
+					CacheEventDispatcher<K, V> cacheEventDispatcher =
+						super.createCacheEventDispatcher(store, serviceConfigs);
+
+					return ProxyUtil.newDelegateProxyInstance(
+						ShardedEhcachePortalCacheTest.class.getClassLoader(),
+						CacheEventDispatcher.class,
+						new TestCacheEventDispatcherDelegate(
+							cacheEventDispatcher),
+						cacheEventDispatcher);
 				}
 
 			}
@@ -341,47 +377,6 @@ public class ShardedEhcachePortalCacheTest {
 	}
 
 	@Test
-	public void testRemove() {
-		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
-
-		Assert.assertSame(
-			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_1));
-
-		_shardedEhcachePortalCache.remove(_TEST_KEY_1);
-
-		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_1));
-
-		_shardedEhcachePortalCache.put(_TEST_KEY_2, _TEST_VALUE_1);
-
-		Assert.assertSame(
-			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
-
-		_companyIdThreadLocal.set(_TEST_COMPANY_ID_2);
-
-		Assert.assertSame(
-			_TEST_VALUE_2, _shardedEhcachePortalCache.get(_TEST_KEY_2));
-
-		_shardedEhcachePortalCache.remove(_TEST_KEY_2);
-
-		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_2));
-
-		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
-
-		Assert.assertSame(
-			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
-
-		_shardedEhcachePortalCache.remove(_TEST_KEY_2, _TEST_VALUE_2);
-
-		Assert.assertSame(
-			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
-
-		_shardedEhcachePortalCache.remove(_TEST_KEY_2, _TEST_VALUE_1);
-
-		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_2));
-	}
-
-	/*
-	@Test
 	public void testRegisterPortalCacheListener() {
 		_assertPortalCacheListener(
 			_getShardedCacheName(_TEST_CACHE_NAME, _TEST_COMPANY_ID_1), null);
@@ -426,7 +421,46 @@ public class ShardedEhcachePortalCacheTest {
 			_getShardedCacheName(_TEST_CACHE_NAME, 3000L), portalCacheListener1,
 			portalCacheListener2);
 	}
-	*/
+
+	@Test
+	public void testRemove() {
+		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
+
+		Assert.assertSame(
+			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_1));
+
+		_shardedEhcachePortalCache.remove(_TEST_KEY_1);
+
+		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_1));
+
+		_shardedEhcachePortalCache.put(_TEST_KEY_2, _TEST_VALUE_1);
+
+		Assert.assertSame(
+			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
+
+		_companyIdThreadLocal.set(_TEST_COMPANY_ID_2);
+
+		Assert.assertSame(
+			_TEST_VALUE_2, _shardedEhcachePortalCache.get(_TEST_KEY_2));
+
+		_shardedEhcachePortalCache.remove(_TEST_KEY_2);
+
+		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_2));
+
+		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
+
+		Assert.assertSame(
+			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
+
+		_shardedEhcachePortalCache.remove(_TEST_KEY_2, _TEST_VALUE_2);
+
+		Assert.assertSame(
+			_TEST_VALUE_1, _shardedEhcachePortalCache.get(_TEST_KEY_2));
+
+		_shardedEhcachePortalCache.remove(_TEST_KEY_2, _TEST_VALUE_1);
+
+		Assert.assertNull(_shardedEhcachePortalCache.get(_TEST_KEY_2));
+	}
 
 	@Test
 	public void testRemoveAll() {
@@ -521,25 +555,6 @@ public class ShardedEhcachePortalCacheTest {
 			_TEST_VALUE_2, _shardedEhcachePortalCache.get(_TEST_KEY_1));
 	}
 
-	private void _assertCacheConfiguration(
-		String cacheName, int maxEntriesLocalHeap) {
-
-		Cache<Object, Object> cache = _cacheManager.getCache(
-			cacheName, Object.class, Object.class);
-
-		CacheConfiguration<Object, Object> cacheConfiguration =
-			cache.getRuntimeConfiguration();
-
-		ResourcePools resourcePools = cacheConfiguration.getResourcePools();
-
-		SizedResourcePool sizedResourcePool = resourcePools.getPoolForResource(
-			ResourceType.Core.HEAP);
-
-		Assert.assertEquals(EntryUnit.ENTRIES, sizedResourcePool.getUnit());
-		Assert.assertEquals(maxEntriesLocalHeap, sizedResourcePool.getSize());
-	}
-
-	/*
 	@Test
 	public void testUnregisterPortalCacheListener() {
 		_assertPortalCacheListener(
@@ -622,7 +637,24 @@ public class ShardedEhcachePortalCacheTest {
 		_assertPortalCacheListener(
 			_getShardedCacheName(_TEST_CACHE_NAME, _TEST_COMPANY_ID_2), null);
 	}
-	*/
+
+	private void _assertCacheConfiguration(
+		String cacheName, int maxEntriesLocalHeap) {
+
+		Cache<Object, Object> cache = _cacheManager.getCache(
+			cacheName, Object.class, Object.class);
+
+		CacheConfiguration<Object, Object> cacheConfiguration =
+			cache.getRuntimeConfiguration();
+
+		ResourcePools resourcePools = cacheConfiguration.getResourcePools();
+
+		SizedResourcePool sizedResourcePool = resourcePools.getPoolForResource(
+			ResourceType.Core.HEAP);
+
+		Assert.assertEquals(EntryUnit.ENTRIES, sizedResourcePool.getUnit());
+		Assert.assertEquals(maxEntriesLocalHeap, sizedResourcePool.getSize());
+	}
 
 	private void _assertEhcacheName(long companyId) {
 		_companyIdThreadLocal.set(companyId);
@@ -637,47 +669,44 @@ public class ShardedEhcachePortalCacheTest {
 			_shardedEhcachePortalCache.getEhcache());
 	}
 
-	private void _assertTimeToLive(
-		long companyId, String key, String value, int timeToLive) {
-
-		Cache<Object, Object> cache = _cacheManager.getCache(
-			_getShardedCacheName(_TEST_CACHE_NAME, companyId), Object.class,
-			Object.class);
-
-		EhcacheValue ehcacheValue = (EhcacheValue)cache.get(key);
-
-		Assert.assertEquals(value, ehcacheValue.getValue());
-
-		long actualTimeToLive = 0;
-
-		Duration duration = ehcacheValue.getTimeToLive();
-
-		if (!duration.equals(ExpiryPolicy.INFINITE)) {
-			actualTimeToLive = duration.toSeconds();
-		}
-
-		Assert.assertEquals(timeToLive, actualTimeToLive);
-	}
-
-	/*
 	private void _assertPortalCacheListener(
 		String cacheName,
 		PortalCacheListener<?, ?>... registeredPortalCacheListeners) {
 
-		Ehcache<Object, Object> ehcache =
-			(Ehcache<Object, Object>)_cacheManager.getCache(
-				cacheName, Object.class, Object.class);
+		Cache<Object, Object> cache = _cacheManager.getCache(
+			cacheName, Object.class, Object.class);
 
-		RegisteredEventListeners registeredEventListeners =
-			cache.getCacheEventNotificationService();
+		List<CacheConfigurationChangeListener>
+			cacheConfigurationChangeListeners =
+				ReflectionTestUtil.getFieldValue(
+					cache.getRuntimeConfiguration(),
+					"cacheConfigurationListenerList");
 
-		Set<CacheEventListener> cacheEventListeners =
-			registeredEventListeners.getCacheEventListeners();
+		TestCacheConfigurationChangeListener
+			testCacheConfigurationChangeListener = null;
+
+		for (CacheConfigurationChangeListener cacheConfigurationChangeListener :
+				cacheConfigurationChangeListeners) {
+
+			if (cacheConfigurationChangeListener instanceof
+					TestCacheConfigurationChangeListener) {
+
+				testCacheConfigurationChangeListener =
+					(TestCacheConfigurationChangeListener)
+						cacheConfigurationChangeListener;
+			}
+		}
+
+		Assert.assertNotNull(testCacheConfigurationChangeListener);
+
+		List<CacheEventListener<?, ?>> cacheEventListeners =
+			testCacheConfigurationChangeListener.getCacheEventListeners();
 
 		Assert.assertEquals(
 			cacheEventListeners.toString(), 1, cacheEventListeners.size());
 
-		Iterator<CacheEventListener> iterator = cacheEventListeners.iterator();
+		Iterator<CacheEventListener<?, ?>> iterator =
+			cacheEventListeners.iterator();
 
 		AggregatedPortalCacheListener<?, ?> aggregatedPortalCacheListener =
 			ReflectionTestUtil.getFieldValue(
@@ -701,7 +730,29 @@ public class ShardedEhcachePortalCacheTest {
 						registeredPortalCacheListener));
 			}
 		}
-	}*/
+	}
+
+	private void _assertTimeToLive(
+		long companyId, String key, String value, int timeToLive) {
+
+		Cache<Object, Object> cache = _cacheManager.getCache(
+			_getShardedCacheName(_TEST_CACHE_NAME, companyId), Object.class,
+			Object.class);
+
+		EhcacheValue ehcacheValue = (EhcacheValue)cache.get(key);
+
+		Assert.assertEquals(value, ehcacheValue.getValue());
+
+		long actualTimeToLive = 0;
+
+		Duration duration = ehcacheValue.getTimeToLive();
+
+		if (!duration.equals(ExpiryPolicy.INFINITE)) {
+			actualTimeToLive = duration.toSeconds();
+		}
+
+		Assert.assertEquals(timeToLive, actualTimeToLive);
+	}
 
 	private List<String> _getCacheNames() {
 		Configuration configuration = _cacheManager.getRuntimeConfiguration();
@@ -752,5 +803,66 @@ public class ShardedEhcachePortalCacheTest {
 		_companyThreadLocalMockedStatic = Mockito.mockStatic(
 			CompanyThreadLocal.class);
 	private ShardedEhcachePortalCache _shardedEhcachePortalCache;
+
+	private static class TestCacheConfigurationChangeListener
+		implements CacheConfigurationChangeListener {
+
+		@Override
+		public void cacheConfigurationChange(
+			CacheConfigurationChangeEvent cacheConfigurationChangeEvent) {
+
+			if (cacheConfigurationChangeEvent.getProperty() ==
+					CacheConfigurationProperty.ADD_LISTENER) {
+
+				EventListenerWrapper<?, ?> eventListenerWrapper =
+					(EventListenerWrapper<?, ?>)
+						cacheConfigurationChangeEvent.getNewValue();
+
+				_cacheEventListeners.add(eventListenerWrapper.getListener());
+			}
+			else if (cacheConfigurationChangeEvent.getProperty() ==
+						CacheConfigurationProperty.REMOVE_LISTENER) {
+
+				EventListenerWrapper<?, ?> eventListenerWrapper =
+					(EventListenerWrapper<?, ?>)
+						cacheConfigurationChangeEvent.getNewValue();
+
+				_cacheEventListeners.remove(eventListenerWrapper.getListener());
+			}
+		}
+
+		public List<CacheEventListener<?, ?>> getCacheEventListeners() {
+			return _cacheEventListeners;
+		}
+
+		private final List<CacheEventListener<?, ?>> _cacheEventListeners =
+			new ArrayList<>();
+
+	}
+
+	private static class TestCacheEventDispatcherDelegate {
+
+		public TestCacheEventDispatcherDelegate(
+			CacheEventDispatcher<?, ?> cacheEventDispatcher) {
+
+			_cacheEventDispatcher = cacheEventDispatcher;
+		}
+
+		public List<CacheConfigurationChangeListener>
+			getConfigurationChangeListeners() {
+
+			List<CacheConfigurationChangeListener>
+				cacheConfigurationChangeListeners =
+					_cacheEventDispatcher.getConfigurationChangeListeners();
+
+			cacheConfigurationChangeListeners.add(
+				new TestCacheConfigurationChangeListener());
+
+			return cacheConfigurationChangeListeners;
+		}
+
+		private final CacheEventDispatcher<?, ?> _cacheEventDispatcher;
+
+	}
 
 }
