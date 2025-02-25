@@ -12,6 +12,6 @@ import org.ehcache.Cache;
  */
 public interface EhcacheWrapper {
 
-	public Cache<Object, Object> getEhcache();
+	public Cache<?, ?> getEhcache();
 
 }

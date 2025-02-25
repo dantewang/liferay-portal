@@ -172,7 +172,8 @@ public class ShardedEhcachePortalCacheTest {
 		_shardedEhcachePortalCache = new ShardedEhcachePortalCache(
 			_baseEhcachePortalCacheManager,
 			new EhcachePortalCacheConfiguration(
-				_TEST_CACHE_NAME, Collections.emptySet(), false));
+				_TEST_CACHE_NAME, Collections.emptySet(), Object.class,
+				Object.class, false));
 
 		_companyIdThreadLocal.set(CompanyConstants.SYSTEM);
 
@@ -208,7 +209,8 @@ public class ShardedEhcachePortalCacheTest {
 			new ShardedEhcachePortalCache(
 				_baseEhcachePortalCacheManager,
 				new EhcachePortalCacheConfiguration(
-					"test.default.cache", Collections.emptySet(), false));
+					"test.default.cache", Collections.emptySet(), Object.class,
+					Object.class, false));
 
 		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
 
