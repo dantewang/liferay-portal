@@ -136,10 +136,15 @@ public class ShardedEhcachePortalCacheTest {
 
 		ReflectionTestUtil.setFieldValue(
 			_baseEhcachePortalCacheManager, "_cacheManager", _cacheManager);
+		ReflectionTestUtil.setFieldValue(
+			_baseEhcachePortalCacheManager, "_keyType", Object.class);
+		ReflectionTestUtil.setFieldValue(
+			_baseEhcachePortalCacheManager, "_valueType", Object.class);
 
 		EhcachePortalCacheManagerConfiguration
 			ehcachePortalCacheManagerConfiguration =
 				new EhcachePortalCacheManagerConfiguration(
+					Object.class, Object.class,
 					CacheConfigurationBuilder.newCacheConfigurationBuilder(
 						Object.class, Object.class,
 						ResourcePoolsBuilder.heap(

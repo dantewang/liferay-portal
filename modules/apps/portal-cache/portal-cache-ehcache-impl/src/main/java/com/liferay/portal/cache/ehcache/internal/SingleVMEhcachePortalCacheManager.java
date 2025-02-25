@@ -36,7 +36,7 @@ public class SingleVMEhcachePortalCacheManager<K extends Serializable, V>
 		setDefaultConfigFile(_DEFAULT_CONFIG_FILE_NAME);
 		setPortalCacheManagerName(PortalCacheManagerNames.SINGLE_VM);
 
-		initialize();
+		initialize(Serializable.class, Object.class);
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Activated " + PortalCacheManagerNames.SINGLE_VM);

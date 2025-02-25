@@ -51,7 +51,7 @@ public class MultiVMEhcachePortalCacheManager
 		setDefaultConfigFile(_DEFAULT_CONFIG_FILE_NAME);
 		setPortalCacheManagerName(PortalCacheManagerNames.MULTI_VM);
 
-		initialize();
+		initialize(Serializable.class, Serializable.class);
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Activated " + PortalCacheManagerNames.MULTI_VM);
