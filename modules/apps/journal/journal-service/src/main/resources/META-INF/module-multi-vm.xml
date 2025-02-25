@@ -6,6 +6,8 @@
 	<cache
 		alias="com.liferay.journal.util.JournalContent"
 	>
+		<key-type>java.io.Serializable</key-type>
+		<value-type>java.io.Serializable</value-type>
 		<expiry>
 			<tti>600</tti>
 		</expiry>

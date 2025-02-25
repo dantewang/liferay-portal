@@ -6,6 +6,8 @@
 	<cache
 		alias="com.liferay.ip.geocoder.internal.IPGeocoderImpl"
 	>
+		<key-type>java.io.Serializable</key-type>
+		<value-type>java.lang.Object</value-type>
 		<expiry>
 			<tti>3600</tti>
 		</expiry>
