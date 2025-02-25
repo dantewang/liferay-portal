@@ -40,6 +40,9 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 		super(baseEhcachePortalCacheManager);
 
+		keyType = ehcachePortalCacheConfiguration.getKeyType();
+		valueType = ehcachePortalCacheConfiguration.getValueType();
+
 		_portalCacheName = ehcachePortalCacheConfiguration.getPortalCacheName();
 		_serializable =
 			ehcachePortalCacheConfiguration.isRequireSerialization();
@@ -51,7 +54,7 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<K> getKeys() {
-		Cache<Object, Object> cache = getEhcache();
+		Cache<?, ?> cache = getEhcache();
 
 		List<K> rawKeys = new ArrayList<>();
 
@@ -85,7 +88,7 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	public void removeAll() {
-		Cache<Object, Object> cache = getEhcache();
+		Cache<?, ?> cache = getEhcache();
 
 		cache.clear();
 
@@ -100,21 +103,21 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected V doGet(K key) {
-		Cache<Object, Object> cache = getEhcache();
+		Cache<Object, Object> cache = (Cache<Object, Object>)getEhcache();
 
 		return _getValue(cache.get(_wrapKey(key)));
 	}
 
 	@Override
 	protected void doPut(K key, V value, int timeToLive) {
-		Cache<Object, Object> cache = getEhcache();
+		Cache<Object, Object> cache = (Cache<Object, Object>)getEhcache();
 
 		cache.put(_wrapKey(key), _wrapValue(value, timeToLive));
 	}
 
 	@Override
 	protected V doPutIfAbsent(K key, V value, int timeToLive) {
-		Cache<Object, Object> cache = getEhcache();
+		Cache<Object, Object> cache = (Cache<Object, Object>)getEhcache();
 
 		return _getValue(
 			cache.putIfAbsent(_wrapKey(key), _wrapValue(value, timeToLive)));
@@ -122,7 +125,7 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected void doRemove(K key) {
-		Cache<Object, Object> cache = getEhcache();
+		Cache<Object, Object> cache = (Cache<Object, Object>)getEhcache();
 
 		Object wrappedKey = _wrapKey(key);
 
@@ -142,7 +145,7 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected boolean doRemove(K key, V value) {
-		Cache<Object, Object> cache = getEhcache();
+		Cache<Object, Object> cache = (Cache<Object, Object>)getEhcache();
 
 		boolean removed = cache.remove(
 			_wrapKey(key), _wrapValue(value, DEFAULT_TIME_TO_LIVE));
@@ -161,7 +164,7 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected V doReplace(K key, V value, int timeToLive) {
-		Cache<Object, Object> cache = getEhcache();
+		Cache<Object, Object> cache = (Cache<Object, Object>)getEhcache();
 
 		return _getValue(
 			cache.replace(_wrapKey(key), _wrapValue(value, timeToLive)));
@@ -169,7 +172,7 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 	@Override
 	protected boolean doReplace(K key, V oldValue, V newValue, int timeToLive) {
-		Cache<Object, Object> cache = getEhcache();
+		Cache<Object, Object> cache = (Cache<Object, Object>)getEhcache();
 
 		return cache.replace(
 			_wrapKey(key), _wrapValue(oldValue, DEFAULT_TIME_TO_LIVE),
@@ -183,6 +186,9 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 	}
 
 	protected abstract void resetEhcache();
+
+	protected final Class<?> keyType;
+	protected final Class<?> valueType;
 
 	@SuppressWarnings("unchecked")
 	private V _getValue(Object value) {

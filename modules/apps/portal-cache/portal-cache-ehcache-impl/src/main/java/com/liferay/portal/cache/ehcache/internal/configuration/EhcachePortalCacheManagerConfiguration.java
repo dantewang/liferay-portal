@@ -24,7 +24,7 @@ public class EhcachePortalCacheManagerConfiguration
 	extends PortalCacheManagerConfiguration {
 
 	public EhcachePortalCacheManagerConfiguration(
-		CacheConfiguration<Object, Object> defaultCacheConfiguration,
+		CacheConfiguration<?, ?> defaultCacheConfiguration,
 		PortalCacheConfiguration defaultPortalCacheConfiguration,
 		Set<PortalCacheConfiguration> portalCacheConfigurations) {
 
@@ -33,37 +33,37 @@ public class EhcachePortalCacheManagerConfiguration
 		_defaultCacheConfiguration = defaultCacheConfiguration;
 	}
 
-	public CacheConfiguration<Object, Object> getDefaultCacheConfiguration() {
+	public CacheConfiguration<?, ?> getDefaultCacheConfiguration() {
 		return _defaultCacheConfiguration;
 	}
 
-	public FluentCacheConfigurationBuilder<Object, Object, ?> newBuilder() {
+	public FluentCacheConfigurationBuilder<?, ?, ?> newBuilder() {
 		if (_defaultCacheConfiguration == null) {
-			CacheConfigurationBuilder<Object, Object>
-				cacheConfigurationBuilder =
-					CacheConfigurationBuilder.newCacheConfigurationBuilder(
-						Object.class, Object.class,
-						ResourcePoolsBuilder.heap(100000));
+			CacheConfigurationBuilder<?, ?> cacheConfigurationBuilder =
+				CacheConfigurationBuilder.newCacheConfigurationBuilder(
+					Object.class, Object.class,
+					ResourcePoolsBuilder.heap(100000));
 
 			return cacheConfigurationBuilder.withExpiry(
 				new EhcacheExpiryPolicy(ExpiryPolicy.NO_EXPIRY));
 		}
 
-		FluentCacheConfigurationBuilder<Object, Object, ?>
+		FluentCacheConfigurationBuilder<?, ?, ?>
 			fluentCacheConfigurationBuilder =
 				_defaultCacheConfiguration.derive();
 
 		return fluentCacheConfigurationBuilder.withExpiry(
 			new EhcacheExpiryPolicy(
-				_defaultCacheConfiguration.getExpiryPolicy()));
+				(ExpiryPolicy<Object, Object>)
+					_defaultCacheConfiguration.getExpiryPolicy()));
 	}
 
 	public void setDefaultCacheConfiguration(
-		CacheConfiguration<Object, Object> defaultCacheConfiguration) {
+		CacheConfiguration<?, ?> defaultCacheConfiguration) {
 
 		_defaultCacheConfiguration = defaultCacheConfiguration;
 	}
 
-	private CacheConfiguration<Object, Object> _defaultCacheConfiguration;
+	private CacheConfiguration<?, ?> _defaultCacheConfiguration;
 
 }

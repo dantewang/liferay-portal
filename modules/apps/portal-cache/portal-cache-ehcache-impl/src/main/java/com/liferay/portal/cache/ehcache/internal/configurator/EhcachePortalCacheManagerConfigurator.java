@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 
@@ -24,6 +25,7 @@ import java.net.URL;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
@@ -35,6 +37,11 @@ import org.ehcache.config.ResourceType;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.expiry.ExpiryPolicy;
 import org.ehcache.xml.XmlConfiguration;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Tina Tian
@@ -117,32 +124,22 @@ public class EhcachePortalCacheManagerConfigurator {
 
 		PortalCacheConfiguration defaultPortalCacheConfiguration;
 
-		CacheConfiguration<Object, Object> defaultCacheConfiguration = null;
-
-		try {
-			CacheConfigurationBuilder<Object, Object>
-				cacheConfigurationBuilder =
-					xmlConfiguration.newCacheConfigurationBuilderFromTemplate(
-						"default", Object.class, Object.class);
-
-			if (cacheConfigurationBuilder != null) {
-				defaultCacheConfiguration = cacheConfigurationBuilder.build();
-			}
-		}
-		catch (Exception exception) {
-			ReflectionUtil.throwException(exception);
-		}
+		CacheConfiguration<?, ?> defaultCacheConfiguration =
+			_parseDefaultCacheConfiguration(xmlConfiguration);
 
 		if (defaultCacheConfiguration != null) {
 			defaultPortalCacheConfiguration =
 				new EhcachePortalCacheConfiguration(
 					"default", new HashSet<>(),
+					defaultCacheConfiguration.getKeyType(),
+					defaultCacheConfiguration.getValueType(),
 					_isRequireSerialization(defaultCacheConfiguration));
 		}
 		else {
 			defaultPortalCacheConfiguration =
 				new EhcachePortalCacheConfiguration(
-					"default", new HashSet<>(), false);
+					"default", new HashSet<>(), Object.class, Object.class,
+					false);
 		}
 
 		Set<PortalCacheConfiguration> portalCacheConfigurations =
@@ -159,12 +156,83 @@ public class EhcachePortalCacheManagerConfigurator {
 			portalCacheConfigurations.add(
 				new EhcachePortalCacheConfiguration(
 					entry.getKey(), new HashSet<>(),
+					cacheConfiguration.getKeyType(),
+					cacheConfiguration.getValueType(),
 					_isRequireSerialization(cacheConfiguration)));
 		}
 
 		return new EhcachePortalCacheManagerConfiguration(
 			defaultCacheConfiguration, defaultPortalCacheConfiguration,
 			portalCacheConfigurations);
+	}
+
+	private CacheConfiguration<?, ?> _parseDefaultCacheConfiguration(
+		XmlConfiguration xmlConfiguration) {
+
+		Document document = xmlConfiguration.asDocument();
+
+		Element documentElement = document.getDocumentElement();
+
+		NodeList cacheTemplateElements = documentElement.getElementsByTagName(
+			"cache-template");
+
+		if (cacheTemplateElements.getLength() == 0) {
+			return null;
+		}
+
+		Class<?> keyType = Object.class;
+		Class<?> valueType = Object.class;
+
+		try {
+			for (int i = 0; i < cacheTemplateElements.getLength(); i++) {
+				Element element = (Element)cacheTemplateElements.item(i);
+
+				if (Objects.equals(element.getAttribute("name"), "default")) {
+					keyType = _parseTypeClass(
+						xmlConfiguration,
+						element.getElementsByTagName("key-type"));
+
+					valueType = _parseTypeClass(
+						xmlConfiguration,
+						element.getElementsByTagName("value-type"));
+
+					break;
+				}
+			}
+
+			CacheConfigurationBuilder<?, ?> cacheConfigurationBuilder =
+				xmlConfiguration.newCacheConfigurationBuilderFromTemplate(
+					"default", keyType, valueType);
+
+			if (cacheConfigurationBuilder != null) {
+				return cacheConfigurationBuilder.build();
+			}
+		}
+		catch (Exception exception) {
+			ReflectionUtil.throwException(exception);
+		}
+
+		return null;
+	}
+
+	private Class<?> _parseTypeClass(
+			XmlConfiguration xmlConfiguration, NodeList nodeList)
+		throws ClassNotFoundException {
+
+		if (nodeList.getLength() == 1) {
+			Element typeElement = (Element)nodeList.item(0);
+
+			Node contentNode = typeElement.getFirstChild();
+
+			String className = contentNode.getNodeValue();
+
+			if (Validator.isNotNull(className)) {
+				return XmlConfiguration.getClassForName(
+					className, xmlConfiguration.getClassLoader());
+			}
+		}
+
+		return Object.class;
 	}
 
 	private void _populateCacheReplicator(

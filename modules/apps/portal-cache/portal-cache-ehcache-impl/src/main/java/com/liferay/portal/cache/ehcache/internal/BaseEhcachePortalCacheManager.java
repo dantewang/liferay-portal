@@ -92,17 +92,19 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 	public void clearAll() throws PortalCacheException {
 		Configuration configuration = _cacheManager.getRuntimeConfiguration();
 
-		Map<String, CacheConfiguration<?, ?>> cacheConfigurationsMap =
+		Map<String, CacheConfiguration<?, ?>> cacheConfigurations =
 			configuration.getCacheConfigurations();
 
-		for (String cacheName : cacheConfigurationsMap.keySet()) {
-			Cache<Object, Object> cache = _cacheManager.getCache(
-				cacheName, Object.class, Object.class);
+		cacheConfigurations.forEach(
+			(name, cacheConfiguration) -> {
+				Cache<?, ?> cache = _cacheManager.getCache(
+					name, cacheConfiguration.getKeyType(),
+					cacheConfiguration.getValueType());
 
-			if (cache != null) {
-				cache.clear();
-			}
-		}
+				if (cache != null) {
+					cache.clear();
+				}
+			});
 	}
 
 	@Override
@@ -213,7 +215,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		return _portalCacheManagerName;
 	}
 
-	public FluentCacheConfigurationBuilder<Object, Object, ?> newBuilder() {
+	public FluentCacheConfigurationBuilder<?, ?, ?> newBuilder() {
 		return _ehcachePortalCacheManagerConfiguration.newBuilder();
 	}
 
@@ -513,7 +515,7 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			extEhcachePortalCacheManagerConfiguration =
 				extConfigurationObjectValuePair.getValue();
 
-		CacheConfiguration<Object, Object> extDefaultCacheConfiguration =
+		CacheConfiguration<?, ?> extDefaultCacheConfiguration =
 			extEhcachePortalCacheManagerConfiguration.
 				getDefaultCacheConfiguration();
 
@@ -543,45 +545,45 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		Map<String, CacheConfiguration<?, ?>> cacheConfigurations =
 			configuration.getCacheConfigurations();
 
-		for (Map.Entry<String, CacheConfiguration<?, ?>> entry :
-				cacheConfigurations.entrySet()) {
+		cacheConfigurations.forEach(
+			(portalCacheName, cacheConfiguration) -> {
+				synchronized (_cacheManager) {
+					Cache<?, ?> cache = _cacheManager.getCache(
+						portalCacheName, cacheConfiguration.getKeyType(),
+						cacheConfiguration.getValueType());
 
-			String portalCacheName = entry.getKey();
+					if (cache != null) {
+						if (_log.isInfoEnabled()) {
+							_log.info(
+								"Overriding existing cache " + portalCacheName);
+						}
 
-			synchronized (_cacheManager) {
-				Cache<Object, Object> cache = _cacheManager.getCache(
-					portalCacheName, Object.class, Object.class);
+						PortalCache<K, V> portalCache = fetchPortalCache(
+							portalCacheName);
 
-				if (cache != null) {
-					if (_log.isInfoEnabled()) {
-						_log.info(
-							"Overriding existing cache " + portalCacheName);
+						if (portalCache != null) {
+							BaseEhcachePortalCache<K, V>
+								baseEhcachePortalCache =
+									EhcacheUnwrapUtil.getWrappedPortalCache(
+										portalCache);
+
+							if (baseEhcachePortalCache != null) {
+								baseEhcachePortalCache.resetEhcache();
+							}
+							else {
+								_log.error(
+									"Unable to reconfigure cache with name " +
+										portalCacheName);
+							}
+						}
+
+						_cacheManager.removeCache(portalCacheName);
 					}
 
-					PortalCache<K, V> portalCache = fetchPortalCache(
-						portalCacheName);
-
-					if (portalCache != null) {
-						BaseEhcachePortalCache<K, V> baseEhcachePortalCache =
-							EhcacheUnwrapUtil.getWrappedPortalCache(
-								portalCache);
-
-						if (baseEhcachePortalCache != null) {
-							baseEhcachePortalCache.resetEhcache();
-						}
-						else {
-							_log.error(
-								"Unable to reconfigure cache with name " +
-									portalCacheName);
-						}
-					}
-
-					_cacheManager.removeCache(portalCacheName);
+					_cacheManager.createCache(
+						portalCacheName, cacheConfiguration);
 				}
-
-				_cacheManager.createCache(portalCacheName, entry.getValue());
-			}
-		}
+			});
 	}
 
 	private void _reconfigPortalCache(
