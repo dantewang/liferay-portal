@@ -76,7 +76,7 @@ public class PortalCacheExtenderTest {
 		_multiVmXML = _generateXMLContent(
 			1,
 			new String[] {_CACHE_NAME_MULTI_ENTITY, _CACHE_NAME_MULTI_FINDER},
-			1001, 51);
+			1001, 51, true);
 
 		_bundle = _installBundle(_BUNDLE_SYMBOLIC_NAME, _multiVmXML, null);
 
@@ -93,7 +93,7 @@ public class PortalCacheExtenderTest {
 		Bundle overridingBundle = null;
 
 		String multiVmXMLUpdated = _generateXMLContent(
-			1, new String[] {_CACHE_NAME_MULTI_ENTITY}, 2001, 101);
+			1, new String[] {_CACHE_NAME_MULTI_ENTITY}, 2001, 101, true);
 
 		try {
 			overridingBundle = _installBundle(
@@ -119,7 +119,7 @@ public class PortalCacheExtenderTest {
 	@Test
 	public void testRecreateMultiVmConfig() throws Exception {
 		_multiVmXML = _generateXMLContent(
-			12, new String[] {_CACHE_NAME_MULTI}, 1001, 51);
+			12, new String[] {_CACHE_NAME_MULTI}, 1001, 51, true);
 
 		for (int i = 10; i <= 12; i++) {
 			_multiVmXML = StringUtil.replace(
@@ -159,9 +159,9 @@ public class PortalCacheExtenderTest {
 	@Test
 	public void testUpdateConfig() throws Exception {
 		_multiVmXML = _generateXMLContent(
-			1, new String[] {_CACHE_NAME_MULTI}, 1001, 51);
+			1, new String[] {_CACHE_NAME_MULTI}, 1001, 51, true);
 		_singleVmXML = _generateXMLContent(
-			1, new String[] {_CACHE_NAME_SINGLE}, 1001, 51);
+			1, new String[] {_CACHE_NAME_SINGLE}, 1001, 51, false);
 
 		_bundle = _installBundle(
 			_BUNDLE_SYMBOLIC_NAME, _multiVmXML, _singleVmXML);
@@ -176,9 +176,9 @@ public class PortalCacheExtenderTest {
 		Bundle overridingBundle = null;
 
 		String multiVmXMLUpdated = _generateXMLContent(
-			1, new String[] {_CACHE_NAME_MULTI}, 2001, 101);
+			1, new String[] {_CACHE_NAME_MULTI}, 2001, 101, true);
 		String singleVmXMLUpdated = _generateXMLContent(
-			1, new String[] {_CACHE_NAME_SINGLE}, 2001, 101);
+			1, new String[] {_CACHE_NAME_SINGLE}, 2001, 101, false);
 
 		try {
 			overridingBundle = _installBundle(
@@ -204,9 +204,9 @@ public class PortalCacheExtenderTest {
 	@Test
 	public void testUpdateConfigByExtFile() throws Exception {
 		_multiVmXML = _generateXMLContent(
-			1, new String[] {_CACHE_NAME_MULTI}, 1001, 51);
+			1, new String[] {_CACHE_NAME_MULTI}, 1001, 51, true);
 		_singleVmXML = _generateXMLContent(
-			1, new String[] {_CACHE_NAME_SINGLE}, 1001, 51);
+			1, new String[] {_CACHE_NAME_SINGLE}, 1001, 51, false);
 
 		_bundle = _installBundle(
 			_BUNDLE_SYMBOLIC_NAME, _multiVmXML, _singleVmXML);
@@ -228,14 +228,14 @@ public class PortalCacheExtenderTest {
 				new File(
 					ehcacheFolder, _BUNDLE_SYMBOLIC_NAME + "-multi-vm-ext.xml"),
 				_generateXMLContent(
-					1, new String[] {_CACHE_NAME_MULTI}, 2001, 101));
+					1, new String[] {_CACHE_NAME_MULTI}, 2001, 101, true));
 
 			_file.write(
 				new File(
 					ehcacheFolder,
 					_BUNDLE_SYMBOLIC_NAME + "-single-vm-ext.xml"),
 				_generateXMLContent(
-					1, new String[] {_CACHE_NAME_SINGLE}, 2001, 101));
+					1, new String[] {_CACHE_NAME_SINGLE}, 2001, 101, false));
 
 			_bundle.start();
 
@@ -308,7 +308,7 @@ public class PortalCacheExtenderTest {
 
 	private String _generateXMLContent(
 		int cacheEntries, String[] cacheNames, int maxHeapEntries,
-		int timeToIdleSeconds) {
+		int timeToIdleSeconds, boolean multiVM) {
 
 		StringBundler sb = new StringBundler();
 
@@ -321,7 +321,18 @@ public class PortalCacheExtenderTest {
 			for (String cacheName : cacheNames) {
 				sb.append("<cache alias=\"");
 				sb.append(cacheName + i);
-				sb.append("\"><expiry><tti>");
+				sb.append("\">");
+
+				if (multiVM) {
+					sb.append("<key-type>java.io.Serializable</key-type>");
+					sb.append("<value-type>java.io.Serializable</value-type>");
+				}
+				else {
+					sb.append("<key-type>java.io.Serializable</key-type>");
+					sb.append("<value-type>java.lang.Object</value-type>");
+				}
+
+				sb.append("<expiry><tti>");
 				sb.append(timeToIdleSeconds);
 				sb.append("</tti></expiry><heap>");
 				sb.append(maxHeapEntries);

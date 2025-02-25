@@ -35,12 +35,14 @@ public class EhcachePortalCache<K extends Serializable, V>
 		super(baseEhcachePortalCacheManager, ehcachePortalCacheConfiguration);
 
 		_cacheManager = baseEhcachePortalCacheManager.getEhcacheManager();
+		_keyType = baseEhcachePortalCacheManager.getKeyType();
+		_valueType = baseEhcachePortalCacheManager.getValueType();
 
 		_ehcacheSupplier = this::_createEhcache;
 	}
 
 	@Override
-	public Cache<Object, Object> getEhcache() {
+	public Cache<?, ?> getEhcache() {
 		return _ehcacheDCLSingleton.getSingleton(_ehcacheSupplier);
 	}
 
@@ -54,10 +56,10 @@ public class EhcachePortalCache<K extends Serializable, V>
 		_ehcacheDCLSingleton.destroy(null);
 	}
 
-	private Cache<Object, Object> _createEhcache() {
+	private Cache<?, ?> _createEhcache() {
 		synchronized (_cacheManager) {
-			Cache<Object, Object> cache = _cacheManager.getCache(
-				getPortalCacheName(), Object.class, Object.class);
+			Cache<?, ?> cache = _cacheManager.getCache(
+				getPortalCacheName(), _keyType, _valueType);
 
 			if (cache == null) {
 				BaseEhcachePortalCacheManager<?, ?>
@@ -71,10 +73,10 @@ public class EhcachePortalCache<K extends Serializable, V>
 			}
 		}
 
-		Cache<Object, Object> cache = _cacheManager.getCache(
-			getPortalCacheName(), Object.class, Object.class);
+		Cache<?, ?> cache = _cacheManager.getCache(
+			getPortalCacheName(), _keyType, _valueType);
 
-		CacheRuntimeConfiguration<Object, Object> cacheRuntimeConfiguration =
+		CacheRuntimeConfiguration<?, ?> cacheRuntimeConfiguration =
 			cache.getRuntimeConfiguration();
 
 		cacheRuntimeConfiguration.registerCacheEventListener(
@@ -87,8 +89,10 @@ public class EhcachePortalCache<K extends Serializable, V>
 	}
 
 	private final CacheManager _cacheManager;
-	private final DCLSingleton<Cache<Object, Object>> _ehcacheDCLSingleton =
+	private final DCLSingleton<Cache<?, ?>> _ehcacheDCLSingleton =
 		new DCLSingleton<>();
-	private final Supplier<Cache<Object, Object>> _ehcacheSupplier;
+	private final Supplier<Cache<?, ?>> _ehcacheSupplier;
+	private final Class<?> _keyType;
+	private final Class<?> _valueType;
 
 }

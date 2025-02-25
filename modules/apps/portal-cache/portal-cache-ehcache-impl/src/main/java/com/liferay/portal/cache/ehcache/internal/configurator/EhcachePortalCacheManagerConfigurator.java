@@ -42,9 +42,11 @@ import org.ehcache.xml.XmlConfiguration;
 public class EhcachePortalCacheManagerConfigurator {
 
 	public EhcachePortalCacheManagerConfigurator(
-		Properties replicatorProperties,
+		Class<?> keyType, Class<?> valueType, Properties replicatorProperties,
 		String defaultReplicatorPropertiesString) {
 
+		_keyType = keyType;
+		_valueType = valueType;
 		_replicatorProperties = replicatorProperties;
 		_defaultReplicatorPropertiesString = defaultReplicatorPropertiesString;
 	}
@@ -117,13 +119,12 @@ public class EhcachePortalCacheManagerConfigurator {
 
 		PortalCacheConfiguration defaultPortalCacheConfiguration;
 
-		CacheConfiguration<Object, Object> defaultCacheConfiguration = null;
+		CacheConfiguration<?, ?> defaultCacheConfiguration = null;
 
 		try {
-			CacheConfigurationBuilder<Object, Object>
-				cacheConfigurationBuilder =
-					xmlConfiguration.newCacheConfigurationBuilderFromTemplate(
-						"default", Object.class, Object.class);
+			CacheConfigurationBuilder<?, ?> cacheConfigurationBuilder =
+				xmlConfiguration.newCacheConfigurationBuilderFromTemplate(
+					"default", _keyType, _valueType);
 
 			if (cacheConfigurationBuilder != null) {
 				defaultCacheConfiguration = cacheConfigurationBuilder.build();
@@ -163,8 +164,8 @@ public class EhcachePortalCacheManagerConfigurator {
 		}
 
 		return new EhcachePortalCacheManagerConfiguration(
-			defaultCacheConfiguration, defaultPortalCacheConfiguration,
-			portalCacheConfigurations);
+			_keyType, _valueType, defaultCacheConfiguration,
+			defaultPortalCacheConfiguration, portalCacheConfigurations);
 	}
 
 	private void _populateCacheReplicator(
@@ -238,6 +239,8 @@ public class EhcachePortalCacheManagerConfigurator {
 	}
 
 	private final String _defaultReplicatorPropertiesString;
+	private final Class<?> _keyType;
 	private final Properties _replicatorProperties;
+	private final Class<?> _valueType;
 
 }
