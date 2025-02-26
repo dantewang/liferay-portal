@@ -168,30 +168,26 @@ public class PortalCacheExtenderTest {
 
 		_multiVmXML = _generateXMLContent(
 			sb -> {
-				sb.append("<persistence directory=\"${java.io.tmpdir}/");
-				sb.append("ehcache/\" />");
-
 				sb.append("<cache alias=\"");
 				sb.append(defaultConfigCacheName);
-				sb.append("\">");
-				sb.append("<key-type>java.io.Serializable</key-type>");
+				sb.append("\"><key-type>java.io.Serializable</key-type>");
 				sb.append("<value-type>java.io.Serializable</value-type>");
 				sb.append("<heap>1000</heap></cache>");
 
 				sb.append("<cache alias=\"");
 				sb.append(offHeapConfigCacheName);
-				sb.append("\">");
-				sb.append("<key-type>java.io.Serializable</key-type>");
+				sb.append("\"><key-type>java.io.Serializable</key-type>");
 				sb.append("<value-type>java.io.Serializable</value-type>");
-				sb.append("<offheap unit=\"MB\">10</offheap></cache>");
+				sb.append("<resources><heap>1000</heap><offheap unit=\"MB\">");
+				sb.append("10</offheap></resources></cache>");
 
 				sb.append("<cache alias=\"");
 				sb.append(diskConfigCacheName);
 				sb.append("\">");
 				sb.append("<key-type>java.io.Serializable</key-type>");
 				sb.append("<value-type>java.io.Serializable</value-type>");
-				sb.append("<disk persistent=\"true\" unit=\"MB\">10</disk>");
-				sb.append("</cache>");
+				sb.append("<resources><heap>1000</heap><disk unit=\"MB\">");
+				sb.append("10</disk></resources></cache>");
 			});
 
 		_bundle = _installBundle(_BUNDLE_SYMBOLIC_NAME, _multiVmXML, null);
@@ -322,7 +318,8 @@ public class PortalCacheExtenderTest {
 
 		PortalCacheManagerConfiguration portalCacheManagerConfiguration =
 			ReflectionTestUtil.getFieldValue(
-				_multiVMPortalCacheManager, "_portalCacheManagerConfiguration");
+				_multiVMPortalCacheManager,
+				"_ehcachePortalCacheManagerConfiguration");
 
 		Assert.assertEquals(
 			requireSerialization,
