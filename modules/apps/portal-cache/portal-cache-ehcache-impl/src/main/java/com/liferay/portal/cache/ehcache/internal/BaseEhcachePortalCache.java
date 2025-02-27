@@ -5,10 +5,10 @@
 
 package com.liferay.portal.cache.ehcache.internal;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.cache.BasePortalCache;
 import com.liferay.portal.cache.ehcache.internal.event.PortalCacheCacheEventListener;
-import com.liferay.portal.cache.ehcache.internal.event.PortalCacheEventUtil;
 import com.liferay.portal.cache.io.SerializableObjectWrapper;
 import com.liferay.portal.kernel.cache.PortalCacheListener;
 import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
@@ -89,6 +89,10 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 		cache.clear();
 
+		if (_log.isDebugEnabled()) {
+			_log.debug("Cleared " + getPortalCacheName());
+		}
+
 		aggregatedPortalCacheListener.notifyRemoveAll(this);
 	}
 
@@ -126,8 +130,14 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 		cache.remove(wrappedKey);
 
-		PortalCacheEventUtil.notifyRemoved(
-			_log, aggregatedPortalCacheListener, this, key, value);
+		if (_log.isDebugEnabled()) {
+			_log.debug(
+				StringBundler.concat(
+					"Removed ", key, " from ", getPortalCacheName()));
+		}
+
+		aggregatedPortalCacheListener.notifyEntryRemoved(
+			this, key, value, DEFAULT_TIME_TO_LIVE);
 	}
 
 	@Override
@@ -137,8 +147,14 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 		boolean removed = cache.remove(
 			_wrapKey(key), _wrapValue(value, DEFAULT_TIME_TO_LIVE));
 
-		PortalCacheEventUtil.notifyRemoved(
-			_log, aggregatedPortalCacheListener, this, key, value);
+		if (_log.isDebugEnabled()) {
+			_log.debug(
+				StringBundler.concat(
+					"Removed ", key, " from ", getPortalCacheName()));
+		}
+
+		aggregatedPortalCacheListener.notifyEntryRemoved(
+			this, key, value, DEFAULT_TIME_TO_LIVE);
 
 		return removed;
 	}
