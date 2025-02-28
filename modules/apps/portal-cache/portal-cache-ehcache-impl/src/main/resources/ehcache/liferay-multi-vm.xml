@@ -8,7 +8,7 @@
 	Caches in this file can be clustered and are configured to be clustered.
 	-->
 
-	<persistence directory="${liferay.home}/data/ehcache"/>
+	<persistence directory="${liferay.home}/data/ehcache" />
 
 	<!-- Default cache template for caches created on-demand -->
 
