@@ -653,12 +653,17 @@ java -jar ${app.server.weblogic.dir}/${app.server.weblogic.jar.name} -ignoreSysP
 	</target>
 
 	<target name="set-up-jakarta-ee-transformer-agent">
+		<echo>######${app.server.type}</echo>
+		<echo>######${app.server.tomcat.version}</echo>
+		<echo>######${app.server.jboss.version}</echo>
+		<echo>######${app.server.wildfly.version}</echo>
 		<if>
 			<and>
 				<equals arg1="${app.server.type}" arg2="tomcat" />
 				<matches pattern="10\.\d+\.\d+" string="${app.server.tomcat.version}" />
 			</and>
 			<then>
+				<echo>******Applying to tomcat</echo>
 				<var name="transformer.agent" value="-javaagent:${CATALINA_HOME}/../tools/portal-tools-jakarta-ee-transformer/com.liferay.portal.tools.jakarta.ee.transformer.jar" />
 
 				<if>
@@ -673,7 +678,11 @@ java -jar ${app.server.weblogic.dir}/${app.server.weblogic.jar.name} -ignoreSysP
 							<![CDATA[
 CATALINA_OPTS="${transformer.agent} -Djakarta.ee.transformer.bundle.header.replacer.logging.disabled=true -Djakarta.ee.transformer.class.remapper.logging.disabled=true -Djakarta.ee.transformer.reverse.text.replacer.disabled=true -Djakarta.ee.transformer.text.replacer.logging.disabled=true ${CATALINA_OPTS}"]]>
 						</echo>
+						<echo>******Applied to tomcat</echo>
 					</then>
+					<else>
+						<echo>******Skip already applied tomcat</echo>
+					</else>
 				</if>
 			</then>
 		</if>
@@ -683,6 +692,7 @@ CATALINA_OPTS="${transformer.agent} -Djakarta.ee.transformer.bundle.header.repla
 				<matches pattern="8\.\d+\.\d+" string="${app.server.jboss.version}" />
 			</and>
 			<then>
+				<echo>******Applying to jboss</echo>
 				<var name="transformer.agent" value="-javaagent:${JBOSS_HOME}/../tools/portal-tools-jakarta-ee-transformer/com.liferay.portal.tools.jakarta.ee.transformer.jar" />
 
 				<if>
@@ -697,7 +707,11 @@ CATALINA_OPTS="${transformer.agent} -Djakarta.ee.transformer.bundle.header.repla
 							<![CDATA[
 JAVA_OPTS="${transformer.agent} -Djakarta.ee.transformer.bundle.header.replacer.logging.disabled=true -Djakarta.ee.transformer.class.remapper.logging.disabled=true -Djakarta.ee.transformer.reverse.text.replacer.disabled=true -Djakarta.ee.transformer.text.replacer.logging.disabled=true $JAVA_OPTS"]]>
 						</echo>
+						<echo>******Applied to jboss</echo>
 					</then>
+					<else>
+						<echo>******Skip already applied jboss</echo>
+					</else>
 				</if>
 			</then>
 		</if>
@@ -707,6 +721,7 @@ JAVA_OPTS="${transformer.agent} -Djakarta.ee.transformer.bundle.header.replacer.
 				<matches pattern="30\.\d+\.\d+" string="${app.server.wildfly.version}" />
 			</and>
 			<then>
+				<echo>******Applying to wildfly</echo>
 				<var name="transformer.agent" value="-javaagent:${JBOSS_HOME}/../tools/portal-tools-jakarta-ee-transformer/com.liferay.portal.tools.jakarta.ee.transformer.jar" />
 
 				<if>
@@ -721,7 +736,11 @@ JAVA_OPTS="${transformer.agent} -Djakarta.ee.transformer.bundle.header.replacer.
 							<![CDATA[
 JAVA_OPTS="${transformer.agent} -Djakarta.ee.transformer.bundle.header.replacer.logging.disabled=true -Djakarta.ee.transformer.class.remapper.logging.disabled=true -Djakarta.ee.transformer.reverse.text.replacer.disabled=true -Djakarta.ee.transformer.text.replacer.logging.disabled=true $JAVA_OPTS"]]>
 						</echo>
+						<echo>******Applied to wildfly</echo>
 					</then>
+					<else>
+						<echo>******Skip already applied wildfly</echo>
+					</else>
 				</if>
 			</then>
 		</if>
