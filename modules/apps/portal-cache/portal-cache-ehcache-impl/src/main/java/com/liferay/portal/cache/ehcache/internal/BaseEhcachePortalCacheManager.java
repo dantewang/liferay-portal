@@ -522,6 +522,10 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 		if (extDefaultCacheConfiguration != null) {
 			ehcachePortalCacheManagerConfiguration.setDefaultCacheConfiguration(
 				extDefaultCacheConfiguration);
+			ehcachePortalCacheManagerConfiguration.
+				setDefaultPortalCacheConfiguration(
+					extEhcachePortalCacheManagerConfiguration.
+						getDefaultPortalCacheConfiguration());
 		}
 
 		Map<String, CacheConfiguration<?, ?>> extCacheConfigurationsMap =
