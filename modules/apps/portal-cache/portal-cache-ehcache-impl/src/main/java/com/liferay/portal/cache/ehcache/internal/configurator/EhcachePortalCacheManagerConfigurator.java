@@ -122,7 +122,7 @@ public class EhcachePortalCacheManagerConfigurator {
 	private EhcachePortalCacheManagerConfiguration _parseConfiguration(
 		XmlConfiguration xmlConfiguration) {
 
-		PortalCacheConfiguration defaultPortalCacheConfiguration;
+		PortalCacheConfiguration defaultPortalCacheConfiguration = null;
 
 		CacheConfiguration<?, ?> defaultCacheConfiguration =
 			_parseDefaultCacheConfiguration(xmlConfiguration);
@@ -134,12 +134,6 @@ public class EhcachePortalCacheManagerConfigurator {
 					defaultCacheConfiguration.getKeyType(),
 					defaultCacheConfiguration.getValueType(),
 					_isRequireSerialization(defaultCacheConfiguration));
-		}
-		else {
-			defaultPortalCacheConfiguration =
-				new EhcachePortalCacheConfiguration(
-					"default", new HashSet<>(), Object.class, Object.class,
-					false);
 		}
 
 		Set<PortalCacheConfiguration> portalCacheConfigurations =

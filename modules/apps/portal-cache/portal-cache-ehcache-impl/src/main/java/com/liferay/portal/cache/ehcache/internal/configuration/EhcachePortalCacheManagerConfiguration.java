@@ -13,8 +13,6 @@ import java.util.Set;
 
 import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.FluentCacheConfigurationBuilder;
-import org.ehcache.config.builders.CacheConfigurationBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.expiry.ExpiryPolicy;
 
 /**
@@ -39,13 +37,7 @@ public class EhcachePortalCacheManagerConfiguration
 
 	public FluentCacheConfigurationBuilder<?, ?, ?> newBuilder() {
 		if (_defaultCacheConfiguration == null) {
-			CacheConfigurationBuilder<?, ?> cacheConfigurationBuilder =
-				CacheConfigurationBuilder.newCacheConfigurationBuilder(
-					Object.class, Object.class,
-					ResourcePoolsBuilder.heap(100000));
-
-			return cacheConfigurationBuilder.withExpiry(
-				new EhcacheExpiryPolicy(ExpiryPolicy.NO_EXPIRY));
+			return null;
 		}
 
 		FluentCacheConfigurationBuilder<?, ?, ?>
