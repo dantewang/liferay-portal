@@ -6,7 +6,10 @@
 package com.liferay.portal.cache.ehcache.internal;
 
 import com.liferay.petra.concurrent.DCLSingleton;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.cache.ehcache.internal.configuration.EhcachePortalCacheManagerConfiguration;
+import com.liferay.portal.cache.ehcache.internal.event.PortalCacheCacheEventListener;
 import com.liferay.portal.cache.test.util.TestPortalCacheListener;
 import com.liferay.portal.cache.test.util.TestPortalCacheReplicator;
 import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
@@ -15,6 +18,9 @@ import com.liferay.portal.kernel.cache.PortalCacheListenerScope;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LogEntry;
+import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.util.Collections;
@@ -24,6 +30,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.FutureTask;
+import java.util.logging.Level;
 
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
@@ -568,6 +575,48 @@ public class BaseEhcachePortalCacheTest {
 		_defaultPortalCacheReplicator.assertPut(_KEY_2, _VALUE_2);
 
 		_defaultPortalCacheReplicator.reset();
+
+		// Remove Logging
+
+		_ehcachePortalCache.put(_KEY_1, _VALUE_1);
+		_ehcachePortalCache.put(_KEY_2, _VALUE_2);
+
+		try (LogCapture logCapture = LoggerTestUtil.configureJDKLogger(
+				PortalCacheCacheEventListener.class.getName() +
+					StringPool.PERIOD +
+						_ehcachePortalCache.getPortalCacheName(),
+				Level.FINE)) {
+
+			_ehcachePortalCache.remove(_KEY_1);
+			_ehcachePortalCache.remove(_KEY_2, _VALUE_2);
+			_ehcachePortalCache.removeAll();
+
+			List<LogEntry> logEntries = logCapture.getLogEntries();
+
+			Assert.assertEquals(logEntries.toString(), 3, logEntries.size());
+
+			LogEntry logEntry1 = logEntries.get(0);
+
+			Assert.assertEquals(
+				StringBundler.concat(
+					"Removed ", _KEY_1, " from ",
+					_ehcachePortalCache.getPortalCacheName()),
+				logEntry1.getMessage());
+
+			LogEntry logEntry2 = logEntries.get(1);
+
+			Assert.assertEquals(
+				StringBundler.concat(
+					"Removed ", _KEY_2, " from ",
+					_ehcachePortalCache.getPortalCacheName()),
+				logEntry2.getMessage());
+
+			LogEntry logEntry3 = logEntries.get(2);
+
+			Assert.assertEquals(
+				"Cleared " + _ehcachePortalCache.getPortalCacheName(),
+				logEntry3.getMessage());
+		}
 	}
 
 	@Test
