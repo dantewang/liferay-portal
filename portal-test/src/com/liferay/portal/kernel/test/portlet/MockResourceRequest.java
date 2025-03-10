@@ -5,8 +5,6 @@
 
 package com.liferay.portal.kernel.test.portlet;
 
-import com.liferay.portletmvc4spring.test.mock.web.portlet.MockResourceURL;
-
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
