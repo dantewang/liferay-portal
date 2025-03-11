@@ -154,6 +154,12 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 			String portalCacheName, boolean mvcc, boolean sharded)
 		throws PortalCacheException {
 
+		if (portalCacheName.equals(
+				PortalCacheConfiguration.PORTAL_CACHE_NAME_DEFAULT)) {
+
+			return null;
+		}
+
 		return _portalCaches.compute(
 			portalCacheName,
 			(key, value) -> {
@@ -244,6 +250,12 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 
 	@Override
 	public void removePortalCache(String portalCacheName) {
+		if (portalCacheName.equals(
+				PortalCacheConfiguration.PORTAL_CACHE_NAME_DEFAULT)) {
+
+			return;
+		}
+
 		PortalCache<K, V> portalCache = _portalCaches.remove(portalCacheName);
 
 		if (portalCache == null) {
@@ -551,6 +563,12 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 
 		cacheConfigurations.forEach(
 			(portalCacheName, cacheConfiguration) -> {
+				if (portalCacheName.equals(
+						PortalCacheConfiguration.PORTAL_CACHE_NAME_DEFAULT)) {
+
+					return;
+				}
+
 				synchronized (_cacheManager) {
 					Cache<?, ?> cache = _cacheManager.getCache(
 						portalCacheName, cacheConfiguration.getKeyType(),
@@ -595,6 +613,12 @@ public abstract class BaseEhcachePortalCacheManager<K extends Serializable, V>
 
 		for (String portalCacheName :
 				portalCacheManagerConfiguration.getPortalCacheNames()) {
+
+			if (portalCacheName.equals(
+					PortalCacheConfiguration.PORTAL_CACHE_NAME_DEFAULT)) {
+
+				continue;
+			}
 
 			PortalCacheConfiguration portalCacheConfiguration =
 				portalCacheManagerConfiguration.getPortalCacheConfiguration(
