@@ -789,7 +789,7 @@ public class BaseEhcachePortalCacheTest {
 
 		// Put if absent
 
-		cache.remove(_KEY_2);
+		cache.remove(new EhcacheKey(_KEY_2));
 
 		_ehcachePortalCache.putIfAbsent(_KEY_2, _VALUE_2, timeToLive);
 
@@ -805,7 +805,7 @@ public class BaseEhcachePortalCacheTest {
 
 		// Replace 1
 
-		cache.remove(_KEY_2);
+		cache.remove(new EhcacheKey(_KEY_2));
 
 		_ehcachePortalCache.replace(_KEY_1, _VALUE_2, timeToLive);
 
@@ -822,7 +822,7 @@ public class BaseEhcachePortalCacheTest {
 
 		// Replace 2
 
-		cache.remove(_KEY_1);
+		cache.remove(new EhcacheKey(_KEY_1));
 
 		_ehcachePortalCache.put(_KEY_1, _VALUE_1);
 

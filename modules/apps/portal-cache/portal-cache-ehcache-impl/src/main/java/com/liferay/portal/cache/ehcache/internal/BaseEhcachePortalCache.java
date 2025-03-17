@@ -21,7 +21,6 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -54,25 +53,22 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<K> getKeys() {
+		List<K> keys = new ArrayList<>();
+
 		Cache<?, ?> cache = getEhcache();
 
-		List<K> rawKeys = new ArrayList<>();
+		cache.forEach(
+			entry -> {
+				EhcacheKey ehcacheKey = (EhcacheKey)entry.getKey();
 
-		cache.forEach(entry -> rawKeys.add((K)entry.getKey()));
+				Object key = ehcacheKey.getKey();
 
-		if (!_serializable) {
-			return rawKeys;
-		}
+				if (_serializable) {
+					key = SerializableObjectWrapper.unwrap(key);
+				}
 
-		if (rawKeys.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		List<K> keys = new ArrayList<>(rawKeys.size());
-
-		for (Object object : rawKeys) {
-			keys.add(SerializableObjectWrapper.unwrap(object));
-		}
+				keys.add((K)key);
+			});
 
 		return keys;
 	}
@@ -209,10 +205,10 @@ public abstract class BaseEhcachePortalCache<K extends Serializable, V>
 
 	private Object _wrapKey(K key) {
 		if (!_serializable) {
-			return key;
+			return new EhcacheKey(key);
 		}
 
-		return new SerializableObjectWrapper(key);
+		return new EhcacheKey(new SerializableObjectWrapper(key));
 	}
 
 	private Object _wrapValue(V value, int timeToLive) {

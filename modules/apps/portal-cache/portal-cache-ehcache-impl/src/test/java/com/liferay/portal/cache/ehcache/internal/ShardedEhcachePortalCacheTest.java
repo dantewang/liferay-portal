@@ -288,7 +288,7 @@ public class ShardedEhcachePortalCacheTest {
 		_companyIdThreadLocal.set(_TEST_COMPANY_ID_1);
 
 		Assert.assertEquals(
-			Arrays.asList(_TEST_KEY_1, _TEST_KEY_SYSTEM),
+			Arrays.asList(_TEST_KEY_SYSTEM, _TEST_KEY_1),
 			_shardedEhcachePortalCache.getKeys());
 
 		_companyIdThreadLocal.set(_TEST_COMPANY_ID_2);
@@ -741,7 +741,8 @@ public class ShardedEhcachePortalCacheTest {
 			_getShardedCacheName(_TEST_CACHE_NAME, companyId), Object.class,
 			Object.class);
 
-		EhcacheValue ehcacheValue = (EhcacheValue)cache.get(key);
+		EhcacheValue ehcacheValue = (EhcacheValue)cache.get(
+			new EhcacheKey(key));
 
 		Assert.assertEquals(value, ehcacheValue.getValue());
 

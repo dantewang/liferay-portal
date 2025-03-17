@@ -9,6 +9,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.cache.AggregatedPortalCacheListener;
 import com.liferay.portal.cache.ehcache.internal.BaseEhcachePortalCache;
+import com.liferay.portal.cache.ehcache.internal.EhcacheKey;
 import com.liferay.portal.cache.ehcache.internal.EhcacheValue;
 import com.liferay.portal.cache.io.SerializableObjectWrapper;
 import com.liferay.portal.kernel.cache.PortalCache;
@@ -132,6 +133,10 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 
 	@SuppressWarnings("unchecked")
 	private K _getKey(Object key) {
+		EhcacheKey ehcacheKey = (EhcacheKey)key;
+
+		key = ehcacheKey.getKey();
+
 		if (_requireSerialization) {
 			return SerializableObjectWrapper.unwrap(key);
 		}
