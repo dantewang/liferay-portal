@@ -30,6 +30,8 @@ public interface CacheStatisticsMBean {
 
 	public long getCacheRemovals();
 
+	public long getHeapEntries();
+
 	public String getName();
 
 }
