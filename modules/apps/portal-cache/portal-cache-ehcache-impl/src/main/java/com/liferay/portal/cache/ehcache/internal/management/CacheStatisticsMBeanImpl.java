@@ -5,10 +5,13 @@
 
 package com.liferay.portal.cache.ehcache.internal.management;
 
+import java.util.Map;
+
 import javax.management.NotCompliantMBeanException;
 import javax.management.StandardMBean;
 
 import org.ehcache.core.statistics.CacheStatistics;
+import org.ehcache.core.statistics.TierStatistics;
 
 /**
  * @author Dante Wang
@@ -24,6 +27,11 @@ public class CacheStatisticsMBeanImpl
 
 		_cacheName = cacheName;
 		_cacheStatistics = cacheStatistics;
+
+		Map<String, TierStatistics> tierStatisticsMap =
+			cacheStatistics.getTierStatistics();
+
+		_tierStatistics = tierStatisticsMap.get("OnHeap");
 	}
 
 	@Override
@@ -77,11 +85,21 @@ public class CacheStatisticsMBeanImpl
 	}
 
 	@Override
+	public long getHeapEntries() {
+		if (_tierStatistics == null) {
+			return -1;
+		}
+
+		return _tierStatistics.getMappings();
+	}
+
+	@Override
 	public String getName() {
 		return _cacheName;
 	}
 
 	private final String _cacheName;
 	private final CacheStatistics _cacheStatistics;
+	private final TierStatistics _tierStatistics;
 
 }
