@@ -11,7 +11,7 @@
 				<arg line="storage container list --account-name isit35689storage --prefix lfr-qa-poshi-test --connection-string ${azure.connection.string}" />
 			</exec>
 
-			<script language="javascript"><![CDATA[
+			<script classpathref="project.classpath" language="javascript"><![CDATA[
 				var containerList = project.getProperty("container.list");
 
 				var expiredContainers = [];

@@ -11,7 +11,7 @@
 				<arg line="storage ls --project=liferay-qa-automated-tests --json" />
 			</exec>
 
-			<script language="javascript"><![CDATA[
+			<script classpathref="project.classpath" language="javascript"><![CDATA[
 				var bucketList = project.getProperty("bucket.list");
 
 				var expiredBuckets = [];
