@@ -43,6 +43,9 @@
 				</then>
 			</if>
 
+			<echo>S3 store bucket list</echo>
+			<echo>${bucket.list}</echo>
+
 			<beanshell>
 				<![CDATA[
 					import java.text.SimpleDateFormat;
