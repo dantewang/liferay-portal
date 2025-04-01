@@ -11,6 +11,9 @@
 				<arg line="storage ls --project=liferay-qa-automated-tests --json" />
 			</exec>
 
+			<echo>GCS store bucket list:</echo>
+			<echo>${bucket.list}</echo>
+
 			<script language="javascript"><![CDATA[
 				var bucketList = project.getProperty("bucket.list");
 
