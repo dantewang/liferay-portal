@@ -39,10 +39,10 @@ public class ConfigurationImpl
 	implements com.liferay.portal.kernel.configuration.Configuration {
 
 	public ConfigurationImpl(
-		ClassLoader classLoader, String name, String webId) {
+		ClassLoader classLoader, String name) {
 
 		_classLoaderAggregateProperties =
-			ClassLoaderAggregatePropertiesUtil.create(classLoader, webId, name);
+			ClassLoaderAggregatePropertiesUtil.create(classLoader, name);
 
 		printSources();
 	}

@@ -17,13 +17,13 @@ import com.liferay.portal.kernel.util.SystemProperties;
 public class ClassLoaderAggregatePropertiesUtil {
 
 	public static ClassLoaderAggregateProperties create(
-		ClassLoader classLoader, String webId, String componentName) {
+		ClassLoader classLoader, String componentName) {
 
 		SystemProperties.set("base.path", ".");
 
 		ClassLoaderAggregateProperties classLoaderAggregateProperties =
 			new ClassLoaderAggregateProperties(
-				classLoader, webId, componentName);
+				classLoader, componentName);
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
