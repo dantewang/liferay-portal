@@ -21,15 +21,15 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
+import jakarta.portlet.PortletMode;
+import jakarta.portlet.PortletRequest;
+import jakarta.portlet.WindowState;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import javax.portlet.PortletMode;
-import javax.portlet.PortletRequest;
-import javax.portlet.WindowState;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -54,35 +54,6 @@ public class CaptchaConfigurationTest {
 	public void test() throws Exception {
 		_test(false, false, true);
 		_test(true, true, false);
-	}
-
-	private void _test(
-			boolean expectedCaptchaRendered,
-			boolean instanceSettingsCreateAccountCaptchaEnabled,
-			boolean systemSettingsCreateAccountCaptchaEnabled)
-		throws Exception {
-
-		try (CompanyConfigurationTemporarySwapper
-				companyConfigurationTemporarySwapper =
-					new CompanyConfigurationTemporarySwapper(
-						TestPropsValues.getCompanyId(),
-						CaptchaConfiguration.class.getName(),
-						new HashMapDictionaryBuilder(
-						).<String, Object>put(
-							"createAccountCaptchaEnabled",
-							instanceSettingsCreateAccountCaptchaEnabled
-						).build());
-			ConfigurationTemporarySwapper configurationTemporarySwapper =
-				new ConfigurationTemporarySwapper(
-					CaptchaConfiguration.class.getName(),
-					new HashMapDictionaryBuilder(
-					).<String, Object>put(
-						"createAccountCaptchaEnabled",
-						systemSettingsCreateAccountCaptchaEnabled
-					).build())) {
-
-			Assert.assertEquals(expectedCaptchaRendered, _isCaptchaRendered());
-		}
 	}
 
 	private MockHttpServletRequest _getMockHttpServletRequest()
@@ -142,6 +113,35 @@ public class CaptchaConfigurationTest {
 		}
 
 		return false;
+	}
+
+	private void _test(
+			boolean expectedCaptchaRendered,
+			boolean instanceSettingsCreateAccountCaptchaEnabled,
+			boolean systemSettingsCreateAccountCaptchaEnabled)
+		throws Exception {
+
+		try (CompanyConfigurationTemporarySwapper
+				companyConfigurationTemporarySwapper =
+					new CompanyConfigurationTemporarySwapper(
+						TestPropsValues.getCompanyId(),
+						CaptchaConfiguration.class.getName(),
+						new HashMapDictionaryBuilder(
+						).<String, Object>put(
+							"createAccountCaptchaEnabled",
+							instanceSettingsCreateAccountCaptchaEnabled
+						).build());
+			ConfigurationTemporarySwapper configurationTemporarySwapper =
+				new ConfigurationTemporarySwapper(
+					CaptchaConfiguration.class.getName(),
+					new HashMapDictionaryBuilder(
+					).<String, Object>put(
+						"createAccountCaptchaEnabled",
+						systemSettingsCreateAccountCaptchaEnabled
+					).build())) {
+
+			Assert.assertEquals(expectedCaptchaRendered, _isCaptchaRendered());
+		}
 	}
 
 	@Inject
