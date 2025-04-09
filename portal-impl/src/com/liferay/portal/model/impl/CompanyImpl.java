@@ -68,9 +68,15 @@ public class CompanyImpl extends CompanyBaseImpl {
 
 	@Override
 	public String getAuthType() {
-		return _getPrefsPropsString(
-			this, PropsKeys.COMPANY_SECURITY_AUTH_TYPE,
-			PropsValues.COMPANY_SECURITY_AUTH_TYPE);
+		String authType = PrefsPropsUtil.getString(
+			getCompanyId(), PropsKeys.COMPANY_SECURITY_AUTH_TYPE,
+			PropsUtil.get(PropsKeys.COMPANY_SECURITY_AUTH_TYPE));
+
+		if (authType != null) {
+			return authType;
+		}
+
+		return PropsValues.COMPANY_SECURITY_AUTH_TYPE;
 	}
 
 	@Override
@@ -319,7 +325,7 @@ public class CompanyImpl extends CompanyBaseImpl {
 	@Override
 	public boolean isAutoLogin() {
 		return _getPrefsPropsBoolean(
-			this, PropsKeys.COMPANY_SECURITY_AUTO_LOGIN,
+			PropsKeys.COMPANY_SECURITY_AUTO_LOGIN,
 			PropsValues.COMPANY_SECURITY_AUTO_LOGIN);
 	}
 
@@ -333,35 +339,35 @@ public class CompanyImpl extends CompanyBaseImpl {
 	@Override
 	public boolean isSiteLogo() {
 		return _getPrefsPropsBoolean(
-			this, PropsKeys.COMPANY_SECURITY_SITE_LOGO,
+			PropsKeys.COMPANY_SECURITY_SITE_LOGO,
 			PropsValues.COMPANY_SECURITY_SITE_LOGO);
 	}
 
 	@Override
 	public boolean isStrangers() {
 		return _getPrefsPropsBoolean(
-			this, PropsKeys.COMPANY_SECURITY_STRANGERS,
+			PropsKeys.COMPANY_SECURITY_STRANGERS,
 			PropsValues.COMPANY_SECURITY_STRANGERS);
 	}
 
 	@Override
 	public boolean isStrangersVerify() {
 		return _getPrefsPropsBoolean(
-			this, PropsKeys.COMPANY_SECURITY_STRANGERS_VERIFY,
+			PropsKeys.COMPANY_SECURITY_STRANGERS_VERIFY,
 			PropsValues.COMPANY_SECURITY_STRANGERS_VERIFY);
 	}
 
 	@Override
 	public boolean isStrangersWithMx() {
 		return _getPrefsPropsBoolean(
-			this, PropsKeys.COMPANY_SECURITY_STRANGERS_WITH_MX,
+			PropsKeys.COMPANY_SECURITY_STRANGERS_WITH_MX,
 			PropsValues.COMPANY_SECURITY_STRANGERS_WITH_MX);
 	}
 
 	@Override
 	public boolean isUpdatePasswordRequired() {
 		return _getPrefsPropsBoolean(
-			this, PropsKeys.COMPANY_SECURITY_UPDATE_PASSWORD_REQUIRED,
+			PropsKeys.COMPANY_SECURITY_UPDATE_PASSWORD_REQUIRED,
 			PropsValues.COMPANY_SECURITY_UPDATE_PASSWORD_REQUIRED);
 	}
 
@@ -389,27 +395,12 @@ public class CompanyImpl extends CompanyBaseImpl {
 		_virtualHostname = virtualHostname;
 	}
 
-	private static boolean _getPrefsPropsBoolean(
-		Company company, String name, boolean defaultValue) {
-
+	private boolean _getPrefsPropsBoolean(String name, boolean defaultValue) {
 		String value = PrefsPropsUtil.getString(
-			company.getCompanyId(), name, PropsUtil.get(name));
+			getCompanyId(), name, PropsUtil.get(name));
 
 		if (value != null) {
 			return GetterUtil.getBoolean(value);
-		}
-
-		return defaultValue;
-	}
-
-	private static String _getPrefsPropsString(
-		Company company, String name, String defaultValue) {
-
-		String value = PrefsPropsUtil.getString(
-			company.getCompanyId(), name, PropsUtil.get(name));
-
-		if (value != null) {
-			return value;
 		}
 
 		return defaultValue;
