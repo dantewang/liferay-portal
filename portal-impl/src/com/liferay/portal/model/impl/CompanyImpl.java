@@ -70,7 +70,7 @@ public class CompanyImpl extends CompanyBaseImpl {
 	public String getAuthType() {
 		String authType = PrefsPropsUtil.getString(
 			getCompanyId(), PropsKeys.COMPANY_SECURITY_AUTH_TYPE,
-			PropsUtil.get(PropsKeys.COMPANY_SECURITY_AUTH_TYPE));
+			() -> PropsUtil.get(PropsKeys.COMPANY_SECURITY_AUTH_TYPE));
 
 		if (authType != null) {
 			return authType;
@@ -397,7 +397,7 @@ public class CompanyImpl extends CompanyBaseImpl {
 
 	private boolean _getPrefsPropsBoolean(String name, boolean defaultValue) {
 		String value = PrefsPropsUtil.getString(
-			getCompanyId(), name, PropsUtil.get(name));
+			getCompanyId(), name, () -> PropsUtil.get(name));
 
 		if (value != null) {
 			return GetterUtil.getBoolean(value);
