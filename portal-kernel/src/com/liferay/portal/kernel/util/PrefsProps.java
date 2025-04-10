@@ -6,6 +6,7 @@
 package com.liferay.portal.kernel.util;
 
 import java.util.Properties;
+import java.util.function.Supplier;
 
 import javax.portlet.PortletPreferences;
 
@@ -106,6 +107,9 @@ public interface PrefsProps {
 	public String getString(long companyId, String name);
 
 	public String getString(long companyId, String name, String defaultValue);
+
+	public String getString(
+		long companyId, String name, Supplier<String> defaultValueSupplier);
 
 	public String getString(PortletPreferences portletPreferences, String name);
 
