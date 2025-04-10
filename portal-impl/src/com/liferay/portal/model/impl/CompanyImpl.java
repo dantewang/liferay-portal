@@ -407,7 +407,6 @@ public class CompanyImpl extends CompanyBaseImpl {
 	}
 
 	private CompanyInfo _companyInfo;
-
 	private Group _group;
 
 	@CacheField(permanent = true, propagateToInterface = true)
