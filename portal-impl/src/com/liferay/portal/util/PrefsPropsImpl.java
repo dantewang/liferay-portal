@@ -338,6 +338,21 @@ public class PrefsPropsImpl implements PrefsProps {
 
 	@Override
 	public String getString(
+		long companyId, String name, Supplier<String> defaultValueSupplier) {
+
+		PortletPreferences portletPreferences = _fetchPreferences(companyId);
+
+		String value = portletPreferences.getValue(name, null);
+
+		if (value != null) {
+			return value;
+		}
+
+		return defaultValueSupplier.get();
+	}
+
+	@Override
+	public String getString(
 		PortletPreferences portletPreferences, String name) {
 
 		String value = PropsUtil.get(name);
