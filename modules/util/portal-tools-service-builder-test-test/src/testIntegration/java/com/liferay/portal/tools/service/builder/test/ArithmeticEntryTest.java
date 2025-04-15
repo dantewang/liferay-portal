@@ -54,7 +54,7 @@ public class ArithmeticEntryTest {
 	}
 
 	@Test
-	public void testDecimalDivision() {
+	public void testDivideByDecimal() {
 		ArithmeticEntry arithmeticEntry = _arithmeticEntryPersistence.create(
 			RandomTestUtil.nextLong());
 
@@ -80,14 +80,36 @@ public class ArithmeticEntryTest {
 	}
 
 	@Test
-	public void testZeroDivisor() {
+	public void testDivideByNull() {
 		ArithmeticEntry arithmeticEntry = _arithmeticEntryPersistence.create(
 			RandomTestUtil.nextLong());
 
-		long number1 = RandomTestUtil.nextLong();
+		arithmeticEntry.setNumber1(3L);
 
-		arithmeticEntry.setNumber1(number1);
+		_arithmeticEntries.add(
+			_arithmeticEntryPersistence.update(arithmeticEntry));
 
+		Assert.assertEquals(
+			Collections.singletonList(null),
+			_arithmeticEntryPersistence.dslQuery(
+				DSLQueryFactoryUtil.select(
+					DSLFunctionFactoryUtil.divide(
+						ArithmeticEntryTable.INSTANCE.number1,
+						ArithmeticEntryTable.INSTANCE.number2
+					).as(
+						"alias", Double.class
+					)
+				).from(
+					ArithmeticEntryTable.INSTANCE
+				)));
+	}
+
+	@Test
+	public void testDivideByZero() {
+		ArithmeticEntry arithmeticEntry = _arithmeticEntryPersistence.create(
+			RandomTestUtil.nextLong());
+
+		arithmeticEntry.setNumber1(3L);
 		arithmeticEntry.setNumber2(0L);
 
 		_arithmeticEntries.add(
