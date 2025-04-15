@@ -131,6 +131,8 @@ public class BndBundleUtil {
 			Headers.TEST_BRIDGE_PASS_CODE, String.valueOf(passCode));
 		project.setProperty("-contract", "!JavaPortlet,!JavaServlet");
 		project.setProperty(
+			"-plugin.metatype", "com.liferay.ant.bnd.metatype.MetatypePlugin");
+		project.setProperty(
 			"Bundle-Activator", TestBundleActivator.class.getCanonicalName());
 
 		Set<String> importPackages = new LinkedHashSet<>();
