@@ -11,7 +11,7 @@
 			<property name="tck.chrome.driver.version" value="100.0.4896.60" />
 
 			<mirrors-get
-				dest="tools/selenium/${selenium.chrome.driver.zip}"
+				dest="tools/selenium/${tck.chrome.driver.zip}"
 				src="https://chromedriver.storage.googleapis.com/${tck.chrome.driver.version}/${tck.chrome.driver.zip}"
 			/>
 
