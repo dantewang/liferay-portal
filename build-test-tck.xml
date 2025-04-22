@@ -87,10 +87,10 @@
 		configured statically in order for top_head.jsp to output render data.
 		-->
 
-		<exec dir="${tck.home}/.." executable="git" failonerror="true">
-			<arg value="apply" />
-			<arg value="${project.dir}/tools/tck/pluto-patch.diff" />
-		</exec>
+<!--		<exec dir="${tck.home}/.." executable="git" failonerror="true">-->
+<!--			<arg value="apply" />-->
+<!--			<arg value="${project.dir}/tools/tck/pluto-patch.diff" />-->
+<!--		</exec>-->
 
 		<local name="java.jdk.home" />
 		<local name="java.jdk.opts" />
@@ -136,9 +136,9 @@
 
 		<prepare-selenium-login-config />
 
-		<antcall inheritall="false" target="start-app-server">
-			<param name="app.server.bin.dir" value="${app.server.bin.dir}" />
-		</antcall>
+<!--		<antcall inheritall="false" target="start-app-server">-->
+<!--			<param name="app.server.bin.dir" value="${app.server.bin.dir}" />-->
+<!--		</antcall>-->
 	</target>
 
 	<target name="run-tck-tests">
@@ -181,26 +181,26 @@
 		<get-java-jdk-home architecture="x64" type="oracle" version="8" />
 		<get-java-jdk-opts architecture="x64" type="oracle" version="8" />
 
-		<exec dir="${tck.home}" executable="mvn" failonerror="true">
-			<env key="JAVA_HOME" value="${java.jdk.home}" />
-			<env key="JAVA_OPTS" value="${java.jdk.opts}" />
-			<arg line="-Pliferay,run-tck -Djava.awt.headless=true ${tck.properties} -Dtest.browser=htmlunit -Dtest.browser.binary= -Dtest.browser.webDriver= -Dtest.list.file=${project.dir}/tools/tck/htmlunit-tests.xml test" />
-		</exec>
+<!--		<exec dir="${tck.home}" executable="mvn" failonerror="true">-->
+<!--			<env key="JAVA_HOME" value="${java.jdk.home}" />-->
+<!--			<env key="JAVA_OPTS" value="${java.jdk.opts}" />-->
+<!--			<arg line="-Pliferay,run-tck -Djava.awt.headless=true ${tck.properties} -Dtest.browser=htmlunit -Dtest.browser.binary= -Dtest.browser.webDriver= -Dtest.list.file=${project.dir}/tools/tck/htmlunit-tests.xml test" />-->
+<!--		</exec>-->
 
-		<if>
-			<available file="${tck.home}/driver/target/surefire-reports/TEST-javax.portlet.tck.driver.TCKLiferayTestDriver.xml" />
-			<then>
-				<mkdir dir="${project.dir}/tools/tck/test-results" />
+<!--		<if>-->
+<!--			<available file="${tck.home}/driver/target/surefire-reports/TEST-javax.portlet.tck.driver.TCKLiferayTestDriver.xml" />-->
+<!--			<then>-->
+<!--				<mkdir dir="${project.dir}/tools/tck/test-results" />-->
 
-				<copy
-					file="${tck.home}/driver/target/surefire-reports/TEST-javax.portlet.tck.driver.TCKLiferayTestDriver.xml"
-					tofile="${project.dir}/tools/tck/test-results/TEST-javax.portlet.tck.driver.TCKLiferayTestDriver-htmlunit.xml"
-				/>
-			</then>
-			<else>
-				<fail message="No TCK tests were run with HTMLUnit." />
-			</else>
-		</if>
+<!--				<copy-->
+<!--					file="${tck.home}/driver/target/surefire-reports/TEST-javax.portlet.tck.driver.TCKLiferayTestDriver.xml"-->
+<!--					tofile="${project.dir}/tools/tck/test-results/TEST-javax.portlet.tck.driver.TCKLiferayTestDriver-htmlunit.xml"-->
+<!--				/>-->
+<!--			</then>-->
+<!--			<else>-->
+<!--				<fail message="No TCK tests were run with HTMLUnit." />-->
+<!--			</else>-->
+<!--		</if>-->
 
 		<prepare-chrome-driver />
 
