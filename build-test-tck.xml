@@ -204,6 +204,8 @@
 
 		<get-browser-property property.name="browser.docker.image" />
 
+		<echo>############## ${browser.docker.image}</echo>
+
 		<if>
 			<and>
 				<isset property="browser.docker.image" />
