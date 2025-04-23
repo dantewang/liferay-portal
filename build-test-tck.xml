@@ -87,10 +87,10 @@
 		configured statically in order for top_head.jsp to output render data.
 		-->
 
-<!--		<exec dir="${tck.home}/.." executable="git" failonerror="true">-->
-<!--			<arg value="apply" />-->
-<!--			<arg value="${project.dir}/tools/tck/pluto-patch.diff" />-->
-<!--		</exec>-->
+		<exec dir="${tck.home}/.." executable="git" failonerror="true">
+			<arg value="apply" />
+			<arg value="${project.dir}/tools/tck/pluto-patch.diff" />
+		</exec>
 
 		<local name="java.jdk.home" />
 		<local name="java.jdk.opts" />
@@ -136,9 +136,9 @@
 
 		<prepare-selenium-login-config />
 
-<!--		<antcall inheritall="false" target="start-app-server">-->
-<!--			<param name="app.server.bin.dir" value="${app.server.bin.dir}" />-->
-<!--		</antcall>-->
+		<antcall inheritall="false" target="start-app-server">
+			<param name="app.server.bin.dir" value="${app.server.bin.dir}" />
+		</antcall>
 	</target>
 
 	<target name="run-tck-tests">
