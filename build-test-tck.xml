@@ -51,6 +51,11 @@
 						file="tools/selenium/chrome-linux/chrome"
 						perm="a+x"
 					/>
+
+					<chmod
+						file="tools/selenium/chrome-linux/chrome_crashpad_handler"
+						perm="a+x"
+					/>
 				</then>
 			</if>
 		</sequential>
