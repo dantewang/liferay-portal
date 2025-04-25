@@ -12,23 +12,6 @@
 	<entry key="V2URLTests_BaseURL_ApiRenderResurl_setParameters8"></entry>
 	<entry key="V2URLTests_PortletURLGenerationListener_ApiRenderResurl_filterResourceURL3"></entry>
 
-	<!-- Failures maybe caused by LPS-76502 (com.liferay.portlet.internal.CacheControlImpl#_removeETag) -->
-
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_getETag1"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_getETag2"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_getExpirationTime1"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_getExpirationTime2"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_isPublicScope1"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_isPublicScope2"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_isPublicScope3"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_setETag1"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_setETag2"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_setExpirationTime1"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_setExpirationTime2"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_setExpirationTime3"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_setPublicScope1"></entry>
-	<entry key="V2EnvironmentTests_CacheControl_ApiResource_setPublicScope2"></entry>
-
 	<!-- Failures not yet identified -->
 
 	<entry key="V2URLTests_BaseURL_ApiRenderActurl_setSecure2"></entry>
