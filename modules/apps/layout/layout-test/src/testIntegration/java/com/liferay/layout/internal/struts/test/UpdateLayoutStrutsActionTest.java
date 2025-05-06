@@ -9,6 +9,8 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.info.item.InfoItemServiceRegistry;
 import com.liferay.layout.test.util.ContentLayoutTestUtil;
 import com.liferay.layout.test.util.LayoutTestUtil;
+import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
+import com.liferay.portal.kernel.deploy.hot.HotDeployUtil;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -21,6 +23,7 @@ import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUti
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.PortletLocalService;
 import com.liferay.portal.kernel.service.PortletPreferencesLocalService;
+import com.liferay.portal.kernel.servlet.ServletContextClassLoaderPool;
 import com.liferay.portal.kernel.struts.StrutsAction;
 import com.liferay.portal.kernel.test.TestInfo;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -35,6 +38,8 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
+
+import java.io.InputStream;
 
 import java.util.List;
 
@@ -54,6 +59,7 @@ import org.osgi.framework.ServiceRegistration;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockServletContext;
 
 /**
  * @author Lourdes Fernández Besada
@@ -123,6 +129,68 @@ public class UpdateLayoutStrutsActionTest {
 
 			Assert.assertEquals(
 				portletIds.toString(), count, portletIds.size());
+		}
+	}
+
+	@Test
+	@TestInfo("LPD-52276")
+	public void testExecuteAddPortletFromWAR() throws Exception {
+		MockServletContext mockServletContext = new MockServletContext() {
+
+			@Override
+			public ClassLoader getClassLoader() {
+				return UpdateLayoutStrutsActionTest.class.getClassLoader();
+			}
+
+			@Override
+			public InputStream getResourceAsStream(String path) {
+				ClassLoader classLoader = getClassLoader();
+
+				return classLoader.getResourceAsStream(_ROOT_PATH + path);
+			}
+
+			private static final String _ROOT_PATH =
+				"/com/liferay/layout/internal/struts/test/dependencies";
+
+		};
+
+		ServletContextClassLoaderPool.register(
+			mockServletContext.getServletContextName(),
+			mockServletContext.getClassLoader());
+
+		HotDeployEvent hotDeployEvent = new HotDeployEvent(mockServletContext);
+
+		HotDeployUtil.fireDeployEvent(hotDeployEvent);
+
+		try {
+			MockHttpServletRequest mockHttpServletRequest =
+				_getMockHttpServletRequest();
+			MockHttpServletResponse mockHttpServletResponse =
+				new MockHttpServletResponse();
+
+			mockHttpServletRequest.setParameter(
+				"p_p_id", "1_WAR_MockServletContext");
+
+			LayoutTypePortlet layoutTypePortlet =
+				(LayoutTypePortlet)_layout.getLayoutType();
+
+			List<String> portletIds = layoutTypePortlet.getPortletIds();
+
+			int count = portletIds.size();
+
+			_updateLayoutStrutsAction.execute(
+				mockHttpServletRequest, mockHttpServletResponse);
+
+			portletIds = layoutTypePortlet.getPortletIds();
+
+			Assert.assertEquals(
+				portletIds.toString(), count + 1, portletIds.size());
+		}
+		finally {
+			HotDeployUtil.fireUndeployEvent(hotDeployEvent);
+
+			ServletContextClassLoaderPool.unregister(
+				mockServletContext.getServletContextName());
 		}
 	}
 
