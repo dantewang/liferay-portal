@@ -214,7 +214,6 @@ public class ElasticsearchServerUtil {
 			Class<?> optionParserClass = classLoader.loadClass(
 				"joptsimple.OptionParser");
 
-
 			_parseMethod = ReflectionUtil.getDeclaredMethod(
 				optionParserClass, "parse", String[].class);
 
@@ -228,7 +227,8 @@ public class ElasticsearchServerUtil {
 
 			_serverCliConstructor.setAccessible(true);
 
-			_parserField = ReflectionUtil.getDeclaredField(serverCliClass, "parser");
+			_parserField = ReflectionUtil.getDeclaredField(
+				serverCliClass.getSuperclass().getSuperclass(), "parser");
 
 			_createEnvMethod = ReflectionUtil.getDeclaredMethod(
 				serverCliClass.getSuperclass(), "createEnv", optionSetClass,
