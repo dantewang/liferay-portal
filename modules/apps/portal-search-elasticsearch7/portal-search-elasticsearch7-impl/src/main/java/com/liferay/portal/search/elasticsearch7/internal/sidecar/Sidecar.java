@@ -242,6 +242,9 @@ public class Sidecar {
 		String sidecarLibClassPath = _createClasspath(
 			_sidecarHomePath.resolve("lib"), path -> true);
 
+		sidecarLibClassPath = sidecarLibClassPath.concat(File.pathSeparator).concat(
+			_createClasspath(_sidecarHomePath.resolve("lib").resolve("tools").resolve("server-cli"), path -> true));
+
 		try {
 			return _processExecutor.execute(
 				_createProcessConfig(sidecarLibClassPath),
