@@ -5,9 +5,14 @@
 
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
+import com.liferay.petra.io.unsync.UnsyncByteArrayInputStream;
+import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.reflect.ReflectionUtil;
 
+import java.io.InputStream;
+
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -20,6 +25,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.elasticsearch.cli.ExitCodes;
+import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
+import org.elasticsearch.common.io.stream.StreamOutput;
+import org.elasticsearch.common.settings.KeyStoreWrapper;
 import org.elasticsearch.node.Node;
 
 /**
@@ -43,8 +51,28 @@ public class ElasticsearchServerUtil {
 	}
 
 	public static Node start(String[] arguments) throws ProcessException {
-		try {
-			_mainMethod.invoke(null, new Object[] {arguments});
+		try (UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
+				new UnsyncByteArrayOutputStream();
+			StreamOutput streamOutput = new OutputStreamStreamOutput(
+				unsyncByteArrayOutputStream)) {
+
+			Object serverArgs = _createServerArgs(arguments);
+
+			_writeToMethod.invoke(serverArgs, streamOutput);
+
+			InputStream originalSystemInInputStream = System.in;
+
+			try (UnsyncByteArrayInputStream unsyncByteArrayInputStream =
+					new UnsyncByteArrayInputStream(
+						unsyncByteArrayOutputStream.toByteArray())) {
+
+				System.setIn(unsyncByteArrayInputStream);
+
+				_mainMethod.invoke(null, (Object)null);
+			}
+			finally {
+				System.setIn(originalSystemInInputStream);
+			}
 
 			System.setSecurityManager(null);
 
@@ -52,10 +80,9 @@ public class ElasticsearchServerUtil {
 
 			return (Node)_nodeField.get(_instanceField.get(null));
 		}
-		catch (ReflectiveOperationException reflectiveOperationException) {
+		catch (Exception exception) {
 			throw new ProcessException(
-				"Unable to start elasticsearch server",
-				reflectiveOperationException);
+				"Unable to start elasticsearch server", exception);
 		}
 	}
 
@@ -114,16 +141,44 @@ public class ElasticsearchServerUtil {
 		}
 	}
 
+	private static Object _createServerArgs(String[] arguments)
+		throws ReflectiveOperationException {
+
+		_configureESLoggingMethod.invoke(null);
+
+		Object processInfo = _fromSystemMethod.invoke(null);
+
+		Object serverCli = _serverCliConstructor.newInstance();
+
+		Object optionSet = _parseMethod.invoke(
+			_parserField.get(serverCli), (Object)arguments);
+
+		Object environment = _createEnvMethod.invoke(
+			serverCli, optionSet, processInfo);
+
+		return _createArgsMethod.invoke(
+			serverCli, optionSet, environment, KeyStoreWrapper.create(),
+			processInfo);
+	}
+
 	private static final Logger _logger = LogManager.getLogger(
 		ElasticsearchServerUtil.class);
 
+	private static final Method _configureESLoggingMethod;
+	private static final Method _createArgsMethod;
+	private static final Method _createEnvMethod;
+	private static final Method _fromSystemMethod;
 	private static final Field _hooksField;
 	private static final Field _instanceField;
 	private static final Method _mainMethod;
 	private static final Field _nodeField;
+	private static final Method _parseMethod;
+	private static final Field _parserField;
+	private static final Constructor<?> _serverCliConstructor;
 	private static final CountDownLatch _shutdownCountDownLatch =
 		new CountDownLatch(1);
 	private static final Method _stopMethod;
+	private static final Method _writeToMethod;
 
 	static {
 		try {
@@ -134,13 +189,11 @@ public class ElasticsearchServerUtil {
 				classLoader.loadClass("java.lang.ApplicationShutdownHooks"),
 				"hooks");
 
-			_mainMethod = ReflectionUtil.getDeclaredMethod(
-				classLoader.loadClass(
-					"org.elasticsearch.bootstrap.Elasticsearch"),
-				"main", String[].class);
-
 			Class<?> elasticsearchClass = classLoader.loadClass(
 				"org.elasticsearch.bootstrap.Elasticsearch");
+
+			_mainMethod = ReflectionUtil.getDeclaredMethod(
+				elasticsearchClass, "main", String[].class);
 
 			_instanceField = ReflectionUtil.getDeclaredField(
 				elasticsearchClass, "INSTANCE");
@@ -150,6 +203,54 @@ public class ElasticsearchServerUtil {
 
 			_stopMethod = ReflectionUtil.getDeclaredMethod(
 				elasticsearchClass, "shutdown");
+
+			_writeToMethod = ReflectionUtil.getDeclaredMethod(
+				classLoader.loadClass("org.elasticsearch.bootstrap.ServerArgs"),
+				"writeTo", StreamOutput.class);
+
+			Class<?> processInfoClass = classLoader.loadClass(
+				"org.elasticsearch.cli.ProcessInfo");
+
+			_fromSystemMethod = ReflectionUtil.getDeclaredMethod(
+				processInfoClass, "fromSystem");
+
+			Class<?> optionParserClass = classLoader.loadClass(
+				"joptsimple.OptionParser");
+
+			_parseMethod = ReflectionUtil.getDeclaredMethod(
+				optionParserClass, "parse", String[].class);
+
+			Class<?> optionSetClass = classLoader.loadClass(
+				"joptsimple.OptionSet");
+
+			Class<?> serverCliClass = classLoader.loadClass(
+				"org.elasticsearch.server.cli.ServerCli");
+
+			_serverCliConstructor = serverCliClass.getDeclaredConstructor();
+
+			_serverCliConstructor.setAccessible(true);
+
+			Class<?> serverCliSuperClass = serverCliClass.getSuperclass();
+
+			_parserField = ReflectionUtil.getDeclaredField(
+				serverCliSuperClass.getSuperclass(), "parser");
+
+			_createEnvMethod = ReflectionUtil.getDeclaredMethod(
+				serverCliSuperClass, "createEnv", optionSetClass,
+				processInfoClass);
+
+			_createArgsMethod = ReflectionUtil.getDeclaredMethod(
+				serverCliClass, "createArgs", optionSetClass,
+				classLoader.loadClass("org.elasticsearch.env.Environment"),
+				classLoader.loadClass(
+					"org.elasticsearch.common.settings.SecureSettings"),
+				processInfoClass);
+
+			Class<?> logConfiguratorClass = classLoader.loadClass(
+				"org.elasticsearch.common.logging.LogConfigurator");
+
+			_configureESLoggingMethod = ReflectionUtil.getDeclaredMethod(
+				logConfiguratorClass, "configureESLogging");
 		}
 		catch (Exception exception) {
 			throw new ExceptionInInitializerError(exception);
