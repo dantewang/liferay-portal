@@ -146,10 +146,10 @@ public class ElasticsearchServerUtil {
 
 		Object processInfo = _fromSystemMethod.invoke(null);
 
-		Object optionSet = _parseMethod.invoke(
-			_optionParserConstructor.newInstance(), (Object)arguments);
-
 		Object serverCli = _serverCliConstructor.newInstance();
+
+		Object optionSet = _parseMethod.invoke(
+			_parserField.get(serverCli), (Object)arguments);
 
 		Object environment = _createEnvMethod.invoke(
 			serverCli, optionSet, processInfo);
@@ -169,7 +169,7 @@ public class ElasticsearchServerUtil {
 	private static final Field _instanceField;
 	private static final Method _mainMethod;
 	private static final Field _nodeField;
-	private static final Constructor<?> _optionParserConstructor;
+	private static final Field _parserField;
 	private static final Method _parseMethod;
 	private static final Constructor<?> _serverCliConstructor;
 	private static final CountDownLatch _shutdownCountDownLatch =
@@ -214,7 +214,6 @@ public class ElasticsearchServerUtil {
 			Class<?> optionParserClass = classLoader.loadClass(
 				"joptsimple.OptionParser");
 
-			_optionParserConstructor = optionParserClass.getDeclaredConstructor();
 
 			_parseMethod = ReflectionUtil.getDeclaredMethod(
 				optionParserClass, "parse", String[].class);
@@ -228,6 +227,8 @@ public class ElasticsearchServerUtil {
 			_serverCliConstructor = serverCliClass.getDeclaredConstructor();
 
 			_serverCliConstructor.setAccessible(true);
+
+			_parserField = ReflectionUtil.getDeclaredField(serverCliClass, "parser");
 
 			_createEnvMethod = ReflectionUtil.getDeclaredMethod(
 				serverCliClass.getSuperclass(), "createEnv", optionSetClass,
