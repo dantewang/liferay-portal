@@ -68,7 +68,7 @@ public class ElasticsearchServerUtil {
 
 				System.setIn(unsyncByteArrayInputStream);
 
-				_mainMethod.invoke(null);
+				_mainMethod.invoke(null, (Object)null);
 			}
 			finally {
 				System.setIn(originalSystemInInputStream);
