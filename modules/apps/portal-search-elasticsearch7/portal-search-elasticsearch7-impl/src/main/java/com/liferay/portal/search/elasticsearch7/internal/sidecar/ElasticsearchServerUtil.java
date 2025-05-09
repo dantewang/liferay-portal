@@ -144,6 +144,8 @@ public class ElasticsearchServerUtil {
 	private static Object _createServerArgs(String[] arguments)
 		throws ReflectiveOperationException {
 
+		_configureESLoggingMethod.invoke(null);
+
 		Object processInfo = _fromSystemMethod.invoke(null);
 
 		Object serverCli = _serverCliConstructor.newInstance();
@@ -162,6 +164,7 @@ public class ElasticsearchServerUtil {
 	private static final Logger _logger = LogManager.getLogger(
 		ElasticsearchServerUtil.class);
 
+	private static final Method _configureESLoggingMethod;
 	private static final Method _createArgsMethod;
 	private static final Method _createEnvMethod;
 	private static final Method _fromSystemMethod;
@@ -240,6 +243,12 @@ public class ElasticsearchServerUtil {
 				classLoader.loadClass(
 					"org.elasticsearch.common.settings.SecureSettings"),
 				processInfoClass);
+
+			Class<?> logConfiguratorClass = classLoader.loadClass(
+				"org.elasticsearch.common.logging.LogConfigurator");
+
+			_configureESLoggingMethod = ReflectionUtil.getDeclaredMethod(
+				logConfiguratorClass, "configureESLogging");
 		}
 		catch (Exception exception) {
 			throw new ExceptionInInitializerError(exception);
