@@ -405,6 +405,13 @@ public class Sidecar {
 		arguments.add(
 			"org.elasticsearch.nativeaccess/org.elasticsearch.nativeaccess=" +
 				"ALL-UNNAMED");
+		arguments.add("--add-opens");
+		arguments.add(
+			"org.elasticsearch.cli/org.elasticsearch.cli=ALL-UNNAMED");
+		arguments.add("--add-opens");
+		arguments.add(
+			"org.elasticsearch.server/org.elasticsearch.common.cli=ALL-" +
+				"UNNAMED");
 
 		// Apply module patches for class modifications
 
