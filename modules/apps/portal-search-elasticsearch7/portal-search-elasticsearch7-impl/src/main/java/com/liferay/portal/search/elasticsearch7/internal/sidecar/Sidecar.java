@@ -240,10 +240,8 @@ public class Sidecar {
 		}
 
 		String sidecarLibClassPath = _createClasspath(
-			_sidecarHomePath.resolve("lib"), path -> true);
-
-		sidecarLibClassPath = sidecarLibClassPath.concat(File.pathSeparator).concat(
-			_createClasspath(_sidecarHomePath.resolve("lib").resolve("tools").resolve("server-cli"), path -> true));
+			_sidecarHomePath.resolve(Paths.get("lib", "tools", "server-cli")),
+			path -> true);
 
 		try {
 			return _processExecutor.execute(
@@ -251,7 +249,9 @@ public class Sidecar {
 				new SidecarMainProcessCallable(
 					_elasticsearchConfigurationWrapper.
 						sidecarHeartbeatInterval(),
-					_getModifiedClasses(sidecarLibClassPath)));
+					_getModifiedClasses(
+						_createClasspath(
+							_sidecarHomePath.resolve("lib"), path -> true))));
 		}
 		catch (ProcessException processException) {
 			throw new RuntimeException(
@@ -381,6 +381,30 @@ public class Sidecar {
 		if (JavaDetector.isJDK21() && OSDetector.isLinux()) {
 			arguments.add("-XX:-UseContainerSupport");
 		}
+
+		// See org.elasticsearch.server.cli.ServerProcessBuilder#getJvmArgs
+
+		arguments.add("--module-path");
+		arguments.add(String.valueOf(_sidecarHomePath.resolve("lib")));
+		arguments.add("--add-modules=jdk.net");
+		arguments.add("--add-modules=ALL-MODULE-PATH");
+
+		// necessary for Java module usage
+
+		arguments.add("--add-opens");
+		arguments.add(
+			"org.elasticsearch.server/org.elasticsearch.bootstrap=ALL-UNNAMED");
+		arguments.add("--add-opens");
+		arguments.add(
+			"org.elasticsearch.server/org.elasticsearch.common.settings=ALL-" +
+				"UNNAMED");
+		arguments.add("--add-opens");
+		arguments.add(
+			"org.elasticsearch.server/org.elasticsearch.env=ALL-UNNAMED");
+		arguments.add("--add-opens");
+		arguments.add(
+			"org.elasticsearch.nativeaccess/org.elasticsearch.nativeaccess=" +
+				"ALL-UNNAMED");
 
 		return arguments;
 	}
