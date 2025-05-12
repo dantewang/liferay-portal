@@ -138,6 +138,10 @@ public class ElasticsearchInstanceSettingsBuilder {
 		_settingsHelperImpl.put(key, value);
 	}
 
+	protected void put(String key, List<String> values) {
+		_settingsHelperImpl.put(key, values);
+	}
+
 	protected void put(String key, String value) {
 		_settingsHelperImpl.put(key, value);
 	}
@@ -281,10 +285,6 @@ public class ElasticsearchInstanceSettingsBuilder {
 		_disableGeoipDownloader();
 
 		_disableXpack();
-	}
-
-	protected void put(String key, List<String> values) {
-		_settingsHelperImpl.put(key, values);
 	}
 
 	private void _loadSidecarConfigurations() {

@@ -92,7 +92,8 @@ public class ElasticsearchServerUtil {
 								_blockEOFCountDownLatch.await();
 							}
 							catch (InterruptedException interruptedException) {
-								Thread.currentThread().interrupt();
+								Thread.currentThread(
+								).interrupt();
 							}
 						}
 
@@ -114,7 +115,8 @@ public class ElasticsearchServerUtil {
 		}
 		catch (Exception exception) {
 			throw new ProcessException(
-				"Unable to start elasticsearch server " +  exception.getMessage(),
+				"Unable to start elasticsearch server " +
+					exception.getMessage(),
 				exception);
 		}
 	}
@@ -201,7 +203,6 @@ public class ElasticsearchServerUtil {
 
 	private static final CountDownLatch _blockEOFCountDownLatch =
 		new CountDownLatch(1);
-
 	private static final Method _configureESLoggingMethod;
 	private static final Method _createArgsMethod;
 	private static final Method _createEnvMethod;
@@ -210,8 +211,8 @@ public class ElasticsearchServerUtil {
 	private static final Field _instanceField;
 	private static final Method _mainMethod;
 	private static final Field _nodeField;
-	private static final Field _parserField;
 	private static final Method _parseMethod;
+	private static final Field _parserField;
 	private static final Constructor<?> _serverCliConstructor;
 	private static final CountDownLatch _shutdownCountDownLatch =
 		new CountDownLatch(1);
@@ -269,7 +270,9 @@ public class ElasticsearchServerUtil {
 			_serverCliConstructor.setAccessible(true);
 
 			_parserField = ReflectionUtil.getDeclaredField(
-				serverCliClass.getSuperclass().getSuperclass(), "parser");
+				serverCliClass.getSuperclass(
+				).getSuperclass(),
+				"parser");
 
 			_createEnvMethod = ReflectionUtil.getDeclaredMethod(
 				serverCliClass.getSuperclass(), "createEnv", optionSetClass,

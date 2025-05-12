@@ -7,14 +7,13 @@ package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import com.liferay.petra.process.ProcessCallable;
 import com.liferay.petra.process.ProcessException;
-
 import com.liferay.petra.reflect.ReflectionUtil;
+
+import java.lang.reflect.Method;
+
 import org.elasticsearch.common.transport.BoundTransportAddress;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.http.HttpServerTransport;
-import org.elasticsearch.node.Node;
-
-import java.lang.reflect.Method;
 
 /**
  * @author Tina Tian
@@ -33,11 +32,16 @@ public class StartSidecarProcessCallable implements ProcessCallable<String> {
 			ClassLoader classLoader =
 				StartSidecarProcessCallable.class.getClassLoader();
 
-			Method injectorMethod = ReflectionUtil.getDeclaredMethod(classLoader.loadClass("org.elasticsearch.node.Node"), "injector");
+			Method injectorMethod = ReflectionUtil.getDeclaredMethod(
+				classLoader.loadClass("org.elasticsearch.node.Node"),
+				"injector");
 
 			Object injectorObject = injectorMethod.invoke(nodeObject);
 
-			Method method = ReflectionUtil.getDeclaredMethod(classLoader.loadClass("org.elasticsearch.injection.guice.Injector"), "getInstance", Class.class);
+			Method method = ReflectionUtil.getDeclaredMethod(
+				classLoader.loadClass(
+					"org.elasticsearch.injection.guice.Injector"),
+				"getInstance", Class.class);
 
 			HttpServerTransport httpServerTransport =
 				(HttpServerTransport)method.invoke(

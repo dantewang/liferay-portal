@@ -41,8 +41,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import java.nio.file.StandardOpenOption;
+
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
 
@@ -431,100 +431,6 @@ public class Sidecar {
 		return StringPool.BLANK;
 	}
 
-	private Map<String, Path> _prepareModifiedClasses(
-		String sidecarLibClassPath) {
-
-		Map<String, Path> patchModulePaths = new HashMap<>();
-
-		try {
-			ClassLoader classLoader = new URLClassLoader(
-				ClassPathUtil.getClassPathURLs(sidecarLibClassPath), null);
-
-			patchModulePaths.putIfAbsent(
-				"org.elasticsearch.nativeaccess",
-				_writeModifiedClass(
-					"org.elasticsearch.nativeaccess",
-					"org.elasticsearch.nativeaccess.NativeAccess",
-					ClassModificationUtil.getModifiedClassBytes(
-						"org.elasticsearch.nativeaccess.NativeAccess",
-						"definitelyRunningAsRoot",
-						methodVisitor -> {
-							methodVisitor.visitCode();
-							methodVisitor.visitInsn(Opcodes.ICONST_0);
-							methodVisitor.visitInsn(Opcodes.IRETURN);
-						},
-						classLoader)));
-
-			patchModulePaths.putIfAbsent(
-				"org.elasticsearch.server",
-				_writeModifiedClass(
-					"org.elasticsearch.server",
-					"org.elasticsearch.common.settings.KeyStoreWrapper",
-					ClassModificationUtil.getModifiedClassBytes(
-						"org.elasticsearch.common.settings.KeyStoreWrapper",
-						"save",
-						methodVisitor -> {
-							methodVisitor.visitCode();
-							methodVisitor.visitInsn(Opcodes.RETURN);
-						},
-						classLoader)));
-
-			patchModulePaths.putIfAbsent(
-				"org.elasticsearch.server",
-				_writeModifiedClass(
-					"org.elasticsearch.server",
-					"org.elasticsearch.bootstrap.Security",
-					ClassModificationUtil.getModifiedClassBytes(
-						"org.elasticsearch.bootstrap.Security", "configure",
-						methodVisitor -> {
-							methodVisitor.visitCode();
-							methodVisitor.visitInsn(Opcodes.RETURN);
-						},
-						classLoader)));
-
-			patchModulePaths.putIfAbsent(
-				"org.elasticsearch.server",
-				_writeModifiedClass(
-					"org.elasticsearch.server",
-					"org.elasticsearch.bootstrap.Spawner",
-					ClassModificationUtil.getModifiedClassBytes(
-						"org.elasticsearch.bootstrap.Spawner",
-						"spawnNativeControllers",
-						methodVisitor -> {
-							methodVisitor.visitCode();
-							methodVisitor.visitInsn(Opcodes.RETURN);
-						},
-						classLoader)));
-		}
-		catch (Exception exception) {
-			_log.error("Unable to modify classes", exception);
-		}
-
-		return patchModulePaths;
-	}
-
-	private Path _writeModifiedClass(
-			String moduleName, String className, byte[] bytes)
-		throws IOException {
-
-		Path patchModulePath = _sidecarTempDirPath.resolve(
-			Paths.get("patch-module", moduleName));
-
-		String[] parts = StringUtil.split(className, CharPool.PERIOD);
-
-		Path classPackagePath = patchModulePath.resolve(
-			Paths.get(parts[0], ArrayUtil.subset(parts, 1, parts.length - 1)));
-
-		Files.createDirectories(classPackagePath);
-
-		Files.write(
-			classPackagePath.resolve(parts[parts.length - 1] + ".class"),
-			bytes, StandardOpenOption.CREATE,
-			StandardOpenOption.TRUNCATE_EXISTING);
-
-		return patchModulePath;
-	}
-
 	private String _getNodeName() {
 		String nodeName = _elasticsearchConfigurationWrapper.nodeName();
 
@@ -616,6 +522,78 @@ public class Sidecar {
 		).install();
 	}
 
+	private Map<String, Path> _prepareModifiedClasses(
+		String sidecarLibClassPath) {
+
+		Map<String, Path> patchModulePaths = new HashMap<>();
+
+		try {
+			ClassLoader classLoader = new URLClassLoader(
+				ClassPathUtil.getClassPathURLs(sidecarLibClassPath), null);
+
+			patchModulePaths.putIfAbsent(
+				"org.elasticsearch.nativeaccess",
+				_writeModifiedClass(
+					"org.elasticsearch.nativeaccess",
+					"org.elasticsearch.nativeaccess.NativeAccess",
+					ClassModificationUtil.getModifiedClassBytes(
+						"org.elasticsearch.nativeaccess.NativeAccess",
+						"definitelyRunningAsRoot",
+						methodVisitor -> {
+							methodVisitor.visitCode();
+							methodVisitor.visitInsn(Opcodes.ICONST_0);
+							methodVisitor.visitInsn(Opcodes.IRETURN);
+						},
+						classLoader)));
+
+			patchModulePaths.putIfAbsent(
+				"org.elasticsearch.server",
+				_writeModifiedClass(
+					"org.elasticsearch.server",
+					"org.elasticsearch.common.settings.KeyStoreWrapper",
+					ClassModificationUtil.getModifiedClassBytes(
+						"org.elasticsearch.common.settings.KeyStoreWrapper",
+						"save",
+						methodVisitor -> {
+							methodVisitor.visitCode();
+							methodVisitor.visitInsn(Opcodes.RETURN);
+						},
+						classLoader)));
+
+			patchModulePaths.putIfAbsent(
+				"org.elasticsearch.server",
+				_writeModifiedClass(
+					"org.elasticsearch.server",
+					"org.elasticsearch.bootstrap.Security",
+					ClassModificationUtil.getModifiedClassBytes(
+						"org.elasticsearch.bootstrap.Security", "configure",
+						methodVisitor -> {
+							methodVisitor.visitCode();
+							methodVisitor.visitInsn(Opcodes.RETURN);
+						},
+						classLoader)));
+
+			patchModulePaths.putIfAbsent(
+				"org.elasticsearch.server",
+				_writeModifiedClass(
+					"org.elasticsearch.server",
+					"org.elasticsearch.bootstrap.Spawner",
+					ClassModificationUtil.getModifiedClassBytes(
+						"org.elasticsearch.bootstrap.Spawner",
+						"spawnNativeControllers",
+						methodVisitor -> {
+							methodVisitor.visitCode();
+							methodVisitor.visitInsn(Opcodes.RETURN);
+						},
+						classLoader)));
+		}
+		catch (Exception exception) {
+			_log.error("Unable to modify classes", exception);
+		}
+
+		return patchModulePaths;
+	}
+
 	private String _startElasticsearch(
 		ProcessChannel<Serializable> processChannel) {
 
@@ -664,6 +642,27 @@ public class Sidecar {
 		catch (InterruptedException interruptedException) {
 			throw new RuntimeException(interruptedException);
 		}
+	}
+
+	private Path _writeModifiedClass(
+			String moduleName, String className, byte[] bytes)
+		throws IOException {
+
+		Path patchModulePath = _sidecarTempDirPath.resolve(
+			Paths.get("patch-module", moduleName));
+
+		String[] parts = StringUtil.split(className, CharPool.PERIOD);
+
+		Path classPackagePath = patchModulePath.resolve(
+			Paths.get(parts[0], ArrayUtil.subset(parts, 1, parts.length - 1)));
+
+		Files.createDirectories(classPackagePath);
+
+		Files.write(
+			classPackagePath.resolve(parts[parts.length - 1] + ".class"), bytes,
+			StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+		return patchModulePath;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(Sidecar.class);
