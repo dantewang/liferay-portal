@@ -64,7 +64,42 @@ public class ElasticsearchServerUtil {
 
 			try (UnsyncByteArrayInputStream unsyncByteArrayInputStream =
 					new UnsyncByteArrayInputStream(
-						unsyncByteArrayOutputStream.toByteArray())) {
+						unsyncByteArrayOutputStream.toByteArray()) {
+
+						@Override
+						public int read() {
+							int value = super.read();
+
+							if (value == -1) {
+								_block();
+							}
+
+							return value;
+						}
+
+						@Override
+						public int read(byte[] bytes, int offset, int length) {
+							int value = super.read(bytes, offset, length);
+
+							if (value == -1) {
+								_block();
+							}
+
+							return value;
+						}
+
+						private void _block() {
+							try {
+								_blockEOFCountDownLatch.await();
+							}
+							catch (InterruptedException interruptedException) {
+								if (_logger.isDebugEnabled()) {
+									_logger.debug(interruptedException);
+								}
+							}
+						}
+
+					}) {
 
 				System.setIn(unsyncByteArrayInputStream);
 
@@ -82,7 +117,9 @@ public class ElasticsearchServerUtil {
 		}
 		catch (Exception exception) {
 			throw new ProcessException(
-				"Unable to start elasticsearch server", exception);
+				"Unable to start elasticsearch server " +
+					exception.getMessage(),
+				exception);
 		}
 	}
 
@@ -134,6 +171,8 @@ public class ElasticsearchServerUtil {
 							}
 						}
 					}
+
+					_blockEOFCountDownLatch.countDown();
 				},
 				"Elasticsearch Server Shutdown Hook");
 
@@ -164,6 +203,8 @@ public class ElasticsearchServerUtil {
 	private static final Logger _logger = LogManager.getLogger(
 		ElasticsearchServerUtil.class);
 
+	private static final CountDownLatch _blockEOFCountDownLatch =
+		new CountDownLatch(1);
 	private static final Method _configureESLoggingMethod;
 	private static final Method _createArgsMethod;
 	private static final Method _createEnvMethod;
