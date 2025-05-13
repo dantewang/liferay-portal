@@ -535,9 +535,9 @@ public class Sidecar {
 				"org.elasticsearch.nativeaccess",
 				_writeModifiedClass(
 					"org.elasticsearch.nativeaccess",
-					"org.elasticsearch.nativeaccess.NativeAccess",
+					"org.elasticsearch.nativeaccess.PosixNativeAccess",
 					ClassModificationUtil.getModifiedClassBytes(
-						"org.elasticsearch.nativeaccess.NativeAccess",
+						"org.elasticsearch.nativeaccess.PosixNativeAccess",
 						"definitelyRunningAsRoot",
 						methodVisitor -> {
 							methodVisitor.visitCode();
