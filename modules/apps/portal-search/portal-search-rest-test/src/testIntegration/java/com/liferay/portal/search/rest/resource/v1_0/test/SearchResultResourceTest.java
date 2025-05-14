@@ -819,7 +819,7 @@ public class SearchResultResourceTest extends BaseSearchResultResourceTestCase {
 	}
 
 	private boolean _isSearchEngineElasticsearch() {
-		return Objects.equals(
+		return StringUtil.startsWith(
 			_searchEngineInformation.getVendorString(), "Elasticsearch");
 	}
 
