@@ -101,7 +101,9 @@ public class CompanyIndexHelper {
 
 			SearchLogHelperUtil.logActionResponse(_log, actionResponse);
 
-			if (companyId != CompanyConstants.SYSTEM) {
+			if ((companyId != CompanyConstants.SYSTEM) &&
+				(_companyLocalService.fetchCompany(companyId) != null)) {
+
 				if (resetBothIndexNames) {
 					_companyLocalService.updateIndexNames(
 						companyId, null, null);
