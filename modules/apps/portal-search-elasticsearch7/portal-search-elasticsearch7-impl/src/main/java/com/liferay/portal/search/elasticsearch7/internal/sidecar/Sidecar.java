@@ -566,17 +566,6 @@ public class Sidecar {
 
 			_patchModuleClass(
 				patchModulePaths, "org.elasticsearch.server",
-				"org.elasticsearch.common.settings.KeyStoreWrapper",
-				ClassModificationUtil.getModifiedClassBytes(
-					"org.elasticsearch.common.settings.KeyStoreWrapper", "save",
-					methodVisitor -> {
-						methodVisitor.visitCode();
-						methodVisitor.visitInsn(Opcodes.RETURN);
-					},
-					classLoader));
-
-			_patchModuleClass(
-				patchModulePaths, "org.elasticsearch.server",
 				"org.elasticsearch.bootstrap.Security",
 				ClassModificationUtil.getModifiedClassBytes(
 					"org.elasticsearch.bootstrap.Security", "configure",
@@ -592,6 +581,17 @@ public class Sidecar {
 				ClassModificationUtil.getModifiedClassBytes(
 					"org.elasticsearch.bootstrap.Spawner",
 					"spawnNativeControllers",
+					methodVisitor -> {
+						methodVisitor.visitCode();
+						methodVisitor.visitInsn(Opcodes.RETURN);
+					},
+					classLoader));
+
+			_patchModuleClass(
+				patchModulePaths, "org.elasticsearch.server",
+				"org.elasticsearch.common.settings.KeyStoreWrapper",
+				ClassModificationUtil.getModifiedClassBytes(
+					"org.elasticsearch.common.settings.KeyStoreWrapper", "save",
 					methodVisitor -> {
 						methodVisitor.visitCode();
 						methodVisitor.visitInsn(Opcodes.RETURN);
