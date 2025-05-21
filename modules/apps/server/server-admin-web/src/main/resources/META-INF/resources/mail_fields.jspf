@@ -24,7 +24,7 @@ Function<String, String> preferenceFunction = key -> companyPortletPreferences.g
 		</portlet:actionURL>
 
 		<liferay-ui:icon
-			message="Reset Default Values"
+			message="reset-default-values"
 			method="post"
 			url="<%= resetMailActionURL %>"
 		/>
