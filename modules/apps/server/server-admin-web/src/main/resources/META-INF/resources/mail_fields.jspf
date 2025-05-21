@@ -11,6 +11,26 @@ PortletPreferences companyPortletPreferences = PrefsPropsUtil.getPreferences(pre
 Function<String, String> preferenceFunction = key -> companyPortletPreferences.getValue(key, defaultValueFunction.apply(key));
 %>
 
+<div class="d-flex justify-content-end">
+	<liferay-ui:icon-menu
+		direction="down"
+		markupView="lexicon"
+		showWhenSingleIcon="<%= true %>"
+	>
+		<portlet:actionURL name="/server_admin/edit_server" var="resetMailActionURL">
+			<portlet:param name="cmd" value="resetMail" />
+			<portlet:param name="preferencesCompanyId" value="<%= String.valueOf(preferencesCompanyId) %>" />
+			<portlet:param name="redirect" value="<%= currentURL %>" />
+		</portlet:actionURL>
+
+		<liferay-ui:icon
+			message="Reset Default Values"
+			method="post"
+			url="<%= resetMailActionURL %>"
+		/>
+	</liferay-ui:icon-menu>
+</div>
+
 <aui:fieldset>
 	<aui:input name="preferencesCompanyId" type="hidden" value="<%= preferencesCompanyId %>" />
 
