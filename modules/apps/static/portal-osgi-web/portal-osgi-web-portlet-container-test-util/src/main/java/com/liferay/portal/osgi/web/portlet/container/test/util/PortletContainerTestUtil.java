@@ -112,6 +112,8 @@ public class PortletContainerTestUtil {
 
 		HttpServletRequest httpServletRequest = new MockHttpServletRequest();
 
+		httpServletRequest.setAttribute(
+			WebKeys.COMPANY_ID, layout.getCompanyId());
 		httpServletRequest.setAttribute(WebKeys.LAYOUT, layout);
 
 		ThemeDisplay themeDisplay = ThemeDisplayFactory.create();
