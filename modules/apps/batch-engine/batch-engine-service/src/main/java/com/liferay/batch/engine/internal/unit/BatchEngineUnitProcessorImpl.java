@@ -55,6 +55,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -171,8 +172,10 @@ public class BatchEngineUnitProcessorImpl implements BatchEngineUnitProcessor {
 				public Object addingService(
 					ServiceReference<Object> serviceReference) {
 
-					Object service = _bundleContext.getService(
-						serviceReference);
+					ServiceObjects<Object> serviceObjects =
+						_bundleContext.getServiceObjects(serviceReference);
+
+					Object service = serviceObjects.getService();
 
 					try {
 						_execute(
