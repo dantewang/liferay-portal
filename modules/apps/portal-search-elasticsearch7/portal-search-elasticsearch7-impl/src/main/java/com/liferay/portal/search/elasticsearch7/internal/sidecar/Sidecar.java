@@ -7,27 +7,26 @@ package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import com.liferay.petra.concurrent.FutureListener;
 import com.liferay.petra.concurrent.NoticeableFuture;
-import com.liferay.petra.process.ClassPathUtil;
 import com.liferay.petra.process.ProcessChannel;
 import com.liferay.petra.process.ProcessConfig;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.petra.process.ProcessLog;
-import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.JavaDetector;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OSDetector;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.elasticsearch7.internal.configuration.ElasticsearchConfigurationWrapper;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.SidecarConstants;
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
+import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
@@ -35,13 +34,11 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import java.net.URL;
-import java.net.URLClassLoader;
 
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
@@ -55,12 +52,8 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import org.elasticsearch.common.settings.Settings;
-
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
  * @author Tina Tian
@@ -392,16 +385,13 @@ public class Sidecar {
 		arguments.add("--module-path=" + _sidecarHomePath.resolve("lib"));
 		arguments.add("-Djdk.module.main=org.elasticsearch.server");
 
-		// Apply module patches for class modifications
+		// Apply agent to load modified classes
 
-		Map<String, Path> patchModulePaths = _patchModuleClasses(
-			_createClasspath(_sidecarHomePath.resolve("lib"), path -> true));
+		Path path = Path.of(
+			PropsUtil.get(PropsKeys.LIFERAY_HOME), "elasticsearch-sidecar",
+			"com.liferay.portal.search.elasticsearch7.sidecar.agent.jar");
 
-		patchModulePaths.forEach(
-			(moduleName, path) -> {
-				arguments.add("--patch-module");
-				arguments.add(moduleName + "=" + path.toAbsolutePath());
-			});
+		arguments.add("-javaagent:" + path.toAbsolutePath());
 
 		return arguments;
 	}
@@ -497,95 +487,6 @@ public class Sidecar {
 		).install();
 	}
 
-	private void _patchModuleClass(
-			Map<String, Path> patchModulePaths, String moduleName,
-			String className, String methodName,
-			Consumer<MethodVisitor> methodVisitorConsumer,
-			ClassLoader classLoader)
-		throws Exception {
-
-		Path patchModulePath = _sidecarTempDirPath.resolve(
-			Paths.get("patch-module", moduleName));
-
-		String[] parts = StringUtil.split(className, CharPool.PERIOD);
-
-		Path classPackagePath = patchModulePath.resolve(
-			Paths.get(parts[0], ArrayUtil.subset(parts, 1, parts.length - 1)));
-
-		Files.createDirectories(classPackagePath);
-
-		Files.write(
-			classPackagePath.resolve(parts[parts.length - 1] + ".class"),
-			ClassModificationUtil.getModifiedClassBytes(
-				className, methodName, methodVisitorConsumer, classLoader),
-			StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-
-		patchModulePaths.putIfAbsent(moduleName, patchModulePath);
-	}
-
-	private Map<String, Path> _patchModuleClasses(String sidecarLibClassPath) {
-		Map<String, Path> patchModulePaths = new HashMap<>();
-
-		try {
-			ClassLoader classLoader = new URLClassLoader(
-				ClassPathUtil.getClassPathURLs(sidecarLibClassPath), null);
-
-			_patchModuleClass(
-				patchModulePaths, "org.elasticsearch.entitlement",
-				"org.elasticsearch.entitlement.bootstrap.EntitlementBootstrap",
-				"bootstrap", _wipingLogicMethodVisitorConsumer, classLoader);
-
-			_patchModuleClass(
-				patchModulePaths, "org.elasticsearch.nativeaccess",
-				"org.elasticsearch.nativeaccess.PosixNativeAccess",
-				"definitelyRunningAsRoot",
-				methodVisitor -> {
-					methodVisitor.visitCode();
-					methodVisitor.visitInsn(Opcodes.ICONST_0);
-					methodVisitor.visitInsn(Opcodes.IRETURN);
-				},
-				classLoader);
-
-			_patchModuleClass(
-				patchModulePaths, "org.elasticsearch.server",
-				"org.elasticsearch.bootstrap.Bootstrap", "sendCliMarker",
-				_wipingLogicMethodVisitorConsumer, classLoader);
-
-			_patchModuleClass(
-				patchModulePaths, "org.elasticsearch.server",
-				"org.elasticsearch.bootstrap.Elasticsearch",
-				"startCliMonitorThread", _wipingLogicMethodVisitorConsumer,
-				classLoader);
-
-			_patchModuleClass(
-				patchModulePaths, "org.elasticsearch.server",
-				"org.elasticsearch.bootstrap.Elasticsearch$" +
-					"EntitlementSelfTester",
-				"entitlementSelfTest", _wipingLogicMethodVisitorConsumer,
-				classLoader);
-
-			_patchModuleClass(
-				patchModulePaths, "org.elasticsearch.server",
-				"org.elasticsearch.common.settings.KeyStoreWrapper", "save",
-				_wipingLogicMethodVisitorConsumer, classLoader);
-
-			_patchModuleClass(
-				patchModulePaths, "org.elasticsearch.server",
-				"org.elasticsearch.bootstrap.Security", "configure",
-				_wipingLogicMethodVisitorConsumer, classLoader);
-
-			_patchModuleClass(
-				patchModulePaths, "org.elasticsearch.server",
-				"org.elasticsearch.bootstrap.Spawner", "spawnNativeControllers",
-				_wipingLogicMethodVisitorConsumer, classLoader);
-		}
-		catch (Exception exception) {
-			_log.error("Unable to modify classes", exception);
-		}
-
-		return patchModulePaths;
-	}
-
 	private String _startElasticsearch(
 		ProcessChannel<Serializable> processChannel) {
 
@@ -637,12 +538,6 @@ public class Sidecar {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(Sidecar.class);
-
-	private static final Consumer<MethodVisitor>
-		_wipingLogicMethodVisitorConsumer = methodVisitor -> {
-			methodVisitor.visitCode();
-			methodVisitor.visitInsn(Opcodes.RETURN);
-		};
 
 	private String _address;
 	private final ElasticsearchConfigurationWrapper
