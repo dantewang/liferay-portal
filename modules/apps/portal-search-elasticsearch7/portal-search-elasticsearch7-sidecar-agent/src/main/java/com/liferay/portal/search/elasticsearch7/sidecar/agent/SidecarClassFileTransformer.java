@@ -5,12 +5,15 @@
 
 package com.liferay.portal.search.elasticsearch7.sidecar.agent;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import java.lang.instrument.ClassFileTransformer;
 
 import java.security.ProtectionDomain;
+
+import java.util.Map;
+import java.util.function.Consumer;
+
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 /**
  * @author Dante Wang
@@ -22,22 +25,51 @@ public class SidecarClassFileTransformer implements ClassFileTransformer {
 		ClassLoader loader, String className, Class<?> classBeingRedefined,
 		ProtectionDomain protectionDomain, byte[] classFileBuffer) {
 
-		Class<?> clazz = SidecarClassFileTransformer.class;
+		Map.Entry<String, Consumer<MethodVisitor>> entry =
+			_methodVisitorConsumers.get(className);
 
-		try (InputStream inputStream = clazz.getResourceAsStream(
-				"/patches/" + className + ".class.bytes")) {
-
-			if (inputStream == null) {
-				return null;
-			}
-
-			return inputStream.readAllBytes();
-		}
-		catch (IOException ioException) {
-			ioException.printStackTrace(System.err);
+		if (entry == null) {
+			return null;
 		}
 
-		return null;
+		return ClassModificationUtil.getModifiedClassBytes(
+			classFileBuffer, entry.getKey(), entry.getValue());
+	}
+
+	private static final Map<String, Map.Entry<String, Consumer<MethodVisitor>>>
+		_methodVisitorConsumers;
+	private static final Consumer<MethodVisitor>
+		_wipingLogicMethodVisitorConsumer = methodVisitor -> {
+			methodVisitor.visitCode();
+			methodVisitor.visitInsn(Opcodes.RETURN);
+		};
+
+	static {
+		_methodVisitorConsumers = Map.of(
+			"org/elasticsearch/entitlement/bootstrap/EntitlementBootstrap",
+			Map.entry("bootstrap", _wipingLogicMethodVisitorConsumer),
+			"org/elasticsearch/nativeaccess/PosixNativeAccess",
+			Map.entry(
+				"definitelyRunningAsRoot",
+				methodVisitor -> {
+					methodVisitor.visitCode();
+					methodVisitor.visitInsn(Opcodes.ICONST_0);
+					methodVisitor.visitInsn(Opcodes.IRETURN);
+				}),
+			"org/elasticsearch/bootstrap/Bootstrap",
+			Map.entry("sendCliMarker", _wipingLogicMethodVisitorConsumer),
+			"org/elasticsearch/bootstrap/Elasticsearch",
+			Map.entry(
+				"startCliMonitorThread", _wipingLogicMethodVisitorConsumer),
+			"org/elasticsearch/bootstrap/Elasticsearch$EntitlementSelfTester",
+			Map.entry("entitlementSelfTest", _wipingLogicMethodVisitorConsumer),
+			"org/elasticsearch/common/settings/KeyStoreWrapper",
+			Map.entry("save", _wipingLogicMethodVisitorConsumer),
+			"org/elasticsearch/bootstrap/Security",
+			Map.entry("configure", _wipingLogicMethodVisitorConsumer),
+			"org/elasticsearch/bootstrap/Spawner",
+			Map.entry(
+				"spawnNativeControllers", _wipingLogicMethodVisitorConsumer));
 	}
 
 }
