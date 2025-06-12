@@ -50,6 +50,8 @@ public class ElasticsearchServerUtil {
 	public static Object start(SidecarServerArgs sidecarServerArgs)
 		throws ProcessException {
 
+		long startTime1 = System.currentTimeMillis();
+
 		try (UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
 				new UnsyncByteArrayOutputStream();
 			StreamOutput streamOutput = new OutputStreamStreamOutput(
@@ -65,7 +67,12 @@ public class ElasticsearchServerUtil {
 
 				System.setIn(unsyncByteArrayInputStream);
 
+				long startTime2 = System.currentTimeMillis();
+
 				_mainMethod.invoke(null, (Object)null);
+
+				System.out.println(
+					"Inner" + (System.currentTimeMillis() - startTime2));
 			}
 			finally {
 				System.setIn(originalSystemInInputStream);
@@ -80,6 +87,10 @@ public class ElasticsearchServerUtil {
 		catch (Exception exception) {
 			throw new ProcessException(
 				"Unable to start elasticsearch server", exception);
+		}
+		finally {
+			System.out.println(
+				"Outer" + (System.currentTimeMillis() - startTime1));
 		}
 	}
 
