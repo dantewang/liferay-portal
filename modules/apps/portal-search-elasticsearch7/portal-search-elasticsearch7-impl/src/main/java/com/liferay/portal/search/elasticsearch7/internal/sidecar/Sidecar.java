@@ -82,7 +82,8 @@ public class Sidecar {
 			_log.debug("Sidecar Elasticsearch starting");
 		}
 
-		String sidecarVersion = _getSidecarVersion();
+		String sidecarVersion = ResourceUtil.getResourceAsString(
+			getClass(), SidecarConstants.SIDECAR_VERSION_FILE_NAME);
 
 		_installElasticsearchIfNeeded(sidecarVersion);
 
@@ -209,16 +210,32 @@ public class Sidecar {
 	private ProcessConfig _createProcessConfig() {
 		ProcessConfig.Builder builder = new ProcessConfig.Builder();
 
-		URL bundleURL = _getBundleURL();
+		ProtectionDomain protectionDomain = Sidecar.class.getProtectionDomain();
 
-		String bootstrapClassPath = _getBootstrapClassPath();
+		CodeSource codeSource = protectionDomain.getCodeSource();
+
+		URL bundleURL = codeSource.getLocation();
+
+		String bootstrapClassPath = _createClasspath(
+			Paths.get(PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR),
+			path -> {
+				String name = String.valueOf(path.getFileName());
+
+				return name.contains("petra");
+			});
 
 		return builder.setArguments(
 			_getJVMArguments()
 		).setBootstrapClassPath(
 			bootstrapClassPath
 		).setEnvironment(
-			_getEnvironment()
+			HashMapBuilder.putAll(
+				System.getenv()
+			).put(
+				"HOSTNAME", "localhost"
+			).put(
+				"LIBFFI_TMPDIR", _sidecarHomePath.toString()
+			).build()
 		).setJavaExecutable(
 			System.getProperty("java.home") + "/bin/java"
 		).setProcessLogConsumer(
@@ -252,30 +269,6 @@ public class Sidecar {
 		}
 	}
 
-	private boolean _fileNameContains(Path path, String s) {
-		String name = String.valueOf(path.getFileName());
-
-		return name.contains(s);
-	}
-
-	private String _getBootstrapClassPath() {
-		return _createClasspath(
-			Paths.get(PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR),
-			path -> _fileNameContains(path, "petra"));
-	}
-
-	private URL _getBundleURL() {
-		ProtectionDomain protectionDomain = Sidecar.class.getProtectionDomain();
-
-		CodeSource codeSource = protectionDomain.getCodeSource();
-
-		return codeSource.getLocation();
-	}
-
-	private String _getClusterName() {
-		return _elasticsearchConfigurationWrapper.clusterName();
-	}
-
 	private Distribution _getElasticsearchDistribution(String sidecarVersion) {
 		if (sidecarVersion.equals(ElasticsearchDistribution.VERSION)) {
 			return new ElasticsearchDistribution();
@@ -283,16 +276,6 @@ public class Sidecar {
 
 		throw new IllegalArgumentException(
 			"Unsupported Elasticsearch version: " + sidecarVersion);
-	}
-
-	private HashMap<String, String> _getEnvironment() {
-		return HashMapBuilder.putAll(
-			System.getenv()
-		).put(
-			"HOSTNAME", "localhost"
-		).put(
-			"LIBFFI_TMPDIR", _sidecarHomePath.toString()
-		).build();
 	}
 
 	private List<String> _getJVMArguments() {
@@ -338,7 +321,7 @@ public class Sidecar {
 						"BootstrapChecks",
 					"logger.bootstrapchecks.level=error",
 					"logger.deprecation.name=org.elasticsearch.deprecation",
-					"logger.deprecation.level=error", _getLogProperties(),
+					"logger.deprecation.level=error", StringPool.BLANK,
 					ResourceUtil.getResourceAsString(
 						Sidecar.class, "/log4j2-sidecar.properties")));
 		}
@@ -396,10 +379,6 @@ public class Sidecar {
 		return arguments;
 	}
 
-	private String _getLogProperties() {
-		return StringPool.BLANK;
-	}
-
 	private String _getNodeName() {
 		String nodeName = _elasticsearchConfigurationWrapper.nodeName();
 
@@ -413,7 +392,7 @@ public class Sidecar {
 	private Settings _getSettings() {
 		return ElasticsearchInstanceSettingsBuilder.builder(
 		).clusterName(
-			_getClusterName()
+			_elasticsearchConfigurationWrapper.clusterName()
 		).discoveryTypeSingleNode(
 			true
 		).elasticsearchConfigurationWrapper(
@@ -468,11 +447,6 @@ public class Sidecar {
 			String.valueOf(_sidecarTempDirPath.resolve("config")), false,
 			String.valueOf(_sidecarHomePath.resolve("logs")), null, false,
 			settingsMap);
-	}
-
-	private String _getSidecarVersion() {
-		return ResourceUtil.getResourceAsString(
-			getClass(), SidecarConstants.SIDECAR_VERSION_FILE_NAME);
 	}
 
 	private void _installElasticsearchIfNeeded(String sidecarVersion) {
@@ -547,7 +521,7 @@ public class Sidecar {
 	private final ProcessExecutor _processExecutor;
 	private FutureListener<Serializable> _restartFutureListener;
 	private final Path _sidecarHomePath;
-	private SidecarManager _sidecarManager;
+	private final SidecarManager _sidecarManager;
 	private Path _sidecarTempDirPath;
 
 	private static class RestartFutureListener
@@ -578,7 +552,7 @@ public class Sidecar {
 			}
 		}
 
-		private SidecarManager _sidecarManager;
+		private final SidecarManager _sidecarManager;
 
 	}
 
