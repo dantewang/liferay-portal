@@ -50,7 +50,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import org.elasticsearch.common.settings.Settings;
@@ -63,12 +62,13 @@ public class Sidecar {
 	public Sidecar(
 		ElasticsearchConfigurationWrapper elasticsearchConfigurationWrapper,
 		ElasticsearchInstancePaths elasticsearchInstancePaths,
-		ProcessExecutor processExecutor, SidecarManager sidecarManager) {
+		ProcessExecutor processExecutor,
+		FutureListener<Serializable> restartFutureListener) {
 
 		_elasticsearchConfigurationWrapper = elasticsearchConfigurationWrapper;
 		_elasticsearchInstancePaths = elasticsearchInstancePaths;
 		_processExecutor = processExecutor;
-		_sidecarManager = sidecarManager;
+		_restartFutureListener = restartFutureListener;
 
 		_sidecarHomePath = elasticsearchInstancePaths.getHomePath();
 	}
@@ -90,10 +90,7 @@ public class Sidecar {
 		ProcessChannel<Serializable> processChannel =
 			_executeSidecarMainProcess();
 
-		FutureListener<Serializable> futureListener = new RestartFutureListener(
-			_sidecarManager);
-
-		_addFutureListener(processChannel, futureListener);
+		_addFutureListener(processChannel, _restartFutureListener);
 
 		String address = _startElasticsearch(processChannel);
 
@@ -106,7 +103,6 @@ public class Sidecar {
 
 		_address = address;
 		_processChannel = processChannel;
-		_restartFutureListener = futureListener;
 	}
 
 	public void stop() {
@@ -519,41 +515,8 @@ public class Sidecar {
 	private final ElasticsearchInstancePaths _elasticsearchInstancePaths;
 	private ProcessChannel<Serializable> _processChannel;
 	private final ProcessExecutor _processExecutor;
-	private FutureListener<Serializable> _restartFutureListener;
+	private final FutureListener<Serializable> _restartFutureListener;
 	private final Path _sidecarHomePath;
-	private final SidecarManager _sidecarManager;
 	private Path _sidecarTempDirPath;
-
-	private static class RestartFutureListener
-		implements FutureListener<Serializable> {
-
-		public RestartFutureListener(SidecarManager sidecarManager) {
-			_sidecarManager = sidecarManager;
-		}
-
-		@Override
-		public void complete(Future<Serializable> future) {
-			try {
-				future.get();
-			}
-			catch (Exception exception) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(
-						"Sidecar Elasticsearch process is aborted", exception);
-				}
-			}
-
-			if (_sidecarManager.isStartupSuccessful()) {
-				if (_log.isInfoEnabled()) {
-					_log.info("Restarting sidecar Elasticsearch process");
-				}
-
-				_sidecarManager.applyConfigurations();
-			}
-		}
-
-		private final SidecarManager _sidecarManager;
-
-	}
 
 }
