@@ -5,6 +5,7 @@
 
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
+import com.liferay.petra.concurrent.FutureListener;
 import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
@@ -18,9 +19,13 @@ import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.Sidec
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
 import com.liferay.portal.util.PropsValues;
 
+import java.io.Serializable;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import java.util.concurrent.Future;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -84,7 +89,8 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 
 			_sidecar = new Sidecar(
 				elasticsearchConfigurationWrapper,
-				_getElasticsearchInstancePaths(), processExecutor, this);
+				_getElasticsearchInstancePaths(), processExecutor,
+				new RestartFutureListener(this));
 
 			ElasticsearchConnectionBuilder elasticsearchConnectionBuilder =
 				new ElasticsearchConnectionBuilder();
@@ -178,5 +184,37 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 
 	private Sidecar _sidecar;
 	private boolean _startupSuccessful;
+
+	private static class RestartFutureListener
+		implements FutureListener<Serializable> {
+
+		public RestartFutureListener(SidecarManager sidecarManager) {
+			_sidecarManager = sidecarManager;
+		}
+
+		@Override
+		public void complete(Future<Serializable> future) {
+			try {
+				future.get();
+			}
+			catch (Exception exception) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Sidecar Elasticsearch process is aborted", exception);
+				}
+			}
+
+			if (_sidecarManager.isStartupSuccessful()) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Restarting sidecar Elasticsearch process");
+				}
+
+				_sidecarManager.applyConfigurations();
+			}
+		}
+
+		private final SidecarManager _sidecarManager;
+
+	}
 
 }
