@@ -12,8 +12,8 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.JavaDetector;
+import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OSDetector;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -41,9 +41,9 @@ import java.security.ProtectionDomain;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.elasticsearch.common.settings.Settings;
 
@@ -231,7 +231,7 @@ public class SidecarRuntimeConfiguration {
 		).setBootstrapClassPath(
 			bootstrapClassPath
 		).setEnvironment(
-			HashMapBuilder.putAll(
+			LinkedHashMapBuilder.putAll(
 				System.getenv()
 			).put(
 				"HOSTNAME", "localhost"
@@ -273,7 +273,7 @@ public class SidecarRuntimeConfiguration {
 
 		sb.append("Sidecar Elasticsearch properties : {");
 
-		Map<String, Serializable> settingsMap = new HashMap<>();
+		Map<String, Serializable> settingsMap = new TreeMap<>();
 
 		for (String key : settings.keySet()) {
 			List<String> list = settings.getAsList(key);
