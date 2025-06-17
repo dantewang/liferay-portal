@@ -26,7 +26,8 @@ import org.osgi.framework.ServiceReference;
 /**
  * @author Dante Wang
  */
-public class SidecarBundleActivator implements BundleActivator {
+public class SearchElasticsearch7ImplBundleActivator
+	implements BundleActivator {
 
 	public static long getChecksum() {
 		return _checksum;
