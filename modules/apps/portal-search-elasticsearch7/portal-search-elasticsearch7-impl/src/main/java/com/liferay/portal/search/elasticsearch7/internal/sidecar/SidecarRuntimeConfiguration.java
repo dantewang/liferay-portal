@@ -56,15 +56,7 @@ public class SidecarRuntimeConfiguration {
 		ElasticsearchConfigurationWrapper elasticsearchConfigurationWrapper,
 		ElasticsearchInstancePaths elasticsearchInstancePaths) {
 
-		Path sidecarTempDirPath = null;
-
-		try {
-			sidecarTempDirPath = Files.createTempDirectory("sidecar");
-		}
-		catch (IOException ioException) {
-			throw new IllegalStateException(
-				"Unable to create temp folder", ioException);
-		}
+		Path sidecarTempDirPath = _createSidecarTempDirPath();
 
 		SidecarRuntimeConfiguration sidecarRuntimeConfiguration =
 			new SidecarRuntimeConfiguration();
@@ -82,8 +74,7 @@ public class SidecarRuntimeConfiguration {
 			elasticsearchInstancePaths.getHomePath();
 		sidecarRuntimeConfiguration._sidecarServerArgs =
 			_createSidecarServerArgs(
-				elasticsearchConfigurationWrapper, elasticsearchInstancePaths,
-				sidecarTempDirPath);
+				elasticsearchConfigurationWrapper, elasticsearchInstancePaths);
 		sidecarRuntimeConfiguration._sidecarShutdownTimeout =
 			elasticsearchConfigurationWrapper.sidecarShutdownTimeout();
 		sidecarRuntimeConfiguration._sidecarTempDirPath = sidecarTempDirPath;
@@ -94,7 +85,7 @@ public class SidecarRuntimeConfiguration {
 	}
 
 	public static SidecarRuntimeConfiguration from(byte[] bytes)
-		throws ClassNotFoundException {
+		throws Exception {
 
 		Deserializer deserializer = new Deserializer(ByteBuffer.wrap(bytes));
 
@@ -121,10 +112,17 @@ public class SidecarRuntimeConfiguration {
 			deserializer.readObject();
 		sidecarRuntimeConfiguration._sidecarShutdownTimeout =
 			deserializer.readLong();
-		sidecarRuntimeConfiguration._sidecarTempDirPath = Path.of(
-			deserializer.readString());
+		sidecarRuntimeConfiguration._sidecarTempDirPath =
+			_createSidecarTempDirPath();
 		sidecarRuntimeConfiguration._sidecarWorkPath = Path.of(
 			deserializer.readString());
+
+		List<String> arguments =
+			sidecarRuntimeConfiguration._processConfig.getArguments();
+
+		arguments.add(
+			"-Djava.io.tmpdir=" +
+				sidecarRuntimeConfiguration._sidecarTempDirPath);
 
 		return sidecarRuntimeConfiguration;
 	}
@@ -162,6 +160,10 @@ public class SidecarRuntimeConfiguration {
 	}
 
 	public byte[] serialize() {
+		List<String> arguments = _processConfig.getArguments();
+
+		arguments.removeIf(argument -> argument.startsWith("-Djava.io.tmpdir"));
+
 		Serializer serializer = new Serializer();
 
 		serializer.writeString(_nodeName);
@@ -170,10 +172,11 @@ public class SidecarRuntimeConfiguration {
 		serializer.writeString(_sidecarHomePath.toString());
 		serializer.writeObject(_sidecarServerArgs);
 		serializer.writeLong(_sidecarShutdownTimeout);
-		serializer.writeString(_sidecarTempDirPath.toString());
 		serializer.writeString(_sidecarWorkPath.toString());
 
 		ByteBuffer byteBuffer = serializer.toByteBuffer();
+
+		arguments.add("-Djava.io.tmpdir=" + _sidecarTempDirPath);
 
 		return byteBuffer.array();
 	}
@@ -249,8 +252,7 @@ public class SidecarRuntimeConfiguration {
 
 	private static SidecarServerArgs _createSidecarServerArgs(
 		ElasticsearchConfigurationWrapper elasticsearchConfigurationWrapper,
-		ElasticsearchInstancePaths elasticsearchInstancePaths,
-		Path sidecarTempDirPath) {
+		ElasticsearchInstancePaths elasticsearchInstancePaths) {
 
 		Settings settings = ElasticsearchInstanceSettingsBuilder.builder(
 		).clusterName(
@@ -304,9 +306,23 @@ public class SidecarRuntimeConfiguration {
 		Path sidecarHomePath = elasticsearchInstancePaths.getHomePath();
 
 		return new SidecarServerArgs(
-			String.valueOf(sidecarTempDirPath.resolve("config")), false,
-			String.valueOf(sidecarHomePath.resolve("logs")), null, false,
+			String.valueOf(sidecarHomePath.resolve(_LIFERAY_SIDECAR_CONFIG)),
+			false, String.valueOf(sidecarHomePath.resolve("logs")), null, false,
 			settingsMap);
+	}
+
+	private static Path _createSidecarTempDirPath() {
+		Path sidecarTempDirPath = null;
+
+		try {
+			sidecarTempDirPath = Files.createTempDirectory("sidecar");
+		}
+		catch (IOException ioException) {
+			throw new IllegalStateException(
+				"Unable to create temp folder", ioException);
+		}
+
+		return sidecarTempDirPath;
 	}
 
 	private static List<String> _getJVMArguments(
@@ -335,7 +351,11 @@ public class SidecarRuntimeConfiguration {
 				elasticsearchConfigurationWrapper.sidecarDebugSettings());
 		}
 
-		Path configFolder = sidecarTempDirPath.resolve("config");
+		Path configFolder = sidecarHomePath.resolve(_LIFERAY_SIDECAR_CONFIG);
+
+		if (Files.exists(configFolder)) {
+			PathUtil.deleteDir(configFolder);
+		}
 
 		try {
 			Files.createDirectories(configFolder);
@@ -419,6 +439,9 @@ public class SidecarRuntimeConfiguration {
 
 	private SidecarRuntimeConfiguration() {
 	}
+
+	private static final String _LIFERAY_SIDECAR_CONFIG =
+		"liferay_sidecar_config";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		SidecarRuntimeConfiguration.class);
