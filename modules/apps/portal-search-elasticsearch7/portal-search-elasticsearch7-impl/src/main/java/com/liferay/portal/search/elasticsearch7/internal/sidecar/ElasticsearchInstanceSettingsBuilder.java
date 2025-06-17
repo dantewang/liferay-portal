@@ -241,7 +241,10 @@ public class ElasticsearchInstanceSettingsBuilder {
 	}
 
 	private void _disableXpack() {
+		put("xpack.apm_data.enabled", false);
+		put("xpack.ent_search.enabled", false);
 		put("xpack.ml.enabled", false);
+		put("xpack.profiling.enabled", false);
 		put("xpack.security.enabled", false);
 		put("xpack.watcher.enabled", false);
 	}
