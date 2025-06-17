@@ -15,7 +15,7 @@ import com.liferay.portal.search.elasticsearch7.internal.configuration.Elasticse
 import com.liferay.portal.search.elasticsearch7.internal.connection.ElasticsearchConnectionBuilder;
 import com.liferay.portal.search.elasticsearch7.internal.connection.ElasticsearchConnectionManager;
 import com.liferay.portal.search.elasticsearch7.internal.connection.constants.ConnectionConstants;
-import com.liferay.portal.search.elasticsearch7.internal.sidecar.activator.SidecarBundleActivator;
+import com.liferay.portal.search.elasticsearch7.internal.sidecar.activator.SearchElasticsearch7ImplBundleActivator;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.SidecarConstants;
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
 import com.liferay.portal.util.PropsValues;
@@ -91,7 +91,8 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 			checksum.update(bytes);
 
 			try {
-				Sidecar sidecar = SidecarBundleActivator.getSidecar();
+				Sidecar sidecar =
+					SearchElasticsearch7ImplBundleActivator.getSidecar();
 
 				if (sidecar != null) {
 					_sidecar = sidecar;
@@ -99,7 +100,8 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 
 				if ((sidecar != null) &&
 					(checksum.getValue() ==
-						SidecarBundleActivator.getChecksum())) {
+						SearchElasticsearch7ImplBundleActivator.
+							getChecksum())) {
 
 					_sidecar = sidecar;
 
