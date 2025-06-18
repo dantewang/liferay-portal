@@ -183,6 +183,13 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 							Sidecar.class.getName());
 
 						Files.write(file.toPath(), bytes);
+
+						File checksumFile = _bundleContext.getDataFile(
+							Sidecar.class.getName() + "_checksum");
+
+						Files.writeString(
+							checksumFile.toPath(),
+							String.valueOf(checksum.getValue()));
 					}
 					catch (IOException ioException) {
 						if (_log.isWarnEnabled()) {
