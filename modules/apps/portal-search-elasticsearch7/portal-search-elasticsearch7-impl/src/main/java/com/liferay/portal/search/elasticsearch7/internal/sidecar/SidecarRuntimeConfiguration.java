@@ -12,8 +12,8 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.JavaDetector;
-import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OSDetector;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -94,20 +94,40 @@ public class SidecarRuntimeConfiguration {
 
 		sidecarRuntimeConfiguration._nodeName = deserializer.readString();
 
-		ProcessConfig.Builder builder = new ProcessConfig.Builder(
-			deserializer.readObject());
+		ProcessConfig.Builder builder = new ProcessConfig.Builder();
 
-		sidecarRuntimeConfiguration._processConfig =
-			builder.setProcessLogConsumer(
-				Sidecar::consumeProcessLog
-			).setReactClassLoader(
-				Sidecar.class.getClassLoader()
-			).build();
+		builder.setArguments(
+			deserializer.readObject()
+		).setBootstrapClassPath(
+			deserializer.readString()
+		).setJavaExecutable(
+			deserializer.readString()
+		).setProcessLogConsumer(
+			Sidecar::consumeProcessLog
+		).setReactClassLoader(
+			Sidecar.class.getClassLoader()
+		).setRuntimeClassPath(
+			deserializer.readString()
+		);
 
 		sidecarRuntimeConfiguration._sidecarHeartbeatInterval =
 			deserializer.readLong();
+
+		String sidecarHomePathString = deserializer.readString();
+
+		sidecarRuntimeConfiguration._processConfig = builder.setEnvironment(
+			HashMapBuilder.putAll(
+				System.getenv()
+			).put(
+				"HOSTNAME", "localhost"
+			).put(
+				"LIBFFI_TMPDIR", sidecarHomePathString
+			).build()
+		).build();
+
 		sidecarRuntimeConfiguration._sidecarHomePath = Path.of(
-			deserializer.readString());
+			sidecarHomePathString);
+
 		sidecarRuntimeConfiguration._sidecarServerArgs =
 			deserializer.readObject();
 		sidecarRuntimeConfiguration._sidecarShutdownTimeout =
@@ -167,7 +187,15 @@ public class SidecarRuntimeConfiguration {
 		Serializer serializer = new Serializer();
 
 		serializer.writeString(_nodeName);
-		serializer.writeObject(_processConfig);
+
+		// ProcessConfig
+
+		serializer.writeObject(
+			(ArrayList<String>)_processConfig.getArguments());
+		serializer.writeString(_processConfig.getBootstrapClassPath());
+		serializer.writeString(_processConfig.getJavaExecutable());
+		serializer.writeString(_processConfig.getRuntimeClassPath());
+
 		serializer.writeLong(_sidecarHeartbeatInterval);
 		serializer.writeString(_sidecarHomePath.toString());
 		serializer.writeObject(_sidecarServerArgs);
@@ -231,7 +259,7 @@ public class SidecarRuntimeConfiguration {
 		).setBootstrapClassPath(
 			bootstrapClassPath
 		).setEnvironment(
-			LinkedHashMapBuilder.putAll(
+			HashMapBuilder.putAll(
 				System.getenv()
 			).put(
 				"HOSTNAME", "localhost"
