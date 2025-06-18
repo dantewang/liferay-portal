@@ -10,10 +10,13 @@ import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.portal.events.StartupHelperUtil;
 import com.liferay.portal.kernel.concurrent.SystemExecutorServiceUtil;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.Sidecar;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.SidecarRuntimeConfiguration;
 
 import java.io.File;
+
+import java.nio.file.Files;
 
 import java.util.concurrent.ExecutorService;
 import java.util.zip.CRC32;
@@ -49,11 +52,21 @@ public class SearchElasticsearch7ImplBundleActivator
 
 		byte[] bytes = FileUtil.getBytes(file);
 
-		Checksum checksum = new CRC32();
+		File checksumFile = bundleContext.getDataFile(
+			Sidecar.class.getName() + "_checksum");
 
-		checksum.update(bytes);
+		if (checksumFile.isFile()) {
+			String checksum = Files.readString(checksumFile.toPath());
 
-		_checksum = checksum.getValue();
+			_checksum = GetterUtil.getLong(checksum);
+		}
+		else {
+			Checksum checksum = new CRC32();
+
+			checksum.update(bytes);
+
+			_checksum = checksum.getValue();
+		}
 
 		ServiceReference<ProcessExecutor> serviceReference =
 			bundleContext.getServiceReference(ProcessExecutor.class);
