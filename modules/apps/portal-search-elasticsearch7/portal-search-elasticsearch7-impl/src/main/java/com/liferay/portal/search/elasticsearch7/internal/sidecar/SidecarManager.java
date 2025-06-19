@@ -6,6 +6,7 @@
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import com.liferay.petra.concurrent.FutureListener;
+import com.liferay.petra.io.Serializer;
 import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -80,11 +82,17 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 			_startupSuccessful = false;
 
 			SidecarRuntimeConfiguration sidecarRuntimeConfiguration =
-				SidecarRuntimeConfiguration.create(
+				SidecarRuntimeConfigurationFactory.create(
 					elasticsearchConfigurationWrapper,
 					_getElasticsearchInstancePaths());
 
-			byte[] bytes = sidecarRuntimeConfiguration.serialize();
+			Serializer serializer = new Serializer();
+
+			serializer.writeObject(sidecarRuntimeConfiguration);
+
+			ByteBuffer byteBuffer = serializer.toByteBuffer();
+
+			byte[] bytes = byteBuffer.array();
 
 			Checksum checksum = new CRC32();
 
