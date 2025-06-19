@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.elasticsearch7.internal.configuration.ElasticsearchConfigurationWrapper;
+import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.SidecarConstants;
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
@@ -66,7 +67,11 @@ public class SidecarRuntimeConfigurationFactory {
 			_createSidecarServerArgs(
 				elasticsearchConfigurationWrapper, elasticsearchInstancePaths),
 			elasticsearchConfigurationWrapper.sidecarShutdownTimeout(),
-			sidecarTempDirPath, elasticsearchInstancePaths.getWorkPath());
+			sidecarTempDirPath,
+			ResourceUtil.getResourceAsString(
+				SidecarRuntimeConfigurationFactory.class,
+				SidecarConstants.SIDECAR_VERSION_FILE_NAME),
+			elasticsearchInstancePaths.getWorkPath());
 	}
 
 	private static String _createClasspath(
