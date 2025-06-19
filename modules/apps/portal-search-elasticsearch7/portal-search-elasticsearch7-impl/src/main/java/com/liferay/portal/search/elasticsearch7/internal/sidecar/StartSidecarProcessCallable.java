@@ -7,13 +7,6 @@ package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import com.liferay.petra.process.ProcessCallable;
 import com.liferay.petra.process.ProcessException;
-import com.liferay.petra.reflect.ReflectionUtil;
-
-import java.lang.reflect.Method;
-
-import org.elasticsearch.common.transport.BoundTransportAddress;
-import org.elasticsearch.common.transport.TransportAddress;
-import org.elasticsearch.http.HttpServerTransport;
 
 /**
  * @author Tina Tian
@@ -29,31 +22,29 @@ public class StartSidecarProcessCallable implements ProcessCallable<String> {
 		Object nodeObject = ElasticsearchServerUtil.start(_sidecarServerArgs);
 
 		try {
+			Object injectorObject = ElasticsearchServerUtil.Reflection.invoke(
+				"org.elasticsearch.node.Node", nodeObject, "injector");
+
 			ClassLoader classLoader =
 				StartSidecarProcessCallable.class.getClassLoader();
 
-			Method injectorMethod = ReflectionUtil.getDeclaredMethod(
-				classLoader.loadClass("org.elasticsearch.node.Node"),
-				"injector");
+			Object httpServerTransportObject =
+				ElasticsearchServerUtil.Reflection.invoke(
+					"org.elasticsearch.injection.guice.Injector",
+					injectorObject, "getInstance", new Class<?>[] {Class.class},
+					classLoader.loadClass(
+						"org.elasticsearch.http.HttpServerTransport"));
 
-			Object injectorObject = injectorMethod.invoke(nodeObject);
+			Object boundAddressObject =
+				ElasticsearchServerUtil.Reflection.invoke(
+					"org.elasticsearch.http.HttpServerTransport",
+					httpServerTransportObject, "boundAddress");
 
-			Method method = ReflectionUtil.getDeclaredMethod(
-				classLoader.loadClass(
-					"org.elasticsearch.injection.guice.Injector"),
-				"getInstance", Class.class);
+			Object publishAddressObject =
+				ElasticsearchServerUtil.Reflection.invoke(
+					boundAddressObject, "publishAddress");
 
-			HttpServerTransport httpServerTransport =
-				(HttpServerTransport)method.invoke(
-					injectorObject, HttpServerTransport.class);
-
-			BoundTransportAddress boundTransportAddress =
-				httpServerTransport.boundAddress();
-
-			TransportAddress publishAddress =
-				boundTransportAddress.publishAddress();
-
-			return publishAddress.toString();
+			return publishAddressObject.toString();
 		}
 		catch (Exception exception) {
 			throw new ProcessException(exception);

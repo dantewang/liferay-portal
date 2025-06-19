@@ -101,6 +101,49 @@ public class ElasticsearchServerUtil {
 		}
 	}
 
+	public static class Reflection {
+
+		public static Object invoke(Object instance, String methodName)
+			throws Exception {
+
+			return invoke(instance, methodName, _EMPTY_PARAMETER_TYPES);
+		}
+
+		public static Object invoke(
+				Object instance, String methodName, Class<?>[] parameterTypes,
+				Object... parameters)
+			throws Exception {
+
+			Method method = ReflectionUtil.getDeclaredMethod(
+				instance.getClass(), methodName, parameterTypes);
+
+			return method.invoke(instance, parameters);
+		}
+
+		public static Object invoke(
+				String className, Object instance, String methodName)
+			throws Exception {
+
+			return invoke(
+				className, instance, methodName, _EMPTY_PARAMETER_TYPES);
+		}
+
+		public static Object invoke(
+				String className, Object instance, String methodName,
+				Class<?>[] parameterTypes, Object... parameters)
+			throws Exception {
+
+			Method method = ReflectionUtil.getDeclaredMethod(
+				_classLoader.loadClass(className), methodName, parameterTypes);
+
+			return method.invoke(instance, parameters);
+		}
+
+		private static final Class<?>[] _EMPTY_PARAMETER_TYPES =
+			new Class<?>[0];
+
+	}
+
 	private static void _addShutdownHook() throws ReflectiveOperationException {
 		synchronized (_hooksField.getDeclaringClass()) {
 			Map<Thread, Thread> hooks = (Map<Thread, Thread>)_hooksField.get(
@@ -194,6 +237,7 @@ public class ElasticsearchServerUtil {
 	private static final Logger _logger = LogManager.getLogger(
 		ElasticsearchServerUtil.class);
 
+	private static final ClassLoader _classLoader;
 	private static final Field _hooksField;
 	private static final Field _instanceField;
 	private static final Method _mainMethod;
@@ -204,14 +248,13 @@ public class ElasticsearchServerUtil {
 
 	static {
 		try {
-			ClassLoader classLoader =
-				ElasticsearchServerUtil.class.getClassLoader();
+			_classLoader = ElasticsearchServerUtil.class.getClassLoader();
 
 			_hooksField = ReflectionUtil.getDeclaredField(
-				classLoader.loadClass("java.lang.ApplicationShutdownHooks"),
+				_classLoader.loadClass("java.lang.ApplicationShutdownHooks"),
 				"hooks");
 
-			Class<?> elasticsearchClass = classLoader.loadClass(
+			Class<?> elasticsearchClass = _classLoader.loadClass(
 				"org.elasticsearch.bootstrap.Elasticsearch");
 
 			_instanceField = ReflectionUtil.getDeclaredField(
