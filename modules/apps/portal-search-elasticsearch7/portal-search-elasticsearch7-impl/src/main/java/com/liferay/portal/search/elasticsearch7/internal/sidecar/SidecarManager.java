@@ -181,6 +181,8 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 				_sidecar::stop
 			).preConnectElasticsearchConnectionConsumer(
 				elasticsearchConnection -> {
+					_installElasticsearchIfNeeded(sidecarRuntimeConfiguration);
+
 					_sidecar.start();
 
 					elasticsearchConnection.setNetworkHostAddresses(
@@ -235,6 +237,15 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 	@Reference
 	protected ProcessExecutor processExecutor;
 
+	private Distribution _getElasticsearchDistribution(String sidecarVersion) {
+		if (sidecarVersion.equals(ElasticsearchDistribution.VERSION)) {
+			return new ElasticsearchDistribution();
+		}
+
+		throw new IllegalArgumentException(
+			"Unsupported Elasticsearch version: " + sidecarVersion);
+	}
+
 	private ElasticsearchInstancePaths _getElasticsearchInstancePaths() {
 		ElasticsearchInstancePathsBuilder elasticsearchInstancePathsBuilder =
 			new ElasticsearchInstancePathsBuilder();
@@ -250,6 +261,21 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 		).workPath(
 			workPath
 		).build();
+	}
+
+	private void _installElasticsearchIfNeeded(
+		SidecarRuntimeConfiguration sidecarRuntimeConfiguration) {
+
+		ElasticsearchInstaller.builder(
+		).distributablesDirectoryPath(
+			sidecarRuntimeConfiguration.getSidecarWorkPath()
+		).distribution(
+			_getElasticsearchDistribution(
+				sidecarRuntimeConfiguration.getSidecarVersion())
+		).installationDirectoryPath(
+			sidecarRuntimeConfiguration.getSidecarHomePath()
+		).build(
+		).install();
 	}
 
 	private Path _resolveHomePath(Path path) {

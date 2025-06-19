@@ -47,7 +47,7 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 		String nodeName, ProcessConfig processConfig,
 		long sidecarHeartbeatInterval, Path sidecarHomePath,
 		SidecarServerArgs sidecarServerArgs, long sidecarShutdownTimeout,
-		Path sidecarTempDirPath, Path sidecarWorkPath) {
+		Path sidecarTempDirPath, String sidecarVersion, Path sidecarWorkPath) {
 
 		_nodeName = nodeName;
 		_processConfig = processConfig;
@@ -56,6 +56,7 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 		_sidecarServerArgs = sidecarServerArgs;
 		_sidecarShutdownTimeout = sidecarShutdownTimeout;
 		_sidecarTempDirPath = sidecarTempDirPath;
+		_sidecarVersion = sidecarVersion;
 		_sidecarWorkPath = sidecarWorkPath;
 	}
 
@@ -85,6 +86,10 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 
 	public Path getSidecarTempDirPath() {
 		return _sidecarTempDirPath;
+	}
+
+	public String getSidecarVersion() {
+		return _sidecarVersion;
 	}
 
 	public Path getSidecarWorkPath() {
@@ -131,6 +136,7 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 
 		_sidecarServerArgs = (SidecarServerArgs)objectInput.readObject();
 		_sidecarShutdownTimeout = objectInput.readLong();
+		_sidecarVersion = objectInput.readUTF();
 		_sidecarWorkPath = Path.of(objectInput.readUTF());
 
 		// Temp dir path is different every startup
@@ -161,6 +167,7 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 		objectOutput.writeUTF(_sidecarHomePath.toString());
 		objectOutput.writeObject(_sidecarServerArgs);
 		objectOutput.writeLong(_sidecarShutdownTimeout);
+		objectOutput.writeUTF(_sidecarVersion);
 		objectOutput.writeUTF(_sidecarWorkPath.toString());
 
 		arguments.add("-Djava.io.tmpdir=" + _sidecarTempDirPath);
@@ -173,6 +180,7 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 	private SidecarServerArgs _sidecarServerArgs;
 	private long _sidecarShutdownTimeout;
 	private Path _sidecarTempDirPath;
+	private String _sidecarVersion;
 	private Path _sidecarWorkPath;
 
 }

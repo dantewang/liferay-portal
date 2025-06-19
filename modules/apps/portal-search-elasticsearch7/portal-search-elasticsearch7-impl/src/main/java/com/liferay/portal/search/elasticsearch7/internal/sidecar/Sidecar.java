@@ -15,8 +15,6 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.SidecarConstants;
-import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -75,11 +73,6 @@ public class Sidecar {
 			_log.debug("Sidecar Elasticsearch starting");
 		}
 
-		String sidecarVersion = ResourceUtil.getResourceAsString(
-			getClass(), SidecarConstants.SIDECAR_VERSION_FILE_NAME);
-
-		_installElasticsearchIfNeeded(sidecarVersion);
-
 		ProcessChannel<Serializable> processChannel =
 			_executeSidecarMainProcess();
 
@@ -92,7 +85,9 @@ public class Sidecar {
 		if (_log.isInfoEnabled()) {
 			_log.info(
 				StringBundler.concat(
-					"Sidecar Elasticsearch ", sidecarVersion, StringPool.SPACE,
+					"Sidecar Elasticsearch ",
+					_sidecarRuntimeConfiguration.getSidecarVersion(),
+					StringPool.SPACE,
 					_sidecarRuntimeConfiguration.getNodeName(), " started at ",
 					address));
 		}
@@ -174,27 +169,6 @@ public class Sidecar {
 				"Unable to start sidecar Elasticsearch process",
 				processException);
 		}
-	}
-
-	private Distribution _getElasticsearchDistribution(String sidecarVersion) {
-		if (sidecarVersion.equals(ElasticsearchDistribution.VERSION)) {
-			return new ElasticsearchDistribution();
-		}
-
-		throw new IllegalArgumentException(
-			"Unsupported Elasticsearch version: " + sidecarVersion);
-	}
-
-	private void _installElasticsearchIfNeeded(String sidecarVersion) {
-		ElasticsearchInstaller.builder(
-		).distributablesDirectoryPath(
-			_sidecarRuntimeConfiguration.getSidecarWorkPath()
-		).distribution(
-			_getElasticsearchDistribution(sidecarVersion)
-		).installationDirectoryPath(
-			_sidecarHomePath
-		).build(
-		).install();
 	}
 
 	private String _startElasticsearch(
