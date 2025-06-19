@@ -6,16 +6,17 @@
 package com.liferay.portal.search.elasticsearch7.internal.sidecar.activator;
 
 import com.liferay.petra.concurrent.DefaultNoticeableFuture;
+import com.liferay.petra.io.Deserializer;
 import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.portal.events.StartupHelperUtil;
 import com.liferay.portal.kernel.concurrent.SystemExecutorServiceUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.Sidecar;
-import com.liferay.portal.search.elasticsearch7.internal.sidecar.SidecarRuntimeConfiguration;
 
 import java.io.File;
 
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 
 import java.util.concurrent.ExecutorService;
@@ -71,12 +72,11 @@ public class SearchElasticsearch7ImplBundleActivator
 		ServiceReference<ProcessExecutor> serviceReference =
 			bundleContext.getServiceReference(ProcessExecutor.class);
 
-		SidecarRuntimeConfiguration sidecarRuntimeConfiguration =
-			SidecarRuntimeConfiguration.from(bytes);
+		Deserializer deserializer = new Deserializer(ByteBuffer.wrap(bytes));
 
 		Sidecar sidecar = new Sidecar(
 			bundleContext.getService(serviceReference), null,
-			sidecarRuntimeConfiguration);
+			deserializer.readObject());
 
 		ExecutorService executorService =
 			SystemExecutorServiceUtil.getExecutorService();
