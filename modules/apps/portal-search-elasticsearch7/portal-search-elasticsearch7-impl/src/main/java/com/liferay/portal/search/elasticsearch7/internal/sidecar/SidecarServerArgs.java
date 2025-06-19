@@ -7,16 +7,7 @@ package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import java.io.Serializable;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-
-import java.security.MessageDigest;
-
 import java.util.Map;
-
-import org.elasticsearch.common.hash.MessageDigests;
-import org.elasticsearch.common.io.stream.StreamOutput;
-import org.elasticsearch.common.settings.KeyStoreWrapper;
 
 /**
  * See org.elasticsearch.bootstrap.ServerArgs
@@ -37,42 +28,28 @@ public class SidecarServerArgs implements Serializable {
 		_settings = settings;
 	}
 
-	public void writeTo(StreamOutput streamOutput) throws Exception {
-		streamOutput.writeBoolean(_daemonize);
-		streamOutput.writeBoolean(_quiet);
-		streamOutput.writeOptionalString(_pidFile);
-		streamOutput.writeString(KeyStoreWrapper.class.getName());
+	public String getConfigDir() {
+		return _configDir;
+	}
 
-		try (KeyStoreWrapper keyStoreWrapper = KeyStoreWrapper.create()) {
-			streamOutput.writeInt(keyStoreWrapper.getFormatVersion());
-			streamOutput.writeBoolean(keyStoreWrapper.hasPassword());
-			streamOutput.writeBoolean(false);
-			streamOutput.writeVInt(1);
-			streamOutput.writeString(KeyStoreWrapper.SEED_SETTING.getKey());
+	public String getLogsDir() {
+		return _logsDir;
+	}
 
-			ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(
-				ElasticsearchServerUtil.class.getSimpleName());
+	public String getPidFile() {
+		return _pidFile;
+	}
 
-			byte[] bytes = byteBuffer.array();
+	public Map<String, Serializable> getSettings() {
+		return _settings;
+	}
 
-			MessageDigest messageDigest = MessageDigests.sha256();
+	public boolean isDaemonize() {
+		return _daemonize;
+	}
 
-			streamOutput.writeByteArray(bytes);
-			streamOutput.writeByteArray(messageDigest.digest(bytes));
-			streamOutput.writeBoolean(false);
-		}
-
-		streamOutput.writeVInt(_settings.size());
-
-		for (Map.Entry<String, Serializable> entry : _settings.entrySet()) {
-			streamOutput.writeString(entry.getKey());
-			streamOutput.writeGenericValue(entry.getValue());
-		}
-
-		streamOutput.writeString(_configDir);
-		streamOutput.writeString(_logsDir);
-
-		streamOutput.flush();
+	public boolean isQuiet() {
+		return _quiet;
 	}
 
 	private final String _configDir;
