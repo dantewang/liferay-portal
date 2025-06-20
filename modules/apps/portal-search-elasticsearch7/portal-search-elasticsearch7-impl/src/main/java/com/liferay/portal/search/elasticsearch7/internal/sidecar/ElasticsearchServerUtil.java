@@ -10,16 +10,15 @@ import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.reflect.ReflectionUtil;
 
+import java.io.Closeable;
 import java.io.InputStream;
-import java.io.Serializable;
+import java.io.OutputStream;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-
-import java.security.MessageDigest;
+import java.nio.file.Path;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -28,12 +27,6 @@ import java.util.concurrent.CountDownLatch;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import org.elasticsearch.cli.ExitCodes;
-import org.elasticsearch.common.hash.MessageDigests;
-import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
-import org.elasticsearch.common.io.stream.StreamOutput;
-import org.elasticsearch.common.settings.KeyStoreWrapper;
 
 /**
  * @author Tina Tian
@@ -49,7 +42,7 @@ public class ElasticsearchServerUtil {
 				_logger.warn("Unable to invoke stop method", exception);
 			}
 
-			System.exit(ExitCodes.CODE_ERROR);
+			System.exit(_EXIT_CODE_ERROR);
 		}
 
 		_shutdownCountDownLatch.countDown();
@@ -60,10 +53,12 @@ public class ElasticsearchServerUtil {
 
 		try (UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
 				new UnsyncByteArrayOutputStream();
-			StreamOutput streamOutput = new OutputStreamStreamOutput(
+			Closeable closeable = (Closeable)Reflection.newInstance(
+				"org.elasticsearch.common.io.stream.OutputStreamStreamOutput",
+				new Class<?>[] {OutputStream.class},
 				unsyncByteArrayOutputStream)) {
 
-			_writeSidecarServerArgs(sidecarServerArgs, streamOutput);
+			_writeSidecarServerArgs(sidecarServerArgs, closeable);
 
 			InputStream originalSystemInInputStream = System.in;
 
@@ -139,6 +134,27 @@ public class ElasticsearchServerUtil {
 			return method.invoke(instance, parameters);
 		}
 
+		public static Object invokeStatic(String className, String methodName)
+			throws Exception {
+
+			Method method = ReflectionUtil.getDeclaredMethod(
+				_classLoader.loadClass(className), methodName);
+
+			return method.invoke(null);
+		}
+
+		public static Object newInstance(
+				String className, Class<?>[] parameterTypes,
+				Object... parameters)
+			throws Exception {
+
+			Class<?> clazz = _classLoader.loadClass(className);
+
+			Constructor<?> constructor = clazz.getConstructor(parameterTypes);
+
+			return constructor.newInstance(parameters);
+		}
+
 		private static final Class<?>[] _EMPTY_PARAMETER_TYPES =
 			new Class<?>[0];
 
@@ -190,49 +206,53 @@ public class ElasticsearchServerUtil {
 	}
 
 	private static void _writeSidecarServerArgs(
-			SidecarServerArgs sidecarServerArgs, StreamOutput streamOutput)
+			SidecarServerArgs sidecarServerArgs, Object streamOutputObject)
 		throws Exception {
 
-		streamOutput.writeBoolean(sidecarServerArgs.isDaemonize());
-		streamOutput.writeBoolean(sidecarServerArgs.isQuiet());
-		streamOutput.writeOptionalString(sidecarServerArgs.getPidFile());
-		streamOutput.writeString(KeyStoreWrapper.class.getName());
+		Reflection.invokeStatic(
+			"org.elasticsearch.common.logging.LogConfigurator",
+			"configureESLogging");
 
-		try (KeyStoreWrapper keyStoreWrapper = KeyStoreWrapper.create()) {
-			streamOutput.writeInt(keyStoreWrapper.getFormatVersion());
-			streamOutput.writeBoolean(keyStoreWrapper.hasPassword());
-			streamOutput.writeBoolean(false);
-			streamOutput.writeVInt(1);
-			streamOutput.writeString(KeyStoreWrapper.SEED_SETTING.getKey());
+		Object keyStoreWrapperObject = Reflection.invokeStatic(
+			"org.elasticsearch.common.settings.KeyStoreWrapper", "create");
 
-			ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(
-				ElasticsearchServerUtil.class.getSimpleName());
+		Object settingsBuilderObject = Reflection.invokeStatic(
+			"org.elasticsearch.common.settings.Settings", "builder");
 
-			byte[] bytes = byteBuffer.array();
+		settingsBuilderObject = Reflection.invoke(
+			settingsBuilderObject, "loadFromMap", new Class<?>[] {Map.class},
+			sidecarServerArgs.getSettings());
 
-			MessageDigest messageDigest = MessageDigests.sha256();
+		Object settingsObject = Reflection.invoke(
+			settingsBuilderObject, "build");
 
-			streamOutput.writeByteArray(bytes);
-			streamOutput.writeByteArray(messageDigest.digest(bytes));
-			streamOutput.writeBoolean(false);
-		}
+		Object serverArgsObject = Reflection.newInstance(
+			"org.elasticsearch.bootstrap.ServerArgs",
+			new Class<?>[] {
+				boolean.class, boolean.class, Path.class,
+				_classLoader.loadClass(
+					"org.elasticsearch.common.settings.SecureSettings"),
+				settingsObject.getClass(), Path.class, Path.class
+			},
+			sidecarServerArgs.isDaemonize(), sidecarServerArgs.isQuiet(),
+			sidecarServerArgs.getPidFile(), keyStoreWrapperObject,
+			settingsObject, Path.of(sidecarServerArgs.getConfigDir()),
+			Path.of(sidecarServerArgs.getLogsDir()));
 
-		streamOutput.writeVInt(
-			sidecarServerArgs.getSettings(
-			).size());
+		Reflection.invoke(
+			serverArgsObject, "writeTo",
+			new Class<?>[] {
+				_classLoader.loadClass(
+					"org.elasticsearch.common.io.stream.StreamOutput")
+			},
+			streamOutputObject);
 
-		Map<String, Serializable> settings = sidecarServerArgs.getSettings();
-
-		for (Map.Entry<String, Serializable> entry : settings.entrySet()) {
-			streamOutput.writeString(entry.getKey());
-			streamOutput.writeGenericValue(entry.getValue());
-		}
-
-		streamOutput.writeString(sidecarServerArgs.getConfigDir());
-		streamOutput.writeString(sidecarServerArgs.getLogsDir());
-
-		streamOutput.flush();
+		Reflection.invoke(streamOutputObject, "flush");
 	}
+
+	// See org.elasticsearch.cli.ExitCodes.CODE_ERROR
+
+	private static final int _EXIT_CODE_ERROR = 70;
 
 	private static final Logger _logger = LogManager.getLogger(
 		ElasticsearchServerUtil.class);

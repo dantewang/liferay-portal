@@ -205,7 +205,7 @@ public class SidecarRuntimeConfigurationFactory {
 			String.valueOf(
 				sidecarHomePath.resolve(
 					SidecarRuntimeConfiguration.LIFERAY_SIDECAR_CONFIG)),
-			false, String.valueOf(sidecarHomePath.resolve("logs")), null, false,
+			false, String.valueOf(sidecarHomePath.resolve("logs")), false,
 			settingsMap);
 	}
 

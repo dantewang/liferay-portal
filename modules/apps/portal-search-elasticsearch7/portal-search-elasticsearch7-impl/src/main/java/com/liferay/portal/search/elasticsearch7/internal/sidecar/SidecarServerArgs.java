@@ -7,6 +7,8 @@ package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import java.io.Serializable;
 
+import java.nio.file.Path;
+
 import java.util.Map;
 
 /**
@@ -17,13 +19,12 @@ import java.util.Map;
 public class SidecarServerArgs implements Serializable {
 
 	public SidecarServerArgs(
-		String configDir, boolean daemonize, String logsDir, String pidFile,
-		boolean quiet, Map<String, Serializable> settings) {
+		String configDir, boolean daemonize, String logsDir, boolean quiet,
+		Map<String, Serializable> settings) {
 
 		_configDir = configDir;
 		_daemonize = daemonize;
 		_logsDir = logsDir;
-		_pidFile = pidFile;
 		_quiet = quiet;
 		_settings = settings;
 	}
@@ -36,8 +37,8 @@ public class SidecarServerArgs implements Serializable {
 		return _logsDir;
 	}
 
-	public String getPidFile() {
-		return _pidFile;
+	public Path getPidFile() {
+		return null;
 	}
 
 	public Map<String, Serializable> getSettings() {
@@ -55,7 +56,6 @@ public class SidecarServerArgs implements Serializable {
 	private final String _configDir;
 	private final boolean _daemonize;
 	private final String _logsDir;
-	private final String _pidFile;
 	private final boolean _quiet;
 	private final Map<String, Serializable> _settings;
 
