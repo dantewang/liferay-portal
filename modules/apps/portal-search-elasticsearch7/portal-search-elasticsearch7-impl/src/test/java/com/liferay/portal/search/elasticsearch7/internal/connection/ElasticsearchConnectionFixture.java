@@ -18,9 +18,9 @@ import com.liferay.portal.search.elasticsearch7.internal.configuration.Elasticse
 import com.liferay.portal.search.elasticsearch7.internal.connection.constants.ConnectionConstants;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.ElasticsearchInstancePaths;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.HttpPortRange;
-import com.liferay.portal.search.elasticsearch7.internal.sidecar.PathUtil;
-import com.liferay.portal.search.elasticsearch7.internal.sidecar.Sidecar;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.SidecarRuntimeConfigurationFactory;
+import com.liferay.portal.search.elasticsearch7.sidecar.PathUtil;
+import com.liferay.portal.search.elasticsearch7.sidecar.Sidecar;
 import com.liferay.portal.util.PropsImpl;
 
 import java.io.IOException;

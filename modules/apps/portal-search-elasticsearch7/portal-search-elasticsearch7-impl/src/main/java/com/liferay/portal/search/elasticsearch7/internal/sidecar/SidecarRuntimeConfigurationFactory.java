@@ -20,6 +20,10 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.elasticsearch7.internal.configuration.ElasticsearchConfigurationWrapper;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.SidecarConstants;
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
+import com.liferay.portal.search.elasticsearch7.sidecar.PathUtil;
+import com.liferay.portal.search.elasticsearch7.sidecar.Sidecar;
+import com.liferay.portal.search.elasticsearch7.sidecar.SidecarRuntimeConfiguration;
+import com.liferay.portal.search.elasticsearch7.sidecar.SidecarServerArgs;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 
@@ -254,7 +258,8 @@ public class SidecarRuntimeConfigurationFactory {
 					"logger.deprecation.name=org.elasticsearch.deprecation",
 					"logger.deprecation.level=error", StringPool.BLANK,
 					ResourceUtil.getResourceAsString(
-						Sidecar.class, "/log4j2-sidecar.properties")));
+						SidecarRuntimeConfigurationFactory.class,
+						"/log4j2-sidecar.properties")));
 		}
 		catch (IOException ioException) {
 			_log.error(

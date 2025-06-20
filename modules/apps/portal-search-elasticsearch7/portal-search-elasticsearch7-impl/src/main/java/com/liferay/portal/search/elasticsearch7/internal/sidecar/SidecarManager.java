@@ -16,9 +16,11 @@ import com.liferay.portal.search.elasticsearch7.internal.configuration.Elasticse
 import com.liferay.portal.search.elasticsearch7.internal.connection.ElasticsearchConnectionBuilder;
 import com.liferay.portal.search.elasticsearch7.internal.connection.ElasticsearchConnectionManager;
 import com.liferay.portal.search.elasticsearch7.internal.connection.constants.ConnectionConstants;
-import com.liferay.portal.search.elasticsearch7.internal.sidecar.activator.SearchElasticsearch7ImplBundleActivator;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.SidecarConstants;
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
+import com.liferay.portal.search.elasticsearch7.sidecar.Sidecar;
+import com.liferay.portal.search.elasticsearch7.sidecar.SidecarRuntimeConfiguration;
+import com.liferay.portal.search.elasticsearch7.sidecar.activator.SearchElasticsearch7SidecarApiBundleActivator;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
@@ -100,7 +102,7 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 
 			try {
 				Sidecar sidecar =
-					SearchElasticsearch7ImplBundleActivator.getSidecar();
+					SearchElasticsearch7SidecarApiBundleActivator.getSidecar();
 
 				if (sidecar != null) {
 					_sidecar = sidecar;
@@ -108,7 +110,7 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 
 				if ((sidecar != null) &&
 					(checksum.getValue() ==
-						SearchElasticsearch7ImplBundleActivator.
+						SearchElasticsearch7SidecarApiBundleActivator.
 							getChecksum())) {
 
 					_sidecar = sidecar;

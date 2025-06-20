@@ -8,6 +8,7 @@ package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.SystemProperties;
+import com.liferay.portal.search.elasticsearch7.sidecar.PathUtil;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-package com.liferay.portal.search.elasticsearch7.internal.sidecar.activator;
+package com.liferay.portal.search.elasticsearch7.sidecar.activator;
 
 import com.liferay.petra.concurrent.DefaultNoticeableFuture;
 import com.liferay.petra.io.Deserializer;
@@ -12,7 +12,7 @@ import com.liferay.portal.events.StartupHelperUtil;
 import com.liferay.portal.kernel.concurrent.SystemExecutorServiceUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.search.elasticsearch7.internal.sidecar.Sidecar;
+import com.liferay.portal.search.elasticsearch7.sidecar.Sidecar;
 
 import java.io.File;
 
@@ -30,7 +30,7 @@ import org.osgi.framework.ServiceReference;
 /**
  * @author Dante Wang
  */
-public class SearchElasticsearch7ImplBundleActivator
+public class SearchElasticsearch7SidecarApiBundleActivator
 	implements BundleActivator {
 
 	public static long getChecksum() {

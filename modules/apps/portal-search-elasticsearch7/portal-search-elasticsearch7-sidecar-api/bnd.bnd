@@ -1,0 +1,7 @@
+Bundle-Activator: com.liferay.portal.search.elasticsearch7.sidecar.activator.SearchElasticsearch7SidecarApiBundleActivator
+Bundle-Name: Liferay Portal Search Elasticsearch 7 Sidecar API
+Bundle-SymbolicName: com.liferay.portal.search.elasticsearch7.sidecar.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.portal.search.elasticsearch7.sidecar,\
+	com.liferay.portal.search.elasticsearch7.sidecar.activator

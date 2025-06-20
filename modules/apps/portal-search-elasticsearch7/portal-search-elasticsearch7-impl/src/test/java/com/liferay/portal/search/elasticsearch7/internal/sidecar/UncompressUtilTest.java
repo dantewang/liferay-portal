@@ -6,6 +6,7 @@
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import com.liferay.portal.kernel.util.OSDetector;
+import com.liferay.portal.search.elasticsearch7.sidecar.PathUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.io.File;
