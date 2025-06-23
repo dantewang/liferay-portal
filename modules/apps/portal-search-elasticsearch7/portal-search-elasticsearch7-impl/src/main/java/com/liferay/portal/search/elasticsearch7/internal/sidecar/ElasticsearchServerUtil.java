@@ -100,6 +100,13 @@ public class ElasticsearchServerUtil {
 
 			Set<Thread> threads = new HashSet<>(hooks.keySet());
 
+			threads.removeIf(
+				thread -> {
+					String threadName = thread.getName();
+
+					return threadName.contains("elasticsearch-shutdown");
+				});
+
 			hooks.clear();
 
 			Thread shutdownHook = new Thread(
