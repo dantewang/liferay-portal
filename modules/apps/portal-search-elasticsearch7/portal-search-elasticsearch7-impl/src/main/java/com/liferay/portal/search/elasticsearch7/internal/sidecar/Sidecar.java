@@ -526,8 +526,9 @@ public class Sidecar {
 						String absolutePath = String.valueOf(
 							dir.toAbsolutePath());
 
-						if (absolutePath.contains("x-pack-") &&
-							!absolutePath.contains("x-pack-core")) {
+						if ((absolutePath.contains("x-pack-") &&
+							 !absolutePath.contains("x-pack-core")) ||
+							absolutePath.contains("repository-azure")) {
 
 							excludedPaths.add(dir);
 						}
