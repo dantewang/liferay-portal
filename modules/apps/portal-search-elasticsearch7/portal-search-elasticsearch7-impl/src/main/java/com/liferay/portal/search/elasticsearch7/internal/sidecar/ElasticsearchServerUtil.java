@@ -10,6 +10,7 @@ import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.reflect.ReflectionUtil;
 
+import java.io.Closeable;
 import java.io.InputStream;
 
 import java.lang.reflect.Field;
@@ -19,9 +20,17 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.AbstractAppender;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.message.Message;
 
 import org.elasticsearch.cli.ExitCodes;
 import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
@@ -34,7 +43,7 @@ public class ElasticsearchServerUtil {
 
 	public static void shutdown() {
 		try {
-			_stopMethod.invoke(null);
+			_shutdownMethod.invoke(null);
 		}
 		catch (Exception exception) {
 			if (_logger.isWarnEnabled()) {
@@ -47,7 +56,7 @@ public class ElasticsearchServerUtil {
 		_shutdownCountDownLatch.countDown();
 	}
 
-	public static Object start(SidecarServerArgs sidecarServerArgs)
+	public static String start(SidecarServerArgs sidecarServerArgs)
 		throws ProcessException {
 
 		try (UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
@@ -59,23 +68,31 @@ public class ElasticsearchServerUtil {
 
 			InputStream originalSystemInInputStream = System.in;
 
+			Object bootstrapObject = null;
+
 			try (UnsyncByteArrayInputStream unsyncByteArrayInputStream =
 					new UnsyncByteArrayInputStream(
 						unsyncByteArrayOutputStream.toByteArray())) {
 
 				System.setIn(unsyncByteArrayInputStream);
 
-				_mainMethod.invoke(null, (Object)null);
+				bootstrapObject = _initPhase1Method.invoke(null);
 			}
 			finally {
 				System.setIn(originalSystemInInputStream);
+			}
+
+			try (Closeable closeable = _enableAppender()) {
+				_initPhase2Method.invoke(null, bootstrapObject);
+
+				_initPhase3Method.invoke(null, bootstrapObject);
 			}
 
 			System.setSecurityManager(null);
 
 			_addShutdownHook();
 
-			return _nodeField.get(_instanceField.get(null));
+			return _getAddress();
 		}
 		catch (Exception exception) {
 			throw new ProcessException(
@@ -138,16 +155,69 @@ public class ElasticsearchServerUtil {
 		}
 	}
 
+	private static Closeable _enableAppender() throws Exception {
+		ClassLoader classLoader =
+			ElasticsearchServerUtil.class.getClassLoader();
+
+		Class<?> clazz = classLoader.loadClass(_LOGGER_NAME);
+
+		LoggerContext loggerContext = (LoggerContext)LogManager.getContext(
+			clazz.getClassLoader(), false);
+
+		org.apache.logging.log4j.core.Logger logger = loggerContext.getLogger(
+			_LOGGER_NAME);
+
+		LoggerConfig loggerConfig = logger.get();
+
+		boolean additive = logger.isAdditive();
+		Level level = logger.getLevel();
+
+		loggerConfig.setAdditive(false);
+		loggerConfig.setLevel(Level.INFO);
+
+		CaptureAddressAppender captureAddressAppender =
+			new CaptureAddressAppender(_LOGGER_NAME + "_capture");
+
+		captureAddressAppender.start();
+
+		logger.addAppender(captureAddressAppender);
+
+		loggerContext.updateLoggers();
+
+		return () -> {
+			captureAddressAppender.stop();
+
+			logger.removeAppender(captureAddressAppender);
+			loggerConfig.setAdditive(additive);
+			loggerConfig.setLevel(level);
+
+			loggerContext.updateLoggers();
+		};
+	}
+
+	private static String _getAddress() {
+		if (_address == null) {
+			throw new IllegalStateException(
+				"The bound address is not captured");
+		}
+
+		return _address;
+	}
+
+	private static final String _LOGGER_NAME =
+		"org.elasticsearch.http.AbstractHttpServerTransport";
+
 	private static final Logger _logger = LogManager.getLogger(
 		ElasticsearchServerUtil.class);
 
+	private static String _address;
 	private static final Field _hooksField;
-	private static final Field _instanceField;
-	private static final Method _mainMethod;
-	private static final Field _nodeField;
+	private static final Method _initPhase1Method;
+	private static final Method _initPhase2Method;
+	private static final Method _initPhase3Method;
 	private static final CountDownLatch _shutdownCountDownLatch =
 		new CountDownLatch(1);
-	private static final Method _stopMethod;
+	private static final Method _shutdownMethod;
 
 	static {
 		try {
@@ -161,18 +231,51 @@ public class ElasticsearchServerUtil {
 			Class<?> elasticsearchClass = classLoader.loadClass(
 				"org.elasticsearch.bootstrap.Elasticsearch");
 
-			_instanceField = ReflectionUtil.getDeclaredField(
-				elasticsearchClass, "INSTANCE");
-			_mainMethod = ReflectionUtil.getDeclaredMethod(
-				elasticsearchClass, "main", String[].class);
-			_nodeField = ReflectionUtil.getDeclaredField(
-				elasticsearchClass, "node");
-			_stopMethod = ReflectionUtil.getDeclaredMethod(
+			Class<?> bootstrapClass = classLoader.loadClass(
+				"org.elasticsearch.bootstrap.Bootstrap");
+
+			_initPhase1Method = ReflectionUtil.getDeclaredMethod(
+				elasticsearchClass, "initPhase1");
+			_initPhase2Method = ReflectionUtil.getDeclaredMethod(
+				elasticsearchClass, "initPhase2", bootstrapClass);
+			_initPhase3Method = ReflectionUtil.getDeclaredMethod(
+				elasticsearchClass, "initPhase3", bootstrapClass);
+			_shutdownMethod = ReflectionUtil.getDeclaredMethod(
 				elasticsearchClass, "shutdown");
 		}
 		catch (Exception exception) {
 			throw new ExceptionInInitializerError(exception);
 		}
+	}
+
+	private static class CaptureAddressAppender extends AbstractAppender {
+
+		@Override
+		public void append(LogEvent logEvent) {
+			Message message = logEvent.getMessage();
+
+			String formattedMessage = message.getFormattedMessage();
+
+			if ((formattedMessage == null) ||
+				!formattedMessage.contains("publish_address")) {
+
+				return;
+			}
+
+			Matcher matcher = _publishAddressPattern.matcher(formattedMessage);
+
+			if (matcher.find()) {
+				_address = matcher.group(1);
+			}
+		}
+
+		private CaptureAddressAppender(String appenderName) {
+			super(appenderName, null, null, true, null);
+		}
+
+		private static final Pattern _publishAddressPattern = Pattern.compile(
+			"publish_address \\{([^}]+)}");
+
 	}
 
 }
