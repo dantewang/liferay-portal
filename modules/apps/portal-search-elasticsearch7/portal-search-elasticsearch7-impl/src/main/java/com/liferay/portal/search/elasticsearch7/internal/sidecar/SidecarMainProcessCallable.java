@@ -9,7 +9,16 @@ import com.liferay.petra.process.ProcessCallable;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.process.local.LocalProcessLauncher;
 
+import com.sun.tools.attach.VirtualMachine;
+
 import java.io.Serializable;
+
+import java.net.URL;
+
+import java.nio.file.Path;
+
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 
 /**
  * @author Tina Tian
@@ -31,9 +40,44 @@ public class SidecarMainProcessCallable
 				return true;
 			});
 
+		try {
+			_loadAgent();
+		}
+		catch (Exception exception) {
+			throw new ProcessException(
+				"Unable to attach Sidecar agent", exception);
+		}
+
 		ElasticsearchServerUtil.waitForShutdown();
 
 		return null;
+	}
+
+	private void _loadAgent() throws Exception {
+		ProtectionDomain protectionDomain =
+			SidecarMainProcessCallable.class.getProtectionDomain();
+
+		CodeSource codeSource = protectionDomain.getCodeSource();
+
+		URL url = codeSource.getLocation();
+
+		Path path = Path.of(url.toURI());
+
+		ProcessHandle processHandle = ProcessHandle.current();
+
+		VirtualMachine virtualMachine = null;
+
+		try {
+			virtualMachine = VirtualMachine.attach(
+				String.valueOf(processHandle.pid()));
+
+			virtualMachine.loadAgent(path.toString());
+		}
+		finally {
+			if (virtualMachine != null) {
+				virtualMachine.detach();
+			}
+		}
 	}
 
 	private static final long serialVersionUID = 1L;

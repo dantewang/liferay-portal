@@ -1,3 +1,4 @@
+Agent-Class: com.liferay.portal.search.elasticsearch7.internal.sidecar.SidecarAgent
 Bundle-Name: Liferay Portal Search Elasticsearch 7 Implementation
 Bundle-SymbolicName: com.liferay.portal.search.elasticsearch7.impl
 Bundle-Version: 6.0.133
@@ -137,3 +138,4 @@ Import-Package:\
 	*
 -dsannotations-options: inherit
 -fixupmessages: Classes found in the wrong directory: ...;is:=ignore
+-includeresource: @asm-*.jar

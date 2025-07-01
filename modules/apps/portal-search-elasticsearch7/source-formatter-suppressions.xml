@@ -5,4 +5,7 @@
 		<suppress checks="CompanyIterationCheck" files=".*" />
 		<suppress checks="UnprocessedExceptionCheck" files="portal-search-elasticsearch7-impl/src/main/java/com/liferay/portal/search/elasticsearch7/internal/index/CompanyIndexHelper\.java" />
 	</checkstyle>
+	<source-check>
+		<suppress checks="BNDDefinitionKeysCheck" files="portal-search-elasticsearch7-impl/bnd\.bnd" />
+	</source-check>
 </suppressions>

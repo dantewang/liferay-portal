@@ -5,12 +5,6 @@
 
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
-import com.liferay.petra.string.CharPool;
-import com.liferay.petra.string.StringBundler;
-
-import java.io.IOException;
-import java.io.InputStream;
-
 import java.util.function.Function;
 
 import org.objectweb.asm.ClassReader;
@@ -26,59 +20,36 @@ import org.objectweb.asm.Opcodes;
 public class ClassModificationUtil {
 
 	public static byte[] getModifiedClassBytes(
-			String className, String methodName,
-			Function<MethodVisitor, MethodVisitor> methodVisitorFunction,
-			ClassLoader classLoader)
-		throws ClassNotFoundException, IOException {
+		byte[] classBytes, String methodName,
+		Function<MethodVisitor, MethodVisitor> methodVisitorFunction) {
 
-		Class<?> clazz = classLoader.loadClass(className);
+		ClassReader classReader = new ClassReader(classBytes);
 
-		String classFileName = clazz.getSimpleName();
+		ClassWriter classWriter = new ClassWriter(
+			classReader, ClassWriter.COMPUTE_MAXS);
 
-		if (className.indexOf(CharPool.DOLLAR) > -1) {
-			int index = className.lastIndexOf(CharPool.PERIOD);
+		classReader.accept(
+			new ClassVisitor(Opcodes.ASM7, classWriter) {
 
-			classFileName = className.substring(index + 1);
-		}
+				@Override
+				public MethodVisitor visitMethod(
+					int access, String name, String description,
+					String signature, String[] exceptions) {
 
-		try (InputStream inputStream = clazz.getResourceAsStream(
-				classFileName + ".class")) {
+					MethodVisitor methodVisitor = super.visitMethod(
+						access, name, description, signature, exceptions);
 
-			if (inputStream == null) {
-				throw new IOException(
-					StringBundler.concat(
-						clazz.getName(), " is unable to load ", classFileName,
-						".class"));
-			}
-
-			ClassReader classReader = new ClassReader(inputStream);
-
-			ClassWriter classWriter = new ClassWriter(
-				classReader, ClassWriter.COMPUTE_MAXS);
-
-			classReader.accept(
-				new ClassVisitor(Opcodes.ASM7, classWriter) {
-
-					@Override
-					public MethodVisitor visitMethod(
-						int access, String name, String description,
-						String signature, String[] exceptions) {
-
-						MethodVisitor methodVisitor = super.visitMethod(
-							access, name, description, signature, exceptions);
-
-						if (!name.equals(methodName)) {
-							return methodVisitor;
-						}
-
-						return methodVisitorFunction.apply(methodVisitor);
+					if (!name.equals(methodName)) {
+						return methodVisitor;
 					}
 
-				},
-				0);
+					return methodVisitorFunction.apply(methodVisitor);
+				}
 
-			return classWriter.toByteArray();
-		}
+			},
+			0);
+
+		return classWriter.toByteArray();
 	}
 
 }
