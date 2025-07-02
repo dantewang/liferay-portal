@@ -47,7 +47,6 @@ import java.security.CodeSource;
 import java.security.ProtectionDomain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -340,12 +339,7 @@ public class Sidecar {
 
 			Files.write(
 				configFolder.resolve("log4j2.properties"),
-				Arrays.asList(
-					"logger.bootstrapchecks.name=org.elasticsearch.bootstrap." +
-						"BootstrapChecks",
-					"logger.bootstrapchecks.level=error",
-					"logger.deprecation.name=org.elasticsearch.deprecation",
-					"logger.deprecation.level=error",
+				List.of(
 					ResourceUtil.getResourceAsString(
 						Sidecar.class, "/log4j2-sidecar.properties")));
 		}
