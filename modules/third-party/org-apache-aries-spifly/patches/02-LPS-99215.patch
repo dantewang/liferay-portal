@@ -11,19 +11,18 @@ index 7e4a95c00395..f557a7dedb83 100644
          consumerBundleTracker.open();
  
          for (Bundle bundle : context.getBundles()) {
-@@ -92,7 +92,11 @@ public abstract class BaseActivator implements BundleActivator {
-         }
- 
+@@ -117,7 +117,10 @@ public abstract class BaseActivator implements BundleActivator {
+
          Map<String, List<String>> allHeaders = new HashMap<String, List<String>>();
--        allHeaders.put(consumerHeaderName, getAllHeaders(consumerHeaderName, bundle));
-+
-+		if (consumerHeaderName != null) {
-+			allHeaders.put(consumerHeaderName, getAllHeaders(consumerHeaderName, bundle));
-+		}
-+
-         allHeaders.put(SpiFlyConstants.REQUIRE_CAPABILITY, getAllHeaders(SpiFlyConstants.REQUIRE_CAPABILITY, bundle));
- 
-         Set<WeavingData> wd = new HashSet<WeavingData>();
+         Set<String> addedHeaders = new HashSet<String>();
+-        List<String> added = allHeaders.put(consumerHeaderName, getAllHeaders(consumerHeaderName, bundle));
++        List<String> added = null;
++        if (consumerHeaderName != null) {
++            allHeaders.put(consumerHeaderName, getAllHeaders(consumerHeaderName, bundle));
++        }
+         if (added != null) {
+             added.stream().forEach(addedHeaders::add);
+         }
 diff --git a/org/apache/aries/spifly/ConsumerBundleTrackerCustomizer.java b/org/apache/aries/spifly/ConsumerBundleTrackerCustomizer.java
 index 9b53d944e7c6..a8e0a645f589 100644
 --- a/org/apache/aries/spifly/ConsumerBundleTrackerCustomizer.java

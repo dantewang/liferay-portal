@@ -99,7 +99,7 @@ public abstract class BaseActivator implements BundleActivator {
         providerBundleTracker.open();
 
         consumerBundleTracker = new BundleTracker(context,
-                Bundle.INSTALLED | Bundle.RESOLVED | Bundle.STARTING | Bundle.ACTIVE, new ConsumerBundleTrackerCustomizer(this, consumerHeaderName));
+                Bundle.RESOLVED | Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING, new ConsumerBundleTrackerCustomizer(this, consumerHeaderName));
         consumerBundleTracker.open();
 
         for (Bundle bundle : context.getBundles()) {
@@ -117,7 +117,10 @@ public abstract class BaseActivator implements BundleActivator {
 
         Map<String, List<String>> allHeaders = new HashMap<String, List<String>>();
         Set<String> addedHeaders = new HashSet<String>();
-        List<String> added = allHeaders.put(consumerHeaderName, getAllHeaders(consumerHeaderName, bundle));
+        List<String> added = null;
+        if (consumerHeaderName != null) {
+            allHeaders.put(consumerHeaderName, getAllHeaders(consumerHeaderName, bundle));
+        }
         if (added != null) {
             added.stream().forEach(addedHeaders::add);
         }
