@@ -88,7 +88,7 @@ public class ProviderBundleTrackerCustomizer implements BundleTrackerCustomizer 
         DiscoveryMode discoveryMode = DiscoveryMode.SERVICELOADER_CAPABILITIES;
         List<String> providedServices = null;
         Map<String, Object> customAttributes = new HashMap<String, Object>();
-        if (bundle.getHeaders().get(SpiFlyConstants.REQUIRE_CAPABILITY) != null) {
+        if (bundle.getHeaders("").get(SpiFlyConstants.REQUIRE_CAPABILITY) != null) {
             try {
                 providedServices = readServiceLoaderMediatorCapabilityMetadata(bundle, customAttributes);
             } catch (InvalidSyntaxException e) {
@@ -275,7 +275,7 @@ public class ProviderBundleTrackerCustomizer implements BundleTrackerCustomizer 
             serviceFileURLs.addAll(Collections.list(entries));
         }
 
-        Object bcp = bundle.getHeaders().get(Constants.BUNDLE_CLASSPATH);
+        Object bcp = bundle.getHeaders("").get(Constants.BUNDLE_CLASSPATH);
         if (bcp instanceof String) {
             for (String entry : ((String) bcp).split(",")) {
                 entry = entry.trim();
@@ -297,7 +297,7 @@ public class ProviderBundleTrackerCustomizer implements BundleTrackerCustomizer 
     }
 
     private String getHeaderFromBundleOrFragment(Bundle bundle, String headerName, String matchString) {
-        Parameters headerParameters = new Parameters(bundle.getHeaders().get(headerName));
+        Parameters headerParameters = new Parameters(bundle.getHeaders("").get(headerName));
         if (matches(headerParameters.toString(), matchString) && !MERGE_HEADERS.contains(headerName)) {
             return headerParameters.isEmpty() ? null : headerParameters.toString();
         }
@@ -308,7 +308,7 @@ public class ProviderBundleTrackerCustomizer implements BundleTrackerCustomizer 
             if (wiring != null) {
                 for (BundleWire wire : wiring.getProvidedWires("osgi.wiring.host")) {
                     Bundle fragment = wire.getRequirement().getRevision().getBundle();
-                    Parameters fragmentParameters = new Parameters(fragment.getHeaders().get(headerName));
+                    Parameters fragmentParameters = new Parameters(fragment.getHeaders("").get(headerName));
                     if (MERGE_HEADERS.contains(headerName)) {
                         headerParameters.mergeWith(fragmentParameters, false);
                     }
@@ -506,3 +506,4 @@ public class ProviderBundleTrackerCustomizer implements BundleTrackerCustomizer 
         private final String serviceType;
     }
 }
+/* @generated */
