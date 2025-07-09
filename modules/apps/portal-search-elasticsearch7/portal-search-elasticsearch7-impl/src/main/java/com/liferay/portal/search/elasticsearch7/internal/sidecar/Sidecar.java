@@ -44,7 +44,6 @@ import java.security.CodeSource;
 import java.security.ProtectionDomain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,14 +81,18 @@ public class Sidecar {
 			_log.debug("Sidecar Elasticsearch starting");
 		}
 
-		String sidecarVersion = _getSidecarVersion();
+		String sidecarVersion = ResourceUtil.getResourceAsString(
+			getClass(), SidecarConstants.SIDECAR_VERSION_FILE_NAME);
 
 		_installElasticsearchIfNeeded(sidecarVersion);
 
 		ProcessChannel<Serializable> processChannel =
 			_executeSidecarMainProcess();
 
-		_addFutureListener(processChannel, _restartFutureListener);
+		NoticeableFuture<Serializable> noticeableFuture =
+			processChannel.getProcessNoticeableFuture();
+
+		noticeableFuture.addFutureListener(_restartFutureListener);
 
 		String address = _startElasticsearch(processChannel);
 
@@ -145,16 +148,6 @@ public class Sidecar {
 		PathUtil.deleteDir(_sidecarTempDirPath);
 	}
 
-	private void _addFutureListener(
-		ProcessChannel<Serializable> processChannel,
-		FutureListener<Serializable> futureListener) {
-
-		NoticeableFuture<Serializable> noticeableFuture =
-			processChannel.getProcessNoticeableFuture();
-
-		noticeableFuture.addFutureListener(futureListener);
-	}
-
 	private void _consumeProcessLog(ProcessLog processLog) {
 		if (ProcessLog.Level.DEBUG == processLog.getLevel()) {
 			if (_log.isDebugEnabled()) {
@@ -207,7 +200,13 @@ public class Sidecar {
 
 		URL bundleURL = _getBundleURL(Sidecar.class);
 
-		String bootstrapClassPath = _getBootstrapClassPath();
+		String bootstrapClassPath = _createClasspath(
+			Paths.get(PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR),
+			path -> {
+				String name = String.valueOf(path.getFileName());
+
+				return name.contains("petra");
+			});
 
 		return builder.setArguments(
 			_getJVMArguments()
@@ -248,28 +247,12 @@ public class Sidecar {
 		}
 	}
 
-	private boolean _fileNameContains(Path path, String s) {
-		String name = String.valueOf(path.getFileName());
-
-		return name.contains(s);
-	}
-
-	private String _getBootstrapClassPath() {
-		return _createClasspath(
-			Paths.get(PropsValues.LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR),
-			path -> _fileNameContains(path, "petra"));
-	}
-
 	private URL _getBundleURL(Class<?> clazz) {
 		ProtectionDomain protectionDomain = clazz.getProtectionDomain();
 
 		CodeSource codeSource = protectionDomain.getCodeSource();
 
 		return codeSource.getLocation();
-	}
-
-	private String _getClusterName() {
-		return _elasticsearchConfigurationWrapper.clusterName();
 	}
 
 	private Distribution _getElasticsearchDistribution(String sidecarVersion) {
@@ -329,12 +312,7 @@ public class Sidecar {
 
 			Files.write(
 				configFolder.resolve("log4j2.properties"),
-				Arrays.asList(
-					"logger.bootstrapchecks.name=org.elasticsearch.bootstrap." +
-						"BootstrapChecks",
-					"logger.bootstrapchecks.level=error",
-					"logger.deprecation.name=org.elasticsearch.deprecation",
-					"logger.deprecation.level=error", _getLogProperties(),
+				List.of(
 					ResourceUtil.getResourceAsString(
 						Sidecar.class, "/log4j2.properties")));
 		}
@@ -405,10 +383,6 @@ public class Sidecar {
 		return arguments;
 	}
 
-	private String _getLogProperties() {
-		return StringPool.BLANK;
-	}
-
 	private String _getNodeName() {
 		String nodeName = _elasticsearchConfigurationWrapper.nodeName();
 
@@ -419,10 +393,10 @@ public class Sidecar {
 		return "liferay_sidecar";
 	}
 
-	private Settings _getSettings() {
-		return ElasticsearchInstanceSettingsBuilder.builder(
+	private SidecarServerArgs _getSidecarServerArgs() {
+		Settings settings = ElasticsearchInstanceSettingsBuilder.builder(
 		).clusterName(
-			_getClusterName()
+			_elasticsearchConfigurationWrapper.clusterName()
 		).discoveryTypeSingleNode(
 			true
 		).elasticsearchConfigurationWrapper(
@@ -434,10 +408,6 @@ public class Sidecar {
 		).nodeName(
 			_getNodeName()
 		).build();
-	}
-
-	private SidecarServerArgs _getSidecarServerArgs() {
-		Settings settings = _getSettings();
 
 		StringBundler sb = new StringBundler((2 * settings.size()) + 1);
 
@@ -477,11 +447,6 @@ public class Sidecar {
 			String.valueOf(_sidecarTempDirPath.resolve("config")), false,
 			String.valueOf(_sidecarHomePath.resolve("logs")), false,
 			settingsMap);
-	}
-
-	private String _getSidecarVersion() {
-		return ResourceUtil.getResourceAsString(
-			getClass(), SidecarConstants.SIDECAR_VERSION_FILE_NAME);
 	}
 
 	private void _installElasticsearchIfNeeded(String sidecarVersion) {
