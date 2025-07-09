@@ -11,7 +11,6 @@ import com.liferay.petra.process.ProcessChannel;
 import com.liferay.petra.process.ProcessConfig;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.process.ProcessExecutor;
-import com.liferay.petra.process.ProcessLog;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
@@ -26,6 +25,7 @@ import com.liferay.portal.search.elasticsearch7.internal.configuration.Elasticse
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.SidecarConstants;
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
 import com.liferay.portal.search.elasticsearch7.sidecar.agent.SidecarAgent;
+import com.liferay.portal.util.PortalClassPathUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
@@ -148,27 +148,6 @@ public class Sidecar {
 		PathUtil.deleteDir(_sidecarTempDirPath);
 	}
 
-	private void _consumeProcessLog(ProcessLog processLog) {
-		if (ProcessLog.Level.DEBUG == processLog.getLevel()) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(processLog.getMessage(), processLog.getThrowable());
-			}
-		}
-		else if (ProcessLog.Level.INFO == processLog.getLevel()) {
-			if (_log.isInfoEnabled()) {
-				_log.info(processLog.getMessage(), processLog.getThrowable());
-			}
-		}
-		else if (ProcessLog.Level.WARN == processLog.getLevel()) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(processLog.getMessage(), processLog.getThrowable());
-			}
-		}
-		else {
-			_log.error(processLog.getMessage(), processLog.getThrowable());
-		}
-	}
-
 	private String _createClasspath(
 		Path dirPath, DirectoryStream.Filter<Path> filter) {
 
@@ -217,7 +196,7 @@ public class Sidecar {
 		).setJavaExecutable(
 			System.getProperty("java.home") + "/bin/java"
 		).setProcessLogConsumer(
-			this::_consumeProcessLog
+			PortalClassPathUtil.createProcessLogConsumer(_log)
 		).setReactClassLoader(
 			Sidecar.class.getClassLoader()
 		).setRuntimeClassPath(
