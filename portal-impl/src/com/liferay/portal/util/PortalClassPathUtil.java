@@ -39,6 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -91,35 +92,37 @@ public class PortalClassPathUtil {
 
 		builder.setBootstrapClassPath(classpath);
 
-		builder.setProcessLogConsumer(
-			processLog -> {
-				if (ProcessLog.Level.DEBUG == processLog.getLevel()) {
-					if (_log.isDebugEnabled()) {
-						_log.debug(
-							processLog.getMessage(), processLog.getThrowable());
-					}
-				}
-				else if (ProcessLog.Level.INFO == processLog.getLevel()) {
-					if (_log.isInfoEnabled()) {
-						_log.info(
-							processLog.getMessage(), processLog.getThrowable());
-					}
-				}
-				else if (ProcessLog.Level.WARN == processLog.getLevel()) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							processLog.getMessage(), processLog.getThrowable());
-					}
-				}
-				else {
-					_log.error(
-						processLog.getMessage(), processLog.getThrowable());
-				}
-			});
+		builder.setProcessLogConsumer(createProcessLogConsumer(_log));
 		builder.setReactClassLoader(PortalClassLoaderUtil.getClassLoader());
 		builder.setRuntimeClassPath(classpath);
 
 		return builder.build();
+	}
+
+	public static Consumer<ProcessLog> createProcessLogConsumer(Log log) {
+		return processLog -> {
+			if (ProcessLog.Level.DEBUG == processLog.getLevel()) {
+				if (log.isDebugEnabled()) {
+					log.debug(
+						processLog.getMessage(), processLog.getThrowable());
+				}
+			}
+			else if (ProcessLog.Level.INFO == processLog.getLevel()) {
+				if (log.isInfoEnabled()) {
+					log.info(
+						processLog.getMessage(), processLog.getThrowable());
+				}
+			}
+			else if (ProcessLog.Level.WARN == processLog.getLevel()) {
+				if (log.isWarnEnabled()) {
+					log.warn(
+						processLog.getMessage(), processLog.getThrowable());
+				}
+			}
+			else {
+				log.error(processLog.getMessage(), processLog.getThrowable());
+			}
+		};
 	}
 
 	public static ProcessConfig getPortalProcessConfig() {
