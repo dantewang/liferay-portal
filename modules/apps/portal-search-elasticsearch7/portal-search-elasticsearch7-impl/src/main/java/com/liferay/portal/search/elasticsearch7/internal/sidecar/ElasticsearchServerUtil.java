@@ -11,9 +11,15 @@ import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.reflect.ReflectionUtil;
 
 import java.io.InputStream;
+import java.io.Serializable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
+import java.security.MessageDigest;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -24,8 +30,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.elasticsearch.cli.ExitCodes;
+import org.elasticsearch.common.hash.MessageDigests;
 import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
 import org.elasticsearch.common.io.stream.StreamOutput;
+import org.elasticsearch.common.settings.KeyStoreWrapper;
 
 /**
  * @author Tina Tian
@@ -55,7 +63,7 @@ public class ElasticsearchServerUtil {
 			StreamOutput streamOutput = new OutputStreamStreamOutput(
 				unsyncByteArrayOutputStream)) {
 
-			sidecarServerArgs.writeTo(streamOutput);
+			_writeServerArgs(sidecarServerArgs, streamOutput);
 
 			InputStream originalSystemInInputStream = System.in;
 
@@ -136,6 +144,49 @@ public class ElasticsearchServerUtil {
 
 			hooks.put(shutdownHook, shutdownHook);
 		}
+	}
+
+	private static void _writeServerArgs(
+			SidecarServerArgs sidecarServerArgs, StreamOutput streamOutput)
+		throws Exception {
+
+		streamOutput.writeBoolean(sidecarServerArgs.isDaemonize());
+		streamOutput.writeBoolean(sidecarServerArgs.isQuiet());
+		streamOutput.writeOptionalString(null);
+		streamOutput.writeString(KeyStoreWrapper.class.getName());
+
+		try (KeyStoreWrapper keyStoreWrapper = KeyStoreWrapper.create()) {
+			streamOutput.writeInt(keyStoreWrapper.getFormatVersion());
+			streamOutput.writeBoolean(keyStoreWrapper.hasPassword());
+			streamOutput.writeBoolean(false);
+			streamOutput.writeVInt(1);
+			streamOutput.writeString(KeyStoreWrapper.SEED_SETTING.getKey());
+
+			ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(
+				ElasticsearchServerUtil.class.getSimpleName());
+
+			byte[] bytes = byteBuffer.array();
+
+			MessageDigest messageDigest = MessageDigests.sha256();
+
+			streamOutput.writeByteArray(bytes);
+			streamOutput.writeByteArray(messageDigest.digest(bytes));
+			streamOutput.writeBoolean(false);
+		}
+
+		Map<String, Serializable> settings = sidecarServerArgs.getSettings();
+
+		streamOutput.writeVInt(settings.size());
+
+		for (Map.Entry<String, Serializable> entry : settings.entrySet()) {
+			streamOutput.writeString(entry.getKey());
+			streamOutput.writeGenericValue(entry.getValue());
+		}
+
+		streamOutput.writeString(sidecarServerArgs.getConfigDir());
+		streamOutput.writeString(sidecarServerArgs.getLogsDir());
+
+		streamOutput.flush();
 	}
 
 	private static final Logger _logger = LogManager.getLogger(
