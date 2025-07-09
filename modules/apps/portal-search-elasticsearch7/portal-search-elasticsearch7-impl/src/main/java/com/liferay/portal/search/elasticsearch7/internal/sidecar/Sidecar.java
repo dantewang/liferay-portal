@@ -475,7 +475,7 @@ public class Sidecar {
 
 		return new SidecarServerArgs(
 			String.valueOf(_sidecarTempDirPath.resolve("config")), false,
-			String.valueOf(_sidecarHomePath.resolve("logs")), null, false,
+			String.valueOf(_sidecarHomePath.resolve("logs")), false,
 			settingsMap);
 	}
 
