@@ -72,6 +72,8 @@ public class ElasticsearchConnectionFixture
 
 			};
 
+		_deleteTmpDir();
+
 		Sidecar sidecar = new Sidecar(
 			new LocalProcessExecutor(), Mockito.mock(FutureListener.class),
 			SidecarRuntimeConfigurationBuilder.builder(
@@ -92,8 +94,6 @@ public class ElasticsearchConnectionFixture
 			sidecar::stop
 		).preConnectElasticsearchConnectionConsumer(
 			elasticsearchConnection -> {
-				_deleteTmpDir();
-
 				sidecar.start();
 
 				elasticsearchConnection.setNetworkHostAddresses(
