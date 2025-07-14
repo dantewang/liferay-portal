@@ -62,6 +62,14 @@ public class SidecarRuntimeConfigurationBuilder {
 
 		_installElasticsearchIfNeeded(sidecarVersion);
 
+		try {
+			_sidecarTempDirPath = Files.createTempDirectory("sidecar");
+		}
+		catch (IOException ioException) {
+			throw new IllegalStateException(
+				"Unable to create temp folder", ioException);
+		}
+
 		String nodeName = _getNodeName();
 
 		return new SidecarRuntimeConfiguration(
@@ -257,35 +265,11 @@ public class SidecarRuntimeConfigurationBuilder {
 				_elasticsearchConfigurationWrapper.sidecarDebugSettings());
 		}
 
-		try {
-			_sidecarTempDirPath = Files.createTempDirectory("sidecar");
-		}
-		catch (IOException ioException) {
-			throw new IllegalStateException(
-				"Unable to create temp folder", ioException);
-		}
-
-		Path configFolder = _sidecarTempDirPath.resolve("config");
-
-		try {
-			Files.createDirectories(configFolder);
-
-			Files.write(
-				configFolder.resolve("log4j2.properties"),
-				List.of(
-					ResourceUtil.getResourceAsString(
-						Sidecar.class, "/log4j2.properties")));
-		}
-		catch (IOException ioException) {
-			_log.error(
-				"Unable to copy log4j2.properties to " + configFolder,
-				ioException);
-		}
-
 		arguments.add("-Des.distribution.type=tar");
 		arguments.add("-Des.networkaddress.cache.negative.ttl=10");
 		arguments.add("-Des.networkaddress.cache.ttl=60");
-		arguments.add("-Des.path.conf=" + configFolder);
+		arguments.add(
+			"-Des.path.conf=" + _sidecarTempDirPath.resolve("config"));
 		arguments.add("-Dfile.encoding=UTF-8");
 		arguments.add("-Dio.netty.noKeySetOptimization=true");
 		arguments.add("-Dio.netty.noUnsafe=true");
