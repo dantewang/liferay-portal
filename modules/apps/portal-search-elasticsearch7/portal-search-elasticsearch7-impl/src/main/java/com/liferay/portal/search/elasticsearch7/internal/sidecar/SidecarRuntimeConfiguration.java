@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import java.util.List;
@@ -78,6 +79,14 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 	public void readExternal(ObjectInput objectInput)
 		throws ClassNotFoundException, IOException {
 
+		try {
+			_tempDirPath = Files.createTempDirectory("sidecar");
+		}
+		catch (IOException ioException) {
+			throw new IllegalStateException(
+				"Unable to create temp folder", ioException);
+		}
+
 		_heartbeatInterval = objectInput.readLong();
 
 		String homePathString = objectInput.readUTF();
@@ -88,8 +97,13 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 
 		ProcessConfig.Builder builder = new ProcessConfig.Builder();
 
+		List<String> arguments = (List<String>)objectInput.readObject();
+
+		arguments.add("-Des.path.conf=" + _tempDirPath.resolve("config"));
+		arguments.add("-Djava.io.tmpdir=" + _tempDirPath);
+
 		_processConfig = builder.setArguments(
-			(List<String>)objectInput.readObject()
+			arguments
 		).setBootstrapClassPath(
 			objectInput.readUTF()
 		).setEnvironment(
@@ -113,7 +127,6 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 
 		_shutdownTimeout = objectInput.readLong();
 		_sidecarServerArgs = (SidecarServerArgs)objectInput.readObject();
-		_tempDirPath = Path.of(objectInput.readUTF());
 		_version = objectInput.readUTF();
 	}
 
@@ -125,14 +138,21 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 
 		// Exclude ENV in ProcessConfig
 
-		objectOutput.writeObject(_processConfig.getArguments());
+		List<String> arguments = _processConfig.getArguments();
+
+		arguments.removeIf(
+			argument ->
+				argument.startsWith("-Des.path.conf") ||
+				argument.startsWith("-Djava.io.tmpdir"));
+
+		objectOutput.writeObject(arguments);
+
 		objectOutput.writeUTF(_processConfig.getBootstrapClassPath());
 		objectOutput.writeUTF(_processConfig.getJavaExecutable());
 		objectOutput.writeUTF(_processConfig.getRuntimeClassPath());
 
 		objectOutput.writeLong(_shutdownTimeout);
 		objectOutput.writeObject(_sidecarServerArgs);
-		objectOutput.writeUTF(_tempDirPath.toString());
 		objectOutput.writeUTF(_version);
 	}
 
