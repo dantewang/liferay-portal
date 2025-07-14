@@ -14,6 +14,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -21,6 +22,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -125,6 +127,25 @@ public class Sidecar {
 			throw new IllegalArgumentException(
 				"Sidecar Elasticsearch home does not exist: " +
 					_sidecarHomePath);
+		}
+
+		Path sidecarTempDirPath = _sidecarRuntimeConfiguration.getTempDirPath();
+
+		Path configFolder = sidecarTempDirPath.resolve("config");
+
+		try {
+			Files.createDirectories(configFolder);
+
+			Files.write(
+				configFolder.resolve("log4j2.properties"),
+				List.of(
+					ResourceUtil.getResourceAsString(
+						Sidecar.class, "/log4j2.properties")));
+		}
+		catch (IOException ioException) {
+			_log.error(
+				"Unable to copy log4j2.properties to " + configFolder,
+				ioException);
 		}
 
 		try {
