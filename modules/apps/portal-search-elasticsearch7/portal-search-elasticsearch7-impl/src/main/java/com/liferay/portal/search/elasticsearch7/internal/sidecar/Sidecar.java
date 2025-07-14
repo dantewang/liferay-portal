@@ -64,7 +64,9 @@ public class Sidecar {
 		NoticeableFuture<Serializable> noticeableFuture =
 			processChannel.getProcessNoticeableFuture();
 
-		noticeableFuture.addFutureListener(_restartFutureListener);
+		if (_restartFutureListener != null) {
+			noticeableFuture.addFutureListener(_restartFutureListener);
+		}
 
 		String address = _startElasticsearch(processChannel);
 
@@ -90,7 +92,9 @@ public class Sidecar {
 			NoticeableFuture<Serializable> noticeableFuture =
 				_processChannel.getProcessNoticeableFuture();
 
-			noticeableFuture.removeFutureListener(_restartFutureListener);
+			if (_restartFutureListener != null) {
+				noticeableFuture.removeFutureListener(_restartFutureListener);
+			}
 
 			_processChannel.write(new StopSidecarProcessCallable());
 
