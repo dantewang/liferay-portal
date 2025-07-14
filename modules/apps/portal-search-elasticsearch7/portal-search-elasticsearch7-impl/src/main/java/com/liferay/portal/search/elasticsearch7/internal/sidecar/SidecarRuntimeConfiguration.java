@@ -6,13 +6,26 @@
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import com.liferay.petra.process.ProcessConfig;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.util.PortalClassPathUtil;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
 import java.nio.file.Path;
+
+import java.util.List;
 
 /**
  * @author Dante Wang
  */
-public class SidecarRuntimeConfiguration {
+public class SidecarRuntimeConfiguration implements Externalizable {
+
+	public SidecarRuntimeConfiguration() {
+	}
 
 	public SidecarRuntimeConfiguration(
 		long heartbeatInterval, Path homePath, String nodeName,
@@ -61,13 +74,75 @@ public class SidecarRuntimeConfiguration {
 		return _version;
 	}
 
-	private final long _heartbeatInterval;
-	private final Path _homePath;
-	private final String _nodeName;
-	private final ProcessConfig _processConfig;
-	private final long _shutdownTimeout;
-	private final SidecarServerArgs _sidecarServerArgs;
-	private final Path _tempDirPath;
-	private final String _version;
+	@Override
+	public void readExternal(ObjectInput objectInput)
+		throws ClassNotFoundException, IOException {
+
+		_heartbeatInterval = objectInput.readLong();
+
+		String homePathString = objectInput.readUTF();
+
+		_homePath = Path.of(homePathString);
+
+		_nodeName = objectInput.readUTF();
+
+		ProcessConfig.Builder builder = new ProcessConfig.Builder();
+
+		_processConfig = builder.setArguments(
+			(List<String>)objectInput.readObject()
+		).setBootstrapClassPath(
+			objectInput.readUTF()
+		).setEnvironment(
+			HashMapBuilder.putAll(
+				System.getenv()
+			).put(
+				"HOSTNAME", "localhost"
+			).put(
+				"LIBFFI_TMPDIR", homePathString
+			).build()
+		).setJavaExecutable(
+			objectInput.readUTF()
+		).setProcessLogConsumer(
+			PortalClassPathUtil.createProcessLogConsumer(
+				LogFactoryUtil.getLog(Sidecar.class))
+		).setReactClassLoader(
+			Sidecar.class.getClassLoader()
+		).setRuntimeClassPath(
+			objectInput.readUTF()
+		).build();
+
+		_shutdownTimeout = objectInput.readLong();
+		_sidecarServerArgs = (SidecarServerArgs)objectInput.readObject();
+		_tempDirPath = Path.of(objectInput.readUTF());
+		_version = objectInput.readUTF();
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
+		objectOutput.writeLong(_heartbeatInterval);
+		objectOutput.writeUTF(_homePath.toString());
+		objectOutput.writeUTF(_nodeName);
+
+		// Exclude ENV in ProcessConfig
+
+		objectOutput.writeObject(_processConfig.getArguments());
+		objectOutput.writeUTF(_processConfig.getBootstrapClassPath());
+		objectOutput.writeUTF(_processConfig.getJavaExecutable());
+		objectOutput.writeUTF(_processConfig.getRuntimeClassPath());
+
+		objectOutput.writeLong(_shutdownTimeout);
+		objectOutput.writeObject(_sidecarServerArgs);
+		objectOutput.writeUTF(_tempDirPath.toString());
+		objectOutput.writeUTF(_version);
+	}
+
+	private long _heartbeatInterval;
+	private Path _homePath;
+	private String _nodeName;
+	private ProcessConfig _processConfig;
+	private long _shutdownTimeout;
+	private SidecarServerArgs _sidecarServerArgs;
+	private Path _tempDirPath;
+	private String _version;
 
 }
