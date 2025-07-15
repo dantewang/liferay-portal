@@ -269,8 +269,6 @@ public class SidecarRuntimeConfigurationBuilder {
 		arguments.add("-Des.distribution.type=tar");
 		arguments.add("-Des.networkaddress.cache.negative.ttl=10");
 		arguments.add("-Des.networkaddress.cache.ttl=60");
-		arguments.add(
-			"-Des.path.conf=" + _sidecarTempDirPath.resolve("config"));
 		arguments.add("-Dfile.encoding=UTF-8");
 		arguments.add("-Dio.netty.noKeySetOptimization=true");
 		arguments.add("-Dio.netty.noUnsafe=true");
