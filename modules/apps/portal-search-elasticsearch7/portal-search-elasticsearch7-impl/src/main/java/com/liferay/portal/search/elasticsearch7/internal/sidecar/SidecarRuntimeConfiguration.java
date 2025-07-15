@@ -14,11 +14,13 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Dante Wang
@@ -99,7 +101,6 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 
 		List<String> arguments = (List<String>)objectInput.readObject();
 
-		arguments.add("-Des.path.conf=" + _tempDirPath.resolve("config"));
 		arguments.add("-Djava.io.tmpdir=" + _tempDirPath);
 
 		_processConfig = builder.setArguments(
@@ -126,7 +127,13 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 		).build();
 
 		_shutdownTimeout = objectInput.readLong();
-		_sidecarServerArgs = (SidecarServerArgs)objectInput.readObject();
+
+		_sidecarServerArgs = new SidecarServerArgs(
+			String.valueOf(_tempDirPath.resolve("config")),
+			objectInput.readBoolean(), objectInput.readUTF(),
+			objectInput.readBoolean(),
+			(Map<String, Serializable>)objectInput.readObject());
+
 		_version = objectInput.readUTF();
 	}
 
@@ -136,14 +143,11 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 		objectOutput.writeUTF(_homePath.toString());
 		objectOutput.writeUTF(_nodeName);
 
-		// Exclude ENV in ProcessConfig
+		// Exclude ENV and temp dir in ProcessConfig
 
 		List<String> arguments = _processConfig.getArguments();
 
-		arguments.removeIf(
-			argument ->
-				argument.startsWith("-Des.path.conf") ||
-				argument.startsWith("-Djava.io.tmpdir"));
+		arguments.removeIf(argument -> argument.startsWith("-Djava.io.tmpdir"));
 
 		objectOutput.writeObject(arguments);
 
@@ -152,7 +156,14 @@ public class SidecarRuntimeConfiguration implements Externalizable {
 		objectOutput.writeUTF(_processConfig.getRuntimeClassPath());
 
 		objectOutput.writeLong(_shutdownTimeout);
-		objectOutput.writeObject(_sidecarServerArgs);
+
+		// Exclude configDir in SidecarServerArgs as it's tied to the temp dir
+
+		objectOutput.writeBoolean(_sidecarServerArgs.isDaemonize());
+		objectOutput.writeUTF(_sidecarServerArgs.getLogsDir());
+		objectOutput.writeBoolean(_sidecarServerArgs.isQuiet());
+		objectOutput.writeObject(_sidecarServerArgs.getSettings());
+
 		objectOutput.writeUTF(_version);
 	}
 
