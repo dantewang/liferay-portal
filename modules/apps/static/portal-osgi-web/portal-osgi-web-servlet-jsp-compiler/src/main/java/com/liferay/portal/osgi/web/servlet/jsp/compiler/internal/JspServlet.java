@@ -200,9 +200,9 @@ public class JspServlet extends HttpServlet {
 			"compilerClassName",
 			"com.liferay.portal.jsp.engine.internal.compiler.BridgeCompiler"
 		).put(
-			"compilerSourceVM", "1.8"
+			"compilerSourceVM", "17"
 		).put(
-			"compilerTargetVM", "1.8"
+			"compilerTargetVM", "17"
 		).put(
 			"development", "false"
 		).put(
