@@ -74,14 +74,7 @@ public class ElasticsearchConnectionFixture
 
 		_deleteTmpDir();
 
-		Sidecar sidecar = new Sidecar(
-			new LocalProcessExecutor(), Mockito.mock(FutureListener.class),
-			SidecarRuntimeConfigurationBuilder.builder(
-			).elasticsearchConfigurationWrapper(
-				elasticsearchConfigurationWrapper
-			).elasticsearchInstancePaths(
-				_createElasticsearchInstancePaths()
-			).build());
+		SidecarHolder sidecarHolder = new SidecarHolder();
 
 		ElasticsearchConnectionBuilder elasticsearchConnectionBuilder =
 			new ElasticsearchConnectionBuilder();
@@ -91,9 +84,12 @@ public class ElasticsearchConnectionFixture
 		).connectionId(
 			ConnectionConstants.SIDECAR_CONNECTION_ID
 		).postCloseRunnable(
-			sidecar::stop
+			sidecarHolder::stopSidecar
 		).preConnectElasticsearchConnectionConsumer(
 			elasticsearchConnection -> {
+				Sidecar sidecar = sidecarHolder.getSidecar(
+					elasticsearchConfigurationWrapper);
+
 				sidecar.start();
 
 				elasticsearchConnection.setNetworkHostAddresses(
@@ -282,5 +278,33 @@ public class ElasticsearchConnectionFixture
 		Collections.<String, Object>emptyMap();
 	private ElasticsearchConnection _elasticsearchConnection;
 	private Path _workPath;
+
+	private class SidecarHolder {
+
+		public Sidecar getSidecar(
+			ElasticsearchConfigurationWrapper
+				elasticsearchConfigurationWrapper) {
+
+			_sidecar = new Sidecar(
+				new LocalProcessExecutor(), Mockito.mock(FutureListener.class),
+				SidecarRuntimeConfigurationBuilder.builder(
+				).elasticsearchConfigurationWrapper(
+					elasticsearchConfigurationWrapper
+				).elasticsearchInstancePaths(
+					_createElasticsearchInstancePaths()
+				).build());
+
+			return _sidecar;
+		}
+
+		public void stopSidecar() {
+			if (_sidecar != null) {
+				_sidecar.stop();
+			}
+		}
+
+		private Sidecar _sidecar;
+
+	}
 
 }
