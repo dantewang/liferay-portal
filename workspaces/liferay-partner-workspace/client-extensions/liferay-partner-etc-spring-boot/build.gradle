@@ -1,7 +1,7 @@
 buildscript {
 	dependencies {
 		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.defaults", version: "latest.release"
-		classpath group: "org.springframework.boot", name: "spring-boot-gradle-plugin", version: "2.7.18"
+		classpath group: "org.springframework.boot", name: "spring-boot-gradle-plugin", version: "3.5.3"
 	}
 
 	repositories {
@@ -27,8 +27,8 @@ dependencies {
 	implementation group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "latest.release"
 	implementation group: "org.json", name: "json", version: "20231013"
 	implementation group: "org.springframework.boot", name: "spring-boot-starter-amqp", version: "2.7.18"
-	implementation group: "org.springframework.boot", name: "spring-boot-starter-oauth2-client", version: "2.7.18"
-	implementation group: "org.springframework.boot", name: "spring-boot-starter-web", version: "2.7.18"
+	implementation group: "org.springframework.boot", name: "spring-boot-starter-oauth2-client", version: "3.5.3"
+	implementation group: "org.springframework.boot", name: "spring-boot-starter-web", version: "3.5.3"
 }
 
 repositories {
