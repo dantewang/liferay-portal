@@ -218,13 +218,47 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>com.liferay.commerce.payment.method.authorize.net.jar!net.authorize.anet.java.sdk.jar</file-name>
-				<version>2.0.6.JAKARTA-LIFERAY-PATCHED-1</version>
-				<project-name>com.liferay:net.authorize.anet.java.sdk</project-name>
+				<file-name>com.liferay.commerce.payment.method.authorize.net.jar!anet-java-sdk.jar</file-name>
+				<version>3.0.0</version>
+				<project-name>Authorize.Net Java SDK</project-name>
+				<project-url>http://developer.authorize.net</project-url>
 				<licenses>
 					<license>
-						<license-name>LGPL 2.1</license-name>
-						<license-url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</license-url>
+						<license-name>SDK License Agreement</license-name>
+						<license-url>https://github.com/AuthorizeNet/sdk-java/blob/master/LICENSE.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.commerce.payment.method.authorize.net.jar!httpclient5.jar</file-name>
+				<version>5.4.1</version>
+				<project-name>Apache HttpClient</project-name>
+				<licenses>
+					<license>
+						<license-name>Apache License, Version 2.0</license-name>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.commerce.payment.method.authorize.net.jar!httpcore5-h2.jar</file-name>
+				<version>5.3.2</version>
+				<project-name>Apache HttpComponents Core HTTP/2</project-name>
+				<licenses>
+					<license>
+						<license-name>Apache License, Version 2.0</license-name>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
+					</license>
+				</licenses>
+			</library>
+			<library>
+				<file-name>com.liferay.commerce.payment.method.authorize.net.jar!httpcore5.jar</file-name>
+				<version>5.3.2</version>
+				<project-name>Apache HttpComponents Core HTTP/1.1</project-name>
+				<licenses>
+					<license>
+						<license-name>Apache License, Version 2.0</license-name>
+						<license-url>https://www.apache.org/licenses/LICENSE-2.0.txt</license-url>
 					</license>
 				</licenses>
 			</library>
@@ -7070,21 +7104,8 @@
 				</licenses>
 			</library>
 			<library>
-				<file-name>lib/development/spring-instrument-tomcat.jar</file-name>
-				<version>4.3.23</version>
-				<project-name>Spring</project-name>
-				<project-url>http://www.springframework.org</project-url>
-				<licenses>
-					<license>
-						<license-name>Apache License 2.0</license-name>
-						<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-					</license>
-				</licenses>
-				<comments>This does not include missing OSGi headers. See LPS-49575.</comments>
-			</library>
-			<library>
 				<file-name>lib/development/spring-instrument.jar</file-name>
-				<version>5.3.39</version>
+				<version>6.2.8</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
@@ -7097,7 +7118,7 @@
 			</library>
 			<library>
 				<file-name>lib/development/spring-test.jar</file-name>
-				<version>5.3.39.JAKARTA-LIFERAY-PATCHED-1</version>
+				<version>6.2.8</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
@@ -7599,7 +7620,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/spring-aop.jar</file-name>
-				<version>5.3.39</version>
+				<version>6.2.8</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
@@ -7612,7 +7633,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/spring-beans.jar</file-name>
-				<version>5.3.39.LIFERAY-PATCHED-1</version>
+				<version>6.2.8.LIFERAY-PATCHED-1</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
@@ -7625,7 +7646,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/spring-context.jar</file-name>
-				<version>5.3.39.LIFERAY-PATCHED-1</version>
+				<version>6.2.8</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
@@ -7638,7 +7659,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/spring-core.jar</file-name>
-				<version>5.3.39</version>
+				<version>6.2.8</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
@@ -7651,7 +7672,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/spring-expression.jar</file-name>
-				<version>5.3.39</version>
+				<version>6.2.8</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
@@ -7664,7 +7685,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/spring-jdbc.jar</file-name>
-				<version>5.3.39</version>
+				<version>6.2.8</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
@@ -7677,7 +7698,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/spring-orm.jar</file-name>
-				<version>5.3.39.LIFERAY-PATCHED-1.JAKARTA-LIFERAY-PATCHED-1</version>
+				<version>6.2.8.LIFERAY-PATCHED-1</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
@@ -7690,7 +7711,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/spring-tx.jar</file-name>
-				<version>5.3.39.LIFERAY-PATCHED-1</version>
+				<version>6.2.8.LIFERAY-PATCHED-1</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
@@ -7703,7 +7724,7 @@
 			</library>
 			<library>
 				<file-name>lib/portal/spring-web.jar</file-name>
-				<version>5.3.39.JAKARTA-LIFERAY-PATCHED-1</version>
+				<version>6.2.8</version>
 				<project-name>Spring</project-name>
 				<project-url>http://www.springframework.org</project-url>
 				<licenses>
