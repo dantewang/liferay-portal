@@ -1,11 +1,23 @@
 /**
- * SPDX-FileCopyrightText: (c) 2023 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
 package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
 import com.liferay.petra.string.StringPool;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterRegistration;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextAttributeEvent;
+import jakarta.servlet.ServletContextAttributeListener;
+import jakarta.servlet.ServletRegistration;
+import jakarta.servlet.SessionCookieConfig;
+import jakarta.servlet.SessionTrackingMode;
+import jakarta.servlet.descriptor.JspConfigDescriptor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,19 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterRegistration;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.ServletContextAttributeListener;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import javax.servlet.SessionCookieConfig;
-import javax.servlet.SessionTrackingMode;
-import javax.servlet.descriptor.JspConfigDescriptor;
 
 import org.eclipse.equinox.http.servlet.internal.context.ContextController;
 import org.eclipse.equinox.http.servlet.internal.context.DispatchTargets;
@@ -85,6 +84,13 @@ public class ServletContextWrapper implements ServletContext {
 	@Override
 	public FilterRegistration.Dynamic addFilter(
 		String filterName, String className) {
+
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public ServletRegistration.Dynamic addJspFile(
+		String servletName, String jspFile) {
 
 		throw new UnsupportedOperationException();
 	}
@@ -281,6 +287,11 @@ public class ServletContextWrapper implements ServletContext {
 	}
 
 	@Override
+	public String getRequestCharacterEncoding() {
+		return _servletContext.getRequestCharacterEncoding();
+	}
+
+	@Override
 	public RequestDispatcher getRequestDispatcher(String path) {
 		if (!path.startsWith(StringPool.SLASH)) {
 			return null;
@@ -335,31 +346,18 @@ public class ServletContextWrapper implements ServletContext {
 	}
 
 	@Override
-	public String getServerInfo() {
-		return _servletContext.getServerInfo();
+	public String getResponseCharacterEncoding() {
+		return _servletContext.getResponseCharacterEncoding();
 	}
 
-	/**
-	 * @deprecated As of Cavanaugh (7.4.x), servlet API 2.1, with no replacement
-	 */
-	@Deprecated
 	@Override
-	public Servlet getServlet(String servletName) throws ServletException {
-		return _servletContext.getServlet(servletName);
+	public String getServerInfo() {
+		return _servletContext.getServerInfo();
 	}
 
 	@Override
 	public String getServletContextName() {
 		return _contextController.getContextName();
-	}
-
-	/**
-	 * @deprecated As of Cavanaugh (7.4.x), servlet API 2.1, with no replacement
-	 */
-	@Deprecated
-	@Override
-	public Enumeration<String> getServletNames() {
-		return _servletContext.getServletNames();
 	}
 
 	@Override
@@ -374,18 +372,14 @@ public class ServletContextWrapper implements ServletContext {
 		return _servletContext.getServletRegistrations();
 	}
 
-	/**
-	 * @deprecated As of Cavanaugh (7.4.x), servlet API 2.0, with no replacement
-	 */
-	@Deprecated
-	@Override
-	public Enumeration<Servlet> getServlets() {
-		return _servletContext.getServlets();
-	}
-
 	@Override
 	public SessionCookieConfig getSessionCookieConfig() {
 		return _servletContext.getSessionCookieConfig();
+	}
+
+	@Override
+	public int getSessionTimeout() {
+		return _servletContext.getSessionTimeout();
 	}
 
 	@Override
@@ -396,16 +390,6 @@ public class ServletContextWrapper implements ServletContext {
 	@Override
 	public int hashCode() {
 		return _contextController.hashCode();
-	}
-
-	/**
-	 * @deprecated As of Cavanaugh (7.4.x), Servlet API 2.1, replaced by
-	 * 			{@link #log(String message, Throwable throwable)}
-	 */
-	@Deprecated
-	@Override
-	public void log(Exception exception, String message) {
-		_servletContext.log(exception, message);
 	}
 
 	@Override
@@ -456,6 +440,21 @@ public class ServletContextWrapper implements ServletContext {
 	@Override
 	public boolean setInitParameter(String name, String value) {
 		return _servletContext.setInitParameter(name, value);
+	}
+
+	@Override
+	public void setRequestCharacterEncoding(String encoding) {
+		_servletContext.setRequestCharacterEncoding(encoding);
+	}
+
+	@Override
+	public void setResponseCharacterEncoding(String encoding) {
+		_servletContext.setResponseCharacterEncoding(encoding);
+	}
+
+	@Override
+	public void setSessionTimeout(int sessionTimeout) {
+		_servletContext.setSessionTimeout(sessionTimeout);
 	}
 
 	@Override
