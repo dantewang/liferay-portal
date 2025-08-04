@@ -17,8 +17,8 @@ import com.liferay.portal.osgi.web.http.servlet.internal.context.customizer.Even
 import com.liferay.portal.osgi.web.http.servlet.internal.context.customizer.FilterServiceTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.customizer.ResourceServiceTrackerCustomizer;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.customizer.ServletServiceTrackerCustomizer;
-import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletContextWrapper;
 import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ResourceServlet;
+import com.liferay.portal.osgi.web.http.servlet.internal.servlet.ServletContextWrapper;
 
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;
@@ -37,8 +37,6 @@ import jakarta.servlet.http.HttpSessionListener;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import java.security.AccessController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
