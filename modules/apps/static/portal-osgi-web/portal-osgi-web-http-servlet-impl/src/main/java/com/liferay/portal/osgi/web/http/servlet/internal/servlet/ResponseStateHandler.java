@@ -234,52 +234,53 @@ public class ResponseStateHandler {
 				new HttpServletRequestWrapper(_httpServletRequest) {
 
 					public Object getAttribute(String attributeName) {
-						if (getDispatcherType() == DispatcherType.ERROR) {
-							if (attributeName.equals(
-									JavaConstants.
-										JAKARTA_SERVLET_ERROR_EXCEPTION)) {
+						if (getDispatcherType() != DispatcherType.ERROR) {
+							return super.getAttribute(attributeName);
+						}
 
-								return ResponseStateHandler.this._exception;
-							}
+						if (attributeName.equals(
+								JavaConstants.
+									JAKARTA_SERVLET_ERROR_EXCEPTION)) {
 
-							if (attributeName.equals(
-									"jakarta.servlet.error.exception_type")) {
+							return ResponseStateHandler.this._exception;
+						}
 
-								return className;
-							}
+						if (attributeName.equals(
+								"jakarta.servlet.error.exception_type")) {
 
-							if (attributeName.equals(
-									JavaConstants.
-										JAKARTA_SERVLET_ERROR_MESSAGE)) {
+							return className;
+						}
 
-								return ResponseStateHandler.this._exception.
-									getMessage();
-							}
+						if (attributeName.equals(
+								JavaConstants.JAKARTA_SERVLET_ERROR_MESSAGE)) {
 
-							if (attributeName.equals(
-									JavaConstants.
-										JAKARTA_SERVLET_ERROR_REQUEST_URI)) {
+							return ResponseStateHandler.this._exception.
+								getMessage();
+						}
 
-								return ResponseStateHandler.this.
-									_httpServletRequest.getRequestURI();
-							}
+						if (attributeName.equals(
+								JavaConstants.
+									JAKARTA_SERVLET_ERROR_REQUEST_URI)) {
 
-							if (attributeName.equals(
-									"jakarta.servlet.error.servlet_name")) {
+							return ResponseStateHandler.this.
+								_httpServletRequest.getRequestURI();
+						}
 
-								EndpointRegistration<?> endpointRegistration =
-									ResponseStateHandler.this.
-										_liferayDispatchTargets.
-											getServletRegistration();
+						if (attributeName.equals(
+								"jakarta.servlet.error.servlet_name")) {
 
-								return endpointRegistration.getName();
-							}
+							EndpointRegistration<?> endpointRegistration =
+								ResponseStateHandler.this.
+									_liferayDispatchTargets.
+										getServletRegistration();
 
-							if (attributeName.equals(
-									"jakarta.servlet.error.status_code")) {
+							return endpointRegistration.getName();
+						}
 
-								return 500;
-							}
+						if (attributeName.equals(
+								"jakarta.servlet.error.status_code")) {
+
+							return 500;
 						}
 
 						return super.getAttribute(attributeName);
@@ -364,39 +365,39 @@ public class ResponseStateHandler {
 				new HttpServletRequestWrapper(_httpServletRequest) {
 
 					public Object getAttribute(String attributeName) {
-						if (getDispatcherType() == DispatcherType.ERROR) {
-							if (attributeName.equals(
-									JavaConstants.
-										JAKARTA_SERVLET_ERROR_MESSAGE)) {
+						if (getDispatcherType() != DispatcherType.ERROR) {
+							return super.getAttribute(attributeName);
+						}
 
-								return httpServletResponseWrapperImpl.
-									getMessage();
-							}
+						if (attributeName.equals(
+								JavaConstants.JAKARTA_SERVLET_ERROR_MESSAGE)) {
 
-							if (attributeName.equals(
-									JavaConstants.
-										JAKARTA_SERVLET_ERROR_REQUEST_URI)) {
+							return httpServletResponseWrapperImpl.getMessage();
+						}
 
-								return ResponseStateHandler.this.
-									_httpServletRequest.getRequestURI();
-							}
+						if (attributeName.equals(
+								JavaConstants.
+									JAKARTA_SERVLET_ERROR_REQUEST_URI)) {
 
-							if (attributeName.equals(
-									"jakarta.servlet.error.servlet_name")) {
+							return ResponseStateHandler.this.
+								_httpServletRequest.getRequestURI();
+						}
 
-								EndpointRegistration<?> endpointRegistration =
-									ResponseStateHandler.this.
-										_liferayDispatchTargets.
-											getServletRegistration();
+						if (attributeName.equals(
+								"jakarta.servlet.error.servlet_name")) {
 
-								return endpointRegistration.getName();
-							}
+							EndpointRegistration<?> endpointRegistration =
+								ResponseStateHandler.this.
+									_liferayDispatchTargets.
+										getServletRegistration();
 
-							if (attributeName.equals(
-									"jakarta.servlet.error.status_code")) {
+							return endpointRegistration.getName();
+						}
 
-								return status;
-							}
+						if (attributeName.equals(
+								"jakarta.servlet.error.status_code")) {
+
+							return status;
 						}
 
 						return super.getAttribute(attributeName);
