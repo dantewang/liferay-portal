@@ -174,29 +174,23 @@ public class ResponseStateHandler {
 				"Response is not a HttpServletResponseWrapper");
 		}
 
-		HttpServletResponseWrapper httpServletResponseWrapper1 =
-			(HttpServletResponseWrapper)_httpServletResponse;
 		HttpServletResponseWrapperImpl httpServletResponseWrapperImpl = null;
 
-		while (true) {
-			if (httpServletResponseWrapper1 instanceof
-					HttpServletResponseWrapperImpl) {
+		HttpServletResponse httpServletResponse = _httpServletResponse;
+
+		while (httpServletResponse instanceof
+					HttpServletResponseWrapper httpServletResponseWrapper) {
+
+			if (httpServletResponseWrapper instanceof
+					HttpServletResponseWrapperImpl
+						curHttpServletResponseWrapperImpl) {
 
 				httpServletResponseWrapperImpl =
-					(HttpServletResponseWrapperImpl)httpServletResponseWrapper1;
-
-				break;
+					curHttpServletResponseWrapperImpl;
 			}
 
-			if (!(httpServletResponseWrapper1.getResponse() instanceof
-					HttpServletResponseWrapper)) {
-
-				break;
-			}
-
-			httpServletResponseWrapper1 =
-				(HttpServletResponseWrapper)
-					httpServletResponseWrapper1.getResponse();
+			httpServletResponse =
+				(HttpServletResponse)httpServletResponseWrapper.getResponse();
 		}
 
 		if (httpServletResponseWrapperImpl == null) {
@@ -295,12 +289,12 @@ public class ResponseStateHandler {
 
 				};
 
-			HttpServletResponseWrapper httpServletResponseWrapper2 =
+			HttpServletResponseWrapper httpServletResponseWrapper =
 				new HttpServletResponseWrapperImpl(wrappedHttpServletResponse);
 
 			ResponseStateHandler responseStateHandler =
 				new ResponseStateHandler(
-					httpServletRequest, httpServletResponseWrapper2,
+					httpServletRequest, httpServletResponseWrapper,
 					(LiferayDispatchTargets)errorDispatchTargets);
 
 			responseStateHandler.processRequest();
