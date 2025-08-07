@@ -267,10 +267,12 @@ public class ResponseStateHandler {
 							if (attributeName.equals(
 									"jakarta.servlet.error.servlet_name")) {
 
-								return ResponseStateHandler.this.
-									_liferayDispatchTargets.
-										getServletRegistration(
-										).getName();
+								EndpointRegistration<?> endpointRegistration =
+									ResponseStateHandler.this.
+										_liferayDispatchTargets.
+											getServletRegistration();
+
+								return endpointRegistration.getName();
 							}
 
 							if (attributeName.equals(
@@ -382,10 +384,12 @@ public class ResponseStateHandler {
 							if (attributeName.equals(
 									"jakarta.servlet.error.servlet_name")) {
 
-								return ResponseStateHandler.this.
-									_liferayDispatchTargets.
-										getServletRegistration(
-										).getName();
+								EndpointRegistration<?> endpointRegistration =
+									ResponseStateHandler.this.
+										_liferayDispatchTargets.
+											getServletRegistration();
+
+								return endpointRegistration.getName();
 							}
 
 							if (attributeName.equals(
