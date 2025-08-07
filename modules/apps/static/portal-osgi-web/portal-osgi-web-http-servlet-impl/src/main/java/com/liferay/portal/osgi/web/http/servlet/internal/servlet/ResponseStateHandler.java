@@ -5,6 +5,8 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
+import com.liferay.petra.reflect.ReflectionUtil;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayDispatchTargets;
 
 import jakarta.servlet.DispatcherType;
@@ -126,7 +128,7 @@ public class ResponseStateHandler {
 			if (_liferayDispatchTargets.getDispatcherType() !=
 					DispatcherType.REQUEST) {
 
-				_throwException(exception);
+				ReflectionUtil.throwException(exception);
 			}
 		}
 		finally {
@@ -206,7 +208,7 @@ public class ResponseStateHandler {
 			(HttpServletResponse)httpServletResponseWrapperImpl.getResponse();
 
 		if (wrappedHttpServletResponse.isCommitted()) {
-			_throwException(_exception);
+			ReflectionUtil.throwException(_exception);
 		}
 
 		ContextController contextController =
@@ -222,7 +224,7 @@ public class ResponseStateHandler {
 				(String)null, (String)null, Match.EXACT);
 
 		if (errorDispatchTargets == null) {
-			_throwException(_exception);
+			ReflectionUtil.throwException(_exception);
 		}
 
 		HttpServletRequestWrapperImpl httpServletRequestWrapperImpl =
@@ -240,7 +242,8 @@ public class ResponseStateHandler {
 					public Object getAttribute(String attributeName) {
 						if (getDispatcherType() == DispatcherType.ERROR) {
 							if (attributeName.equals(
-									"jakarta.servlet.error.exception")) {
+									JavaConstants.
+										JAKARTA_SERVLET_ERROR_EXCEPTION)) {
 
 								return ResponseStateHandler.this._exception;
 							}
@@ -252,14 +255,16 @@ public class ResponseStateHandler {
 							}
 
 							if (attributeName.equals(
-									"jakarta.servlet.error.message")) {
+									JavaConstants.
+										JAKARTA_SERVLET_ERROR_MESSAGE)) {
 
 								return ResponseStateHandler.this._exception.
 									getMessage();
 							}
 
 							if (attributeName.equals(
-									"jakarta.servlet.error.request_uri")) {
+									JavaConstants.
+										JAKARTA_SERVLET_ERROR_REQUEST_URI)) {
 
 								return ResponseStateHandler.this.
 									_httpServletRequest.getRequestURI();
@@ -365,14 +370,16 @@ public class ResponseStateHandler {
 					public Object getAttribute(String attributeName) {
 						if (getDispatcherType() == DispatcherType.ERROR) {
 							if (attributeName.equals(
-									"jakarta.servlet.error.message")) {
+									JavaConstants.
+										JAKARTA_SERVLET_ERROR_MESSAGE)) {
 
 								return httpServletResponseWrapperImpl.
 									getMessage();
 							}
 
 							if (attributeName.equals(
-									"jakarta.servlet.error.request_uri")) {
+									JavaConstants.
+										JAKARTA_SERVLET_ERROR_REQUEST_URI)) {
 
 								return ResponseStateHandler.this.
 									_httpServletRequest.getRequestURI();
@@ -417,20 +424,6 @@ public class ResponseStateHandler {
 		}
 		finally {
 			httpServletRequestWrapperImpl.pop();
-		}
-	}
-
-	private void _throwException(Exception exception)
-		throws IOException, ServletException {
-
-		if (exception instanceof RuntimeException) {
-			throw (RuntimeException)exception;
-		}
-		else if (exception instanceof IOException) {
-			throw (IOException)exception;
-		}
-		else if (exception instanceof ServletException) {
-			throw (ServletException)exception;
 		}
 	}
 
