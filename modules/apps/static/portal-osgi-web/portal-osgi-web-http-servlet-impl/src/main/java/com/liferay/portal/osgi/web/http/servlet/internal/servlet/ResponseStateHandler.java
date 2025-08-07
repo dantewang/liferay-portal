@@ -323,7 +323,7 @@ public class ResponseStateHandler {
 
 		final int status = httpServletResponseWrapperImpl.getInternalStatus();
 
-		if ((status < 400) || (status == -1)) {
+		if (status < 400) {
 			return;
 		}
 
