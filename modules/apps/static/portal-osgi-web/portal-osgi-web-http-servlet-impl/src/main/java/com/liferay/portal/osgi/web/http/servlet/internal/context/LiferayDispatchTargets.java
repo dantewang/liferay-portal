@@ -14,6 +14,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.StringUtil;
 
+import com.liferay.portal.osgi.web.http.servlet.internal.servlet.HttpServletResponseWrapperImpl;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
@@ -40,7 +41,6 @@ import org.eclipse.equinox.http.servlet.internal.context.DispatchTargets;
 import org.eclipse.equinox.http.servlet.internal.registration.EndpointRegistration;
 import org.eclipse.equinox.http.servlet.internal.registration.FilterRegistration;
 import org.eclipse.equinox.http.servlet.internal.servlet.HttpServletRequestWrapperImpl;
-import org.eclipse.equinox.http.servlet.internal.servlet.HttpServletResponseWrapperImpl;
 import org.eclipse.equinox.http.servlet.internal.servlet.ResponseStateHandler;
 import org.eclipse.equinox.http.servlet.internal.util.Params;
 
