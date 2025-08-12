@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.model.LayoutSetStagingHandler;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
+import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -49,20 +50,50 @@ public class LayoutSetLocalServiceStagingAdvice {
 			ProxyUtil.fetchInvocationHandler(
 				_layoutSetLocalService, AopInvocationHandler.class);
 
+		ServiceWrapper<LayoutSetLocalService> lastServiceWrapper = null;
+
 		Object target = aopInvocationHandler.getTarget();
 
-		aopInvocationHandler.setTarget(
-			ProxyUtil.newProxyInstance(
-				AggregateClassLoader.getAggregateClassLoader(
-					PortalClassLoaderUtil.getClassLoader(),
-					LayoutSetLocalServiceStagingAdvice.class.getClassLoader()),
-				new Class<?>[] {
-					IdentifiableOSGiService.class, LayoutSetLocalService.class,
-					BaseLocalService.class
-				},
-				new LayoutSetLocalServiceStagingInvocationHandler(target)));
+		while (target instanceof ServiceWrapper serviceWrapper) {
+			lastServiceWrapper = serviceWrapper;
 
-		_closeable = () -> aopInvocationHandler.setTarget(target);
+			target = serviceWrapper.getWrappedService();
+		}
+
+		Object proxy = ProxyUtil.newProxyInstance(
+			AggregateClassLoader.getAggregateClassLoader(
+				PortalClassLoaderUtil.getClassLoader(),
+				LayoutSetLocalServiceStagingAdvice.class.getClassLoader()),
+			new Class<?>[] {
+				IdentifiableOSGiService.class, LayoutSetLocalService.class,
+				BaseLocalService.class
+			},
+			new LayoutSetLocalServiceStagingInvocationHandler(target));
+
+		if (lastServiceWrapper == null) {
+			aopInvocationHandler.setTarget(proxy);
+		}
+		else {
+			lastServiceWrapper.setWrappedService((LayoutSetLocalService)proxy);
+		}
+
+		Object originalService = target;
+
+		_closeable = () -> {
+			Object currentTarget = aopInvocationHandler.getTarget();
+
+			while (currentTarget instanceof ServiceWrapper serviceWrapper) {
+				currentTarget = serviceWrapper.getWrappedService();
+
+				if (currentTarget == proxy) {
+					serviceWrapper.setWrappedService(originalService);
+
+					return;
+				}
+			}
+
+			aopInvocationHandler.setTarget(originalService);
+		};
 	}
 
 	@Deactivate
