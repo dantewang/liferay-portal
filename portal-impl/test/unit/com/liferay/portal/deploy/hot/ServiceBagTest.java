@@ -6,6 +6,7 @@
 package com.liferay.portal.deploy.hot;
 
 import com.liferay.portal.kernel.bean.ClassLoaderBeanHandler;
+import com.liferay.portal.kernel.proxy.TargetInvocationHandler;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalServiceWrapper;
 import com.liferay.portal.kernel.service.ServiceWrapper;
@@ -23,6 +24,8 @@ import org.mockito.Mockito;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import java.lang.reflect.Method;
+
 /**
  * @author Kevin Lee
  */
@@ -37,7 +40,7 @@ public class ServiceBagTest {
 		LayoutLocalService service = new LayoutLocalServiceImpl();
 
 		TestAopInvocationHandler testAopInvocationHandler =
-			new TestAopInvocationHandler();
+			new TestAopInvocationHandler(service);
 
 		ServiceBag<LayoutLocalService> serviceBag = new ServiceBag<>(
 			testAopInvocationHandler, LayoutLocalService.class,
@@ -45,17 +48,21 @@ public class ServiceBagTest {
 			Mockito.mock(BundleContext.class),
 			Mockito.mock(ServiceReference.class));
 
-		testAopInvocationHandler.setTarget(
-			ProxyUtil.newProxyInstance(
-				ServiceBagTest.class.getClassLoader(),
-				new Class<?>[] {LayoutLocalService.class},
-				new ClassLoaderBeanHandler(
-					testAopInvocationHandler.getTarget(),
-					ServiceBagTest.class.getClassLoader())));
+		TestTargetInvocationHandler testTargetInvocationHandler =
+			new TestTargetInvocationHandler(
+				testAopInvocationHandler.getTarget());
+
+		Object proxy = ProxyUtil.newProxyInstance(
+			ServiceBagTest.class.getClassLoader(),
+			new Class<?>[] {LayoutLocalService.class},
+			testTargetInvocationHandler);
+
+		testAopInvocationHandler.setTarget(proxy);
 
 		serviceBag.replace();
 
-		Assert.assertSame(service, testAopInvocationHandler.getTarget());
+		Assert.assertSame(proxy, testAopInvocationHandler.getTarget());
+		Assert.assertSame(service, testTargetInvocationHandler.getTarget());
 	}
 
 	@Test
@@ -63,7 +70,7 @@ public class ServiceBagTest {
 		LayoutLocalService service = new LayoutLocalServiceImpl();
 
 		TestAopInvocationHandler testAopInvocationHandler =
-			new TestAopInvocationHandler();
+			new TestAopInvocationHandler(service);
 
 		ServiceBag<LayoutLocalService> serviceBag = new ServiceBag<>(
 			testAopInvocationHandler, LayoutLocalService.class,
@@ -71,18 +78,21 @@ public class ServiceBagTest {
 			Mockito.mock(BundleContext.class),
 			Mockito.mock(ServiceReference.class));
 
+		TestTargetInvocationHandler testTargetInvocationHandler =
+			new TestTargetInvocationHandler(
+				testAopInvocationHandler.getTarget());
+
 		Object proxy = ProxyUtil.newProxyInstance(
 			ServiceBagTest.class.getClassLoader(),
 			new Class<?>[] {LayoutLocalService.class},
-			new ClassLoaderBeanHandler(
-				testAopInvocationHandler.getTarget(),
-				ServiceBagTest.class.getClassLoader()));
+			testTargetInvocationHandler);
 
 		testAopInvocationHandler.setTarget(proxy);
 
 		new ServiceBag<>(
 			testAopInvocationHandler, LayoutLocalService.class,
-			new LayoutLocalServiceWrapper((LayoutLocalService)proxy),
+			new LayoutLocalServiceWrapper(
+				(LayoutLocalService)testAopInvocationHandler.getTarget()),
 			Mockito.mock(BundleContext.class),
 			Mockito.mock(ServiceReference.class));
 
@@ -97,20 +107,52 @@ public class ServiceBagTest {
 
 		LayoutLocalService wrappedService = serviceWrapper.getWrappedService();
 
-		Assert.assertSame(proxy, wrappedService);
-
 		ClassLoaderBeanHandler classLoaderBeanHandler =
 			ProxyUtil.fetchInvocationHandler(
 				wrappedService, ClassLoaderBeanHandler.class);
 
-		Assert.assertSame(service, classLoaderBeanHandler.getTarget());
+		Assert.assertNotEquals(null, classLoaderBeanHandler);
+
+		Assert.assertSame(proxy, classLoaderBeanHandler.getBean());
+
+		classLoaderBeanHandler =
+			ProxyUtil.fetchInvocationHandler(
+				testTargetInvocationHandler.getTarget(),
+				ClassLoaderBeanHandler.class);
+
+		Assert.assertSame(service, classLoaderBeanHandler.getBean());
 	}
 
 	private static class TestAopInvocationHandler extends AopInvocationHandler {
 
-		public TestAopInvocationHandler() {
-			super(null, null, null);
+		public TestAopInvocationHandler(Object target) {
+			super(target, null, null);
 		}
+
+	}
+
+	private static class TestTargetInvocationHandler implements TargetInvocationHandler {
+
+		public TestTargetInvocationHandler(Object target) {
+			_target = target;
+		}
+
+		@Override
+		public Object getTarget() {
+			return _target;
+		}
+
+		@Override
+		public void setTarget(Object target) {
+			_target = target;
+		}
+
+		@Override
+		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+			return null;
+		}
+
+		private Object _target;
 
 	}
 
