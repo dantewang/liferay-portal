@@ -139,6 +139,8 @@ public class ServiceBag<V> {
 
 				if (classLoaderBeanHandler != null) {
 					currentService = classLoaderBeanHandler.getTarget();
+
+					previousService = currentService;
 				}
 
 				TargetInvocationHandler targetInvocationHandler =
