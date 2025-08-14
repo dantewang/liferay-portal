@@ -8,6 +8,8 @@ package com.liferay.portal.spring.aop;
 import com.liferay.petra.reflect.AnnotationLocator;
 import com.liferay.portal.kernel.aop.AopMethodInvocation;
 import com.liferay.portal.kernel.aop.ChainableMethodAdvice;
+import com.liferay.portal.kernel.proxy.TargetInvocationHandler;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.spring.transaction.TransactionAttributeAdapter;
 import com.liferay.portal.spring.transaction.TransactionExecutor;
 import com.liferay.portal.spring.transaction.TransactionInterceptor;
@@ -41,6 +43,18 @@ public class AopInvocationHandler implements InvocationHandler {
 	}
 
 	public synchronized void setTarget(Object target) {
+		if (ProxyUtil.isProxyClass(target.getClass())) {
+			TargetInvocationHandler targetInvocationHandler =
+				ProxyUtil.fetchInvocationHandler(
+					target, TargetInvocationHandler.class);
+
+			if (targetInvocationHandler == null) {
+				throw new IllegalArgumentException(
+					"If the target is a proxy, it must be a proxy of" +
+						"TargetInvocationHandler.");
+			}
+		}
+
 		_target = target;
 
 		_aopMethodInvocations.clear();
