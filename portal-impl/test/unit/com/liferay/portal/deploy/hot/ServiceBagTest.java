@@ -35,26 +35,26 @@ public class ServiceBagTest {
 	public void testReplaceWithDifferentProxies() {
 		LayoutLocalService service = new LayoutLocalServiceImpl();
 
-		TestAopInvocationHandler invocationHandler =
+		TestAopInvocationHandler testAopInvocationHandler =
 			new TestAopInvocationHandler();
 
 		ServiceBag<LayoutLocalService> serviceBag = new ServiceBag<>(
-			invocationHandler, LayoutLocalService.class,
+			testAopInvocationHandler, LayoutLocalService.class,
 			new LayoutLocalServiceWrapper(service),
 			Mockito.mock(BundleContext.class),
 			Mockito.mock(ServiceReference.class));
 
-		invocationHandler.setTarget(
+		testAopInvocationHandler.setTarget(
 			ProxyUtil.newProxyInstance(
 				ServiceBagTest.class.getClassLoader(),
 				new Class<?>[] {LayoutLocalService.class},
 				new ClassLoaderBeanHandler(
-					invocationHandler.getTarget(),
+					testAopInvocationHandler.getTarget(),
 					ServiceBagTest.class.getClassLoader())));
 
 		serviceBag.replace();
 
-		Assert.assertSame(service, invocationHandler.getTarget());
+		Assert.assertSame(service, testAopInvocationHandler.getTarget());
 	}
 
 	private static class TestAopInvocationHandler extends AopInvocationHandler {
