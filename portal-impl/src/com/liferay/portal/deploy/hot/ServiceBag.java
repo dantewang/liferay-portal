@@ -5,6 +5,7 @@
 
 package com.liferay.portal.deploy.hot;
 
+import com.jcraft.jsch.Proxy;
 import com.liferay.portal.kernel.bean.ClassLoaderBeanHandler;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.proxy.TargetInvocationHandler;
@@ -70,14 +71,13 @@ public class ServiceBag<V> {
 
 	@SuppressWarnings("unchecked")
 	public <T> void replace() {
-		ServiceWrapper<T> currentService = _fetchServiceWrapper(
-			_aopInvocationHandler.getTarget());
+		Object currentService = _aopInvocationHandler.getTarget();
 
-		ServiceWrapper<T> previousService = null;
+		Object previousService = null;
 
 		// Loop through services
 
-		while (currentService != null) {
+		while (true) {
 
 			// A matching service was found
 
@@ -108,7 +108,18 @@ public class ServiceBag<V> {
 					// wrapped service as the previous without changing the
 					// target source
 
-					previousService.setWrappedService((T)wrappedService);
+					if (previousService instanceof
+							ServiceWrapper serviceWrapper) {
+
+						serviceWrapper.setWrappedService((T)wrappedService);
+					}
+					else {
+						TargetInvocationHandler targetInvocationHandler =
+							ProxyUtil.fetchInvocationHandler(
+								previousService, TargetInvocationHandler.class);
+
+						targetInvocationHandler.setTarget(wrappedService);
+					}
 				}
 
 				break;
@@ -118,34 +129,29 @@ public class ServiceBag<V> {
 
 			previousService = currentService;
 
-			currentService = _fetchServiceWrapper(
-				previousService.getWrappedService());
+			if (previousService instanceof ServiceWrapper serviceWrapper) {
+				currentService = serviceWrapper.getWrappedService();
+			}
+			else {
+				ClassLoaderBeanHandler classLoaderBeanHandler =
+					ProxyUtil.fetchInvocationHandler(
+						previousService, ClassLoaderBeanHandler.class);
+
+				if (classLoaderBeanHandler != null) {
+					currentService = classLoaderBeanHandler.getTarget();
+				}
+
+				TargetInvocationHandler targetInvocationHandler =
+					ProxyUtil.fetchInvocationHandler(
+						currentService, TargetInvocationHandler.class);
+
+				currentService = targetInvocationHandler.getTarget();
+			}
 		}
 
 		if (_serviceReference != null) {
 			_bundleContext.ungetService(_serviceReference);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> ServiceWrapper<T> _fetchServiceWrapper(Object service) {
-		while (!(service instanceof ServiceWrapper)) {
-			TargetInvocationHandler targetInvocationHandler =
-				ProxyUtil.fetchInvocationHandler(
-					service, TargetInvocationHandler.class);
-
-			if (targetInvocationHandler == null) {
-				break;
-			}
-
-			service = targetInvocationHandler.getTarget();
-		}
-
-		if (service instanceof ServiceWrapper) {
-			return (ServiceWrapper<T>)service;
-		}
-
-		return null;
 	}
 
 	private final AopInvocationHandler _aopInvocationHandler;
