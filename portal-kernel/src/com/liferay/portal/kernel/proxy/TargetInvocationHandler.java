@@ -14,4 +14,6 @@ public interface TargetInvocationHandler extends InvocationHandler {
 
 	public Object getTarget();
 
+	public void setTarget(Object target);
+
 }

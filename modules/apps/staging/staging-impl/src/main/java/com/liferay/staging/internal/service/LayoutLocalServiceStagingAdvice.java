@@ -901,6 +901,11 @@ public class LayoutLocalServiceStagingAdvice {
 			return wrapReturnValue(returnValue, false);
 		}
 
+		@Override
+		public void setTarget(Object target) {
+			_targetObject = target;
+		}
+
 		private LayoutLocalServiceStagingInvocationHandler(
 			LayoutLocalServiceStagingAdvice layoutLocalServiceStagingAdvice,
 			Object targetObject) {
@@ -922,7 +927,7 @@ public class LayoutLocalServiceStagingAdvice {
 
 		private final LayoutLocalServiceStagingAdvice
 			_layoutLocalServiceStagingAdvice;
-		private final Object _targetObject;
+		private volatile Object _targetObject;
 
 	}
 

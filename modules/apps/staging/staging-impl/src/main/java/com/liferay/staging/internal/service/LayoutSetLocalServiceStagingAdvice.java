@@ -145,13 +145,18 @@ public class LayoutSetLocalServiceStagingAdvice {
 			}
 		}
 
+		@Override
+		public void setTarget(Object target) {
+			_targetObject = target;
+		}
+
 		private LayoutSetLocalServiceStagingInvocationHandler(
 			Object targetObject) {
 
 			_targetObject = targetObject;
 		}
 
-		private final Object _targetObject;
+		private volatile Object _targetObject;
 
 	}
 

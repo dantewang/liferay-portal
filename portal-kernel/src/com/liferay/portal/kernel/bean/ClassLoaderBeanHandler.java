@@ -69,6 +69,11 @@ public class ClassLoaderBeanHandler implements TargetInvocationHandler {
 		}
 	}
 
+	@Override
+	public void setTarget(Object target) {
+		throw new UnsupportedOperationException();
+	}
+
 	private final Object _bean;
 	private final ClassLoader _classLoader;
 
