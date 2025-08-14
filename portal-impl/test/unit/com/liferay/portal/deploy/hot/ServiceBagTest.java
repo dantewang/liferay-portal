@@ -8,6 +8,7 @@ package com.liferay.portal.deploy.hot;
 import com.liferay.portal.kernel.bean.ClassLoaderBeanHandler;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalServiceWrapper;
+import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.service.impl.LayoutLocalServiceImpl;
 import com.liferay.portal.spring.aop.AopInvocationHandler;
@@ -32,7 +33,7 @@ public class ServiceBagTest {
 		LiferayUnitTestRule.INSTANCE;
 
 	@Test
-	public void testReplaceWithDifferentProxies() {
+	public void testReplace() {
 		LayoutLocalService service = new LayoutLocalServiceImpl();
 
 		TestAopInvocationHandler testAopInvocationHandler =
@@ -55,6 +56,54 @@ public class ServiceBagTest {
 		serviceBag.replace();
 
 		Assert.assertSame(service, testAopInvocationHandler.getTarget());
+	}
+
+	@Test
+	public void testReplaceWithComplexChain() {
+		LayoutLocalService service = new LayoutLocalServiceImpl();
+
+		TestAopInvocationHandler testAopInvocationHandler =
+			new TestAopInvocationHandler();
+
+		ServiceBag<LayoutLocalService> serviceBag = new ServiceBag<>(
+			testAopInvocationHandler, LayoutLocalService.class,
+			new LayoutLocalServiceWrapper(service),
+			Mockito.mock(BundleContext.class),
+			Mockito.mock(ServiceReference.class));
+
+		Object proxy = ProxyUtil.newProxyInstance(
+			ServiceBagTest.class.getClassLoader(),
+			new Class<?>[] {LayoutLocalService.class},
+			new ClassLoaderBeanHandler(
+				testAopInvocationHandler.getTarget(),
+				ServiceBagTest.class.getClassLoader()));
+
+		testAopInvocationHandler.setTarget(proxy);
+
+		new ServiceBag<>(
+			testAopInvocationHandler, LayoutLocalService.class,
+			new LayoutLocalServiceWrapper((LayoutLocalService)proxy),
+			Mockito.mock(BundleContext.class),
+			Mockito.mock(ServiceReference.class));
+
+		serviceBag.replace();
+
+		Object target = testAopInvocationHandler.getTarget();
+
+		Assert.assertTrue(target instanceof ServiceWrapper);
+
+		ServiceWrapper<LayoutLocalService> serviceWrapper =
+			(ServiceWrapper<LayoutLocalService>)target;
+
+		LayoutLocalService wrappedService = serviceWrapper.getWrappedService();
+
+		Assert.assertSame(proxy, wrappedService);
+
+		ClassLoaderBeanHandler classLoaderBeanHandler =
+			ProxyUtil.fetchInvocationHandler(
+				wrappedService, ClassLoaderBeanHandler.class);
+
+		Assert.assertSame(service, classLoaderBeanHandler.getTarget());
 	}
 
 	private static class TestAopInvocationHandler extends AopInvocationHandler {
