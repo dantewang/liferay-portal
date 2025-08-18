@@ -43,14 +43,28 @@ public interface JavaConstants {
 	public static final String JAKARTA_SERVLET_CONTEXT_TEMPDIR =
 		"jakarta.servlet.context.tempdir";
 
+	public static final String JAKARTA_SERVLET_ERROR = "jakarta.servlet.error.";
+
 	public static final String JAKARTA_SERVLET_ERROR_EXCEPTION =
 		"jakarta.servlet.error.exception";
+
+	public static final String JAKARTA_SERVLET_ERROR_EXCEPTION_TYPE =
+		"jakarta.servlet.error.exception_type";
 
 	public static final String JAKARTA_SERVLET_ERROR_MESSAGE =
 		"jakarta.servlet.error.message";
 
 	public static final String JAKARTA_SERVLET_ERROR_REQUEST_URI =
 		"jakarta.servlet.error.request_uri";
+
+	public static final String JAKARTA_SERVLET_ERROR_SERVLET_NAME =
+		"jakarta.servlet.error.servlet_name";
+
+	public static final String JAKARTA_SERVLET_ERROR_STATUS_CODE =
+		"jakarta.servlet.error.status_code";
+
+	public static final String JAKARTA_SERVLET_FORWARD =
+		"jakarta.servlet.forward.";
 
 	public static final String JAKARTA_SERVLET_FORWARD_CONTEXT_PATH =
 		"jakarta.servlet.forward.context_path";
