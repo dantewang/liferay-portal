@@ -5,6 +5,8 @@
 
 package com.liferay.portal.osgi.web.http.servlet.internal.servlet;
 
+import com.liferay.portal.kernel.util.JavaConstants;
+
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.Servlet;
@@ -60,7 +62,7 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 
 		if (httpServletRequest.getDispatcherType() == DispatcherType.INCLUDE) {
 			return (String)httpServletRequest.getAttribute(
-				"jakarta.servlet.include.path_info");
+				JavaConstants.JAKARTA_SERVLET_INCLUDE_PATH_INFO);
 		}
 
 		return httpServletRequest.getPathInfo();
@@ -99,14 +101,16 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 
 			if (dispatcherType == DispatcherType.ERROR) {
 				if (dispatcherAttribute &&
-					!attributeName.startsWith("javax.servlet.error.")) {
+					!attributeName.startsWith(
+						JavaConstants.JAKARTA_SERVLET_ERROR)) {
 
 					return null;
 				}
 			}
 			else if (dispatcherType == DispatcherType.INCLUDE) {
 				if (hasServletName &&
-					attributeName.startsWith("javax.servlet.include")) {
+					attributeName.startsWith(
+						JavaConstants.JAKARTA_SERVLET_INCLUDE)) {
 
 					return null;
 				}
@@ -126,7 +130,7 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 				}
 
 				if (attributeName.equals(
-						"jakarta.servlet.include.context_path")) {
+						JavaConstants.JAKARTA_SERVLET_INCLUDE_CONTEXT_PATH)) {
 
 					ContextController contextController =
 						currentDispatchTargets.getContextController();
@@ -134,24 +138,26 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 					return contextController.getContextPath();
 				}
 
-				if (attributeName.equals("jakarta.servlet.include.path_info")) {
+				if (attributeName.equals(
+						JavaConstants.JAKARTA_SERVLET_INCLUDE_PATH_INFO)) {
+
 					return currentDispatchTargets.getPathInfo();
 				}
 
 				if (attributeName.equals(
-						"jakarta.servlet.include.query_string")) {
+						JavaConstants.JAKARTA_SERVLET_INCLUDE_QUERY_STRING)) {
 
 					return currentDispatchTargets.getQueryString();
 				}
 
 				if (attributeName.equals(
-						"jakarta.servlet.include.request_uri")) {
+						JavaConstants.JAKARTA_SERVLET_INCLUDE_REQUEST_URI)) {
 
 					return currentDispatchTargets.getRequestURI();
 				}
 
 				if (attributeName.equals(
-						"jakarta.servlet.include.servlet_path")) {
+						JavaConstants.JAKARTA_SERVLET_INCLUDE_SERVLET_PATH)) {
 
 					return currentDispatchTargets.getServletPath();
 				}
@@ -162,7 +168,8 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 			}
 			else if (dispatcherType == DispatcherType.FORWARD) {
 				if (hasServletName &&
-					attributeName.startsWith("javax.servlet.forward")) {
+					attributeName.startsWith(
+						JavaConstants.JAKARTA_SERVLET_FORWARD)) {
 
 					return null;
 				}
@@ -176,7 +183,7 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 				}
 
 				if (attributeName.equals(
-						"jakarta.servlet.forward.context_path")) {
+						JavaConstants.JAKARTA_SERVLET_FORWARD_CONTEXT_PATH)) {
 
 					ContextController contextController =
 						currentDispatchTargets.getContextController();
@@ -187,24 +194,26 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 				DispatchTargets originalDispatchTargets =
 					(DispatchTargets)_dispatchTargetsDeque.getLast();
 
-				if (attributeName.equals("jakarta.servlet.forward.path_info")) {
+				if (attributeName.equals(
+						JavaConstants.JAKARTA_SERVLET_FORWARD_PATH_INFO)) {
+
 					return originalDispatchTargets.getPathInfo();
 				}
 
 				if (attributeName.equals(
-						"jakarta.servlet.forward.query_string")) {
+						JavaConstants.JAKARTA_SERVLET_FORWARD_QUERY_STRING)) {
 
 					return originalDispatchTargets.getQueryString();
 				}
 
 				if (attributeName.equals(
-						"jakarta.servlet.forward.request_uri")) {
+						JavaConstants.JAKARTA_SERVLET_FORWARD_REQUEST_URI)) {
 
 					return originalDispatchTargets.getRequestURI();
 				}
 
 				if (attributeName.equals(
-						"jakarta.servlet.forward.servlet_path")) {
+						JavaConstants.JAKARTA_SERVLET_FORWARD_SERVLET_PATH)) {
 
 					return originalDispatchTargets.getServletPath();
 				}
@@ -536,21 +545,22 @@ public class HttpServletRequestWrapperImpl extends HttpServletRequestWrapper {
 	private static final Object _NULL_PLACEHOLDER = new Object();
 
 	private static final Set<String> _dispatcherAttributes = Set.of(
-		"jakarta.servlet.error.exception",
-		"jakarta.servlet.error.exception_type", "jakarta.servlet.error.message",
-		"jakarta.servlet.error.request_uri",
-		"jakarta.servlet.error.servlet_name",
-		"jakarta.servlet.error.status_code",
-		"jakarta.servlet.forward.context_path",
-		"jakarta.servlet.forward.path_info",
-		"jakarta.servlet.forward.query_string",
-		"jakarta.servlet.forward.request_uri",
-		"jakarta.servlet.forward.servlet_path",
-		"jakarta.servlet.include.context_path",
-		"jakarta.servlet.include.path_info",
-		"jakarta.servlet.include.query_string",
-		"jakarta.servlet.include.request_uri",
-		"jakarta.servlet.include.servlet_path");
+		JavaConstants.JAKARTA_SERVLET_ERROR_EXCEPTION,
+		JavaConstants.JAKARTA_SERVLET_ERROR_EXCEPTION_TYPE,
+		JavaConstants.JAKARTA_SERVLET_ERROR_MESSAGE,
+		JavaConstants.JAKARTA_SERVLET_ERROR_REQUEST_URI,
+		JavaConstants.JAKARTA_SERVLET_ERROR_SERVLET_NAME,
+		JavaConstants.JAKARTA_SERVLET_ERROR_STATUS_CODE,
+		JavaConstants.JAKARTA_SERVLET_FORWARD_CONTEXT_PATH,
+		JavaConstants.JAKARTA_SERVLET_FORWARD_PATH_INFO,
+		JavaConstants.JAKARTA_SERVLET_FORWARD_QUERY_STRING,
+		JavaConstants.JAKARTA_SERVLET_FORWARD_REQUEST_URI,
+		JavaConstants.JAKARTA_SERVLET_FORWARD_SERVLET_PATH,
+		JavaConstants.JAKARTA_SERVLET_INCLUDE_CONTEXT_PATH,
+		JavaConstants.JAKARTA_SERVLET_INCLUDE_PATH_INFO,
+		JavaConstants.JAKARTA_SERVLET_INCLUDE_QUERY_STRING,
+		JavaConstants.JAKARTA_SERVLET_INCLUDE_REQUEST_URI,
+		JavaConstants.JAKARTA_SERVLET_INCLUDE_SERVLET_PATH);
 
 	private final Deque<DispatchTargets> _dispatchTargetsDeque =
 		new LinkedList<>();

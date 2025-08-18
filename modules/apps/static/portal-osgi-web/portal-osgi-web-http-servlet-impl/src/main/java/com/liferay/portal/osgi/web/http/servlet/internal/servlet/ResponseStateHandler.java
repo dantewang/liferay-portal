@@ -244,7 +244,8 @@ public class ResponseStateHandler {
 						}
 
 						if (attributeName.equals(
-								"jakarta.servlet.error.exception_type")) {
+								JavaConstants.
+									JAKARTA_SERVLET_ERROR_EXCEPTION_TYPE)) {
 
 							return className;
 						}
@@ -265,7 +266,8 @@ public class ResponseStateHandler {
 						}
 
 						if (attributeName.equals(
-								"jakarta.servlet.error.servlet_name")) {
+								JavaConstants.
+									JAKARTA_SERVLET_ERROR_SERVLET_NAME)) {
 
 							EndpointRegistration<?> endpointRegistration =
 								ResponseStateHandler.this.
@@ -276,7 +278,8 @@ public class ResponseStateHandler {
 						}
 
 						if (attributeName.equals(
-								"jakarta.servlet.error.status_code")) {
+								JavaConstants.
+									JAKARTA_SERVLET_ERROR_STATUS_CODE)) {
 
 							return 500;
 						}
@@ -382,7 +385,8 @@ public class ResponseStateHandler {
 						}
 
 						if (attributeName.equals(
-								"jakarta.servlet.error.servlet_name")) {
+								JavaConstants.
+									JAKARTA_SERVLET_ERROR_SERVLET_NAME)) {
 
 							EndpointRegistration<?> endpointRegistration =
 								ResponseStateHandler.this.
@@ -393,7 +397,8 @@ public class ResponseStateHandler {
 						}
 
 						if (attributeName.equals(
-								"jakarta.servlet.error.status_code")) {
+								JavaConstants.
+									JAKARTA_SERVLET_ERROR_STATUS_CODE)) {
 
 							return status;
 						}
