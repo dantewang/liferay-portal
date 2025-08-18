@@ -100,7 +100,7 @@ public class DirectRequestDispatcherFactoryUtil {
 	}
 
 	private static final String _EQUINOX_REQUEST_CLASS_NAME =
-		"org.eclipse.equinox.http.servlet.internal.servlet." +
+		"com.liferay.portal.osgi.web.http.servlet.internal.servlet." +
 			"HttpServletRequestWrapperImpl";
 
 	private static final Log _log = LogFactoryUtil.getLog(

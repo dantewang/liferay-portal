@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import org.eclipse.equinox.http.servlet.internal.HttpServletEndpointController;
 import org.eclipse.equinox.http.servlet.internal.context.DispatchTargets;
-import org.eclipse.equinox.http.servlet.internal.servlet.HttpServletRequestWrapperImpl;
 
 /**
  * @author Dante Wang
