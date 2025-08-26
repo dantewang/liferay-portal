@@ -83,74 +83,6 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 
 		_startupSuccessful = false;
 
-		SidecarRuntimeConfiguration sidecarRuntimeConfiguration =
-			SidecarRuntimeConfigurationBuilder.builder(
-			).elasticsearchConfigurationWrapper(
-				elasticsearchConfigurationWrapper
-			).elasticsearchInstancePaths(
-				_getElasticsearchInstancePaths()
-			).build();
-
-		Serializer serializer = new Serializer();
-
-		serializer.writeObject(sidecarRuntimeConfiguration);
-
-		ByteBuffer byteBuffer = serializer.toByteBuffer();
-
-		byte[] bytes = byteBuffer.array();
-
-		Checksum checksum = new CRC32();
-
-		checksum.update(bytes);
-
-		if (_sidecar == null) {
-			try {
-				Sidecar sidecar =
-					SearchElasticsearch7ImplBundleActivator.getSidecar();
-
-				if (sidecar != null) {
-					_sidecar = sidecar;
-				}
-
-				if ((sidecar != null) &&
-					(checksum.getValue() ==
-						SearchElasticsearch7ImplBundleActivator.
-							getChecksum())) {
-
-					ElasticsearchConnectionBuilder
-						elasticsearchConnectionBuilder =
-							new ElasticsearchConnectionBuilder();
-
-					elasticsearchConnectionManager.addElasticsearchConnection(
-						elasticsearchConnectionBuilder.active(
-							true
-						).connectionId(
-							ConnectionConstants.SIDECAR_CONNECTION_ID
-						).maxConnections(
-							elasticsearchConfigurationWrapper.maxConnections()
-						).maxConnectionsPerRoute(
-							elasticsearchConfigurationWrapper.
-								maxConnectionsPerRoute()
-						).networkHostAddresses(
-							new String[] {_sidecar.getNetworkHostAddress()}
-						).postCloseRunnable(
-							_sidecar::stop
-						).build());
-
-					_startupSuccessful = true;
-
-					return;
-				}
-			}
-			catch (Exception exception) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(
-						"Failed to start Sidecar with persisted configuration",
-						exception);
-				}
-			}
-		}
-
 		if (_log.isWarnEnabled()) {
 			_log.warn(
 				StringBundler.concat(
@@ -162,14 +94,6 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 					"configuring a remote Elasticsearch connection in the ",
 					"Control Panel."));
 		}
-
-		if (_sidecar != null) {
-			_sidecar.stop();
-		}
-
-		_sidecar = new Sidecar(
-			processExecutor, new RestartFutureListener(this),
-			sidecarRuntimeConfiguration);
 
 		ElasticsearchConnectionBuilder elasticsearchConnectionBuilder =
 			new ElasticsearchConnectionBuilder();
@@ -186,31 +110,10 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 			_sidecar::stop
 		).preConnectElasticsearchConnectionConsumer(
 			elasticsearchConnection -> {
-				_sidecar.start();
+				_startSidecar();
 
 				elasticsearchConnection.setNetworkHostAddresses(
 					new String[] {_sidecar.getNetworkHostAddress()});
-
-				try {
-					File file = _bundleContext.getDataFile(
-						Sidecar.class.getName());
-
-					Files.write(file.toPath(), bytes);
-
-					File checksumFile = _bundleContext.getDataFile(
-						Sidecar.class.getName() + "_checksum");
-
-					Files.writeString(
-						checksumFile.toPath(),
-						String.valueOf(checksum.getValue()));
-				}
-				catch (IOException ioException) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							"Unable to persist Sidecar configuration",
-							ioException);
-					}
-				}
 			}
 		);
 
@@ -277,6 +180,85 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 		}
 
 		return relativeSidecarHomePath;
+	}
+
+	private void _startSidecar() {
+		SidecarRuntimeConfiguration sidecarRuntimeConfiguration =
+			SidecarRuntimeConfigurationBuilder.builder(
+			).elasticsearchConfigurationWrapper(
+				elasticsearchConfigurationWrapper
+			).elasticsearchInstancePaths(
+				_getElasticsearchInstancePaths()
+			).build();
+
+		Serializer serializer = new Serializer();
+
+		serializer.writeObject(sidecarRuntimeConfiguration);
+
+		ByteBuffer byteBuffer = serializer.toByteBuffer();
+
+		byte[] bytes = byteBuffer.array();
+
+		Checksum checksum = new CRC32();
+
+		checksum.update(bytes);
+
+		if (_sidecar == null) {
+			try {
+				Sidecar sidecar =
+					SearchElasticsearch7ImplBundleActivator.getSidecar();
+
+				if ((sidecar != null) && !sidecar.isStopped() &&
+					(checksum.getValue() ==
+						SearchElasticsearch7ImplBundleActivator.
+							getChecksum())) {
+
+					_sidecar = sidecar;
+
+					if (_log.isInfoEnabled()) {
+						_log.info(
+							"Started Sidecar with persisted configuration");
+					}
+
+					return;
+				}
+			}
+			catch (Exception exception) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Failed to start Sidecar with persisted configuration",
+						exception);
+				}
+			}
+		}
+
+		if (_sidecar != null) {
+			_sidecar.stop();
+		}
+
+		_sidecar = new Sidecar(
+			processExecutor, new RestartFutureListener(this),
+			sidecarRuntimeConfiguration);
+
+		_sidecar.start();
+
+		try {
+			File file = _bundleContext.getDataFile(Sidecar.class.getName());
+
+			Files.write(file.toPath(), bytes);
+
+			File checksumFile = _bundleContext.getDataFile(
+				Sidecar.class.getName() + "_checksum");
+
+			Files.writeString(
+				checksumFile.toPath(), String.valueOf(checksum.getValue()));
+		}
+		catch (IOException ioException) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Unable to persist Sidecar configuration", ioException);
+			}
+		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(SidecarManager.class);
