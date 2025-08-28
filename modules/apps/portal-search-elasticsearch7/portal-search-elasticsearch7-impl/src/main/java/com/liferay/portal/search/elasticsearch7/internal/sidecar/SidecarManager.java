@@ -78,6 +78,29 @@ public class SidecarManager implements ElasticsearchConfigurationObserver {
 			elasticsearchConnectionManager.removeElasticsearchConnection(
 				ConnectionConstants.SIDECAR_CONNECTION_ID);
 
+			try {
+				Sidecar sidecar =
+					SearchElasticsearch7ImplBundleActivator.getSidecar();
+
+				if ((sidecar != null) && !sidecar.isStopped()) {
+					sidecar.stop();
+				}
+
+				File file = _bundleContext.getDataFile(Sidecar.class.getName());
+
+				Files.deleteIfExists(file.toPath());
+
+				File checksumFile = _bundleContext.getDataFile(
+					Sidecar.class.getName() + "_checksum");
+
+				Files.deleteIfExists(checksumFile.toPath());
+			}
+			catch (Exception exception) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(exception);
+				}
+			}
+
 			return;
 		}
 
