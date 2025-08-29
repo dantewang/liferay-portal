@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.equinox.http.servlet.internal.registration.EndpointRegistration;
 import org.eclipse.equinox.http.servlet.internal.registration.ServletRegistration;
 import org.eclipse.equinox.http.servlet.internal.servlet.RequestDispatcherAdaptor;
 import org.eclipse.equinox.http.servlet.internal.util.EventListeners;
@@ -434,11 +435,10 @@ public class LiferayHttpServletRequestWrapper
 			LiferayContextController liferayContextController =
 				liferayDispatchTargets.getContextController();
 
-			ServletRegistration servletRegistration =
-				(ServletRegistration)
-					liferayDispatchTargets.getServletRegistration();
+			EndpointRegistration<?> endpointRegistration =
+				liferayDispatchTargets.getServletRegistration();
 
-			Servlet servlet = servletRegistration.getT();
+			Servlet servlet = endpointRegistration.getT();
 
 			ServletConfig servletConfig = servlet.getServletConfig();
 
