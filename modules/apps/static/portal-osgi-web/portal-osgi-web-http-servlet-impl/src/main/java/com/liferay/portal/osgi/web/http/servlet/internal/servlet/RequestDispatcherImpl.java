@@ -23,9 +23,9 @@ import java.io.IOException;
 /**
  * @author Dante Wang
  */
-public class RequestDispatcherAdaptor implements RequestDispatcher {
+public class RequestDispatcherImpl implements RequestDispatcher {
 
-	public RequestDispatcherAdaptor(
+	public RequestDispatcherImpl(
 		LiferayDispatchTargets liferayDispatchTargets, String path) {
 
 		_liferayDispatchTargets = liferayDispatchTargets;
@@ -71,7 +71,7 @@ public class RequestDispatcherAdaptor implements RequestDispatcher {
 	}
 
 	private static final String _SIMPLE_NAME =
-		RequestDispatcherAdaptor.class.getSimpleName();
+		RequestDispatcherImpl.class.getSimpleName();
 
 	private final LiferayDispatchTargets _liferayDispatchTargets;
 	private final String _path;
