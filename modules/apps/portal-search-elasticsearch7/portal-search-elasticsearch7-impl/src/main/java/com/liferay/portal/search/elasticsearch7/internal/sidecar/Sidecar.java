@@ -433,8 +433,6 @@ public class Sidecar {
 			_elasticsearchConfigurationWrapper
 		).elasticsearchInstancePaths(
 			_elasticsearchInstancePaths
-		).httpPortRange(
-			new HttpPortRange(_elasticsearchConfigurationWrapper)
 		).nodeName(
 			_getNodeName()
 		).build();

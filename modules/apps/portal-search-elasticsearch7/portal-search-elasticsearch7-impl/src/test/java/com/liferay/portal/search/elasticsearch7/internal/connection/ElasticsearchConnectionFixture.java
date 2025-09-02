@@ -16,7 +16,6 @@ import com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfi
 import com.liferay.portal.search.elasticsearch7.internal.configuration.ElasticsearchConfigurationWrapper;
 import com.liferay.portal.search.elasticsearch7.internal.connection.constants.ConnectionConstants;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.ElasticsearchInstancePaths;
-import com.liferay.portal.search.elasticsearch7.internal.sidecar.HttpPortRange;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.PathUtil;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.Sidecar;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.SidecarManager;
@@ -202,7 +201,7 @@ public class ElasticsearchConnectionFixture
 			).put(
 				"logExceptionsOnly", false
 			).put(
-				"sidecarHttpPort", HttpPortRange.AUTO
+				"sidecarHttpPort", "9201-9300"
 			).put(
 				"sidecarJVMOptions", sidecarJVMOptions
 			).putAll(
