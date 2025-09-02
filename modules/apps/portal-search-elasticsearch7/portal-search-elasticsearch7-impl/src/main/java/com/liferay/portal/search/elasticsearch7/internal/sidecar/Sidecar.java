@@ -425,29 +425,28 @@ public class Sidecar {
 	}
 
 	private Settings _getSettings() {
-		String sidecarHttpPort =
-			_elasticsearchConfigurationWrapper.sidecarHttpPort();
+		_sidecarHttpPort = _elasticsearchConfigurationWrapper.sidecarHttpPort();
 
-		if (Validator.isBlank(sidecarHttpPort)) {
-			sidecarHttpPort = String.valueOf(
+		if (Validator.isBlank(_sidecarHttpPort)) {
+			_sidecarHttpPort = String.valueOf(
 				_elasticsearchConfigurationWrapper.embeddedHttpPort());
 		}
 
-		if (Validator.isNull(sidecarHttpPort)) {
+		if (Validator.isNull(_sidecarHttpPort)) {
 			throw new IllegalArgumentException(
 				"Sidecar http port is not defined");
 		}
 
 		try (Socket socket = new Socket(
-				"localhost", Integer.valueOf(sidecarHttpPort))) {
+				"localhost", Integer.valueOf(_sidecarHttpPort))) {
 
 			throw new IllegalArgumentException(
-				"Sidecar http port " + sidecarHttpPort + " is not available");
+				"Sidecar http port " + _sidecarHttpPort + " is not available");
 		}
 		catch (IOException ioException) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(
-					"Sidecar http port " + sidecarHttpPort + " is available ",
+					"Sidecar http port " + _sidecarHttpPort + " is available ",
 					ioException);
 			}
 		}
@@ -462,7 +461,7 @@ public class Sidecar {
 		).elasticsearchInstancePaths(
 			_elasticsearchInstancePaths
 		).httpPort(
-			sidecarHttpPort
+			_sidecarHttpPort
 		).nodeName(
 			_getNodeName()
 		).build();
@@ -605,7 +604,9 @@ public class Sidecar {
 		throws Exception {
 
 		try {
-			return noticeableFuture.get();
+			noticeableFuture.get();
+
+			return "localhost:" + _sidecarHttpPort;
 		}
 		catch (ExecutionException executionException) {
 			throw new Exception(executionException.getCause());
@@ -630,6 +631,7 @@ public class Sidecar {
 	private final ProcessExecutor _processExecutor;
 	private FutureListener<Serializable> _restartFutureListener;
 	private final Path _sidecarHomePath;
+	private String _sidecarHttpPort;
 	private SidecarManager _sidecarManager;
 	private Path _sidecarTempDirPath;
 
