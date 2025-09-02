@@ -89,7 +89,9 @@ public class Sidecar {
 		ProcessChannel<Serializable> processChannel =
 			_executeSidecarMainProcess();
 
-		String address = _startElasticsearch(processChannel);
+		_startElasticsearch(processChannel);
+
+		String address = "localhost:" + _sidecarHttpPort;
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
@@ -534,14 +536,14 @@ public class Sidecar {
 		}
 	}
 
-	private String _startElasticsearch(
+	private void _startElasticsearch(
 		ProcessChannel<Serializable> processChannel) {
 
 		NoticeableFuture<String> noticeableFuture = processChannel.write(
 			new StartSidecarProcessCallable(_getBytes()));
 
 		try {
-			return _waitForPublishedAddress(noticeableFuture);
+			_waitForPublishedAddress(noticeableFuture);
 		}
 		catch (IOException ioException) {
 			if (Objects.equals(ioException.getMessage(), "Stream closed")) {
@@ -569,14 +571,12 @@ public class Sidecar {
 		}
 	}
 
-	private String _waitForPublishedAddress(
+	private void _waitForPublishedAddress(
 			NoticeableFuture<String> noticeableFuture)
 		throws Exception {
 
 		try {
 			noticeableFuture.get();
-
-			return "localhost:" + _sidecarHttpPort;
 		}
 		catch (ExecutionException executionException) {
 			throw new Exception(executionException.getCause());
