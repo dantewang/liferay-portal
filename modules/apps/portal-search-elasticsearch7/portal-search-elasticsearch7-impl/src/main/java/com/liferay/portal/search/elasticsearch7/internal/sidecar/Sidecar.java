@@ -86,7 +86,10 @@ public class Sidecar {
 
 		_installElasticsearchIfNeeded(sidecarVersion);
 
-		_processChannel = _startElasticsearch();
+		_processChannel = _startElasticsearch(
+			_createProcessConfig(), _getSettings(),
+			_elasticsearchConfigurationWrapper.sidecarHeartbeatInterval(),
+			_sidecarHomePath, _sidecarTempDirPath);
 
 		String address = "localhost:" + _sidecarHttpPort;
 
@@ -526,25 +529,22 @@ public class Sidecar {
 		}
 	}
 
-	private ProcessChannel<Serializable> _startElasticsearch() {
-		if (!Files.isDirectory(_sidecarHomePath)) {
+	private ProcessChannel<Serializable> _startElasticsearch(
+		ProcessConfig processConfig, Settings settings, long heartbeatInterval,
+		Path sidecarTempDirPath, Path sidecarHomePath) {
+
+		if (!Files.isDirectory(sidecarHomePath)) {
 			throw new IllegalArgumentException(
 				"Sidecar Elasticsearch home does not exist: " +
-					_sidecarHomePath);
+					sidecarHomePath);
 		}
 
-		ProcessConfig processConfig = _createProcessConfig();
-
 		ProcessChannel<Serializable> processChannel =
-			_executeSidecarMainProcess(
-				processConfig,
-				_elasticsearchConfigurationWrapper.sidecarHeartbeatInterval());
-
-		Settings settings = _getSettings();
+			_executeSidecarMainProcess(processConfig, heartbeatInterval);
 
 		NoticeableFuture<String> noticeableFuture = processChannel.write(
 			new StartSidecarProcessCallable(
-				_getBytes(settings, _sidecarTempDirPath, _sidecarHomePath)));
+				_getBytes(settings, sidecarTempDirPath, sidecarHomePath)));
 
 		try {
 			_waitForPublishedAddress(noticeableFuture);
