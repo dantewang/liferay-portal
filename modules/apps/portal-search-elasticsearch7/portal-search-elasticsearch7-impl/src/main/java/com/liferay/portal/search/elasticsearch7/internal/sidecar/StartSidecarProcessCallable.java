@@ -13,17 +13,23 @@ import com.liferay.petra.process.ProcessException;
  */
 public class StartSidecarProcessCallable implements ProcessCallable<String> {
 
-	public StartSidecarProcessCallable(SidecarServerArgs sidecarServerArgs) {
-		_sidecarServerArgs = sidecarServerArgs;
+	public StartSidecarProcessCallable(byte[] bytes) {
+		_bytes = bytes;
 	}
 
 	@Override
 	public String call() throws ProcessException {
-		return ElasticsearchServerUtil.start(_sidecarServerArgs);
+		try {
+			return ElasticsearchServerUtil.start(_bytes);
+		}
+		catch (Exception exception) {
+			throw new ProcessException(
+				"Unable to start elasticsearch server", exception);
+		}
 	}
 
 	private static final long serialVersionUID = 1L;
 
-	private final SidecarServerArgs _sidecarServerArgs;
+	private final byte[] _bytes;
 
 }

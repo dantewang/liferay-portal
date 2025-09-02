@@ -7,6 +7,7 @@ package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import com.liferay.petra.concurrent.FutureListener;
 import com.liferay.petra.concurrent.NoticeableFuture;
+import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.process.ProcessChannel;
 import com.liferay.petra.process.ProcessConfig;
 import com.liferay.petra.process.ProcessException;
@@ -54,6 +55,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
+import org.elasticsearch.common.io.stream.StreamOutput;
 import org.elasticsearch.common.settings.Settings;
 
 /**
@@ -273,6 +276,63 @@ public class Sidecar {
 		return codeSource.getLocation();
 	}
 
+	private byte[] _getBytes() {
+		Settings settings = _getSettings();
+
+		StringBundler sb = new StringBundler((2 * settings.size()) + 1);
+
+		sb.append("Sidecar Elasticsearch properties : {");
+
+		Map<String, Serializable> settingsMap = new HashMap<>();
+
+		for (String key : settings.keySet()) {
+			List<String> list = settings.getAsList(key);
+
+			if (ListUtil.isEmpty(list)) {
+				continue;
+			}
+
+			String keyValue = StringBundler.concat(
+				key, StringPool.EQUAL, StringUtil.merge(list));
+
+			sb.append(keyValue);
+
+			sb.append(StringPool.COMMA);
+
+			if (list.size() == 1) {
+				settingsMap.put(key, list.get(0));
+			}
+			else {
+				settingsMap.put(key, new ArrayList<>(list));
+			}
+		}
+
+		sb.setStringAt(StringPool.CLOSE_CURLY_BRACE, sb.index() - 1);
+
+		if (_log.isDebugEnabled()) {
+			_log.debug(sb.toString());
+		}
+
+		SidecarServerArgs sidecarServerArgs = new SidecarServerArgs(
+			String.valueOf(_sidecarTempDirPath.resolve("config")), false,
+			String.valueOf(_sidecarHomePath.resolve("logs")), null, false,
+			settingsMap);
+
+		try (UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
+				new UnsyncByteArrayOutputStream();
+			StreamOutput streamOutput = new OutputStreamStreamOutput(
+				unsyncByteArrayOutputStream)) {
+
+			sidecarServerArgs.writeTo(streamOutput);
+
+			return unsyncByteArrayOutputStream.toByteArray();
+		}
+		catch (Exception exception) {
+			throw new IllegalStateException(
+				"Unable to get the bytes used by sidecar", exception);
+		}
+	}
+
 	private String _getClusterName() {
 		return _elasticsearchConfigurationWrapper.clusterName();
 	}
@@ -467,49 +527,6 @@ public class Sidecar {
 		).build();
 	}
 
-	private SidecarServerArgs _getSidecarServerArgs() {
-		Settings settings = _getSettings();
-
-		StringBundler sb = new StringBundler((2 * settings.size()) + 1);
-
-		sb.append("Sidecar Elasticsearch properties : {");
-
-		Map<String, Serializable> settingsMap = new HashMap<>();
-
-		for (String key : settings.keySet()) {
-			List<String> list = settings.getAsList(key);
-
-			if (ListUtil.isEmpty(list)) {
-				continue;
-			}
-
-			String keyValue = StringBundler.concat(
-				key, StringPool.EQUAL, StringUtil.merge(list));
-
-			sb.append(keyValue);
-
-			sb.append(StringPool.COMMA);
-
-			if (list.size() == 1) {
-				settingsMap.put(key, list.get(0));
-			}
-			else {
-				settingsMap.put(key, new ArrayList<>(list));
-			}
-		}
-
-		sb.setStringAt(StringPool.CLOSE_CURLY_BRACE, sb.index() - 1);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug(sb.toString());
-		}
-
-		return new SidecarServerArgs(
-			String.valueOf(_sidecarTempDirPath.resolve("config")), false,
-			String.valueOf(_sidecarHomePath.resolve("logs")), null, false,
-			settingsMap);
-	}
-
 	private String _getSidecarVersion() {
 		return ResourceUtil.getResourceAsString(
 			getClass(), SidecarConstants.SIDECAR_VERSION_FILE_NAME);
@@ -568,7 +585,7 @@ public class Sidecar {
 		ProcessChannel<Serializable> processChannel) {
 
 		NoticeableFuture<String> noticeableFuture = processChannel.write(
-			new StartSidecarProcessCallable(_getSidecarServerArgs()));
+			new StartSidecarProcessCallable(_getBytes()));
 
 		try {
 			return _waitForPublishedAddress(noticeableFuture);
