@@ -221,8 +221,8 @@ public class Sidecar {
 		return codeSource.getLocation();
 	}
 
-	private byte[] _getBytes() {
-		Settings settings = _getSettings();
+	private byte[] _getBytes(
+		Settings settings, Path sidecarTempDirPath, Path sidecarHomePath) {
 
 		StringBundler sb = new StringBundler((2 * settings.size()) + 1);
 
@@ -259,8 +259,8 @@ public class Sidecar {
 		}
 
 		SidecarServerArgs sidecarServerArgs = new SidecarServerArgs(
-			String.valueOf(_sidecarTempDirPath.resolve("config")), false,
-			String.valueOf(_sidecarHomePath.resolve("logs")), null, false,
+			String.valueOf(sidecarTempDirPath.resolve("config")), false,
+			String.valueOf(sidecarHomePath.resolve("logs")), null, false,
 			settingsMap);
 
 		try (UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
@@ -540,8 +540,11 @@ public class Sidecar {
 				processConfig,
 				_elasticsearchConfigurationWrapper.sidecarHeartbeatInterval());
 
+		Settings settings = _getSettings();
+
 		NoticeableFuture<String> noticeableFuture = processChannel.write(
-			new StartSidecarProcessCallable(_getBytes()));
+			new StartSidecarProcessCallable(
+				_getBytes(settings, _sidecarTempDirPath, _sidecarHomePath)));
 
 		try {
 			_waitForPublishedAddress(noticeableFuture);
