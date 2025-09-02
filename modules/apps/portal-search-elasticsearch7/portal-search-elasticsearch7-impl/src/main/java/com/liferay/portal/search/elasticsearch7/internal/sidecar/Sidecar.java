@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
+import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -424,6 +425,33 @@ public class Sidecar {
 	}
 
 	private Settings _getSettings() {
+		String sidecarHttpPort =
+			_elasticsearchConfigurationWrapper.sidecarHttpPort();
+
+		if (Validator.isBlank(sidecarHttpPort)) {
+			sidecarHttpPort = String.valueOf(
+				_elasticsearchConfigurationWrapper.embeddedHttpPort());
+		}
+
+		if (Validator.isNull(sidecarHttpPort)) {
+			throw new IllegalArgumentException(
+				"Sidecar http port is not defined");
+		}
+
+		try (Socket socket = new Socket(
+				"localhost", Integer.valueOf(sidecarHttpPort))) {
+
+			throw new IllegalArgumentException(
+				"Sidecar http port " + sidecarHttpPort + " is not available");
+		}
+		catch (IOException ioException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Sidecar http port " + sidecarHttpPort + " is available ",
+					ioException);
+			}
+		}
+
 		return ElasticsearchInstanceSettingsBuilder.builder(
 		).clusterName(
 			_getClusterName()
@@ -433,6 +461,8 @@ public class Sidecar {
 			_elasticsearchConfigurationWrapper
 		).elasticsearchInstancePaths(
 			_elasticsearchInstancePaths
+		).httpPort(
+			sidecarHttpPort
 		).nodeName(
 			_getNodeName()
 		).build();

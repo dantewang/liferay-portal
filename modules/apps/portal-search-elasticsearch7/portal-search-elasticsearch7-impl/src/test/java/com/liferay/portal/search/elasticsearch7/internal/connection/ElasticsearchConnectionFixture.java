@@ -22,6 +22,8 @@ import com.liferay.portal.search.elasticsearch7.internal.sidecar.SidecarManager;
 
 import java.io.IOException;
 
+import java.net.Socket;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -192,6 +194,18 @@ public class ElasticsearchConnectionFixture
 						"add-opens=java.base/java.lang.invoke=ALL-UNNAMED";
 			}
 
+			int availablePort = 0;
+
+			for (int port = 9201; port < 9300; port++) {
+				try (Socket socket = new Socket("localhost", port)) {
+				}
+				catch (IOException ioException) {
+					availablePort = port;
+
+					break;
+				}
+			}
+
 			return HashMapBuilder.<String, Object>put(
 				"clusterName", clusterName
 			).put(
@@ -201,7 +215,7 @@ public class ElasticsearchConnectionFixture
 			).put(
 				"logExceptionsOnly", false
 			).put(
-				"sidecarHttpPort", "9201-9300"
+				"sidecarHttpPort", String.valueOf(availablePort)
 			).put(
 				"sidecarJVMOptions", sidecarJVMOptions
 			).putAll(
