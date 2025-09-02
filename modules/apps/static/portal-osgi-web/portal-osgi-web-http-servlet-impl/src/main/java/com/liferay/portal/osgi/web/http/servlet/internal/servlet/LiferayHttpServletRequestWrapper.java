@@ -9,6 +9,8 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayContextController;
 import com.liferay.portal.osgi.web.http.servlet.internal.context.LiferayDispatchTargets;
+import com.liferay.portal.osgi.web.http.servlet.internal.registration.EndpointRegistration;
+import com.liferay.portal.osgi.web.http.servlet.internal.registration.EventListeners;
 
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.RequestDispatcher;
@@ -28,10 +30,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.eclipse.equinox.http.servlet.internal.registration.EndpointRegistration;
-import org.eclipse.equinox.http.servlet.internal.registration.ServletRegistration;
-import org.eclipse.equinox.http.servlet.internal.util.EventListeners;
 
 /**
  * @author Dante Wang
@@ -386,11 +384,14 @@ public class LiferayHttpServletRequestWrapper
 		LiferayDispatchTargets liferayDispatchTargets =
 			_liferayDispatchTargetsDeque.peek();
 
-		ServletRegistration servletRegistration =
-			(ServletRegistration)
-				liferayDispatchTargets.getServletRegistration();
+		EndpointRegistration<?> endpointRegistration =
+			liferayDispatchTargets.getServletRegistration();
 
-		return servletRegistration.getServletContext();
+		Servlet servlet = endpointRegistration.getT();
+
+		ServletConfig servletConfig = servlet.getServletConfig();
+
+		return servletConfig.getServletContext();
 	}
 
 	@Override
@@ -440,7 +441,7 @@ public class LiferayHttpServletRequestWrapper
 
 			ServletConfig servletConfig = servlet.getServletConfig();
 
-			return liferayContextController.getSessionAdaptor(
+			return liferayContextController.getHttpSessionWrapper(
 				httpSession, servletConfig.getServletContext());
 		}
 
@@ -485,13 +486,16 @@ public class LiferayHttpServletRequestWrapper
 			eventListeners.get(ServletRequestAttributeListener.class);
 
 		if (!servletRequestAttributeListeners.isEmpty()) {
-			ServletRegistration servletRegistration =
-				(ServletRegistration)
-					liferayDispatchTargets.getServletRegistration();
+			EndpointRegistration<?> endpointRegistration =
+				liferayDispatchTargets.getServletRegistration();
+
+			Servlet servlet = endpointRegistration.getT();
+
+			ServletConfig servletConfig = servlet.getServletConfig();
 
 			ServletRequestAttributeEvent servletRequestAttributeEvent =
 				new ServletRequestAttributeEvent(
-					servletRegistration.getServletContext(), this, name, null);
+					servletConfig.getServletContext(), this, name, null);
 
 			for (ServletRequestAttributeListener
 					servletRequestAttributeListener :
@@ -533,13 +537,16 @@ public class LiferayHttpServletRequestWrapper
 			eventListeners.get(ServletRequestAttributeListener.class);
 
 		if (!servletRequestAttributeListeners.isEmpty()) {
-			ServletRegistration servletRegistration =
-				(ServletRegistration)
-					liferayDispatchTargets.getServletRegistration();
+			EndpointRegistration<?> endpointRegistration =
+				liferayDispatchTargets.getServletRegistration();
+
+			Servlet servlet = endpointRegistration.getT();
+
+			ServletConfig servletConfig = servlet.getServletConfig();
 
 			ServletRequestAttributeEvent servletRequestAttributeEvent =
 				new ServletRequestAttributeEvent(
-					servletRegistration.getServletContext(), this, name, value);
+					servletConfig.getServletContext(), this, name, value);
 
 			for (ServletRequestAttributeListener
 					servletRequestAttributeListener :
