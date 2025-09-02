@@ -186,19 +186,13 @@ public class Sidecar {
 		).build();
 	}
 
-	private ProcessChannel<Serializable> _executeSidecarMainProcess() {
-		if (!Files.isDirectory(_sidecarHomePath)) {
-			throw new IllegalArgumentException(
-				"Sidecar Elasticsearch home does not exist: " +
-					_sidecarHomePath);
-		}
+	private ProcessChannel<Serializable> _executeSidecarMainProcess(
+		ProcessConfig processConfig, long heartbeatInterval) {
 
 		try {
 			return _processExecutor.execute(
-				_createProcessConfig(),
-				new SidecarMainProcessCallable(
-					_elasticsearchConfigurationWrapper.
-						sidecarHeartbeatInterval()));
+				processConfig,
+				new SidecarMainProcessCallable(heartbeatInterval));
 		}
 		catch (ProcessException processException) {
 			throw new RuntimeException(
@@ -533,8 +527,18 @@ public class Sidecar {
 	}
 
 	private ProcessChannel<Serializable> _startElasticsearch() {
+		if (!Files.isDirectory(_sidecarHomePath)) {
+			throw new IllegalArgumentException(
+				"Sidecar Elasticsearch home does not exist: " +
+					_sidecarHomePath);
+		}
+
+		ProcessConfig processConfig = _createProcessConfig();
+
 		ProcessChannel<Serializable> processChannel =
-			_executeSidecarMainProcess();
+			_executeSidecarMainProcess(
+				processConfig,
+				_elasticsearchConfigurationWrapper.sidecarHeartbeatInterval());
 
 		NoticeableFuture<String> noticeableFuture = processChannel.write(
 			new StartSidecarProcessCallable(_getBytes()));
