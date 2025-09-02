@@ -5,7 +5,6 @@
 
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
-import com.liferay.petra.concurrent.FutureListener;
 import com.liferay.petra.concurrent.NoticeableFuture;
 import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.process.ProcessChannel;
@@ -52,8 +51,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
 import org.elasticsearch.common.io.stream.StreamOutput;
@@ -67,12 +64,11 @@ public class Sidecar {
 	public Sidecar(
 		ElasticsearchConfigurationWrapper elasticsearchConfigurationWrapper,
 		ElasticsearchInstancePaths elasticsearchInstancePaths,
-		ProcessExecutor processExecutor, SidecarManager sidecarManager) {
+		ProcessExecutor processExecutor) {
 
 		_elasticsearchConfigurationWrapper = elasticsearchConfigurationWrapper;
 		_elasticsearchInstancePaths = elasticsearchInstancePaths;
 		_processExecutor = processExecutor;
-		_sidecarManager = sidecarManager;
 
 		_sidecarHomePath = elasticsearchInstancePaths.getHomePath();
 	}
@@ -93,11 +89,6 @@ public class Sidecar {
 		ProcessChannel<Serializable> processChannel =
 			_executeSidecarMainProcess();
 
-		FutureListener<Serializable> futureListener = new RestartFutureListener(
-			_sidecarManager);
-
-		_addFutureListener(processChannel, futureListener);
-
 		String address = _startElasticsearch(processChannel);
 
 		if (_log.isInfoEnabled()) {
@@ -109,7 +100,6 @@ public class Sidecar {
 
 		_address = address;
 		_processChannel = processChannel;
-		_restartFutureListener = futureListener;
 	}
 
 	public void stop() {
@@ -118,49 +108,12 @@ public class Sidecar {
 		}
 
 		if (_processChannel != null) {
-			NoticeableFuture<Serializable> noticeableFuture =
-				_processChannel.getProcessNoticeableFuture();
-
-			noticeableFuture.removeFutureListener(_restartFutureListener);
-
 			_processChannel.write(new StopSidecarProcessCallable());
-
-			try {
-				noticeableFuture.get(
-					_elasticsearchConfigurationWrapper.sidecarShutdownTimeout(),
-					TimeUnit.MILLISECONDS);
-			}
-			catch (Exception exception) {
-				if (!noticeableFuture.isDone()) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							StringBundler.concat(
-								"Forcibly shutdown sidecar Elasticsearch ",
-								"process because it did not shut down in ",
-								_elasticsearchConfigurationWrapper.
-									sidecarShutdownTimeout(),
-								" ms"),
-							exception);
-					}
-
-					noticeableFuture.cancel(true);
-				}
-			}
 
 			_processChannel = null;
 		}
 
 		PathUtil.deleteDir(_sidecarTempDirPath);
-	}
-
-	private void _addFutureListener(
-		ProcessChannel<Serializable> processChannel,
-		FutureListener<Serializable> futureListener) {
-
-		NoticeableFuture<Serializable> noticeableFuture =
-			processChannel.getProcessNoticeableFuture();
-
-		noticeableFuture.addFutureListener(futureListener);
 	}
 
 	private void _consumeProcessLog(ProcessLog processLog) {
@@ -646,42 +599,8 @@ public class Sidecar {
 	private final ElasticsearchInstancePaths _elasticsearchInstancePaths;
 	private ProcessChannel<Serializable> _processChannel;
 	private final ProcessExecutor _processExecutor;
-	private FutureListener<Serializable> _restartFutureListener;
 	private final Path _sidecarHomePath;
 	private String _sidecarHttpPort;
-	private SidecarManager _sidecarManager;
 	private Path _sidecarTempDirPath;
-
-	private static class RestartFutureListener
-		implements FutureListener<Serializable> {
-
-		public RestartFutureListener(SidecarManager sidecarManager) {
-			_sidecarManager = sidecarManager;
-		}
-
-		@Override
-		public void complete(Future<Serializable> future) {
-			try {
-				future.get();
-			}
-			catch (Exception exception) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(
-						"Sidecar Elasticsearch process is aborted", exception);
-				}
-			}
-
-			if (_sidecarManager.isStartupSuccessful()) {
-				if (_log.isInfoEnabled()) {
-					_log.info("Restarting sidecar Elasticsearch process");
-				}
-
-				_sidecarManager.applyConfigurations();
-			}
-		}
-
-		private SidecarManager _sidecarManager;
-
-	}
 
 }
