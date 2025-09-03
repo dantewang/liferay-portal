@@ -5,11 +5,8 @@
 
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
-import com.liferay.petra.concurrent.NoticeableFuture;
 import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
-import com.liferay.petra.process.ProcessChannel;
 import com.liferay.petra.process.ProcessConfig;
-import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.petra.process.ProcessLog;
 import com.liferay.petra.string.StringBundler;
@@ -24,6 +21,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.elasticsearch7.internal.configuration.ElasticsearchConfigurationWrapper;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.SidecarConstants;
+import com.liferay.portal.search.elasticsearch7.internal.sidecar.process.SidecarProcess;
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
 import com.liferay.portal.search.elasticsearch7.sidecar.agent.SidecarAgent;
 import com.liferay.portal.util.PropsValues;
@@ -50,7 +48,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
 import org.elasticsearch.common.io.stream.StreamOutput;
@@ -128,7 +125,7 @@ public class Sidecar {
 					_sidecarHomePath);
 		}
 
-		_processChannel = _startElasticsearch(
+		SidecarProcess.start(
 			_createProcessConfig(),
 			_elasticsearchConfigurationWrapper.sidecarHeartbeatInterval(),
 			_getBytes(settingsMap, _sidecarHomePath, _sidecarTempDirPath));
@@ -150,11 +147,7 @@ public class Sidecar {
 			_log.debug("Stopping sidecar Elasticsearch");
 		}
 
-		if (_processChannel != null) {
-			_processChannel.write(new StopSidecarProcessCallable());
-
-			_processChannel = null;
-		}
+		SidecarProcess.stop();
 
 		PathUtil.deleteDir(_sidecarTempDirPath);
 	}
@@ -229,21 +222,6 @@ public class Sidecar {
 			StringBundler.concat(
 				bundleURL.getPath(), File.pathSeparator, bootstrapClassPath)
 		).build();
-	}
-
-	private ProcessChannel<Serializable> _executeSidecarMainProcess(
-		ProcessConfig processConfig, long heartbeatInterval) {
-
-		try {
-			return _processExecutor.execute(
-				processConfig,
-				new SidecarMainProcessCallable(heartbeatInterval));
-		}
-		catch (ProcessException processException) {
-			throw new RuntimeException(
-				"Unable to start sidecar Elasticsearch process",
-				processException);
-		}
 	}
 
 	private boolean _fileNameContains(Path path, String s) {
@@ -538,61 +516,6 @@ public class Sidecar {
 		}
 	}
 
-	private ProcessChannel<Serializable> _startElasticsearch(
-		ProcessConfig processConfig, long heartbeatInterval, byte[] bytes) {
-
-		ProcessChannel<Serializable> processChannel =
-			_executeSidecarMainProcess(processConfig, heartbeatInterval);
-
-		NoticeableFuture<String> noticeableFuture = processChannel.write(
-			new StartSidecarProcessCallable(bytes));
-
-		try {
-			_waitForPublishedAddress(noticeableFuture);
-
-			return processChannel;
-		}
-		catch (IOException ioException) {
-			if (Objects.equals(ioException.getMessage(), "Stream closed")) {
-				throw new RuntimeException(
-					StringBundler.concat(
-						"Sidecar JVM did not launch successfully. ",
-						SidecarMainProcessCallable.class.getSimpleName(),
-						" may have crashed, or its classpath may be missing ",
-						"required libraries"),
-					ioException);
-			}
-
-			processChannel.write(new StopSidecarProcessCallable());
-
-			throw new RuntimeException(ioException);
-		}
-		catch (Exception exception) {
-			processChannel.write(new StopSidecarProcessCallable());
-
-			if (exception instanceof RuntimeException) {
-				throw (RuntimeException)exception;
-			}
-
-			throw new RuntimeException(exception);
-		}
-	}
-
-	private void _waitForPublishedAddress(
-			NoticeableFuture<String> noticeableFuture)
-		throws Exception {
-
-		try {
-			noticeableFuture.get();
-		}
-		catch (ExecutionException executionException) {
-			throw new Exception(executionException.getCause());
-		}
-		catch (InterruptedException interruptedException) {
-			throw new RuntimeException(interruptedException);
-		}
-	}
-
 	private static final String _DEFAULT_MODULES_FOLDER_NAME = "modules";
 
 	private static final String _SIDECAR_MODULES_FOLDER_NAME =
@@ -604,7 +527,6 @@ public class Sidecar {
 	private final ElasticsearchConfigurationWrapper
 		_elasticsearchConfigurationWrapper;
 	private final ElasticsearchInstancePaths _elasticsearchInstancePaths;
-	private ProcessChannel<Serializable> _processChannel;
 	private final ProcessExecutor _processExecutor;
 	private final Path _sidecarHomePath;
 	private String _sidecarHttpPort;

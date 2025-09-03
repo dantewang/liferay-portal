@@ -5,6 +5,8 @@
 
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
+import com.liferay.portal.search.elasticsearch7.internal.sidecar.process.ElasticsearchServerUtil;
+
 import java.io.Serializable;
 
 import java.nio.ByteBuffer;
