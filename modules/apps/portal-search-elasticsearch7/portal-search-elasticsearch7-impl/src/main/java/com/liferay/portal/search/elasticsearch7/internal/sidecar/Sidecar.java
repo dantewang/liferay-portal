@@ -122,6 +122,12 @@ public class Sidecar {
 			_log.debug(sb.toString());
 		}
 
+		if (!Files.isDirectory(_sidecarHomePath)) {
+			throw new IllegalArgumentException(
+				"Sidecar Elasticsearch home does not exist: " +
+					_sidecarHomePath);
+		}
+
 		_processChannel = _startElasticsearch(
 			_createProcessConfig(), settingsMap,
 			_elasticsearchConfigurationWrapper.sidecarHeartbeatInterval(),
@@ -535,12 +541,6 @@ public class Sidecar {
 	private ProcessChannel<Serializable> _startElasticsearch(
 		ProcessConfig processConfig, Map<String, Serializable> settingsMap,
 		long heartbeatInterval, Path sidecarTempDirPath, Path sidecarHomePath) {
-
-		if (!Files.isDirectory(sidecarHomePath)) {
-			throw new IllegalArgumentException(
-				"Sidecar Elasticsearch home does not exist: " +
-					sidecarHomePath);
-		}
 
 		ProcessChannel<Serializable> processChannel =
 			_executeSidecarMainProcess(processConfig, heartbeatInterval);
