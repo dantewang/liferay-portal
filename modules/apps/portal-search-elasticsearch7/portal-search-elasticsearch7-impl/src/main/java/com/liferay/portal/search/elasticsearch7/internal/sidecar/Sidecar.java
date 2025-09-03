@@ -245,8 +245,8 @@ public class Sidecar {
 	}
 
 	private byte[] _getBytes(
-		Map<String, Serializable> settingsMap, Path sidecarTempDirPath,
-		Path sidecarHomePath) {
+		Map<String, Serializable> settingsMap, Path sidecarHomePath,
+		Path sidecarTempDirPath) {
 
 		SidecarServerArgs sidecarServerArgs = new SidecarServerArgs(
 			String.valueOf(sidecarTempDirPath.resolve("config")), false,
