@@ -86,8 +86,44 @@ public class Sidecar {
 
 		_installElasticsearchIfNeeded(sidecarVersion);
 
+		Settings settings = _getSettings();
+
+		StringBundler sb = new StringBundler((2 * settings.size()) + 1);
+
+		sb.append("Sidecar Elasticsearch properties : {");
+
+		Map<String, Serializable> settingsMap = new HashMap<>();
+
+		for (String key : settings.keySet()) {
+			List<String> list = settings.getAsList(key);
+
+			if (ListUtil.isEmpty(list)) {
+				continue;
+			}
+
+			String keyValue = StringBundler.concat(
+				key, StringPool.EQUAL, StringUtil.merge(list));
+
+			sb.append(keyValue);
+
+			sb.append(StringPool.COMMA);
+
+			if (list.size() == 1) {
+				settingsMap.put(key, list.get(0));
+			}
+			else {
+				settingsMap.put(key, new ArrayList<>(list));
+			}
+		}
+
+		sb.setStringAt(StringPool.CLOSE_CURLY_BRACE, sb.index() - 1);
+
+		if (_log.isDebugEnabled()) {
+			_log.debug(sb.toString());
+		}
+
 		_processChannel = _startElasticsearch(
-			_createProcessConfig(), _getSettings(),
+			_createProcessConfig(), settingsMap,
 			_elasticsearchConfigurationWrapper.sidecarHeartbeatInterval(),
 			_sidecarHomePath, _sidecarTempDirPath);
 
@@ -225,41 +261,8 @@ public class Sidecar {
 	}
 
 	private byte[] _getBytes(
-		Settings settings, Path sidecarTempDirPath, Path sidecarHomePath) {
-
-		StringBundler sb = new StringBundler((2 * settings.size()) + 1);
-
-		sb.append("Sidecar Elasticsearch properties : {");
-
-		Map<String, Serializable> settingsMap = new HashMap<>();
-
-		for (String key : settings.keySet()) {
-			List<String> list = settings.getAsList(key);
-
-			if (ListUtil.isEmpty(list)) {
-				continue;
-			}
-
-			String keyValue = StringBundler.concat(
-				key, StringPool.EQUAL, StringUtil.merge(list));
-
-			sb.append(keyValue);
-
-			sb.append(StringPool.COMMA);
-
-			if (list.size() == 1) {
-				settingsMap.put(key, list.get(0));
-			}
-			else {
-				settingsMap.put(key, new ArrayList<>(list));
-			}
-		}
-
-		sb.setStringAt(StringPool.CLOSE_CURLY_BRACE, sb.index() - 1);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug(sb.toString());
-		}
+		Map<String, Serializable> settingsMap, Path sidecarTempDirPath,
+		Path sidecarHomePath) {
 
 		SidecarServerArgs sidecarServerArgs = new SidecarServerArgs(
 			String.valueOf(sidecarTempDirPath.resolve("config")), false,
@@ -530,8 +533,8 @@ public class Sidecar {
 	}
 
 	private ProcessChannel<Serializable> _startElasticsearch(
-		ProcessConfig processConfig, Settings settings, long heartbeatInterval,
-		Path sidecarTempDirPath, Path sidecarHomePath) {
+		ProcessConfig processConfig, Map<String, Serializable> settingsMap,
+		long heartbeatInterval, Path sidecarTempDirPath, Path sidecarHomePath) {
 
 		if (!Files.isDirectory(sidecarHomePath)) {
 			throw new IllegalArgumentException(
@@ -544,7 +547,7 @@ public class Sidecar {
 
 		NoticeableFuture<String> noticeableFuture = processChannel.write(
 			new StartSidecarProcessCallable(
-				_getBytes(settings, sidecarTempDirPath, sidecarHomePath)));
+				_getBytes(settingsMap, sidecarTempDirPath, sidecarHomePath)));
 
 		try {
 			_waitForPublishedAddress(noticeableFuture);
