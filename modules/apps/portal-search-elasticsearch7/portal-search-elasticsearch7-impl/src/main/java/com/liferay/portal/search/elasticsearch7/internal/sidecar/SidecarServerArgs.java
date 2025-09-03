@@ -5,8 +5,6 @@
 
 package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
-import com.liferay.portal.search.elasticsearch7.internal.sidecar.process.ElasticsearchServerUtil;
-
 import java.io.Serializable;
 
 import java.nio.ByteBuffer;
@@ -53,7 +51,7 @@ public class SidecarServerArgs implements Serializable {
 			streamOutput.writeString(KeyStoreWrapper.SEED_SETTING.getKey());
 
 			ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(
-				ElasticsearchServerUtil.class.getSimpleName());
+				SidecarServerArgs.class.getSimpleName());
 
 			byte[] bytes = byteBuffer.array();
 
