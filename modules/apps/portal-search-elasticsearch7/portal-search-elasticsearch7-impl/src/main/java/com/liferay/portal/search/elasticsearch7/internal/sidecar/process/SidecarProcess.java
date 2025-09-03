@@ -30,20 +30,13 @@ public class SidecarProcess {
 
 		SidecarProcess sidecarProcess =
 			_sidecarProcessDCLSingleton.getSingleton(
-				() -> new SidecarProcess());
+				SidecarProcess::new);
 
 		sidecarProcess._start(processConfig, heartbeatInterval, bytes);
 	}
 
 	public static void stop() {
-		SidecarProcess sidecarProcess =
-			_sidecarProcessDCLSingleton.getSingleton(() -> null);
-
-		if (sidecarProcess == null) {
-			return;
-		}
-
-		sidecarProcess._stop();
+		_sidecarProcessDCLSingleton.destroy(SidecarProcess::_stop);
 	}
 
 	private ProcessChannel<Serializable> _executeSidecarMainProcess(
@@ -105,7 +98,17 @@ public class SidecarProcess {
 		if (_processChannel != null) {
 			_processChannel.write(new StopSidecarProcessCallable());
 
-			_processChannel = null;
+			NoticeableFuture<?> noticeableFuture =
+				_processChannel.getProcessNoticeableFuture();
+
+			try {
+				_processChannel = null;
+
+				noticeableFuture.get();
+			}
+			catch (InterruptedException | ExecutionException exception) {
+				throw new RuntimeException(exception);
+			}
 		}
 	}
 
