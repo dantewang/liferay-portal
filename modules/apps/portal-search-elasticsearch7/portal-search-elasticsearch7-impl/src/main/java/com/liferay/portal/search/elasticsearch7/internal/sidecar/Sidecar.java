@@ -129,9 +129,9 @@ public class Sidecar {
 		}
 
 		_processChannel = _startElasticsearch(
-			_createProcessConfig(), settingsMap,
+			_createProcessConfig(),
 			_elasticsearchConfigurationWrapper.sidecarHeartbeatInterval(),
-			_sidecarHomePath, _sidecarTempDirPath);
+			_getBytes(settingsMap, _sidecarHomePath, _sidecarTempDirPath));
 
 		String address = "localhost:" + _sidecarHttpPort;
 
@@ -539,15 +539,13 @@ public class Sidecar {
 	}
 
 	private ProcessChannel<Serializable> _startElasticsearch(
-		ProcessConfig processConfig, Map<String, Serializable> settingsMap,
-		long heartbeatInterval, Path sidecarTempDirPath, Path sidecarHomePath) {
+		ProcessConfig processConfig, long heartbeatInterval, byte[] bytes) {
 
 		ProcessChannel<Serializable> processChannel =
 			_executeSidecarMainProcess(processConfig, heartbeatInterval);
 
 		NoticeableFuture<String> noticeableFuture = processChannel.write(
-			new StartSidecarProcessCallable(
-				_getBytes(settingsMap, sidecarTempDirPath, sidecarHomePath)));
+			new StartSidecarProcessCallable(bytes));
 
 		try {
 			_waitForPublishedAddress(noticeableFuture);
