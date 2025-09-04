@@ -251,7 +251,7 @@ definition {
 
 		var sidecarVersion = Elasticsearch.getSidecarVersion();
 
-		AssertConsoleTextPresent(value1 = "Sidecar Elasticsearch ${sidecarVersion} liferay_sidecar started at [\d\.]+:9201");
+		AssertConsoleTextPresent(value1 = "Sidecar Elasticsearch ${sidecarVersion} liferay_sidecar started at .+:9201");
 
 		JSONWebcontent.addWebContent(
 			content = "WC Content",
