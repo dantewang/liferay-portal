@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -29,8 +29,7 @@ public class SidecarProcess {
 		ProcessConfig processConfig, long heartbeatInterval, byte[] bytes) {
 
 		SidecarProcess sidecarProcess =
-			_sidecarProcessDCLSingleton.getSingleton(
-				SidecarProcess::new);
+			_sidecarProcessDCLSingleton.getSingleton(SidecarProcess::new);
 
 		sidecarProcess._start(processConfig, heartbeatInterval, bytes);
 	}
@@ -106,7 +105,7 @@ public class SidecarProcess {
 
 				noticeableFuture.get();
 			}
-			catch (InterruptedException | ExecutionException exception) {
+			catch (ExecutionException | InterruptedException exception) {
 				throw new RuntimeException(exception);
 			}
 		}

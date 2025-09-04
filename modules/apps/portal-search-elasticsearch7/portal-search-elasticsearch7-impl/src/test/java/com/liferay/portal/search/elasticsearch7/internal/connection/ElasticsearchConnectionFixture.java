@@ -18,7 +18,6 @@ import com.liferay.portal.search.elasticsearch7.internal.connection.constants.Co
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.ElasticsearchInstancePaths;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.PathUtil;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.Sidecar;
-import com.liferay.portal.search.elasticsearch7.internal.sidecar.SidecarManager;
 
 import java.io.IOException;
 
