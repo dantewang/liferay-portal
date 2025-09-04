@@ -7,7 +7,6 @@ package com.liferay.portal.search.elasticsearch7.internal.sidecar;
 
 import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.process.ProcessConfig;
-import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.petra.process.ProcessLog;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -60,12 +59,10 @@ public class Sidecar {
 
 	public Sidecar(
 		ElasticsearchConfigurationWrapper elasticsearchConfigurationWrapper,
-		ElasticsearchInstancePaths elasticsearchInstancePaths,
-		ProcessExecutor processExecutor) {
+		ElasticsearchInstancePaths elasticsearchInstancePaths) {
 
 		_elasticsearchConfigurationWrapper = elasticsearchConfigurationWrapper;
 		_elasticsearchInstancePaths = elasticsearchInstancePaths;
-		_processExecutor = processExecutor;
 
 		_sidecarHomePath = elasticsearchInstancePaths.getHomePath();
 	}
@@ -527,7 +524,6 @@ public class Sidecar {
 	private final ElasticsearchConfigurationWrapper
 		_elasticsearchConfigurationWrapper;
 	private final ElasticsearchInstancePaths _elasticsearchInstancePaths;
-	private final ProcessExecutor _processExecutor;
 	private final Path _sidecarHomePath;
 	private String _sidecarHttpPort;
 	private Path _sidecarTempDirPath;
