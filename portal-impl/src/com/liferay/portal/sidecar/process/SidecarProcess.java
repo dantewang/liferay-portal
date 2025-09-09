@@ -18,6 +18,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.util.PropsValues;
 
@@ -208,7 +209,11 @@ public class SidecarProcess {
 			).setBootstrapClassPath(
 				bootstrapClassPath
 			).setEnvironment(
-				sidecarProcessBag.getSystemEnvironments()
+				HashMapBuilder.putAll(
+					System.getenv()
+				).putAll(
+					sidecarProcessBag.getSystemEnvironments()
+				).build()
 			).setJavaExecutable(
 				System.getProperty("java.home") + "/bin/java"
 			).setProcessLogConsumer(
