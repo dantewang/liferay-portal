@@ -237,6 +237,10 @@ public class SidecarProcess {
 			noticeableFuture.get();
 
 			_sidecarProcessBag = sidecarProcessBag;
+
+			if (_log.isInfoEnabled()) {
+				_log.info("Sidecar process started");
+			}
 		}
 		catch (Exception exception) {
 			_stop();
@@ -281,6 +285,10 @@ public class SidecarProcess {
 
 			_processChannel = null;
 			_sidecarProcessBag = null;
+
+			if (_log.isInfoEnabled()) {
+				_log.info("Sidecar process stopped");
+			}
 		}
 	}
 

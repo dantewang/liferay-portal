@@ -151,6 +151,7 @@
 		<Logger level="ERROR" name="com.liferay.portal.servlet.filters.virtualhost.VirtualHostFilter" />
 		<Logger level="INFO" name="com.liferay.portal.setup.SetupWizardSampleDataUtil" />
 		<Logger level="ERROR" name="com.liferay.portal.sharepoint" />
+		<Logger level="INFO" name="com.liferay.portal.sidecar.process.SidecarProcess" />
 		<Logger level="ERROR" name="com.liferay.portal.spring" />
 		<Logger level="ERROR" name="com.liferay.portal.spring.context.ArrayApplicationContext" />
 		<Logger level="ERROR" name="com.liferay.portal.spring.context.PortalApplicationContext" />
