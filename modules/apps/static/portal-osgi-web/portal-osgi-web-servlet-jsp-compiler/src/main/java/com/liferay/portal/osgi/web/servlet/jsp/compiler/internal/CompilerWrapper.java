@@ -29,6 +29,7 @@ import java.io.IOException;
 
 import java.lang.reflect.Field;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.nio.file.Files;
@@ -317,6 +318,25 @@ public class CompilerWrapper extends Compiler {
 
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
+		String location = bundle.getLocation();
+
+		int index = location.indexOf(CharPool.QUESTION);
+
+		if (index != -1) {
+			location = location.substring(0, index);
+		}
+
+		URL bundleUrl = null;
+
+		try {
+			bundleUrl = new URL(location);
+		}
+		catch (MalformedURLException malformedURLException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(malformedURLException);
+			}
+		}
+
 		List<String> resourcePaths = new ArrayList<>(
 			bundleWiring.listResources(
 				"/META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
@@ -333,7 +353,7 @@ public class CompilerWrapper extends Compiler {
 			}
 
 			_populateTldMappings(
-				StringPool.SLASH.concat(resourcePath), taglibXmls,
+				StringPool.SLASH.concat(resourcePath), bundleUrl, taglibXmls,
 				tldResourcePaths, url);
 		}
 
@@ -347,7 +367,7 @@ public class CompilerWrapper extends Compiler {
 
 		for (URL url : urls) {
 			_populateTldMappings(
-				url.getPath(), taglibXmls, tldResourcePaths, url);
+				url.getPath(), bundleUrl, taglibXmls, tldResourcePaths, url);
 		}
 	}
 
@@ -617,9 +637,9 @@ public class CompilerWrapper extends Compiler {
 	}
 
 	private void _populateTldMappings(
-			String absoluteResourcePath,
-			Map<TldResourcePath, TaglibXml> taglibXmls,
-			Map<String, TldResourcePath> tldResourcePaths, URL url)
+		String absoluteResourcePath,
+		URL bundleUrl, Map<TldResourcePath, TaglibXml> taglibXmls,
+		Map<String, TldResourcePath> tldResourcePaths, URL url)
 		throws IOException {
 
 		String uri = TldURIUtil.getTldURI(url);
@@ -631,8 +651,17 @@ public class CompilerWrapper extends Compiler {
 		uri = uri.trim();
 
 		try {
-			TldResourcePath tldResourcePath = new TldResourcePath(
-				url, absoluteResourcePath);
+			TldResourcePath tldResourcePath;
+
+			if (bundleUrl == null) {
+				tldResourcePath = new TldResourcePath(
+					url, absoluteResourcePath);
+			}
+			else {
+				tldResourcePath = new TldResourcePath(
+					bundleUrl, absoluteResourcePath,
+					absoluteResourcePath.substring(1));
+			}
 
 			tldResourcePaths.put(uri, tldResourcePath);
 
