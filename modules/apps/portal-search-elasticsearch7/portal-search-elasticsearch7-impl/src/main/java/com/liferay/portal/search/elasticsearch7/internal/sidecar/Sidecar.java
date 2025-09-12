@@ -205,7 +205,7 @@ public class Sidecar {
 		}
 	}
 
-	private ProcessConfig _createProcessConfig() {
+	private ProcessConfig _createProcessConfig(Path configFolder) {
 		ProcessConfig.Builder builder = new ProcessConfig.Builder();
 
 		URL bundleURL = _getBundleURL(Sidecar.class);
@@ -213,7 +213,7 @@ public class Sidecar {
 		String bootstrapClassPath = _getBootstrapClassPath();
 
 		return builder.setArguments(
-			_getJVMArguments()
+			_getJVMArguments(configFolder)
 		).setBootstrapClassPath(
 			bootstrapClassPath
 		).setEnvironment(
@@ -238,8 +238,38 @@ public class Sidecar {
 		}
 
 		try {
+			_sidecarTempDirPath = Files.createTempDirectory("sidecar");
+		}
+		catch (IOException ioException) {
+			throw new IllegalStateException(
+				"Unable to create temp folder", ioException);
+		}
+
+		Path configFolder = _sidecarTempDirPath.resolve("config");
+
+		try {
+			Files.createDirectories(configFolder);
+
+			Files.write(
+				configFolder.resolve("log4j2.properties"),
+				Arrays.asList(
+					"logger.bootstrapchecks.name=org.elasticsearch.bootstrap." +
+						"BootstrapChecks",
+					"logger.bootstrapchecks.level=error",
+					"logger.deprecation.name=org.elasticsearch.deprecation",
+					"logger.deprecation.level=error", _getLogProperties(),
+					ResourceUtil.getResourceAsString(
+						Sidecar.class, "/log4j2.properties")));
+		}
+		catch (IOException ioException) {
+			_log.error(
+				"Unable to copy log4j2.properties to " + configFolder,
+				ioException);
+		}
+
+		try {
 			return _processExecutor.execute(
-				_createProcessConfig(),
+				_createProcessConfig(configFolder),
 				new SidecarMainProcessCallable(
 					_elasticsearchConfigurationWrapper.
 						sidecarHeartbeatInterval()));
@@ -290,7 +320,7 @@ public class Sidecar {
 		).build();
 	}
 
-	private List<String> _getJVMArguments() {
+	private List<String> _getJVMArguments(Path configFolder) {
 		List<String> arguments = new ArrayList<>();
 
 		for (String jvmOption :
@@ -311,36 +341,6 @@ public class Sidecar {
 		if (_elasticsearchConfigurationWrapper.sidecarDebug()) {
 			arguments.add(
 				_elasticsearchConfigurationWrapper.sidecarDebugSettings());
-		}
-
-		try {
-			_sidecarTempDirPath = Files.createTempDirectory("sidecar");
-		}
-		catch (IOException ioException) {
-			throw new IllegalStateException(
-				"Unable to create temp folder", ioException);
-		}
-
-		Path configFolder = _sidecarTempDirPath.resolve("config");
-
-		try {
-			Files.createDirectories(configFolder);
-
-			Files.write(
-				configFolder.resolve("log4j2.properties"),
-				Arrays.asList(
-					"logger.bootstrapchecks.name=org.elasticsearch.bootstrap." +
-						"BootstrapChecks",
-					"logger.bootstrapchecks.level=error",
-					"logger.deprecation.name=org.elasticsearch.deprecation",
-					"logger.deprecation.level=error", _getLogProperties(),
-					ResourceUtil.getResourceAsString(
-						Sidecar.class, "/log4j2.properties")));
-		}
-		catch (IOException ioException) {
-			_log.error(
-				"Unable to copy log4j2.properties to " + configFolder,
-				ioException);
 		}
 
 		arguments.add("-Des.distribution.type=tar");
