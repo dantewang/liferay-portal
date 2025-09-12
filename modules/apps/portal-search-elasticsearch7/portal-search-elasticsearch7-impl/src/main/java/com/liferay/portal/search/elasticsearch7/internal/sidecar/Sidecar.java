@@ -217,7 +217,13 @@ public class Sidecar {
 		).setBootstrapClassPath(
 			bootstrapClassPath
 		).setEnvironment(
-			_getEnvironment()
+			HashMapBuilder.putAll(
+				System.getenv()
+			).put(
+				"HOSTNAME", "localhost"
+			).put(
+				"LIBFFI_TMPDIR", _sidecarHomePath.toString()
+			).build()
 		).setJavaExecutable(
 			System.getProperty("java.home") + "/bin/java"
 		).setProcessLogConsumer(
@@ -308,16 +314,6 @@ public class Sidecar {
 
 		throw new IllegalArgumentException(
 			"Unsupported Elasticsearch version: " + sidecarVersion);
-	}
-
-	private HashMap<String, String> _getEnvironment() {
-		return HashMapBuilder.putAll(
-			System.getenv()
-		).put(
-			"HOSTNAME", "localhost"
-		).put(
-			"LIBFFI_TMPDIR", _sidecarHomePath.toString()
-		).build();
 	}
 
 	private List<String> _getJVMArguments(Path configFolder) {
