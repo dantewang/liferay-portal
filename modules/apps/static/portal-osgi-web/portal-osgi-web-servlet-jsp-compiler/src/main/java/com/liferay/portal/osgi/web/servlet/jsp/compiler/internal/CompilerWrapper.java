@@ -326,10 +326,10 @@ public class CompilerWrapper extends Compiler {
 			location = location.substring(0, index);
 		}
 
-		URL bundleUrl = null;
+		URL bundleURL = null;
 
 		try {
-			bundleUrl = new URL(location);
+			bundleURL = new URL(location);
 		}
 		catch (MalformedURLException malformedURLException) {
 			if (_log.isDebugEnabled()) {
@@ -353,7 +353,7 @@ public class CompilerWrapper extends Compiler {
 			}
 
 			_populateTldMappings(
-				StringPool.SLASH.concat(resourcePath), bundleUrl, taglibXmls,
+				StringPool.SLASH.concat(resourcePath), bundleURL, taglibXmls,
 				tldResourcePaths, url);
 		}
 
@@ -367,7 +367,7 @@ public class CompilerWrapper extends Compiler {
 
 		for (URL url : urls) {
 			_populateTldMappings(
-				url.getPath(), bundleUrl, taglibXmls, tldResourcePaths, url);
+				url.getPath(), bundleURL, taglibXmls, tldResourcePaths, url);
 		}
 	}
 
@@ -637,9 +637,9 @@ public class CompilerWrapper extends Compiler {
 	}
 
 	private void _populateTldMappings(
-		String absoluteResourcePath,
-		URL bundleUrl, Map<TldResourcePath, TaglibXml> taglibXmls,
-		Map<String, TldResourcePath> tldResourcePaths, URL url)
+			String absoluteResourcePath, URL bundleURL,
+			Map<TldResourcePath, TaglibXml> taglibXmls,
+			Map<String, TldResourcePath> tldResourcePaths, URL url)
 		throws IOException {
 
 		String uri = TldURIUtil.getTldURI(url);
@@ -653,13 +653,13 @@ public class CompilerWrapper extends Compiler {
 		try {
 			TldResourcePath tldResourcePath;
 
-			if (bundleUrl == null) {
+			if (bundleURL == null) {
 				tldResourcePath = new TldResourcePath(
 					url, absoluteResourcePath);
 			}
 			else {
 				tldResourcePath = new TldResourcePath(
-					bundleUrl, absoluteResourcePath,
+					bundleURL, absoluteResourcePath,
 					absoluteResourcePath.substring(1));
 			}
 
