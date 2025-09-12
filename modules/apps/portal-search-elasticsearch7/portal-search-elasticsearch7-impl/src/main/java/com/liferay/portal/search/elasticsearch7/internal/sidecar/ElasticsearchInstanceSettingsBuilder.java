@@ -88,14 +88,6 @@ public class ElasticsearchInstanceSettingsBuilder {
 		return this;
 	}
 
-	public ElasticsearchInstanceSettingsBuilder httpPortRange(
-		HttpPortRange httpPortRange) {
-
-		_httpPortRange = httpPortRange;
-
-		return this;
-	}
-
 	public ElasticsearchInstanceSettingsBuilder networkHost(
 		String networkHost) {
 
@@ -164,7 +156,15 @@ public class ElasticsearchInstanceSettingsBuilder {
 	}
 
 	private void _configureHttp() {
-		put("http.port", _httpPortRange.toSettingsString());
+		String sidecarHttpPort =
+			_elasticsearchConfigurationWrapper.sidecarHttpPort();
+
+		if (Validator.isBlank(sidecarHttpPort)) {
+			sidecarHttpPort = String.valueOf(
+				_elasticsearchConfigurationWrapper.embeddedHttpPort());
+		}
+
+		put("http.port", sidecarHttpPort);
 
 		put(
 			"http.cors.enabled",
@@ -282,7 +282,6 @@ public class ElasticsearchInstanceSettingsBuilder {
 	private ElasticsearchConfigurationWrapper
 		_elasticsearchConfigurationWrapper;
 	private ElasticsearchInstancePaths _elasticsearchInstancePaths;
-	private HttpPortRange _httpPortRange;
 	private String _networkHost;
 	private String _nodeName;
 	private final SettingsHelperImpl _settingsHelperImpl =
