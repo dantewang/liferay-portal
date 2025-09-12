@@ -33,22 +33,6 @@ public class ElasticsearchInstanceSettingsBuilder {
 		return _settingsHelperImpl.build();
 	}
 
-	public ElasticsearchInstanceSettingsBuilder clusterName(
-		String clusterName) {
-
-		_clusterName = clusterName;
-
-		return this;
-	}
-
-	public ElasticsearchInstanceSettingsBuilder discoveryTypeSingleNode(
-		boolean discoveryTypeSingleNode) {
-
-		_discoveryTypeSingleNode = discoveryTypeSingleNode;
-
-		return this;
-	}
-
 	public ElasticsearchInstanceSettingsBuilder
 		elasticsearchConfigurationWrapper(
 			ElasticsearchConfigurationWrapper
@@ -63,12 +47,6 @@ public class ElasticsearchInstanceSettingsBuilder {
 		ElasticsearchInstancePaths elasticsearchInstancePaths) {
 
 		_elasticsearchInstancePaths = elasticsearchInstancePaths;
-
-		return this;
-	}
-
-	public ElasticsearchInstanceSettingsBuilder nodeName(String nodeName) {
-		_nodeName = nodeName;
 
 		return this;
 	}
@@ -106,12 +84,10 @@ public class ElasticsearchInstanceSettingsBuilder {
 	}
 
 	private void _configureClustering() {
-		put("cluster.name", _clusterName);
+		put("cluster.name", _elasticsearchConfigurationWrapper.clusterName());
 		put("cluster.routing.allocation.disk.threshold_enabled", false);
 
-		if (_discoveryTypeSingleNode) {
-			put("discovery.type", "single-node");
-		}
+		put("discovery.type", "single-node");
 	}
 
 	private void _configureHttp() {
@@ -184,6 +160,16 @@ public class ElasticsearchInstanceSettingsBuilder {
 		put("path.repo", String.valueOf(dataParentPath.resolve("repo")));
 	}
 
+	private String _getNodeName() {
+		String nodeName = _elasticsearchConfigurationWrapper.nodeName();
+
+		if (!Validator.isBlank(nodeName)) {
+			return nodeName;
+		}
+
+		return "liferay_sidecar";
+	}
+
 	private void _loadAdditionalConfigurations() {
 		_settingsHelperImpl.loadFromSource(
 			_elasticsearchConfigurationWrapper.additionalConfigurations());
@@ -207,7 +193,7 @@ public class ElasticsearchInstanceSettingsBuilder {
 
 		_configureNetworking();
 
-		put("node.name", _nodeName);
+		put("node.name", _getNodeName());
 		put("node.roles", List.of("master", "ingest", "data"));
 
 		_configurePaths();
@@ -221,12 +207,9 @@ public class ElasticsearchInstanceSettingsBuilder {
 		put("node.store.allow_mmap", false);
 	}
 
-	private String _clusterName;
-	private boolean _discoveryTypeSingleNode;
 	private ElasticsearchConfigurationWrapper
 		_elasticsearchConfigurationWrapper;
 	private ElasticsearchInstancePaths _elasticsearchInstancePaths;
-	private String _nodeName;
 	private final SettingsHelperImpl _settingsHelperImpl =
 		new SettingsHelperImpl(Settings.builder());
 

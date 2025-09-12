@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.util.JavaDetector;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OSDetector;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.elasticsearch7.internal.configuration.ElasticsearchConfigurationWrapper;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.constants.SidecarConstants;
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
@@ -99,8 +98,8 @@ public class Sidecar {
 		if (_log.isInfoEnabled()) {
 			_log.info(
 				StringBundler.concat(
-					"Sidecar Elasticsearch ", sidecarVersion, StringPool.SPACE,
-					_getNodeName(), " started at ", address));
+					"Sidecar Elasticsearch ", sidecarVersion, " started at ",
+					address));
 		}
 
 		_address = address;
@@ -272,10 +271,6 @@ public class Sidecar {
 		return codeSource.getLocation();
 	}
 
-	private String _getClusterName() {
-		return _elasticsearchConfigurationWrapper.clusterName();
-	}
-
 	private Distribution _getElasticsearchDistribution(String sidecarVersion) {
 		if (sidecarVersion.equals(ElasticsearchDistribution.VERSION)) {
 			return new ElasticsearchDistribution();
@@ -413,28 +408,12 @@ public class Sidecar {
 		return StringPool.BLANK;
 	}
 
-	private String _getNodeName() {
-		String nodeName = _elasticsearchConfigurationWrapper.nodeName();
-
-		if (!Validator.isBlank(nodeName)) {
-			return nodeName;
-		}
-
-		return "liferay_sidecar";
-	}
-
 	private Settings _getSettings() {
 		return ElasticsearchInstanceSettingsBuilder.builder(
-		).clusterName(
-			_getClusterName()
-		).discoveryTypeSingleNode(
-			true
 		).elasticsearchConfigurationWrapper(
 			_elasticsearchConfigurationWrapper
 		).elasticsearchInstancePaths(
 			_elasticsearchInstancePaths
-		).nodeName(
-			_getNodeName()
 		).build();
 	}
 
