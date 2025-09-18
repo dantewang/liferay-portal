@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.servlet.PortalSessionListener;
 import com.liferay.portal.servlet.filters.healthcheckdatasource.HealthCheckDataSourceFilter;
+import com.liferay.portal.web.internal.jboss.JBossServletContextFilter;
 import com.liferay.portal.web.internal.session.replication.SessionReplicationFilter;
 import com.liferay.shielded.container.Ordered;
 import com.liferay.shielded.container.ShieldedContainerInitializer;
@@ -125,6 +126,17 @@ public class PortalWebShieldedContainerInitializer
 
 			dynamic.addMappingForUrlPatterns(
 				EnumSet.of(DispatcherType.REQUEST), false, "/*");
+		}
+
+		if (ServerDetector.isJBoss() || ServerDetector.isWildfly()) {
+			FilterRegistration.Dynamic dynamic = servletContext.addFilter(
+				JBossServletContextFilter.class.getName(),
+				new JBossServletContextFilter(servletContext));
+
+			dynamic.setAsyncSupported(true);
+
+			dynamic.addMappingForUrlPatterns(
+				EnumSet.allOf(DispatcherType.class), false, "/*");
 		}
 
 		if (PropsValues.HEALTH_CHECK_DATA_SOURCE_ENABLED) {
