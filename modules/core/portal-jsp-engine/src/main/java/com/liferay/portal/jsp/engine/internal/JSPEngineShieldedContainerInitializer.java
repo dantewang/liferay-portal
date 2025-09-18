@@ -24,16 +24,11 @@ import com.liferay.shielded.container.ShieldedContainerInitializer;
 import com.liferay.taglib.servlet.JspFactorySwapper;
 
 import jakarta.servlet.DispatcherType;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
 import jakarta.servlet.FilterRegistration;
 import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 
 import java.io.File;
 import java.io.IOException;
