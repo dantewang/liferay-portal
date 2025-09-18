@@ -158,28 +158,8 @@ public class JSPEngineShieldedContainerInitializer
 		else {
 			FilterRegistration.Dynamic filterDynamic = servletContext.addFilter(
 				"Portal Jasper Filter",
-				new Filter() {
-
-					@Override
-					public void destroy() {
-					}
-
-					@Override
-					public void doFilter(
-							ServletRequest servletRequest,
-							ServletResponse servletResponse,
-							FilterChain filterChain)
-						throws IOException, ServletException {
-
-						portalJSPServlet.service(
-							servletRequest, servletResponse);
-					}
-
-					@Override
-					public void init(FilterConfig filterConfig) {
-					}
-
-				});
+				(servletRequest, servletResponse, filterChain) ->
+					portalJSPServlet.service(servletRequest, servletResponse));
 
 			filterDynamic.addMappingForUrlPatterns(
 				EnumSet.allOf(DispatcherType.class), true, "*.jsp", "*.jspx");
