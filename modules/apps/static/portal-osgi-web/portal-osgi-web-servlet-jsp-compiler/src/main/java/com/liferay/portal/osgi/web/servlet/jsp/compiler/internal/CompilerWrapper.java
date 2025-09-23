@@ -315,8 +315,6 @@ public class CompilerWrapper extends Compiler {
 			Map<String, TldResourcePath> tldResourcePaths)
 		throws IOException {
 
-		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
-
 		String location = bundle.getLocation();
 
 		int index = location.indexOf(CharPool.QUESTION);
@@ -326,6 +324,8 @@ public class CompilerWrapper extends Compiler {
 		}
 
 		URL bundleURL = new URL(location);
+
+		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
 		List<String> resourcePaths = new ArrayList<>(
 			bundleWiring.listResources(
