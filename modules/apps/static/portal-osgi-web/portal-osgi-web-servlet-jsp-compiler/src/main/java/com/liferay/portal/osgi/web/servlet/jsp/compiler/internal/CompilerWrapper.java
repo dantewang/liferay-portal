@@ -317,6 +317,16 @@ public class CompilerWrapper extends Compiler {
 
 		BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
 
+		String location = bundle.getLocation();
+
+		int index = location.indexOf(CharPool.QUESTION);
+
+		if (index != -1) {
+			location = location.substring(0, index);
+		}
+
+		URL bundleURL = new URL(location);
+
 		List<String> resourcePaths = new ArrayList<>(
 			bundleWiring.listResources(
 				"/META-INF/", "*.tld", BundleWiring.LISTRESOURCES_RECURSE));
@@ -333,8 +343,8 @@ public class CompilerWrapper extends Compiler {
 			}
 
 			_populateTldMappings(
-				StringPool.SLASH.concat(resourcePath), taglibXmls,
-				tldResourcePaths, url);
+				StringPool.SLASH.concat(resourcePath), bundleURL, taglibXmls,
+				tldResourcePaths, TldURIUtil.getTldURI(url));
 		}
 
 		List<URL> urls = new ArrayList<>(
@@ -347,7 +357,8 @@ public class CompilerWrapper extends Compiler {
 
 		for (URL url : urls) {
 			_populateTldMappings(
-				url.getPath(), taglibXmls, tldResourcePaths, url);
+				url.getPath(), bundleURL, taglibXmls, tldResourcePaths,
+				TldURIUtil.getTldURI(url));
 		}
 	}
 
@@ -617,24 +628,22 @@ public class CompilerWrapper extends Compiler {
 	}
 
 	private void _populateTldMappings(
-			String absoluteResourcePath,
-			Map<TldResourcePath, TaglibXml> taglibXmls,
-			Map<String, TldResourcePath> tldResourcePaths, URL url)
-		throws IOException {
+		String absoluteResourcePath, URL bundleURL,
+		Map<TldResourcePath, TaglibXml> taglibXmls,
+		Map<String, TldResourcePath> tldResourcePaths, String tldURI) {
 
-		String uri = TldURIUtil.getTldURI(url);
-
-		if ((uri == null) || tldResourcePaths.containsKey(uri)) {
+		if ((tldURI == null) || tldResourcePaths.containsKey(tldURI)) {
 			return;
 		}
 
-		uri = uri.trim();
+		tldURI = tldURI.trim();
 
 		try {
 			TldResourcePath tldResourcePath = new TldResourcePath(
-				url, absoluteResourcePath);
+				bundleURL, absoluteResourcePath,
+				absoluteResourcePath.substring(1));
 
-			tldResourcePaths.put(uri, tldResourcePath);
+			tldResourcePaths.put(tldURI, tldResourcePath);
 
 			TldParser tldParser = new TldParser(true, false, true);
 
