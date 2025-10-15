@@ -1392,7 +1392,7 @@ closeTemplate()
 		<antcall target="unzip-weblogic-custom-${app.server.weblogic.version.build}" />
 	</target>
 
-	<target name="unzip-weblogic-custom-14110">
+	<target name="unzip-weblogic-custom-15110">
 		<antcall target="unzip-weblogic-zip-files" />
 
 		<antcall target="install-weblogic14-setup-files" />
