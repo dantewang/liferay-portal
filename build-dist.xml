@@ -1139,11 +1139,20 @@ rerun this task.
 			src="${app.server.parent.dir}/${app.server.weblogic.zip.name}"
 		/>
 
+		<echo file="${app.server.weblogic.dir}-temp/responsefile.rsp">
+[ENGINE]
+Response File Version=1.0.0.0.0
+[GENERIC]
+ORACLE_HOME=${app.server.weblogic.dir}
+INSTALL_TYPE=WebLogic Server
+DECLINE_SECURITY_UPDATES=true
+		</echo>
+
 		<java
 			fork="true"
 			jar="${app.server.weblogic.dir}-temp/${app.server.weblogic.jar.name}"
 		>
-			<arg line="ORACLE_HOME=${app.server.weblogic.dir}" />
+			<arg line="-silent -responseFile ${app.server.weblogic.dir}-temp/responsefile.rsp" />
 		</java>
 
 		<delete dir="${app.server.weblogic.dir}-temp" />
