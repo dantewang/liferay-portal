@@ -5405,7 +5405,13 @@ tell application "Safari" to quit
 							app.server.type=weblogic
 						</app-server-properties-update>
 
-						<ant antfile="build-dist.xml" inheritAll="false" target="unzip-weblogic-custom" />
+						<local name="java.jdk.home" />
+
+						<get-java-jdk-home architecture="x64" type="oracle" version="17" />
+
+						<ant antfile="build-dist.xml" inheritAll="false" target="unzip-weblogic-custom">
+							<param name="weblogic.java.jdk.home" value="${java.jdk.home}" />
+						</ant>
 
 						<antcall inheritAll="false" target="deploy" />
 
