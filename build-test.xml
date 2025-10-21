@@ -5224,7 +5224,13 @@ tell application "Safari" to quit
 
 	<macrodef name="prepare-test-app-server-custom">
 		<sequential>
-			<ant antfile="build-dist.xml" inheritAll="false" target="unzip-${app.server.type}-custom" />
+			<local name="java.jdk.home" />
+
+			<get-java-jdk-home architecture="x64" type="oracle" version="17" />
+
+			<ant antfile="build-dist.xml" inheritAll="false" target="unzip-${app.server.type}">
+				<param name="weblogic.java.jdk.home" value="${java.jdk.home}" />
+			</ant>
 
 			<if>
 				<equals arg1="${app.server.type}" arg2="weblogic" />
