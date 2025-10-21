@@ -5226,7 +5226,7 @@ tell application "Safari" to quit
 		<sequential>
 			<local name="java.jdk.home" />
 
-			<get-java-jdk-home architecture="x64" type="oracle" version="17" />
+			<get-java-jdk-home type="oracle" version="17" />
 
 			<ant antfile="build-dist.xml" inheritAll="false" target="unzip-${app.server.type}">
 				<property name="weblogic.java.jdk.home" value="${java.jdk.home}" />
@@ -5417,7 +5417,7 @@ tell application "Safari" to quit
 
 						<local name="java.jdk.home" />
 
-						<get-java-jdk-home architecture="x64" type="oracle" version="17" />
+						<get-java-jdk-home type="oracle" version="17" />
 
 						<ant antfile="build-dist.xml" inheritAll="false" target="unzip-weblogic">
 							<property name="weblogic.java.jdk.home" value="${java.jdk.home}" />
