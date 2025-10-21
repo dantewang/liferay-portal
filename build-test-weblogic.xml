@@ -18,7 +18,7 @@
 				<get-java-jdk-home architecture="x64" type="oracle" version="17" />
 
 				<ant antfile="build-dist.xml" inheritAll="false" target="unzip-weblogic">
-					<param name="weblogic.java.jdk.home" value="${java.jdk.home}" />
+					<property name="weblogic.java.jdk.home" value="${java.jdk.home}" />
 				</ant>
 
 				<ant target="all" />
