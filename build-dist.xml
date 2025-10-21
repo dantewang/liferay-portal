@@ -1062,7 +1062,7 @@ org.apache.level=WARNING]]>
 	</target>
 
 	<target name="unzip-weblogic">
-		<antcall target="unzip-weblogic-custom-${app.server.weblogic.version.build}" />
+		<antcall target="unzip-weblogic-${app.server.weblogic.version.build}" />
 	</target>
 
 	<target name="unzip-weblogic-15110">
