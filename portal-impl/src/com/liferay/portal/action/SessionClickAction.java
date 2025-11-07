@@ -64,7 +64,8 @@ public class SessionClickAction implements Action {
 
 						if (useHttpSession) {
 							SessionClicks.put(httpSession, name, value);
-						} else {
+						}
+						else {
 							SessionClicks.put(httpServletRequest, name, value);
 						}
 					}
