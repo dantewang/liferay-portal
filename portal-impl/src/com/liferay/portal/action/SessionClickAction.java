@@ -41,29 +41,32 @@ public class SessionClickAction implements Action {
 			AuthTokenUtil.checkCSRFToken(
 				httpServletRequest, SessionClickAction.class.getName());
 
-			HttpSession httpSession = httpServletRequest.getSession();
+			String cmd = ParamUtil.getString(httpServletRequest, Constants.CMD);
 
-			Enumeration<String> enumeration =
-				httpServletRequest.getParameterNames();
+			if (StringUtil.equals(cmd, "set")) {
+				HttpSession httpSession = httpServletRequest.getSession();
 
-			boolean useHttpSession = ParamUtil.getBoolean(
-				httpServletRequest, "useHttpSession");
+				Enumeration<String> enumeration =
+					httpServletRequest.getParameterNames();
 
-			while (enumeration.hasMoreElements()) {
-				String name = enumeration.nextElement();
+				boolean useHttpSession = ParamUtil.getBoolean(
+					httpServletRequest, "useHttpSession");
 
-				if (!StringUtil.equals(name, Constants.CMD) &&
-					!StringUtil.equals(name, "doAsUserId") &&
-					!StringUtil.equals(name, "p_auth")) {
+				while (enumeration.hasMoreElements()) {
+					String name = enumeration.nextElement();
 
-					String value = ParamUtil.getString(
-						httpServletRequest, name);
+					if (!StringUtil.equals(name, Constants.CMD) &&
+						!StringUtil.equals(name, "doAsUserId") &&
+						!StringUtil.equals(name, "p_auth")) {
 
-					if (useHttpSession) {
-						SessionClicks.put(httpSession, name, value);
-					}
-					else {
-						SessionClicks.put(httpServletRequest, name, value);
+						String value = ParamUtil.getString(
+							httpServletRequest, name);
+
+						if (useHttpSession) {
+							SessionClicks.put(httpSession, name, value);
+						} else {
+							SessionClicks.put(httpServletRequest, name, value);
+						}
 					}
 				}
 			}
@@ -71,9 +74,6 @@ public class SessionClickAction implements Action {
 			String value = getValue(httpServletRequest);
 
 			if (value != null) {
-				String cmd = ParamUtil.getString(
-					httpServletRequest, Constants.CMD);
-
 				if (StringUtil.equals(cmd, "get")) {
 					httpServletResponse.setContentType(ContentTypes.TEXT_PLAIN);
 				}
