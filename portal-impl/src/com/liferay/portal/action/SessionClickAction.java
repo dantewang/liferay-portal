@@ -52,7 +52,7 @@ public class SessionClickAction implements Action {
 			while (enumeration.hasMoreElements()) {
 				String name = enumeration.nextElement();
 
-				if (!StringUtil.equals(name, "cmd") &&
+				if (!StringUtil.equals(name, Constants.CMD) &&
 					!StringUtil.equals(name, "doAsUserId") &&
 					!StringUtil.equals(name, "p_auth")) {
 
