@@ -526,7 +526,7 @@ fi
 export JAVA_HOME=${weblogic.java.jdk.home}
 export PATH=$JAVA_HOME/bin:$PATH
 
-java -jar ${app.server.weblogic.dir}-temp/${app.server.weblogic.jar.name} -ignoreSysPrereqs -invPtrLoc ${app.server.weblogic.dir}-temp/oraInst.loc -responseFile ${app.server.weblogic.dir}-temp/responseFile.rsp -silent -log ${app.server.weblogic.dir}/install.log
+java -jar ${app.server.weblogic.dir}-temp/${app.server.weblogic.jar.name} -ignoreSysPrereqs -invPtrLoc ${app.server.weblogic.dir}-temp/oraInst.loc -responseFile ${app.server.weblogic.dir}-temp/responseFile.rsp -silent
 			]]>
 		</echo>
 
@@ -558,25 +558,15 @@ inventory_loc=${app.server.parent.dir}/oraInventory
 inst_group=appserver
 				</echo>
 
-				<trycatch>
-					<try>
-						<execute dir="${app.server.weblogic.dir}-temp">
-							<![CDATA[
-								sudo chown -R appserver: ${app.server.weblogic.dir}
-								sudo chown -R appserver: ${app.server.weblogic.dir}-temp
+				<execute dir="${app.server.weblogic.dir}-temp">
+					<![CDATA[
+						sudo chown -R appserver: ${app.server.parent.dir}/oraInventory
+						sudo chown -R appserver: ${app.server.weblogic.dir}
+						sudo chown -R appserver: ${app.server.weblogic.dir}-temp
 
-								su appserver -c "/bin/sh install_weblogic.sh"
-							]]>
-						</execute>
-					</try>
-					<finally>
-						<execute dir="@{app.server.weblogic.dir}">
-							<![CDATA[
-								cat "${app.server.weblogic.dir}/install.log"
-							]]>
-						</execute>
-					</finally>
-				</trycatch>
+						su appserver -c "/bin/sh install_weblogic.sh"
+					]]>
+				</execute>
 			</then>
 			<else>
 				<exec executable="id" outputproperty="user.group">
