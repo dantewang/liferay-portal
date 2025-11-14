@@ -517,6 +517,8 @@ fi
 
 		<property name="weblogic.java.jdk.home" value="${env.JAVA_HOME}" />
 
+		<echo message="install-weblogic-setup-files ${weblogic.java.jdk.home}" />
+
 		<echo file="${app.server.weblogic.dir}-temp/install_weblogic.sh">
 			<![CDATA[
 #!/bin/bash

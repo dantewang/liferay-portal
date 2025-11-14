@@ -5208,8 +5208,10 @@ tell application "Safari" to quit
 
 					<get-java-jdk-home type="oracle" version="17" />
 
+					<echo message="prepare-test-app-server-custom ${java.jdk.home}" />
+
 					<ant antfile="build-dist.xml" inheritAll="false" target="unzip-${app.server.type}-custom">
-						<property name="weblogic.java.jdk.home" value="${java.jdk.home}" />
+						<property name="weblogic.java.jdk.home" value="/opt/java/oracle17" />
 					</ant>
 
 					<chmod
@@ -5399,8 +5401,10 @@ tell application "Safari" to quit
 
 						<get-java-jdk-home type="oracle" version="17" />
 
+						<echo message="prepare-test-bundles ${java.jdk.home}" />
+
 						<ant antfile="build-dist.xml" inheritAll="false" target="unzip-weblogic-custom">
-							<property name="weblogic.java.jdk.home" value="${java.jdk.home}" />
+							<property name="weblogic.java.jdk.home" value="/opt/java/oracle17" />
 						</ant>
 
 						<antcall inheritAll="false" target="deploy" />
