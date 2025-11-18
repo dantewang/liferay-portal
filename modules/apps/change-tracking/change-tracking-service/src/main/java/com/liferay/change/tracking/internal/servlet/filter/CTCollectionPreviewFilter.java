@@ -9,6 +9,8 @@ import com.liferay.change.tracking.constants.CTConstants;
 import com.liferay.change.tracking.exception.NoSuchCollectionException;
 import com.liferay.change.tracking.model.CTCollection;
 import com.liferay.change.tracking.service.CTCollectionLocalService;
+import com.liferay.petra.lang.CentralizedThreadLocal;
+import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.portal.kernel.change.tracking.CTCollectionPreviewThreadLocal;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
@@ -17,7 +19,6 @@ import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.servlet.DynamicServletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -32,8 +33,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-
-import java.util.Map;
 
 /**
  * @author David Truong
@@ -52,6 +51,10 @@ public class CTCollectionPreviewFilter extends BasePortalFilter {
 			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, FilterChain filterChain)
 		throws Exception {
+
+		if (_skipFilter.get()) {
+			return;
+		}
 
 		long previewCTCollectionId = ParamUtil.getLong(
 			httpServletRequest, "previewCTCollectionId", -1);
@@ -80,17 +83,16 @@ public class CTCollectionPreviewFilter extends BasePortalFilter {
 				_ctCollectionLocalService.fetchCTCollection(
 					previewCTCollectionId);
 
-			DynamicServletRequest dynamicServletRequest =
-				new DynamicServletRequest(
-					httpServletRequest,
-					Map.of("previewCTCollectionId", new String[] {"-1"}));
-
 			if (ctCollection == null) {
-				_portal.sendError(
-					new NoSuchCollectionException(), dynamicServletRequest,
-					httpServletResponse);
+				try (SafeCloseable safeCloseable =
+						_skipFilter.setWithSafeCloseable(true)) {
 
-				return;
+					_portal.sendError(
+						new NoSuchCollectionException(), httpServletRequest,
+						httpServletResponse);
+
+					return;
+				}
 			}
 
 			if ((ctCollection.getStatus() !=
@@ -103,11 +105,15 @@ public class CTCollectionPreviewFilter extends BasePortalFilter {
 				(ctCollection.getStatus() !=
 					WorkflowConstants.STATUS_SCHEDULED)) {
 
-				_portal.sendError(
-					new PortalException("Collection is not available"),
-					dynamicServletRequest, httpServletResponse);
+				try (SafeCloseable safeCloseable =
+						_skipFilter.setWithSafeCloseable(true)) {
 
-				return;
+					_portal.sendError(
+						new PortalException("Collection is not available"),
+						httpServletRequest, httpServletResponse);
+
+					return;
+				}
 			}
 
 			PermissionChecker permissionChecker =
@@ -115,19 +121,23 @@ public class CTCollectionPreviewFilter extends BasePortalFilter {
 
 			if (permissionChecker == null) {
 				permissionChecker = permissionCheckerFactory.create(
-					_portal.getUser(dynamicServletRequest));
+					_portal.getUser(httpServletRequest));
 			}
 
 			if (!_modelResourcePermission.contains(
 					permissionChecker, ctCollection, ActionKeys.VIEW)) {
 
-				_portal.sendError(
-					new PrincipalException.MustHavePermission(
-						permissionChecker, CTCollection.class.getName(),
-						previewCTCollectionId, ActionKeys.VIEW),
-					dynamicServletRequest, httpServletResponse);
+				try (SafeCloseable safeCloseable =
+						_skipFilter.setWithSafeCloseable(true)) {
 
-				return;
+					_portal.sendError(
+						new PrincipalException.MustHavePermission(
+							permissionChecker, CTCollection.class.getName(),
+							previewCTCollectionId, ActionKeys.VIEW),
+						httpServletRequest, httpServletResponse);
+
+					return;
+				}
 			}
 		}
 
@@ -154,5 +164,9 @@ public class CTCollectionPreviewFilter extends BasePortalFilter {
 
 	@Reference
 	private Portal _portal;
+
+	private final CentralizedThreadLocal<Boolean> _skipFilter =
+		new CentralizedThreadLocal<>(
+			CTCollectionPreviewFilter.class.getName(), () -> false);
 
 }
