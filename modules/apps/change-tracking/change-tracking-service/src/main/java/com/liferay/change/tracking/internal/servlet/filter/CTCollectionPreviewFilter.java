@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
+import com.liferay.portal.kernel.servlet.DynamicServletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -31,6 +32,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+
+import java.util.Map;
 
 /**
  * @author David Truong
@@ -77,9 +80,14 @@ public class CTCollectionPreviewFilter extends BasePortalFilter {
 				_ctCollectionLocalService.fetchCTCollection(
 					previewCTCollectionId);
 
+			DynamicServletRequest dynamicServletRequest =
+				new DynamicServletRequest(
+					httpServletRequest,
+					Map.of("previewCTCollectionId", new String[] {"-1"}));
+
 			if (ctCollection == null) {
 				_portal.sendError(
-					new NoSuchCollectionException(), httpServletRequest,
+					new NoSuchCollectionException(), dynamicServletRequest,
 					httpServletResponse);
 
 				return;
@@ -97,7 +105,7 @@ public class CTCollectionPreviewFilter extends BasePortalFilter {
 
 				_portal.sendError(
 					new PortalException("Collection is not available"),
-					httpServletRequest, httpServletResponse);
+					dynamicServletRequest, httpServletResponse);
 
 				return;
 			}
@@ -107,7 +115,7 @@ public class CTCollectionPreviewFilter extends BasePortalFilter {
 
 			if (permissionChecker == null) {
 				permissionChecker = permissionCheckerFactory.create(
-					_portal.getUser(httpServletRequest));
+					_portal.getUser(dynamicServletRequest));
 			}
 
 			if (!_modelResourcePermission.contains(
@@ -117,7 +125,7 @@ public class CTCollectionPreviewFilter extends BasePortalFilter {
 					new PrincipalException.MustHavePermission(
 						permissionChecker, CTCollection.class.getName(),
 						previewCTCollectionId, ActionKeys.VIEW),
-					httpServletRequest, httpServletResponse);
+					dynamicServletRequest, httpServletResponse);
 
 				return;
 			}
