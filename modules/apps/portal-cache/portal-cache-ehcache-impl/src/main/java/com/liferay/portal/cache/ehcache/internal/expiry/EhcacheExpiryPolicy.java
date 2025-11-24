@@ -7,6 +7,7 @@ package com.liferay.portal.cache.ehcache.internal.expiry;
 
 import java.time.Duration;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import org.ehcache.expiry.ExpiryPolicy;
@@ -18,6 +19,10 @@ public class EhcacheExpiryPolicy implements ExpiryPolicy<Object, Object> {
 
 	public EhcacheExpiryPolicy(ExpiryPolicy<Object, Object> expiryPolicy) {
 		_expiryPolicy = expiryPolicy;
+
+		Class<?> clazz = expiryPolicy.getClass();
+
+		_ttl = Objects.equals(_TTL_POLICY_CLASS_NAME, clazz.getName());
 	}
 
 	@Override
@@ -29,7 +34,13 @@ public class EhcacheExpiryPolicy implements ExpiryPolicy<Object, Object> {
 	public Duration getExpiryForCreation(Object key, Object value) {
 		EhcacheExpiryValue ehcacheExpiryValue = (EhcacheExpiryValue)value;
 
-		return ehcacheExpiryValue.getTimeToLive();
+		Duration duration = ehcacheExpiryValue.getTimeToLive();
+
+		if (_ttl && duration.equals(ExpiryPolicy.INFINITE)) {
+			return _expiryPolicy.getExpiryForCreation(key, value);
+		}
+
+		return duration;
 	}
 
 	@Override
@@ -38,9 +49,20 @@ public class EhcacheExpiryPolicy implements ExpiryPolicy<Object, Object> {
 
 		EhcacheExpiryValue ehcacheExpiryValue = (EhcacheExpiryValue)newValue;
 
-		return ehcacheExpiryValue.getTimeToLive();
+		Duration duration = ehcacheExpiryValue.getTimeToLive();
+
+		if (_ttl && duration.equals(ExpiryPolicy.INFINITE)) {
+			return _expiryPolicy.getExpiryForUpdate(key, oldValue, newValue);
+		}
+
+		return duration;
 	}
 
+	private static final String _TTL_POLICY_CLASS_NAME =
+		"org.ehcache.config.builders.ExpiryPolicyBuilder." +
+			"TimeToLiveExpiryPolicy";
+
 	private final ExpiryPolicy<Object, Object> _expiryPolicy;
+	private final boolean _ttl;
 
 }
