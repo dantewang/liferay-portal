@@ -102,14 +102,7 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 			return _performCountMethod.performCount();
 		}
 
-		return (Long)executeDSLQuery(
-			_dslQueryCountMethod,
-			DSLQueryFactoryUtil.count(
-			).from(
-				_table
-			).where(
-				getPredicate()
-			));
+		return (Long)executeDSLQuery(_dslQueryCountMethod, getDslQuery(null));
 	}
 
 	@Override
@@ -183,45 +176,20 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 	protected long doPerformActions(long previousPrimaryKey)
 		throws PortalException {
 
-		Predicate predicate = getPredicate();
+		DSLQuery dslQuery = getDslQuery(
+			predicate -> {
+				if (_orderByFunction != null) {
+					return predicate;
+				}
 
-		if (_orderByFunction == null) {
-			Predicate primaryKeyPredicate = _table.getColumn(
-				_primaryKeyPropertyName, Long.class
-			).gt(
-				previousPrimaryKey
-			);
+				Predicate primaryKeyPredicate = _table.getColumn(
+					_primaryKeyPropertyName, Long.class
+				).gt(
+					previousPrimaryKey
+				);
 
-			predicate = primaryKeyPredicate.and(predicate);
-		}
-
-		JoinStep joinStep = DSLQueryFactoryUtil.select(
-		).from(
-			_table
-		);
-
-		if (_joinFunction != null) {
-			joinStep = _joinFunction.apply(joinStep);
-		}
-
-		GroupByStep groupByStep = joinStep.where(predicate);
-
-		OrderByStep orderByStep = groupByStep;
-
-		if (_groupByFunction != null) {
-			orderByStep = _groupByFunction.apply(groupByStep);
-		}
-
-		LimitStep limitStep = orderByStep.orderBy(getOrderByFunction());
-
-		DSLQuery dslQuery;
-
-		if (_orderByFunction == null) {
-			dslQuery = limitStep.limit(0, _interval);
-		}
-		else {
-			dslQuery = limitStep.limit(_offset, _interval + _offset);
-		}
+				return primaryKeyPredicate.and(predicate);
+			});
 
 		Callable<Long> callable = () -> {
 			List<Object> objects = (List<Object>)executeDSLQuery(
@@ -322,6 +290,41 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 
 	protected long getCompanyId() {
 		return _companyId;
+	}
+
+	protected DSLQuery getDslQuery(
+		Function<Predicate, Predicate> customizePredicateFunction) {
+
+		JoinStep joinStep = DSLQueryFactoryUtil.select(
+		).from(
+			_table
+		);
+
+		if (_joinFunction != null) {
+			joinStep = _joinFunction.apply(joinStep);
+		}
+
+		Predicate predicate = getPredicate();
+
+		if (customizePredicateFunction != null) {
+			predicate = customizePredicateFunction.apply(predicate);
+		}
+
+		GroupByStep groupByStep = joinStep.where(predicate);
+
+		OrderByStep orderByStep = groupByStep;
+
+		if (_groupByFunction != null) {
+			orderByStep = _groupByFunction.apply(groupByStep);
+		}
+
+		LimitStep limitStep = orderByStep.orderBy(getOrderByFunction());
+
+		if (_orderByFunction == null) {
+			return limitStep.limit(0, _interval);
+		}
+
+		return limitStep.limit(_offset, _interval + _offset);
 	}
 
 	protected int getInterval() {
