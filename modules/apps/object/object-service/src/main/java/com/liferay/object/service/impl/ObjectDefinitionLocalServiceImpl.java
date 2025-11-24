@@ -117,7 +117,9 @@ import com.liferay.portal.db.partition.util.DBPartitionUtil;
 import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.dao.jdbc.CurrentConnection;
+import com.liferay.portal.kernel.dao.orm.ActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.Property;
@@ -535,8 +537,8 @@ public class ObjectDefinitionLocalServiceImpl
 		if (!objectDefinition.isUnmodifiableSystemObject()) {
 			_deleteObjectDefinitionPLOEntries(objectDefinition);
 
-			ActionableDynamicQuery actionableDynamicQuery =
-				new DefaultActionableDynamicQuery() {
+			ActionableDSLQuery actionableDSLQuery =
+				new DefaultActionableDSLQuery() {
 
 					@Override
 					protected void intervalCompleted(
@@ -560,37 +562,29 @@ public class ObjectDefinitionLocalServiceImpl
 
 				};
 
-			actionableDynamicQuery.setAddCriteriaMethod(
-				dynamicQuery -> {
-					Property nameProperty = PropertyFactoryUtil.forName(
-						"objectDefinitionId");
-
-					dynamicQuery.add(
-						nameProperty.eq(
-							objectDefinition.getObjectDefinitionId()));
-				});
-			actionableDynamicQuery.setBaseLocalService(
-				_objectEntryLocalService);
-			actionableDynamicQuery.setClassLoader(getClassLoader());
-			actionableDynamicQuery.setModelClass(ObjectEntry.class);
+			actionableDSLQuery.buildDSL(
+				dslBuilder -> dslBuilder.wherePredicate(
+					ObjectEntryTable.INSTANCE.objectDefinitionId.eq(
+						objectDefinition.getObjectDefinitionId())));
+			actionableDSLQuery.setBaseLocalService(_objectEntryLocalService);
+			actionableDSLQuery.setPrimaryKeyPropertyName("objectEntryId");
+			actionableDSLQuery.setTable(ObjectEntryTable.INSTANCE);
 
 			AtomicBoolean deletedMarker = new AtomicBoolean();
 
-			actionableDynamicQuery.setPerformActionMethod(
+			actionableDSLQuery.setPerformActionMethod(
 				(ObjectEntry objectEntry) -> {
 					deletedMarker.set(true);
 
 					_objectEntryLocalService.deleteObjectEntry(objectEntry);
 				});
 
-			actionableDynamicQuery.setPrimaryKeyPropertyName("objectEntryId");
-
 			try (SafeCloseable safeCloseable =
 					ObjectDefinitionThreadLocal.
 						setDeleteObjectDefinitionIdWithSafeCloseable(
 							objectDefinition.getObjectDefinitionId())) {
 
-				actionableDynamicQuery.performActions();
+				actionableDSLQuery.performActions();
 
 				if (deletedMarker.get()) {
 					_resourcePermissionLocalService.deleteResourcePermissions(
@@ -1702,28 +1696,21 @@ public class ObjectDefinitionLocalServiceImpl
 			ObjectDefinitionSettingConstants.NAME_ACCEPTED_GROUP_IDS);
 
 		if (Validator.isNotNull(acceptedGroupIds)) {
-			ActionableDynamicQuery actionableDynamicQuery =
-				_objectEntryLocalService.getActionableDynamicQuery();
+			ActionableDSLQuery actionableDSLQuery =
+				_objectEntryLocalService.getActionableDSLQuery();
 
-			actionableDynamicQuery.setAddCriteriaMethod(
-				dynamicQuery -> {
-					Property groupId = PropertyFactoryUtil.forName("groupId");
+			actionableDSLQuery.buildDSL(
+				dslBuilder -> dslBuilder.wherePredicate(
+					ObjectEntryTable.INSTANCE.groupId.notIn(
+						TransformUtil.transform(
+							acceptedGroupIds.split("\\s*,\\s*"),
+							GetterUtil::getLong, Long.class)
+					).and(
+						ObjectEntryTable.INSTANCE.objectDefinitionId.eq(
+							objectDefinition.getObjectDefinitionId())
+					)));
 
-					dynamicQuery.add(
-						RestrictionsFactoryUtil.not(
-							groupId.in(
-								TransformUtil.transform(
-									acceptedGroupIds.split("\\s*,\\s*"),
-									GetterUtil::getLong, Long.class))));
-
-					Property objectDefinitionId = PropertyFactoryUtil.forName(
-						"objectDefinitionId");
-
-					dynamicQuery.add(
-						objectDefinitionId.eq(
-							objectDefinition.getObjectDefinitionId()));
-				});
-			actionableDynamicQuery.setPerformActionMethod(
+			actionableDSLQuery.setPerformActionMethod(
 				(ObjectEntry objectEntry) ->
 					_objectEntryLocalService.deleteObjectEntry(objectEntry));
 
@@ -1731,7 +1718,7 @@ public class ObjectDefinitionLocalServiceImpl
 					ObjectEntryThreadLocal.
 						setDisassociateRelatedModelsWithSafeCloseable(true)) {
 
-				actionableDynamicQuery.performActions();
+				actionableDSLQuery.performActions();
 			}
 		}
 
@@ -2862,6 +2849,39 @@ public class ObjectDefinitionLocalServiceImpl
 	private void _updateWorkflowInstances(ObjectDefinition objectDefinition)
 		throws PortalException {
 
+		ActionableDSLQuery actionableDSLQuery =
+			_objectEntryLocalService.getActionableDSLQuery();
+
+		actionableDSLQuery.buildDSL(
+			dslBuilder -> dslBuilder.wherePredicate(
+				ObjectEntryTable.INSTANCE.objectDefinitionId.eq(
+					objectDefinition.getObjectDefinitionId()
+				).and(
+					ObjectEntryTable.INSTANCE.status.neq(
+						WorkflowConstants.STATUS_APPROVED)
+				)));
+		actionableDSLQuery.setParallel(true);
+		actionableDSLQuery.setPerformActionMethod(
+			(ObjectEntry objectEntry) -> {
+				WorkflowInstanceLink workflowInstanceLink =
+					_workflowInstanceLinkLocalService.fetchWorkflowInstanceLink(
+						objectEntry.getCompanyId(),
+						objectEntry.getNonzeroGroupId(),
+						objectDefinition.getClassName(),
+						objectEntry.getObjectEntryId());
+
+				if (workflowInstanceLink != null) {
+					_workflowInstanceManager.updateActive(
+						objectDefinition.getUserId(),
+						objectDefinition.getCompanyId(),
+						workflowInstanceLink.getWorkflowInstanceId(),
+						objectDefinition.isActive());
+				}
+			});
+
+		actionableDSLQuery.performActions();
+
+		/*
 		ActionableDynamicQuery actionableDynamicQuery =
 			_objectEntryLocalService.getActionableDynamicQuery();
 
@@ -2899,6 +2919,7 @@ public class ObjectDefinitionLocalServiceImpl
 			});
 
 		actionableDynamicQuery.performActions();
+		*/
 	}
 
 	private void _validateAccountEntryRestrictedObjectFieldId(
