@@ -7,18 +7,23 @@ package com.liferay.portal.kernel.dao.orm;
 
 import com.liferay.petra.sql.dsl.Table;
 import com.liferay.petra.sql.dsl.expression.Predicate;
+import com.liferay.petra.sql.dsl.query.GroupByStep;
+import com.liferay.petra.sql.dsl.query.JoinStep;
 import com.liferay.petra.sql.dsl.query.LimitStep;
 import com.liferay.petra.sql.dsl.query.OrderByStep;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.transaction.TransactionConfig;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
  * @author Dante Wang
  */
 public interface ActionableDSLQuery {
+
+	public void buildDSL(Consumer<DSLBuilder> consumer);
 
 	public PerformActionMethod<?> getPerformActionMethod();
 
@@ -40,9 +45,6 @@ public interface ActionableDSLQuery {
 
 	public void setInterval(int interval);
 
-	public void setOrderByFunction(
-		Function<OrderByStep, LimitStep> orderByFunction);
-
 	public void setParallel(boolean parallel);
 
 	public void setPerformActionMethod(
@@ -56,7 +58,19 @@ public interface ActionableDSLQuery {
 
 	public void setTransactionConfig(TransactionConfig transactionConfig);
 
-	public void setWherePredicate(Predicate predicate);
+	public interface DSLBuilder {
+
+		public DSLBuilder groupByFunction(
+			Function<GroupByStep, OrderByStep> function);
+
+		public DSLBuilder joinFunction(Function<JoinStep, JoinStep> function);
+
+		public DSLBuilder orderByFunction(
+			Function<OrderByStep, LimitStep> function);
+
+		public DSLBuilder wherePredicate(Predicate predicate);
+
+	}
 
 	public interface PerformActionMethod<T> {
 

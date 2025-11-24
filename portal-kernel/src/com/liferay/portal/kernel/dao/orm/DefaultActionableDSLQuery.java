@@ -10,6 +10,8 @@ import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.Table;
 import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
+import com.liferay.petra.sql.dsl.query.GroupByStep;
+import com.liferay.petra.sql.dsl.query.JoinStep;
 import com.liferay.petra.sql.dsl.query.LimitStep;
 import com.liferay.petra.sql.dsl.query.OrderByStep;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -49,6 +52,11 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 			PortalException.class, SystemException.class);
 
 		REQUIRES_NEW_TRANSACTION_CONFIG = builder.build();
+	}
+
+	@Override
+	public void buildDSL(Consumer<DSLBuilder> consumer) {
+		consumer.accept(new DSLBuilderImpl());
 	}
 
 	@Override
@@ -141,13 +149,6 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 	}
 
 	@Override
-	public void setOrderByFunction(
-		Function<OrderByStep, LimitStep> orderByFunction) {
-
-		_orderByFunction = orderByFunction;
-	}
-
-	@Override
 	public void setParallel(boolean parallel) {
 		_parallel = parallel;
 	}
@@ -179,11 +180,6 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 		_transactionConfig = transactionConfig;
 	}
 
-	@Override
-	public void setWherePredicate(Predicate predicate) {
-		_predicate = predicate;
-	}
-
 	protected long doPerformActions(long previousPrimaryKey)
 		throws PortalException {
 
@@ -199,14 +195,24 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 			predicate = primaryKeyPredicate.and(predicate);
 		}
 
-		LimitStep limitStep = DSLQueryFactoryUtil.select(
+		JoinStep joinStep = DSLQueryFactoryUtil.select(
 		).from(
 			_table
-		).where(
-			predicate
-		).orderBy(
-			getOrderByFunction()
 		);
+
+		if (_joinFunction != null) {
+			joinStep = _joinFunction.apply(joinStep);
+		}
+
+		GroupByStep groupByStep = joinStep.where(predicate);
+
+		OrderByStep orderByStep = groupByStep;
+
+		if (_groupByFunction != null) {
+			orderByStep = _groupByFunction.apply(groupByStep);
+		}
+
+		LimitStep limitStep = orderByStep.orderBy(getOrderByFunction());
 
 		DSLQuery dslQuery;
 
@@ -388,9 +394,11 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 	private long _companyId;
 	private Method _dslQueryCountMethod;
 	private Method _dslQueryMethod;
+	private Function<GroupByStep, OrderByStep> _groupByFunction;
 	private long _groupId;
 	private String _groupIdPropertyName = "groupId";
 	private int _interval = Indexer.DEFAULT_INTERVAL;
+	private Function<JoinStep, JoinStep> _joinFunction;
 	private int _offset;
 	private Function<OrderByStep, LimitStep> _orderByFunction;
 	private boolean _parallel;
@@ -403,5 +411,41 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 	private String _primaryKeyPropertyName;
 	private Table<?> _table;
 	private TransactionConfig _transactionConfig;
+
+	private class DSLBuilderImpl implements DSLBuilder {
+
+		@Override
+		public DSLBuilder groupByFunction(
+			Function<GroupByStep, OrderByStep> function) {
+
+			_groupByFunction = function;
+
+			return this;
+		}
+
+		@Override
+		public DSLBuilder joinFunction(Function<JoinStep, JoinStep> function) {
+			_joinFunction = function;
+
+			return this;
+		}
+
+		@Override
+		public DSLBuilder orderByFunction(
+			Function<OrderByStep, LimitStep> function) {
+
+			_orderByFunction = function;
+
+			return this;
+		}
+
+		@Override
+		public DSLBuilder wherePredicate(Predicate predicate) {
+			_predicate = predicate;
+
+			return this;
+		}
+
+	}
 
 }
