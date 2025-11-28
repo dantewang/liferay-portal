@@ -118,13 +118,8 @@ import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.dao.jdbc.CurrentConnection;
 import com.liferay.portal.kernel.dao.orm.ActionableDSLQuery;
-import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DefaultActionableDSLQuery;
-import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
-import com.liferay.portal.kernel.dao.orm.Property;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dependency.manager.DependencyManagerSyncUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -2888,46 +2883,6 @@ public class ObjectDefinitionLocalServiceImpl
 		actionableDSLQuery.setTable(ObjectEntryTable.INSTANCE);
 
 		actionableDSLQuery.performActions();
-
-		/*
-		ActionableDynamicQuery actionableDynamicQuery =
-			_objectEntryLocalService.getActionableDynamicQuery();
-
-		actionableDynamicQuery.setAddCriteriaMethod(
-			dynamicQuery -> {
-				Property objectDefinitionIdProperty =
-					PropertyFactoryUtil.forName("objectDefinitionId");
-
-				dynamicQuery.add(
-					objectDefinitionIdProperty.eq(
-						objectDefinition.getObjectDefinitionId()));
-
-				Property statusProperty = PropertyFactoryUtil.forName("status");
-
-				dynamicQuery.add(
-					statusProperty.ne(WorkflowConstants.STATUS_APPROVED));
-			});
-		actionableDynamicQuery.setParallel(true);
-		actionableDynamicQuery.setPerformActionMethod(
-			(ObjectEntry objectEntry) -> {
-				WorkflowInstanceLink workflowInstanceLink =
-					_workflowInstanceLinkLocalService.fetchWorkflowInstanceLink(
-						objectEntry.getCompanyId(),
-						objectEntry.getNonzeroGroupId(),
-						objectDefinition.getClassName(),
-						objectEntry.getObjectEntryId());
-
-				if (workflowInstanceLink != null) {
-					_workflowInstanceManager.updateActive(
-						objectDefinition.getUserId(),
-						objectDefinition.getCompanyId(),
-						workflowInstanceLink.getWorkflowInstanceId(),
-						objectDefinition.isActive());
-				}
-			});
-
-		actionableDynamicQuery.performActions();
-		*/
 	}
 
 	private void _validateAccountEntryRestrictedObjectFieldId(
