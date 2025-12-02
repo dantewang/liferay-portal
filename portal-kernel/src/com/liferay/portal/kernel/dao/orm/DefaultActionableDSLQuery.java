@@ -39,6 +39,7 @@ import java.util.function.Function;
 /**
  * @author Brian Wing Shun Chan
  * @author Shuyang Zhou
+ * @author Dante Wang
  */
 public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 
@@ -93,6 +94,8 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 		}
 		finally {
 			_offset = 0;
+
+			actionsCompleted();
 		}
 	}
 
@@ -171,6 +174,9 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 	@Override
 	public void setTransactionConfig(TransactionConfig transactionConfig) {
 		_transactionConfig = transactionConfig;
+	}
+
+	protected void actionsCompleted() throws PortalException {
 	}
 
 	protected long doPerformActions(long previousPrimaryKey)
