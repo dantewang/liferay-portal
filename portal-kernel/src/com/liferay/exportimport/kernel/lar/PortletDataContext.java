@@ -5,6 +5,8 @@
 
 package com.liferay.exportimport.kernel.lar;
 
+import com.liferay.petra.sql.dsl.Column;
+import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -172,6 +174,8 @@ public interface PortletDataContext extends Serializable {
 	public DateRange getDateRange();
 
 	public Criterion getDateRangeCriteria(String propertyName);
+
+	public Predicate getDateRangePredicate(Column<?, Date> column);
 
 	public Set<StagedModelType> getDeletionSystemEventStagedModelTypes();
 
