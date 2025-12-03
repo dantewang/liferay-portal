@@ -8,6 +8,7 @@ package com.liferay.portal.kernel.dao.orm;
 import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.sql.dsl.DSLQueryFactoryUtil;
 import com.liferay.petra.sql.dsl.Table;
+import com.liferay.petra.sql.dsl.expression.Expression;
 import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.petra.sql.dsl.query.GroupByStep;
@@ -105,7 +106,15 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 			return _performCountMethod.performCount();
 		}
 
-		return (Long)executeDSLQuery(_dslQueryCountMethod, getDslQuery(null));
+		return (Long)executeDSLQuery(
+			_dslQueryCountMethod,
+			getDslQuery(
+				null,
+				DSLQueryFactoryUtil.countDistinct(
+					getCountDistinctExpression()
+				).from(
+					_table
+				)));
 	}
 
 	@Override
@@ -195,7 +204,11 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 				);
 
 				return primaryKeyPredicate.and(predicate);
-			});
+			},
+			DSLQueryFactoryUtil.select(
+			).from(
+				_table
+			));
 
 		Callable<Long> callable = () -> {
 			List<Object> objects = (List<Object>)executeDSLQuery(
@@ -298,13 +311,13 @@ public class DefaultActionableDSLQuery implements ActionableDSLQuery {
 		return _companyId;
 	}
 
-	protected DSLQuery getDslQuery(
-		Function<Predicate, Predicate> customizePredicateFunction) {
+	protected Expression<?> getCountDistinctExpression() {
+		return null;
+	}
 
-		JoinStep joinStep = DSLQueryFactoryUtil.select(
-		).from(
-			_table
-		);
+	protected DSLQuery getDslQuery(
+		Function<Predicate, Predicate> customizePredicateFunction,
+		JoinStep joinStep) {
 
 		if (_joinFunction != null) {
 			joinStep = _joinFunction.apply(joinStep);
