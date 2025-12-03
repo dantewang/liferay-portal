@@ -820,6 +820,10 @@ public class Entity implements Comparable<Entity> {
 		return _versionEntity;
 	}
 
+	public boolean hasActionableDSLQuery() {
+		return hasActionableDynamicQuery();
+	}
+
 	public boolean hasActionableDynamicQuery() {
 		if (hasEntityColumns() && hasLocalService()) {
 			if (hasCompoundPK()) {
