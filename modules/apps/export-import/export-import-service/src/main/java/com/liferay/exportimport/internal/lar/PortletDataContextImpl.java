@@ -33,6 +33,7 @@ import com.liferay.exportimport.kernel.xstream.XStreamAlias;
 import com.liferay.exportimport.kernel.xstream.XStreamConverter;
 import com.liferay.exportimport.kernel.xstream.XStreamType;
 import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.petra.sql.dsl.Column;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -727,6 +728,19 @@ public class PortletDataContextImpl implements PortletDataContext {
 		conjunction.add(property.ge(_startDate));
 
 		return conjunction;
+	}
+
+	@Override
+	public com.liferay.petra.sql.dsl.expression.Predicate getDateRangePredicate(
+		Column<?, Date> column) {
+
+		if (!hasDateRange()) {
+			return null;
+		}
+
+		return com.liferay.petra.sql.dsl.expression.Predicate.and(
+			column.lte(_endDate), column.gte(_startDate)
+		).withParentheses();
 	}
 
 	@Override

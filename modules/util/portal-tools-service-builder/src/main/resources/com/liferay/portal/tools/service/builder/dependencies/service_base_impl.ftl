@@ -11,7 +11,9 @@ import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerRegistryUtil;
 import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.exportimport.kernel.lar.StagedModelType;
 import com.liferay.petra.function.UnsafeFunction;
+import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.io.AutoDeleteFileInputStream;
+import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -21,14 +23,18 @@ import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.dao.jdbc.CurrentConnectionUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Conjunction;
 import com.liferay.portal.kernel.dao.orm.Criterion;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Disjunction;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ExportActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
@@ -91,6 +97,7 @@ import org.osgi.service.component.annotations.Reference;
 	</#if>
 
 	import ${apiPackagePath}.model.${entity.name};
+	import ${apiPackagePath}.model.${entity.name}Table;
 
 	<#list entity.blobEntityColumns as entityColumn>
 		<#if entityColumn.lazy>
@@ -785,6 +792,198 @@ import org.osgi.service.component.annotations.Reference;
 					</#if>
 
 					return exportActionableDynamicQuery;
+				}
+			</#if>
+		</#if>
+
+		<#if entity.hasActionableDSLQuery() && serviceBuilder.isVersionGTE_7_4_0()>
+			@Override
+			public ActionableDSLQuery getActionableDSLQuery() {
+				ActionableDSLQuery actionableDSLQuery = new DefaultActionableDSLQuery();
+
+				actionableDSLQuery.setBaseLocalService(${entity.variableName}LocalService);
+				actionableDSLQuery.setTable(${entity.name}Table.INSTANCE);
+
+				<#if entity.hasPrimitivePK()>
+					actionableDSLQuery.setPrimaryKeyPropertyName("${entity.PKVariableName}");
+				<#else>
+					<#assign
+						pkEntityColumn = entity.PKEntityColumns?first
+					/>
+
+					actionableDSLQuery.setPrimaryKeyPropertyName("primaryKey.${pkEntityColumn.name}");
+
+					<#list entity.PKEntityColumns as pkEntityColumn>
+						<#if stringUtil.equals(pkEntityColumn.name, "groupId")>
+							actionableDSLQuery.setGroupIdPropertyName("primaryKey.groupId");
+						</#if>
+					</#list>
+				</#if>
+
+				return actionableDSLQuery;
+			}
+
+			@Override
+			public IndexableActionableDSLQuery getIndexableActionableDSLQuery() {
+				IndexableActionableDSLQuery indexableActionableDSLQuery = new IndexableActionableDSLQuery(${entity.name}.class);
+
+				indexableActionableDSLQuery.setBaseLocalService(${entity.variableName}LocalService);
+				indexableActionableDSLQuery.setTable(${entity.name}Table.INSTANCE);
+
+				<#if entity.hasPrimitivePK()>
+					indexableActionableDSLQuery.setPrimaryKeyPropertyName("${entity.PKVariableName}");
+				<#else>
+					<#assign
+						pkEntityColumn = entity.PKEntityColumns?first
+					/>
+
+					indexableActionableDSLQuery.setPrimaryKeyPropertyName("primaryKey.${pkEntityColumn.name}");
+
+					<#list entity.PKEntityColumns as pkEntityColumn>
+						<#if stringUtil.equals(pkEntityColumn.name, "groupId")>
+							indexableActionableDSLQuery.setGroupIdPropertyName("primaryKey.groupId");
+						</#if>
+					</#list>
+				</#if>
+
+				return indexableActionableDSLQuery;
+			}
+
+			protected void initActionableDSLQuery(ActionableDSLQuery actionableDSLQuery) {
+				actionableDSLQuery.setBaseLocalService(${entity.variableName}LocalService);
+				actionableDSLQuery.setTable(${entity.name}Table.INSTANCE);
+
+				<#if entity.hasPrimitivePK()>
+					actionableDSLQuery.setPrimaryKeyPropertyName("${entity.PKVariableName}");
+				<#else>
+					<#assign
+						pkEntityColumn = entity.PKEntityColumns?first
+					/>
+
+					actionableDSLQuery.setPrimaryKeyPropertyName("primaryKey.${pkEntityColumn.name}");
+
+					<#list entity.PKEntityColumns as pkEntityColumn>
+						<#if stringUtil.equals(pkEntityColumn.name, "groupId")>
+							actionableDSLQuery.setGroupIdPropertyName("primaryKey.groupId");
+						</#if>
+					</#list>
+				</#if>
+			}
+
+			<#if entity.isStagedModel()>
+				@Override
+				public ExportActionableDSLQuery getExportActionableDSLQuery(final PortletDataContext portletDataContext) {
+					final ExportActionableDSLQuery exportActionableDSLQuery = new ExportActionableDSLQuery() {
+
+						@Override
+						public long performCount() throws PortalException {
+							ManifestSummary manifestSummary = portletDataContext.getManifestSummary();
+
+							StagedModelType stagedModelType = getStagedModelType();
+
+							long modelAdditionCount = super.performCount();
+
+							manifestSummary.addModelAdditionCount(stagedModelType, modelAdditionCount);
+
+							long modelDeletionCount = ExportImportHelperUtil.getModelDeletionCount(portletDataContext, stagedModelType);
+
+							manifestSummary.addModelDeletionCount(stagedModelType, modelDeletionCount);
+
+							return modelAdditionCount;
+						}
+
+						<#if entity.isResourcedModel()>
+							@Override
+							protected Expression<?> getCountDistinctExpression() {
+								return ${entity.name}Table.INSTANCE.resourcePrimKey;
+							}
+						</#if>
+					};
+
+					initActionableDSLQuery(exportActionableDSLQuery);
+
+					exportActionableDSLQuery.buildDSL(
+						dslBuilder -> {
+							Predicate predicate = null;
+
+							<#if entity.isWorkflowEnabled()>
+								Predicate modifiedDatePredicate = portletDataContext.getDateRangePredicate(${entity.name}Table.INSTANCE.modifiedDate);
+
+								<#if entity.isStagedGroupedModel()>
+									if (modifiedDatePredicate != null) {
+										modifiedDatePredicate = Predicate.and(
+											modifiedDatePredicate,
+											Predicate.or(
+												${entity.name}Table.INSTANCE.modifiedDate.gt(${entity.name}Table.INSTANCE.lastPublishDate),
+												${entity.name}Table.INSTANCE.lastPublishDate.isNull()
+											).withParentheses()
+										).withParentheses();
+									}
+								</#if>
+
+								Predicate statusDatePredicate = portletDataContext.getDateRangePredicate(${entity.name}Table.INSTANCE.statusDate);
+
+								if ((modifiedDatePredicate != null) && (statusDatePredicate != null)) {
+									predicate = Predicate.or(
+										modifiedDatePredicate, statusDatePredicate
+									).withParentheses();
+								}
+							<#else>
+								predicate = portletDataContext.getDateRangePredicate(${entity.name}Table.INSTANCE.modifiedDate);
+							</#if>
+
+							<#if entity.isTypedModel()>
+								StagedModelType stagedModelType = exportActionableDSLQuery.getStagedModelType();
+
+								long referrerClassNameId = stagedModelType.getReferrerClassNameId();
+
+								if ((referrerClassNameId != StagedModelType.REFERRER_CLASS_NAME_ID_ALL) && (referrerClassNameId != StagedModelType.REFERRER_CLASS_NAME_ID_ANY)) {
+									predicate = Predicate.and(predicate, ${entity.name}Table.INSTANCE.classNameId.eq(referrerClassNameId));
+								}
+								else if (referrerClassNameId == StagedModelType.REFERRER_CLASS_NAME_ID_ANY) {
+									predicate = Predicate.and(predicate, ${entity.name}Table.INSTANCE.classNameId.isNotNull());
+								}
+							</#if>
+
+							<#if entity.isWorkflowEnabled()>
+								if (portletDataContext.isInitialPublication()) {
+									predicate = Predicate.and(predicate, ${entity.name}Table.INSTANCE.status.neq(WorkflowConstants.STATUS_IN_TRASH));
+								}
+								else {
+									StagedModelDataHandler<?> stagedModelDataHandler = StagedModelDataHandlerRegistryUtil.getStagedModelDataHandler(${entity.name}.class.getName());
+
+									predicate = Predicate.and(
+										predicate,
+										${entity.name}Table.INSTANCE.status.in(
+											TransformUtil.transform(stagedModelDataHandler.getExportableStatuses(), Integer::valueOf, Integer.class)));
+								}
+							</#if>
+
+							dslBuilder.wherePredicate(predicate);
+						});
+
+					exportActionableDSLQuery.setCompanyId(portletDataContext.getCompanyId());
+
+					<#if entity.isStagedGroupedModel()>
+						exportActionableDSLQuery.setGroupId(portletDataContext.getScopeGroupId());
+					</#if>
+
+					exportActionableDSLQuery.setPerformActionMethod(
+						new ActionableDSLQuery.PerformActionMethod<${entity.name}>() {
+
+							@Override
+							public void performAction(${entity.name} ${entity.variableName}) throws PortalException {
+								StagedModelDataHandlerUtil.exportStagedModel(portletDataContext, ${entity.variableName});
+							}
+
+						});
+					<#if entity.isTypedModel()>
+						exportActionableDSLQuery.setStagedModelType(new StagedModelType(PortalUtil.getClassNameId(${entity.name}.class.getName()), StagedModelType.REFERRER_CLASS_NAME_ID_ALL));
+					<#else>
+						exportActionableDSLQuery.setStagedModelType(new StagedModelType(PortalUtil.getClassNameId(${entity.name}.class.getName())));
+					</#if>
+
+					return exportActionableDSLQuery;
 				}
 			</#if>
 		</#if>
