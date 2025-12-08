@@ -1692,11 +1692,7 @@ public class ObjectDefinitionLocalServiceImpl
 
 		if (Validator.isNotNull(acceptedGroupIds)) {
 			ActionableDSLQuery actionableDSLQuery =
-				new DefaultActionableDSLQuery();
-
-			actionableDSLQuery.setBaseLocalService(_objectEntryLocalService);
-			actionableDSLQuery.setTable(ObjectEntryTable.INSTANCE);
-			actionableDSLQuery.setPrimaryKeyPropertyName("objectEntryId");
+				_objectEntryLocalService.getActionableDSLQuery();
 
 			actionableDSLQuery.buildDSL(
 				dslBuilder -> dslBuilder.wherePredicate(
@@ -2848,7 +2844,8 @@ public class ObjectDefinitionLocalServiceImpl
 	private void _updateWorkflowInstances(ObjectDefinition objectDefinition)
 		throws PortalException {
 
-		ActionableDSLQuery actionableDSLQuery = new DefaultActionableDSLQuery();
+		ActionableDSLQuery actionableDSLQuery =
+			_objectEntryLocalService.getActionableDSLQuery();
 
 		actionableDSLQuery.buildDSL(
 			dslBuilder -> dslBuilder.wherePredicate(
@@ -2858,7 +2855,6 @@ public class ObjectDefinitionLocalServiceImpl
 					ObjectEntryTable.INSTANCE.status.neq(
 						WorkflowConstants.STATUS_APPROVED)
 				)));
-		actionableDSLQuery.setBaseLocalService(_objectEntryLocalService);
 		actionableDSLQuery.setParallel(true);
 		actionableDSLQuery.setPerformActionMethod(
 			(ObjectEntry objectEntry) -> {
@@ -2877,8 +2873,6 @@ public class ObjectDefinitionLocalServiceImpl
 						objectDefinition.isActive());
 				}
 			});
-		actionableDSLQuery.setPrimaryKeyPropertyName("objectEntryId");
-		actionableDSLQuery.setTable(ObjectEntryTable.INSTANCE);
 
 		actionableDSLQuery.performActions();
 	}
