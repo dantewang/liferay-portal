@@ -561,8 +561,7 @@ public class ObjectDefinitionLocalServiceImpl
 				dslBuilder -> dslBuilder.wherePredicate(
 					ObjectEntryTable.INSTANCE.objectDefinitionId.eq(
 						objectDefinition.getObjectDefinitionId())));
-			actionableDSLQuery.setBaseLocalService(
-				_objectEntryLocalService);
+			actionableDSLQuery.setBaseLocalService(_objectEntryLocalService);
 			actionableDSLQuery.setPrimaryKeyPropertyName("objectEntryId");
 			actionableDSLQuery.setTable(ObjectEntryTable.INSTANCE);
 
@@ -574,7 +573,6 @@ public class ObjectDefinitionLocalServiceImpl
 
 					_objectEntryLocalService.deleteObjectEntry(objectEntry);
 				});
-
 
 			try (SafeCloseable safeCloseable =
 					ObjectDefinitionThreadLocal.

@@ -1,5 +1,5 @@
 /**
- * SPDX-FileCopyrightText: (c) 2000 Liferay, Inc. https://liferay.com
+ * SPDX-FileCopyrightText: (c) 2025 Liferay, Inc. https://liferay.com
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
@@ -161,7 +161,7 @@ public class IndexableActionableDSLQuery extends DefaultActionableDSLQuery {
 
 	private long _count;
 	private Collection<Document> _documents = new ArrayList<>();
-	private Class<?> _modelClass;
+	private final Class<?> _modelClass;
 	private long _total;
 
 }
