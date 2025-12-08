@@ -306,6 +306,13 @@ public class LayoutRevisionLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _layoutRevisionLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -341,6 +348,13 @@ public class LayoutRevisionLocalServiceWrapper
 
 		return _layoutRevisionLocalService.getChildLayoutRevisionsCount(
 			layoutSetBranchId, parentLayoutRevision, plid);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _layoutRevisionLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

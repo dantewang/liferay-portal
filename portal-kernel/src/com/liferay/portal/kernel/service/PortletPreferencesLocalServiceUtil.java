@@ -263,6 +263,12 @@ public class PortletPreferencesLocalServiceUtil {
 		return getService().fetchPreferences(portletPreferencesIds);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -273,6 +279,12 @@ public class PortletPreferencesLocalServiceUtil {
 		long companyId, String portletId) {
 
 		return getService().getDefaultPreferences(companyId, portletId);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

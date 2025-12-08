@@ -246,6 +246,13 @@ public class ContactLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _contactLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -319,6 +326,13 @@ public class ContactLocalServiceWrapper
 	@Override
 	public int getContactsCount(long classNameId, long classPK) {
 		return _contactLocalService.getContactsCount(classNameId, classPK);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _contactLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

@@ -11,10 +11,13 @@ import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.jdbc.CurrentConnectionUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -23,6 +26,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.model.UserGroupRole;
+import com.liferay.portal.kernel.model.UserGroupRoleTable;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
@@ -288,6 +292,42 @@ public abstract class UserGroupRoleLocalServiceBaseImpl
 		actionableDynamicQuery.setModelClass(UserGroupRole.class);
 
 		actionableDynamicQuery.setPrimaryKeyPropertyName("userGroupRoleId");
+	}
+
+	@Override
+	public ActionableDSLQuery getActionableDSLQuery() {
+		ActionableDSLQuery actionableDSLQuery = new DefaultActionableDSLQuery();
+
+		actionableDSLQuery.setBaseLocalService(userGroupRoleLocalService);
+		actionableDSLQuery.setTable(UserGroupRoleTable.INSTANCE);
+
+		actionableDSLQuery.setPrimaryKeyPropertyName("userGroupRoleId");
+
+		return actionableDSLQuery;
+	}
+
+	@Override
+	public IndexableActionableDSLQuery getIndexableActionableDSLQuery() {
+		IndexableActionableDSLQuery indexableActionableDSLQuery =
+			new IndexableActionableDSLQuery(UserGroupRole.class);
+
+		indexableActionableDSLQuery.setBaseLocalService(
+			userGroupRoleLocalService);
+		indexableActionableDSLQuery.setTable(UserGroupRoleTable.INSTANCE);
+
+		indexableActionableDSLQuery.setPrimaryKeyPropertyName(
+			"userGroupRoleId");
+
+		return indexableActionableDSLQuery;
+	}
+
+	protected void initActionableDSLQuery(
+		ActionableDSLQuery actionableDSLQuery) {
+
+		actionableDSLQuery.setBaseLocalService(userGroupRoleLocalService);
+		actionableDSLQuery.setTable(UserGroupRoleTable.INSTANCE);
+
+		actionableDSLQuery.setPrimaryKeyPropertyName("userGroupRoleId");
 	}
 
 	/**

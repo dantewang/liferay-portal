@@ -216,6 +216,12 @@ public class ClassNameLocalServiceUtil {
 		return getService().fetchClassName(value);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -281,6 +287,12 @@ public class ClassNameLocalServiceUtil {
 	 */
 	public static int getClassNamesCount() {
 		return getService().getClassNamesCount();
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

@@ -444,6 +444,12 @@ public class ResourcePermissionLocalServiceUtil {
 			companyId, name, scope, primKey, roleId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -480,6 +486,12 @@ public class ResourcePermissionLocalServiceUtil {
 
 		return getService().getAvailableResourcePermissionActionIds(
 			companyId, name, scope, primKey, roleId, actionIds);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

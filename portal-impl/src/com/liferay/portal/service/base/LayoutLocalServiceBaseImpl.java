@@ -13,19 +13,25 @@ import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerRegistryUtil;
 import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.exportimport.kernel.lar.StagedModelType;
 import com.liferay.petra.function.UnsafeFunction;
+import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.jdbc.CurrentConnectionUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Conjunction;
 import com.liferay.portal.kernel.dao.orm.Criterion;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Disjunction;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ExportActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.dao.orm.Property;
@@ -36,6 +42,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.LayoutTable;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.search.Indexable;
@@ -480,6 +487,176 @@ public abstract class LayoutLocalServiceBaseImpl
 				StagedModelType.REFERRER_CLASS_NAME_ID_ALL));
 
 		return exportActionableDynamicQuery;
+	}
+
+	@Override
+	public ActionableDSLQuery getActionableDSLQuery() {
+		ActionableDSLQuery actionableDSLQuery = new DefaultActionableDSLQuery();
+
+		actionableDSLQuery.setBaseLocalService(layoutLocalService);
+		actionableDSLQuery.setTable(LayoutTable.INSTANCE);
+
+		actionableDSLQuery.setPrimaryKeyPropertyName("plid");
+
+		return actionableDSLQuery;
+	}
+
+	@Override
+	public IndexableActionableDSLQuery getIndexableActionableDSLQuery() {
+		IndexableActionableDSLQuery indexableActionableDSLQuery =
+			new IndexableActionableDSLQuery(Layout.class);
+
+		indexableActionableDSLQuery.setBaseLocalService(layoutLocalService);
+		indexableActionableDSLQuery.setTable(LayoutTable.INSTANCE);
+
+		indexableActionableDSLQuery.setPrimaryKeyPropertyName("plid");
+
+		return indexableActionableDSLQuery;
+	}
+
+	protected void initActionableDSLQuery(
+		ActionableDSLQuery actionableDSLQuery) {
+
+		actionableDSLQuery.setBaseLocalService(layoutLocalService);
+		actionableDSLQuery.setTable(LayoutTable.INSTANCE);
+
+		actionableDSLQuery.setPrimaryKeyPropertyName("plid");
+	}
+
+	@Override
+	public ExportActionableDSLQuery getExportActionableDSLQuery(
+		final PortletDataContext portletDataContext) {
+
+		final ExportActionableDSLQuery exportActionableDSLQuery =
+			new ExportActionableDSLQuery() {
+
+				@Override
+				public long performCount() throws PortalException {
+					ManifestSummary manifestSummary =
+						portletDataContext.getManifestSummary();
+
+					StagedModelType stagedModelType = getStagedModelType();
+
+					long modelAdditionCount = super.performCount();
+
+					manifestSummary.addModelAdditionCount(
+						stagedModelType, modelAdditionCount);
+
+					long modelDeletionCount =
+						ExportImportHelperUtil.getModelDeletionCount(
+							portletDataContext, stagedModelType);
+
+					manifestSummary.addModelDeletionCount(
+						stagedModelType, modelDeletionCount);
+
+					return modelAdditionCount;
+				}
+
+			};
+
+		initActionableDSLQuery(exportActionableDSLQuery);
+
+		exportActionableDSLQuery.buildDSL(
+			dslBuilder -> {
+				Predicate predicate = null;
+
+				Predicate modifiedDatePredicate =
+					portletDataContext.getDateRangePredicate(
+						LayoutTable.INSTANCE.modifiedDate);
+
+				if (modifiedDatePredicate != null) {
+					modifiedDatePredicate = Predicate.and(
+						modifiedDatePredicate,
+						Predicate.or(
+							LayoutTable.INSTANCE.modifiedDate.gt(
+								LayoutTable.INSTANCE.lastPublishDate),
+							LayoutTable.INSTANCE.lastPublishDate.isNull()
+						).withParentheses()
+					).withParentheses();
+				}
+
+				Predicate statusDatePredicate =
+					portletDataContext.getDateRangePredicate(
+						LayoutTable.INSTANCE.statusDate);
+
+				if ((modifiedDatePredicate != null) &&
+					(statusDatePredicate != null)) {
+
+					predicate = Predicate.or(
+						modifiedDatePredicate, statusDatePredicate
+					).withParentheses();
+				}
+
+				StagedModelType stagedModelType =
+					exportActionableDSLQuery.getStagedModelType();
+
+				long referrerClassNameId =
+					stagedModelType.getReferrerClassNameId();
+
+				if ((referrerClassNameId !=
+						StagedModelType.REFERRER_CLASS_NAME_ID_ALL) &&
+					(referrerClassNameId !=
+						StagedModelType.REFERRER_CLASS_NAME_ID_ANY)) {
+
+					predicate = Predicate.and(
+						predicate,
+						LayoutTable.INSTANCE.classNameId.eq(
+							referrerClassNameId));
+				}
+				else if (referrerClassNameId ==
+							StagedModelType.REFERRER_CLASS_NAME_ID_ANY) {
+
+					predicate = Predicate.and(
+						predicate,
+						LayoutTable.INSTANCE.classNameId.isNotNull());
+				}
+
+				if (portletDataContext.isInitialPublication()) {
+					predicate = Predicate.and(
+						predicate,
+						LayoutTable.INSTANCE.status.neq(
+							WorkflowConstants.STATUS_IN_TRASH));
+				}
+				else {
+					StagedModelDataHandler<?> stagedModelDataHandler =
+						StagedModelDataHandlerRegistryUtil.
+							getStagedModelDataHandler(Layout.class.getName());
+
+					predicate = Predicate.and(
+						predicate,
+						LayoutTable.INSTANCE.status.in(
+							TransformUtil.transform(
+								stagedModelDataHandler.getExportableStatuses(),
+								Integer::valueOf, Integer.class)));
+				}
+
+				dslBuilder.wherePredicate(predicate);
+			});
+
+		exportActionableDSLQuery.setCompanyId(
+			portletDataContext.getCompanyId());
+
+		exportActionableDSLQuery.setGroupId(
+			portletDataContext.getScopeGroupId());
+
+		exportActionableDSLQuery.setPerformActionMethod(
+			new ActionableDSLQuery.PerformActionMethod<Layout>() {
+
+				@Override
+				public void performAction(Layout layout)
+					throws PortalException {
+
+					StagedModelDataHandlerUtil.exportStagedModel(
+						portletDataContext, layout);
+				}
+
+			});
+		exportActionableDSLQuery.setStagedModelType(
+			new StagedModelType(
+				PortalUtil.getClassNameId(Layout.class.getName()),
+				StagedModelType.REFERRER_CLASS_NAME_ID_ALL));
+
+		return exportActionableDSLQuery;
 	}
 
 	/**

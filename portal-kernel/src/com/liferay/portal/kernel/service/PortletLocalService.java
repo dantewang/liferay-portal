@@ -9,8 +9,10 @@ import com.liferay.expando.kernel.model.CustomAttributesDisplay;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.change.tracking.CTAware;
 import com.liferay.portal.kernel.cluster.Clusterable;
+import com.liferay.portal.kernel.dao.orm.ActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -257,6 +259,9 @@ public interface PortletLocalService
 	public Portlet fetchPortletById(long companyId, String portletId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ActionableDSLQuery getActionableDSLQuery();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	@Transactional(enabled = false)
@@ -270,6 +275,9 @@ public interface PortletLocalService
 
 	@Transactional(enabled = false)
 	public List<FriendlyURLMapper> getFriendlyURLMappers();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public IndexableActionableDSLQuery getIndexableActionableDSLQuery();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();

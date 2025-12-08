@@ -571,6 +571,13 @@ public class GroupLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _groupLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -984,6 +991,13 @@ public class GroupLocalServiceWrapper
 
 		return _groupLocalService.getGroupsCount(
 			companyId, className, parentGroupId);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _groupLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

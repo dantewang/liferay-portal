@@ -518,6 +518,12 @@ public class GroupLocalServiceUtil {
 		return getService().fetchUserPersonalSiteGroup(companyId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -892,6 +898,12 @@ public class GroupLocalServiceUtil {
 		long companyId, String className, long parentGroupId) {
 
 		return getService().getGroupsCount(companyId, className, parentGroupId);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

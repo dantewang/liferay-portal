@@ -392,6 +392,13 @@ public class CompanyLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _companyLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -506,6 +513,13 @@ public class CompanyLocalServiceWrapper
 	@Override
 	public long getCompanyIdByUserId(long userId) throws Exception {
 		return _companyLocalService.getCompanyIdByUserId(userId);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _companyLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

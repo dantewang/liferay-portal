@@ -209,6 +209,12 @@ public class PluginSettingLocalServiceUtil {
 		return getService().fetchPluginSetting(pluginSettingId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -217,6 +223,12 @@ public class PluginSettingLocalServiceUtil {
 
 	public static PluginSetting getDefaultPluginSetting() {
 		return getService().getDefaultPluginSetting();
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

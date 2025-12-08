@@ -204,6 +204,12 @@ public class CompanyInfoLocalServiceUtil {
 		return getService().fetchCompanyInfo(companyInfoId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -245,6 +251,12 @@ public class CompanyInfoLocalServiceUtil {
 	 */
 	public static int getCompanyInfosCount() {
 		return getService().getCompanyInfosCount();
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

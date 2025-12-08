@@ -199,6 +199,12 @@ public class ImageLocalServiceUtil {
 		return getService().fetchImage(imageId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -261,6 +267,12 @@ public class ImageLocalServiceUtil {
 	 */
 	public static int getImagesCount() {
 		return getService().getImagesCount();
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

@@ -216,6 +216,13 @@ public class ImageLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _imageLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -288,6 +295,13 @@ public class ImageLocalServiceWrapper
 	@Override
 	public int getImagesCount() {
 		return _imageLocalService.getImagesCount();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _imageLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

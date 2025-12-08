@@ -235,6 +235,13 @@ public class BrowserTrackerLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _browserTrackerLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -290,6 +297,13 @@ public class BrowserTrackerLocalServiceWrapper
 	@Override
 	public int getBrowserTrackersCount() {
 		return _browserTrackerLocalService.getBrowserTrackersCount();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _browserTrackerLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override
