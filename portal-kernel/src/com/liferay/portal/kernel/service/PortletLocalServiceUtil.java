@@ -284,6 +284,12 @@ public class PortletLocalServiceUtil {
 		return getService().fetchPortletById(companyId, portletId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -310,6 +316,12 @@ public class PortletLocalServiceUtil {
 		getFriendlyURLMappers() {
 
 		return getService().getFriendlyURLMappers();
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

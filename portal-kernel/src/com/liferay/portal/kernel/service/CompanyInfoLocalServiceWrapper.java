@@ -233,6 +233,13 @@ public class CompanyInfoLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _companyInfoLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -280,6 +287,13 @@ public class CompanyInfoLocalServiceWrapper
 	@Override
 	public int getCompanyInfosCount() {
 		return _companyInfoLocalService.getCompanyInfosCount();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _companyInfoLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

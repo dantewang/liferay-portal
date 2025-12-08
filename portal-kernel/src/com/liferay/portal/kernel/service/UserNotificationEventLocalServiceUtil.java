@@ -306,6 +306,12 @@ public class UserNotificationEventLocalServiceUtil {
 			uuid, companyId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -548,6 +554,12 @@ public class UserNotificationEventLocalServiceUtil {
 
 		return getService().getDeliveredUserNotificationEventsCount(
 			userId, deliveryType, delivered, actionRequired);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

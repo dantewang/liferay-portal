@@ -10,10 +10,13 @@ import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.jdbc.CurrentConnectionUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -22,6 +25,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.model.UserNotificationDelivery;
+import com.liferay.portal.kernel.model.UserNotificationDeliveryTable;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
@@ -307,6 +311,47 @@ public abstract class UserNotificationDeliveryLocalServiceBaseImpl
 		actionableDynamicQuery.setModelClass(UserNotificationDelivery.class);
 
 		actionableDynamicQuery.setPrimaryKeyPropertyName(
+			"userNotificationDeliveryId");
+	}
+
+	@Override
+	public ActionableDSLQuery getActionableDSLQuery() {
+		ActionableDSLQuery actionableDSLQuery = new DefaultActionableDSLQuery();
+
+		actionableDSLQuery.setBaseLocalService(
+			userNotificationDeliveryLocalService);
+		actionableDSLQuery.setTable(UserNotificationDeliveryTable.INSTANCE);
+
+		actionableDSLQuery.setPrimaryKeyPropertyName(
+			"userNotificationDeliveryId");
+
+		return actionableDSLQuery;
+	}
+
+	@Override
+	public IndexableActionableDSLQuery getIndexableActionableDSLQuery() {
+		IndexableActionableDSLQuery indexableActionableDSLQuery =
+			new IndexableActionableDSLQuery(UserNotificationDelivery.class);
+
+		indexableActionableDSLQuery.setBaseLocalService(
+			userNotificationDeliveryLocalService);
+		indexableActionableDSLQuery.setTable(
+			UserNotificationDeliveryTable.INSTANCE);
+
+		indexableActionableDSLQuery.setPrimaryKeyPropertyName(
+			"userNotificationDeliveryId");
+
+		return indexableActionableDSLQuery;
+	}
+
+	protected void initActionableDSLQuery(
+		ActionableDSLQuery actionableDSLQuery) {
+
+		actionableDSLQuery.setBaseLocalService(
+			userNotificationDeliveryLocalService);
+		actionableDSLQuery.setTable(UserNotificationDeliveryTable.INSTANCE);
+
+		actionableDSLQuery.setPrimaryKeyPropertyName(
 			"userNotificationDeliveryId");
 	}
 

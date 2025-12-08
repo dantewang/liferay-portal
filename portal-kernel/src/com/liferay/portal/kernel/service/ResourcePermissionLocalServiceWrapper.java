@@ -488,6 +488,13 @@ public class ResourcePermissionLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _resourcePermissionLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -528,6 +535,13 @@ public class ResourcePermissionLocalServiceWrapper
 		return _resourcePermissionLocalService.
 			getAvailableResourcePermissionActionIds(
 				companyId, name, scope, primKey, roleId, actionIds);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _resourcePermissionLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

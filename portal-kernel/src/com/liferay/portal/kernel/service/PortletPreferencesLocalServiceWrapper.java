@@ -302,6 +302,13 @@ public class PortletPreferencesLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _portletPreferencesLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -314,6 +321,13 @@ public class PortletPreferencesLocalServiceWrapper
 
 		return _portletPreferencesLocalService.getDefaultPreferences(
 			companyId, portletId);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _portletPreferencesLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

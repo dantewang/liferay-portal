@@ -710,6 +710,12 @@ public class LayoutLocalServiceUtil {
 			uuid, groupId, privateLayout);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -777,6 +783,14 @@ public class LayoutLocalServiceUtil {
 		return getService().getDefaultPlid(groupId, privateLayout, portletId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ExportActionableDSLQuery
+		getExportActionableDSLQuery(
+			com.liferay.exportimport.kernel.lar.PortletDataContext
+				portletDataContext) {
+
+		return getService().getExportActionableDSLQuery(portletDataContext);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery
 		getExportActionableDynamicQuery(
 			com.liferay.exportimport.kernel.lar.PortletDataContext
@@ -800,6 +814,12 @@ public class LayoutLocalServiceUtil {
 
 		return getService().getFriendlyURLLayout(
 			groupId, privateLayout, friendlyURL);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

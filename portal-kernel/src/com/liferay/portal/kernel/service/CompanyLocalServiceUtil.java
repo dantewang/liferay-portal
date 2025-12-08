@@ -344,6 +344,12 @@ public class CompanyLocalServiceUtil {
 		getService().forEachCompanyId(unsafeConsumer, companyIds);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -441,6 +447,12 @@ public class CompanyLocalServiceUtil {
 	 */
 	public static long getCompanyIdByUserId(long userId) throws Exception {
 		return getService().getCompanyIdByUserId(userId);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

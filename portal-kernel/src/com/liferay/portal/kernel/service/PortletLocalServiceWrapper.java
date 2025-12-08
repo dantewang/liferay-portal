@@ -333,6 +333,13 @@ public class PortletLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _portletLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -366,6 +373,13 @@ public class PortletLocalServiceWrapper
 		getFriendlyURLMappers() {
 
 		return _portletLocalService.getFriendlyURLMappers();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _portletLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

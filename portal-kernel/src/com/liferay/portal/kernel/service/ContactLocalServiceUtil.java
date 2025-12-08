@@ -222,6 +222,12 @@ public class ContactLocalServiceUtil {
 		return getService().fetchContacts(primaryKeys);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -283,6 +289,12 @@ public class ContactLocalServiceUtil {
 
 	public static int getContactsCount(long classNameId, long classPK) {
 		return getService().getContactsCount(classNameId, classPK);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

@@ -481,6 +481,12 @@ public class OrganizationLocalServiceUtil {
 			uuid, companyId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -489,6 +495,14 @@ public class OrganizationLocalServiceUtil {
 
 	public static String[] getChildrenTypes(String type) {
 		return getService().getChildrenTypes(type);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.ExportActionableDSLQuery
+		getExportActionableDSLQuery(
+			com.liferay.exportimport.kernel.lar.PortletDataContext
+				portletDataContext) {
+
+		return getService().getExportActionableDSLQuery(portletDataContext);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery
@@ -536,6 +550,12 @@ public class OrganizationLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getGroupUserOrganizations(groupId, userId);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

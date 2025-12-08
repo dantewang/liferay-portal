@@ -251,6 +251,13 @@ public class ClassNameLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _classNameLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -329,6 +336,13 @@ public class ClassNameLocalServiceWrapper
 	@Override
 	public int getClassNamesCount() {
 		return _classNameLocalService.getClassNamesCount();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _classNameLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

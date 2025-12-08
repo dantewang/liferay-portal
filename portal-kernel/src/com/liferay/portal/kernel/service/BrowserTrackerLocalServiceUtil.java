@@ -208,6 +208,12 @@ public class BrowserTrackerLocalServiceUtil {
 		return getService().fetchBrowserTracker(browserTrackerId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return getService().getActionableDSLQuery();
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -255,6 +261,12 @@ public class BrowserTrackerLocalServiceUtil {
 	 */
 	public static int getBrowserTrackersCount() {
 		return getService().getBrowserTrackersCount();
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return getService().getIndexableActionableDSLQuery();
 	}
 
 	public static

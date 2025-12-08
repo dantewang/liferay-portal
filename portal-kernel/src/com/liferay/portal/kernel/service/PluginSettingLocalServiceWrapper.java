@@ -235,6 +235,13 @@ public class PluginSettingLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _pluginSettingLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -246,6 +253,13 @@ public class PluginSettingLocalServiceWrapper
 		getDefaultPluginSetting() {
 
 		return _pluginSettingLocalService.getDefaultPluginSetting();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _pluginSettingLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

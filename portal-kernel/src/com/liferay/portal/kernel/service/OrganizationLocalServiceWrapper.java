@@ -530,6 +530,13 @@ public class OrganizationLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _organizationLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -539,6 +546,16 @@ public class OrganizationLocalServiceWrapper
 	@Override
 	public String[] getChildrenTypes(String type) {
 		return _organizationLocalService.getChildrenTypes(type);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ExportActionableDSLQuery
+		getExportActionableDSLQuery(
+			com.liferay.exportimport.kernel.lar.PortletDataContext
+				portletDataContext) {
+
+		return _organizationLocalService.getExportActionableDSLQuery(
+			portletDataContext);
 	}
 
 	@Override
@@ -597,6 +614,13 @@ public class OrganizationLocalServiceWrapper
 
 		return _organizationLocalService.getGroupUserOrganizations(
 			groupId, userId);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _organizationLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override
