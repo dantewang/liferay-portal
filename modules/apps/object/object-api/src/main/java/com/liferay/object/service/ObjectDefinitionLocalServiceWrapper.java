@@ -420,6 +420,13 @@ public class ObjectDefinitionLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _objectDefinitionLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
@@ -434,6 +441,16 @@ public class ObjectDefinitionLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ExportActionableDSLQuery
+		getExportActionableDSLQuery(
+			com.liferay.exportimport.kernel.lar.PortletDataContext
+				portletDataContext) {
+
+		return _objectDefinitionLocalService.getExportActionableDSLQuery(
+			portletDataContext);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery
 		getExportActionableDynamicQuery(
 			com.liferay.exportimport.kernel.lar.PortletDataContext
@@ -441,6 +458,13 @@ public class ObjectDefinitionLocalServiceWrapper
 
 		return _objectDefinitionLocalService.getExportActionableDynamicQuery(
 			portletDataContext);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _objectDefinitionLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

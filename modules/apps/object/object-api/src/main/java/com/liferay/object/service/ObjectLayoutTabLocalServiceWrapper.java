@@ -275,10 +275,27 @@ public class ObjectLayoutTabLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDSLQuery
+		getActionableDSLQuery() {
+
+		return _objectLayoutTabLocalService.getActionableDSLQuery();
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
 		return _objectLayoutTabLocalService.getActionableDynamicQuery();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ExportActionableDSLQuery
+		getExportActionableDSLQuery(
+			com.liferay.exportimport.kernel.lar.PortletDataContext
+				portletDataContext) {
+
+		return _objectLayoutTabLocalService.getExportActionableDSLQuery(
+			portletDataContext);
 	}
 
 	@Override
@@ -289,6 +306,13 @@ public class ObjectLayoutTabLocalServiceWrapper
 
 		return _objectLayoutTabLocalService.getExportActionableDynamicQuery(
 			portletDataContext);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery
+		getIndexableActionableDSLQuery() {
+
+		return _objectLayoutTabLocalService.getIndexableActionableDSLQuery();
 	}
 
 	@Override

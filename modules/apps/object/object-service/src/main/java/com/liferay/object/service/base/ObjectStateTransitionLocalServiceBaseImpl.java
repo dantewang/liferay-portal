@@ -11,18 +11,24 @@ import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.exportimport.kernel.lar.StagedModelType;
 import com.liferay.object.model.ObjectStateTransition;
+import com.liferay.object.model.ObjectStateTransitionTable;
 import com.liferay.object.service.ObjectStateTransitionLocalService;
 import com.liferay.object.service.persistence.ObjectStateTransitionPersistence;
+import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.jdbc.CurrentConnectionUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ExportActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.IndexableActionableDSLQuery;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -399,6 +405,113 @@ public abstract class ObjectStateTransitionLocalServiceBaseImpl
 					ObjectStateTransition.class.getName())));
 
 		return exportActionableDynamicQuery;
+	}
+
+	@Override
+	public ActionableDSLQuery getActionableDSLQuery() {
+		ActionableDSLQuery actionableDSLQuery = new DefaultActionableDSLQuery();
+
+		actionableDSLQuery.setBaseLocalService(
+			objectStateTransitionLocalService);
+		actionableDSLQuery.setTable(ObjectStateTransitionTable.INSTANCE);
+
+		actionableDSLQuery.setPrimaryKeyPropertyName("objectStateTransitionId");
+
+		return actionableDSLQuery;
+	}
+
+	@Override
+	public IndexableActionableDSLQuery getIndexableActionableDSLQuery() {
+		IndexableActionableDSLQuery indexableActionableDSLQuery =
+			new IndexableActionableDSLQuery(ObjectStateTransition.class);
+
+		indexableActionableDSLQuery.setBaseLocalService(
+			objectStateTransitionLocalService);
+		indexableActionableDSLQuery.setTable(
+			ObjectStateTransitionTable.INSTANCE);
+
+		indexableActionableDSLQuery.setPrimaryKeyPropertyName(
+			"objectStateTransitionId");
+
+		return indexableActionableDSLQuery;
+	}
+
+	protected void initActionableDSLQuery(
+		ActionableDSLQuery actionableDSLQuery) {
+
+		actionableDSLQuery.setBaseLocalService(
+			objectStateTransitionLocalService);
+		actionableDSLQuery.setTable(ObjectStateTransitionTable.INSTANCE);
+
+		actionableDSLQuery.setPrimaryKeyPropertyName("objectStateTransitionId");
+	}
+
+	@Override
+	public ExportActionableDSLQuery getExportActionableDSLQuery(
+		final PortletDataContext portletDataContext) {
+
+		final ExportActionableDSLQuery exportActionableDSLQuery =
+			new ExportActionableDSLQuery() {
+
+				@Override
+				public long performCount() throws PortalException {
+					ManifestSummary manifestSummary =
+						portletDataContext.getManifestSummary();
+
+					StagedModelType stagedModelType = getStagedModelType();
+
+					long modelAdditionCount = super.performCount();
+
+					manifestSummary.addModelAdditionCount(
+						stagedModelType, modelAdditionCount);
+
+					long modelDeletionCount =
+						ExportImportHelperUtil.getModelDeletionCount(
+							portletDataContext, stagedModelType);
+
+					manifestSummary.addModelDeletionCount(
+						stagedModelType, modelDeletionCount);
+
+					return modelAdditionCount;
+				}
+
+			};
+
+		initActionableDSLQuery(exportActionableDSLQuery);
+
+		exportActionableDSLQuery.buildDSL(
+			dslBuilder -> {
+				Predicate predicate = null;
+
+				predicate = portletDataContext.getDateRangePredicate(
+					ObjectStateTransitionTable.INSTANCE.modifiedDate);
+
+				dslBuilder.wherePredicate(predicate);
+			});
+
+		exportActionableDSLQuery.setCompanyId(
+			portletDataContext.getCompanyId());
+
+		exportActionableDSLQuery.setPerformActionMethod(
+			new ActionableDSLQuery.PerformActionMethod
+				<ObjectStateTransition>() {
+
+				@Override
+				public void performAction(
+						ObjectStateTransition objectStateTransition)
+					throws PortalException {
+
+					StagedModelDataHandlerUtil.exportStagedModel(
+						portletDataContext, objectStateTransition);
+				}
+
+			});
+		exportActionableDSLQuery.setStagedModelType(
+			new StagedModelType(
+				PortalUtil.getClassNameId(
+					ObjectStateTransition.class.getName())));
+
+		return exportActionableDSLQuery;
 	}
 
 	/**
