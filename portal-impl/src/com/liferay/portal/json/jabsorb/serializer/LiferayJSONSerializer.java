@@ -131,10 +131,6 @@ public class LiferayJSONSerializer extends JSONSerializer {
 					}
 				}
 
-				if (itemClass.isArray()) {
-					return Class.forName("[" + itemClass.getName());
-				}
-
 				return Class.forName("[L" + itemClass.getName() + ";");
 			}
 			catch (JSONException jsonException) {
