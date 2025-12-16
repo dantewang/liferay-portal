@@ -109,21 +109,15 @@ public class LiferayJSONSerializer extends JSONSerializer {
 					"Unable to get class " + className, exception);
 			}
 		}
-		else if (object instanceof JSONArray) {
-			JSONArray jsonArray = (JSONArray)object;
-
-			if (jsonArray.length() == 0) {
-				return Object[].class;
+		else if (object instanceof JSONArray jsonArray) {
+			if (jsonArray.isEmpty()) {
+				return super.getClassFromHint(object);
 			}
 
-			Class<?> compClazz;
-
 			try {
-				Object jsonArrayFirstItem = jsonArray.get(0);
+				Class<?> itemClass = getClassFromHint(jsonArray.get(0));
 
-				compClazz = getClassFromHint(jsonArrayFirstItem);
-
-				if (!Objects.equals(compClazz, Integer.class)) {
+				if (!Objects.equals(itemClass, Integer.class)) {
 					return super.getClassFromHint(object);
 				}
 
@@ -131,24 +125,21 @@ public class LiferayJSONSerializer extends JSONSerializer {
 					Class<?> clazz = getClassFromHint(jsonArray.get(i));
 
 					if (Objects.equals(clazz, Long.class)) {
-						compClazz = clazz;
+						itemClass = clazz;
 
 						break;
 					}
 				}
 
-				if (compClazz.isArray()) {
-					return Class.forName("[" + compClazz.getName());
+				if (itemClass.isArray()) {
+					return Class.forName("[" + itemClass.getName());
 				}
 
-				return Class.forName("[L" + compClazz.getName() + ";");
+				return Class.forName("[L" + itemClass.getName() + ";");
 			}
 			catch (JSONException jsonException) {
-				throw (NoSuchElementException)new NoSuchElementException(
-					jsonException.getMessage()
-				).initCause(
-					jsonException
-				);
+				throw new NoSuchElementException(
+					jsonException.getMessage(), jsonException);
 			}
 			catch (ClassNotFoundException classNotFoundException) {
 				throw new UnmarshallException(
