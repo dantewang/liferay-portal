@@ -115,9 +115,13 @@ public class LiferayJSONSerializer extends JSONSerializer {
 			}
 
 			try {
+				Object firstItem = jsonArray.get(0);
+
 				Class<?> itemClass = getClassFromHint(jsonArray.get(0));
 
-				if (!Objects.equals(itemClass, Integer.class)) {
+				if (!Objects.equals(itemClass, Integer.class) ||
+					!Objects.equals(0, firstItem)) {
+
 					return super.getClassFromHint(object);
 				}
 
