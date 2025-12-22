@@ -50,6 +50,7 @@ import com.liferay.friendly.url.service.FriendlyURLEntryLocalService;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
 import com.liferay.petra.function.transform.TransformUtil;
+import com.liferay.petra.io.DummyOutputStream;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -510,20 +511,37 @@ public class FileEntryStagedModelDataHandler
 						updateFileEntry = true;
 					}
 					else {
-						try (InputStream existingFileVersionInputStream =
-								latestExistingFileVersion.getContentStream(
-									false)) {
+						Object model = latestExistingFileVersion.getModel();
 
-							if (existingFileVersionInputStream == null) {
-								updateFileEntry = true;
-							}
-						}
-						catch (Exception exception) {
-							if (_log.isDebugEnabled()) {
-								_log.debug(exception);
-							}
+						if ((model instanceof DLFileVersion dlFileVersion) &&
+							DLStoreUtil.hasFile(
+								latestExistingFileVersion.getCompanyId(),
+								latestExistingFileVersion.getRepositoryId(),
+								latestExistingFileVersion.getFileName(),
+								dlFileVersion.getStoreFileName())) {
 
 							updateFileEntry = true;
+						}
+						else {
+							try (InputStream existingFileVersionInputStream =
+									latestExistingFileVersion.getContentStream(
+										false)) {
+
+								if (existingFileVersionInputStream == null) {
+									updateFileEntry = true;
+								}
+								else {
+									existingFileVersionInputStream.transferTo(
+										new DummyOutputStream());
+								}
+							}
+							catch (Exception exception) {
+								if (_log.isDebugEnabled()) {
+									_log.debug(exception);
+								}
+
+								updateFileEntry = true;
+							}
 						}
 					}
 
