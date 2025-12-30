@@ -17,6 +17,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.configuration.module.configuration.ConfigurationProvider;
+import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListener;
 import com.liferay.portal.kernel.change.tracking.CTAware;
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.jndi.JNDIUtil;
@@ -27,9 +28,11 @@ import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
+import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -42,6 +45,7 @@ import jakarta.mail.Session;
 
 import java.io.IOException;
 
+import java.util.Dictionary;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,8 +53,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
@@ -387,8 +394,30 @@ public class MailServiceImpl
 	}
 
 	@Activate
-	@Modified
 	protected void activate(Map<String, Object> properties) {
+		modified(properties);
+
+		BundleContext bundleContext = SystemBundleUtil.getBundleContext();
+
+		_serviceRegistration = bundleContext.registerService(
+			ConfigurationModelListener.class,
+			new MailSettingCompanyConfigurationModelListener(this),
+			HashMapDictionaryBuilder.<String, Object>put(
+				"model.class.name",
+				"com.liferay.mail.settings.configuration." +
+					"MailSettingCompanyConfiguration"
+			).build());
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		if (_serviceRegistration != null) {
+			_serviceRegistration.unregister();
+		}
+	}
+
+	@Modified
+	protected void modified(Map<String, Object> properties) {
 		_mailSettingSystemConfiguration = ConfigurableUtil.createConfigurable(
 			MailSettingSystemConfiguration.class, properties);
 	}
@@ -451,6 +480,39 @@ public class MailServiceImpl
 
 	private volatile MailSettingSystemConfiguration
 		_mailSettingSystemConfiguration;
+	private volatile ServiceRegistration<ConfigurationModelListener>
+		_serviceRegistration;
 	private final Map<Long, Session> _sessions = new ConcurrentHashMap<>();
+
+	private static class MailSettingCompanyConfigurationModelListener
+		implements ConfigurationModelListener {
+
+		@Override
+		public void onAfterSave(
+			String pid, Dictionary<String, Object> properties) {
+
+			if (properties == null) {
+				return;
+			}
+
+			long companyId = GetterUtil.getLong(properties.get("companyId"));
+
+			if (companyId > 0) {
+				_mailService.clearSession(companyId);
+			}
+			else {
+				_mailService.clearSession();
+			}
+		}
+
+		private MailSettingCompanyConfigurationModelListener(
+			MailService mailService) {
+
+			_mailService = mailService;
+		}
+
+		private final MailService _mailService;
+
+	}
 
 }
