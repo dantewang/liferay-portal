@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
-import com.liferay.portal.kernel.module.util.SystemBundleUtil;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -394,10 +393,10 @@ public class MailServiceImpl
 	}
 
 	@Activate
-	protected void activate(Map<String, Object> properties) {
-		modified(properties);
+	protected void activate(
+		BundleContext bundleContext, Map<String, Object> properties) {
 
-		BundleContext bundleContext = SystemBundleUtil.getBundleContext();
+		modified(properties);
 
 		_serviceRegistration = bundleContext.registerService(
 			ConfigurationModelListener.class,
