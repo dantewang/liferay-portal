@@ -17,18 +17,10 @@ definition {
 			groupName = "Guest",
 			layoutName = "JSF Showcase");
 
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			portlet = "Pages");
-
-		PagesAdmin.configurePage(
-			columnName = "1 Column",
-			pageName = "JSF Showcase",
-			sitePageType = "Widget Page");
-
-		Navigator.openWithAppendToBaseURL(urlAppend = "web/guest/jsf-showcase");
-
-		Portlet.addPG(portletName = "JSF Showcase");
+		JSONLayout.addWidgetToPublicLayout(
+			groupName = "Guest",
+			layoutName = "JSF Showcase",
+			widgetName = "JSF Showcase");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/guest/jsf-showcase");
 	}
