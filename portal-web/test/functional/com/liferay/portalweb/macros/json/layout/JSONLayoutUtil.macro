@@ -278,12 +278,6 @@ definition {
 		else if (${widgetName} == "Frontend Data Set Sample") {
 			var portletId = "com_liferay_frontend_data_set_sample_web_internal_portlet_FDSSamplePortlet";
 		}
-		else if (${widgetName} == "Alloy Showcase") {
-			var portletId = "1_WAR_comliferayfacesdemoalloyshowcaseportlet";
-		}
-		else if (${widgetName} == "JSF Showcase") {
-			var portletId = "1_WAR_comliferayfacesdemojsfshowcaseportlet";
-		}
 		else {
 			fail("'widgetName' is either invalid or its 'portletId' is not yet set.");
 		}
