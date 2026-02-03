@@ -18,13 +18,23 @@ import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Localization;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.language.LanguageResources;
 import com.liferay.portal.search.spi.model.index.contributor.ModelDocumentContributor;
 
+import java.io.IOException;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -41,6 +51,10 @@ public class LayoutModelDocumentContributor
 	@Override
 	public void contribute(Document document, Layout layout) {
 		if (layout.isSystem()) {
+			return;
+		}
+
+		if (!_layoutIndexWhitelist.contains(Long.toString(layout.getPlid()))) {
 			return;
 		}
 
@@ -69,6 +83,20 @@ public class LayoutModelDocumentContributor
 		document.addText(
 			"privateLayout", String.valueOf(layout.isPrivateLayout()));
 		document.addText("systemLayout", String.valueOf(layout.isSystem()));
+	}
+
+	@Activate
+	protected void activate() {
+		try {
+			_layoutIndexWhitelist = new HashSet<>(
+				Files.readAllLines(
+					Path.of(
+						PropsUtil.get(PropsKeys.LIFERAY_HOME) +
+							"/layout_index_whilelist.txt")));
+		}
+		catch (IOException ioException) {
+			_log.error(ioException);
+		}
 	}
 
 	private void _addLayoutContentFields(Document document, Layout layout) {
@@ -145,5 +173,7 @@ public class LayoutModelDocumentContributor
 
 	@Reference
 	private Localization _localization;
+
+	private Set<String> _layoutIndexWhitelist;
 
 }
