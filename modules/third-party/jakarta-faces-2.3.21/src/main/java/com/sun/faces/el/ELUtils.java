@@ -332,7 +332,7 @@ public class ELUtils {
         
         if (beanManager == null) {
             // TODO: use version enum and >=
-            if (getFacesConfigXmlVersion(facesContext).equals("2.3") || getWebXmlVersion(facesContext).equals("4.0")) {
+            if (getWebXmlVersion(facesContext).equals("4.0")) {
                 throw new FacesException("Unable to find CDI BeanManager");
             }
         } else {
@@ -965,3 +965,4 @@ public class ELUtils {
         return result;
     }
 }
+/* @generated */
