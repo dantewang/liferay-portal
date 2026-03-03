@@ -1,0 +1,35 @@
+import com.liferay.gradle.plugins.patcher.PatchTask
+
+apply plugin: "com.liferay.patcher"
+
+task patch(type: PatchTask)
+
+dependencies {
+	api group: "com.liferay.faces", name: "jakarta.faces", transitive: false, version: "2.3.21.LIFERAY-PATCHED-1"
+	api group: "jakarta.el", name: "jakarta.el-api", version: "3.0.2"
+	api group: "jakarta.servlet", name: "jakarta.servlet-api", version: "4.0.2"
+	api group: "jakarta.servlet.jsp", name: "jakarta.servlet.jsp-api", version: "2.3.4"
+	api group: "javax.enterprise", name: "cdi-api", version: "2.0.SP1"
+}
+
+generateJSPJava	{
+	mustRunAfter copyPatchOriginalLibClasses
+}
+
+jarSources {
+	mustRunAfter patch
+}
+
+javadoc {
+	enabled = false
+}
+
+patch {
+	ext {
+		autoClean = false
+	}
+
+	fileNames "**/com/sun/faces/application/applicationimpl/Version.java"
+	fileNames "**/com/sun/faces/el/ELUtils.java"
+	originalLibModuleName = "jakarta.faces"
+}
