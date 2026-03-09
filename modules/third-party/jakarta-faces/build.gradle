@@ -1,12 +1,9 @@
-import com.liferay.portal.tools.jakarta.ee.transformer.JarTransformer
-
 import java.util.function.Function
 
 import org.eclipse.transformer.cli.JakartaTransformerCLI
 
 buildscript {
 	dependencies {
-		classpath group: "com.liferay", name: "com.liferay.portal.tools.jakarta.ee.transformer", version: "1.0.0"
 		classpath group: "org.eclipse.transformer", name: "org.eclipse.transformer.cli", version: "1.0.0"
 	}
 
@@ -82,8 +79,6 @@ jar {
 				)
 
 				JakartaTransformerCLI.runWith(jakartaTransformerCLI)
-
-				JarTransformer.transform(jar.archivePath)
 			}
 
 		}
