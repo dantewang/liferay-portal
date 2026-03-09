@@ -34,7 +34,7 @@ buildscript {
 }
 
 dependencies {
-    compileOnly group: "com.liferay.faces", name: "jakarta.faces", transitive: false, version: "2.3.21.LIFERAY-PATCHED-1"
+	compileOnly group: "com.liferay.faces", name: "jakarta.faces", transitive: false, version: "2.3.21.LIFERAY-PATCHED-1"
 }
 
 jar {
