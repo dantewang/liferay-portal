@@ -5,7 +5,7 @@
 
 package com.liferay.feature.flag.web.internal.model.listener;
 
-import com.liferay.feature.flag.web.internal.DeprecationFeatureFlagHelper;
+import com.liferay.feature.flag.web.internal.DeprecationFeatureFlagUtil;
 import com.liferay.feature.flag.web.internal.feature.flag.FeatureFlagsBagProvider;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.model.BaseModelListener;
@@ -30,11 +30,9 @@ public class CompanyModelListener extends BaseModelListener<Company> {
 	public void onAfterCreate(Company company) throws ModelListenerException {
 		TransactionCommitCallbackUtil.registerCallback(
 			() -> {
-				DeprecationFeatureFlagHelper deprecationFeatureFlagHelper =
-					_getDeprecationFeatureFlagHelper();
-
-				deprecationFeatureFlagHelper.processDeprecationFeatureFlags(
-					company.getCompanyId());
+				DeprecationFeatureFlagUtil.processDeprecationFeatureFlags(
+					company.getCompanyId(), _featureFlagsBagProvider,
+					_portalPreferencesLocalService);
 
 				return null;
 			});
@@ -42,16 +40,11 @@ public class CompanyModelListener extends BaseModelListener<Company> {
 
 	@Activate
 	protected void activate() {
-		DeprecationFeatureFlagHelper deprecationFeatureFlagHelper =
-			_getDeprecationFeatureFlagHelper();
-
 		_companyLocalService.forEachCompanyId(
-			deprecationFeatureFlagHelper::processDeprecationFeatureFlags);
-	}
-
-	private DeprecationFeatureFlagHelper _getDeprecationFeatureFlagHelper() {
-		return new DeprecationFeatureFlagHelper(
-			_featureFlagsBagProvider, _portalPreferencesLocalService);
+			companyId ->
+				DeprecationFeatureFlagUtil.processDeprecationFeatureFlags(
+					companyId, _featureFlagsBagProvider,
+					_portalPreferencesLocalService));
 	}
 
 	@Reference

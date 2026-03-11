@@ -5,7 +5,7 @@
 
 package com.liferay.feature.flag.web.internal.verify;
 
-import com.liferay.feature.flag.web.internal.DeprecationFeatureFlagHelper;
+import com.liferay.feature.flag.web.internal.DeprecationFeatureFlagUtil;
 import com.liferay.feature.flag.web.internal.feature.flag.FeatureFlagsBagProvider;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
@@ -21,13 +21,10 @@ import org.osgi.service.component.annotations.Reference;
 public class SystemDeprecationFeatureFlagVerifyProcess extends VerifyProcess {
 
 	@Override
-	protected void doVerify() throws Exception {
-		DeprecationFeatureFlagHelper deprecationFeatureFlagHelper =
-			new DeprecationFeatureFlagHelper(
-				_featureFlagsBagProvider, _portalPreferencesLocalService);
-
-		deprecationFeatureFlagHelper.processDeprecationFeatureFlags(
-			CompanyConstants.SYSTEM);
+	protected void doVerify() {
+		DeprecationFeatureFlagUtil.processDeprecationFeatureFlags(
+			CompanyConstants.SYSTEM, _featureFlagsBagProvider,
+			_portalPreferencesLocalService);
 	}
 
 	@Reference

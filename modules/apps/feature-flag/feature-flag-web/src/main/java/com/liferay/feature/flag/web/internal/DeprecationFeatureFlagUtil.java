@@ -21,18 +21,14 @@ import java.util.List;
 /**
  * @author Thiago Buarque
  */
-public class DeprecationFeatureFlagHelper {
+public class DeprecationFeatureFlagUtil {
 
-	public DeprecationFeatureFlagHelper(
-		FeatureFlagsBagProvider featureFlagsBagProvider,
+	public static void processDeprecationFeatureFlags(
+		long companyId, FeatureFlagsBagProvider featureFlagsBagProvider,
 		PortalPreferencesLocalService portalPreferencesLocalService) {
 
-		_featureFlagsBagProvider = featureFlagsBagProvider;
-		_portalPreferencesLocalService = portalPreferencesLocalService;
-	}
-
-	public void processDeprecationFeatureFlags(long companyId) {
-		PortalPreferences portalPreferences = _getPortalPreferences(companyId);
+		PortalPreferences portalPreferences = _getPortalPreferences(
+			companyId, portalPreferencesLocalService);
 
 		boolean processed = GetterUtil.getBoolean(
 			portalPreferences.getValue(
@@ -44,37 +40,38 @@ public class DeprecationFeatureFlagHelper {
 		}
 
 		FeatureFlagsBag featureFlagsBag =
-			_featureFlagsBagProvider.getOrCreateFeatureFlagsBag(companyId);
+			featureFlagsBagProvider.getOrCreateFeatureFlagsBag(companyId);
 
 		List<FeatureFlag> deprecationFeatureFlags =
 			featureFlagsBag.getFeatureFlags(
 				FeatureFlagType.DEPRECATION.getPredicate());
 
 		for (FeatureFlag deprecationFeatureFlag : deprecationFeatureFlags) {
-			_featureFlagsBagProvider.setEnabled(
+			featureFlagsBagProvider.setEnabled(
 				companyId, deprecationFeatureFlag.getKey(), false);
 		}
 
-		portalPreferences = _getPortalPreferences(companyId);
+		portalPreferences = _getPortalPreferences(
+			companyId, portalPreferencesLocalService);
 
 		portalPreferences.setValue(
 			FeatureFlagConstants.PREFERENCE_NAMESPACE,
 			FeatureFlagConstants.PREFERENCE_KEY_DEPRECATION_PROCESSED, "true");
 
-		_portalPreferencesLocalService.updatePreferences(
+		portalPreferencesLocalService.updatePreferences(
 			companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, portalPreferences);
 	}
 
-	private PortalPreferences _getPortalPreferences(long companyId) {
+	private static PortalPreferences _getPortalPreferences(
+		long companyId,
+		PortalPreferencesLocalService portalPreferencesLocalService) {
+
 		PortalPreferencesWrapper portalPreferencesWrapper =
 			(PortalPreferencesWrapper)
-				_portalPreferencesLocalService.getPreferences(
+				portalPreferencesLocalService.getPreferences(
 					companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 		return portalPreferencesWrapper.getPortalPreferencesImpl();
 	}
-
-	private final FeatureFlagsBagProvider _featureFlagsBagProvider;
-	private final PortalPreferencesLocalService _portalPreferencesLocalService;
 
 }
