@@ -5,7 +5,7 @@
 
 package com.liferay.feature.flag.web.internal.model.listener;
 
-import com.liferay.feature.flag.web.internal.DeprecationFeatureFlagUtil;
+import com.liferay.feature.flag.web.internal.util.DeprecationFeatureFlagUtil;
 import com.liferay.feature.flag.web.internal.feature.flag.FeatureFlagsBagProvider;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.model.BaseModelListener;

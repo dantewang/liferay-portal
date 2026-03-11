@@ -5,7 +5,7 @@
 
 package com.liferay.feature.flag.web.internal.verify;
 
-import com.liferay.feature.flag.web.internal.DeprecationFeatureFlagUtil;
+import com.liferay.feature.flag.web.internal.util.DeprecationFeatureFlagUtil;
 import com.liferay.feature.flag.web.internal.feature.flag.FeatureFlagsBagProvider;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
