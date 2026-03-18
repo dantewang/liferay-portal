@@ -1,11 +1,12 @@
 package com.liferay.portal.license.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.portal.kernel.license.util.LicenseManagerUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.AssumeTestRule;
 import com.liferay.portal.kernel.test.rule.TomcatClusterTestRule;
-import com.liferay.portal.license.test.util.LicenseTestUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.test.cluster.tomcat.TomcatCluster;
 import com.liferay.portal.test.cluster.tomcat.TomcatNode;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -23,7 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-public class ClusterLicenseTest {
+public class ClusterLicenseTest  extends BaseLicenseTestCase{
 
 	@ClassRule
 	@Rule
@@ -41,7 +42,7 @@ public class ClusterLicenseTest {
 		new TomcatClusterTestRule();
 
 	public static void assume() {
-		Assume.assumeTrue(LicenseTestUtil.isReleaseBundle());
+		Assume.assumeTrue(isReleaseBundle());
 	}
 
 	@BeforeClass
@@ -49,7 +50,8 @@ public class ClusterLicenseTest {
 		TomcatCluster.Builder builder1 =
 			tomcatClusterTestRule.buildTomcatNode();
 
-		builder1.setJpdaEnabled(true);
+		// set this to true then we can debug with _tomcatNode1
+//		builder1.setJpdaEnabled(true);
 
 		_tomcatNode1 = builder1.build();
 
@@ -65,15 +67,13 @@ public class ClusterLicenseTest {
 
 	@After
 	public void tearDown() throws Exception {
-		LicenseTestUtil.removeAllLicenseBinaryFiles();
-		LicenseTestUtil.resetLifecycleAction();
+		resetLicenseData();
+		resetLifecycleAction();
 	}
 
 	@Test
 	public void test() throws Exception {
-
-		// Check This instance is not registered
-
+		// need to make this path to make sure the data/license get deployed to the tomcatNode
 		String path = _tomcatNode1.getLiferayHome(
 		).concat(
 			"/data/license"
@@ -83,50 +83,27 @@ public class ClusterLicenseTest {
 		_tomcatNode1.syncExecute(
 			() -> {
 
-				// Check This instance is not registered
-
 				Map<String, String> licenseProperties =
-					LicenseTestUtil.getPortalLicenseProperties();
+					LicenseManagerUtil.getLicenseProperties("Portal");
 
 				Assert.assertTrue(
 					licenseProperties.toString(), licenseProperties.isEmpty());
 
-				String response = LicenseTestUtil.hitHomePage(
-					"localhost", 8080);
-
-				Assert.assertTrue(
-					response.contains("This instance is not registered."));
+				assertLicenseNotRegistered(port);
 
 				ReflectionTestUtil.setFieldValue(
 					LicenseUtil.class, "LICENSE_REPOSITORY_DIR", path);
 
-				// Deploy free type license to the two new nodes
+				deployFreeTierLicense(Time.HOUR);
 
-				LicenseTestUtil.deployFreeTierLicenseContent(
-					"Monday, February 17, 2026 02:00:00 AM GMT",
-					"Monday, March 1, 2027 12:00:00 AM GMT");
+				assertLicensePropertiesExisted(getPortalProductId());
 
-				//				Thread.sleep(10000);
-
-				licenseProperties =
-					LicenseTestUtil.getPortalLicenseProperties();
-
-				Assert.assertFalse(
-					licenseProperties.toString(), licenseProperties.isEmpty());
-
-				response = LicenseTestUtil.hitHomePage("localhost", port);
-
-				Assert.assertTrue(response.contains("Welcome to Liferay"));
+				assertLicenseRegistered(port);
 
 				return null;
 			});
 	}
 
-	private static final String _DXP_ONLY_MODULE_SYMBOLIC_NAME =
-		"com.liferay.saml.api";
-
-	private static final String _ENTERPRISE_APP_SYMBOLIC_NAME =
-		"com.liferay.portal.license.enterprise.app";
 
 	private static transient TomcatNode _tomcatNode1;
 	private static transient TomcatNode _tomcatNode2;

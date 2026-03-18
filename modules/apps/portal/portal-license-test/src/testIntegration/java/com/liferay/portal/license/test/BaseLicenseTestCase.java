@@ -26,6 +26,7 @@ import com.liferay.portal.util.LicenseUtil;
 
 import java.io.File;
 
+import java.io.Serializable;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -59,7 +60,7 @@ import org.osgi.framework.launch.Framework;
 /**
  * @author Tina Tian
  */
-public abstract class BaseLicenseTestCase {
+public abstract class BaseLicenseTestCase implements Serializable {
 
 	public static ResettableClassFileTransformer disableValidate() {
 		return _transformMethod(ReflectionsHolder._validateMethod, true);
@@ -111,6 +112,12 @@ public abstract class BaseLicenseTestCase {
 		Assert.assertTrue(response.contains(_NOT_REGISTERED_LICENSE_KEY));
 	}
 
+	public void assertLicenseNotRegistered(int port) throws Exception {
+		String response = _hitHomePage("localhost", port);
+
+		Assert.assertTrue(response.contains(_NOT_REGISTERED_LICENSE_KEY));
+	}
+
 	public void assertLicensePropertiesExisted(String productId) {
 		Map<String, String> licenseProperties =
 			LicenseManagerUtil.getLicenseProperties(productId);
@@ -129,6 +136,12 @@ public abstract class BaseLicenseTestCase {
 
 	public void assertLicenseRegistered() throws Exception {
 		String response = _hitHomePage("localhost", 8080);
+
+		Assert.assertFalse(response.contains(_LICENSE_PAGE_KEY));
+	}
+
+	public void assertLicenseRegistered(int port) throws Exception {
+		String response = _hitHomePage("localhost", port);
 
 		Assert.assertFalse(response.contains(_LICENSE_PAGE_KEY));
 	}
