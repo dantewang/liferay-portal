@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
+ * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+ */
+
 package com.liferay.portal.license.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
@@ -6,6 +11,7 @@ import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.AssumeTestRule;
 import com.liferay.portal.kernel.test.rule.TomcatClusterTestRule;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.test.cluster.tomcat.TomcatCluster;
 import com.liferay.portal.test.cluster.tomcat.TomcatNode;
@@ -13,6 +19,9 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.LicenseUtil;
 
 import java.util.Map;
+import java.util.Properties;
+
+import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -23,8 +32,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * @author Dante Wang
+ * @author Jiefeng Wu
+ */
 @RunWith(Arquillian.class)
-public class ClusterLicenseTest  extends BaseLicenseTestCase{
+public class ClusterLicenseTest extends BaseLicenseTestCase {
 
 	@ClassRule
 	@Rule
@@ -50,9 +63,6 @@ public class ClusterLicenseTest  extends BaseLicenseTestCase{
 		TomcatCluster.Builder builder1 =
 			tomcatClusterTestRule.buildTomcatNode();
 
-		// set this to true then we can debug with _tomcatNode1
-//		builder1.setJpdaEnabled(true);
-
 		_tomcatNode1 = builder1.build();
 
 		_tomcatNode1.start(true);
@@ -73,15 +83,21 @@ public class ClusterLicenseTest  extends BaseLicenseTestCase{
 
 	@Test
 	public void test() throws Exception {
-		// need to make this path to make sure the data/license get deployed to the tomcatNode
 		String path = _tomcatNode1.getLiferayHome(
 		).concat(
 			"/data/license"
 		);
+
 		int port = _tomcatNode1.getConnectorPort();
 
 		_tomcatNode1.syncExecute(
 			() -> {
+				ResettableClassFileTransformer
+					disableKeyValidatorResettableClassFileTransformer =
+						disableValidate();
+				ResettableClassFileTransformer
+					setVersionResettableClassFileTransformer = setVersion(
+						"2026.Q1.0");
 
 				Map<String, String> licenseProperties =
 					LicenseManagerUtil.getLicenseProperties("Portal");
@@ -100,15 +116,16 @@ public class ClusterLicenseTest  extends BaseLicenseTestCase{
 
 				assertLicenseRegistered(port);
 
+				resetClassFileTransformer(
+					disableKeyValidatorResettableClassFileTransformer);
+				resetClassFileTransformer(
+					setVersionResettableClassFileTransformer);
+
 				return null;
 			});
 	}
 
-
 	private static transient TomcatNode _tomcatNode1;
 	private static transient TomcatNode _tomcatNode2;
-	private static transient TomcatNode _tomcatNode3;
-	private static transient TomcatNode _tomcatNode4;
-	private static transient TomcatNode _tomcatNode5;
 
 }

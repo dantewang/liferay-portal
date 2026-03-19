@@ -25,8 +25,8 @@ import com.liferay.portal.module.framework.ModuleFrameworkUtil;
 import com.liferay.portal.util.LicenseUtil;
 
 import java.io.File;
-
 import java.io.Serializable;
+
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
