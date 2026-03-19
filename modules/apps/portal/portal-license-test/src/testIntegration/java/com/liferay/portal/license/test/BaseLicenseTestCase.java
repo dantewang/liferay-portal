@@ -101,19 +101,19 @@ public abstract class BaseLicenseTestCase implements Serializable {
 	}
 
 	public void assertLicenseInvalid() throws Exception {
-		String response = _hitHomePage("localhost", 8080);
+		String response = hitHomePage("localhost", 8080);
 
 		Assert.assertTrue(response.contains(_INVALID_LICENSE_KEY));
 	}
 
 	public void assertLicenseNotRegistered() throws Exception {
-		String response = _hitHomePage("localhost", 8080);
+		String response = hitHomePage("localhost", 8080);
 
 		Assert.assertTrue(response.contains(_NOT_REGISTERED_LICENSE_KEY));
 	}
 
 	public void assertLicenseNotRegistered(int port) throws Exception {
-		String response = _hitHomePage("localhost", port);
+		String response = hitHomePage("localhost", port);
 
 		Assert.assertTrue(response.contains(_NOT_REGISTERED_LICENSE_KEY));
 	}
@@ -135,13 +135,13 @@ public abstract class BaseLicenseTestCase implements Serializable {
 	}
 
 	public void assertLicenseRegistered() throws Exception {
-		String response = _hitHomePage("localhost", 8080);
+		String response = hitHomePage("localhost", 8080);
 
 		Assert.assertFalse(response.contains(_LICENSE_PAGE_KEY));
 	}
 
 	public void assertLicenseRegistered(int port) throws Exception {
-		String response = _hitHomePage("localhost", port);
+		String response = hitHomePage("localhost", port);
 
 		Assert.assertFalse(response.contains(_LICENSE_PAGE_KEY));
 	}
@@ -270,6 +270,16 @@ public abstract class BaseLicenseTestCase implements Serializable {
 		return _licenseTestProperties.getProperty(propertyKey);
 	}
 
+	protected String hitHomePage(String host, int port) throws Exception {
+		Http.Options options = new Http.Options();
+
+		options.setCookieSpec(Http.CookieSpec.IGNORE_COOKIES);
+		options.setLocation(String.format("http://%s:%d/", host, port));
+		options.setMethod(Http.Method.GET);
+
+		return HttpUtil.URLtoString(options);
+	}
+
 	private static Field _findField(ClassLoader classLoader, String fieldString)
 		throws Exception {
 
@@ -364,16 +374,6 @@ public abstract class BaseLicenseTestCase implements Serializable {
 		}
 
 		return bundleSymbolicNames;
-	}
-
-	private String _hitHomePage(String host, int port) throws Exception {
-		Http.Options options = new Http.Options();
-
-		options.setCookieSpec(Http.CookieSpec.IGNORE_COOKIES);
-		options.setLocation(String.format("http://%s:%d/", host, port));
-		options.setMethod(Http.Method.GET);
-
-		return HttpUtil.URLtoString(options);
 	}
 
 	private static final DateFormat _DATE_FORMAT = new SimpleDateFormat(
