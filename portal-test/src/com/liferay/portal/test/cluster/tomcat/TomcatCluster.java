@@ -199,7 +199,7 @@ public class TomcatCluster {
 		8010);
 	private static final AtomicInteger _nodeIdCounter = new AtomicInteger();
 	private static final AtomicInteger _shutdownPortCounter = new AtomicInteger(
-		8015);
+		8020);
 
 	private final Class<?> _clusterOwnerClass;
 	private final String[] _elasticSearchNetworkHostAddresses;
