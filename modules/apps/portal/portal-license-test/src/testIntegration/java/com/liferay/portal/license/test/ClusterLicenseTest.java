@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.AssumeTestRule;
 import com.liferay.portal.kernel.test.rule.TomcatClusterTestRule;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.test.cluster.tomcat.TomcatCluster;
@@ -24,10 +25,10 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -108,55 +109,74 @@ public class ClusterLicenseTest extends BaseLicenseTestCase {
 
 		tomcatNode3.syncExecute(() -> _test(port3));
 
+		_testConsoleMessageListener.listenToMessage(
+			tomcatNode1.getNodeId(), _CONSOLE_KEY_LICENSED_NODE,
+			_CONSOLE_KEY_NODE_EXCEEDED);
+		_testConsoleMessageListener.listenToMessage(
+			tomcatNode2.getNodeId(), _CONSOLE_KEY_LICENSED_NODE,
+			_CONSOLE_KEY_NODE_EXCEEDED);
+		_testConsoleMessageListener.listenToMessage(
+			tomcatNode3.getNodeId(), _CONSOLE_KEY_LICENSED_NODE,
+			_CONSOLE_KEY_NODE_EXCEEDED);
+
 		TomcatNode tomcatNode4 = _startTomcatNode();
 		TomcatNode tomcatNode5 = _startTomcatNode();
 		TomcatNode tomcatNode6 = _startTomcatNode();
 
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode1.getNodeId(), _CONSOLE_KEY_LICENSED_NODE);
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode1.getNodeId(), _CONSOLE_KEY_NODE_EXCEEDED);
+		_testConsoleMessageListener.assertMessageListened(
+			tomcatNode1.getNodeId());
+		_testConsoleMessageListener.assertMessageListened(
+			tomcatNode2.getNodeId());
+		_testConsoleMessageListener.assertMessageListened(
+			tomcatNode3.getNodeId());
 
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode2.getNodeId(), _CONSOLE_KEY_LICENSED_NODE);
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode2.getNodeId(), _CONSOLE_KEY_NODE_EXCEEDED);
-
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode3.getNodeId(), _CONSOLE_KEY_LICENSED_NODE);
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode3.getNodeId(), _CONSOLE_KEY_NODE_EXCEEDED);
+		_testConsoleMessageListener.listenToMessage(
+			tomcatNode1.getNodeId(), _CONSOLE_KEY_FINISHED_SHUTDOWN);
+		_testConsoleMessageListener.listenToMessage(
+			tomcatNode2.getNodeId(), _CONSOLE_KEY_FINISHED_SHUTDOWN);
+		_testConsoleMessageListener.listenToMessage(
+			tomcatNode3.getNodeId(), _CONSOLE_KEY_FINISHED_SHUTDOWN);
 
 		int port4 = tomcatNode4.getConnectorPort();
 
+		_testConsoleMessageListener.listenToMessage(
+			tomcatNode4.getNodeId(), _CONSOLE_KEY_TEMPORARY_NODE,
+			_CONSOLE_KEY_NODE_EXCEEDED);
+
 		tomcatNode4.syncExecute(() -> _test(port4));
 
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode4.getNodeId(), _CONSOLE_KEY_TEMPORARY_NODE);
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode4.getNodeId(), _CONSOLE_KEY_NODE_EXCEEDED);
+		_testConsoleMessageListener.assertMessageListened(
+			tomcatNode4.getNodeId());
 
 		int port5 = tomcatNode5.getConnectorPort();
 
-		tomcatNode4.syncExecute(() -> _test(port5));
+		_testConsoleMessageListener.listenToMessage(
+			tomcatNode5.getNodeId(), _CONSOLE_KEY_TEMPORARY_NODE,
+			_CONSOLE_KEY_NODE_EXCEEDED);
 
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode5.getNodeId(), _CONSOLE_KEY_TEMPORARY_NODE);
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode5.getNodeId(), _CONSOLE_KEY_NODE_EXCEEDED);
+		tomcatNode5.syncExecute(() -> _test(port5));
+
+		_testConsoleMessageListener.assertMessageListened(
+			tomcatNode5.getNodeId());
 
 		int port6 = tomcatNode6.getConnectorPort();
 
-		tomcatNode4.syncExecute(() -> _test(port6));
+		_testConsoleMessageListener.listenToMessage(
+			tomcatNode6.getNodeId(), _CONSOLE_KEY_TEMPORARY_NODE,
+			_CONSOLE_KEY_NODE_EXCEEDED);
 
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode6.getNodeId(), _CONSOLE_KEY_TEMPORARY_NODE);
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode6.getNodeId(), _CONSOLE_KEY_NODE_EXCEEDED);
+		tomcatNode6.syncExecute(() -> _test(port6));
+
+		_testConsoleMessageListener.assertMessageListened(
+			tomcatNode6.getNodeId());
 
 		TomcatNode tomcatNode7 = _startTomcatNode();
 
 		int port7 = tomcatNode7.getConnectorPort();
+
+		_testConsoleMessageListener.listenToMessage(
+			tomcatNode7.getNodeId(), _CONSOLE_KEY_BEYOND_TEMPORARY_NODE,
+			_CONSOLE_KEY_NODE_EXCEEDED);
 
 		tomcatNode7.syncExecute(
 			() -> {
@@ -172,20 +192,28 @@ public class ClusterLicenseTest extends BaseLicenseTestCase {
 
 				String response = hitHomePage("localhost", port7);
 
-				Assert.assertTrue(response.contains(_EXCEEDED_LICENSE_KEY));
+				Assert.assertTrue(response.contains(_PAGE_KEY_EXCEEDED_LIMIT));
 
 				return null;
 			});
 
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode7.getNodeId(), _CONSOLE_KEY_BEYOND_TEMPORARY_NODE);
-		_testConsoleMessageListener.assertMessage(
-			tomcatNode7.getNodeId(), _CONSOLE_KEY_NODE_EXCEEDED);
+		_testConsoleMessageListener.assertMessageListened(
+			tomcatNode7.getNodeId());
 
-		// TODO: wait for grace period expiration and assert nodes shutdown
+		// TODO: temporarily hard-code wait time to 6 minutes according to the
+		// grace period used by portal-license-smoke (5 minutes)
 
-		// TODO: check "Finished shutting down overloaded nodes"
+		tomcatNode4.wait(6L, TimeUnit.MINUTES);
+		tomcatNode5.wait(6L, TimeUnit.MINUTES);
+		tomcatNode6.wait(6L, TimeUnit.MINUTES);
+		tomcatNode7.wait(6L, TimeUnit.MINUTES);
 
+		_testConsoleMessageListener.assertMessageListened(
+			tomcatNode1.getNodeId());
+		_testConsoleMessageListener.assertMessageListened(
+			tomcatNode2.getNodeId());
+		_testConsoleMessageListener.assertMessageListened(
+			tomcatNode3.getNodeId());
 	}
 
 	private TomcatNode _startTomcatNode() throws Exception {
@@ -200,10 +228,10 @@ public class ClusterLicenseTest extends BaseLicenseTestCase {
 			"/data/license"
 		);
 
-		tomcatNode.execute(
+		tomcatNode.syncExecute(
 			() -> {
 				disableValidate();
-				setVersion("2026.Q1.0");
+				setVersion("2026.Q1.0 LTS");
 
 				ReflectionTestUtil.setFieldValue(
 					LicenseUtil.class, "LICENSE_REPOSITORY_DIR", path);
@@ -234,8 +262,11 @@ public class ClusterLicenseTest extends BaseLicenseTestCase {
 
 	private static final String _CONSOLE_KEY_BEYOND_TEMPORARY_NODE =
 		"This current node is beyond the temporarily permitted node count " +
-			"and is deactivated and will automatically shut down after the " +
+			"and is deactivatedand will automatically shut down after the " +
 				"grace period expires";
+
+	private static final String _CONSOLE_KEY_FINISHED_SHUTDOWN =
+		"Finished shutting down overloaded nodes";
 
 	private static final String _CONSOLE_KEY_LICENSED_NODE =
 		"This current node is within the licensed node count and will not be " +
@@ -251,7 +282,7 @@ public class ClusterLicenseTest extends BaseLicenseTestCase {
 			"and will be automatically deactivated and shut down after the " +
 				"grace period expires";
 
-	private static final String _EXCEEDED_LICENSE_KEY =
+	private static final String _PAGE_KEY_EXCEEDED_LIMIT =
 		"You have exceeded the developer mode connection limit";
 
 	private static PrintStream _originalSystemErrPrintStream;
@@ -261,36 +292,78 @@ public class ClusterLicenseTest extends BaseLicenseTestCase {
 
 	private static class TestConsoleMessageListener {
 
-		public void addMessage(String messageLine) {
-			if (!messageLine.startsWith(_PREFIX)) {
+		public void assertMessageListened(int nodeId) throws Exception {
+			ObjectValuePair<CompletableFuture<String>, String[]>
+				objectValuePair = _messageFutures.remove(_getKey(nodeId));
+
+			Assert.assertNotNull(objectValuePair);
+
+			CompletableFuture<String> completableFuture =
+				objectValuePair.getKey();
+
+			Assert.assertNotNull(completableFuture.get(3, TimeUnit.MINUTES));
+		}
+
+		public void listenToMessage(int nodeId, String... keywords) {
+			CompletableFuture<String> completableFuture =
+				new CompletableFuture<>();
+
+			ObjectValuePair<CompletableFuture<String>, String[]>
+				objectValuePair = new ObjectValuePair<>(
+					completableFuture, keywords);
+
+			_messageFutures.put(_getKey(nodeId), objectValuePair);
+		}
+
+		public void onMessage(String message) {
+			if (!message.startsWith(_PREFIX)) {
 				return;
 			}
 
-			int index = messageLine.indexOf(CharPool.CLOSE_BRACKET);
+			int index = message.indexOf(CharPool.CLOSE_BRACKET);
 
 			if (index == -1) {
 				return;
 			}
 
-			String nodeName = messageLine.substring(0, index + 1);
+			String nodeName = message.substring(0, index + 1);
 
-			List<String> lines = _messages.computeIfAbsent(
-				nodeName, key -> new ArrayList<>());
+			ObjectValuePair<CompletableFuture<String>, String[]>
+				objectValuePair = _messageFutures.get(nodeName);
 
-			lines.add(messageLine);
+			if (objectValuePair == null) {
+				return;
+			}
+
+			if (_hasKeyword(objectValuePair.getValue(), message)) {
+				CompletableFuture<String> completableFuture =
+					objectValuePair.getKey();
+
+				Assert.assertFalse(completableFuture.isDone());
+
+				completableFuture.complete(message);
+			}
 		}
 
-		public void assertMessage(int nodeId, String expectedMessage) {
-			List<String> lines = _messages.get(
-				_PREFIX + nodeId + StringPool.CLOSE_BRACKET);
+		private String _getKey(int nodeId) {
+			return _PREFIX + nodeId + StringPool.CLOSE_BRACKET;
+		}
 
-			Assert.assertTrue(
-				lines.removeIf(line -> line.contains(expectedMessage)));
+		private boolean _hasKeyword(String[] keywords, String message) {
+			for (String keyword : keywords) {
+				if (!message.contains(keyword)) {
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		private static final String _PREFIX = "[TomcatNode-";
 
-		private final Map<String, List<String>> _messages = new HashMap<>();
+		private final Map
+			<String, ObjectValuePair<CompletableFuture<String>, String[]>>
+				_messageFutures = new ConcurrentHashMap<>();
 
 	}
 
@@ -310,7 +383,7 @@ public class ClusterLicenseTest extends BaseLicenseTestCase {
 			super.print(message);
 
 			for (String line : StringUtil.split(message, CharPool.NEW_LINE)) {
-				_testConsoleMessageListener.addMessage(line);
+				_testConsoleMessageListener.onMessage(line);
 			}
 		}
 
