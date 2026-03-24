@@ -26,6 +26,7 @@ import com.liferay.portal.module.framework.ModuleFrameworkUtil;
 import com.liferay.portal.util.LicenseUtil;
 
 import java.io.File;
+import java.io.Serializable;
 
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
@@ -58,7 +59,7 @@ import org.osgi.framework.launch.Framework;
 /**
  * @author Tina Tian
  */
-public abstract class BaseLicenseTestCase {
+public abstract class BaseLicenseTestCase implements Serializable {
 
 	public static ResettableClassFileTransformer disableValidate() {
 		return _transformMethod(ReflectionsHolder._validateMethod, true);
@@ -115,19 +116,31 @@ public abstract class BaseLicenseTestCase {
 	}
 
 	public void assertPortalLicenseInvalid() throws Exception {
-		String response = _hitHomePage("localhost", 8080);
+		String response = hitHomePage("localhost", 8080);
 
 		Assert.assertTrue(response.contains(_INVALID_LICENSE_KEY));
 	}
 
 	public void assertPortalLicenseNotRegistered() throws Exception {
-		String response = _hitHomePage("localhost", 8080);
+		String response = hitHomePage("localhost", 8080);
+
+		Assert.assertTrue(response.contains(_NOT_REGISTERED_LICENSE_KEY));
+	}
+
+	public void assertPortalLicenseNotRegistered(int port) throws Exception {
+		String response = hitHomePage("localhost", port);
 
 		Assert.assertTrue(response.contains(_NOT_REGISTERED_LICENSE_KEY));
 	}
 
 	public void assertPortalLicenseRegistered() throws Exception {
-		String response = _hitHomePage("localhost", 8080);
+		String response = hitHomePage("localhost", 8080);
+
+		Assert.assertFalse(response.contains(_LICENSE_PAGE_KEY));
+	}
+
+	public void assertPortalLicenseRegistered(int port) throws Exception {
+		String response = hitHomePage("localhost", port);
 
 		Assert.assertFalse(response.contains(_LICENSE_PAGE_KEY));
 	}
@@ -332,19 +345,8 @@ public abstract class BaseLicenseTestCase {
 		}
 	}
 
-	protected String getCMPProductId() {
-		return _licenseTestProperties.getProperty("product.id.cmp");
-	}
-
-	protected String getPortalProductId() {
-		return _licenseTestProperties.getProperty("product.id.portal");
-	}
-
-	protected String getProperty(String propertyKey) {
-		return _licenseTestProperties.getProperty(propertyKey);
-	}
-
-	private static Field _findField(ClassLoader classLoader, String fieldString)
+	protected static Field findField(
+			ClassLoader classLoader, String fieldString)
 		throws Exception {
 
 		return ReflectionTestUtil.getField(
@@ -355,7 +357,7 @@ public abstract class BaseLicenseTestCase {
 				fieldString.lastIndexOf(StringPool.PERIOD) + 1));
 	}
 
-	private static Method _findMethod(
+	protected static Method findMethod(
 			ClassLoader classLoader, String methodString)
 		throws Exception {
 
@@ -386,6 +388,28 @@ public abstract class BaseLicenseTestCase {
 
 		return ReflectionTestUtil.getMethod(
 			classLoader.loadClass(className), methodSimpleName, parameterTypes);
+	}
+
+	protected String getCMPProductId() {
+		return _licenseTestProperties.getProperty("product.id.cmp");
+	}
+
+	protected String getPortalProductId() {
+		return _licenseTestProperties.getProperty("product.id.portal");
+	}
+
+	protected String getProperty(String propertyKey) {
+		return _licenseTestProperties.getProperty(propertyKey);
+	}
+
+	protected String hitHomePage(String host, int port) throws Exception {
+		Http.Options options = new Http.Options();
+
+		options.setCookieSpec(Http.CookieSpec.IGNORE_COOKIES);
+		options.setLocation(String.format("http://%s:%d/", host, port));
+		options.setMethod(Http.Method.GET);
+
+		return HttpUtil.URLtoString(options);
 	}
 
 	private static ResettableClassFileTransformer _transformMethod(
@@ -438,16 +462,6 @@ public abstract class BaseLicenseTestCase {
 		}
 
 		return bundleSymbolicNames;
-	}
-
-	private String _hitHomePage(String host, int port) throws Exception {
-		Http.Options options = new Http.Options();
-
-		options.setCookieSpec(Http.CookieSpec.IGNORE_COOKIES);
-		options.setLocation(String.format("http://%s:%d/", host, port));
-		options.setMethod(Http.Method.GET);
-
-		return HttpUtil.URLtoString(options);
 	}
 
 	private static final String _CMP_LICENSE_TYPE = "production";
@@ -519,14 +533,14 @@ public abstract class BaseLicenseTestCase {
 				}
 
 				try {
-					_lifecycleActionField = _findField(
+					_lifecycleActionField = findField(
 						classLoader,
 						_licenseTestProperties.getProperty(
 							"lifecycle.action.field"));
-					_validateMethod = _findMethod(
+					_validateMethod = findMethod(
 						classLoader,
 						_licenseTestProperties.getProperty("validate.method"));
-					_versionMethod = _findMethod(
+					_versionMethod = findMethod(
 						classLoader,
 						_licenseTestProperties.getProperty("version.method"));
 
