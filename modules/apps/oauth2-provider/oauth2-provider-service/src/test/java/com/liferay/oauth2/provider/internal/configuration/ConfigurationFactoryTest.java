@@ -35,6 +35,8 @@ import org.junit.Test;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;
 
+import org.osgi.framework.BundleContext;
+
 /**
  * @author Raymond Augé
  */
@@ -284,6 +286,7 @@ public class ConfigurationFactoryTest {
 			oa2pahscf, "_portalK8sConfigMapModifierSnapshot", _snapshot);
 
 		oa2pahscf.activate(
+			Mockito.mock(BundleContext.class),
 			HashMapBuilder.<String, Object>put(
 				"baseURL", "http://localhost"
 			).put(
@@ -357,6 +360,7 @@ public class ConfigurationFactoryTest {
 			oa2pauacf, "_virtualHostLocalService", virtualHostLocalService);
 
 		oa2pauacf.activate(
+			Mockito.mock(BundleContext.class),
 			HashMapBuilder.<String, Object>put(
 				"baseURL", "http://localhost"
 			).put(

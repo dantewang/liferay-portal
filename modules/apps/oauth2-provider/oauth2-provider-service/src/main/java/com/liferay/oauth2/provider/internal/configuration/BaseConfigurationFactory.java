@@ -14,9 +14,12 @@ import com.liferay.osgi.util.configuration.ConfigurationFactoryUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.k8s.agent.PortalK8sConfigMapModifier;
+import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.model.BaseModelListener;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.ModelListener;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.module.service.Snapshot;
 import com.liferay.portal.kernel.service.CompanyLocalService;
@@ -29,6 +32,8 @@ import com.liferay.portal.kernel.util.Validator;
 import java.util.List;
 import java.util.Map;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
@@ -41,6 +46,10 @@ public abstract class BaseConfigurationFactory {
 
 	@Deactivate
 	protected void deactivate(Integer reason) throws PortalException {
+		if (_serviceRegistration != null) {
+			_serviceRegistration.unregister();
+		}
+
 		if (reason !=
 				ComponentConstants.DEACTIVATION_REASON_CONFIGURATION_DELETED) {
 
@@ -181,6 +190,81 @@ public abstract class BaseConfigurationFactory {
 			OAuth2Application oAuth2Application, List<String> scopeAliasesList)
 		throws Exception {
 
+		_updateScopes(oAuth2Application, scopeAliasesList);
+
+		if ((bundleContext == null) || (_serviceRegistration != null)) {
+			return;
+		}
+
+		long oAuth2ApplicationId = oAuth2Application.getOAuth2ApplicationId();
+
+		_serviceRegistration = bundleContext.registerService(
+			ModelListener.class,
+			new BaseModelListener<OAuth2ApplicationScopeAliases>() {
+
+				@Override
+				public void onAfterCreate(OAuth2ApplicationScopeAliases model)
+					throws ModelListenerException {
+
+					try {
+						updateScopes(
+							oAuth2ApplicationLocalService.
+								fetchOAuth2Application(oAuth2ApplicationId),
+							scopeAliasesList);
+					}
+					catch (Exception exception) {
+						throw new ModelListenerException(exception);
+					}
+				}
+
+				@Override
+				public void onAfterUpdate(
+						OAuth2ApplicationScopeAliases originalModel,
+						OAuth2ApplicationScopeAliases model)
+					throws ModelListenerException {
+
+					try {
+						updateScopes(
+							oAuth2ApplicationLocalService.
+								fetchOAuth2Application(oAuth2ApplicationId),
+							scopeAliasesList);
+					}
+					catch (Exception exception) {
+						throw new ModelListenerException(exception);
+					}
+				}
+
+			},
+			null);
+	}
+
+	protected volatile BundleContext bundleContext;
+
+	@Reference
+	protected CompanyLocalService companyLocalService;
+
+	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED)
+	protected ModuleServiceLifecycle moduleServiceLifecycle;
+
+	protected volatile OAuth2Application oAuth2Application;
+
+	@Reference
+	protected OAuth2ApplicationLocalService oAuth2ApplicationLocalService;
+
+	@Reference
+	protected OAuth2ApplicationScopeAliasesLocalService
+		oAuth2ApplicationScopeAliasesLocalService;
+
+	@Reference
+	protected ScopeLocator scopeLocator;
+
+	@Reference
+	protected UserLocalService userLocalService;
+
+	private void _updateScopes(
+			OAuth2Application oAuth2Application, List<String> scopeAliasesList)
+		throws Exception {
+
 		boolean update = true;
 
 		OAuth2ApplicationScopeAliases oAuth2ApplicationScopeAliases =
@@ -215,27 +299,6 @@ public abstract class BaseConfigurationFactory {
 		}
 	}
 
-	@Reference
-	protected CompanyLocalService companyLocalService;
-
-	@Reference(target = ModuleServiceLifecycle.PORTAL_INITIALIZED)
-	protected ModuleServiceLifecycle moduleServiceLifecycle;
-
-	protected volatile OAuth2Application oAuth2Application;
-
-	@Reference
-	protected OAuth2ApplicationLocalService oAuth2ApplicationLocalService;
-
-	@Reference
-	protected OAuth2ApplicationScopeAliasesLocalService
-		oAuth2ApplicationScopeAliasesLocalService;
-
-	@Reference
-	protected ScopeLocator scopeLocator;
-
-	@Reference
-	protected UserLocalService userLocalService;
-
 	private static final Snapshot<PortalK8sConfigMapModifier>
 		_portalK8sConfigMapModifierSnapshot = new Snapshot<>(
 			BaseConfigurationFactory.class, PortalK8sConfigMapModifier.class,
@@ -244,6 +307,7 @@ public abstract class BaseConfigurationFactory {
 	private volatile String _configMapName;
 	private volatile Map<String, String> _extensionProperties;
 	private volatile String _projectName;
+	private volatile ServiceRegistration<?> _serviceRegistration;
 	private volatile String _virtualInstanceId;
 
 }

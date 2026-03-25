@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -48,10 +49,15 @@ public class OAuth2ProviderApplicationUserAgentConfigurationFactory
 	extends BaseConfigurationFactory {
 
 	@Activate
-	protected void activate(Map<String, Object> properties) throws Exception {
+	protected void activate(
+			BundleContext bundleContext, Map<String, Object> properties)
+		throws Exception {
+
 		if (_log.isDebugEnabled()) {
 			_log.debug("Activate " + properties);
 		}
+
+		this.bundleContext = bundleContext;
 
 		ConfigurationFactoryUtil.executeAsCompany(
 			companyLocalService, properties,
