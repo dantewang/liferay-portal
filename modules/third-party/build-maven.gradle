@@ -23,7 +23,7 @@ downloadSource {
 	doNotTrackState("")
 
 	from {
-		zipTree(FileUtil.get(project, mvnSourceURL))
+		zipTree(FileUtil.get(project, mvnSourceURL, null, false, false))
 	}
 
 	into buildDir
