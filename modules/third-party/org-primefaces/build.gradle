@@ -1,3 +1,7 @@
+if (JavaVersion.current() != JavaVersion.VERSION_17) {
+    throw new GradleException("Project ${project.name} requires JDK 17.")
+}
+
 ext {
 	jakartaFacesModule = true
 }
