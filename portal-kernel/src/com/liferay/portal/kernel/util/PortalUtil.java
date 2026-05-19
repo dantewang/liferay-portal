@@ -1737,6 +1737,13 @@ public class PortalUtil {
 			group, layoutTypePortlet, portletDisplay, portletName);
 	}
 
+	public static boolean isStrictVirtualHostModeBlocked(
+		HttpServletRequest httpServletRequest, Group group) {
+
+		return _portal.isStrictVirtualHostModeBlocked(
+			httpServletRequest, group);
+	}
+
 	public static boolean isSystemGroup(String groupName) {
 		return _portal.isSystemGroup(groupName);
 	}

@@ -1067,6 +1067,9 @@ public interface Portal {
 		Group group, LayoutTypePortlet layoutTypePortlet,
 		PortletDisplay portletDisplay, String portletName);
 
+	public boolean isStrictVirtualHostModeBlocked(
+		HttpServletRequest httpServletRequest, Group group);
+
 	public boolean isSystemGroup(String groupName);
 
 	public boolean isSystemRole(String roleName);

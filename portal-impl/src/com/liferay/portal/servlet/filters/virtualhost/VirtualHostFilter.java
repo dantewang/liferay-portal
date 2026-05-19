@@ -265,6 +265,18 @@ public class VirtualHostFilter extends BasePortalFilter {
 				PortalUtil.fetchFriendlyURLGroup(
 					CompanyThreadLocal.getCompanyId(), friendlyURL);
 
+			if ((friendlyURLGroupObjectValuePair != null) &&
+				PortalUtil.isStrictVirtualHostModeBlocked(
+					httpServletRequest,
+					friendlyURLGroupObjectValuePair.getValue())) {
+
+				PortalUtil.sendError(
+					new NoSuchLayoutException(), httpServletRequest,
+					httpServletResponse);
+
+				return;
+			}
+
 			if (!PropsValues.
 					LAYOUT_FRIENDLY_URL_PUBLIC_SERVLET_MAPPING_ENABLED &&
 				(friendlyURLGroupObjectValuePair != null)) {
@@ -353,6 +365,18 @@ public class VirtualHostFilter extends BasePortalFilter {
 
 			ObjectValuePair<String, Group> friendlyURLGroupObjectValuePair =
 				PortalUtil.fetchFriendlyURLGroup(companyId, friendlyURL);
+
+			if ((friendlyURLGroupObjectValuePair != null) &&
+				PortalUtil.isStrictVirtualHostModeBlocked(
+					httpServletRequest,
+					friendlyURLGroupObjectValuePair.getValue())) {
+
+				PortalUtil.sendError(
+					new NoSuchLayoutException(), httpServletRequest,
+					httpServletResponse);
+
+				return;
+			}
 
 			if (friendlyURLGroupObjectValuePair != null) {
 				httpServletRequest.setAttribute(

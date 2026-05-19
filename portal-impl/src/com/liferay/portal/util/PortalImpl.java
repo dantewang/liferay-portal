@@ -196,6 +196,7 @@ import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.virtual.host.configuration.provider.VirtualHostConfigurationProviderUtil;
 import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.language.LanguageResources;
 import com.liferay.portal.model.impl.LayoutTypeImpl;
@@ -5822,6 +5823,58 @@ public class PortalImpl implements Portal {
 		}
 
 		return false;
+	}
+
+	@Override
+	public boolean isStrictVirtualHostModeBlocked(
+		HttpServletRequest httpServletRequest, Group group) {
+
+		long companyId = group.getCompanyId();
+
+		if (!VirtualHostConfigurationProviderUtil.isStrictModeEnabled(
+				companyId)) {
+
+			return false;
+		}
+
+		LayoutSet publicLayoutSet = group.getPublicLayoutSet();
+
+		NavigableMap<String, String> virtualHostnames =
+			publicLayoutSet.getVirtualHostnames();
+
+		if (virtualHostnames.isEmpty()) {
+			return false;
+		}
+
+		LayoutSet requestLayoutSet =
+			(LayoutSet)httpServletRequest.getAttribute(
+				WebKeys.VIRTUAL_HOST_LAYOUT_SET);
+
+		if ((requestLayoutSet != null) &&
+			(requestLayoutSet.getGroupId() == group.getGroupId())) {
+
+			return false;
+		}
+
+		if (VirtualHostConfigurationProviderUtil.
+				isDefaultInstanceURLBypassAllowed(companyId)) {
+
+			try {
+				Company company = CompanyLocalServiceUtil.getCompany(companyId);
+
+				if (Objects.equals(
+						getHost(httpServletRequest),
+						company.getVirtualHostname())) {
+
+					return false;
+				}
+			}
+			catch (PortalException portalException) {
+				_log.error(portalException);
+			}
+		}
+
+		return true;
 	}
 
 	@Override

@@ -146,6 +146,16 @@ public class FriendlyURLServlet extends HttpServlet {
 			groupFriendlyURL = friendlyURLGroupObjectValuePair.getKey();
 		}
 
+		if ((group != null) &&
+			portal.isStrictVirtualHostModeBlocked(
+				httpServletRequest, group)) {
+
+			throw new NoSuchGroupException(
+				StringBundler.concat(
+					"{companyId=", companyId, ", friendlyURL=",
+					groupFriendlyURL, "}"));
+		}
+
 		if ((group == null) ||
 			(!group.isActive() && !groupLocalService.isMaintenanceMode(group) &&
 			 !inactiveRequestHandler.isShowInactiveRequestMessage() &&
