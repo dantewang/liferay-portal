@@ -441,13 +441,24 @@ public class JournalArticleLocalServiceImpl
 
 		sanitize(user.getCompanyId(), groupId, userId, classPK, descriptionMap);
 
+		// Compat-convert and parse the content once so validate and
+		// updateDDMFields share the same Fields. _replaceTempImages still
+		// runs in updateDDMFields and triggers a re-parse only when it
+		// actually changes the content.
+
+		content = _journalContentCompatibilityConverter.convert(content);
+
+		Fields ddmFields = _journalConverter.getDDMFields(
+			ddmStructure, content);
+
 		if (validate) {
 			validate(
 				externalReferenceCode, user.getCompanyId(), groupId,
 				classNameId, articleId, autoArticleId, version, titleMap,
-				content, ddmStructure.getStructureId(), ddmTemplateKey,
-				displayDate, expirationDate, smallImage, smallImageURL,
-				smallImageFile, smallImageBytes, serviceContext);
+				content, ddmFields, ddmStructure.getStructureId(),
+				ddmTemplateKey, displayDate, expirationDate, smallImage,
+				smallImageURL, smallImageFile, smallImageBytes,
+				serviceContext);
 
 			try {
 				validateReferences(
@@ -592,7 +603,7 @@ public class JournalArticleLocalServiceImpl
 
 		// Dynamic data mapping
 
-		updateDDMFields(article, content, groupId, user);
+		updateDDMFields(article, content, ddmFields, groupId, user);
 
 		if (_classNameLocalService.getClassNameId(DDMStructure.class) !=
 				classNameId) {
@@ -7105,6 +7116,29 @@ public class JournalArticleLocalServiceImpl
 		return ddmFormValues;
 	}
 
+	protected DDMFormValues updateDDMFields(
+			JournalArticle article, String content, Fields ddmFields,
+			long groupId, User user)
+		throws PortalException {
+
+		String newContent = _replaceTempImages(article, content);
+
+		DDMStructure ddmStructure = article.getDDMStructure();
+
+		if (!content.equals(newContent)) {
+			ddmFields = _journalConverter.getDDMFields(ddmStructure, newContent);
+		}
+
+		DDMFormValues ddmFormValues = _fieldsToDDMFormValuesConverter.convert(
+			ddmStructure, ddmFields);
+
+		format(user, groupId, article, ddmFormValues.getDDMFormFieldValues());
+
+		updateDDMFields(article, newContent, ddmFormValues);
+
+		return ddmFormValues;
+	}
+
 	protected void updateDDMLinks(
 			long id, long groupId, long ddmStructureId, String ddmTemplateKey,
 			boolean incrementVersion)
@@ -7312,6 +7346,24 @@ public class JournalArticleLocalServiceImpl
 			autoArticleId, version, titleMap, content, ddmStructureId,
 			ddmTemplateKey, displayDate, expirationDate, smallImage,
 			smallImageURL, smallImageFile, smallImageBytes, serviceContext);
+	}
+
+	protected void validate(
+			String externalReferenceCode, long companyId, long groupId,
+			long classNameId, String articleId, boolean autoArticleId,
+			double version, Map<Locale, String> titleMap, String content,
+			Fields ddmFields, long ddmStructureId, String ddmTemplateKey,
+			Date displayDate, Date expirationDate, boolean smallImage,
+			String smallImageURL, File smallImageFile, byte[] smallImageBytes,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		_getModelValidator().validate(
+			externalReferenceCode, companyId, groupId, classNameId, articleId,
+			autoArticleId, version, titleMap, content, ddmFields,
+			ddmStructureId, ddmTemplateKey, displayDate, expirationDate,
+			smallImage, smallImageURL, smallImageFile, smallImageBytes,
+			serviceContext);
 	}
 
 	protected void validateContent(String content) throws PortalException {

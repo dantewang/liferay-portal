@@ -98,6 +98,22 @@ public class JournalArticleModelValidator
 			byte[] smallImageBytes, ServiceContext serviceContext)
 		throws PortalException {
 
+		validate(
+			companyId, groupId, classNameId, titleMap, content, null,
+			ddmStructureId, ddmTemplateKey, displayDate, expirationDate,
+			smallImage, smallImageURL, smallImageFile, smallImageBytes,
+			serviceContext);
+	}
+
+	public void validate(
+			long companyId, long groupId, long classNameId,
+			Map<Locale, String> titleMap, String content, Fields ddmFields,
+			long ddmStructureId, String ddmTemplateKey, Date displayDate,
+			Date expirationDate, boolean smallImage, String smallImageURL,
+			File smallImageFile, byte[] smallImageBytes,
+			ServiceContext serviceContext)
+		throws PortalException {
+
 		Locale articleDefaultLocale = LocaleUtil.fromLanguageId(
 			_localization.getDefaultLanguageId(content));
 
@@ -159,8 +175,14 @@ public class JournalArticleModelValidator
 			ddmStructureId);
 
 		if (!ExportImportThreadLocal.isImportInProcess()) {
-			validateDDMStructureFields(
-				ddmStructure, classNameId, content, articleDefaultLocale);
+			if (ddmFields != null) {
+				validateDDMStructureFields(
+					ddmStructure, classNameId, ddmFields, articleDefaultLocale);
+			}
+			else {
+				validateDDMStructureFields(
+					ddmStructure, classNameId, content, articleDefaultLocale);
+			}
 		}
 
 		if (Validator.isNotNull(ddmTemplateKey)) {
@@ -233,6 +255,23 @@ public class JournalArticleModelValidator
 			ServiceContext serviceContext)
 		throws PortalException {
 
+		validate(
+			externalReferenceCode, companyId, groupId, classNameId, articleId,
+			autoArticleId, version, titleMap, content, null, ddmStructureId,
+			ddmTemplateKey, displayDate, expirationDate, smallImage,
+			smallImageURL, smallImageFile, smallImageBytes, serviceContext);
+	}
+
+	public void validate(
+			String externalReferenceCode, long companyId, long groupId,
+			long classNameId, String articleId, boolean autoArticleId,
+			double version, Map<Locale, String> titleMap, String content,
+			Fields ddmFields, long ddmStructureId, String ddmTemplateKey,
+			Date displayDate, Date expirationDate, boolean smallImage,
+			String smallImageURL, File smallImageFile, byte[] smallImageBytes,
+			ServiceContext serviceContext)
+		throws PortalException {
+
 		_validateExternalReferenceCode(externalReferenceCode, groupId);
 
 		if (!autoArticleId) {
@@ -252,9 +291,10 @@ public class JournalArticleModelValidator
 		}
 
 		validate(
-			companyId, groupId, classNameId, titleMap, content, ddmStructureId,
-			ddmTemplateKey, displayDate, expirationDate, smallImage,
-			smallImageURL, smallImageFile, smallImageBytes, serviceContext);
+			companyId, groupId, classNameId, titleMap, content, ddmFields,
+			ddmStructureId, ddmTemplateKey, displayDate, expirationDate,
+			smallImage, smallImageURL, smallImageFile, smallImageBytes,
+			serviceContext);
 	}
 
 	public void validateContent(String content) throws PortalException {
