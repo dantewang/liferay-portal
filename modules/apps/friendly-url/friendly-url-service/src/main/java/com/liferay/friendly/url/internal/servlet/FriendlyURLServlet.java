@@ -147,8 +147,7 @@ public class FriendlyURLServlet extends HttpServlet {
 		}
 
 		if ((group != null) &&
-			portal.isStrictVirtualHostModeBlocked(
-				httpServletRequest, group)) {
+			portal.isStrictVirtualHostModeBlocked(httpServletRequest, group)) {
 
 			throw new NoSuchGroupException(
 				StringBundler.concat(

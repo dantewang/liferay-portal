@@ -5846,9 +5846,8 @@ public class PortalImpl implements Portal {
 			return false;
 		}
 
-		LayoutSet requestLayoutSet =
-			(LayoutSet)httpServletRequest.getAttribute(
-				WebKeys.VIRTUAL_HOST_LAYOUT_SET);
+		LayoutSet requestLayoutSet = (LayoutSet)httpServletRequest.getAttribute(
+			WebKeys.VIRTUAL_HOST_LAYOUT_SET);
 
 		if ((requestLayoutSet != null) &&
 			(requestLayoutSet.getGroupId() == group.getGroupId())) {

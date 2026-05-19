@@ -9,6 +9,7 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.LayoutFriendlyURLException;
+import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -271,7 +272,7 @@ public class VirtualHostFilter extends BasePortalFilter {
 					friendlyURLGroupObjectValuePair.getValue())) {
 
 				PortalUtil.sendError(
-					new NoSuchLayoutException(), httpServletRequest,
+					new NoSuchGroupException(), httpServletRequest,
 					httpServletResponse);
 
 				return;
