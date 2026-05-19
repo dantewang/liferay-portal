@@ -13,8 +13,7 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
  * @author Dante Wang
  */
 @ExtendedObjectClassDefinition(
-	category = "virtual-hosts",
-	scope = ExtendedObjectClassDefinition.Scope.COMPANY
+	category = "aeo-seo", scope = ExtendedObjectClassDefinition.Scope.COMPANY
 )
 @Meta.OCD(
 	description = "virtual-host-configuration-description",
