@@ -8187,9 +8187,9 @@ public class PortalImpl implements Portal {
 			return 0;
 		}
 
-		return layouts.get(
-			0
-		).getPlid();
+		Layout layout = layouts.get(0);
+
+		return layout.getPlid();
 	}
 
 	private Map<String, String> _getVariables(Layout layout, String mainPath) {
