@@ -271,6 +271,9 @@ public class VirtualHostFilter extends BasePortalFilter {
 					httpServletRequest,
 					friendlyURLGroupObjectValuePair.getValue())) {
 
+				httpServletRequest.setAttribute(
+					WebKeys.STRICT_VIRTUAL_HOST_BLOCKED, Boolean.TRUE);
+
 				PortalUtil.sendError(
 					new NoSuchGroupException(), httpServletRequest,
 					httpServletResponse);
@@ -371,6 +374,9 @@ public class VirtualHostFilter extends BasePortalFilter {
 				PortalUtil.isStrictVirtualHostModeBlocked(
 					httpServletRequest,
 					friendlyURLGroupObjectValuePair.getValue())) {
+
+				httpServletRequest.setAttribute(
+					WebKeys.STRICT_VIRTUAL_HOST_BLOCKED, Boolean.TRUE);
 
 				PortalUtil.sendError(
 					new NoSuchLayoutException(), httpServletRequest,
