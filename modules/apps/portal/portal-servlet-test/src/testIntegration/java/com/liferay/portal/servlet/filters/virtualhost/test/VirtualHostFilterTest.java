@@ -250,8 +250,6 @@ public class VirtualHostFilterTest {
 		Group group = (Group)mockHttpServletRequest.getAttribute(
 			WebKeys.FRIENDLY_URL_GROUP);
 
-		Assert.assertNotNull(group);
-
 		Assert.assertEquals(_publicLayoutSet.getGroupId(), group.getGroupId());
 
 		Assert.assertEquals(
@@ -277,8 +275,6 @@ public class VirtualHostFilterTest {
 
 			Group group = (Group)mockHttpServletRequest.getAttribute(
 				WebKeys.FRIENDLY_URL_GROUP);
-
-			Assert.assertNotNull(group);
 
 			Assert.assertEquals(
 				_publicLayoutSet.getGroupId(), group.getGroupId());
