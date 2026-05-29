@@ -259,12 +259,6 @@ public class PortalUtil {
 		return _portal.fetchClassName(classNameId);
 	}
 
-	public static Group fetchFriendlyURLGroup(
-		long companyId, String groupFriendlyURL) {
-
-		return _portal.fetchFriendlyURLGroup(companyId, groupFriendlyURL);
-	}
-
 	/**
 	 * Generates a random key to identify the request based on the input string.
 	 *
@@ -1732,10 +1726,6 @@ public class PortalUtil {
 
 	public static boolean isValidResourceId(String resourceId) {
 		return _portal.isValidResourceId(resourceId);
-	}
-
-	public static String parseGroupFriendlyURL(String path) {
-		return _portal.parseGroupFriendlyURL(path);
 	}
 
 	public static void resetCDNHosts() {

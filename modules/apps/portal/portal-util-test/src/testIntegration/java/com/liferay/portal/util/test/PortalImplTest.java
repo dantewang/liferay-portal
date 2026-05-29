@@ -8,7 +8,6 @@ package com.liferay.portal.util.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.petra.lang.SafeCloseable;
-import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.Company;
@@ -16,7 +15,6 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutSet;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
@@ -29,7 +27,6 @@ import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.PropsValuesTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
-import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.File;
@@ -66,54 +63,6 @@ public class PortalImplTest {
 	@Rule
 	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
 		new LiferayIntegrationTestRule();
-
-	@Test
-	public void testFetchFriendlyURLGroupWithGroupFriendlyURL()
-		throws Exception {
-
-		_group = GroupTestUtil.addGroup();
-
-		Group group = _portal.fetchFriendlyURLGroup(
-			TestPropsValues.getCompanyId(), _group.getFriendlyURL());
-
-		Assert.assertEquals(_group.getGroupId(), group.getGroupId());
-	}
-
-	@Test
-	public void testFetchFriendlyURLGroupWithNullFriendlyURL()
-		throws Exception {
-
-		Assert.assertNull(
-			_portal.fetchFriendlyURLGroup(
-				TestPropsValues.getCompanyId(), null));
-	}
-
-	@Test
-	public void testFetchFriendlyURLGroupWithoutMatchingGroupOrUser()
-		throws Exception {
-
-		Assert.assertNull(
-			_portal.fetchFriendlyURLGroup(
-				TestPropsValues.getCompanyId(),
-				StringPool.SLASH + RandomTestUtil.randomString()));
-	}
-
-	@Test
-	public void testFetchFriendlyURLGroupWithUserScreenName() throws Exception {
-		User user = UserTestUtil.addUser();
-
-		Group userGroup = user.getGroup();
-
-		_groupLocalService.updateFriendlyURL(
-			userGroup.getGroupId(),
-			StringPool.SLASH + RandomTestUtil.randomString());
-
-		Group group = _portal.fetchFriendlyURLGroup(
-			TestPropsValues.getCompanyId(),
-			StringPool.SLASH + user.getScreenName());
-
-		Assert.assertEquals(userGroup.getGroupId(), group.getGroupId());
-	}
 
 	@Test
 	public void testGetLayoutFriendlyURLWithPublicServletMappingDisabled()
@@ -265,48 +214,6 @@ public class PortalImplTest {
 			Assert.assertTrue(
 				uploadServletRequest instanceof UploadServletRequestImpl);
 		}
-	}
-
-	@Test
-	public void testParseGroupFriendlyURLWithDocumentPathPrefix()
-		throws Exception {
-
-		_group = GroupTestUtil.addGroup();
-
-		Group otherGroup = GroupTestUtil.addGroup();
-
-		Assert.assertEquals(
-			otherGroup.getFriendlyURL(),
-			_portal.parseGroupFriendlyURL(
-				StringBundler.concat(
-					_group.getFriendlyURL(), "/documents/d",
-					otherGroup.getFriendlyURL(), StringPool.SLASH,
-					RandomTestUtil.randomString())));
-	}
-
-	@Test
-	public void testParseGroupFriendlyURLWithLayoutSuffix() throws Exception {
-		_group = GroupTestUtil.addGroup();
-
-		Assert.assertEquals(
-			_group.getFriendlyURL(),
-			_portal.parseGroupFriendlyURL(
-				_group.getFriendlyURL() + StringPool.SLASH +
-					RandomTestUtil.randomString()));
-	}
-
-	@Test
-	public void testParseGroupFriendlyURLWithoutSuffix() throws Exception {
-		_group = GroupTestUtil.addGroup();
-
-		Assert.assertEquals(
-			_group.getFriendlyURL(),
-			_portal.parseGroupFriendlyURL(_group.getFriendlyURL()));
-	}
-
-	@Test
-	public void testParseGroupFriendlyURLWithRoot() throws Exception {
-		Assert.assertNull(_portal.parseGroupFriendlyURL(StringPool.SLASH));
 	}
 
 	private void _assertLayoutFriendlyURL(

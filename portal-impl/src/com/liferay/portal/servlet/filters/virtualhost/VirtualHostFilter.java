@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.impl.LayoutImpl;
 import com.liferay.portal.servlet.I18nServlet;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
+import com.liferay.portal.util.FriendlyURLUtil;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.webserver.WebServerServlet;
 
@@ -260,10 +261,10 @@ public class VirtualHostFilter extends BasePortalFilter {
 		}
 
 		if (layoutSet == null) {
-			String groupFriendlyURL = PortalUtil.parseGroupFriendlyURL(
+			String groupFriendlyURL = FriendlyURLUtil.parseGroupFriendlyURL(
 				friendlyURL);
 
-			Group group = PortalUtil.fetchFriendlyURLGroup(
+			Group group = FriendlyURLUtil.fetchFriendlyURLGroup(
 				CompanyThreadLocal.getCompanyId(), groupFriendlyURL);
 
 			if (!PropsValues.
@@ -353,11 +354,11 @@ public class VirtualHostFilter extends BasePortalFilter {
 					StringPool.BLANK);
 			}
 
-			String groupFriendlyURL = PortalUtil.parseGroupFriendlyURL(
+			String groupFriendlyURL = FriendlyURLUtil.parseGroupFriendlyURL(
 				friendlyURL);
 
-			Group group = PortalUtil.fetchFriendlyURLGroup(
-				CompanyThreadLocal.getCompanyId(), groupFriendlyURL);
+			Group group = FriendlyURLUtil.fetchFriendlyURLGroup(
+				companyId, groupFriendlyURL);
 
 			if (group != null) {
 				httpServletRequest.setAttribute(
