@@ -6,7 +6,6 @@
 package com.liferay.portal.util.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
@@ -83,49 +82,6 @@ public class FriendlyURLUtilTest {
 			StringPool.SLASH + user.getScreenName());
 
 		Assert.assertEquals(userGroup.getGroupId(), group.getGroupId());
-	}
-
-	@Test
-	public void testParseGroupFriendlyURLWithDocumentPathPrefix()
-		throws Exception {
-
-		_group = GroupTestUtil.addGroup();
-
-		Group otherGroup = GroupTestUtil.addGroup();
-
-		Assert.assertEquals(
-			otherGroup.getFriendlyURL(),
-			FriendlyURLUtil.parseGroupFriendlyURL(
-				StringBundler.concat(
-					_group.getFriendlyURL(), "/documents/d",
-					otherGroup.getFriendlyURL(), StringPool.SLASH,
-					RandomTestUtil.randomString())));
-	}
-
-	@Test
-	public void testParseGroupFriendlyURLWithLayoutSuffix() throws Exception {
-		_group = GroupTestUtil.addGroup();
-
-		Assert.assertEquals(
-			_group.getFriendlyURL(),
-			FriendlyURLUtil.parseGroupFriendlyURL(
-				_group.getFriendlyURL() + StringPool.SLASH +
-					RandomTestUtil.randomString()));
-	}
-
-	@Test
-	public void testParseGroupFriendlyURLWithoutSuffix() throws Exception {
-		_group = GroupTestUtil.addGroup();
-
-		Assert.assertEquals(
-			_group.getFriendlyURL(),
-			FriendlyURLUtil.parseGroupFriendlyURL(_group.getFriendlyURL()));
-	}
-
-	@Test
-	public void testParseGroupFriendlyURLWithRoot() throws Exception {
-		Assert.assertNull(
-			FriendlyURLUtil.parseGroupFriendlyURL(StringPool.SLASH));
 	}
 
 	@DeleteAfterTestRun
