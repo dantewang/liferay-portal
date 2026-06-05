@@ -15,8 +15,6 @@
 		props='<%=
 			HashMapBuilder.<String, Object>put(
 				"baseResourceURL", String.valueOf(baseResourceURL)
-			).put(
-				"companyId", themeDisplay.getCompanyId()
 			).build()
 		%>'
 	/>

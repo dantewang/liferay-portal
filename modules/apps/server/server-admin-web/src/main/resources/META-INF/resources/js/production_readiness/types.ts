@@ -34,7 +34,6 @@ export interface ResultsPayload {
 
 export interface ProductionReadinessDashboardProps {
 	baseResourceURL: string;
-	companyId: number;
 }
 
 export type FilterValue = 'all' | 'failed' | 'ignored' | 'passed';

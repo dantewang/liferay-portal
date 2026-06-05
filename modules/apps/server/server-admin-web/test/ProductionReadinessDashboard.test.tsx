@@ -113,12 +113,7 @@ describe('ProductionReadinessDashboard', () => {
 	it('renders summary counts and rules grouped by category', async () => {
 		mockFetchOnce(SAMPLE_PAYLOAD);
 
-		render(
-			<ProductionReadinessDashboard
-				baseResourceURL={BASE_URL}
-				companyId={42}
-			/>
-		);
+		render(<ProductionReadinessDashboard baseResourceURL={BASE_URL} />);
 
 		await waitFor(() =>
 			expect(screen.getByText('Security Enabled')).toBeInTheDocument()
@@ -172,12 +167,7 @@ describe('ProductionReadinessDashboard', () => {
 	it('filters rules with the single-select filter pills', async () => {
 		mockFetchOnce(SAMPLE_PAYLOAD);
 
-		render(
-			<ProductionReadinessDashboard
-				baseResourceURL={BASE_URL}
-				companyId={42}
-			/>
-		);
+		render(<ProductionReadinessDashboard baseResourceURL={BASE_URL} />);
 
 		await waitFor(() =>
 			expect(screen.getByText('Security Enabled')).toBeInTheDocument()
@@ -215,12 +205,7 @@ describe('ProductionReadinessDashboard', () => {
 			summary: {failed: 0, ignored: 0, passed: 0},
 		});
 
-		render(
-			<ProductionReadinessDashboard
-				baseResourceURL={BASE_URL}
-				companyId={42}
-			/>
-		);
+		render(<ProductionReadinessDashboard baseResourceURL={BASE_URL} />);
 
 		await waitFor(() =>
 			expect(
@@ -242,12 +227,7 @@ describe('ProductionReadinessDashboard', () => {
 			summary: {failed: 1, ignored: 2, passed: 1},
 		});
 
-		render(
-			<ProductionReadinessDashboard
-				baseResourceURL={BASE_URL}
-				companyId={42}
-			/>
-		);
+		render(<ProductionReadinessDashboard baseResourceURL={BASE_URL} />);
 
 		await waitFor(() =>
 			expect(screen.getByText('Security Enabled')).toBeInTheDocument()
@@ -273,12 +253,7 @@ describe('ProductionReadinessDashboard', () => {
 	it('paginates rules beyond the default delta', async () => {
 		mockFetchOnce(buildLargePayload(12));
 
-		render(
-			<ProductionReadinessDashboard
-				baseResourceURL={BASE_URL}
-				companyId={42}
-			/>
-		);
+		render(<ProductionReadinessDashboard baseResourceURL={BASE_URL} />);
 
 		await waitFor(() =>
 			expect(screen.getByText('Rule 00')).toBeInTheDocument()
