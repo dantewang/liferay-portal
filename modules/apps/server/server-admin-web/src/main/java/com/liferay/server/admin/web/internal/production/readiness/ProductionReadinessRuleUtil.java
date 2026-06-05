@@ -53,31 +53,25 @@ public class ProductionReadinessRuleUtil {
 		Collection<ProductionReadinessResult> productionReadinessResults =
 			new ArrayList<>();
 
-		productionReadinessResults.addAll(
-			_checkJVMConfigurations("jvm-and-infrastructure-validation"));
+		productionReadinessResults.addAll(_checkJVMConfigurations());
 
-		productionReadinessResults.add(
-			_checkDatabaseConfiguration("database-configuration"));
+		productionReadinessResults.add(_checkDatabaseConfiguration());
 
 		productionReadinessResults.addAll(
-			_checkPortalPropertiesConfigurations(
-				"portal-properties-configuration"));
+			_checkPortalPropertiesConfigurations());
 
-		productionReadinessResults.add(
-			_checkSidecarDetection("search-engine-connectivity-validation"));
+		productionReadinessResults.add(_checkSidecarDetection());
 
 		return productionReadinessResults;
 	}
 
-	private static ProductionReadinessResult _checkCounterIncrement(
-		String category) {
-
+	private static ProductionReadinessResult _checkCounterIncrement() {
 		int counterIncrement = GetterUtil.getInteger(
 			PropsUtil.get("counter.increment"));
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "counter-increment"
+				_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, "counter-increment"
 			).currentValue(
 				String.valueOf(counterIncrement)
 			);
@@ -89,9 +83,7 @@ public class ProductionReadinessRuleUtil {
 		return builder.pass();
 	}
 
-	private static ProductionReadinessResult _checkDatabaseConfiguration(
-		String category) {
-
+	private static ProductionReadinessResult _checkDatabaseConfiguration() {
 		int jdbcMaxPoolSize = GetterUtil.getInteger(
 			PropsUtil.get("jdbc.default.maximumPoolSize"));
 
@@ -105,7 +97,7 @@ public class ProductionReadinessRuleUtil {
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "pool-vs-thread-ratio"
+				_CATEGORY_DATABASE_CONFIGURATION, "pool-vs-thread-ratio"
 			).currentValue(
 				StringBundler.concat(
 					"DB Pool Size=", jdbcMaxPoolSize, ", Tomcat Threads=",
@@ -120,14 +112,13 @@ public class ProductionReadinessRuleUtil {
 		return builder.fail();
 	}
 
-	private static ProductionReadinessResult _checkDLImagePreviewDPI(
-		String category) {
-
+	private static ProductionReadinessResult _checkDLImagePreviewDPI() {
 		int dpi = PropsValues.DL_FILE_ENTRY_PREVIEW_DOCUMENT_DPI;
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "dl-image-preview-dpi"
+				_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION,
+				"dl-image-preview-dpi"
 			).currentValue(
 				String.valueOf(dpi)
 			);
@@ -141,12 +132,10 @@ public class ProductionReadinessRuleUtil {
 		return builder.pass();
 	}
 
-	private static ProductionReadinessResult _checkDLPreviewForking(
-		String category) {
-
+	private static ProductionReadinessResult _checkDLPreviewForking() {
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "dl-preview-forking"
+				_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, "dl-preview-forking"
 			).currentValue(
 				PropsKeys.DL_FILE_ENTRY_PREVIEW_FORK_PROCESS_ENABLED + "=" +
 					PropsValues.DL_FILE_ENTRY_PREVIEW_FORK_PROCESS_ENABLED
@@ -163,9 +152,7 @@ public class ProductionReadinessRuleUtil {
 		return builder.fail();
 	}
 
-	private static ProductionReadinessResult _checkExplicitGCDisabled(
-		String category) {
-
+	private static ProductionReadinessResult _checkExplicitGCDisabled() {
 		RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
 
 		List<String> inputArguments = runtimeMXBean.getInputArguments();
@@ -173,7 +160,9 @@ public class ProductionReadinessRuleUtil {
 		boolean disabled = inputArguments.contains("-XX:+DisableExplicitGC");
 
 		ProductionReadinessResult.Builder builder =
-			ProductionReadinessResult.builder(category, "explicit-gc-disabled");
+			ProductionReadinessResult.builder(
+				_CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION,
+				"explicit-gc-disabled");
 
 		if (disabled) {
 			return builder.currentValue(
@@ -186,14 +175,13 @@ public class ProductionReadinessRuleUtil {
 		).fail();
 	}
 
-	private static ProductionReadinessResult _checkFileStoreImplementation(
-		String category) {
-
+	private static ProductionReadinessResult _checkFileStoreImplementation() {
 		String dlStoreImpl = PropsValues.DL_STORE_IMPL;
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "file-store-implementation"
+				_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION,
+				"file-store-implementation"
 			).currentValue(
 				dlStoreImpl
 			);
@@ -214,9 +202,7 @@ public class ProductionReadinessRuleUtil {
 		).fail();
 	}
 
-	private static ProductionReadinessResult _checkGarbageCollectorType(
-		String category) {
-
+	private static ProductionReadinessResult _checkGarbageCollectorType() {
 		List<GarbageCollectorMXBean> garbageCollectorMXBeans =
 			ManagementFactory.getGarbageCollectorMXBeans();
 
@@ -240,7 +226,8 @@ public class ProductionReadinessRuleUtil {
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "garbage-collector-type"
+				_CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION,
+				"garbage-collector-type"
 			).currentValue(
 				String.join(", ", gcNames)
 			).recommendedValue(
@@ -254,15 +241,14 @@ public class ProductionReadinessRuleUtil {
 		return builder.fail();
 	}
 
-	private static ProductionReadinessResult _checkHeapAllocationConsistency(
-		String category, MemoryUsage heapUsage) {
-
-		long xmsBytes = heapUsage.getInit();
-		long xmxBytes = heapUsage.getMax();
+	private static ProductionReadinessResult _checkHeapAllocationConsistency() {
+		long xmsBytes = _heapMemoryUsage.getInit();
+		long xmxBytes = _heapMemoryUsage.getMax();
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "heap-allocation-consistency"
+				_CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION,
+				"heap-allocation-consistency"
 			).currentValue(
 				StringBundler.concat(
 					"Xms=", xmsBytes / 1024 / 1024, "MB, Xmx=",
@@ -276,16 +262,15 @@ public class ProductionReadinessRuleUtil {
 		return builder.fail();
 	}
 
-	private static ProductionReadinessResult _checkHeapSizeUpperLimit(
-		String category, MemoryUsage heapUsage) {
-
-		long xmxBytes = heapUsage.getMax();
+	private static ProductionReadinessResult _checkHeapSizeUpperLimit() {
+		long xmxBytes = _heapMemoryUsage.getMax();
 
 		double maxMemoryGB = xmxBytes / (1024.0 * 1024.0 * 1024.0);
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "heap-size-upper-limit"
+				_CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION,
+				"heap-size-upper-limit"
 			).currentValue(
 				maxMemoryGB + "GB"
 			);
@@ -297,16 +282,15 @@ public class ProductionReadinessRuleUtil {
 		return builder.fail();
 	}
 
-	private static ProductionReadinessResult _checkHugePagesConfiguration(
-		String category, MemoryUsage heapUsage) {
-
-		long xmxBytes = heapUsage.getMax();
+	private static ProductionReadinessResult _checkHugePagesConfiguration() {
+		long xmxBytes = _heapMemoryUsage.getMax();
 
 		double maxMemoryGB = xmxBytes / (1024.0 * 1024.0 * 1024.0);
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "huge-pages-configuration");
+				_CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION,
+				"huge-pages-configuration");
 
 		if (maxMemoryGB <= 4.0) {
 			return builder.messageKeySuffix(
@@ -374,9 +358,7 @@ public class ProductionReadinessRuleUtil {
 		).pass();
 	}
 
-	private static ProductionReadinessResult _checkJMXConfigurationDisabled(
-		String category) {
-
+	private static ProductionReadinessResult _checkJMXConfigurationDisabled() {
 		RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
 
 		List<String> inputArguments = runtimeMXBean.getInputArguments();
@@ -395,7 +377,8 @@ public class ProductionReadinessRuleUtil {
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "jmx-configuration-disabled");
+				_CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION,
+				"jmx-configuration-disabled");
 
 		if (jmxEnabled) {
 			return builder.currentValue(
@@ -406,9 +389,7 @@ public class ProductionReadinessRuleUtil {
 		return builder.pass();
 	}
 
-	private static ProductionReadinessResult _checkJSPEngineSettings(
-		String category) {
-
+	private static ProductionReadinessResult _checkJSPEngineSettings() {
 		if (!ServerDetector.isTomcat()) {
 			return null;
 		}
@@ -465,7 +446,8 @@ public class ProductionReadinessRuleUtil {
 
 			if ((development == null) || (mappedFile == null)) {
 				return ProductionReadinessResult.builder(
-					category, "jsp-engine-settings"
+					_CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION,
+					"jsp-engine-settings"
 				).currentValue(
 					"development or mappedfile is not set, Tomcat will use " +
 						"the default value development=true or mappedfile=true"
@@ -476,7 +458,8 @@ public class ProductionReadinessRuleUtil {
 
 			ProductionReadinessResult.Builder builder =
 				ProductionReadinessResult.builder(
-					category, "jsp-engine-settings"
+					_CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION,
+					"jsp-engine-settings"
 				).currentValue(
 					StringBundler.concat(
 						"development=", development, ", mappedfile=",
@@ -500,15 +483,13 @@ public class ProductionReadinessRuleUtil {
 		return null;
 	}
 
-	private static ProductionReadinessResult _checkJSPReloading(
-		String category) {
-
+	private static ProductionReadinessResult _checkJSPReloading() {
 		boolean directServletContextReload = GetterUtil.getBoolean(
 			PropsUtil.get("direct.servlet.context.reload"));
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "jsp-reloading"
+				_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, "jsp-reloading"
 			).currentValue(
 				"direct.servlet.context.reload=" + directServletContextReload
 			).recommendedValue(
@@ -525,42 +506,31 @@ public class ProductionReadinessRuleUtil {
 	}
 
 	private static Collection<ProductionReadinessResult>
-		_checkJVMConfigurations(String category) {
-
-		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
-
-		MemoryUsage heapUsage = memoryMXBean.getHeapMemoryUsage();
+		_checkJVMConfigurations() {
 
 		Collection<ProductionReadinessResult> productionReadinessResults =
 			new ArrayList<>();
 
-		productionReadinessResults.add(
-			_checkHeapAllocationConsistency(category, heapUsage));
+		productionReadinessResults.add(_checkHeapAllocationConsistency());
 
-		productionReadinessResults.add(
-			_checkHeapSizeUpperLimit(category, heapUsage));
+		productionReadinessResults.add(_checkHeapSizeUpperLimit());
 
-		productionReadinessResults.add(
-			_checkHugePagesConfiguration(category, heapUsage));
+		productionReadinessResults.add(_checkHugePagesConfiguration());
 
-		productionReadinessResults.add(_checkJSPEngineSettings(category));
+		productionReadinessResults.add(_checkJSPEngineSettings());
 
-		productionReadinessResults.add(_checkGarbageCollectorType(category));
+		productionReadinessResults.add(_checkGarbageCollectorType());
 
-		productionReadinessResults.add(_checkExplicitGCDisabled(category));
+		productionReadinessResults.add(_checkExplicitGCDisabled());
 
-		productionReadinessResults.add(
-			_checkPreventDiagnosticOverhead(category));
+		productionReadinessResults.add(_checkPreventDiagnosticOverhead());
 
-		productionReadinessResults.add(
-			_checkJMXConfigurationDisabled(category));
+		productionReadinessResults.add(_checkJMXConfigurationDisabled());
 
 		return productionReadinessResults;
 	}
 
-	private static Collection<ProductionReadinessResult> _checkLanguages(
-		String category) {
-
+	private static Collection<ProductionReadinessResult> _checkLanguages() {
 		List<String> availableLocales = List.of(PropsValues.LOCALES);
 
 		List<String> betaLocales = List.of(PropsValues.LOCALES_BETA);
@@ -575,7 +545,7 @@ public class ProductionReadinessRuleUtil {
 		if (enabledBetaLocales.isEmpty() && unusedLocales.isEmpty()) {
 			return Collections.singletonList(
 				ProductionReadinessResult.builder(
-					category, "languages"
+					_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, "languages"
 				).pass());
 		}
 
@@ -585,7 +555,7 @@ public class ProductionReadinessRuleUtil {
 		if (!enabledBetaLocales.isEmpty()) {
 			productionReadinessResults.add(
 				ProductionReadinessResult.builder(
-					category, "languages"
+					_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, "languages"
 				).currentValue(
 					StringUtil.merge(enabledBetaLocales)
 				).messageKeySuffix(
@@ -598,7 +568,7 @@ public class ProductionReadinessRuleUtil {
 		if (!unusedLocales.isEmpty()) {
 			productionReadinessResults.add(
 				ProductionReadinessResult.builder(
-					category, "languages"
+					_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, "languages"
 				).currentValue(
 					StringUtil.merge(unusedLocales)
 				).messageKeySuffix(
@@ -611,14 +581,12 @@ public class ProductionReadinessRuleUtil {
 		return productionReadinessResults;
 	}
 
-	private static ProductionReadinessResult _checkPasswordEncryption(
-		String category) {
-
+	private static ProductionReadinessResult _checkPasswordEncryption() {
 		String algorithm = PropsUtil.get("passwords.encryption.algorithm");
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "password-encryption"
+				_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, "password-encryption"
 			).currentValue(
 				algorithm
 			).recommendedValue(
@@ -634,16 +602,15 @@ public class ProductionReadinessRuleUtil {
 		).fail();
 	}
 
-	private static ProductionReadinessResult _checkPortalDeveloperProperties(
-		String category) {
-
+	private static ProductionReadinessResult _checkPortalDeveloperProperties() {
 		boolean hasDeveloperProperties = ArrayUtil.contains(
 			PropsUtil.getArray("include-and-override"),
 			"portal-developer.properties");
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "portal-developer-properties");
+				_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION,
+				"portal-developer-properties");
 
 		if (hasDeveloperProperties) {
 			return builder.currentValue(
@@ -659,34 +626,31 @@ public class ProductionReadinessRuleUtil {
 	}
 
 	private static Collection<ProductionReadinessResult>
-		_checkPortalPropertiesConfigurations(String category) {
+		_checkPortalPropertiesConfigurations() {
 
 		Collection<ProductionReadinessResult> productionReadinessResults =
 			new ArrayList<>();
 
-		productionReadinessResults.add(_checkJSPReloading(category));
+		productionReadinessResults.add(_checkJSPReloading());
 
-		productionReadinessResults.add(_checkCounterIncrement(category));
+		productionReadinessResults.add(_checkCounterIncrement());
 
-		productionReadinessResults.add(_checkDLPreviewForking(category));
+		productionReadinessResults.add(_checkDLPreviewForking());
 
-		productionReadinessResults.add(_checkDLImagePreviewDPI(category));
+		productionReadinessResults.add(_checkDLImagePreviewDPI());
 
-		productionReadinessResults.add(_checkFileStoreImplementation(category));
+		productionReadinessResults.add(_checkFileStoreImplementation());
 
-		productionReadinessResults.add(_checkPasswordEncryption(category));
+		productionReadinessResults.add(_checkPasswordEncryption());
 
-		productionReadinessResults.addAll(_checkLanguages(category));
+		productionReadinessResults.addAll(_checkLanguages());
 
-		productionReadinessResults.add(
-			_checkPortalDeveloperProperties(category));
+		productionReadinessResults.add(_checkPortalDeveloperProperties());
 
 		return productionReadinessResults;
 	}
 
-	private static ProductionReadinessResult _checkPreventDiagnosticOverhead(
-		String category) {
-
+	private static ProductionReadinessResult _checkPreventDiagnosticOverhead() {
 		RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
 
 		List<String> inputArguments = runtimeMXBean.getInputArguments();
@@ -696,7 +660,8 @@ public class ProductionReadinessRuleUtil {
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "prevent-diagnostic-overhead");
+				_CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION,
+				"prevent-diagnostic-overhead");
 
 		if (unlocked) {
 			return builder.currentValue(
@@ -707,9 +672,7 @@ public class ProductionReadinessRuleUtil {
 		return builder.pass();
 	}
 
-	private static ProductionReadinessResult _checkSidecarDetection(
-		String category) {
-
+	private static ProductionReadinessResult _checkSidecarDetection() {
 		File file = new File(
 			PropsValues.LIFERAY_HOME,
 			"osgi/configs/com.liferay.portal.search.elasticsearch8." +
@@ -717,7 +680,8 @@ public class ProductionReadinessRuleUtil {
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
-				category, "sidecar-detection"
+				_CATEGORY_SEARCH_ENGINE_CONNECTIVITY_VALIDATION,
+				"sidecar-detection"
 			).severity(
 				ProductionReadinessResult.Severity.HIGH
 			);
@@ -860,6 +824,19 @@ public class ProductionReadinessRuleUtil {
 		return GetterUtil.getLong(sizeStr) * multiplier;
 	}
 
+	private static final String _CATEGORY_DATABASE_CONFIGURATION =
+		"database-configuration";
+
+	private static final String _CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION =
+		"jvm-and-infrastructure-validation";
+
+	private static final String _CATEGORY_PORTAL_PROPERTIES_CONFIGURATION =
+		"portal-properties-configuration";
+
+	private static final String
+		_CATEGORY_SEARCH_ENGINE_CONNECTIVITY_VALIDATION =
+			"search-engine-connectivity-validation";
+
 	private static final String _PREFIX_HUGEPAGESIZE = "Hugepagesize:";
 
 	private static final String _PREFIX_LARGE_PAGE_SIZE_IN_BYTES =
@@ -867,5 +844,13 @@ public class ProductionReadinessRuleUtil {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ProductionReadinessRuleUtil.class);
+
+	private static final MemoryUsage _heapMemoryUsage;
+
+	static {
+		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+
+		_heapMemoryUsage = memoryMXBean.getHeapMemoryUsage();
+	}
 
 }
