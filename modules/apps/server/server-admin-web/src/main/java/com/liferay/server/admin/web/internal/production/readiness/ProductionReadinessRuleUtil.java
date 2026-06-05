@@ -241,7 +241,7 @@ public class ProductionReadinessRuleUtil {
 				_CATEGORY_JVM_AND_INFRASTRUCTURE_VALIDATION,
 				"garbage-collector-type"
 			).currentValue(
-				String.join(", ", gcNames)
+				StringUtil.merge(gcNames, ", ")
 			).recommendedValue(
 				"G1, Shenandoah, or ZGC"
 			);
