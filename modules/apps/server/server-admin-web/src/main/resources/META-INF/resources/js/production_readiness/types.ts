@@ -5,7 +5,7 @@
 
 export type RuleStatus = 'PASS' | 'FAIL';
 
-export type RuleSeverity = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+export type RuleSeverity = 'CRITICAL' | 'HIGH' | 'LOW' | 'MEDIUM';
 
 export interface RuleResult {
 	category: string;
