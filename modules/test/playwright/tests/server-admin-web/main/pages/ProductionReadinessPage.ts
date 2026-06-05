@@ -105,6 +105,10 @@ export class ProductionReadinessPage {
 		return this.dashboard.locator(`[data-rule-key="${ruleKey}"]`);
 	}
 
+	ruleRows(): Locator {
+		return this.dashboard.locator('[data-rule-key]');
+	}
+
 	ignoreButton(ruleKey: string): Locator {
 		return this.ruleRow(ruleKey).getByRole('button');
 	}
@@ -131,7 +135,7 @@ export class ProductionReadinessPage {
 	}
 
 	async firstRuleKey(): Promise<string> {
-		const row = this.dashboard.locator('[data-rule-key]').first();
+		const row = this.ruleRows().first();
 
 		await expect(row).toBeVisible();
 
@@ -163,5 +167,21 @@ export class ProductionReadinessPage {
 		await expect(this.summary).toBeVisible();
 
 		await this.expandAllCategoryPanels();
+	}
+
+	async unignoreRule(ruleKey: string) {
+
+		// Navigate from scratch so the cleanup works no matter which state an
+		// earlier failure left the page in
+
+		await this.goto();
+
+		await this.selectFilter('Ignored');
+
+		await this.expandAllCategoryPanels();
+
+		if (await this.ruleRow(ruleKey).count()) {
+			await this.toggleIgnore(ruleKey);
+		}
 	}
 }

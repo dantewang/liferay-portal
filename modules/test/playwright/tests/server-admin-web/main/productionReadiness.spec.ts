@@ -71,6 +71,11 @@ test(
 
 		await productionReadinessPage.expandAllCategoryPanels();
 
+		test.skip(
+			!(await productionReadinessPage.ruleRows().count()),
+			'There are no failed production readiness rules'
+		);
+
 		const targetRuleKey = await productionReadinessPage.firstRuleKey();
 
 		// Record the baseline summary counts
@@ -81,60 +86,70 @@ test(
 		const passedBaseline =
 			await productionReadinessPage.summaryCount('Passed');
 
-		// Ignore the rule
+		try {
 
-		await productionReadinessPage.toggleIgnore(targetRuleKey);
+			// Ignore the rule
 
-		expect(await productionReadinessPage.summaryCount('Passed')).toBe(
-			passedBaseline
-		);
-		expect(await productionReadinessPage.summaryCount('Failed')).toBe(
-			failedBaseline - 1
-		);
-		expect(await productionReadinessPage.ignoredCount()).toBe(
-			ignoredBaseline + 1
-		);
+			await productionReadinessPage.toggleIgnore(targetRuleKey);
 
-		// The Failed filter hides the ignored rule
+			expect(await productionReadinessPage.summaryCount('Passed')).toBe(
+				passedBaseline
+			);
+			expect(await productionReadinessPage.summaryCount('Failed')).toBe(
+				failedBaseline - 1
+			);
+			expect(await productionReadinessPage.ignoredCount()).toBe(
+				ignoredBaseline + 1
+			);
 
-		await expect(
-			productionReadinessPage.ruleRow(targetRuleKey)
-		).toHaveCount(0);
+			// The Failed filter hides the ignored rule
 
-		// The Ignored filter shows it
+			await expect(
+				productionReadinessPage.ruleRow(targetRuleKey)
+			).toHaveCount(0);
 
-		await productionReadinessPage.selectFilter('Ignored');
+			// The Ignored filter shows it
 
-		await productionReadinessPage.expandAllCategoryPanels();
+			await productionReadinessPage.selectFilter('Ignored');
 
-		await expect(
-			productionReadinessPage.ruleRow(targetRuleKey)
-		).toBeVisible();
+			await productionReadinessPage.expandAllCategoryPanels();
 
-		expect(await productionReadinessPage.isIgnored(targetRuleKey)).toBe(
-			true
-		);
+			await expect(
+				productionReadinessPage.ruleRow(targetRuleKey)
+			).toBeVisible();
 
-		// Unignore the rule and check the counts are restored
+			expect(await productionReadinessPage.isIgnored(targetRuleKey)).toBe(
+				true
+			);
 
-		await productionReadinessPage.toggleIgnore(targetRuleKey);
+			// Unignore the rule and check the counts are restored
 
-		await productionReadinessPage.selectFilter('All Validations');
+			await productionReadinessPage.toggleIgnore(targetRuleKey);
 
-		await productionReadinessPage.expandAllCategoryPanels();
+			await productionReadinessPage.selectFilter('All Validations');
 
-		expect(await productionReadinessPage.isIgnored(targetRuleKey)).toBe(
-			false
-		);
+			await productionReadinessPage.expandAllCategoryPanels();
 
-		expect(await productionReadinessPage.summaryCount('Passed')).toBe(
-			passedBaseline
-		);
-		expect(await productionReadinessPage.summaryCount('Failed')).toBe(
-			failedBaseline
-		);
-		expect(await productionReadinessPage.ignoredCount()).toBe(
-			ignoredBaseline
-		);
+			expect(await productionReadinessPage.isIgnored(targetRuleKey)).toBe(
+				false
+			);
+
+			expect(await productionReadinessPage.summaryCount('Passed')).toBe(
+				passedBaseline
+			);
+			expect(await productionReadinessPage.summaryCount('Failed')).toBe(
+				failedBaseline
+			);
+			expect(await productionReadinessPage.ignoredCount()).toBe(
+				ignoredBaseline
+			);
+		}
+		finally {
+
+			// Unignore the target rule even when an assertion failed, since
+			// the environment is shared
+
+			await productionReadinessPage.unignoreRule(targetRuleKey);
+		}
 	}
 );
