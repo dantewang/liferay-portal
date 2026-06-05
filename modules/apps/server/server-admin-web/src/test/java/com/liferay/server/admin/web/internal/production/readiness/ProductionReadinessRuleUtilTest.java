@@ -140,14 +140,10 @@ public class ProductionReadinessRuleUtilTest {
 			for (ProductionReadinessResult productionReadinessResult :
 					productionReadinessResults) {
 
-				if (productionReadinessResult == null) {
-					continue;
-				}
-
-				Assert.assertNotNull(productionReadinessResult.getKey());
-				Assert.assertNotNull(productionReadinessResult.getStatus());
 				Assert.assertNotNull(productionReadinessResult.getCategory());
+				Assert.assertNotNull(productionReadinessResult.getKey());
 				Assert.assertNotNull(productionReadinessResult.getSeverity());
+				Assert.assertNotNull(productionReadinessResult.getStatus());
 			}
 		}
 	}

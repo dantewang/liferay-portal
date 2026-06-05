@@ -65,10 +65,6 @@ public class GetProductionReadinessResultsMVCResourceCommand
 		for (ProductionReadinessResult productionReadinessResult :
 				ProductionReadinessRuleUtil.check()) {
 
-			if (productionReadinessResult == null) {
-				continue;
-			}
-
 			if (!ignoreRules.contains(productionReadinessResult.getKey())) {
 				if (productionReadinessResult.getStatus() ==
 						ProductionReadinessResult.Status.PASS) {

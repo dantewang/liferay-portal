@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
@@ -52,14 +53,17 @@ public class ProductionReadinessRuleUtil {
 		Collection<ProductionReadinessResult> productionReadinessResults =
 			new ArrayList<>();
 
-		productionReadinessResults.addAll(_checkJVMConfigurations());
+		for (Supplier<ProductionReadinessResult>
+				productionReadinessResultSupplier :
+					_productionReadinessResultSuppliers) {
 
-		productionReadinessResults.add(_checkDatabaseConfiguration());
+			ProductionReadinessResult productionReadinessResult =
+				productionReadinessResultSupplier.get();
 
-		productionReadinessResults.addAll(
-			_checkPortalPropertiesConfigurations());
-
-		productionReadinessResults.add(_checkSidecarDetection());
+			if (productionReadinessResult != null) {
+				productionReadinessResults.add(productionReadinessResult);
+			}
+		}
 
 		return productionReadinessResults;
 	}
@@ -519,31 +523,6 @@ public class ProductionReadinessRuleUtil {
 		return builder.pass();
 	}
 
-	private static Collection<ProductionReadinessResult>
-		_checkJVMConfigurations() {
-
-		Collection<ProductionReadinessResult> productionReadinessResults =
-			new ArrayList<>();
-
-		productionReadinessResults.add(_checkHeapAllocationConsistency());
-
-		productionReadinessResults.add(_checkHeapSizeUpperLimit());
-
-		productionReadinessResults.add(_checkHugePagesConfiguration());
-
-		productionReadinessResults.add(_checkJSPEngineSettings());
-
-		productionReadinessResults.add(_checkGarbageCollectorType());
-
-		productionReadinessResults.add(_checkExplicitGCDisabled());
-
-		productionReadinessResults.add(_checkPreventDiagnosticOverhead());
-
-		productionReadinessResults.add(_checkJMXConfigurationDisabled());
-
-		return productionReadinessResults;
-	}
-
 	private static ProductionReadinessResult _checkPasswordEncryption() {
 		String algorithm = PropsUtil.get("passwords.encryption.algorithm");
 
@@ -586,33 +565,6 @@ public class ProductionReadinessRuleUtil {
 		return builder.currentValue(
 			"portal-developer.properties is not included"
 		).pass();
-	}
-
-	private static Collection<ProductionReadinessResult>
-		_checkPortalPropertiesConfigurations() {
-
-		Collection<ProductionReadinessResult> productionReadinessResults =
-			new ArrayList<>();
-
-		productionReadinessResults.add(_checkJSPReloading());
-
-		productionReadinessResults.add(_checkCounterIncrement());
-
-		productionReadinessResults.add(_checkDLPreviewForking());
-
-		productionReadinessResults.add(_checkDLImagePreviewDPI());
-
-		productionReadinessResults.add(_checkFileStoreImplementation());
-
-		productionReadinessResults.add(_checkPasswordEncryption());
-
-		productionReadinessResults.add(_checkBetaLanguages());
-
-		productionReadinessResults.add(_checkUnusedLanguages());
-
-		productionReadinessResults.add(_checkPortalDeveloperProperties());
-
-		return productionReadinessResults;
 	}
 
 	private static ProductionReadinessResult _checkPreventDiagnosticOverhead() {
@@ -846,5 +798,27 @@ public class ProductionReadinessRuleUtil {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ProductionReadinessRuleUtil.class);
+
+	private static final List<Supplier<ProductionReadinessResult>>
+		_productionReadinessResultSuppliers = List.of(
+			ProductionReadinessRuleUtil::_checkHeapAllocationConsistency,
+			ProductionReadinessRuleUtil::_checkHeapSizeUpperLimit,
+			ProductionReadinessRuleUtil::_checkHugePagesConfiguration,
+			ProductionReadinessRuleUtil::_checkJSPEngineSettings,
+			ProductionReadinessRuleUtil::_checkGarbageCollectorType,
+			ProductionReadinessRuleUtil::_checkExplicitGCDisabled,
+			ProductionReadinessRuleUtil::_checkPreventDiagnosticOverhead,
+			ProductionReadinessRuleUtil::_checkJMXConfigurationDisabled,
+			ProductionReadinessRuleUtil::_checkDatabaseConfiguration,
+			ProductionReadinessRuleUtil::_checkJSPReloading,
+			ProductionReadinessRuleUtil::_checkCounterIncrement,
+			ProductionReadinessRuleUtil::_checkDLPreviewForking,
+			ProductionReadinessRuleUtil::_checkDLImagePreviewDPI,
+			ProductionReadinessRuleUtil::_checkFileStoreImplementation,
+			ProductionReadinessRuleUtil::_checkPasswordEncryption,
+			ProductionReadinessRuleUtil::_checkBetaLanguages,
+			ProductionReadinessRuleUtil::_checkUnusedLanguages,
+			ProductionReadinessRuleUtil::_checkPortalDeveloperProperties,
+			ProductionReadinessRuleUtil::_checkSidecarDetection);
 
 }
