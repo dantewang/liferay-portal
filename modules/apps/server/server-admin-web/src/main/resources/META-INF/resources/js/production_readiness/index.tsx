@@ -211,7 +211,7 @@ export function ProductionReadinessDashboard(
 	const {failed, ignored, passed} = payload.summary;
 
 	return (
-		<div className="deployment-validation-dashboard">
+		<div className="production-readiness-dashboard">
 			<div className="align-items-start d-flex justify-content-between mb-4">
 				<SummaryHeader
 					failed={failed}
@@ -222,7 +222,7 @@ export function ProductionReadinessDashboard(
 				<FilterPills onChange={onFilterChange} value={filterValue} />
 			</div>
 
-			<div className="deployment-validation-sections">
+			<div className="production-readiness-sections">
 				{grouped.map(({category, categoryLabel, results}) => (
 					<CategorySection
 						categoryLabel={categoryLabel}

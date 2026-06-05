@@ -125,22 +125,22 @@ describe('ProductionReadinessDashboard', () => {
 		);
 
 		const summary = document.querySelector(
-			'.deployment-validation-summary'
+			'.production-readiness-summary'
 		) as HTMLElement;
 
 		expect(
 			within(summary).getByText('3', {
-				selector: '.deployment-validation-count-total',
+				selector: '.production-readiness-count-total',
 			})
 		).toBeInTheDocument();
 		expect(
 			within(summary).getByText('1', {
-				selector: '.deployment-validation-count-passed',
+				selector: '.production-readiness-count-passed',
 			})
 		).toBeInTheDocument();
 		expect(
 			within(summary).getByText('1', {
-				selector: '.deployment-validation-count-failed',
+				selector: '.production-readiness-count-failed',
 			})
 		).toBeInTheDocument();
 
@@ -285,14 +285,14 @@ describe('ProductionReadinessDashboard', () => {
 		);
 
 		expect(
-			document.querySelectorAll('.deployment-validation-rule')
+			document.querySelectorAll('.production-readiness-rule')
 		).toHaveLength(10);
 
 		await userEvent.click(screen.getByLabelText('Go to page, 2'));
 
 		await waitFor(() =>
 			expect(
-				document.querySelectorAll('.deployment-validation-rule')
+				document.querySelectorAll('.production-readiness-rule')
 			).toHaveLength(2)
 		);
 	});

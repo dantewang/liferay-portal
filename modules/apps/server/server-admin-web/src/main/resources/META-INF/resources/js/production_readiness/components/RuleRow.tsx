@@ -21,7 +21,7 @@ const RuleRow: React.FC<Props> = ({onToggleIgnore, result, toggling}) => {
 
 	return (
 		<li
-			className={`align-items-start d-flex deployment-validation-rule py-3${
+			className={`align-items-start d-flex production-readiness-rule py-3${
 				result.ignored ? ' text-muted' : ''
 			}`}
 			data-rule-key={result.ruleKey}

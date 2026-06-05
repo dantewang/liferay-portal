@@ -35,9 +35,6 @@ ServerDisplayContext serverDisplayContext = new ServerDisplayContext(renderReque
 		<c:when test='<%= tabs1.equals("data-migration") %>'>
 			<liferay-util:include page="/data_migration.jsp" servletContext="<%= application %>" />
 		</c:when>
-		<c:when test='<%= tabs1.equals("deployment-validation") %>'>
-			<liferay-util:include page="/production_readiness.jsp" servletContext="<%= application %>" />
-		</c:when>
 		<c:when test='<%= tabs1.equals("external-services") %>'>
 			<liferay-util:include page="/external_services.jsp" servletContext="<%= application %>" />
 		</c:when>
@@ -49,6 +46,9 @@ ServerDisplayContext serverDisplayContext = new ServerDisplayContext(renderReque
 		</c:when>
 		<c:when test='<%= tabs1.equals("mail") %>'>
 			<liferay-util:include page="/mail.jsp" servletContext="<%= application %>" />
+		</c:when>
+		<c:when test='<%= tabs1.equals("production-readiness") %>'>
+			<liferay-util:include page="/production_readiness.jsp" servletContext="<%= application %>" />
 		</c:when>
 		<c:when test='<%= tabs1.equals("properties") %>'>
 			<liferay-util:include page="/properties.jsp" servletContext="<%= application %>" />

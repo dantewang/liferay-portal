@@ -28,7 +28,7 @@ const CategorySection: React.FC<Props> = ({
 
 	return (
 		<ClayPanel
-			className="deployment-validation-section"
+			className="production-readiness-section"
 			collapsable
 			defaultExpanded
 			displayTitle={categoryLabel}

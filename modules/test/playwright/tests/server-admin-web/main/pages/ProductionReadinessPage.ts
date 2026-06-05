@@ -30,11 +30,11 @@ export class ProductionReadinessPage {
 	constructor(page: Page) {
 		this.globalMenuPage = new GlobalMenuPage(page);
 		this.page = page;
-		this.dashboard = page.locator('.deployment-validation-dashboard');
-		this.summary = page.locator('.deployment-validation-summary');
+		this.dashboard = page.locator('.production-readiness-dashboard');
+		this.summary = page.locator('.production-readiness-summary');
 		this.tabLink = page.getByRole('link', {
 			exact: true,
-			name: 'Deployment Validation',
+			name: 'Production Readiness',
 		});
 	}
 
@@ -62,7 +62,7 @@ export class ProductionReadinessPage {
 
 	async summaryCount(label: SummaryLabel): Promise<number> {
 		const text = await this.summary
-			.locator(`.deployment-validation-count-${label.toLowerCase()}`)
+			.locator(`.production-readiness-count-${label.toLowerCase()}`)
 			.innerText();
 
 		const value = parseInt(text.trim(), 10);

@@ -41,27 +41,27 @@
 	}
 }
 
-.deployment-validation-dashboard {
-	.deployment-validation-dot {
+.production-readiness-dashboard {
+	.production-readiness-dot {
 		border-radius: 50%;
 		display: inline-block;
 		height: 8px;
 		width: 8px;
 
-		&.deployment-validation-dot-failed {
+		&.production-readiness-dot-failed {
 			background-color: #da1414;
 		}
 
-		&.deployment-validation-dot-ignored {
+		&.production-readiness-dot-ignored {
 			background-color: #6b6c7e;
 		}
 
-		&.deployment-validation-dot-passed {
+		&.production-readiness-dot-passed {
 			background-color: #287d3c;
 		}
 	}
 
-	.deployment-validation-rule {
+	.production-readiness-rule {
 		border-bottom: 1px solid #e7e7ed;
 
 		&:last-child {
@@ -69,7 +69,7 @@
 		}
 	}
 
-	.deployment-validation-section {
+	.production-readiness-section {
 		.panel-header {
 			background-color: #f7f8f9;
 			width: 100%;

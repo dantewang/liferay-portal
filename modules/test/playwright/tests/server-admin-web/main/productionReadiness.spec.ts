@@ -12,11 +12,11 @@ import {productionReadinessPagesTest} from './fixtures/productionReadinessPagesT
 export const test = mergeTests(productionReadinessPagesTest, loginTest());
 
 test(
-	'LPD-87225 - Deployment Validation dashboard renders the summary, filters, and category sections and passes a11y review.',
+	'LPD-87225 - Production Readiness dashboard renders the summary, filters, and category sections and passes a11y review.',
 	{tag: '@LPD-87225'},
 	async ({productionReadinessPage}) => {
 
-		// Open the Deployment Validation tab
+		// Open the Production Readiness tab
 
 		await productionReadinessPage.goto();
 
@@ -62,7 +62,7 @@ test(
 	{tag: '@LPD-87225'},
 	async ({productionReadinessPage}) => {
 
-		// Open the Deployment Validation tab and pick a currently failed
+		// Open the Production Readiness tab and pick a currently failed
 		// rule as the target
 
 		await productionReadinessPage.goto();

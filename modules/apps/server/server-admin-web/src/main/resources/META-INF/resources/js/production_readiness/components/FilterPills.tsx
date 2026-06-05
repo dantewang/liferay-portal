@@ -43,7 +43,7 @@ const FilterPills: React.FC<Props> = ({onChange, value}) => {
 	];
 
 	return (
-		<div className="deployment-validation-filters text-right">
+		<div className="production-readiness-filters text-right">
 			<div className="small text-secondary text-uppercase">
 				{Liferay.Language.get('filters')}
 			</div>
@@ -66,7 +66,7 @@ const FilterPills: React.FC<Props> = ({onChange, value}) => {
 					>
 						{pill.dot && (
 							<span
-								className={`deployment-validation-dot deployment-validation-dot-${pill.dot} mr-2`}
+								className={`production-readiness-dot production-readiness-dot-${pill.dot} mr-2`}
 							/>
 						)}
 
