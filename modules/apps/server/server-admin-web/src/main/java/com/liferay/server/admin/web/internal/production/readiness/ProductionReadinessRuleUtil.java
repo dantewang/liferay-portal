@@ -32,7 +32,6 @@ import java.lang.management.RuntimeMXBean;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -63,6 +62,15 @@ public class ProductionReadinessRuleUtil {
 		productionReadinessResults.add(_checkSidecarDetection());
 
 		return productionReadinessResults;
+	}
+
+	private static ProductionReadinessResult _checkBetaLanguages() {
+		List<String> betaLocales = List.of(PropsValues.LOCALES_BETA);
+
+		return _getLanguagesProductionReadinessResult(
+			"languages-beta",
+			ListUtil.filter(
+				List.of(PropsValues.LOCALES_ENABLED), betaLocales::contains));
 	}
 
 	private static ProductionReadinessResult _checkCounterIncrement() {
@@ -536,57 +544,6 @@ public class ProductionReadinessRuleUtil {
 		return productionReadinessResults;
 	}
 
-	private static Collection<ProductionReadinessResult> _checkLanguages() {
-		List<String> availableLocales = List.of(PropsValues.LOCALES);
-
-		List<String> betaLocales = List.of(PropsValues.LOCALES_BETA);
-		List<String> enabledLocales = List.of(PropsValues.LOCALES_ENABLED);
-
-		List<String> enabledBetaLocales = ListUtil.filter(
-			enabledLocales, betaLocales::contains);
-
-		List<String> unusedLocales = ListUtil.filter(
-			availableLocales, locale -> !enabledLocales.contains(locale));
-
-		if (enabledBetaLocales.isEmpty() && unusedLocales.isEmpty()) {
-			return Collections.singletonList(
-				ProductionReadinessResult.builder(
-					_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, "languages"
-				).pass());
-		}
-
-		List<ProductionReadinessResult> productionReadinessResults =
-			new ArrayList<>(2);
-
-		if (!enabledBetaLocales.isEmpty()) {
-			productionReadinessResults.add(
-				ProductionReadinessResult.builder(
-					_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, "languages"
-				).currentValue(
-					StringUtil.merge(enabledBetaLocales)
-				).messageKeySuffix(
-					"beta"
-				).messageParameters(
-					StringUtil.merge(enabledBetaLocales)
-				).fail());
-		}
-
-		if (!unusedLocales.isEmpty()) {
-			productionReadinessResults.add(
-				ProductionReadinessResult.builder(
-					_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, "languages"
-				).currentValue(
-					StringUtil.merge(unusedLocales)
-				).messageKeySuffix(
-					"unused"
-				).messageParameters(
-					StringUtil.merge(unusedLocales)
-				).fail());
-		}
-
-		return productionReadinessResults;
-	}
-
 	private static ProductionReadinessResult _checkPasswordEncryption() {
 		String algorithm = PropsUtil.get("passwords.encryption.algorithm");
 
@@ -649,7 +606,9 @@ public class ProductionReadinessRuleUtil {
 
 		productionReadinessResults.add(_checkPasswordEncryption());
 
-		productionReadinessResults.addAll(_checkLanguages());
+		productionReadinessResults.add(_checkBetaLanguages());
+
+		productionReadinessResults.add(_checkUnusedLanguages());
 
 		productionReadinessResults.add(_checkPortalDeveloperProperties());
 
@@ -699,10 +658,41 @@ public class ProductionReadinessRuleUtil {
 		return builder.pass();
 	}
 
+	private static ProductionReadinessResult _checkUnusedLanguages() {
+		List<String> enabledLocales = List.of(PropsValues.LOCALES_ENABLED);
+
+		return _getLanguagesProductionReadinessResult(
+			"languages-unused",
+			ListUtil.filter(
+				List.of(PropsValues.LOCALES),
+				locale -> !enabledLocales.contains(locale)));
+	}
+
 	private static MemoryUsage _getHeapMemoryUsage() {
 		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
 
 		return memoryMXBean.getHeapMemoryUsage();
+	}
+
+	private static ProductionReadinessResult
+		_getLanguagesProductionReadinessResult(
+			String key, List<String> locales) {
+
+		ProductionReadinessResult.Builder builder =
+			ProductionReadinessResult.builder(
+				_CATEGORY_PORTAL_PROPERTIES_CONFIGURATION, key);
+
+		if (locales.isEmpty()) {
+			return builder.pass();
+		}
+
+		String localesString = StringUtil.merge(locales);
+
+		return builder.currentValue(
+			localesString
+		).messageParameters(
+			localesString
+		).fail();
 	}
 
 	private static int _getMaxThreads() {

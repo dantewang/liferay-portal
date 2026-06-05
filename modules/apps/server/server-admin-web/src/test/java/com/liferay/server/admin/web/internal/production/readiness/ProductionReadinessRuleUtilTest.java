@@ -153,6 +153,54 @@ public class ProductionReadinessRuleUtilTest {
 	}
 
 	@Test
+	public void testCheckBetaLanguagesFail() throws Exception {
+		try (AutoCloseable closeable1 =
+				ReflectionTestUtil.setFieldValueWithAutoCloseable(
+					PropsValues.class, "LOCALES_BETA", new String[] {"fr_FR"});
+			AutoCloseable closeable2 =
+				ReflectionTestUtil.setFieldValueWithAutoCloseable(
+					PropsValues.class, "LOCALES_ENABLED",
+					new String[] {"en_US", "fr_FR"})) {
+
+			ProductionReadinessResult productionReadinessResult =
+				ReflectionTestUtil.invoke(
+					ProductionReadinessRuleUtil.class, "_checkBetaLanguages",
+					new Class<?>[0]);
+
+			Assert.assertEquals(
+				ProductionReadinessResult.Status.FAIL,
+				productionReadinessResult.getStatus());
+			Assert.assertEquals(
+				"languages-beta", productionReadinessResult.getKey());
+			Assert.assertEquals(
+				"fr_FR", productionReadinessResult.getCurrentValue());
+		}
+	}
+
+	@Test
+	public void testCheckBetaLanguagesPass() throws Exception {
+		try (AutoCloseable closeable1 =
+				ReflectionTestUtil.setFieldValueWithAutoCloseable(
+					PropsValues.class, "LOCALES_BETA", new String[] {"fr_FR"});
+			AutoCloseable closeable2 =
+				ReflectionTestUtil.setFieldValueWithAutoCloseable(
+					PropsValues.class, "LOCALES_ENABLED",
+					new String[] {"en_US"})) {
+
+			ProductionReadinessResult productionReadinessResult =
+				ReflectionTestUtil.invoke(
+					ProductionReadinessRuleUtil.class, "_checkBetaLanguages",
+					new Class<?>[0]);
+
+			Assert.assertEquals(
+				ProductionReadinessResult.Status.PASS,
+				productionReadinessResult.getStatus());
+			Assert.assertEquals(
+				"languages-beta", productionReadinessResult.getKey());
+		}
+	}
+
+	@Test
 	public void testCheckCounterIncrementFail() {
 		try (MockedStatic<PropsUtil> propsUtilMockedStatic = Mockito.mockStatic(
 				PropsUtil.class)) {
@@ -1006,112 +1054,6 @@ public class ProductionReadinessRuleUtilTest {
 	}
 
 	@Test
-	public void testCheckLanguagesBetaFail() throws Exception {
-		try (AutoCloseable closeable1 =
-				ReflectionTestUtil.setFieldValueWithAutoCloseable(
-					PropsValues.class, "LOCALES",
-					new String[] {"en_US", "fr_FR"});
-			AutoCloseable closeable2 =
-				ReflectionTestUtil.setFieldValueWithAutoCloseable(
-					PropsValues.class, "LOCALES_BETA", new String[] {"fr_FR"});
-			AutoCloseable closeable3 =
-				ReflectionTestUtil.setFieldValueWithAutoCloseable(
-					PropsValues.class, "LOCALES_ENABLED",
-					new String[] {"en_US", "fr_FR"})) {
-
-			Collection<ProductionReadinessResult> productionReadinessResults =
-				ReflectionTestUtil.invoke(
-					ProductionReadinessRuleUtil.class, "_checkLanguages",
-					new Class<?>[0]);
-
-			Assert.assertEquals(
-				productionReadinessResults.toString(), 1,
-				productionReadinessResults.size());
-
-			ProductionReadinessResult productionReadinessResult =
-				productionReadinessResults.iterator(
-				).next();
-
-			Assert.assertEquals(
-				ProductionReadinessResult.Status.FAIL,
-				productionReadinessResult.getStatus());
-			Assert.assertEquals(
-				"languages", productionReadinessResult.getKey());
-		}
-	}
-
-	@Test
-	public void testCheckLanguagesPass() throws Exception {
-		try (AutoCloseable closeable1 =
-				ReflectionTestUtil.setFieldValueWithAutoCloseable(
-					PropsValues.class, "LOCALES", new String[] {"en_US"});
-			AutoCloseable closeable2 =
-				ReflectionTestUtil.setFieldValueWithAutoCloseable(
-					PropsValues.class, "LOCALES_BETA", new String[0]);
-			AutoCloseable closeable3 =
-				ReflectionTestUtil.setFieldValueWithAutoCloseable(
-					PropsValues.class, "LOCALES_ENABLED",
-					new String[] {"en_US"})) {
-
-			Collection<ProductionReadinessResult> productionReadinessResults =
-				ReflectionTestUtil.invoke(
-					ProductionReadinessRuleUtil.class, "_checkLanguages",
-					new Class<?>[0]);
-
-			Assert.assertEquals(
-				productionReadinessResults.toString(), 1,
-				productionReadinessResults.size());
-
-			ProductionReadinessResult productionReadinessResult =
-				productionReadinessResults.iterator(
-				).next();
-
-			Assert.assertEquals(
-				ProductionReadinessResult.Status.PASS,
-				productionReadinessResult.getStatus());
-			Assert.assertEquals(
-				"languages", productionReadinessResult.getKey());
-		}
-	}
-
-	@Test
-	public void testCheckLanguagesUnusedFail() throws Exception {
-		try (AutoCloseable closeable1 =
-				ReflectionTestUtil.setFieldValueWithAutoCloseable(
-					PropsValues.class, "LOCALES",
-					new String[] {"en_US", "de_DE"});
-			AutoCloseable closeable2 =
-				ReflectionTestUtil.setFieldValueWithAutoCloseable(
-					PropsValues.class, "LOCALES_BETA", new String[0]);
-			AutoCloseable closeable3 =
-				ReflectionTestUtil.setFieldValueWithAutoCloseable(
-					PropsValues.class, "LOCALES_ENABLED",
-					new String[] {"en_US"})) {
-
-			Collection<ProductionReadinessResult> productionReadinessResults =
-				ReflectionTestUtil.invoke(
-					ProductionReadinessRuleUtil.class, "_checkLanguages",
-					new Class<?>[0]);
-
-			Assert.assertEquals(
-				productionReadinessResults.toString(), 1,
-				productionReadinessResults.size());
-
-			ProductionReadinessResult productionReadinessResult =
-				productionReadinessResults.iterator(
-				).next();
-
-			Assert.assertEquals(
-				ProductionReadinessResult.Status.FAIL,
-				productionReadinessResult.getStatus());
-			Assert.assertEquals(
-				"languages", productionReadinessResult.getKey());
-			Assert.assertEquals(
-				"de_DE", productionReadinessResult.getCurrentValue());
-		}
-	}
-
-	@Test
 	public void testCheckPasswordEncryptionBCRYPTPass() {
 		_assertPasswordEncryption(
 			"BCRYPT", ProductionReadinessResult.Status.PASS);
@@ -1311,6 +1253,55 @@ public class ProductionReadinessRuleUtilTest {
 				productionReadinessResult.getStatus());
 			Assert.assertEquals(
 				"sidecar-detection", productionReadinessResult.getKey());
+		}
+	}
+
+	@Test
+	public void testCheckUnusedLanguagesFail() throws Exception {
+		try (AutoCloseable closeable1 =
+				ReflectionTestUtil.setFieldValueWithAutoCloseable(
+					PropsValues.class, "LOCALES",
+					new String[] {"en_US", "de_DE"});
+			AutoCloseable closeable2 =
+				ReflectionTestUtil.setFieldValueWithAutoCloseable(
+					PropsValues.class, "LOCALES_ENABLED",
+					new String[] {"en_US"})) {
+
+			ProductionReadinessResult productionReadinessResult =
+				ReflectionTestUtil.invoke(
+					ProductionReadinessRuleUtil.class, "_checkUnusedLanguages",
+					new Class<?>[0]);
+
+			Assert.assertEquals(
+				ProductionReadinessResult.Status.FAIL,
+				productionReadinessResult.getStatus());
+			Assert.assertEquals(
+				"languages-unused", productionReadinessResult.getKey());
+			Assert.assertEquals(
+				"de_DE", productionReadinessResult.getCurrentValue());
+		}
+	}
+
+	@Test
+	public void testCheckUnusedLanguagesPass() throws Exception {
+		try (AutoCloseable closeable1 =
+				ReflectionTestUtil.setFieldValueWithAutoCloseable(
+					PropsValues.class, "LOCALES", new String[] {"en_US"});
+			AutoCloseable closeable2 =
+				ReflectionTestUtil.setFieldValueWithAutoCloseable(
+					PropsValues.class, "LOCALES_ENABLED",
+					new String[] {"en_US"})) {
+
+			ProductionReadinessResult productionReadinessResult =
+				ReflectionTestUtil.invoke(
+					ProductionReadinessRuleUtil.class, "_checkUnusedLanguages",
+					new Class<?>[0]);
+
+			Assert.assertEquals(
+				ProductionReadinessResult.Status.PASS,
+				productionReadinessResult.getStatus());
+			Assert.assertEquals(
+				"languages-unused", productionReadinessResult.getKey());
 		}
 	}
 
