@@ -32,7 +32,7 @@ const SummaryHeader: React.FC<Props> = ({failed, passed, total}) => {
 				</span>
 
 				<span className="mr-3 text-secondary">
-					{Liferay.Language.get('production-readiness-passed')}
+					{Liferay.Language.get('passed')}
 				</span>
 
 				<span className="h2 mb-0 mr-1 production-readiness-count-failed text-danger">
@@ -40,7 +40,7 @@ const SummaryHeader: React.FC<Props> = ({failed, passed, total}) => {
 				</span>
 
 				<span className="text-secondary">
-					{Liferay.Language.get('production-readiness-failed')}
+					{Liferay.Language.get('failed')}
 				</span>
 			</div>
 		</div>

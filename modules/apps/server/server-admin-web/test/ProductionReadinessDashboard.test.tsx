@@ -184,7 +184,7 @@ describe('ProductionReadinessDashboard', () => {
 		);
 
 		const failedPill = screen.getByRole('button', {
-			name: 'production-readiness-failed',
+			name: 'failed',
 		});
 
 		await userEvent.click(failedPill);
@@ -254,7 +254,7 @@ describe('ProductionReadinessDashboard', () => {
 		);
 
 		const ignoreButton = screen.getByRole('button', {
-			name: 'production-readiness-ignore: security-enabled',
+			name: 'ignore: security-enabled',
 		});
 
 		await userEvent.click(ignoreButton);

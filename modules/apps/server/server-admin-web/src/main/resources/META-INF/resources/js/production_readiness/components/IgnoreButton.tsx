@@ -20,8 +20,8 @@ const IgnoreButton: React.FC<Props> = ({
 	ruleKey,
 }) => {
 	const label = ignored
-		? Liferay.Language.get('production-readiness-unignore')
-		: Liferay.Language.get('production-readiness-ignore');
+		? Liferay.Language.get('unignore')
+		: Liferay.Language.get('ignore');
 
 	return (
 		<ClayButtonWithIcon

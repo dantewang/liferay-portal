@@ -25,12 +25,12 @@ function statusDisplayType(
 
 function statusLabel(status: RuleStatus, ignored: boolean): string {
 	if (ignored) {
-		return Liferay.Language.get('production-readiness-ignored');
+		return Liferay.Language.get('ignored');
 	}
 
 	return status === 'PASS'
-		? Liferay.Language.get('production-readiness-passed')
-		: Liferay.Language.get('production-readiness-failed');
+		? Liferay.Language.get('passed')
+		: Liferay.Language.get('failed');
 }
 
 const StatusLabel: React.FC<Props> = ({result}) => {

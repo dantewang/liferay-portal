@@ -27,17 +27,17 @@ const FilterPills: React.FC<Props> = ({onChange, value}) => {
 		},
 		{
 			dot: 'passed',
-			label: Liferay.Language.get('production-readiness-passed'),
+			label: Liferay.Language.get('passed'),
 			value: 'passed',
 		},
 		{
 			dot: 'failed',
-			label: Liferay.Language.get('production-readiness-failed'),
+			label: Liferay.Language.get('failed'),
 			value: 'failed',
 		},
 		{
 			dot: 'ignored',
-			label: Liferay.Language.get('production-readiness-ignored'),
+			label: Liferay.Language.get('ignored'),
 			value: 'ignored',
 		},
 	];
