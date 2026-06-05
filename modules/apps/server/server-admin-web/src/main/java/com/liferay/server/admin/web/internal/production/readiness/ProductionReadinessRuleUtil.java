@@ -242,8 +242,10 @@ public class ProductionReadinessRuleUtil {
 	}
 
 	private static ProductionReadinessResult _checkHeapAllocationConsistency() {
-		long xmsBytes = _heapMemoryUsage.getInit();
-		long xmxBytes = _heapMemoryUsage.getMax();
+		MemoryUsage heapMemoryUsage = _getHeapMemoryUsage();
+
+		long xmsBytes = heapMemoryUsage.getInit();
+		long xmxBytes = heapMemoryUsage.getMax();
 
 		ProductionReadinessResult.Builder builder =
 			ProductionReadinessResult.builder(
@@ -263,7 +265,9 @@ public class ProductionReadinessRuleUtil {
 	}
 
 	private static ProductionReadinessResult _checkHeapSizeUpperLimit() {
-		long xmxBytes = _heapMemoryUsage.getMax();
+		MemoryUsage heapMemoryUsage = _getHeapMemoryUsage();
+
+		long xmxBytes = heapMemoryUsage.getMax();
 
 		double maxMemoryGB = xmxBytes / (1024.0 * 1024.0 * 1024.0);
 
@@ -283,7 +287,9 @@ public class ProductionReadinessRuleUtil {
 	}
 
 	private static ProductionReadinessResult _checkHugePagesConfiguration() {
-		long xmxBytes = _heapMemoryUsage.getMax();
+		MemoryUsage heapMemoryUsage = _getHeapMemoryUsage();
+
+		long xmxBytes = heapMemoryUsage.getMax();
 
 		double maxMemoryGB = xmxBytes / (1024.0 * 1024.0 * 1024.0);
 
@@ -693,6 +699,12 @@ public class ProductionReadinessRuleUtil {
 		return builder.pass();
 	}
 
+	private static MemoryUsage _getHeapMemoryUsage() {
+		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+
+		return memoryMXBean.getHeapMemoryUsage();
+	}
+
 	private static int _getMaxThreads() {
 		try {
 			MBeanServer mBeanServer =
@@ -844,13 +856,5 @@ public class ProductionReadinessRuleUtil {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ProductionReadinessRuleUtil.class);
-
-	private static final MemoryUsage _heapMemoryUsage;
-
-	static {
-		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
-
-		_heapMemoryUsage = memoryMXBean.getHeapMemoryUsage();
-	}
 
 }

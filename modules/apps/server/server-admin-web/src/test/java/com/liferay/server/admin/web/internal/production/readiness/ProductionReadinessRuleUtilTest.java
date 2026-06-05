@@ -97,19 +97,9 @@ public class ProductionReadinessRuleUtilTest {
 				false
 			);
 
-			MemoryMXBean memoryMXBean = Mockito.mock(MemoryMXBean.class);
-
-			Mockito.when(
-				memoryMXBean.getHeapMemoryUsage()
-			).thenReturn(
-				_memoryUsage(2L * 1024 * 1024 * 1024, 2L * 1024 * 1024 * 1024)
-			);
-
-			managementFactoryMockedStatic.when(
-				ManagementFactory::getMemoryMXBean
-			).thenReturn(
-				memoryMXBean
-			);
+			_stubHeapMemoryUsage(
+				managementFactoryMockedStatic,
+				_memoryUsage(2L * 1024 * 1024 * 1024, 2L * 1024 * 1024 * 1024));
 
 			RuntimeMXBean runtimeMXBean = Mockito.mock(RuntimeMXBean.class);
 
@@ -176,7 +166,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkCounterIncrement",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -202,7 +192,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkCounterIncrement",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -230,8 +220,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkDatabaseConfiguration",
-					new Class<?>[] {String.class}, "category");
+					"_checkDatabaseConfiguration", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -259,8 +248,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkDatabaseConfiguration",
-					new Class<?>[] {String.class}, "category");
+					"_checkDatabaseConfiguration", new Class<?>[0]);
 
 			Assert.assertNull(productionReadinessResult);
 		}
@@ -284,8 +272,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkDatabaseConfiguration",
-					new Class<?>[] {String.class}, "category");
+					"_checkDatabaseConfiguration", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -305,8 +292,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkDLImagePreviewDPI", new Class<?>[] {String.class},
-					"category");
+					"_checkDLImagePreviewDPI", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -328,8 +314,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkDLImagePreviewDPI", new Class<?>[] {String.class},
-					"category");
+					"_checkDLImagePreviewDPI", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -349,7 +334,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkDLPreviewForking",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -369,7 +354,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkDLPreviewForking",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -390,8 +375,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkExplicitGCDisabled", new Class<?>[] {String.class},
-					"category");
+					"_checkExplicitGCDisabled", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -416,8 +400,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkExplicitGCDisabled", new Class<?>[] {String.class},
-					"category");
+					"_checkExplicitGCDisabled", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -437,8 +420,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkFileStoreImplementation",
-					new Class<?>[] {String.class}, "category");
+					"_checkFileStoreImplementation", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -467,8 +449,7 @@ public class ProductionReadinessRuleUtilTest {
 				ProductionReadinessResult productionReadinessResult =
 					ReflectionTestUtil.invoke(
 						ProductionReadinessRuleUtil.class,
-						"_checkFileStoreImplementation",
-						new Class<?>[] {String.class}, "category");
+						"_checkFileStoreImplementation", new Class<?>[0]);
 
 				Assert.assertEquals(
 					"Expected PASS for " + impl,
@@ -503,8 +484,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkGarbageCollectorType", new Class<?>[] {String.class},
-					"category");
+					"_checkGarbageCollectorType", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -537,8 +517,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkGarbageCollectorType", new Class<?>[] {String.class},
-					"category");
+					"_checkGarbageCollectorType", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -550,76 +529,94 @@ public class ProductionReadinessRuleUtilTest {
 
 	@Test
 	public void testCheckHeapAllocationConsistencyFail() {
-		MemoryUsage memoryUsage = _memoryUsage(
-			2L * 1024 * 1024 * 1024, 4L * 1024 * 1024 * 1024);
+		try (MockedStatic<ManagementFactory> managementFactoryMockedStatic =
+				Mockito.mockStatic(ManagementFactory.class)) {
 
-		ProductionReadinessResult productionReadinessResult =
-			ReflectionTestUtil.invoke(
-				ProductionReadinessRuleUtil.class,
-				"_checkHeapAllocationConsistency",
-				new Class<?>[] {String.class, MemoryUsage.class}, "category",
-				memoryUsage);
+			_stubHeapMemoryUsage(
+				managementFactoryMockedStatic,
+				_memoryUsage(2L * 1024 * 1024 * 1024, 4L * 1024 * 1024 * 1024));
 
-		Assert.assertEquals(
-			ProductionReadinessResult.Status.FAIL,
-			productionReadinessResult.getStatus());
-		Assert.assertEquals(
-			"heap-allocation-consistency", productionReadinessResult.getKey());
+			ProductionReadinessResult productionReadinessResult =
+				ReflectionTestUtil.invoke(
+					ProductionReadinessRuleUtil.class,
+					"_checkHeapAllocationConsistency", new Class<?>[0]);
+
+			Assert.assertEquals(
+				ProductionReadinessResult.Status.FAIL,
+				productionReadinessResult.getStatus());
+			Assert.assertEquals(
+				"heap-allocation-consistency",
+				productionReadinessResult.getKey());
+		}
 	}
 
 	@Test
 	public void testCheckHeapAllocationConsistencyPass() {
-		MemoryUsage memoryUsage = _memoryUsage(
-			4L * 1024 * 1024 * 1024, 4L * 1024 * 1024 * 1024);
+		try (MockedStatic<ManagementFactory> managementFactoryMockedStatic =
+				Mockito.mockStatic(ManagementFactory.class)) {
 
-		ProductionReadinessResult productionReadinessResult =
-			ReflectionTestUtil.invoke(
-				ProductionReadinessRuleUtil.class,
-				"_checkHeapAllocationConsistency",
-				new Class<?>[] {String.class, MemoryUsage.class}, "category",
-				memoryUsage);
+			_stubHeapMemoryUsage(
+				managementFactoryMockedStatic,
+				_memoryUsage(4L * 1024 * 1024 * 1024, 4L * 1024 * 1024 * 1024));
 
-		Assert.assertEquals(
-			ProductionReadinessResult.Status.PASS,
-			productionReadinessResult.getStatus());
-		Assert.assertEquals(
-			"heap-allocation-consistency", productionReadinessResult.getKey());
+			ProductionReadinessResult productionReadinessResult =
+				ReflectionTestUtil.invoke(
+					ProductionReadinessRuleUtil.class,
+					"_checkHeapAllocationConsistency", new Class<?>[0]);
+
+			Assert.assertEquals(
+				ProductionReadinessResult.Status.PASS,
+				productionReadinessResult.getStatus());
+			Assert.assertEquals(
+				"heap-allocation-consistency",
+				productionReadinessResult.getKey());
+		}
 	}
 
 	@Test
 	public void testCheckHeapSizeUpperLimitFail() {
-		MemoryUsage memoryUsage = _memoryUsage(
-			64L * 1024 * 1024 * 1024, 64L * 1024 * 1024 * 1024);
+		try (MockedStatic<ManagementFactory> managementFactoryMockedStatic =
+				Mockito.mockStatic(ManagementFactory.class)) {
 
-		ProductionReadinessResult productionReadinessResult =
-			ReflectionTestUtil.invoke(
-				ProductionReadinessRuleUtil.class, "_checkHeapSizeUpperLimit",
-				new Class<?>[] {String.class, MemoryUsage.class}, "category",
-				memoryUsage);
+			_stubHeapMemoryUsage(
+				managementFactoryMockedStatic,
+				_memoryUsage(
+					64L * 1024 * 1024 * 1024, 64L * 1024 * 1024 * 1024));
 
-		Assert.assertEquals(
-			ProductionReadinessResult.Status.FAIL,
-			productionReadinessResult.getStatus());
-		Assert.assertEquals(
-			"heap-size-upper-limit", productionReadinessResult.getKey());
+			ProductionReadinessResult productionReadinessResult =
+				ReflectionTestUtil.invoke(
+					ProductionReadinessRuleUtil.class,
+					"_checkHeapSizeUpperLimit", new Class<?>[0]);
+
+			Assert.assertEquals(
+				ProductionReadinessResult.Status.FAIL,
+				productionReadinessResult.getStatus());
+			Assert.assertEquals(
+				"heap-size-upper-limit", productionReadinessResult.getKey());
+		}
 	}
 
 	@Test
 	public void testCheckHeapSizeUpperLimitPass() {
-		MemoryUsage memoryUsage = _memoryUsage(
-			16L * 1024 * 1024 * 1024, 16L * 1024 * 1024 * 1024);
+		try (MockedStatic<ManagementFactory> managementFactoryMockedStatic =
+				Mockito.mockStatic(ManagementFactory.class)) {
 
-		ProductionReadinessResult productionReadinessResult =
-			ReflectionTestUtil.invoke(
-				ProductionReadinessRuleUtil.class, "_checkHeapSizeUpperLimit",
-				new Class<?>[] {String.class, MemoryUsage.class}, "category",
-				memoryUsage);
+			_stubHeapMemoryUsage(
+				managementFactoryMockedStatic,
+				_memoryUsage(
+					16L * 1024 * 1024 * 1024, 16L * 1024 * 1024 * 1024));
 
-		Assert.assertEquals(
-			ProductionReadinessResult.Status.PASS,
-			productionReadinessResult.getStatus());
-		Assert.assertEquals(
-			"heap-size-upper-limit", productionReadinessResult.getKey());
+			ProductionReadinessResult productionReadinessResult =
+				ReflectionTestUtil.invoke(
+					ProductionReadinessRuleUtil.class,
+					"_checkHeapSizeUpperLimit", new Class<?>[0]);
+
+			Assert.assertEquals(
+				ProductionReadinessResult.Status.PASS,
+				productionReadinessResult.getStatus());
+			Assert.assertEquals(
+				"heap-size-upper-limit", productionReadinessResult.getKey());
+		}
 	}
 
 	@Test
@@ -628,6 +625,10 @@ public class ProductionReadinessRuleUtilTest {
 				Mockito.mockStatic(ManagementFactory.class);
 			MockedStatic<FileUtil> fileUtilMockedStatic = Mockito.mockStatic(
 				FileUtil.class)) {
+
+			_stubHeapMemoryUsage(
+				managementFactoryMockedStatic,
+				_memoryUsage(8L * 1024 * 1024 * 1024, 8L * 1024 * 1024 * 1024));
 
 			_stubRuntimeInputArguments(
 				managementFactoryMockedStatic,
@@ -640,15 +641,10 @@ public class ProductionReadinessRuleUtilTest {
 				"Hugepagesize:    2048 kB\n"
 			);
 
-			MemoryUsage memoryUsage = _memoryUsage(
-				8L * 1024 * 1024 * 1024, 8L * 1024 * 1024 * 1024);
-
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkHugePagesConfiguration",
-					new Class<?>[] {String.class, MemoryUsage.class},
-					"category", memoryUsage);
+					"_checkHugePagesConfiguration", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -663,19 +659,18 @@ public class ProductionReadinessRuleUtilTest {
 		try (MockedStatic<ManagementFactory> managementFactoryMockedStatic =
 				Mockito.mockStatic(ManagementFactory.class)) {
 
+			_stubHeapMemoryUsage(
+				managementFactoryMockedStatic,
+				_memoryUsage(8L * 1024 * 1024 * 1024, 8L * 1024 * 1024 * 1024));
+
 			_stubRuntimeInputArguments(
 				managementFactoryMockedStatic,
 				Collections.singletonList("-XX:+UseLargePages"));
 
-			MemoryUsage memoryUsage = _memoryUsage(
-				8L * 1024 * 1024 * 1024, 8L * 1024 * 1024 * 1024);
-
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkHugePagesConfiguration",
-					new Class<?>[] {String.class, MemoryUsage.class},
-					"category", memoryUsage);
+					"_checkHugePagesConfiguration", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -690,18 +685,17 @@ public class ProductionReadinessRuleUtilTest {
 		try (MockedStatic<ManagementFactory> managementFactoryMockedStatic =
 				Mockito.mockStatic(ManagementFactory.class)) {
 
+			_stubHeapMemoryUsage(
+				managementFactoryMockedStatic,
+				_memoryUsage(8L * 1024 * 1024 * 1024, 8L * 1024 * 1024 * 1024));
+
 			_stubRuntimeInputArguments(
 				managementFactoryMockedStatic, Collections.emptyList());
-
-			MemoryUsage memoryUsage = _memoryUsage(
-				8L * 1024 * 1024 * 1024, 8L * 1024 * 1024 * 1024);
 
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkHugePagesConfiguration",
-					new Class<?>[] {String.class, MemoryUsage.class},
-					"category", memoryUsage);
+					"_checkHugePagesConfiguration", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -716,21 +710,24 @@ public class ProductionReadinessRuleUtilTest {
 
 	@Test
 	public void testCheckHugePagesConfigurationSmallHeapPass() {
-		MemoryUsage memoryUsage = _memoryUsage(
-			2L * 1024 * 1024 * 1024, 2L * 1024 * 1024 * 1024);
+		try (MockedStatic<ManagementFactory> managementFactoryMockedStatic =
+				Mockito.mockStatic(ManagementFactory.class)) {
 
-		ProductionReadinessResult productionReadinessResult =
-			ReflectionTestUtil.invoke(
-				ProductionReadinessRuleUtil.class,
-				"_checkHugePagesConfiguration",
-				new Class<?>[] {String.class, MemoryUsage.class}, "category",
-				memoryUsage);
+			_stubHeapMemoryUsage(
+				managementFactoryMockedStatic,
+				_memoryUsage(2L * 1024 * 1024 * 1024, 2L * 1024 * 1024 * 1024));
 
-		Assert.assertEquals(
-			ProductionReadinessResult.Status.PASS,
-			productionReadinessResult.getStatus());
-		Assert.assertEquals(
-			"huge-pages-configuration", productionReadinessResult.getKey());
+			ProductionReadinessResult productionReadinessResult =
+				ReflectionTestUtil.invoke(
+					ProductionReadinessRuleUtil.class,
+					"_checkHugePagesConfiguration", new Class<?>[0]);
+
+			Assert.assertEquals(
+				ProductionReadinessResult.Status.PASS,
+				productionReadinessResult.getStatus());
+			Assert.assertEquals(
+				"huge-pages-configuration", productionReadinessResult.getKey());
+		}
 	}
 
 	@Test
@@ -746,8 +743,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkJMXConfigurationDisabled",
-					new Class<?>[] {String.class}, "category");
+					"_checkJMXConfigurationDisabled", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -775,8 +771,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkJMXConfigurationDisabled",
-					new Class<?>[] {String.class}, "category");
+					"_checkJMXConfigurationDisabled", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -834,8 +829,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkJSPEngineSettings", new Class<?>[] {String.class},
-					"category");
+					"_checkJSPEngineSettings", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -869,8 +863,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkJSPEngineSettings", new Class<?>[] {String.class},
-					"category");
+					"_checkJSPEngineSettings", new Class<?>[0]);
 
 			Assert.assertNull(productionReadinessResult);
 		}
@@ -894,8 +887,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkJSPEngineSettings", new Class<?>[] {String.class},
-					"category");
+					"_checkJSPEngineSettings", new Class<?>[0]);
 
 			Assert.assertNull(productionReadinessResult);
 		}
@@ -948,8 +940,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkJSPEngineSettings", new Class<?>[] {String.class},
-					"category");
+					"_checkJSPEngineSettings", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -977,7 +968,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkJSPReloading",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -1004,7 +995,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkJSPReloading",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -1031,7 +1022,7 @@ public class ProductionReadinessRuleUtilTest {
 			Collection<ProductionReadinessResult> productionReadinessResults =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkLanguages",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				productionReadinessResults.toString(), 1,
@@ -1065,7 +1056,7 @@ public class ProductionReadinessRuleUtilTest {
 			Collection<ProductionReadinessResult> productionReadinessResults =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkLanguages",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				productionReadinessResults.toString(), 1,
@@ -1100,7 +1091,7 @@ public class ProductionReadinessRuleUtilTest {
 			Collection<ProductionReadinessResult> productionReadinessResults =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkLanguages",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				productionReadinessResults.toString(), 1,
@@ -1164,8 +1155,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkPortalDeveloperProperties",
-					new Class<?>[] {String.class}, "category");
+					"_checkPortalDeveloperProperties", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -1193,8 +1183,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkPortalDeveloperProperties",
-					new Class<?>[] {String.class}, "category");
+					"_checkPortalDeveloperProperties", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -1217,8 +1206,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkPreventDiagnosticOverhead",
-					new Class<?>[] {String.class}, "category");
+					"_checkPreventDiagnosticOverhead", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -1240,8 +1228,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkPreventDiagnosticOverhead",
-					new Class<?>[] {String.class}, "category");
+					"_checkPreventDiagnosticOverhead", new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -1264,7 +1251,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkSidecarDetection",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -1291,7 +1278,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkSidecarDetection",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.PASS,
@@ -1317,7 +1304,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class, "_checkSidecarDetection",
-					new Class<?>[] {String.class}, "category");
+					new Class<?>[0]);
 
 			Assert.assertEquals(
 				ProductionReadinessResult.Status.FAIL,
@@ -1407,8 +1394,7 @@ public class ProductionReadinessRuleUtilTest {
 			ProductionReadinessResult productionReadinessResult =
 				ReflectionTestUtil.invoke(
 					ProductionReadinessRuleUtil.class,
-					"_checkPasswordEncryption", new Class<?>[] {String.class},
-					"category");
+					"_checkPasswordEncryption", new Class<?>[0]);
 
 			Assert.assertEquals(
 				expectedStatus, productionReadinessResult.getStatus());
@@ -1502,6 +1488,25 @@ public class ProductionReadinessRuleUtilTest {
 		else {
 			System.setProperty(key, previousValue);
 		}
+	}
+
+	private void _stubHeapMemoryUsage(
+		MockedStatic<ManagementFactory> managementFactoryMockedStatic,
+		MemoryUsage memoryUsage) {
+
+		MemoryMXBean memoryMXBean = Mockito.mock(MemoryMXBean.class);
+
+		Mockito.when(
+			memoryMXBean.getHeapMemoryUsage()
+		).thenReturn(
+			memoryUsage
+		);
+
+		managementFactoryMockedStatic.when(
+			ManagementFactory::getMemoryMXBean
+		).thenReturn(
+			memoryMXBean
+		);
 	}
 
 	private void _stubMBeanServerMaxThreads(
