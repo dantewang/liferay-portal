@@ -8,7 +8,7 @@ package com.liferay.server.admin.web.internal.portlet.action;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCResourceCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
-import com.liferay.server.admin.web.internal.production.readiness.ProductionReadinessIgnoreRuleUtil;
+import com.liferay.server.admin.web.internal.production.readiness.ProductionReadinessIgnoredRuleUtil;
 
 import jakarta.portlet.ResourceRequest;
 import jakarta.portlet.ResourceResponse;
@@ -33,7 +33,7 @@ public class UnignoreProductionReadinessRuleMVCResourceCommand
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
-		ProductionReadinessIgnoreRuleUtil.removeIgnoreRule(
+		ProductionReadinessIgnoredRuleUtil.removeIgnoredRule(
 			ParamUtil.getString(resourceRequest, "ruleKey"));
 	}
 

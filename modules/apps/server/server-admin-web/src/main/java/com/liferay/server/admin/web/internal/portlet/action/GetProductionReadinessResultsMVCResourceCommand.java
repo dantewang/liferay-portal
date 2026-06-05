@@ -14,7 +14,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.server.admin.web.internal.production.readiness.ProductionReadinessIgnoreRuleUtil;
+import com.liferay.server.admin.web.internal.production.readiness.ProductionReadinessIgnoredRuleUtil;
 import com.liferay.server.admin.web.internal.production.readiness.ProductionReadinessResult;
 import com.liferay.server.admin.web.internal.production.readiness.ProductionReadinessRuleUtil;
 
@@ -57,15 +57,15 @@ public class GetProductionReadinessResultsMVCResourceCommand
 		int passed = 0;
 		int failed = 0;
 
-		List<String> ignoreRules =
-			ProductionReadinessIgnoreRuleUtil.getIgnoreRules();
+		List<String> ignoredRules =
+			ProductionReadinessIgnoredRuleUtil.getIgnoredRules();
 
-		int ignored = ignoreRules.size();
+		int ignored = ignoredRules.size();
 
 		for (ProductionReadinessResult productionReadinessResult :
 				ProductionReadinessRuleUtil.check()) {
 
-			if (!ignoreRules.contains(productionReadinessResult.getKey())) {
+			if (!ignoredRules.contains(productionReadinessResult.getKey())) {
 				if (productionReadinessResult.getStatus() ==
 						ProductionReadinessResult.Status.PASS) {
 
@@ -77,7 +77,7 @@ public class GetProductionReadinessResultsMVCResourceCommand
 			}
 
 			resultsJSONArray.put(
-				_toJSONObject(ignoreRules, locale, productionReadinessResult));
+				_toJSONObject(ignoredRules, locale, productionReadinessResult));
 		}
 
 		JSONObject summaryJSONObject = _jsonFactory.createJSONObject(
@@ -104,7 +104,7 @@ public class GetProductionReadinessResultsMVCResourceCommand
 	}
 
 	private JSONObject _toJSONObject(
-		List<String> ignoreRules, Locale locale,
+		List<String> ignoredRules, Locale locale,
 		ProductionReadinessResult productionReadinessResult) {
 
 		String message = LanguageUtil.format(
@@ -125,7 +125,7 @@ public class GetProductionReadinessResultsMVCResourceCommand
 		).put(
 			"docsLink", _CHECKLIST_DOCS_LINK
 		).put(
-			"ignored", ignoreRules.contains(productionReadinessResult.getKey())
+			"ignored", ignoredRules.contains(productionReadinessResult.getKey())
 		).put(
 			"message", message
 		).put(
