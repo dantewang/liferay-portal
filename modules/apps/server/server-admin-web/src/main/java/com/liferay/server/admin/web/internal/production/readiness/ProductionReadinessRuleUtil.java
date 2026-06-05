@@ -678,7 +678,7 @@ public class ProductionReadinessRuleUtil {
 				_log.warn(exception);
 			}
 
-			return 200;
+			return _DEFAULT_MAX_THREADS;
 		}
 	}
 
@@ -790,6 +790,8 @@ public class ProductionReadinessRuleUtil {
 	private static final String
 		_CATEGORY_SEARCH_ENGINE_CONNECTIVITY_VALIDATION =
 			"search-engine-connectivity-validation";
+
+	private static final int _DEFAULT_MAX_THREADS = 200;
 
 	private static final String _PREFIX_HUGEPAGESIZE = "Hugepagesize:";
 
