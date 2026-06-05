@@ -54,26 +54,26 @@ public class GetProductionReadinessResultsMVCResourceCommand
 
 		JSONArray resultsJSONArray = _jsonFactory.createJSONArray();
 
-		int passed = 0;
 		int failed = 0;
+		int ignored = 0;
+		int passed = 0;
 
 		List<String> ignoredRules =
 			ProductionReadinessIgnoredRuleUtil.getIgnoredRules();
 
-		int ignored = ignoredRules.size();
-
 		for (ProductionReadinessResult productionReadinessResult :
 				ProductionReadinessRuleUtil.check()) {
 
-			if (!ignoredRules.contains(productionReadinessResult.getKey())) {
-				if (productionReadinessResult.getStatus() ==
+			if (ignoredRules.contains(productionReadinessResult.getKey())) {
+				ignored++;
+			}
+			else if (productionReadinessResult.getStatus() ==
 						ProductionReadinessResult.Status.PASS) {
 
-					passed++;
-				}
-				else {
-					failed++;
-				}
+				passed++;
+			}
+			else {
+				failed++;
 			}
 
 			resultsJSONArray.put(
