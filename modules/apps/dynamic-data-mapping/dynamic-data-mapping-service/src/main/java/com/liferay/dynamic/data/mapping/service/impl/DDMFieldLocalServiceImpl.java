@@ -125,9 +125,33 @@ public class DDMFieldLocalServiceImpl extends DDMFieldLocalServiceBaseImpl {
 
 	@Override
 	public void deleteDDMFormValues(long storageId) {
-		ddmFieldPersistence.removeByStorageId(storageId);
+		for (DDMField ddmField :
+				ddmFieldPersistence.<List<DDMField>>dslQuery(
+					DSLQueryFactoryUtil.select(
+						DDMFieldTable.INSTANCE
+					).from(
+						DDMFieldTable.INSTANCE
+					).where(
+						DDMFieldTable.INSTANCE.storageId.eq(storageId)
+					),
+					false)) {
 
-		_ddmFieldAttributePersistence.removeByStorageId(storageId);
+			ddmFieldPersistence.remove(ddmField);
+		}
+
+		for (DDMFieldAttribute ddmFieldAttribute :
+				_ddmFieldAttributePersistence.<List<DDMFieldAttribute>>dslQuery(
+					DSLQueryFactoryUtil.select(
+						DDMFieldAttributeTable.INSTANCE
+					).from(
+						DDMFieldAttributeTable.INSTANCE
+					).where(
+						DDMFieldAttributeTable.INSTANCE.storageId.eq(storageId)
+					),
+					false)) {
+
+			_ddmFieldAttributePersistence.remove(ddmFieldAttribute);
+		}
 	}
 
 	@Override
