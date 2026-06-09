@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -74,6 +75,47 @@ public class DDMFieldLocalServiceTest {
 	@After
 	public void tearDown() throws Exception {
 		_ddmFieldLocalService.deleteDDMFormValues(_STORAGE_ID);
+	}
+
+	@Test
+	public void testDeleteDDMFormValues() throws Exception {
+		DDMForm ddmForm = DDMFormTestUtil.createDDMForm("field1", "field2");
+
+		DDMStructure ddmStructure = _ddmStructureTestHelper.addStructure(
+			ddmForm, StorageType.DEFAULT.toString());
+
+		DDMFormValues ddmFormValues = new DDMFormValues(ddmForm);
+
+		ddmFormValues.setDefaultLocale(LocaleUtil.ENGLISH);
+		ddmFormValues.setAvailableLocales(
+			Collections.singleton(LocaleUtil.ENGLISH));
+		ddmFormValues.setDDMFormFieldValues(
+			Arrays.asList(
+				_createDDMFormFieldValue(
+					LocaleUtil.ENGLISH, "field1", "value1"),
+				_createDDMFormFieldValue(
+					LocaleUtil.ENGLISH, "field2", "value2")));
+
+		_ddmFieldLocalService.updateDDMFormValues(
+			ddmStructure.getStructureId(), _STORAGE_ID, ddmFormValues);
+
+		Assert.assertFalse(
+			ListUtil.isEmpty(
+				_ddmFieldLocalService.getDDMFields(_STORAGE_ID, "field1")));
+		Assert.assertFalse(
+			ListUtil.isEmpty(
+				_ddmFieldLocalService.getDDMFieldAttributes(
+					_STORAGE_ID, StringPool.BLANK)));
+
+		_ddmFieldLocalService.deleteDDMFormValues(_STORAGE_ID);
+
+		Assert.assertTrue(
+			ListUtil.isEmpty(
+				_ddmFieldLocalService.getDDMFields(_STORAGE_ID, "field1")));
+		Assert.assertTrue(
+			ListUtil.isEmpty(
+				_ddmFieldLocalService.getDDMFieldAttributes(
+					_STORAGE_ID, StringPool.BLANK)));
 	}
 
 	@Test
