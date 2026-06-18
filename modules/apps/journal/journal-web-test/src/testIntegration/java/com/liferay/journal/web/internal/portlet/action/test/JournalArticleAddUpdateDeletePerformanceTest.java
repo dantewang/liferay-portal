@@ -44,6 +44,8 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.trash.TrashHandler;
+import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LoggingTimer;
@@ -53,6 +55,11 @@ import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
 
+import jakarta.portlet.ActionRequest;
+import jakarta.portlet.Portlet;
+import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -65,6 +72,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
  * Reproduces the customer scenario behind LPD-94079: a web content article
@@ -192,15 +200,63 @@ public class JournalArticleAddUpdateDeletePerformanceTest {
 				(initialDDMFieldAttributeCount +
 					((_UPDATE_COUNT + 1) * _MIN_DDM_FIELD_ATTRIBUTE_ROWS)));
 
-		// Delete through the web content UI MVC action command
+		// Delete first 5 versions
 
-		try (LoggingTimer loggingTimer = new LoggingTimer("Delete article")) {
-			_deleteArticle(article.getArticleId());
+		List<JournalArticle> articles = _journalArticleLocalService.getArticles(
+			_group.getGroupId(), article.getArticleId());
+
+		List<String> deleteRowIds = new ArrayList<>();
+
+		for (JournalArticle tempArticle : articles) {
+			if (tempArticle.getVersion() < article.getVersion()) {
+				deleteRowIds.add(
+					tempArticle.getArticleId() + "_version_" +
+						tempArticle.getVersion());
+			}
+		}
+
+		Assert.assertEquals(5, deleteRowIds.size());
+
+		try (LoggingTimer loggingTimer = new LoggingTimer(
+				"Delete article versions 1 to 5")) {
+
+			_deleteArticleVersions(deleteRowIds);
+		}
+
+		Assert.assertEquals(
+			1,
+			_journalArticleLocalService.getArticlesCount(
+				_group.getGroupId(), article.getArticleId()));
+
+		// Move remaining 1-version article to trash
+
+		try (LoggingTimer loggingTimer = new LoggingTimer(
+				"Move article to trash")) {
+
+			_moveArticleToTrash(article.getArticleId());
+		}
+
+		JournalArticle remainingArticle =
+			_journalArticleLocalService.fetchLatestArticle(
+				article.getResourcePrimKey(),
+				WorkflowConstants.STATUS_IN_TRASH);
+
+		Assert.assertNotNull(remainingArticle);
+		Assert.assertEquals(
+			WorkflowConstants.STATUS_IN_TRASH, remainingArticle.getStatus());
+
+		// Permanently delete article from trash
+
+		try (LoggingTimer loggingTimer = new LoggingTimer(
+				"Delete article from trash")) {
+
+			_deleteArticleFromTrash(article);
 		}
 
 		Assert.assertNull(
 			_journalArticleLocalService.fetchArticle(
 				_group.getGroupId(), article.getArticleId()));
+
 		Assert.assertEquals(
 			0,
 			_ddmFieldLocalService.getDDMFormValuesCount(
@@ -276,7 +332,54 @@ public class JournalArticleAddUpdateDeletePerformanceTest {
 		return ddmFormFieldValue;
 	}
 
-	private void _deleteArticle(String articleId) throws Exception {
+	private void _deleteArticleFromTrash(JournalArticle article)
+		throws Exception {
+
+		MockLiferayPortletActionRequest mockLiferayPortletActionRequest =
+			new MockLiferayPortletActionRequest();
+
+		mockLiferayPortletActionRequest.setAttribute(
+			WebKeys.THEME_DISPLAY, _getThemeDisplay());
+
+		mockLiferayPortletActionRequest.setParameter(
+			ActionRequest.ACTION_NAME, "deleteEntries");
+		mockLiferayPortletActionRequest.setParameter(
+			"className", JournalArticle.class.getName());
+		mockLiferayPortletActionRequest.setParameter(
+			"classPK", String.valueOf(article.getResourcePrimKey()));
+
+		_trashPortlet.processAction(
+			mockLiferayPortletActionRequest,
+			new MockLiferayPortletActionResponse());
+	}
+
+	private void _deleteArticleVersions(List<String> deleteRowIds)
+		throws Exception {
+
+		MockLiferayPortletActionRequest mockLiferayPortletActionRequest =
+			new MockLiferayPortletActionRequest() {
+
+				@Override
+				public HttpServletRequest getOriginalHttpServletRequest() {
+					return new MockHttpServletRequest();
+				}
+
+			};
+
+		mockLiferayPortletActionRequest.setAttribute(
+			WebKeys.THEME_DISPLAY, _getThemeDisplay());
+
+		mockLiferayPortletActionRequest.setParameter(
+			"groupId", String.valueOf(_group.getGroupId()));
+		mockLiferayPortletActionRequest.setParameter(
+			"rowIds", deleteRowIds.toArray(new String[0]));
+
+		_deleteArticlesMVCActionCommand.processAction(
+			mockLiferayPortletActionRequest,
+			new MockLiferayPortletActionResponse());
+	}
+
+	private void _moveArticleToTrash(String articleId) throws Exception {
 		MockLiferayPortletActionRequest mockLiferayPortletActionRequest =
 			new MockLiferayPortletActionRequest();
 
@@ -288,7 +391,7 @@ public class JournalArticleAddUpdateDeletePerformanceTest {
 		mockLiferayPortletActionRequest.setParameter(
 			"rowIdsJournalArticle", articleId);
 
-		_deleteArticlesAndFoldersMVCActionCommand.processAction(
+		_moveArticlesAndFoldersToTrashMVCActionCommand.processAction(
 			mockLiferayPortletActionRequest,
 			new MockLiferayPortletActionResponse());
 	}
@@ -408,8 +511,8 @@ public class JournalArticleAddUpdateDeletePerformanceTest {
 	@Inject
 	private DDMFormValuesToFieldsConverter _ddmFormValuesToFieldsConverter;
 
-	@Inject(filter = "mvc.command.name=/journal/delete_articles_and_folders")
-	private MVCActionCommand _deleteArticlesAndFoldersMVCActionCommand;
+	@Inject(filter = "mvc.command.name=/journal/delete_articles")
+	private MVCActionCommand _deleteArticlesMVCActionCommand;
 
 	@DeleteAfterTestRun
 	private Group _group;
@@ -419,5 +522,11 @@ public class JournalArticleAddUpdateDeletePerformanceTest {
 
 	@Inject
 	private JournalConverter _journalConverter;
+
+	@Inject(filter = "mvc.command.name=/journal/move_articles_and_folders_to_trash")
+	private MVCActionCommand _moveArticlesAndFoldersToTrashMVCActionCommand;
+
+	@Inject(filter = "jakarta.portlet.name=com_liferay_trash_web_portlet_TrashPortlet")
+	private Portlet _trashPortlet;
 
 }
